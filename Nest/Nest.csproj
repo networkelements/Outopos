@@ -74,13 +74,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="CirculationCollection.cs" />
-    <Compile Include="ConnectionType.cs" />
-    <Compile Include="ChannelCollection.cs" />
-    <Compile Include="IdCollection.cs" />
-    <Compile Include="ServerManager.cs" />
-    <Compile Include="SessionManager.cs" />
-    <Compile Include="UriCollection.cs" />
     <Compile Include="Windows\SessionWindow.xaml.cs">
       <DependentUpon>SessionWindow.xaml</DependentUpon>
     </Compile>
