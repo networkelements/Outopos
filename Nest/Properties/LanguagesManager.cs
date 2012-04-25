@@ -20,7 +20,7 @@ namespace Nest.Properties
         static LanguagesManager()
         {
 #if DEBUG
-            string path = @"C:\Public\Project\Nest\Nest\bin\Debug\Core\Languages";
+            string path = @"C:\Core\Project\Nest\Nest\bin\Debug\Core\Languages";
 #else
             string path = Path.Combine(Directory.GetCurrentDirectory(), "Languages");
 #endif
