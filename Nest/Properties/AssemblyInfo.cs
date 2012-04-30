@@ -9,7 +9,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Nest")]
-[assembly: AssemblyCopyright("Copyright © Albert Lindsay 2011")]
+[assembly: AssemblyCopyright("Copyright © Albert Lindsay 2011-2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
