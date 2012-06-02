@@ -1,0 +1,21 @@
+﻿<Application x:Class="Lair.App"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:prop="clr-namespace:Lair.Properties" 
+        xmlns:local="clr-namespace:Lair.Windows" 
+        Startup="Application_Startup"
+        Exit="Application_Exit"
+        DispatcherUnhandledException="Application_DispatcherUnhandledException">
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Themes/ExpressionDark.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="{x:Type local:ListViewEx}" BasedOn="{StaticResource {x:Type ListView}}" />
+
+            <ObjectDataProvider x:Key="ResourcesInstance" ObjectType="{x:Type prop:LanguagesManager}" MethodName="GetInstance"/>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

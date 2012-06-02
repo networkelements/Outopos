@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Configuration>
+
+  <Translate Key="MainWindow_Settings" Value="Settings" />
+  <Translate Key="MainWindow_SignatureSetting" Value="Signature Setting" />
+  <Translate Key="MainWindow_Languages" Value="Languages" />
+  <Translate Key="MainWindow_VersionInformation" Value="Version Information" />
+  <Translate Key="MainWindow_ServerAdd" Value="Server Add" />
+  
+  <Translate Key="ServerWindow_Ok" Value="_Ok" />
+  <Translate Key="ServerWindow_Canrel" Value="_Cancel" />
+  <Translate Key="ServerWindow_Up" Value="Up" />
+  <Translate Key="ServerWindow_Down" Value="Down" />
+  <Translate Key="ServerWindow_Add" Value="Add" />
+  <Translate Key="ServerWindow_Edit" Value="Edit" />
+  <Translate Key="ServerWindow_Delete" Value="Delete" />
+  <Translate Key="ServerWindow_Name" Value="Name" />
+  <Translate Key="ServerWindow_Uri" Value="Uri" />
+  <Translate Key="ServerWindow_Signature" Value="Signature" />
+  <Translate Key="ServerWindow_Port" Value="Port" />
+  <Translate Key="ServerWindow_Connection" Value="Connection" />
+  <Translate Key="ServerWindow_ServerType" Value="Server Type" />
+  <Translate Key="ServerWindow_Ipv4" Value="Ipv4" />
+  <Translate Key="ServerWindow_Ipv6" Value="Ipv6" />
+  <Translate Key="ServerWindow_Tor" Value="Tor" />
+  <Translate Key="ServerWindow_Type" Value="Type" />
+  <Translate Key="ServerWindow_Host" Value="Host" />
+  <Translate Key="ServerWindow_Listen" Value="Listen" />
+  <Translate Key="ServerWindow_ListenUris" Value="Listen Uris" />
+  <Translate Key="ServerWindow_Miscellaneous" Value="Miscellaneous" />
+  <Translate Key="ServerWindow_CoreSettings" Value="Core Settings" />
+  <Translate Key="ServerWindow_ConnectionCountLimit" Value="Connection Count Limit" />
+
+</Configuration>
