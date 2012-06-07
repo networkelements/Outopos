@@ -28,7 +28,7 @@ namespace Lair.Windows
     {
         private BufferManager _bufferManager;
 
-        private List<SessionTreeViewItem> _sessionTreeViewItems = new List<SessionTreeViewItem>();
+        private List<TreeViewItem> _treeViewItems = new List<TreeViewItem>();
 
         private System.Windows.Forms.NotifyIcon _notifyIcon = new System.Windows.Forms.NotifyIcon();
         private WindowState _windowState;
@@ -229,8 +229,8 @@ namespace Lair.Windows
                 .OrderBy(n => int.Parse(Path.GetFileName(n))))
             {
                 string name;
-                ServerManager serverManager = new ServerManager(_bufferManager);
-                ClientManager sessionManager = new ClientManager(_bufferManager);
+                RouterManager routerManager = new RouterManager(_bufferManager);
+                SessionManager sessionManager = new SessionManager(_bufferManager);
 
                 using (FileStream stream = new FileStream(Path.Combine(path, "Name.txt"), FileMode.Open))
                 using (StreamReader reader = new StreamReader(stream))
@@ -238,13 +238,13 @@ namespace Lair.Windows
                     name = reader.ReadLine();
                 }
 
-                serverManager.Load(Path.Combine(path, "ServerManager"));
+                routerManager.Load(Path.Combine(path, "ServerManager"));
                 sessionManager.Load(Path.Combine(path, "SessionManager"));
 
-                _sessionTreeViewItems.Add(new SessionTreeViewItem()
+                _treeViewItems.Add(new SessionTreeViewItem()
                 {
                     Name = name,
-                    ServerManager = serverManager,
+                    ServerManager = routerManager,
                     SessionManager = sessionManager,
                 });
             }
@@ -255,6 +255,15 @@ namespace Lair.Windows
             Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
             Thread.CurrentThread.Priority = ThreadPriority.Highest;
 
+            TopRelativeDoubleConverter.GetDoubleEvent = (object state) =>
+            {
+                return this.PointToScreen(new Point(0, 0)).Y;
+            };
+
+            LeftRelativeDoubleConverter.GetDoubleEvent = (object state) =>
+            {
+                return this.PointToScreen(new Point(0, 0)).X;
+            };
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -288,36 +297,31 @@ namespace Lair.Windows
 
         private void _treeViewServerAddContextMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            string name = "";
+            SettingsManager settingsManager = new SettingsManager();
+            settingsManager.AutoStart = true;
+            settingsManager.Name = "Server";
 
-            if (!_sessionTreeViewItems.Any(n => n.Name == "Server"))
-            {
-                name = "Server";
-            }
-            else
-            {
-                int i = 1;
-                while (_sessionTreeViewItems.Any(n => n.Name == "Server_" + i)) i++;
-
-                name = "Server_" + i;
-            }
-
-            ServerManager serverManager = new ServerManager(_bufferManager);
+            RouterManager routerManager = new RouterManager(_bufferManager);
             Random random = new Random();
-            serverManager.ListenUris.Clear();
-            serverManager.ListenUris.Add(string.Format("tcp:{0}:{1}", IPAddress.Any.ToString(), random.Next(1024, 65536)));
-            serverManager.ListenUris.Add(string.Format("tcp:[{0}]:{1}", IPAddress.IPv6Any.ToString(), random.Next(1024, 65536)));
+            routerManager.ListenUris.Clear();
+            routerManager.ListenUris.Add(string.Format("tcp:{0}:{1}", IPAddress.Any.ToString(), random.Next(1024, 65536)));
+            routerManager.ListenUris.Add(string.Format("tcp:[{0}]:{1}", IPAddress.IPv6Any.ToString(), random.Next(1024, 65536)));
 
-            ServerWindow window = new ServerWindow(ref name, ref serverManager);
+            RouterWindow window = new RouterWindow(ref settingsManager, ref routerManager);
             window.Owner = this;
             window.ShowDialog();
+
+            _treeViewItems.Add(new RouterTreeViewItem()
+            {
+                SettingsManager = settingsManager,
+                RouterManager = routerManager,
+            });
         }
 
         public class SessionTreeViewItem : TreeViewItem
         {
-            private string _name;
-            private ServerManager _serverManager;
-            private ClientManager _sessionManager;
+            private SessionManager _sessionManager;
+            private SettingsManager _settingsManager;
 
             public SessionTreeViewItem()
                 : base()
@@ -329,12 +333,12 @@ namespace Lair.Windows
             {
                 base.Header = new TextBlock()
                 {
-                    Text = _name
+                    Text = this.Name,
                 };
 
                 List<ChannelTreeViewItem> list = new List<ChannelTreeViewItem>();
 
-                foreach (var item in this.SessionManager.Channels)
+                foreach (var item in this.SettingsManager.Channels)
                 {
                     list.Add(new ChannelTreeViewItem()
                     {
@@ -359,21 +363,7 @@ namespace Lair.Windows
                 }
             }
 
-            public ServerManager ServerManager
-            {
-                get
-                {
-                    return _serverManager;
-                }
-                set
-                {
-                    _serverManager = value;
-
-                    this.Update();
-                }
-            }
-
-            public ClientManager SessionManager
+            public SessionManager SessionManager
             {
                 get
                 {
@@ -387,15 +377,117 @@ namespace Lair.Windows
                 }
             }
 
+            public SettingsManager SettingsManager
+            {
+                get
+                {
+                    return _settingsManager;
+                }
+                set
+                {
+                    _settingsManager = value;
+
+                    this.Update();
+                }
+            }
+
             new public string Name
             {
                 get
                 {
-                    return _name;
+                    return _settingsManager.Name;
                 }
                 set
                 {
-                    _name = value;
+                    _settingsManager.Name = value;
+
+                    this.Update();
+                }
+            }
+        }
+
+        public class RouterTreeViewItem : TreeViewItem
+        {
+            private RouterManager _routerManager;
+            private SettingsManager _settingsManager;
+
+            public RouterTreeViewItem()
+                : base()
+            {
+                base.IsExpanded = true;
+            }
+
+            public void Update()
+            {
+                base.Header = new TextBlock()
+                {
+                    Text = this.Name,
+                };
+
+                List<ChannelTreeViewItem> list = new List<ChannelTreeViewItem>();
+
+                foreach (var item in this.SettingsManager.Channels)
+                {
+                    list.Add(new ChannelTreeViewItem()
+                    {
+                        Name = item
+                    });
+                }
+
+                foreach (var item in this.Items.OfType<ChannelTreeViewItem>().ToArray())
+                {
+                    if (!list.Any(n => n.Name == item.Name))
+                    {
+                        this.Items.Remove(item);
+                    }
+                }
+
+                foreach (var item in list)
+                {
+                    if (!this.Items.OfType<ChannelTreeViewItem>().Any(n => n.Name == item.Name))
+                    {
+                        this.Items.Add(item);
+                    }
+                }
+            }
+
+            public RouterManager RouterManager
+            {
+                get
+                {
+                    return _routerManager;
+                }
+                set
+                {
+                    _routerManager = value;
+
+                    this.Update();
+                }
+            }
+
+            public SettingsManager SettingsManager
+            {
+                get
+                {
+                    return _settingsManager;
+                }
+                set
+                {
+                    _settingsManager = value;
+
+                    this.Update();
+                }
+            }
+
+            new public string Name
+            {
+                get
+                {
+                    return _settingsManager.Name;
+                }
+                set
+                {
+                    _settingsManager.Name = value;
 
                     this.Update();
                 }

@@ -19,7 +19,7 @@ namespace Lair
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class ClientManager : ManagerBase, Library.Configuration.ISettings, IThisLock
+    public class SessionManager : ManagerBase, Library.Configuration.ISettings, IThisLock
     {
         private BufferManager _bufferManager;
         private ConnectionManager _connectionManager;
@@ -31,7 +31,7 @@ namespace Lair
 
         private const int MaxReceiveCount = 1 * 1024 * 1024;
 
-        public ClientManager(BufferManager bufferManager)
+        public SessionManager(BufferManager bufferManager)
         {
             _bufferManager = bufferManager;
 
@@ -106,24 +106,6 @@ namespace Lair
                 using (DeadlockMonitor.Lock(this.ThisLock))
                 {
                     _settings.ProxyUri = value;
-                }
-            }
-        }
-
-        public ChannelCollection Channels
-        {
-            get
-            {
-                using (DeadlockMonitor.Lock(this.ThisLock))
-                {
-                    return _settings.Channels;
-                }
-            }
-            set
-            {
-                using (DeadlockMonitor.Lock(this.ThisLock))
-                {
-                    _settings.Channels = value;
                 }
             }
         }
@@ -355,8 +337,8 @@ namespace Lair
                         }
                     }
 #endif
-                    socket = ClientManager.Connect(new IPEndPoint(ClientManager.GetIpAddress(host), port), new TimeSpan(0, 0, 10));
-                    connection = new TcpConnection(socket, ClientManager.MaxReceiveCount, _bufferManager);
+                    socket = SessionManager.Connect(new IPEndPoint(SessionManager.GetIpAddress(host), port), new TimeSpan(0, 0, 10));
+                    connection = new TcpConnection(socket, SessionManager.MaxReceiveCount, _bufferManager);
                 }
                 else
                 {
@@ -400,7 +382,7 @@ namespace Lair
 
                     if (proxyHost == null) return null;
 
-                    socket = ClientManager.Connect(new IPEndPoint(ClientManager.GetIpAddress(proxyHost), proxyPort), new TimeSpan(0, 0, 10));
+                    socket = SessionManager.Connect(new IPEndPoint(SessionManager.GetIpAddress(proxyHost), proxyPort), new TimeSpan(0, 0, 10));
                     ProxyClientBase proxy = null;
 
                     if (this.ConnectionType == ConnectionType.Socks4Proxy)
@@ -420,13 +402,13 @@ namespace Lair
                         proxy = new HttpProxyClient(socket, host, port);
                     }
 
-                    connection = new TcpConnection(proxy.CreateConnection(new TimeSpan(0, 0, 30)), ClientManager.MaxReceiveCount, _bufferManager);
+                    connection = new TcpConnection(proxy.CreateConnection(new TimeSpan(0, 0, 30)), SessionManager.MaxReceiveCount, _bufferManager);
                 }
 
                 var secureConnection = new SecureClientConnection(connection, null, _bufferManager);
                 secureConnection.Connect(new TimeSpan(0, 1, 0));
 
-                _connectionManager = new ConnectionManager(new CompressConnection(secureConnection, ClientManager.MaxReceiveCount, _bufferManager), _bufferManager);
+                _connectionManager = new ConnectionManager(new CompressConnection(secureConnection, SessionManager.MaxReceiveCount, _bufferManager), _bufferManager);
             }
             catch (Exception)
             {
@@ -582,24 +564,6 @@ namespace Lair
                     using (DeadlockMonitor.Lock(this.ThisLock))
                     {
                         this["ProxyUri"] = value;
-                    }
-                }
-            }
-
-            public ChannelCollection Channels
-            {
-                get
-                {
-                    using (DeadlockMonitor.Lock(this.ThisLock))
-                    {
-                        return (ChannelCollection)this["Channels"];
-                    }
-                }
-                set
-                {
-                    using (DeadlockMonitor.Lock(this.ThisLock))
-                    {
-                        this["Channels"] = value;
                     }
                 }
             }

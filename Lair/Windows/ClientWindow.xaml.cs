@@ -19,7 +19,7 @@ namespace Lair.Windows
     /// </summary>
     public partial class SessionWindow : Window
     {
-        public SessionWindow(ref string name, ref ServerManager nestServerManager)
+        public SessionWindow(ref string name, ref RouterManager nestServerManager)
         {
             InitializeComponent();
         }

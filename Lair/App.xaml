@@ -16,6 +16,11 @@
             <Style TargetType="{x:Type local:ListViewEx}" BasedOn="{StaticResource {x:Type ListView}}" />
 
             <ObjectDataProvider x:Key="ResourcesInstance" ObjectType="{x:Type prop:LanguagesManager}" MethodName="GetInstance"/>
+         
+            <local:TopRelativeDoubleConverter x:Key="_topRelativeDoubleConverter"/>
+            <local:LeftRelativeDoubleConverter x:Key="_leftRelativeDoubleConverter"/>
+            <local:StringToFontFamilyConverter x:Key="_stringToFontFamilyConverter"/>
+            <local:StringToDoubleConverter x:Key="_stringToDoubleConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -17,27 +17,33 @@ using Library.Net.Lair;
 namespace Lair.Windows
 {
     /// <summary>
-    /// Interaction logic for ServerWindow.xaml
+    /// Interaction logic for RouterWindow.xaml
     /// </summary>
-    public partial class ServerWindow : Window
+    public partial class RouterWindow : Window
     {
-        private string _name;
-        private ServerManager _serverManager;
+        private SettingsManager _settingsManager;
+        private RouterManager _routerManager;
 
         private UriCollection _listenUris = new UriCollection();
 
-        public ServerWindow(ref string name, ref ServerManager serverManager)
+        public RouterWindow(ref SettingsManager settingsManager, ref RouterManager routerManager)
         {
-            _name = name;
-            _serverManager = serverManager;
+            _settingsManager = settingsManager;
+            _routerManager = routerManager;
 
             InitializeComponent();
 
-            _nameTextBox.Text = name;
+            _serverListenUrisListView.ItemsSource = _listenUris;
 
-            using (DeadlockMonitor.Lock(_serverManager.ThisLock))
+            using (DeadlockMonitor.Lock(_settingsManager.ThisLock))
             {
-                _listenUris.AddRange(_serverManager.ListenUris);
+                _nameTextBox.Text = _settingsManager.Name;
+            }
+
+            using (DeadlockMonitor.Lock(_routerManager.ThisLock))
+            {
+                _listenUris.AddRange(_routerManager.ListenUris);
+                _miscellaneousConnectionCountLimitTextBox.Text = _routerManager.ConnectionCountLimit.ToString();
             }
         }
 
@@ -269,20 +275,25 @@ namespace Lair.Windows
 
         private void _miscellaneousConnectionCountLimitTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            _miscellaneousConnectionCountLimitTextBox.Text = ServerWindow.GetStringToInt(_miscellaneousConnectionCountLimitTextBox.Text).ToString();
+            _miscellaneousConnectionCountLimitTextBox.Text = RouterWindow.GetStringToInt(_miscellaneousConnectionCountLimitTextBox.Text).ToString();
         }
 
         #endregion
-        
+
         private void _okButton_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = true;
 
-            _name = _nameTextBox.Text;
-
-            using (DeadlockMonitor.Lock(_serverManager.ThisLock))
+            using (DeadlockMonitor.Lock(_settingsManager.ThisLock))
             {
+                _settingsManager.Name = _nameTextBox.Text;
+            }
 
+            using (DeadlockMonitor.Lock(_routerManager.ThisLock))
+            {
+                _routerManager.ListenUris.Clear();
+                _routerManager.ListenUris.AddRange(_listenUris);
+                _routerManager.ConnectionCountLimit = int.Parse(_miscellaneousConnectionCountLimitTextBox.Text);
             }
         }
 

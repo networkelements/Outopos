@@ -22,8 +22,37 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<double>() { Name = "MainWindow_Height", Value = 500 },
                 new Library.Configuration.SettingsContext<double>() { Name = "MainWindow_Width", Value = 700 },
                 new Library.Configuration.SettingsContext<WindowState>() { Name = "MainWindow_WindowState", Value = WindowState.Normal },
+                      
+                new Library.Configuration.SettingsContext<double>() { Name = "RouterWindow_Top", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "RouterWindow_Left", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "RouterWindow_Height", Value = 500 },
+                new Library.Configuration.SettingsContext<double>() { Name = "RouterWindow_Width", Value = 700 },
+                new Library.Configuration.SettingsContext<WindowState>() { Name = "RouterWindow_WindowState", Value = WindowState.Normal },               
             })
         {
+
+        }
+
+        public override void Load(string directoryPath)
+        {
+            using (DeadlockMonitor.Lock(this.ThisLock))
+            {
+                try
+                {
+                    base.Load(directoryPath);
+                }
+                catch (Exception)
+                {
+                }
+            }
+        }
+
+        public override void Save(string directoryPath)
+        {
+            using (DeadlockMonitor.Lock(this.ThisLock))
+            {
+                base.Save(directoryPath);
+            }
         }
 
         public static Settings Instance
@@ -151,6 +180,102 @@ namespace Lair.Properties
             }
         }
 
+
+        public double RouterWindow_Top
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["RouterWindow_Top"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["RouterWindow_Top"] = value;
+                }
+            }
+        }
+
+        public double RouterWindow_Left
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["RouterWindow_Left"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["RouterWindow_Left"] = value;
+                }
+            }
+        }
+
+        public double RouterWindow_Height
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["RouterWindow_Height"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["RouterWindow_Height"] = value;
+                }
+            }
+        }
+
+        public double RouterWindow_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["RouterWindow_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["RouterWindow_Width"] = value;
+                }
+            }
+        }
+
+        public WindowState RouterWindow_WindowState
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (WindowState)this["RouterWindow_WindowState"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["RouterWindow_WindowState"] = value;
+                }
+            }
+        }
+
         #endregion
 
         #region IThisLock メンバ
@@ -164,27 +289,5 @@ namespace Lair.Properties
         }
 
         #endregion
-
-        public override void Load(string directoryPath)
-        {
-            using (DeadlockMonitor.Lock(this.ThisLock))
-            {
-                try
-                {
-                    base.Load(directoryPath);
-                }
-                catch (Exception)
-                {
-                }
-            }
-        }
-
-        public override void Save(string directoryPath)
-        {
-            using (DeadlockMonitor.Lock(this.ThisLock))
-            {
-                base.Save(directoryPath);
-            }
-        }
     }
 }

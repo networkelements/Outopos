@@ -66,6 +66,40 @@ namespace Lair.Properties
 
         #region Property
 
+        public string FontFamily
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("FontFamily");
+                }
+            }
+        }
+
+        public string FontSize
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("FontSize");
+                }
+            }
+        }
+
+        public string DateTime_StringFormat
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("DateTime_StringFormat");
+                }
+            }
+        }
+
+
         public string MainWindow_Settings
         {
             get
@@ -121,255 +155,277 @@ namespace Lair.Properties
             }
         }
 
-        public string ServerWindow_Ok
+        public string RouterWindow_Ok
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ServerWindow_Ok");
+                    return this.Translate("RouterWindow_Ok");
                 }
             }
         }
 
-        public string ServerWindow_Canrel
+        public string RouterWindow_Canrel
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ServerWindow_Canrel");
+                    return this.Translate("RouterWindow_Canrel");
                 }
             }
         }
 
-        public string ServerWindow_Up
+        public string RouterWindow_Up
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ServerWindow_Up");
+                    return this.Translate("RouterWindow_Up");
                 }
             }
         }
 
-        public string ServerWindow_Down
+        public string RouterWindow_Down
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ServerWindow_Down");
+                    return this.Translate("RouterWindow_Down");
                 }
             }
         }
 
-        public string ServerWindow_Add
+        public string RouterWindow_Add
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ServerWindow_Add");
+                    return this.Translate("RouterWindow_Add");
                 }
             }
         }
 
-        public string ServerWindow_Edit
+        public string RouterWindow_Edit
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ServerWindow_Edit");
+                    return this.Translate("RouterWindow_Edit");
                 }
             }
         }
 
-        public string ServerWindow_Delete
+        public string RouterWindow_Delete
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ServerWindow_Delete");
+                    return this.Translate("RouterWindow_Delete");
                 }
             }
         }
 
-        public string ServerWindow_Name
+        public string RouterWindow_Name
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ServerWindow_Name");
+                    return this.Translate("RouterWindow_Name");
                 }
             }
         }
 
-        public string ServerWindow_Uri
+        public string RouterWindow_Uri
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ServerWindow_Uri");
+                    return this.Translate("RouterWindow_Uri");
                 }
             }
         }
 
-        public string ServerWindow_Signature
+        public string RouterWindow_Signature
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ServerWindow_Signature");
+                    return this.Translate("RouterWindow_Signature");
                 }
             }
         }
 
-        public string ServerWindow_Port
+        public string RouterWindow_Port
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ServerWindow_Port");
+                    return this.Translate("RouterWindow_Port");
                 }
             }
         }
 
-        public string ServerWindow_Connection
+        public string RouterWindow_Connection
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ServerWindow_Connection");
+                    return this.Translate("RouterWindow_Connection");
                 }
             }
         }
 
-        public string ServerWindow_ServerType
+        public string RouterWindow_ServerType
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ServerWindow_ServerType");
+                    return this.Translate("RouterWindow_ServerType");
                 }
             }
         }
 
-        public string ServerWindow_Ipv4
+        public string RouterWindow_Ipv4
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ServerWindow_Ipv4");
+                    return this.Translate("RouterWindow_Ipv4");
                 }
             }
         }
 
-        public string ServerWindow_Ipv6
+        public string RouterWindow_Ipv6
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ServerWindow_Ipv6");
+                    return this.Translate("RouterWindow_Ipv6");
                 }
             }
         }
 
-        public string ServerWindow_Tor
+        public string RouterWindow_Tor
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ServerWindow_Tor");
+                    return this.Translate("RouterWindow_Tor");
                 }
             }
         }
 
-        public string ServerWindow_Type
+        public string RouterWindow_Type
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ServerWindow_Type");
+                    return this.Translate("RouterWindow_Type");
                 }
             }
         }
 
-        public string ServerWindow_Host
+        public string RouterWindow_Host
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ServerWindow_Host");
+                    return this.Translate("RouterWindow_Host");
                 }
             }
         }
 
-        public string ServerWindow_Listen
+        public string RouterWindow_Server
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ServerWindow_Listen");
+                    return this.Translate("RouterWindow_Server");
                 }
             }
         }
 
-        public string ServerWindow_ListenUris
+        public string RouterWindow_ListenUris
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ServerWindow_ListenUris");
+                    return this.Translate("RouterWindow_ListenUris");
                 }
             }
         }
 
-        public string ServerWindow_Miscellaneous
+        public string RouterWindow_Miscellaneous
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ServerWindow_Miscellaneous");
+                    return this.Translate("RouterWindow_Miscellaneous");
                 }
             }
         }
 
-        public string ServerWindow_CoreSettings
+        public string RouterWindow_CoreSettings
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ServerWindow_CoreSettings");
+                    return this.Translate("RouterWindow_CoreSettings");
                 }
             }
         }
 
-        public string ServerWindow_ConnectionCountLimit
+        public string RouterWindow_ConnectionCountLimit
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ServerWindow_ConnectionCountLimit");
+                    return this.Translate("RouterWindow_ConnectionCountLimit");
+                }
+            }
+        }
+
+        public string RouterWindow_OptionSettings
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("RouterWindow_OptionSettings");
+                }
+            }
+        }
+
+        public string RouterWindow_AutoStart
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("RouterWindow_AutoStart");
                 }
             }
         }

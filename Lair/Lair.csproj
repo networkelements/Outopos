@@ -78,19 +78,21 @@
     <Compile Include="ChannelCollection.cs" />
     <Compile Include="CirculationCollection.cs" />
     <Compile Include="ConnectionType.cs" />
+    <Compile Include="SettingsManager.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="IdCollection.cs" />
     <Compile Include="MessageConverter.cs" />
-    <Compile Include="ServerManager.cs" />
-    <Compile Include="ClientManager.cs" />
+    <Compile Include="RouterManager.cs" />
+    <Compile Include="SessionManager.cs" />
     <Compile Include="UriCollection.cs" />
     <Compile Include="Windows\ListViewEx.cs" />
     <Compile Include="Windows\ClientWindow.xaml.cs">
       <DependentUpon>ClientWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\ServerWindow.xaml.cs">
-      <DependentUpon>ServerWindow.xaml</DependentUpon>
+    <Compile Include="Windows\RouterWindow.xaml.cs">
+      <DependentUpon>RouterWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\ValueConverter.cs" />
     <Page Include="Themes\ExpressionDark.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -113,7 +115,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Windows\ServerWindow.xaml">
+    <Page Include="Windows\RouterWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

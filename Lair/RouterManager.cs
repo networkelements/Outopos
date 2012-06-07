@@ -19,7 +19,7 @@ using System.Diagnostics;
 
 namespace Lair
 {
-    public class ServerManager : StateManagerBase, Library.Configuration.ISettings, IThisLock
+    public class RouterManager : StateManagerBase, Library.Configuration.ISettings, IThisLock
     {
         private Settings _settings;
         private BufferManager _bufferManager;
@@ -44,7 +44,7 @@ namespace Lair
 
         private const int MaxReceiveCount = 1 * 1024 * 1024;
 
-        public ServerManager(BufferManager bufferManager)
+        public RouterManager(BufferManager bufferManager)
         {
             _settings = new Settings();
             _bufferManager = bufferManager;
@@ -199,7 +199,7 @@ namespace Lair
                         {
                             var socket = _listeners[i].AcceptTcpClient().Client;
 
-                            connection = new TcpConnection(socket, ServerManager.MaxReceiveCount, _bufferManager);
+                            connection = new TcpConnection(socket, RouterManager.MaxReceiveCount, _bufferManager);
                             break;
                         }
                     }
@@ -210,7 +210,7 @@ namespace Lair
                         secureConnection.Connect(new TimeSpan(0, 0, 20));
                         id = MessageConverter.ToSignatureString(secureConnection.Certificate);
 
-                        return new CompressConnection(secureConnection, ServerManager.MaxReceiveCount, _bufferManager);
+                        return new CompressConnection(secureConnection, RouterManager.MaxReceiveCount, _bufferManager);
                     }
                 }
                 catch (Exception)
@@ -261,9 +261,9 @@ namespace Lair
 
                         if (item.Value == null) continue;
                         if (item.Value.Command == null) continue;
-                        command = ServerManager.Split(item.Value.Command);
+                        command = RouterManager.Split(item.Value.Command);
                         if (item.Value.Content.Array == null) continue;
-                        content = ServerManager.FromBuffer(item.Value.Content, _bufferManager);
+                        content = RouterManager.FromBuffer(item.Value.Content, _bufferManager);
                     }
 
                     if (this.State == ManagerState.Stop) return;
@@ -554,7 +554,6 @@ namespace Lair
                     new Library.Configuration.SettingsContext<UriCollection>() { Name = "ListenUris", Value = new UriCollection() },
                     new Library.Configuration.SettingsContext<List<ChannelConfig>>() { Name = "ChannelConfigs", Value = new List<ChannelConfig>() },
                     new Library.Configuration.SettingsContext<int>() { Name = "ConnectionCountLimit", Value = 50 },
-                    new Library.Configuration.SettingsContext<string>() { Name = "Path", Value = null },
                 })
             {
 
@@ -630,29 +629,6 @@ namespace Lair
                     using (DeadlockMonitor.Lock(this.ThisLock))
                     {
                         this["ConnectionCountLimit"] = value;
-                    }
-                }
-            }
-
-            public string Path
-            {
-                get
-                {
-                    using (DeadlockMonitor.Lock(this.ThisLock))
-                    {
-                        var path = (string)this["Path"];
-
-                        if (path == null)
-                        {
-                            do
-                            {
-                                path = System.IO.Path.Combine(App.DirectoryPaths["Configuration"], "Tor", System.IO.Path.GetRandomFileName());
-                            } while (File.Exists(path));
-
-                            Directory.CreateDirectory(path);
-                        }
-
-                        return path;
                     }
                 }
             }
