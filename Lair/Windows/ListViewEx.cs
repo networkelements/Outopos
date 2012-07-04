@@ -21,6 +21,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Threading;
 using System.Xml;
+using Lair.Properties;
 
 namespace Lair.Windows
 {

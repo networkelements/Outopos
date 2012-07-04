@@ -4,6 +4,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:prop="clr-namespace:Lair.Properties"     
         xmlns:local="clr-namespace:Lair.Windows" 
+        FontFamily="{Binding Path=FontFamily, Mode=OneWay, Source={StaticResource ResourcesInstance}, Converter={StaticResource _stringToFontFamilyConverter}}"
+        FontSize="{Binding Path=FontSize, Mode=OneWay, Source={StaticResource ResourcesInstance}, Converter={StaticResource _stringToDoubleConverter}}"
         Background="{DynamicResource WindowBackgroundBrush}"
         Top="{Binding Path=MainWindow_Top, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}"
         Left="{Binding Path=MainWindow_Left, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}"
@@ -13,51 +15,63 @@
         StateChanged="Window_StateChanged"
         Loaded="Window_Loaded"
         Closed="Window_Closed">
-   
+    
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="438*" />
+            <RowDefinition Height="23" />
+        </Grid.RowDefinitions>
+        <TabControl Margin="0,28,0,0" Name="_tabControl" SelectionChanged="_tabControl_SelectionChanged">
+            <TabItem Header="{Binding Path=MainWindow_Connection, Source={StaticResource ResourcesInstance}}" Name="_connectionTabItem" />
+            <TabItem Header="{Binding Path=MainWindow_Download, Source={StaticResource ResourcesInstance}}" Name="_downloadTabItem" />
+            <TabItem Header="{Binding Path=MainWindow_Upload, Source={StaticResource ResourcesInstance}}" Name="_uploadTabItem" />
+            <TabItem Header="{Binding Path=MainWindow_Share, Source={StaticResource ResourcesInstance}}" Name="_shareTabItem" />
+            <TabItem Header="{Binding Path=MainWindow_Cache, Source={StaticResource ResourcesInstance}}" Name="_cacheTabItem" />
+            <TabItem Header="{Binding Path=MainWindow_Library, Source={StaticResource ResourcesInstance}}" Name="_libraryTabItem" />
+            <TabItem Header="{Binding Path=MainWindow_Log, Source={StaticResource ResourcesInstance}}" Name="_logTabItem" >
+                <RichTextBox Name="_logRichTextBox" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" IsReadOnly="True">
+                    <RichTextBox.Document>
+                        <FlowDocument>
+                            <FlowDocument.Blocks>
+                                <Paragraph Name="_logParagraph" />
+                            </FlowDocument.Blocks>
+                        </FlowDocument>
+                    </RichTextBox.Document>
+                </RichTextBox>
+            </TabItem>
+        </TabControl>
         <Menu Name="_menu" Height="24" VerticalAlignment="Top">
+            <MenuItem Header="{Binding Path=MainWindow_Connections, Source={StaticResource ResourcesInstance}}">
+                <MenuItem Name="_menuItemStart" Header="{Binding Path=MainWindow_Start, Source={StaticResource ResourcesInstance}}" Click="_menuItemStart_Click" />
+                <MenuItem Name="_menuItemStop" Header="{Binding Path=MainWindow_Stop, Source={StaticResource ResourcesInstance}}" IsEnabled="False"  Click="_menuItemStop_Click" />
+            </MenuItem>
             <MenuItem Header="{Binding Path=MainWindow_Settings, Source={StaticResource ResourcesInstance}}">
+                <MenuItem Name="_menuItemKeywordSetting" Header="{Binding Path=MainWindow_KeywordSetting, Source={StaticResource ResourcesInstance}}" Click="_menuItemKeywordSetting_Click" />
                 <MenuItem Name="_menuItemSignatureSetting" Header="{Binding Path=MainWindow_SignatureSetting, Source={StaticResource ResourcesInstance}}" Click="_menuItemSignatureSetting_Click" />
+                <MenuItem Name="_menuItemConnectionSetting" Header="{Binding Path=MainWindow_ConnectionSetting, Source={StaticResource ResourcesInstance}}" Click="_menuItemConnectionSetting_Click" />
+                <MenuItem Name="_menuItemCheckingBlocks" Header="{Binding Path=MainWindow_CheckingBlocks, Source={StaticResource ResourcesInstance}}" Click="_menuItemCheckingBlocks_Click" />
             </MenuItem>
             <MenuItem Name="_menuItemLanguages" Header="{Binding Path=MainWindow_Languages, Source={StaticResource ResourcesInstance}}" />
             <MenuItem Header="{Binding Path=MainWindow_Help, Source={StaticResource ResourcesInstance}}">
                 <MenuItem Name="_menuItemVersionInformation" Header="{Binding Path=MainWindow_VersionInformation, Source={StaticResource ResourcesInstance}}" Click="_menuItemVersionInformation_Click" />
             </MenuItem>
         </Menu>
-        <Grid Margin="0,29,0,0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="321*" />
-                <RowDefinition Height="22*" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="432*" />
-                <ColumnDefinition Width="4" />
-                <ColumnDefinition Width="171*" />
-            </Grid.ColumnDefinitions>
-               
-            <GridSplitter Grid.Column="1" Grid.RowSpan="2" HorizontalAlignment="Stretch" />
-            
-            <RichTextBox Name="_richTextBox" />
-            <TextBox Grid.Row="1" Name="_textBox" />
-            
-            <Grid Grid.Column="2" Grid.RowSpan="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="126*" />
-                    <RowDefinition Height="4" />
-                    <RowDefinition Height="208*" />
-                </Grid.RowDefinitions>
-                
-                <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" />
-                
-                <ListView Name="_listView" />
-                <TreeView Grid.Row="2" Name="_treeView">
-                    <TreeView.ContextMenu>
-                        <ContextMenu Name="_treeViewContextMenu" >
-                            <MenuItem Name="_treeViewServerAddContextMenuItem" Header="{Binding Path=MainWindow_ServerAdd, Source={StaticResource ResourcesInstance}}" Click="_treeViewServerAddContextMenuItem_Click" />
-                        </ContextMenu>
-                    </TreeView.ContextMenu>
-                </TreeView>
-            </Grid>
-        </Grid>
+        <StatusBar Grid.Row="1" 
+                   FontFamily="{Binding Path=FontFamily, Mode=OneWay, Source={StaticResource ResourcesInstance}, Converter={StaticResource _stringToFontFamilyConverter}}"
+                   FontSize="{Binding Path=FontSize, Mode=OneWay, Source={StaticResource ResourcesInstance}, Converter={StaticResource _stringToDoubleConverter}}" >
+            <StatusBarItem>
+                <Grid>
+                    <TextBlock Name="_stateTextBlock" Margin="6,0,0,0" />
+                </Grid>
+            </StatusBarItem>
+            <StatusBarItem HorizontalContentAlignment="Right">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding Path=MainWindow_SendSpeed, Source={StaticResource ResourcesInstance}}" Margin="0,0,6,0" />
+                    <TextBlock Name="_sendSpeedTextBlock" Margin="0,0,6,0" MinWidth="80" />
+                    <TextBlock Text="{Binding Path=MainWindow_ReceiveSpeed, Source={StaticResource ResourcesInstance}}" Margin="0,0,6,0" />
+                    <TextBlock Name="_receiveSpeedTextBlock"  Margin="0,0,6,0" MinWidth="80" />
+                </StackPanel>
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Window>

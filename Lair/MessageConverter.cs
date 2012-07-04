@@ -6,6 +6,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using Lair.Properties;
+using Library.Net.Lair;
 using Library.Security;
 using System.Security.Cryptography;
 using Library.Io;
@@ -14,6 +16,11 @@ namespace Lair
 {
     static class MessageConverter
     {
+        public static string ToKeywordsString(IEnumerable<string> keywords)
+        {
+            return String.Join(", ", keywords);
+        }
+
         public static string ToSignatureString(DigitalSignature digitalSignature)
         {
             if (digitalSignature == null || digitalSignature.Nickname == null || digitalSignature.PublicKey == null) return null;
@@ -65,6 +72,50 @@ namespace Lair
                             .Replace('+', '-').Replace('/', '_').Substring(0, 30);
                     }
                 }
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException("ArgumentException", e);
+            }
+        }
+
+        public static string ToInfoMessage(Seed seed)
+        {
+            try
+            {
+                var keywords = seed.Keywords.Where(n => !string.IsNullOrWhiteSpace(n)).ToList();
+
+                StringBuilder builder = new StringBuilder();
+
+                if (!string.IsNullOrWhiteSpace(seed.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.CacheControl_Name, seed.Name));
+                if (seed.Certificate != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.CacheControl_Signature, MessageConverter.ToSignatureString(seed.Certificate)));
+                builder.AppendLine(string.Format("{0}: {1:#,0}", LanguagesManager.Instance.CacheControl_Length, seed.Length));
+                if (keywords.Count != 0) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.CacheControl_Keywords, String.Join(", ", keywords)));
+                builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.CacheControl_CreationTime, seed.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
+                if (!string.IsNullOrWhiteSpace(seed.Comment)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.CacheControl_Comment, seed.Comment));
+
+                if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
+                else return null;
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException("ArgumentException", e);
+            }
+        }
+
+        public static string ToInfoMessage(Box box)
+        {
+            try
+            {
+                StringBuilder builder = new StringBuilder();
+
+                if (!string.IsNullOrWhiteSpace(box.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.CacheControl_Name, box.Name));
+                if (box.Certificate != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.CacheControl_Signature, MessageConverter.ToSignatureString(box.Certificate)));
+                builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.CacheControl_CreationTime, box.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
+                if (!string.IsNullOrWhiteSpace(box.Comment)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.CacheControl_Comment, box.Comment));
+
+                if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
+                else return null;
             }
             catch (Exception e)
             {
