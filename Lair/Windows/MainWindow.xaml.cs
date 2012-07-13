@@ -38,7 +38,7 @@ namespace Lair.Windows
     partial class MainWindow : Window
     {
         private BufferManager _bufferManager;
-        private LairManager _amoebaManager;
+        private LairManager _lairManager;
         private AutoBaseNodeSettingManager _autoBaseNodeSettingManager;
 
         System.Windows.Forms.NotifyIcon _notifyIcon = new System.Windows.Forms.NotifyIcon();
@@ -318,10 +318,10 @@ namespace Lair.Windows
             {
                 bool initFlag = false;
 
-                _amoebaManager = new LairManager(Path.Combine(App.DirectoryPaths["Configuration"], "Cache.blocks"), _bufferManager);
-                _amoebaManager.Load(_configrationDirectoryPaths["LairManager"]);
+                _lairManager = new LairManager(Path.Combine(App.DirectoryPaths["Configuration"], "Cache.blocks"), _bufferManager);
+                _lairManager.Load(_configrationDirectoryPaths["LairManager"]);
 
-                if (_amoebaManager.BaseNode == null || _amoebaManager.BaseNode.Id == null)
+                if (_lairManager.BaseNode == null || _lairManager.BaseNode.Id == null)
                 {
                     byte[] buffer = new byte[64];
                     (new RNGCryptoServiceProvider()).GetBytes(buffer);
@@ -329,145 +329,21 @@ namespace Lair.Windows
                     var baseNode = new Node();
                     baseNode.Id = buffer;
 
-                    _amoebaManager.BaseNode = baseNode;
+                    _lairManager.BaseNode = baseNode;
                 }
 
                 if (!File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Lair.version")))
                 {
                     initFlag = true;
 
-                    {
-                        System.Diagnostics.ProcessStartInfo p = new System.Diagnostics.ProcessStartInfo();
-                        p.UseShellExecute = true;
-                        p.FileName = Path.Combine(App.DirectoryPaths["Core"], "Lair.exe");
-                        p.Arguments = "Relate on";
-
-                        OperatingSystem osInfo = Environment.OSVersion;
-
-                        if (osInfo.Platform == PlatformID.Win32NT && osInfo.Version.Major >= 6)
-                        {
-                            p.Verb = "runas";
-                        }
-
-                        try
-                        {
-                            System.Diagnostics.Process.Start(p);
-                        }
-                        catch (System.ComponentModel.Win32Exception)
-                        {
-
-                        }
-                    }
-
-                    Settings.Instance.Global_SearchKeywords.Clear();
-                    Settings.Instance.Global_SearchKeywords.Add("Box");
-                    Settings.Instance.Global_SearchKeywords.Add("Picture");
-                    Settings.Instance.Global_SearchKeywords.Add("Movie");
-                    Settings.Instance.Global_SearchKeywords.Add("Music");
-                    Settings.Instance.Global_SearchKeywords.Add("Archive");
-                    Settings.Instance.Global_SearchKeywords.Add("Document");
-                    Settings.Instance.Global_SearchKeywords.Add("Executable");
-
-                    Directory.CreateDirectory(Path.Combine(@"..\", "Download"));
-                    _amoebaManager.DownloadDirectory = Path.Combine(@"..\", "Download");
-
-                    _amoebaManager.ConnectionCountLimit = 12;
-                    _amoebaManager.DownloadingConnectionCountLowerLimit = 3;
-                    _amoebaManager.UploadingConnectionCountLowerLimit = 3;
-
-                    Settings.Instance.Global_UploadKeywords.Clear();
-                    Settings.Instance.Global_UploadKeywords.Add("Document");
-
-                    SearchItem pictureSearchItem = new SearchItem()
-                    {
-                        Name = "Picture"
-                    };
-                    pictureSearchItem.SearchKeywordCollection.Add(new SearchContains<string>()
-                    {
-                        Contains = true,
-                        Value = "Picture",
-                    });
-
-                    SearchItem movieSearchItem = new SearchItem()
-                    {
-                        Name = "Movie"
-                    };
-                    movieSearchItem.SearchKeywordCollection.Add(new SearchContains<string>()
-                    {
-                        Contains = true,
-                        Value = "Movie",
-                    });
-
-                    SearchItem musicSearchItem = new SearchItem()
-                    {
-                        Name = "Music"
-                    };
-                    musicSearchItem.SearchKeywordCollection.Add(new SearchContains<string>()
-                    {
-                        Contains = true,
-                        Value = "Music",
-                    });
-
-                    SearchItem archiveSearchItem = new SearchItem()
-                    {
-                        Name = "Archive"
-                    };
-                    archiveSearchItem.SearchKeywordCollection.Add(new SearchContains<string>()
-                    {
-                        Contains = true,
-                        Value = "Archive",
-                    });
-
-                    SearchItem documentSearchItem = new SearchItem()
-                    {
-                        Name = "Document"
-                    };
-                    documentSearchItem.SearchKeywordCollection.Add(new SearchContains<string>()
-                    {
-                        Contains = true,
-                        Value = "Document",
-                    });
-
-                    SearchItem ExecutableSearchItem = new SearchItem()
-                    {
-                        Name = "Executable"
-                    };
-                    ExecutableSearchItem.SearchKeywordCollection.Add(new SearchContains<string>()
-                    {
-                        Contains = true,
-                        Value = "Executable",
-                    });
-
-                    Settings.Instance.CacheControl_SearchTreeItem.Items.Clear();
-                    Settings.Instance.CacheControl_SearchTreeItem.Items.Add(new SearchTreeItem()
-                    {
-                        SearchItem = pictureSearchItem
-                    });
-                    Settings.Instance.CacheControl_SearchTreeItem.Items.Add(new SearchTreeItem()
-                    {
-                        SearchItem = movieSearchItem
-                    });
-                    Settings.Instance.CacheControl_SearchTreeItem.Items.Add(new SearchTreeItem()
-                    {
-                        SearchItem = musicSearchItem
-                    });
-                    Settings.Instance.CacheControl_SearchTreeItem.Items.Add(new SearchTreeItem()
-                    {
-                        SearchItem = archiveSearchItem
-                    });
-                    Settings.Instance.CacheControl_SearchTreeItem.Items.Add(new SearchTreeItem()
-                    {
-                        SearchItem = documentSearchItem
-                    });
-                    Settings.Instance.CacheControl_SearchTreeItem.Items.Add(new SearchTreeItem()
-                    {
-                        SearchItem = ExecutableSearchItem
-                    });
+                    _lairManager.ConnectionCountLimit = 12;
+                    _lairManager.DownloadingConnectionCountLowerLimit = 3;
+                    _lairManager.UploadingConnectionCountLowerLimit = 3;
 
                     Random random = new Random();
-                    _amoebaManager.ListenUris.Clear();
-                    _amoebaManager.ListenUris.Add(string.Format("tcp:{0}:{1}", IPAddress.Any.ToString(), random.Next(1024, 65536)));
-                    _amoebaManager.ListenUris.Add(string.Format("tcp:[{0}]:{1}", IPAddress.IPv6Any.ToString(), random.Next(1024, 65536)));
+                    _lairManager.ListenUris.Clear();
+                    _lairManager.ListenUris.Add(string.Format("tcp:{0}:{1}", IPAddress.Any.ToString(), random.Next(1024, 65536)));
+                    _lairManager.ListenUris.Add(string.Format("tcp:[{0}]:{1}", IPAddress.IPv6Any.ToString(), random.Next(1024, 65536)));
 
                     var ipv4ConnectionFilter = new ConnectionFilter()
                     {
@@ -515,12 +391,12 @@ namespace Lair.Windows
                         },
                     };
 
-                    _amoebaManager.Filters.Clear();
-                    _amoebaManager.Filters.Add(ipv4ConnectionFilter);
-                    _amoebaManager.Filters.Add(ipv6ConnectionFilter);
-                    _amoebaManager.Filters.Add(tcpConnectionFilter);
-                    _amoebaManager.Filters.Add(torConnectionFilter);
-                    _amoebaManager.Filters.Add(i2pConnectionFilter);
+                    _lairManager.Filters.Clear();
+                    _lairManager.Filters.Add(ipv4ConnectionFilter);
+                    _lairManager.Filters.Add(ipv6ConnectionFilter);
+                    _lairManager.Filters.Add(tcpConnectionFilter);
+                    _lairManager.Filters.Add(torConnectionFilter);
+                    _lairManager.Filters.Add(i2pConnectionFilter);
                 }
                 else
                 {
@@ -553,24 +429,165 @@ namespace Lair.Windows
                         }
 
                         baseNode.Id = buffer;
-                        baseNode.Uris.AddRange(_amoebaManager.BaseNode.Uris);
+                        baseNode.Uris.AddRange(_lairManager.BaseNode.Uris);
 
-                        _amoebaManager.BaseNode = baseNode;
+                        _lairManager.BaseNode = baseNode;
                     }
                 }
 #endif
 
-                _autoBaseNodeSettingManager = new AutoBaseNodeSettingManager(_amoebaManager);
+                _autoBaseNodeSettingManager = new AutoBaseNodeSettingManager(_lairManager);
                 _autoBaseNodeSettingManager.Load(_configrationDirectoryPaths["AutoBaseNodeSettingManager"]);
 
                 if (initFlag)
                 {
                     _autoBaseNodeSettingManager.Save(_configrationDirectoryPaths["AutoBaseNodeSettingManager"]);
-                    _amoebaManager.Save(_configrationDirectoryPaths["LairManager"]);
+                    _lairManager.Save(_configrationDirectoryPaths["LairManager"]);
                     Settings.Instance.Save(_configrationDirectoryPaths["MainWindow"]);
                 }
             }
         }
+
+        private object _updateLockObject = new object();
+
+        private void UpdateCheck(bool isShow)
+        {
+            /*lock (_updateLockObject)
+            {
+                try
+                {
+                    Version updateVersion = new Version();
+
+                    if (File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Lair.update")))
+                    {
+                        using (StreamReader reader = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Lair.update"), new UTF8Encoding(false)))
+                        {
+                            updateVersion = new Version(reader.ReadLine());
+                        }
+                    }
+
+                    var url = Settings.Instance.Global_Update_Url;
+                    var proxyUri = Settings.Instance.Global_Update_ProxyUri;
+                    var signature = Settings.Instance.Global_Update_Signature;
+
+                    HttpWebRequest rq = (HttpWebRequest)HttpWebRequest.Create(url);
+                    rq.Method = "GET";
+                    rq.UserAgent = "";
+                    rq.ReadWriteTimeout = 1000 * 60;
+                    rq.Timeout = 1000 * 60;
+                    rq.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore);
+                    rq.KeepAlive = true;
+
+                    if (!string.IsNullOrWhiteSpace(proxyUri))
+                    {
+                        string proxyScheme = null;
+                        string proxyHost = null;
+                        int proxyPort = -1;
+
+                        {
+                            Regex regex = new Regex(@"(.*?):(.*):(\d*)");
+                            var match = regex.Match(proxyUri);
+
+                            if (match.Success)
+                            {
+                                proxyScheme = match.Groups[1].Value;
+                                proxyHost = match.Groups[2].Value;
+                                proxyPort = int.Parse(match.Groups[3].Value);
+                            }
+                            else
+                            {
+                                Regex regex2 = new Regex(@"(.*?):(.*)");
+                                var match2 = regex2.Match(proxyUri);
+
+                                if (match2.Success)
+                                {
+                                    proxyScheme = match2.Groups[1].Value;
+                                    proxyHost = match2.Groups[2].Value;
+                                    proxyPort = 80;
+                                }
+                            }
+                        }
+
+                        rq.Proxy = new WebProxy(proxyHost, proxyPort);
+                    }
+
+                    Seed seed;
+
+                    using (HttpWebResponse rs = (HttpWebResponse)rq.GetResponse())
+                    using (Stream stream = rs.GetResponseStream())
+                    using (StreamReader r = new StreamReader(stream))
+                    {
+                        seed = LairConverter.FromSeedString(r.ReadLine());
+                    }
+
+                    Regex regex3 = new Regex(@"Lair ((\d*)\.(\d*)\.(\d*)).*\.zip");
+                    var match3 = regex3.Match(seed.Name);
+
+                    if (match3.Success)
+                    {
+                        var tempVersion = new Version(match3.Groups[1].Value);
+
+                        if (tempVersion <= App.LairVersion)
+                        {
+                            if (!isShow) return;
+                         
+                            this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                            {
+                                MessageBox.Show(
+                                    this,
+                                    LanguagesManager.Instance.MainWindow_LatestVersion_Message,
+                                    "Update",
+                                    MessageBoxButton.OK,
+                                    MessageBoxImage.Information);
+                            }), null);
+                        }
+                        else
+                        {
+                            if (!isShow && tempVersion <= updateVersion) return;
+
+                            if (!string.IsNullOrWhiteSpace(signature))
+                            {
+                                if (!seed.VerifyCertificate()) throw new Exception("Update VerifyCertificate");
+                                if (MessageConverter.ToSignatureString(seed.Certificate) != signature) throw new Exception("Update Signature");
+                            }
+
+                            bool flag = true;
+
+                            if (Settings.Instance.Global_Update_Option != UpdateOption.AutoUpdate)
+                            {
+                                this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                                {
+                                    if (MessageBox.Show(
+                                        this,
+                                        string.Format(LanguagesManager.Instance.MainWindow_UpdateCheck_Message, Path.GetFileNameWithoutExtension(seed.Name)),
+                                        "Update",
+                                        MessageBoxButton.OKCancel,
+                                        MessageBoxImage.Information) == MessageBoxResult.Cancel)
+                                    {
+                                        flag = false;
+                                    }
+                                }), null);
+                            }
+
+                            using (StreamWriter writer = new StreamWriter(Path.Combine(App.DirectoryPaths["Configuration"], "Lair.update"), false, new UTF8Encoding(false)))
+                            {
+                                writer.WriteLine(tempVersion.ToString());
+                            }
+
+                            if (flag)
+                            {
+                                _lairManager.Download(seed, App.DirectoryPaths["Update"], 6);
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                }
+            }*/
+        }
+        
 
         private void ConnectionsInformationShow(object state)
         {
@@ -586,10 +603,10 @@ namespace Lair.Windows
 
                 try
                 {
-                    sentByteCountList[count] = _amoebaManager.SentByteCount - sentByteCount;
-                    sentByteCount = _amoebaManager.SentByteCount;
-                    receivedByteCountList[count] = _amoebaManager.ReceivedByteCount - receivedByteCount;
-                    receivedByteCount = _amoebaManager.ReceivedByteCount;
+                    sentByteCountList[count] = _lairManager.SentByteCount - sentByteCount;
+                    sentByteCount = _lairManager.SentByteCount;
+                    receivedByteCountList[count] = _lairManager.ReceivedByteCount - receivedByteCount;
+                    receivedByteCount = _lairManager.ReceivedByteCount;
                     count++;
                     if (count >= sentByteCountList.Count) count = 0;
 
@@ -610,7 +627,7 @@ namespace Lair.Windows
                     {
                         try
                         {
-                            if (_amoebaManager.State == ManagerState.Start)
+                            if (_lairManager.State == ManagerState.Start)
                             {
                                 _stateTextBlock.Text = "Start";
                             }
@@ -639,7 +656,6 @@ namespace Lair.Windows
             Stopwatch updateStopwatch = new Stopwatch();
             spaceCheckStopwatch.Start();
             backupStopwatch.Start();
-            updateStopwatch.Start();
 
             for (; ; )
             {
@@ -655,7 +671,7 @@ namespace Lair.Windows
 
                         if (drive.AvailableFreeSpace < NetworkConverter.FromSizeString("256MB"))
                         {
-                            if (_amoebaManager.State == ManagerState.Start)
+                            if (_lairManager.State == ManagerState.Start)
                             {
                                 this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
                                 {
@@ -679,8 +695,27 @@ namespace Lair.Windows
                     try
                     {
                         _autoBaseNodeSettingManager.Save(_configrationDirectoryPaths["AutoBaseNodeSettingManager"]);
-                        _amoebaManager.Save(_configrationDirectoryPaths["LairManager"]);
+                        _lairManager.Save(_configrationDirectoryPaths["LairManager"]);
                         Settings.Instance.Save(_configrationDirectoryPaths["MainWindow"]);
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                }
+
+
+                if (!updateStopwatch.IsRunning && updateStopwatch.Elapsed > new TimeSpan(3, 0, 0, 0))
+                {
+                    updateStopwatch.Restart();
+
+                    try
+                    {
+                        if (Settings.Instance.Global_Update_Option == UpdateOption.AutoCheck
+                           || Settings.Instance.Global_Update_Option == UpdateOption.AutoUpdate)
+                        {
+                            _menuItemUpdateCheck_Click(null, null);
+                        }
                     }
                     catch (Exception)
                     {
@@ -705,35 +740,15 @@ namespace Lair.Windows
                 return this.PointToScreen(new Point(0, 0)).X;
             };
 
-            CacheControl _cacheControl = new CacheControl(this, _amoebaManager, _bufferManager);
-            _cacheControl.Height = Double.NaN;
-            _cacheControl.Width = Double.NaN;
-            _cacheTabItem.Content = _cacheControl;
-
-            ConnectionControl _connectionControl = new ConnectionControl(_amoebaManager);
+            ConnectionControl _connectionControl = new ConnectionControl(_lairManager);
             _connectionControl.Height = Double.NaN;
             _connectionControl.Width = Double.NaN;
             _connectionTabItem.Content = _connectionControl;
 
-            DownloadControl _downloadControl = new DownloadControl(_amoebaManager, _bufferManager);
-            _downloadControl.Height = Double.NaN;
-            _downloadControl.Width = Double.NaN;
-            _downloadTabItem.Content = _downloadControl;
-
-            UploadControl _uploadControl = new UploadControl(this, _amoebaManager, _bufferManager);
-            _uploadControl.Height = Double.NaN;
-            _uploadControl.Width = Double.NaN;
-            _uploadTabItem.Content = _uploadControl;
-
-            ShareControl _shareControl = new ShareControl(this, _amoebaManager, _bufferManager);
-            _shareControl.Height = Double.NaN;
-            _shareControl.Width = Double.NaN;
-            _shareTabItem.Content = _shareControl;
-
-            LibraryControl _libraryControl = new LibraryControl(this, _amoebaManager, _bufferManager);
-            _libraryControl.Height = Double.NaN;
-            _libraryControl.Width = Double.NaN;
-            _libraryTabItem.Content = _libraryControl;
+            ChannelControl _channelControl = new ChannelControl(this, _lairManager, _bufferManager);
+            _channelControl.Height = Double.NaN;
+            _channelControl.Width = Double.NaN;
+            _channelTabItem.Content = _channelControl;
 
             ThreadPool.QueueUserWorkItem(new WaitCallback(this.ConnectionsInformationShow), this);
             ThreadPool.QueueUserWorkItem(new WaitCallback(this.Timer), this);
@@ -742,6 +757,24 @@ namespace Lair.Windows
             {
                 _menuItemStart_Click(null, null);
             }
+
+            ThreadPool.QueueUserWorkItem(new WaitCallback((object state) =>
+            {
+                Thread.Sleep(1000 * 60);
+
+                try
+                {
+                    if (Settings.Instance.Global_Update_Option == UpdateOption.AutoCheck
+                       || Settings.Instance.Global_Update_Option == UpdateOption.AutoUpdate)
+                    {
+                        _menuItemUpdateCheck_Click(null, null);
+                    }
+                }
+                catch (Exception)
+                {
+
+                }
+            }));
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -754,9 +787,9 @@ namespace Lair.Windows
             _autoBaseNodeSettingManager.Save(_configrationDirectoryPaths["AutoBaseNodeSettingManager"]);
             _autoBaseNodeSettingManager.Dispose();
 
-            _amoebaManager.Stop();
-            _amoebaManager.Save(_configrationDirectoryPaths["LairManager"]);
-            _amoebaManager.Dispose();
+            _lairManager.Stop();
+            _lairManager.Save(_configrationDirectoryPaths["LairManager"]);
+            _lairManager.Dispose();
 
             Settings.Instance.Save(_configrationDirectoryPaths["MainWindow"]);
         }
@@ -785,26 +818,6 @@ namespace Lair.Windows
             {
                 App.SelectTab = "Connection";
             }
-            else if ((string)tabItem.Header == LanguagesManager.Instance.MainWindow_Cache)
-            {
-                App.SelectTab = "Search";
-            }
-            else if ((string)tabItem.Header == LanguagesManager.Instance.MainWindow_Download)
-            {
-                App.SelectTab = "Download";
-            }
-            else if ((string)tabItem.Header == LanguagesManager.Instance.MainWindow_Upload)
-            {
-                App.SelectTab = "Upload";
-            }
-            else if ((string)tabItem.Header == LanguagesManager.Instance.MainWindow_Share)
-            {
-                App.SelectTab = "Share";
-            }
-            else if ((string)tabItem.Header == LanguagesManager.Instance.MainWindow_Library)
-            {
-                App.SelectTab = "Library";
-            }
             else if ((string)tabItem.Header == LanguagesManager.Instance.MainWindow_Log)
             {
                 App.SelectTab = "Log";
@@ -827,7 +840,7 @@ namespace Lair.Windows
                     _autoBaseNodeSettingManager.Start();
                 }
 
-                _amoebaManager.Start();
+                _lairManager.Start();
             }));
 
             _menuItemStart.IsEnabled = false;
@@ -842,7 +855,7 @@ namespace Lair.Windows
             ThreadPool.QueueUserWorkItem(new WaitCallback((object state) =>
             {
                 _autoBaseNodeSettingManager.Stop();
-                _amoebaManager.Stop();
+                _lairManager.Stop();
             }));
 
             _menuItemStart.IsEnabled = true;
@@ -852,72 +865,43 @@ namespace Lair.Windows
             Log.Information("Stop");
         }
 
-        private void _menuItemKeywordSetting_Click(object sender, RoutedEventArgs e)
-        {
-            KeywordWindow window = new KeywordWindow(_bufferManager);
-            window.Owner = this;
-            window.ShowDialog();
-        }
-
-        private void _menuItemSignatureSetting_Click(object sender, RoutedEventArgs e)
-        {
-            SignatureWindow window = new SignatureWindow(_bufferManager);
-            window.Owner = this;
-            window.ShowDialog();
-        }
-
         private void _menuItemConnectionSetting_Click(object sender, RoutedEventArgs e)
         {
-            ConnectionWindow window = new ConnectionWindow(_amoebaManager, _autoBaseNodeSettingManager, _bufferManager);
+            ConnectionWindow window = new ConnectionWindow(_lairManager, _autoBaseNodeSettingManager, _bufferManager);
             window.Owner = this;
             window.ShowDialog();
+        }
+
+        private void _menuItemUserInterfaceSetting_Click(object sender, RoutedEventArgs e)
+        {
+            UserInterfaceWindow window = new UserInterfaceWindow(_bufferManager);
+            window.Owner = this;
+            window.ShowDialog();
+        }
+
+        private void _menuItemUpdateCheck_Click(object sender, RoutedEventArgs e)
+        {
+            ThreadPool.QueueUserWorkItem(new WaitCallback((object state) =>
+            {
+                Thread.CurrentThread.IsBackground = true;
+
+                this.UpdateCheck(sender != null);
+            }));
+        }
+
+        private void _menuItemDeveloperSiteCheck_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("http://lyrise.i2p.to/projects/trac/");
+        }
+
+        private void _menuItemManualSiteCheck_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("http://lyrise.web.fc2.com/");
         }
 
         private void _menuItemVersionInformation_Click(object sender, RoutedEventArgs e)
         {
             VersionInformationWindow window = new VersionInformationWindow();
-            window.Owner = this;
-            window.ShowDialog();
-        }
-
-        private void _menuItemCheckingBlocks_Click(object sender, RoutedEventArgs e)
-        {
-            var window = new ProgressWindow(true);
-            window.Owner = this;
-            window.Message1 = LanguagesManager.Instance.MainWindow_CheckingBlocks_Message;
-            window.Message2 = string.Format(LanguagesManager.Instance.MainWindow_CheckingBlocks_State, 0, 0, 0);
-            window.ButtonMessage = LanguagesManager.Instance.ProgressWindow_Cancel;
-
-            ThreadPool.QueueUserWorkItem(new WaitCallback((object wstate) =>
-            {
-                _amoebaManager.CheckBlocks((object sender2, int badBlockCount, int checkedBlockCount, int blockCount, out bool isStop) =>
-                {
-                    bool flag = false;
-
-                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
-                    {
-                        try
-                        {
-                            window.Value = 100 * ((double)checkedBlockCount / (double)blockCount);
-                        }
-                        catch (Exception)
-                        {
-
-                        }
-
-                        window.Message2 = string.Format(LanguagesManager.Instance.MainWindow_CheckingBlocks_State, badBlockCount, checkedBlockCount, blockCount);
-                        if (window.DialogResult == true) flag = true;
-                    }), null);
-
-                    isStop = flag;
-                });
-
-                this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
-                {
-                    window.ButtonMessage = LanguagesManager.Instance.ProgressWindow_Ok;
-                }), null);
-            }));
-
             window.Owner = this;
             window.ShowDialog();
         }

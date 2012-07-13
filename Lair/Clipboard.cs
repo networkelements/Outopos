@@ -10,9 +10,6 @@ namespace Lair
 {
     static class Clipboard
     {
-        private static List<Box> _boxList = new List<Box>();
-        private static List<Windows.SearchTreeItem> _searchTreeItemList = new List<Windows.SearchTreeItem>();
-
         public static IEnumerable<string> GetPaths()
         {
             try
@@ -37,7 +34,7 @@ namespace Lair
             }
             catch (Exception)
             {
-                
+
             }
         }
 
@@ -74,7 +71,7 @@ namespace Lair
             foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
             {
                 if (!item.StartsWith("Node@")) continue;
-                
+
                 try
                 {
                     list.Add(LairConverter.FromNodeString(item));
@@ -100,17 +97,17 @@ namespace Lair
             Clipboard.SetText(sb.ToString());
         }
 
-        public static IEnumerable<Seed> GetSeeds()
+        public static IEnumerable<Channel> GetChannels()
         {
-            var list = new List<Seed>();
+            var list = new List<Channel>();
 
             foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
             {
-                if (!item.StartsWith("Seed@")) continue;
+                if (!item.StartsWith("Channel@")) continue;
 
                 try
                 {
-                    list.Add(LairConverter.FromSeedString(item));
+                    list.Add(LairConverter.FromChannelString(item));
                 }
                 catch (Exception)
                 {
@@ -121,38 +118,16 @@ namespace Lair
             return list;
         }
 
-        public static void SetSeeds(IEnumerable<Seed> seeds)
+        public static void SetChannels(IEnumerable<Channel> channels)
         {
             var sb = new StringBuilder();
 
-            foreach (var item in seeds)
+            foreach (var item in channels)
             {
-                sb.AppendLine(LairConverter.ToSeedString(item));
+                sb.AppendLine(LairConverter.ToChannelString(item));
             }
 
             Clipboard.SetText(sb.ToString());
-        }
-
-        public static IEnumerable<Box> GetBoxes()
-        {
-            return _boxList.Select(n => n.DeepClone());
-        }
-
-        public static void SetBoxes(IEnumerable<Box> boxes)
-        {
-            _boxList.Clear();
-            _boxList.AddRange(boxes.Select(n => n.DeepClone()));
-        }
-
-        public static IEnumerable<Windows.SearchTreeItem> GetSearchTreeItems()
-        {
-            return _searchTreeItemList.Select(n => n.DeepClone());
-        }
-
-        public static void SetSearchTreeItems(List<Windows.SearchTreeItem> searchTreeItems)
-        {
-            _searchTreeItemList.Clear();
-            _searchTreeItemList.AddRange(searchTreeItems.Select(n => n.DeepClone()));
         }
     }
 }

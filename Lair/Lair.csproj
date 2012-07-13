@@ -8,8 +8,8 @@
     <ProjectGuid>{7C83E92E-62BE-49E6-870A-DEB9D5340664}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Amoeba</RootNamespace>
-    <AssemblyName>Amoeba</AssemblyName>
+    <RootNamespace>Lair</RootNamespace>
+    <AssemblyName>Lair</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -61,10 +61,17 @@
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DelaySign>false</DelaySign>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ionic.Zip">
       <HintPath>.\Ionic.Zip.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -106,6 +113,10 @@
     </ApplicationDefinition>
     <Compile Include="Extensions.cs" />
     <Compile Include="NativeMethods.cs" />
+    <Page Include="Windows\ChannelControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\ConnectionControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -118,6 +129,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Windows\MessageEditWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\UserInterfaceWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Windows\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -127,12 +146,6 @@
     <Page Include="Windows\ProgressWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\SignatureWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Themes\ExpressionDark.xaml">
       <SubType>Designer</SubType>
@@ -147,6 +160,16 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Windows\ChannelControl.xaml.cs">
+      <DependentUpon>ChannelControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\RichTextBoxHelper.cs" />
+    <Compile Include="Windows\MessageEditWindow.xaml.cs">
+      <DependentUpon>MessageEditWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\UserInterfaceWindow.xaml.cs">
+      <DependentUpon>UserInterfaceWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\ListViewEx.cs" />
     <Compile Include="Windows\MainWindow.xaml.cs">
@@ -171,9 +194,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\Settings.cs" />
-    <Compile Include="Windows\SignatureWindow.xaml.cs">
-      <DependentUpon>SignatureWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="AutoBaseNodeSettingManager.cs" />
     <Compile Include="Windows\ValueConverter.cs" />
     <Compile Include="Windows\VersionInformationWindow.xaml.cs">
@@ -189,8 +209,14 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Polipo\libgnurx-0.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Polipo\polipo.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Tor\tor-resolve.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Tor\tor.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -229,17 +255,20 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Properties\Lair.license">
+    <Content Include="Properties\Amoeba.license">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="Properties\Lair.readme">
+    <Content Include="Properties\Amoeba.readme">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="app.manifest">
       <SubType>Designer</SubType>
+    </None>
+    <None Include="Polipo\polipo.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Tor\torrc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -258,12 +287,16 @@
       <Project>{74597E45-7F3C-4958-8B6A-B16DE8DE47B9}</Project>
       <Name>Library.Io</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Library\Library.Net.Amoeba\Library.Net.Amoeba.csproj">
+      <Project>{82230C99-6599-4130-AAC9-FC926ABC0724}</Project>
+      <Name>Library.Net.Amoeba</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Library\Library.Net.Connection\Library.Net.Connection.csproj">
       <Project>{38994E3C-0699-4D6C-AD02-F9F657340347}</Project>
       <Name>Library.Net.Connection</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Library\Library.Net.Lair\Library.Net.Lair.csproj">
-      <Project>{82230C99-6599-4130-AAC9-FC926ABC0724}</Project>
+      <Project>{AE8FE1EB-0280-48CE-A26A-F58E3FFE6B5D}</Project>
       <Name>Library.Net.Lair</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Library\Library.Net\Library.Net.csproj">

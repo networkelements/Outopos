@@ -24,7 +24,7 @@ namespace Lair.Windows
     partial class ConnectionWindow : Window
     {
         private BufferManager _bufferManager;
-        private LairManager _amoebaManager;
+        private LairManager _lairManager;
         private AutoBaseNodeSettingManager _autoBaseNodeSettingManager;
 
         private Node _baseNode;
@@ -32,18 +32,18 @@ namespace Lair.Windows
         private ConnectionFilterCollection _clientFilters = new ConnectionFilterCollection();
         private UriCollection _listenUris = new UriCollection();
 
-        public ConnectionWindow(LairManager amoebaManager, AutoBaseNodeSettingManager autoBaseNodeSettingManager, BufferManager bufferManager)
+        public ConnectionWindow(LairManager lairManager, AutoBaseNodeSettingManager autoBaseNodeSettingManager, BufferManager bufferManager)
         {
-            _amoebaManager = amoebaManager;
+            _lairManager = lairManager;
             _autoBaseNodeSettingManager = autoBaseNodeSettingManager;
             _bufferManager = bufferManager;
 
-            lock (_amoebaManager.ThisLock)
+            lock (_lairManager.ThisLock)
             {
-                _baseNode = _amoebaManager.BaseNode.DeepClone();
-                _otherNodes.AddRange(_amoebaManager.OtherNodes.Select(n => n.DeepClone()));
-                _clientFilters.AddRange(_amoebaManager.Filters.Select(n => n.DeepClone()));
-                _listenUris.AddRange(_amoebaManager.ListenUris);
+                _baseNode = _lairManager.BaseNode.DeepClone();
+                _otherNodes.AddRange(_lairManager.OtherNodes.Select(n => n.DeepClone()));
+                _clientFilters.AddRange(_lairManager.Filters.Select(n => n.DeepClone()));
+                _listenUris.AddRange(_lairManager.ListenUris);
             }
 
             InitializeComponent();
@@ -59,11 +59,9 @@ namespace Lair.Windows
             _otherNodesListView.ItemsSource = _otherNodes;
             _clientFiltersListView.ItemsSource = _clientFilters;
             _serverListenUrisListView.ItemsSource = _listenUris;
-            _miscellaneousDownloadDirectoryTextBox.Text = _amoebaManager.DownloadDirectory;
-            _miscellaneousConnectionCountTextBox.Text = _amoebaManager.ConnectionCountLimit.ToString();
-            _miscellaneousDownloadingConnectionCountTextBox.Text = _amoebaManager.DownloadingConnectionCountLowerLimit.ToString();
-            _miscellaneousUploadingConnectionCountTextBox.Text = _amoebaManager.UploadingConnectionCountLowerLimit.ToString();
-            _miscellaneousCacheSizeTextBox.Text = NetworkConverter.ToSizeString(_amoebaManager.Size);
+            _miscellaneousConnectionCountTextBox.Text = _lairManager.ConnectionCountLimit.ToString();
+            _miscellaneousDownloadingConnectionCountTextBox.Text = _lairManager.DownloadingConnectionCountLowerLimit.ToString();
+            _miscellaneousUploadingConnectionCountTextBox.Text = _lairManager.UploadingConnectionCountLowerLimit.ToString();
             _miscellaneousAutoBaseNodeSettingCheckBox.IsChecked = Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled;
 
             foreach (var item in Enum.GetValues(typeof(ConnectionType)))
@@ -72,59 +70,6 @@ namespace Lair.Windows
             }
 
             _clientFiltersConnectionTypeComboBox.SelectedItem = _clientFiltersConnectionTypeComboBox.Items.GetItemAt(1);
-
-            if ((Settings.Instance.Global_SearchFilterSettings_State & SearchState.Cache) == SearchState.Cache)
-            {
-                _miscellaneousSearchFilterCacheCheckBox.IsChecked = true;
-            }
-            if ((Settings.Instance.Global_SearchFilterSettings_State & SearchState.Uploading) == SearchState.Uploading)
-            {
-                _miscellaneousSearchFilterUploadingCheckBox.IsChecked = true;
-            }
-            if ((Settings.Instance.Global_SearchFilterSettings_State & SearchState.Downloading) == SearchState.Downloading)
-            {
-                _miscellaneousSearchFilterDownloadingCheckBox.IsChecked = true;
-            }
-            if ((Settings.Instance.Global_SearchFilterSettings_State & SearchState.Uploaded) == SearchState.Uploaded)
-            {
-                _miscellaneousSearchFilterUploadedCheckBox.IsChecked = true;
-            }
-            if ((Settings.Instance.Global_SearchFilterSettings_State & SearchState.Downloaded) == SearchState.Downloaded)
-            {
-                _miscellaneousSearchFilterDownloadedCheckBox.IsChecked = true;
-            }
-
-            try
-            {
-                string extension = ".box";
-                string commandline = "\"" + Path.Combine(App.DirectoryPaths["Core"], "Lair.exe") + "\" \"%1\"";
-                string fileType = "Lair";
-                string verb = "open";
-
-                using (var regkey = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(extension))
-                {
-                    if (fileType != (string)regkey.GetValue("")) throw new Exception();
-                }
-
-                using (var shellkey = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(fileType))
-                {
-                    using (var shellkey2 = shellkey.OpenSubKey("shell\\" + verb))
-                    {
-                        using (var shellkey3 = shellkey2.OpenSubKey("command"))
-                        {
-                            if (commandline != (string)shellkey3.GetValue("")) throw new Exception();
-                        }
-                    }
-                }
-
-                Settings.Instance.Global_RelateBoxFile_IsEnabled = true;
-                _miscellaneousRelateBoxFileCheckBox.IsChecked = true;
-            }
-            catch
-            {
-                Settings.Instance.Global_RelateBoxFile_IsEnabled = false;
-                _miscellaneousRelateBoxFileCheckBox.IsChecked = false;
-            }
         }
 
         #region BaseNode
@@ -500,7 +445,7 @@ namespace Lair.Windows
 
             var item = _clientFiltersListView.SelectedItem as ConnectionFilter;
             if (item == null) return;
-            
+
             if (item.ProxyUri != null)
             {
                 _clientFiltersProxyUriTextBox.Text = item.ProxyUri;
@@ -821,7 +766,7 @@ namespace Lair.Windows
 
                 return;
             }
-            
+
             var item = _serverListenUrisListView.SelectedItem as string;
             if (item == null) return;
 
@@ -1027,141 +972,44 @@ namespace Lair.Windows
         {
             this.DialogResult = true;
 
-            lock (_amoebaManager.ThisLock)
+            lock (_lairManager.ThisLock)
             {
-                long size = (long)NetworkConverter.FromSizeString("50 GB");
-
-                try
-                {
-                    size = Math.Abs((long)NetworkConverter.FromSizeString(_miscellaneousCacheSizeTextBox.Text));
-                }
-                catch (Exception)
-                {
-
-                }
-
-                if (_amoebaManager.Size != size)
-                {
-                    _amoebaManager.Resize(size);
-                }
-
-                _amoebaManager.BaseNode = _baseNode.DeepClone();
-                _amoebaManager.SetOtherNodes(_otherNodes.Where(n => n != null && n.Id != null && n.Uris.Count != 0));
+                _lairManager.BaseNode = _baseNode.DeepClone();
+                _lairManager.SetOtherNodes(_otherNodes.Where(n => n != null && n.Id != null && n.Uris.Count != 0));
 
                 int count = int.Parse(_miscellaneousConnectionCountTextBox.Text);
-                _amoebaManager.ConnectionCountLimit = Math.Max(Math.Min(count, 50), 1);
+                _lairManager.ConnectionCountLimit = Math.Max(Math.Min(count, 50), 1);
 
                 int scount = int.Parse(_miscellaneousDownloadingConnectionCountTextBox.Text);
-                _amoebaManager.DownloadingConnectionCountLowerLimit = Math.Max(Math.Min(scount, 50), 1);
+                _lairManager.DownloadingConnectionCountLowerLimit = Math.Max(Math.Min(scount, 50), 1);
 
                 int ucount = int.Parse(_miscellaneousUploadingConnectionCountTextBox.Text);
-                _amoebaManager.UploadingConnectionCountLowerLimit = Math.Max(Math.Min(ucount, 50), 1);
+                _lairManager.UploadingConnectionCountLowerLimit = Math.Max(Math.Min(ucount, 50), 1);
 
-                _amoebaManager.Filters.Clear();
-                _amoebaManager.Filters.AddRange(_clientFilters.Select(n => n.DeepClone()));
+                _lairManager.Filters.Clear();
+                _lairManager.Filters.AddRange(_clientFilters.Select(n => n.DeepClone()));
 
-                if (!Collection.Equals(_amoebaManager.ListenUris, _listenUris))
+                if (!Collection.Equals(_lairManager.ListenUris, _listenUris))
                 {
-                    _amoebaManager.ListenUris.Clear();
-                    _amoebaManager.ListenUris.AddRange(_listenUris);
+                    _lairManager.ListenUris.Clear();
+                    _lairManager.ListenUris.AddRange(_listenUris);
 
                     _autoBaseNodeSettingManager.Restart();
                 }
+            }
 
-                string path = _miscellaneousDownloadDirectoryTextBox.Text;
+            if (Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled != _miscellaneousAutoBaseNodeSettingCheckBox.IsChecked.Value)
+            {
+                Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled = _miscellaneousAutoBaseNodeSettingCheckBox.IsChecked.Value;
 
-                foreach (var item in System.IO.Path.GetInvalidPathChars())
+                if (Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled)
                 {
-                    path = path.Replace(item.ToString(), "-");
-                }
-
-                _amoebaManager.DownloadDirectory = path;
-            }
-
-            Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled = _miscellaneousAutoBaseNodeSettingCheckBox.IsChecked.Value;
-
-            Settings.Instance.Global_SearchFilterSettings_State = 0;
-
-            if (_miscellaneousSearchFilterCacheCheckBox.IsChecked.Value)
-            {
-                Settings.Instance.Global_SearchFilterSettings_State |= SearchState.Cache;
-            }
-            if (_miscellaneousSearchFilterUploadingCheckBox.IsChecked.Value)
-            {
-                Settings.Instance.Global_SearchFilterSettings_State |= SearchState.Uploading;
-            }
-            if (_miscellaneousSearchFilterDownloadingCheckBox.IsChecked.Value)
-            {
-                Settings.Instance.Global_SearchFilterSettings_State |= SearchState.Downloading;
-            }
-            if (_miscellaneousSearchFilterUploadedCheckBox.IsChecked.Value)
-            {
-                Settings.Instance.Global_SearchFilterSettings_State |= SearchState.Uploaded;
-            }
-            if (_miscellaneousSearchFilterDownloadedCheckBox.IsChecked.Value)
-            {
-                Settings.Instance.Global_SearchFilterSettings_State |= SearchState.Downloaded;
-            }
-
-            if (Settings.Instance.Global_RelateBoxFile_IsEnabled != _miscellaneousRelateBoxFileCheckBox.IsChecked.Value)
-            {
-                if (_miscellaneousRelateBoxFileCheckBox.IsChecked.Value)
-                {
-                    System.Diagnostics.ProcessStartInfo p = new System.Diagnostics.ProcessStartInfo();
-                    p.UseShellExecute = true;
-                    p.FileName = Path.Combine(App.DirectoryPaths["Core"], "Lair.exe");
-                    p.Arguments = "Relate on";
-
-                    OperatingSystem osInfo = Environment.OSVersion;
-
-                    if (osInfo.Platform == PlatformID.Win32NT && osInfo.Version.Major >= 6)
-                    {
-                        p.Verb = "runas";
-                    }
-
-                    try
-                    {
-                        System.Diagnostics.Process.Start(p);
-                    }
-                    catch (System.ComponentModel.Win32Exception)
-                    {
-
-                    }
+                    _autoBaseNodeSettingManager.Start();
                 }
                 else
                 {
-                    System.Diagnostics.ProcessStartInfo p = new System.Diagnostics.ProcessStartInfo();
-                    p.UseShellExecute = true;
-                    p.FileName = Path.Combine(App.DirectoryPaths["Core"], "Lair.exe");
-                    p.Arguments = "Relate off";
-
-                    OperatingSystem osInfo = Environment.OSVersion;
-
-                    if (osInfo.Platform == PlatformID.Win32NT && osInfo.Version.Major >= 6)
-                    {
-                        p.Verb = "runas";
-                    }
-
-                    try
-                    {
-                        System.Diagnostics.Process.Start(p);
-                    }
-                    catch (System.ComponentModel.Win32Exception)
-                    {
-
-                    }
+                    _autoBaseNodeSettingManager.Stop();
                 }
-
-                Settings.Instance.Global_RelateBoxFile_IsEnabled = _miscellaneousRelateBoxFileCheckBox.IsChecked.Value;
-            }
-
-            if (Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled)
-            {
-                _autoBaseNodeSettingManager.Start();
-            }
-            else
-            {
-                _autoBaseNodeSettingManager.Stop();
             }
         }
 

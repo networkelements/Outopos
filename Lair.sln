@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lair", "Lair\Lair.csproj", "{7C83E92E-62BE-49E6-870A-DEB9D5340664}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library", "..\Library\Library\Library.csproj", "{63EADC1F-9A8A-4945-A562-DA666D0BCB7B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.Collections", "..\Library\Library.Collections\Library.Collections.csproj", "{197C654F-2461-446A-B531-4A789F14BE19}"
@@ -29,7 +27,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.Update", "..\Librar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.Compression", "..\Library\Library.Compression\Library.Compression.csproj", "{51ECCC57-56CB-44A0-9A43-DB596F982FC8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.Net.Lair", "..\Library\Library.Net.Lair\Library.Net.Lair.csproj", "{82230C99-6599-4130-AAC9-FC926ABC0724}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lair", "Lair\Lair.csproj", "{7C83E92E-62BE-49E6-870A-DEB9D5340664}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.Net.Lair", "..\Library\Library.Net.Lair\Library.Net.Lair.csproj", "{AE8FE1EB-0280-48CE-A26A-F58E3FFE6B5D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.Net.Amoeba", "..\Library\Library.Net.Amoeba\Library.Net.Amoeba.csproj", "{82230C99-6599-4130-AAC9-FC926ABC0724}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,12 +41,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7C83E92E-62BE-49E6-870A-DEB9D5340664}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7C83E92E-62BE-49E6-870A-DEB9D5340664}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7C83E92E-62BE-49E6-870A-DEB9D5340664}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{7C83E92E-62BE-49E6-870A-DEB9D5340664}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7C83E92E-62BE-49E6-870A-DEB9D5340664}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7C83E92E-62BE-49E6-870A-DEB9D5340664}.Release|x86.ActiveCfg = Release|Any CPU
 		{63EADC1F-9A8A-4945-A562-DA666D0BCB7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{63EADC1F-9A8A-4945-A562-DA666D0BCB7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63EADC1F-9A8A-4945-A562-DA666D0BCB7B}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -123,6 +119,18 @@ Global
 		{51ECCC57-56CB-44A0-9A43-DB596F982FC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51ECCC57-56CB-44A0-9A43-DB596F982FC8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{51ECCC57-56CB-44A0-9A43-DB596F982FC8}.Release|x86.ActiveCfg = Release|Any CPU
+		{7C83E92E-62BE-49E6-870A-DEB9D5340664}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C83E92E-62BE-49E6-870A-DEB9D5340664}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C83E92E-62BE-49E6-870A-DEB9D5340664}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7C83E92E-62BE-49E6-870A-DEB9D5340664}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C83E92E-62BE-49E6-870A-DEB9D5340664}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C83E92E-62BE-49E6-870A-DEB9D5340664}.Release|x86.ActiveCfg = Release|Any CPU
+		{AE8FE1EB-0280-48CE-A26A-F58E3FFE6B5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE8FE1EB-0280-48CE-A26A-F58E3FFE6B5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE8FE1EB-0280-48CE-A26A-F58E3FFE6B5D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AE8FE1EB-0280-48CE-A26A-F58E3FFE6B5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE8FE1EB-0280-48CE-A26A-F58E3FFE6B5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE8FE1EB-0280-48CE-A26A-F58E3FFE6B5D}.Release|x86.ActiveCfg = Release|Any CPU
 		{82230C99-6599-4130-AAC9-FC926ABC0724}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{82230C99-6599-4130-AAC9-FC926ABC0724}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{82230C99-6599-4130-AAC9-FC926ABC0724}.Debug|x86.ActiveCfg = Debug|Any CPU

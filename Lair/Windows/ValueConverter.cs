@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -7,65 +8,14 @@ using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Media.Imaging;
 using Lair.Properties;
 using Library;
 using Library.Net.Lair;
-using System.Drawing;
 
 namespace Lair.Windows
 {
-    [ValueConversion(typeof(object), typeof(BitmapImage))]
-    class ObjectToImageConverter : IValueConverter
-    {
-        private static Dictionary<string, BitmapImage> _images = new Dictionary<string, BitmapImage>();
-
-        static ObjectToImageConverter()
-        {
-            try
-            {
-                var boxImage = ObjectToImageConverter.GetImage(Path.Combine(App.DirectoryPaths["Icons"], "Box.png"));
-                var seedImage = ObjectToImageConverter.GetImage(Path.Combine(App.DirectoryPaths["Icons"], "Seed.png"));
-
-                _images["Box"] = boxImage;
-                _images["Seed"] = seedImage;
-            }
-            catch (Exception)
-            {
-
-            }
-        }
-
-        private static BitmapImage GetImage(string path)
-        {
-            var icon = new BitmapImage();
-            icon.BeginInit();
-            icon.StreamSource = new FileStream(path, FileMode.Open);
-            icon.EndInit();
-            return icon;
-        }
-
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value == null) return null;
-            var key = value.GetType().Name.ToString();
-
-            if (_images.ContainsKey(key))
-            {
-                return _images[key];
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotSupportedException();
-        }
-    }
-
     [ValueConversion(typeof(string), typeof(string))]
     class StringRegularizationConverter : IValueConverter
     {
@@ -183,29 +133,6 @@ namespace Lair.Windows
         }
     }
 
-    [ValueConversion(typeof(object), typeof(string))]
-    class ObjectToInfoStringConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is Seed)
-            {
-                return MessageConverter.ToInfoMessage((Seed)value);
-            }
-            else if (value is Box)
-            {
-                return MessageConverter.ToInfoMessage((Box)value);
-            }
-
-            return null;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotSupportedException();
-        }
-    }
-
     [ValueConversion(typeof(Node), typeof(string))]
     class NodeToStringConverter : IValueConverter
     {
@@ -220,23 +147,6 @@ namespace Lair.Windows
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
-        }
-    }
-
-    [ValueConversion(typeof(Seed), typeof(string))]
-    class SeedToStringConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            var item = value as Seed;
-            if (item == null) return null;
-
-            return LairConverter.ToSeedString(item);
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotSupportedException();
         }
     }
 
@@ -351,123 +261,6 @@ namespace Lair.Windows
             if (item == null) return null;
 
             return double.Parse(item);
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    [ValueConversion(typeof(SearchState), typeof(string))]
-    class SearchStateToStringConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (!(value is SearchState)) return null;
-            var item = (SearchState)value;
-
-            string text = "";
-
-            if ((item & SearchState.Cache) == SearchState.Cache)
-            {
-                text += LanguagesManager.Instance.SearchState_Cache + ", ";
-            }
-            if ((item & SearchState.Uploading) == SearchState.Uploading)
-            {
-                text += LanguagesManager.Instance.SearchState_Uploading + ", ";
-            }
-            if ((item & SearchState.Downloading) == SearchState.Downloading)
-            {
-                text += LanguagesManager.Instance.SearchState_Downloading + ", ";
-            }
-            if ((item & SearchState.Uploaded) == SearchState.Uploaded)
-            {
-                text += LanguagesManager.Instance.SearchState_Uploaded + ", ";
-            }
-            if ((item & SearchState.Downloaded) == SearchState.Downloaded)
-            {
-                text += LanguagesManager.Instance.SearchState_Downloaded + ", ";
-            }
-
-            if (text.Length < 2) return "";
-            return text.Remove(text.Length - 2);
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    [ValueConversion(typeof(DownloadState), typeof(string))]
-    class DownloadStateToStringConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            var item = value as DownloadState?;
-            if (item == null) return null;
-
-            if (item.Value == DownloadState.Downloading)
-            {
-                return LanguagesManager.Instance.DownloadState_Downloading;
-            }
-            else if (item.Value == DownloadState.Decoding)
-            {
-                return LanguagesManager.Instance.DownloadState_Decoding;
-            }
-            else if (item.Value == DownloadState.Completed)
-            {
-                return LanguagesManager.Instance.DownloadState_Completed;
-            }
-            else if (item.Value == DownloadState.Error)
-            {
-                return LanguagesManager.Instance.DownloadState_Error;
-            }
-
-            return "";
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    [ValueConversion(typeof(UploadState), typeof(string))]
-    class UploadStateToStringConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            var item = value as UploadState?;
-            if (item == null) return null;
-
-            if (item.Value == UploadState.ComputeHash)
-            {
-                return LanguagesManager.Instance.UploadState_ComputeHash;
-            }
-            else if (item.Value == UploadState.Encoding)
-            {
-                return LanguagesManager.Instance.UploadState_Encoding;
-            }
-            else if (item.Value == UploadState.ComputeCorrection)
-            {
-                return LanguagesManager.Instance.UploadState_ComputeCorrection;
-            }
-            else if (item.Value == UploadState.Uploading)
-            {
-                return LanguagesManager.Instance.UploadState_Uploading;
-            }
-            else if (item.Value == UploadState.Completed)
-            {
-                return LanguagesManager.Instance.UploadState_Completed;
-            }
-            else if (item.Value == UploadState.Error)
-            {
-                return LanguagesManager.Instance.UploadState_Error;
-            }
-
-            return "";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

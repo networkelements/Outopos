@@ -4,23 +4,18 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using Lair.Properties;
+using Library.Io;
 using Library.Net.Lair;
 using Library.Security;
-using System.Security.Cryptography;
-using Library.Io;
 
 namespace Lair
 {
     static class MessageConverter
     {
-        public static string ToKeywordsString(IEnumerable<string> keywords)
-        {
-            return String.Join(", ", keywords);
-        }
-
         public static string ToSignatureString(DigitalSignature digitalSignature)
         {
             if (digitalSignature == null || digitalSignature.Nickname == null || digitalSignature.PublicKey == null) return null;
@@ -79,7 +74,7 @@ namespace Lair
             }
         }
 
-        public static string ToInfoMessage(Seed seed)
+        public static string ToInfoMessage(Library.Net.Amoeba.Seed seed)
         {
             try
             {
@@ -103,7 +98,7 @@ namespace Lair
             }
         }
 
-        public static string ToInfoMessage(Box box)
+        public static string ToInfoMessage(Library.Net.Amoeba.Box box)
         {
             try
             {
@@ -116,6 +111,21 @@ namespace Lair
 
                 if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
                 else return null;
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException("ArgumentException", e);
+            }
+        }
+
+        public static string ToChannelString(Channel channel)
+        {
+            if (channel.Name == null || channel.Id == null) return null;
+
+            try
+            {
+                return channel.Name + " " + Convert.ToBase64String(channel.Id)
+                    .Replace('+', '-').Replace('/', '_').Substring(0, 30);
             }
             catch (Exception e)
             {

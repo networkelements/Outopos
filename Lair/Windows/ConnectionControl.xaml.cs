@@ -28,14 +28,14 @@ namespace Lair.Windows
     /// </summary>
     partial class ConnectionControl : UserControl
     {
-        private LairManager _amoebaManager;
+        private LairManager _lairManager;
 
         private ObservableCollection<LairInfomationListViewItem> _infomationListViewItemCollection = new ObservableCollection<LairInfomationListViewItem>();
         private ObservableCollection<ConnectionListViewItem> _listViewItemCollection = new ObservableCollection<ConnectionListViewItem>();
 
-        public ConnectionControl(LairManager amoebaManager)
+        public ConnectionControl(LairManager lairManager)
         {
-            _amoebaManager = amoebaManager;
+            _lairManager = lairManager;
 
             InitializeComponent();
 
@@ -59,14 +59,14 @@ namespace Lair.Windows
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem());
 
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PushNodeCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PushBlocksLinkCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PushBlocksRequestCount" });
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PushBlockLinkCount" });
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PushBlockRequestCount" });
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PushBlockCount" });
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem());
 
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullNodeCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullBlocksLinkCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullBlocksRequestCount" });
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullBlockLinkCount" });
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullBlockRequestCount" });
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullBlockCount" });
 
             _infomationListView.ItemsSource = _infomationListViewItemCollection;
@@ -84,23 +84,23 @@ namespace Lair.Windows
             {
                 for (; ; )
                 {
-                    var information = _amoebaManager.Information;
+                    var information = _lairManager.Information;
                     Dictionary<string, string> dic = new Dictionary<string, string>();
 
                     dic["ConnectionControl_CreateConnectionCount"] = ((int)information["CreateConnectionCount"]).ToString();
                     dic["ConnectionControl_AcceptConnectionCount"] = ((int)information["AcceptConnectionCount"]).ToString();
 
-                    dic["ConnectionControl_SentByteCount"] = NetworkConverter.ToSizeString(_amoebaManager.SentByteCount);
-                    dic["ConnectionControl_ReceivedByteCount"] = NetworkConverter.ToSizeString(_amoebaManager.ReceivedByteCount);
+                    dic["ConnectionControl_SentByteCount"] = NetworkConverter.ToSizeString(_lairManager.SentByteCount);
+                    dic["ConnectionControl_ReceivedByteCount"] = NetworkConverter.ToSizeString(_lairManager.ReceivedByteCount);
 
                     dic["ConnectionControl_PullNodeCount"] = ((int)information["PullNodeCount"]).ToString();
-                    dic["ConnectionControl_PullBlocksLinkCount"] = ((int)information["PullBlocksLinkCount"]).ToString();
-                    dic["ConnectionControl_PullBlocksRequestCount"] = ((int)information["PullBlocksRequestCount"]).ToString();
+                    dic["ConnectionControl_PullBlockLinkCount"] = ((int)information["PullBlockLinkCount"]).ToString();
+                    dic["ConnectionControl_PullBlockRequestCount"] = ((int)information["PullBlockRequestCount"]).ToString();
                     dic["ConnectionControl_PullBlockCount"] = ((int)information["PullBlockCount"]).ToString();
 
                     dic["ConnectionControl_PushNodeCount"] = ((int)information["PushNodeCount"]).ToString();
-                    dic["ConnectionControl_PushBlocksLinkCount"] = ((int)information["PushBlocksLinkCount"]).ToString();
-                    dic["ConnectionControl_PushBlocksRequestCount"] = ((int)information["PushBlocksRequestCount"]).ToString();
+                    dic["ConnectionControl_PushBlockLinkCount"] = ((int)information["PushBlockLinkCount"]).ToString();
+                    dic["ConnectionControl_PushBlockRequestCount"] = ((int)information["PushBlockRequestCount"]).ToString();
                     dic["ConnectionControl_PushBlockCount"] = ((int)information["PushBlockCount"]).ToString();
 
                     dic["ConnectionControl_RelayBlockCount"] = ((int)information["RelayBlockCount"]).ToString();
@@ -142,7 +142,7 @@ namespace Lair.Windows
                     Thread.Sleep(1000 * 3);
                     if (App.SelectTab != "Connection") continue;
 
-                    var connectionInformation = _amoebaManager.ConnectionInformation.ToArray();
+                    var connectionInformation = _lairManager.ConnectionInformation.ToArray();
                     Dictionary<int, Information> dic = new Dictionary<int, Information>();
 
                     foreach (var item in connectionInformation.ToArray())

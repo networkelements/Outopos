@@ -18,9 +18,6 @@
         <local:NodeToStringConverter x:Key="_nodeToStringConverter"/>
         <local:ConnectionTypeToStringConverter x:Key="_connectionTypeToStringConverter" />
 
-        <DataTemplate x:Key="_myTemplate_Keyword">
-            <TextBlock Text="{Binding Mode=OneWay}" />
-        </DataTemplate>
         <DataTemplate x:Key="_myTemplate_Node">
             <TextBlock Text="{Binding Mode=OneWay, Converter={StaticResource _nodeToStringConverter}}" />
         </DataTemplate>
@@ -99,11 +96,11 @@
                                 <ListView.View>
                                     <GridView AllowsColumnReorder="False">
                                         <GridViewColumn Header="{Binding Path=ConnectionWindow_ConnectionType, Source={StaticResource ResourcesInstance}}" CellTemplate="{StaticResource _myTemplate_ConnectionType}" 
-                                            Width="{Binding Path=ConnectionWindow_Client_Filters_ConnectionType_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
+                                            Width="{Binding Path=ConnectionWindow_Client_Filters_GridViewColumn_ConnectionType_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
                                         <GridViewColumn Header="{Binding Path=ConnectionWindow_ProxyUri, Source={StaticResource ResourcesInstance}}" CellTemplate="{StaticResource _myTemplate_ProxyUri}" 
-                                            Width="{Binding Path=ConnectionWindow_Client_Filters_ProxyUri_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
+                                            Width="{Binding Path=ConnectionWindow_Client_Filters_GridViewColumn_ProxyUri_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
                                         <GridViewColumn Header="{Binding Path=ConnectionWindow_UriCondition, Source={StaticResource ResourcesInstance}}"
-                                            Width="{Binding Path=ConnectionWindow_Client_Filters_UriCondition_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" CellTemplate="{StaticResource _myTemplate_UriCondition}" />
+                                            Width="{Binding Path=ConnectionWindow_Client_Filters_GridViewColumn_UriCondition_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" CellTemplate="{StaticResource _myTemplate_UriCondition}" />
                                     </GridView>
                                 </ListView.View>
                             </local:ListViewEx>
@@ -139,7 +136,7 @@
                                 <ListView.View>
                                     <GridView AllowsColumnReorder="False">
                                         <GridViewColumn Header="{Binding Path=ConnectionWindow_Uri, Source={StaticResource ResourcesInstance}}" 
-                                            Width="{Binding Path=ConnectionWindow_Server_ListenUris_Uri_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
+                                            Width="{Binding Path=ConnectionWindow_Server_ListenUris_GridViewColumn_Uri_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
                                     </GridView>
                                 </ListView.View>
                             </local:ListViewEx>
@@ -177,20 +174,6 @@
                         <Expander Header="{Binding Path=ConnectionWindow_AutoSettings, Source={StaticResource ResourcesInstance}}" VerticalAlignment="Top" Margin="6,6,6,0">
                             <Grid Margin="0,0,0,6">
                                 <CheckBox Content="{Binding Path=ConnectionWindow_AutoBaseNodeSetting, Source={StaticResource ResourcesInstance}}" Height="16" HorizontalAlignment="Left" Margin="6,6,0,0" Name="_miscellaneousAutoBaseNodeSettingCheckBox" VerticalAlignment="Top" />
-                            </Grid>
-                        </Expander>
-                        <Expander Header="{Binding Path=ConnectionWindow_SearchFilterSettings, Source={StaticResource ResourcesInstance}}" VerticalAlignment="Top" Margin="6,6,6,0">
-                            <Grid Margin="0,0,0,6">
-                                <CheckBox Content="{Binding Path=ConnectionWindow_Cache, Source={StaticResource ResourcesInstance}}" Height="16" HorizontalAlignment="Left" Margin="6,6,0,0" Name="_miscellaneousSearchFilterCacheCheckBox" VerticalAlignment="Top" />
-                                <CheckBox Content="{Binding Path=ConnectionWindow_Uploading, Source={StaticResource ResourcesInstance}}" Height="16" HorizontalAlignment="Left" Margin="6,28,0,0" Name="_miscellaneousSearchFilterUploadingCheckBox" VerticalAlignment="Top" />
-                                <CheckBox Content="{Binding Path=ConnectionWindow_Downloading, Source={StaticResource ResourcesInstance}}" Height="16" HorizontalAlignment="Left" Margin="6,50,0,0" Name="_miscellaneousSearchFilterDownloadingCheckBox" VerticalAlignment="Top" />
-                                <CheckBox Content="{Binding Path=ConnectionWindow_Uploaded, Source={StaticResource ResourcesInstance}}" Height="16" HorizontalAlignment="Left" Margin="6,72,0,0" Name="_miscellaneousSearchFilterUploadedCheckBox" VerticalAlignment="Top" />
-                                <CheckBox Content="{Binding Path=ConnectionWindow_Downloaded, Source={StaticResource ResourcesInstance}}" Height="16" HorizontalAlignment="Left" Margin="6,94,0,0" Name="_miscellaneousSearchFilterDownloadedCheckBox" VerticalAlignment="Top" />
-                            </Grid>
-                        </Expander>
-                        <Expander Header="{Binding Path=ConnectionWindow_RelateSettings, Source={StaticResource ResourcesInstance}}" VerticalAlignment="Top" Margin="6,6,6,0">
-                            <Grid Margin="0,0,0,6">
-                                <CheckBox Content="{Binding Path=ConnectionWindow_RelateBoxFile, Source={StaticResource ResourcesInstance}}" Height="16" HorizontalAlignment="Left" Margin="6,6,0,0" Name="_miscellaneousRelateBoxFileCheckBox" VerticalAlignment="Top" />
                             </Grid>
                         </Expander>
                     </StackPanel>
