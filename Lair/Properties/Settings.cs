@@ -83,6 +83,18 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<double>() { Name = "MessageEditWindow_Height", Value = 500 },
                 new Library.Configuration.SettingsContext<double>() { Name = "MessageEditWindow_Width", Value = 700 },
                 new Library.Configuration.SettingsContext<WindowState>() { Name = "MessageEditWindow_WindowState", Value = WindowState.Normal },
+              
+                new Library.Configuration.SettingsContext<double>() { Name = "CategoryEditWindow_Top", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "CategoryEditWindow_Left", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "CategoryEditWindow_Height", Value = 500 },
+                new Library.Configuration.SettingsContext<double>() { Name = "CategoryEditWindow_Width", Value = 700 },
+                new Library.Configuration.SettingsContext<WindowState>() { Name = "CategoryEditWindow_WindowState", Value = WindowState.Normal },
+              
+                new Library.Configuration.SettingsContext<double>() { Name = "NewChannelWindow_Top", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "NewChannelWindow_Left", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "NewChannelWindow_Height", Value = 500 },
+                new Library.Configuration.SettingsContext<double>() { Name = "NewChannelWindow_Width", Value = 700 },
+                new Library.Configuration.SettingsContext<WindowState>() { Name = "NewChannelWindow_WindowState", Value = WindowState.Normal },
             })
         {
 
@@ -1188,6 +1200,198 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     this["MessageEditWindow_WindowState"] = value;
+                }
+            }
+        }
+
+
+        public double CategoryEditWindow_Top
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["CategoryEditWindow_Top"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["CategoryEditWindow_Top"] = value;
+                }
+            }
+        }
+
+        public double CategoryEditWindow_Left
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["CategoryEditWindow_Left"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["CategoryEditWindow_Left"] = value;
+                }
+            }
+        }
+
+        public double CategoryEditWindow_Height
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["CategoryEditWindow_Height"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["CategoryEditWindow_Height"] = value;
+                }
+            }
+        }
+
+        public double CategoryEditWindow_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["CategoryEditWindow_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["CategoryEditWindow_Width"] = value;
+                }
+            }
+        }
+
+        public WindowState CategoryEditWindow_WindowState
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (WindowState)this["CategoryEditWindow_WindowState"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["CategoryEditWindow_WindowState"] = value;
+                }
+            }
+        }
+
+
+        public double NewChannelWindow_Top
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["NewChannelWindow_Top"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["NewChannelWindow_Top"] = value;
+                }
+            }
+        }
+
+        public double NewChannelWindow_Left
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["NewChannelWindow_Left"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["NewChannelWindow_Left"] = value;
+                }
+            }
+        }
+
+        public double NewChannelWindow_Height
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["NewChannelWindow_Height"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["NewChannelWindow_Height"] = value;
+                }
+            }
+        }
+
+        public double NewChannelWindow_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["NewChannelWindow_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["NewChannelWindow_Width"] = value;
+                }
+            }
+        }
+
+        public WindowState NewChannelWindow_WindowState
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (WindowState)this["NewChannelWindow_WindowState"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["NewChannelWindow_WindowState"] = value;
                 }
             }
         }

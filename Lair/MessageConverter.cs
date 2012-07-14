@@ -35,7 +35,7 @@ namespace Lair
                         memoryStream.Seek(0, SeekOrigin.Begin);
 
                         return digitalSignature.Nickname.Replace("@", "_") + "@" + Convert.ToBase64String(sha512.ComputeHash(memoryStream).ToArray())
-                            .Replace('+', '-').Replace('/', '_').Substring(0, 30);
+                            .Replace('+', '-').Replace('/', '_').Substring(0, 64);
                     }
                 }
             }
@@ -64,9 +64,24 @@ namespace Lair
                         memoryStream.Seek(0, SeekOrigin.Begin);
 
                         return certificate.Nickname.Replace("@", "_") + "@" + Convert.ToBase64String(sha512.ComputeHash(memoryStream).ToArray())
-                            .Replace('+', '-').Replace('/', '_').Substring(0, 30);
+                            .Replace('+', '-').Replace('/', '_').Substring(0, 64);
                     }
                 }
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException("ArgumentException", e);
+            }
+        }
+
+        public static string ToChannelString(Channel channel)
+        {
+            if (channel.Name == null || channel.Id == null) return null;
+
+            try
+            {
+                return channel.Name + " - " + Convert.ToBase64String(channel.Id)
+                    .Replace('+', '-').Replace('/', '_').Substring(0, 64);
             }
             catch (Exception e)
             {
@@ -82,12 +97,12 @@ namespace Lair
 
                 StringBuilder builder = new StringBuilder();
 
-                if (!string.IsNullOrWhiteSpace(seed.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.CacheControl_Name, seed.Name));
-                if (seed.Certificate != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.CacheControl_Signature, MessageConverter.ToSignatureString(seed.Certificate)));
-                builder.AppendLine(string.Format("{0}: {1:#,0}", LanguagesManager.Instance.CacheControl_Length, seed.Length));
-                if (keywords.Count != 0) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.CacheControl_Keywords, String.Join(", ", keywords)));
-                builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.CacheControl_CreationTime, seed.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
-                if (!string.IsNullOrWhiteSpace(seed.Comment)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.CacheControl_Comment, seed.Comment));
+                if (!string.IsNullOrWhiteSpace(seed.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.ChannelControl_Name, seed.Name));
+                if (seed.Certificate != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.ChannelControl_Signature, MessageConverter.ToSignatureString(seed.Certificate)));
+                builder.AppendLine(string.Format("{0}: {1:#,0}", LanguagesManager.Instance.ChannelControl_Length, seed.Length));
+                if (keywords.Count != 0) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.ChannelControl_Keywords, String.Join(", ", keywords)));
+                builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.ChannelControl_CreationTime, seed.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
+                if (!string.IsNullOrWhiteSpace(seed.Comment)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.ChannelControl_Comment, seed.Comment));
 
                 if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
                 else return null;
@@ -104,10 +119,10 @@ namespace Lair
             {
                 StringBuilder builder = new StringBuilder();
 
-                if (!string.IsNullOrWhiteSpace(box.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.CacheControl_Name, box.Name));
-                if (box.Certificate != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.CacheControl_Signature, MessageConverter.ToSignatureString(box.Certificate)));
-                builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.CacheControl_CreationTime, box.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
-                if (!string.IsNullOrWhiteSpace(box.Comment)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.CacheControl_Comment, box.Comment));
+                if (!string.IsNullOrWhiteSpace(box.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.ChannelControl_Name, box.Name));
+                if (box.Certificate != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.ChannelControl_Signature, MessageConverter.ToSignatureString(box.Certificate)));
+                builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.ChannelControl_CreationTime, box.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
+                if (!string.IsNullOrWhiteSpace(box.Comment)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.ChannelControl_Comment, box.Comment));
 
                 if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
                 else return null;
@@ -118,14 +133,18 @@ namespace Lair
             }
         }
 
-        public static string ToChannelString(Channel channel)
+        public static string ToInfoMessage(Channel channel)
         {
-            if (channel.Name == null || channel.Id == null) return null;
-
             try
             {
-                return channel.Name + " " + Convert.ToBase64String(channel.Id)
-                    .Replace('+', '-').Replace('/', '_').Substring(0, 30);
+                StringBuilder builder = new StringBuilder();
+
+                if (!string.IsNullOrWhiteSpace(channel.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.ChannelControl_Name, channel.Name));
+                if (channel.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.ChannelControl_Id, Convert.ToBase64String(channel.Id)
+                    .Replace('+', '-').Replace('/', '_').Substring(0, 64)));
+
+                if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
+                else return null;
             }
             catch (Exception e)
             {

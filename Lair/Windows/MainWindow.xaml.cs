@@ -818,6 +818,10 @@ namespace Lair.Windows
             {
                 App.SelectTab = "Connection";
             }
+            else if ((string)tabItem.Header == LanguagesManager.Instance.MainWindow_Channel)
+            {
+                App.SelectTab = "Channel";
+            }
             else if ((string)tabItem.Header == LanguagesManager.Instance.MainWindow_Log)
             {
                 App.SelectTab = "Log";

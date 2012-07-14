@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.IO;
 using System.Windows.Documents;
-using Library.Net.Lair;
-using Lair.Properties;
-using System.Windows.Media;
-using Library;
-using System.Windows.Markup;
 using System.Windows.Input;
-using System.Text.RegularExpressions;
+using System.Windows.Markup;
+using System.Windows.Media;
+using Lair.Properties;
+using Library;
+using Library.Net.Lair;
 
 namespace Lair.Windows
 {
@@ -49,9 +49,17 @@ namespace Lair.Windows
                     var fd = new FlowDocument();
                     var p = new Paragraph();
 
-                    p.Inlines.Add(string.Format("{1} {0}",
-                        message.CreationTime.ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo),
-                        MessageConverter.ToSignatureString(message.Certificate)));
+                    if (message.Certificate == null)
+                    {
+                        p.Inlines.Add(string.Format(" - Anonymous - {0}",
+                            message.CreationTime.ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
+                    }
+                    else
+                    {
+                        p.Inlines.Add(string.Format(" - {0} - {1}",
+                            MessageConverter.ToSignatureString(message.Certificate),
+                            message.CreationTime.ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
+                    }
 
                     p.Inlines.Add(new LineBreak());
                     p.Inlines.Add(new LineBreak());
@@ -181,7 +189,7 @@ namespace Lair.Windows
                                 {
                                     Run r = new Run();
                                     r.Foreground = new SolidColorBrush(Color.FromRgb(0xEF, 0xEF, 0xEF));
-                                    r.Text = MessageConverter.ToChannelString(channel);
+                                    r.Text = MessageConverter.ToInfoMessage(channel);
 
                                     p.Inlines.Add(r);
                                 }

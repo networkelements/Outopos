@@ -36,23 +36,25 @@
             <local:CategoryTreeViewItem x:Name="_treeViewItem" IsExpanded="True">
                 <local:CategoryTreeViewItem.ContextMenu>
                     <ContextMenu Name="_treeViewContextMenu">
-                        <MenuItem Name="_treeViewAddCategoryMenuItem" Header="{Binding Path=CacheControl_AddCategory, Source={StaticResource ResourcesInstance}}" Click="_treeViewAddCategoryMenuItem_Click"/>
-                        <MenuItem Name="_treeViewEditMenuItem" Header="{Binding Path=CacheControl_Edit, Source={StaticResource ResourcesInstance}}" Click="_treeViewEditMenuItem_Click"/>
-                        <MenuItem Name="_treeViewDeleteMenuItem" Header="{Binding Path=CacheControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_treeViewDeleteMenuItem_Click"/>
+                        <MenuItem Name="_treeViewNewChannelMenuItem" Header="{Binding Path=ChannelControl_NewChannel, Source={StaticResource ResourcesInstance}}" Click="_treeViewNewChannelMenuItem_Click"/>
                         <Separator />
-                        <MenuItem Name="_treeViewCutContextMenuItem" Header="{Binding Path=CacheControl_Cut, Source={StaticResource ResourcesInstance}}" Click="_treeViewCutContextMenuItem_Click" />
-                        <MenuItem Name="_treeViewCopyContextMenuItem" Header="{Binding Path=CacheControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_treeViewCopyContextMenuItem_Click" />
-                        <MenuItem Name="_treeViewPasteContextMenuItem" Header="{Binding Path=CacheControl_Paste, Source={StaticResource ResourcesInstance}}" Click="_treeViewPasteContextMenuItem_Click" />
+                        <MenuItem Name="_treeViewAddCategoryMenuItem" Header="{Binding Path=ChannelControl_AddCategory, Source={StaticResource ResourcesInstance}}" Click="_treeViewAddCategoryMenuItem_Click"/>
+                        <MenuItem Name="_treeViewEditMenuItem" Header="{Binding Path=ChannelControl_Edit, Source={StaticResource ResourcesInstance}}" Click="_treeViewEditMenuItem_Click"/>
+                        <MenuItem Name="_treeViewDeleteMenuItem" Header="{Binding Path=ChannelControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_treeViewDeleteMenuItem_Click"/>
+                        <Separator />
+                        <MenuItem Name="_treeViewCutContextMenuItem" Header="{Binding Path=ChannelControl_Cut, Source={StaticResource ResourcesInstance}}" Click="_treeViewCutContextMenuItem_Click" />
+                        <MenuItem Name="_treeViewCopyContextMenuItem" Header="{Binding Path=ChannelControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_treeViewCopyContextMenuItem_Click" />
+                        <MenuItem Name="_treeViewPasteContextMenuItem" Header="{Binding Path=ChannelControl_Paste, Source={StaticResource ResourcesInstance}}" Click="_treeViewPasteContextMenuItem_Click" />
                     </ContextMenu>
                 </local:CategoryTreeViewItem.ContextMenu>
             </local:CategoryTreeViewItem>
         </TreeView>
 
-        <WrapPanel Grid.Column="2" Name="wrapPanel1" FlowDirection="RightToLeft">
+        <WrapPanel Grid.Column="2" Name="wrapPanel" FlowDirection="RightToLeft">
             <Button Height="23" Name="_newMessageButton" Width="40" Click="_newMessageButton_Click" />
         </WrapPanel>
 
-        <local:ListBoxEx Grid.Column="2" Grid.Row="1" x:Name="_listBox" ContextMenuOpening="_listBox_ContextMenuOpening" SizeChanged="_listBox_SizeChanged"
+        <local:ListBoxEx Grid.Column="2" Grid.Row="1" x:Name="_listBox" SizeChanged="_listBox_SizeChanged" PreviewMouseWheel="_listBox_PreviewMouseWheel"
                 VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
             <ListBox.Resources>
                 <Style TargetType="{x:Type ListBoxItem}">

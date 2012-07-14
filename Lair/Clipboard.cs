@@ -5,11 +5,15 @@ using System.Linq;
 using System.Text;
 using Library;
 using Library.Net.Lair;
+using Lair.Windows;
 
 namespace Lair
 {
     static class Clipboard
     {
+        private static List<Category> _categoryList = new List<Category>();
+        private static List<Board> _boardList = new List<Board>();
+
         public static IEnumerable<string> GetPaths()
         {
             try
@@ -128,6 +132,17 @@ namespace Lair
             }
 
             Clipboard.SetText(sb.ToString());
+        }
+
+        public static IEnumerable<Category> GetCategories()
+        {
+            return _categoryList.Select(n => n.DeepClone()).ToArray();
+        }
+
+        public static void SetCategories(IEnumerable<Category> categoryies)
+        {
+            _categoryList.Clear();
+            _categoryList.AddRange(categoryies.Select(n => n.DeepClone()));
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -11,10 +12,9 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Lair.Properties;
 using Library;
 using Library.Net.Lair;
-using Lair.Properties;
-using System.Runtime.Serialization;
 using Library.Security;
 
 namespace Lair.Windows

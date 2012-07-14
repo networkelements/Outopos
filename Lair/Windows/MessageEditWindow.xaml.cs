@@ -24,12 +24,12 @@ namespace Lair.Windows
     partial class MessageEditWindow : Window
     {
         private Message _message;
-        private LairManager _amoebaManager;
+        private LairManager _lairManager;
 
-        public MessageEditWindow(ref Message message, LairManager amoebaManager)
+        public MessageEditWindow(ref Message message, LairManager lairManager)
         {
             _message = message;
-            _amoebaManager = amoebaManager;
+            _lairManager = lairManager;
 
             var digitalSignatureCollection = new List<object>();
             digitalSignatureCollection.Add(new ComboBoxItem() { Content = "" });
