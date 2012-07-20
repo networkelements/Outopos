@@ -398,7 +398,7 @@ namespace Lair.Windows
 
                         foreach (CategoryTreeViewItem item in list.OfType<CategoryTreeViewItem>())
                         {
-                            if (item.Value.FilterUpload_IsEnabled)
+                            if (item.Value.FilterUpload_IsEnabled && item.Value.FilterUploadDigitalSignature != null)
                             {
                                 foreach (var board in item.Value.Boards)
                                 {
