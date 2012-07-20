@@ -349,16 +349,16 @@ namespace Lair.Windows
         {
             var selectItems = _otherNodesListView.SelectedItems;
 
-            _otherNodesCopyContextMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
+            _otherNodesCopyMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
 
             {
                 var nodes = Clipboard.GetNodes();
 
-                _otherNodesPasteContextMenuItem.IsEnabled = (nodes.Count() > 0) ? true : false;
+                _otherNodesPasteMenuItem.IsEnabled = (nodes.Count() > 0) ? true : false;
             }
         }
 
-        private void _otherNodesCopyContextMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _otherNodesCopyMenuItem_Click(object sender, RoutedEventArgs e)
         {
             var sb = new StringBuilder();
 
@@ -370,7 +370,7 @@ namespace Lair.Windows
             Clipboard.SetText(sb.ToString());
         }
 
-        private void _otherNodesPasteContextMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _otherNodesPasteMenuItem_Click(object sender, RoutedEventArgs e)
         {
             foreach (var item in Clipboard.GetNodes())
             {
@@ -948,22 +948,6 @@ namespace Lair.Windows
         private void _miscellaneousUploadingConnectionCountTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             _miscellaneousUploadingConnectionCountTextBox.Text = ConnectionWindow.GetStringToInt(_miscellaneousUploadingConnectionCountTextBox.Text).ToString();
-        }
-
-        private void _miscellaneousDownloadDirectoryTextBox_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            using (System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog())
-            {
-                dialog.RootFolder = System.Environment.SpecialFolder.MyComputer;
-                dialog.SelectedPath = _miscellaneousDownloadDirectoryTextBox.Text;
-                dialog.ShowNewFolderButton = true;
-                dialog.Description = LanguagesManager.Instance.ConnectionWindow_DownloadDirectory;
-
-                if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    _miscellaneousDownloadDirectoryTextBox.Text = dialog.SelectedPath;
-                }
-            }
         }
 
         #endregion

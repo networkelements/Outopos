@@ -19,6 +19,8 @@
         <local:LongToSizeStringConverter x:Key="_longToSizeStringConverter"/>
         <local:BytesToHexStringConverter x:Key="_bytesToHexStringConverter" />
         <local:DateTimeToStringConverter x:Key="_dateTimeToStringConverter" />
+        <local:ObjectToInfoStringConverter x:Key="_objectToInfoStringConverter" />
+        <local:StringRegularizationConverter x:Key="_stringRegularizationConverter" />
 
         <DataTemplate x:Key="_myTemplate_SearchContains_Contains">
             <TextBlock Text="{Binding Path=Contains, Mode=OneWay, Converter={StaticResource _boolToStringConverter}}" />
@@ -32,6 +34,9 @@
         <DataTemplate x:Key="_myTemplate_SearchContains_String_Value">
             <TextBlock Text="{Binding Path=Value, Mode=OneWay}" />
         </DataTemplate>
+        <DataTemplate x:Key="_myTemplate_SearchContains_Message_Content">
+            <TextBlock Text="{Binding Path=Value.Content, Mode=OneWay, Converter={StaticResource _stringRegularizationConverter}}" ToolTip="{Binding Path=Value, Mode=OneWay, Converter={StaticResource _objectToInfoStringConverter}}" />
+        </DataTemplate>
     </Window.Resources>
 
     <Grid>
@@ -40,6 +45,17 @@
         <Button Height="23" HorizontalAlignment="Right" Margin="0,0,93,12" Name="_okButton" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CategoryEditWindow_Ok, Source={StaticResource ResourcesInstance}}" Click="_okButton_Click" />
         <Button Height="23" HorizontalAlignment="Right" Margin="0,0,12,12" Name="_cancelButton" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CategoryEditWindow_Cancel, Source={StaticResource ResourcesInstance}}" Click="_cancelButton_Click" />
         <TabControl Margin="0,42,0,41">
+            <TabItem Header="{Binding Path=CategoryEditWindow_Upload, Source={StaticResource ResourcesInstance}}">
+                <Grid>
+                    <Label Content="{Binding Path=CategoryEditWindow_Signature, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" Width="120" VerticalContentAlignment="Center" />
+                    <ComboBox Height="24" Margin="132,6,6,0" Name="_filterUploadSignatureComboBox" VerticalAlignment="Top" VerticalContentAlignment="Center" SelectionChanged="_filterUploadSignatureComboBox_SelectionChanged" />
+                    <GroupBox Header="{Binding Path=UserInterfaceWindow_UpdateOption, Source={StaticResource ResourcesInstance}}" Height="58" Margin="6,36,6,0" Name="groupBox1" VerticalAlignment="Top">
+                        <Grid>
+                            <CheckBox Content="{Binding Path=CategoryEditWindow_FilterUpload, Source={StaticResource ResourcesInstance}}" Height="16" HorizontalAlignment="Left" Margin="6,6,0,0" Name="_filterUploadCheckBox" VerticalAlignment="Top" />
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
             <TabItem Header="{Binding Path=CategoryEditWindow_Word, Source={StaticResource ResourcesInstance}}">
                 <Grid>
                     <Button Name="_wordUpButton" Height="23" HorizontalAlignment="Right" Margin="0,0,330,6" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CategoryEditWindow_Up, Source={StaticResource ResourcesInstance}}" Click="_wordUpButton_Click" IsEnabled="False" />
@@ -52,8 +68,8 @@
                     <local:ListViewEx x:Name="_wordListView" Margin="0,0,0,87" SelectionChanged="_wordListView_SelectionChanged" PreviewMouseLeftButtonDown="_wordListView_PreviewMouseLeftButtonDown" ContextMenuOpening="_wordListView_ContextMenuOpening">
                         <ListView.ContextMenu>
                             <ContextMenu Name="_wordListViewContextMenu" >
-                                <MenuItem Name="_wordListViewCopyContextMenuItem" Header="{Binding Path=CategoryEditWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_wordListViewCopyContextMenuItem_Click"/>
-                                <MenuItem Name="_wordListViewPasteContextMenuItem" Header="{Binding Path=CategoryEditWindow_Paste, Source={StaticResource ResourcesInstance}}" Click="_wordListViewPasteContextMenuItem_Click"/>
+                                <MenuItem Name="_wordListViewCopyMenuItem" Header="{Binding Path=CategoryEditWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_wordListViewCopyMenuItem_Click"/>
+                                <MenuItem Name="_wordListViewPasteMenuItem" Header="{Binding Path=CategoryEditWindow_Paste, Source={StaticResource ResourcesInstance}}" Click="_wordListViewPasteMenuItem_Click"/>
                             </ContextMenu>
                         </ListView.ContextMenu>
                         <ListView.View>
@@ -79,8 +95,8 @@
                     <local:ListViewEx x:Name="_regexListView" Margin="0,0,0,87" SelectionChanged="_regexListView_SelectionChanged" PreviewMouseLeftButtonDown="_regexListView_PreviewMouseLeftButtonDown" ContextMenuOpening="_regexListView_ContextMenuOpening">
                         <ListView.ContextMenu>
                             <ContextMenu Name="_regexListViewContextMenu" >
-                                <MenuItem Name="_regexListViewCopyContextMenuItem" Header="{Binding Path=CategoryEditWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_regexListViewCopyContextMenuItem_Click"/>
-                                <MenuItem Name="_regexListViewPasteContextMenuItem" Header="{Binding Path=CategoryEditWindow_Paste, Source={StaticResource ResourcesInstance}}" Click="_regexListViewPasteContextMenuItem_Click"/>
+                                <MenuItem Name="_regexListViewCopyMenuItem" Header="{Binding Path=CategoryEditWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_regexListViewCopyMenuItem_Click"/>
+                                <MenuItem Name="_regexListViewPasteMenuItem" Header="{Binding Path=CategoryEditWindow_Paste, Source={StaticResource ResourcesInstance}}" Click="_regexListViewPasteMenuItem_Click"/>
                             </ContextMenu>
                         </ListView.ContextMenu>
                         <ListView.View>
@@ -109,8 +125,8 @@
                     <local:ListViewEx x:Name="_signatureListView" Margin="0,0,0,87" SelectionChanged="_signatureListView_SelectionChanged" PreviewMouseLeftButtonDown="_signatureListView_PreviewMouseLeftButtonDown" ContextMenuOpening="_signatureListView_ContextMenuOpening">
                         <ListView.ContextMenu>
                             <ContextMenu Name="_signatureListViewContextMenu" >
-                                <MenuItem Name="_signatureListViewCopyContextMenuItem" Header="{Binding Path=CategoryEditWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_signatureListViewCopyContextMenuItem_Click"/>
-                                <MenuItem Name="_signatureListViewPasteContextMenuItem" Header="{Binding Path=CategoryEditWindow_Paste, Source={StaticResource ResourcesInstance}}" Click="_signatureListViewPasteContextMenuItem_Click"/>
+                                <MenuItem Name="_signatureListViewCopyMenuItem" Header="{Binding Path=CategoryEditWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_signatureListViewCopyMenuItem_Click"/>
+                                <MenuItem Name="_signatureListViewPasteMenuItem" Header="{Binding Path=CategoryEditWindow_Paste, Source={StaticResource ResourcesInstance}}" Click="_signatureListViewPasteMenuItem_Click"/>
                             </ContextMenu>
                         </ListView.ContextMenu>
                         <ListView.View>
@@ -119,6 +135,33 @@
                                     Width="{Binding Path=CategoryEditWindow_GridViewColumn_Signature_Contains_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
                                 <GridViewColumn Header="{Binding Path=CategoryEditWindow_Value, Source={StaticResource ResourcesInstance}}" CellTemplate="{StaticResource _myTemplate_SearchContains_String_Value}" 
                                     Width="{Binding Path=CategoryEditWindow_GridViewColumn_Signature_Value_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
+                            </GridView>
+                        </ListView.View>
+                    </local:ListViewEx>
+                </Grid>
+            </TabItem>
+            <TabItem Header="{Binding Path=CategoryEditWindow_Message, Source={StaticResource ResourcesInstance}}">
+                <Grid>
+                    <Button Name="_messageUpButton" Height="23" HorizontalAlignment="Right" Margin="0,0,330,6" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CategoryEditWindow_Up, Source={StaticResource ResourcesInstance}}" Click="_messageUpButton_Click" IsEnabled="False" />
+                    <Button Name="_messageDownButton" Height="23" HorizontalAlignment="Right" Margin="0,0,249,6" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CategoryEditWindow_Down, Source={StaticResource ResourcesInstance}}" Click="_messageDownButton_Click" IsEnabled="False" />
+                    <Button Name="_messageAddButton" Height="23" HorizontalAlignment="Right" Margin="0,0,168,6" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CategoryEditWindow_Add, Source={StaticResource ResourcesInstance}}" Click="_messageAddButton_Click" />
+                    <Button Name="_messageEditButton" Height="23" HorizontalAlignment="Right" Margin="0,0,87,6" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CategoryEditWindow_Edit, Source={StaticResource ResourcesInstance}}" Click="_messageEditButton_Click"/>
+                    <Button Name="_messageDeleteButton" Height="23" HorizontalAlignment="Right" Margin="0,0,6,6" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CategoryEditWindow_Delete, Source={StaticResource ResourcesInstance}}" Click="_messageDeleteButton_Click" />
+                    <TextBox Name="_messageTextBox" Height="24" Margin="6,0,6,35" VerticalAlignment="Bottom" VerticalContentAlignment="Center" />
+                    <CheckBox Name="_messageContainsCheckBox" Height="16" HorizontalAlignment="Left" Margin="6,0,0,65" VerticalAlignment="Bottom" Width="120"  Content="{Binding Path=CategoryEditWindow_Contains, Source={StaticResource ResourcesInstance}}" />
+                    <local:ListViewEx x:Name="_messageListView" Margin="0,0,0,87" SelectionChanged="_messageListView_SelectionChanged" PreviewMouseLeftButtonDown="_messageListView_PreviewMouseLeftButtonDown" ContextMenuOpening="_messageListView_ContextMenuOpening">
+                        <ListView.ContextMenu>
+                            <ContextMenu Name="_messageListViewContextMenu" >
+                                <MenuItem Name="_messageListViewCopyMenuItem" Header="{Binding Path=CategoryEditWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_messageListViewCopyMenuItem_Click"/>
+                                <MenuItem Name="_messageListViewPasteMenuItem" Header="{Binding Path=CategoryEditWindow_Paste, Source={StaticResource ResourcesInstance}}" Click="_messageListViewPasteMenuItem_Click"/>
+                            </ContextMenu>
+                        </ListView.ContextMenu>
+                        <ListView.View>
+                            <GridView AllowsColumnReorder="False">
+                                <GridViewColumn Header="{Binding Path=CategoryEditWindow_Contains, Source={StaticResource ResourcesInstance}}" CellTemplate="{StaticResource _myTemplate_SearchContains_Contains}" 
+                                Width="{Binding Path=CategoryEditWindow_GridViewColumn_Message_Contains_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
+                                <GridViewColumn Header="{Binding Path=CategoryEditWindow_Value, Source={StaticResource ResourcesInstance}}" CellTemplate="{StaticResource _myTemplate_SearchContains_Message_Content}" 
+                                Width="{Binding Path=CategoryEditWindow_GridViewColumn_Message_Value_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
                             </GridView>
                         </ListView.View>
                     </local:ListViewEx>

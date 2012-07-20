@@ -29,6 +29,7 @@ using Library.Net.Connection;
 using Library.Net.Proxy;
 using Library.Net.Upnp;
 using Library.Security;
+using System.ComponentModel;
 
 namespace Lair.Windows
 {
@@ -336,6 +337,11 @@ namespace Lair.Windows
                 {
                     initFlag = true;
 
+                    Settings.Instance.ChannelControl_Category.Boards.Add(new Board() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAAnsVLtnbRdm22in0qQhQ8Smdqc9Yro90PXOiF3lkIF2RREEbGiQmRmpukx0tPytNON6UiN35jYs3xCSNoxmmnhwAAAAYBQW1vZWJhhggnHQ==") });
+                    Settings.Instance.ChannelControl_Category.Boards.Add(new Board() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAACeKcl3zp_ff2hFIhIHWjxxEt1tBcqZvmt4X9a1t3ilY7rUXHbWLPJ6rwu1sLvbHB0KhP81b1J7XvVUV_wi991gAAAAQBTGFpcl1EKAI=") });
+                    Settings.Instance.ChannelControl_Category.Boards.Add(new Board() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAAtsMEuKHe-iQje0OeLoHfbSLvKXFo4zv7xP7j2IW1ZK_st0yVK4kO7Hcl9SDnqNTSxAvShddBiOg_2q6tSLsMTwAAAAYBUHVibGljMXNfWw==") });
+                    Settings.Instance.ChannelControl_Category.Boards.Add(new Board() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAASaqqritqZRVYlzfkcVhMAT0tm8PTp3Vu_KWBUEloBtnZ_WnRQO5pcEq60gQOktBz5qFxg_Saiqo6lwtDP-bIdgAAAAQBVGVzdITgoiw=") });
+
                     _lairManager.ConnectionCountLimit = 12;
                     _lairManager.DownloadingConnectionCountLowerLimit = 3;
                     _lairManager.UploadingConnectionCountLowerLimit = 3;
@@ -436,6 +442,32 @@ namespace Lair.Windows
                 }
 #endif
 
+                if (string.IsNullOrWhiteSpace(Settings.Instance.Global_Amoeba_Path))
+                {
+                    foreach (var p in Process.GetProcesses())
+                    {
+                        try
+                        {
+                            var path = p.MainModule.FileName;
+
+                            if (Path.GetFileName(path) == "Amoeba.exe")
+                            {
+                                Settings.Instance.Global_Amoeba_Path = path;
+                                
+                                break;
+                            }
+                        }
+                        catch (Win32Exception)
+                        {
+
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                    }
+                }
+
                 _autoBaseNodeSettingManager = new AutoBaseNodeSettingManager(_lairManager);
                 _autoBaseNodeSettingManager.Load(_configrationDirectoryPaths["AutoBaseNodeSettingManager"]);
 
@@ -452,7 +484,7 @@ namespace Lair.Windows
 
         private void UpdateCheck(bool isShow)
         {
-            /*lock (_updateLockObject)
+            lock (_updateLockObject)
             {
                 try
                 {
@@ -469,59 +501,66 @@ namespace Lair.Windows
                     var url = Settings.Instance.Global_Update_Url;
                     var proxyUri = Settings.Instance.Global_Update_ProxyUri;
                     var signature = Settings.Instance.Global_Update_Signature;
+                    WebProxy proxy = null;
+                    string line1;
+                    string line2;
 
-                    HttpWebRequest rq = (HttpWebRequest)HttpWebRequest.Create(url);
-                    rq.Method = "GET";
-                    rq.UserAgent = "";
-                    rq.ReadWriteTimeout = 1000 * 60;
-                    rq.Timeout = 1000 * 60;
-                    rq.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore);
-                    rq.KeepAlive = true;
-
-                    if (!string.IsNullOrWhiteSpace(proxyUri))
                     {
-                        string proxyScheme = null;
-                        string proxyHost = null;
-                        int proxyPort = -1;
+                        HttpWebRequest rq = (HttpWebRequest)HttpWebRequest.Create(url);
+                        rq.Method = "GET";
+                        rq.ContentType = "text/html; charset=UTF-8";
+                        rq.UserAgent = "";
+                        rq.ReadWriteTimeout = 1000 * 60;
+                        rq.Timeout = 1000 * 60;
+                        rq.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore);
+                        rq.KeepAlive = true;
+                        rq.Headers.Add(HttpRequestHeader.AcceptCharset, "utf-8");
 
+                        if (!string.IsNullOrWhiteSpace(proxyUri))
                         {
-                            Regex regex = new Regex(@"(.*?):(.*):(\d*)");
-                            var match = regex.Match(proxyUri);
+                            string proxyScheme = null;
+                            string proxyHost = null;
+                            int proxyPort = -1;
 
-                            if (match.Success)
                             {
-                                proxyScheme = match.Groups[1].Value;
-                                proxyHost = match.Groups[2].Value;
-                                proxyPort = int.Parse(match.Groups[3].Value);
-                            }
-                            else
-                            {
-                                Regex regex2 = new Regex(@"(.*?):(.*)");
-                                var match2 = regex2.Match(proxyUri);
+                                Regex regex = new Regex(@"(.*?):(.*):(\d*)");
+                                var match = regex.Match(proxyUri);
 
-                                if (match2.Success)
+                                if (match.Success)
                                 {
-                                    proxyScheme = match2.Groups[1].Value;
-                                    proxyHost = match2.Groups[2].Value;
-                                    proxyPort = 80;
+                                    proxyScheme = match.Groups[1].Value;
+                                    proxyHost = match.Groups[2].Value;
+                                    proxyPort = int.Parse(match.Groups[3].Value);
+                                }
+                                else
+                                {
+                                    Regex regex2 = new Regex(@"(.*?):(.*)");
+                                    var match2 = regex2.Match(proxyUri);
+
+                                    if (match2.Success)
+                                    {
+                                        proxyScheme = match2.Groups[1].Value;
+                                        proxyHost = match2.Groups[2].Value;
+                                        proxyPort = 80;
+                                    }
                                 }
                             }
+
+                            proxy = new WebProxy(proxyHost, proxyPort);
+                            rq.Proxy = proxy;
                         }
-
-                        rq.Proxy = new WebProxy(proxyHost, proxyPort);
+                     
+                        using (HttpWebResponse rs = (HttpWebResponse)rq.GetResponse())
+                        using (Stream stream = rs.GetResponseStream())
+                        using (StreamReader r = new StreamReader(stream))
+                        {
+                            line1 = r.ReadLine();
+                            line2 = r.ReadLine();
+                        }
                     }
 
-                    Seed seed;
-
-                    using (HttpWebResponse rs = (HttpWebResponse)rq.GetResponse())
-                    using (Stream stream = rs.GetResponseStream())
-                    using (StreamReader r = new StreamReader(stream))
-                    {
-                        seed = LairConverter.FromSeedString(r.ReadLine());
-                    }
-
-                    Regex regex3 = new Regex(@"Lair ((\d*)\.(\d*)\.(\d*)).*\.zip");
-                    var match3 = regex3.Match(seed.Name);
+                    Regex regex3 = new Regex(@"Lair ((\d*)\.(\d*)\.(\d*)).*");
+                    var match3 = regex3.Match(line1);
 
                     if (match3.Success)
                     {
@@ -530,7 +569,7 @@ namespace Lair.Windows
                         if (tempVersion <= App.LairVersion)
                         {
                             if (!isShow) return;
-                         
+
                             this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
                             {
                                 MessageBox.Show(
@@ -545,12 +584,6 @@ namespace Lair.Windows
                         {
                             if (!isShow && tempVersion <= updateVersion) return;
 
-                            if (!string.IsNullOrWhiteSpace(signature))
-                            {
-                                if (!seed.VerifyCertificate()) throw new Exception("Update VerifyCertificate");
-                                if (MessageConverter.ToSignatureString(seed.Certificate) != signature) throw new Exception("Update Signature");
-                            }
-
                             bool flag = true;
 
                             if (Settings.Instance.Global_Update_Option != UpdateOption.AutoUpdate)
@@ -559,7 +592,7 @@ namespace Lair.Windows
                                 {
                                     if (MessageBox.Show(
                                         this,
-                                        string.Format(LanguagesManager.Instance.MainWindow_UpdateCheck_Message, Path.GetFileNameWithoutExtension(seed.Name)),
+                                        string.Format(LanguagesManager.Instance.MainWindow_UpdateCheck_Message, line1),
                                         "Update",
                                         MessageBoxButton.OKCancel,
                                         MessageBoxImage.Information) == MessageBoxResult.Cancel)
@@ -576,7 +609,72 @@ namespace Lair.Windows
 
                             if (flag)
                             {
-                                _lairManager.Download(seed, App.DirectoryPaths["Update"], 6);
+                                HttpWebRequest rq = (HttpWebRequest)HttpWebRequest.Create(line2);
+                                rq.Method = "GET";
+                                rq.ContentType = "text/html; charset=UTF-8";
+                                rq.UserAgent = "";
+                                rq.ReadWriteTimeout = 1000 * 60;
+                                rq.Timeout = 1000 * 60;
+                                rq.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore);
+                                rq.KeepAlive = true;
+                                rq.Proxy = proxy;
+                                rq.Headers.Add(HttpRequestHeader.AcceptCharset, "utf-8");
+
+                                using (HttpWebResponse rs = (HttpWebResponse)rq.GetResponse())
+                                {
+                                    string fileName = null;
+
+                                    if (rs.Headers.AllKeys.Contains("Content-Disposition"))
+                                    {
+                                        string dispos = rs.Headers["Content-Disposition"];
+
+                                        if (!String.IsNullOrEmpty(dispos))
+                                        {
+                                            Regex re = new Regex(@"
+                                            filename\s*=\s*
+                                            (?:
+                                              ""(?<filename>[^""]*)""
+                                              |
+                                              (?<filename>[^;]*)
+                                            )
+                                            ", RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace);
+
+                                            Match m = re.Match(dispos);
+
+                                            if (m.Success)
+                                            {
+                                                fileName = m.Groups["filename"].Value;
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        fileName = Path.GetFileName(line2);
+                                    }
+
+                                    using (Stream inStream = rs.GetResponseStream())
+                                    using (FileStream outStream = new FileStream(string.Format(@"{0}\{1}", App.DirectoryPaths["Update"], fileName), FileMode.Create))
+                                    {
+                                        byte[] buffer = new byte[1024 * 4];
+
+                                        int length = 0;
+
+                                        while (0 < (length = inStream.Read(buffer, 0, buffer.Length)))
+                                        {
+                                            outStream.Write(buffer, 0, length);
+                                        }
+                                    }
+
+                                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                                    {
+                                        MessageBox.Show(
+                                            this,
+                                            LanguagesManager.Instance.MainWindow_Restart_Message,
+                                            "Update",
+                                            MessageBoxButton.OK,
+                                            MessageBoxImage.Information);
+                                    }), null);
+                                }
                             }
                         }
                     }
@@ -585,10 +683,9 @@ namespace Lair.Windows
                 {
                     Log.Error(e);
                 }
-            }*/
+            }
         }
         
-
         private void ConnectionsInformationShow(object state)
         {
             long sentByteCount = 0;

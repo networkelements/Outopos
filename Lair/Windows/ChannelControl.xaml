@@ -13,9 +13,28 @@
         <local:LongToSizeStringConverter x:Key="_longToSizeStringConverter"/>
         <local:DoubleToGridLengthConverter x:Key="_doubleToGridLengthConverter" />
         <local:StringRegularizationConverter x:Key="_stringRegularizationConverter" />
+        <local:StringRegularization2Converter x:Key="_stringRegularization2Converter" />
         <local:BytesToHexStringConverter x:Key="_bytesToHexStringConverter" />
         <local:DateTimeToStringConverter x:Key="_dateTimeToStringConverter" />
 
+        <Style x:Key="_headerStyle" TargetType="{x:Type GridViewColumnHeader}">
+            <Setter Property="Visibility" Value="Collapsed"/>
+        </Style>
+        <DataTemplate x:Key="_myTemplate_ListView">
+            <Grid>
+                <RichTextBox x:Name="_richTextBox" IsReadOnly="True" local:RichTextBoxHelper.DocumentMessage="{Binding}"  Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType=Grid}}" ContextMenuOpening="_richTextBox_ContextMenuOpening">
+                    <RichTextBox.ContextMenu>
+                        <ContextMenu Name="_richTextBoxContextMenu">
+                            <MenuItem Name="_richTextBoxCopyMenuItem" Header="{Binding Path=ChannelControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxCopyMenuItem_Click" />
+                            <Separator />
+                            <MenuItem Name="_richTextBoxFilterWordMenuItem" Header="{Binding Path=ChannelControl_FilterWord, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxFilterWordMenuItem_Click"/>
+                            <MenuItem Name="_richTextBoxFilterSignatureMenuItem" Header="{Binding Path=ChannelControl_FilterSignature, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxFilterSignatureMenuItem_Click"/>
+                            <MenuItem Name="_richTextBoxFilterMessageMenuItem" Header="{Binding Path=ChannelControl_FilterMessage, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxFilterMessageMenuItem_Click"/>
+                        </ContextMenu>
+                    </RichTextBox.ContextMenu>
+                </RichTextBox>
+            </Grid>
+        </DataTemplate>
     </UserControl.Resources>
 
     <Grid>
@@ -27,6 +46,7 @@
             <ColumnDefinition Width="{Binding Path=ChannelControl_Grid_ColumnDefinitions_Width, Mode=TwoWay, Converter={StaticResource _doubleToGridLengthConverter}, Source={x:Static prop:Settings.Instance}}" />
             <ColumnDefinition Width="4" />
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="40" />
         </Grid.ColumnDefinitions>
 
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.RowSpan="2" />
@@ -42,36 +62,17 @@
                         <MenuItem Name="_treeViewEditMenuItem" Header="{Binding Path=ChannelControl_Edit, Source={StaticResource ResourcesInstance}}" Click="_treeViewEditMenuItem_Click"/>
                         <MenuItem Name="_treeViewDeleteMenuItem" Header="{Binding Path=ChannelControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_treeViewDeleteMenuItem_Click"/>
                         <Separator />
-                        <MenuItem Name="_treeViewCutContextMenuItem" Header="{Binding Path=ChannelControl_Cut, Source={StaticResource ResourcesInstance}}" Click="_treeViewCutContextMenuItem_Click" />
-                        <MenuItem Name="_treeViewCopyContextMenuItem" Header="{Binding Path=ChannelControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_treeViewCopyContextMenuItem_Click" />
-                        <MenuItem Name="_treeViewPasteContextMenuItem" Header="{Binding Path=ChannelControl_Paste, Source={StaticResource ResourcesInstance}}" Click="_treeViewPasteContextMenuItem_Click" />
+                        <MenuItem Name="_treeViewCutMenuItem" Header="{Binding Path=ChannelControl_Cut, Source={StaticResource ResourcesInstance}}" Click="_treeViewCutMenuItem_Click" />
+                        <MenuItem Name="_treeViewCopyMenuItem" Header="{Binding Path=ChannelControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_treeViewCopyMenuItem_Click" />
+                        <MenuItem Name="_treeViewPasteMenuItem" Header="{Binding Path=ChannelControl_Paste, Source={StaticResource ResourcesInstance}}" Click="_treeViewPasteMenuItem_Click" />
                     </ContextMenu>
                 </local:CategoryTreeViewItem.ContextMenu>
             </local:CategoryTreeViewItem>
         </TreeView>
-
-        <WrapPanel Grid.Column="2" Name="wrapPanel" FlowDirection="RightToLeft">
-            <Button Height="23" Name="_newMessageButton" Width="40" Click="_newMessageButton_Click" />
-        </WrapPanel>
-
-        <local:ListBoxEx Grid.Column="2" Grid.Row="1" x:Name="_listBox" SizeChanged="_listBox_SizeChanged" PreviewMouseWheel="_listBox_PreviewMouseWheel"
-                VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
-            <ListBox.Resources>
-                <Style TargetType="{x:Type ListBoxItem}">
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                    <Setter Property="VerticalContentAlignment"  Value="Stretch" />
-                    <Setter Property="OverridesDefaultStyle" Value="True" />
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                <Grid SnapsToDevicePixels="true" Margin="0,3,6,3">
-                                    <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Margin="5,2,0,2" x:Name="contentPresenter" />
-                                </Grid>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                    <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
-                </Style>
+        
+        <local:ListViewEx Grid.Column="2" Grid.Row="1" x:Name="_listView" Padding="0,1,0,0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SizeChanged="_listView_SizeChanged" PreviewMouseWheel="_listView_PreviewMouseWheel"
+                VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" Grid.ColumnSpan="3">
+            <ListView.Resources>
                 <Style TargetType="{x:Type RichTextBox}">
                     <Setter Property="KeyboardNavigation.TabNavigation" Value="None" />
                     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
@@ -96,19 +97,52 @@
                     <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}"/>
                     <Setter Property="BorderBrush" Value="#FF000000"/>
                 </Style>
-            </ListBox.Resources>
-            <ListBox.ItemsPanel>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="OverridesDefaultStyle" Value="True" />
+                    <!--<Setter Property="Foreground" Value="{DynamicResource TextBrush}" />-->
+                    <!--<Setter Property="FocusVisualStyle" Value="{StaticResource ListViewItemFocusVisual}" />-->
+                    <!--<Setter Property="Background" Value="Transparent" />-->
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="BorderThickness" Value="1" />
+                    <Setter Property="Margin" Value="0" />
+                    <Setter Property="VerticalAlignment" Value="Stretch" />
+                    <Setter Property="HorizontalAlignment" Value="Stretch" />
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                <Border SnapsToDevicePixels="true" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="2" x:Name="border">
+
+                                    <Grid Margin="0,3,0,0">
+                                        <!--<Rectangle x:Name="Background" Opacity="0.25" Fill="{StaticResource NormalBrush}" RadiusX="1" RadiusY="1"/>-->
+                                        <GridViewRowPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Margin="0,2,0,2" VerticalAlignment="Stretch" />
+                                    </Grid>
+
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsKeyboardFocusWithin" Value="true">
+                                        <Setter Property="IsSelected" Value="true" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListView.Resources>
+            <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <VirtualizingStackPanel CanHorizontallyScroll="False" Orientation="Vertical" IsItemsHost="True"/>
                 </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <RichTextBox IsReadOnly="True" Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType=Grid}}" local:RichTextBoxHelper.DocumentMessage="{Binding Mode=OneWay}" />
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </local:ListBoxEx>
+            </ListView.ItemsPanel>
+            <ListView.View>
+                <GridView AllowsColumnReorder="False" ColumnHeaderContainerStyle="{StaticResource _headerStyle}">
+                    <GridViewColumn x:Name="_gridViewColumn" Header="Value" CellTemplate="{StaticResource _myTemplate_ListView}" />
+                </GridView>
+            </ListView.View>
+        </local:ListViewEx>
+        
+        <ComboBox Name="_signatureComboBox" Grid.Column="2" SelectionChanged="_signatureComboBox_SelectionChanged" />
+        <Button Name="_sendMessageButton" Content="{Binding Path=ChannelControl_SendMessage, Source={StaticResource ResourcesInstance}}" Click="_sendMessageButton_Click" Grid.Column="3" />
     </Grid>
 </UserControl>

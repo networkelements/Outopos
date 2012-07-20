@@ -113,6 +113,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Extensions.cs" />
+    <Compile Include="Hash\Sha512.cs" />
     <Compile Include="NativeMethods.cs" />
     <Page Include="Windows\ChannelControl.xaml">
       <SubType>Designer</SubType>
@@ -179,10 +180,10 @@
     <Compile Include="Windows\NewChannelWindow.xaml.cs">
       <DependentUpon>NewChannelWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\RichTextBoxHelper.cs" />
     <Compile Include="Windows\MessageEditWindow.xaml.cs">
       <DependentUpon>MessageEditWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\RichTextBoxHelper.cs" />
     <Compile Include="Windows\UserInterfaceWindow.xaml.cs">
       <DependentUpon>UserInterfaceWindow.xaml</DependentUpon>
     </Compile>

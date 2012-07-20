@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -37,7 +38,7 @@ namespace Lair.Windows
         }
 
         public static readonly DependencyProperty DocumentMessageProperty = DependencyProperty.RegisterAttached("DocumentMessage", typeof(Message), typeof(RichTextBoxHelper),
-            new FrameworkPropertyMetadata
+            new FrameworkPropertyMetadata()
             {
                 PropertyChangedCallback = (obj, e) =>
                 {
@@ -79,6 +80,8 @@ namespace Lair.Windows
                                 if (!seed.VerifyCertificate()) throw new Exception();
 
                                 {
+                                    var span = new Span();
+
                                     var rl1 = rl.Substring(0, 64);
                                     var rl2 = (64 < rl.Length) ? rl.Substring(64, Math.Min(rl.Length - 64, 16)) : "";
                                     var rl3 = (80 < rl.Length) ? rl.Substring(80) : "";
@@ -86,6 +89,7 @@ namespace Lair.Windows
                                     Hyperlink l = new Hyperlink();
                                     l.Foreground = new SolidColorBrush(Color.FromRgb(0xDF, 0xDF, 0xDF));
                                     l.Cursor = Cursors.Hand;
+                                    l.ToolTip = new TextBlock() { Text = "aaaaaaaaaa" };
                                     l.PreviewMouseLeftButtonDown += (object sender, MouseButtonEventArgs ex) =>
                                     {
                                         if (RichTextBoxHelper.SeedClickEvent != null)
@@ -110,17 +114,25 @@ namespace Lair.Windows
                                         l.Inlines.Add(r);
                                     }
 
-                                    p.Inlines.Add(l);
+                                    span.Inlines.Add(l);
 
                                     if (!string.IsNullOrWhiteSpace(rl3))
                                     {
                                         Run r = new Run();
                                         r.Foreground = new SolidColorBrush(Color.FromRgb(0x33, 0x33, 0x33));
                                         r.Text = rl3;
-                                        r.FontSize = 1;
+                                        r.FontSize = 0.1;
+                                        r.FontStretch = FontStretches.UltraCondensed;
 
-                                        p.Inlines.Add(r);
+                                        span.Inlines.Add(r);
                                     }
+
+                                    l.PreviewMouseRightButtonDown += (object sender, MouseButtonEventArgs ex) =>
+                                    {
+                                        richTextBox.Selection.Select(span.ContentStart, span.ContentEnd);
+                                    };
+
+                                    p.Inlines.Add(span);
                                 }
 
                                 p.Inlines.Add(new LineBreak());
@@ -140,6 +152,8 @@ namespace Lair.Windows
                                 var channel = Library.Net.Lair.LairConverter.FromChannelString(rl);
 
                                 {
+                                    var span = new Span();
+                                    
                                     var rl1 = rl.Substring(0, 64);
                                     var rl2 = (64 < rl.Length) ? rl.Substring(64, Math.Min(rl.Length - 64, 16)) : "";
                                     var rl3 = (80 < rl.Length) ? rl.Substring(80) : "";
@@ -171,17 +185,25 @@ namespace Lair.Windows
                                         l.Inlines.Add(r);
                                     }
 
-                                    p.Inlines.Add(l);
+                                    span.Inlines.Add(l);
 
                                     if (!string.IsNullOrWhiteSpace(rl3))
                                     {
                                         Run r = new Run();
                                         r.Foreground = new SolidColorBrush(Color.FromRgb(0x33, 0x33, 0x33));
                                         r.Text = rl3;
-                                        r.FontSize = 1;
+                                        r.FontSize = 0.1;
+                                        r.FontStretch = FontStretches.UltraCondensed;
 
-                                        p.Inlines.Add(r);
+                                        span.Inlines.Add(r);
                                     }
+
+                                    l.PreviewMouseRightButtonDown += (object sender, MouseButtonEventArgs ex) =>
+                                    {
+                                        richTextBox.Selection.Select(span.ContentStart, span.ContentEnd);
+                                    };
+
+                                    p.Inlines.Add(span);
                                 }
 
                                 p.Inlines.Add(new LineBreak());

@@ -28,14 +28,20 @@ namespace Lair.Windows
         private List<SearchContains<string>> _searchKeywordCollection;
         private List<SearchContains<SearchRegex>> _searchNameRegexCollection;
         private List<SearchContains<string>> _searchSignatureCollection;
+        private List<SearchContains<Message>> _searchMessageCollection;
 
         public CategoryEditWindow(ref Category category)
         {
             _category = category;
 
+            var digitalSignatureCollection = new List<object>();
+            digitalSignatureCollection.Add(new ComboBoxItem() { Content = "" });
+            digitalSignatureCollection.AddRange(Settings.Instance.Global_DigitalSignatureCollection.Select(n => new DigitalSignatureComboBoxItem(n)).ToArray());
+
             _searchKeywordCollection = _category.SearchWordCollection.Select(n => n.DeepClone()).ToList();
             _searchNameRegexCollection = _category.SearchRegexCollection.Select(n => n.DeepClone()).ToList();
             _searchSignatureCollection = _category.SearchSignatureCollection.Select(n => n.DeepClone()).ToList();
+            _searchMessageCollection = _category.SearchMessageCollection.Select(n => n.DeepClone()).ToList();
 
             InitializeComponent();
 
@@ -44,35 +50,34 @@ namespace Lair.Windows
                 this.Icon = BitmapFrame.Create(stream);
             }
 
+            _filterUploadSignatureComboBox.ItemsSource = digitalSignatureCollection;
+
+            var index = Settings.Instance.Global_DigitalSignatureCollection.IndexOf(_category.FilterUploadDigitalSignature);
+            _filterUploadSignatureComboBox.SelectedIndex = index + 1;
+
+            _filterUploadCheckBox.IsChecked = category.FilterUpload_IsEnabled;
+
             _nameTextBox.Text = category.Name;
 
             _wordContainsCheckBox.IsChecked = true;
             _regexContainsCheckBox.IsChecked = true;
             _signatureContainsCheckBox.IsChecked = true;
+            _messageContainsCheckBox.IsChecked = true;
 
             _wordListView.ItemsSource = _searchKeywordCollection;
             _regexListView.ItemsSource = _searchNameRegexCollection;
             _signatureListView.ItemsSource = _searchSignatureCollection;
+            _messageListView.ItemsSource = _searchMessageCollection;
         }
 
-        private void _okButton_Click(object sender, RoutedEventArgs e)
+        #region Upload
+
+        private void _filterUploadSignatureComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            this.DialogResult = true;
-
-            _category.Name = _nameTextBox.Text;
-
-            _category.SearchWordCollection.Clear();
-            _category.SearchWordCollection.AddRange(_searchKeywordCollection.Select(n => n.DeepClone()).ToList());
-            _category.SearchRegexCollection.Clear();
-            _category.SearchRegexCollection.AddRange(_searchNameRegexCollection.Select(n => n.DeepClone()).ToList());
-            _category.SearchSignatureCollection.Clear();
-            _category.SearchSignatureCollection.AddRange(_searchSignatureCollection.Select(n => n.DeepClone()).ToList());
+            _filterUploadCheckBox.IsEnabled = _filterUploadSignatureComboBox.SelectedIndex != 0;
         }
 
-        private void _cancelButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.DialogResult = false;
-        }
+        #endregion
 
         #region _wordListView
 
@@ -142,16 +147,16 @@ namespace Lair.Windows
         {
             var selectItems = _wordListView.SelectedItems;
 
-            _wordListViewCopyContextMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
+            _wordListViewCopyMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
 
             {
                 var text = Clipboard.GetText();
 
-                _wordListViewPasteContextMenuItem.IsEnabled = (text != null && Regex.IsMatch(text, @"([\+-]) (.*)"));
+                _wordListViewPasteMenuItem.IsEnabled = (text != null && Regex.IsMatch(text, @"([\+-]) (.*)"));
             }
         }
 
-        private void _wordListViewCopyContextMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _wordListViewCopyMenuItem_Click(object sender, RoutedEventArgs e)
         {
             var sb = new StringBuilder();
 
@@ -163,7 +168,7 @@ namespace Lair.Windows
             Clipboard.SetText(sb.ToString());
         }
 
-        private void _wordListViewPasteContextMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _wordListViewPasteMenuItem_Click(object sender, RoutedEventArgs e)
         {
             Regex regex = new Regex(@"([\+-]) (.*)");
 
@@ -358,16 +363,16 @@ namespace Lair.Windows
         {
             var selectItems = _regexListView.SelectedItems;
 
-            _regexListViewCopyContextMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
+            _regexListViewCopyMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
 
             {
                 var text = Clipboard.GetText();
 
-                _regexListViewPasteContextMenuItem.IsEnabled = (text != null && Regex.IsMatch(text, @"([\+-]) ([\+-]) (.*)"));
+                _regexListViewPasteMenuItem.IsEnabled = (text != null && Regex.IsMatch(text, @"([\+-]) ([\+-]) (.*)"));
             }
         }
 
-        private void _regexListViewCopyContextMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _regexListViewCopyMenuItem_Click(object sender, RoutedEventArgs e)
         {
             var sb = new StringBuilder();
 
@@ -379,7 +384,7 @@ namespace Lair.Windows
             Clipboard.SetText(sb.ToString());
         }
 
-        private void _regexListViewPasteContextMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _regexListViewPasteMenuItem_Click(object sender, RoutedEventArgs e)
         {
             Regex regex = new Regex(@"([\+-]) ([\+-]) (.*)");
 
@@ -607,16 +612,16 @@ namespace Lair.Windows
         {
             var selectItems = _signatureListView.SelectedItems;
 
-            _signatureListViewCopyContextMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
+            _signatureListViewCopyMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
 
             {
                 var text = Clipboard.GetText();
 
-                _signatureListViewPasteContextMenuItem.IsEnabled = (text != null && Regex.IsMatch(text, @"([\+-]) (.*)"));
+                _signatureListViewPasteMenuItem.IsEnabled = (text != null && Regex.IsMatch(text, @"([\+-]) (.*)"));
             }
         }
 
-        private void _signatureListViewCopyContextMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _signatureListViewCopyMenuItem_Click(object sender, RoutedEventArgs e)
         {
             var sb = new StringBuilder();
 
@@ -628,7 +633,7 @@ namespace Lair.Windows
             Clipboard.SetText(sb.ToString());
         }
 
-        private void _signatureListViewPasteContextMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _signatureListViewPasteMenuItem_Click(object sender, RoutedEventArgs e)
         {
             Regex regex = new Regex(@"([\+-]) (.*)");
 
@@ -752,5 +757,247 @@ namespace Lair.Windows
         }
 
         #endregion
+
+        #region _messageListView
+
+        private void _messageListViewUpdate()
+        {
+            _messageListView_SelectionChanged(this, null);
+        }
+
+        private void _messageListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                var selectIndex = _messageListView.SelectedIndex;
+
+                if (selectIndex == -1)
+                {
+                    _messageUpButton.IsEnabled = false;
+                    _messageDownButton.IsEnabled = false;
+                }
+                else
+                {
+                    if (selectIndex == 0)
+                    {
+                        _messageUpButton.IsEnabled = false;
+                    }
+                    else
+                    {
+                        _messageUpButton.IsEnabled = true;
+                    }
+
+                    if (selectIndex == _searchMessageCollection.Count - 1)
+                    {
+                        _messageDownButton.IsEnabled = false;
+                    }
+                    else
+                    {
+                        _messageDownButton.IsEnabled = true;
+                    }
+                }
+
+                _messageListView_PreviewMouseLeftButtonDown(this, null);
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private void _messageListView_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var selectIndex = _messageListView.SelectedIndex;
+            if (selectIndex == -1)
+            {
+                _messageContainsCheckBox.IsChecked = true;
+                _messageTextBox.Text = "";
+                return;
+            }
+
+            var item = _messageListView.SelectedItem as SearchContains<Message>;
+            if (item == null) return;
+
+            _messageContainsCheckBox.IsChecked = item.Contains;
+            _messageTextBox.Text = LairConverter.ToMessageString(item.Value);
+        }
+
+        private void _messageListView_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            var selectItems = _messageListView.SelectedItems;
+
+            _messageListViewCopyMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
+
+            {
+                var text = Clipboard.GetText();
+
+                _messageListViewPasteMenuItem.IsEnabled = (text != null && Regex.IsMatch(text, @"([\+-]) (.*)"));
+            }
+        }
+
+        private void _messageListViewCopyMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var sb = new StringBuilder();
+
+            foreach (var item in _messageListView.SelectedItems.OfType<SearchContains<Message>>())
+            {
+                sb.AppendLine(string.Format("{0} {1}", (item.Contains == true) ? "+" : "-", LairConverter.ToMessageString(item.Value)));
+            }
+
+            Clipboard.SetText(sb.ToString());
+        }
+
+        private void _messageListViewPasteMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            Regex regex = new Regex(@"([\+-]) (.*)");
+
+            foreach (var line in Clipboard.GetText().Split('\r', '\n'))
+            {
+                try
+                {
+                    var match = regex.Match(line);
+                    if (!match.Success) continue;
+
+                    var message = LairConverter.FromMessageString(match.Groups[2].Value);
+                    if (!message.VerifyCertificate()) continue;
+
+                    var item = new SearchContains<Message>()
+                    {
+                        Contains = (match.Groups[1].Value == "+") ? true : false,
+                        Value = message,
+                    };
+
+                    if (_searchMessageCollection.Contains(item)) continue;
+                    _searchMessageCollection.Add(item);
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
+            }
+
+            _messageTextBox.Text = "";
+            _messageListView.SelectedIndex = _searchMessageCollection.Count - 1;
+
+            _messageListView.Items.Refresh();
+            _messageListViewUpdate();
+        }
+
+        private void _messageUpButton_Click(object sender, RoutedEventArgs e)
+        {
+            var item = _messageListView.SelectedItem as SearchContains<Message>;
+            if (item == null) return;
+
+            var selectIndex = _messageListView.SelectedIndex;
+            if (selectIndex == -1) return;
+
+            _searchMessageCollection.Remove(item);
+            _searchMessageCollection.Insert(selectIndex - 1, item);
+            _messageListView.Items.Refresh();
+
+            _messageListViewUpdate();
+        }
+
+        private void _messageDownButton_Click(object sender, RoutedEventArgs e)
+        {
+            var item = _messageListView.SelectedItem as SearchContains<Message>;
+            if (item == null) return;
+
+            var selectIndex = _messageListView.SelectedIndex;
+            if (selectIndex == -1) return;
+
+            _searchMessageCollection.Remove(item);
+            _searchMessageCollection.Insert(selectIndex + 1, item);
+            _messageListView.Items.Refresh();
+
+            _messageListViewUpdate();
+        }
+
+        private void _messageAddButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_messageTextBox.Text == "") return;
+            if (!Regex.IsMatch(_messageTextBox.Text, @"^[a-zA-Z0-9\-_]*$")) return;
+
+            var item = new SearchContains<Message>()
+            {
+                Contains = _messageContainsCheckBox.IsChecked.Value,
+                Value = LairConverter.FromMessageString(_messageTextBox.Text),
+            };
+
+            if (_searchMessageCollection.Contains(item)) return;
+            _searchMessageCollection.Add(item);
+
+            _messageTextBox.Text = "";
+            _messageListView.SelectedIndex = _searchMessageCollection.Count - 1;
+
+            _messageListView.Items.Refresh();
+            _messageListViewUpdate();
+        }
+
+        private void _messageEditButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_messageTextBox.Text == "") return;
+            if (!Regex.IsMatch(_messageTextBox.Text, @"^[a-zA-Z0-9\-_]*$")) return;
+
+            var uitem = new SearchContains<Message>()
+            {
+                Contains = _messageContainsCheckBox.IsChecked.Value,
+                Value = LairConverter.FromMessageString(_messageTextBox.Text),
+            };
+
+            if (_searchMessageCollection.Contains(uitem)) return;
+
+            var item = _messageListView.SelectedItem as SearchContains<Message>;
+            if (item == null) return;
+
+            item.Contains = _messageContainsCheckBox.IsChecked.Value;
+            item.Value = LairConverter.FromMessageString(_messageTextBox.Text);
+
+            _messageListView.Items.Refresh();
+            _messageListViewUpdate();
+        }
+
+        private void _messageDeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            var item = _messageListView.SelectedItem as SearchContains<Message>;
+            if (item == null) return;
+
+            _messageTextBox.Text = "";
+
+            int selectIndex = _messageListView.SelectedIndex;
+            _searchMessageCollection.Remove(item);
+            _messageListView.Items.Refresh();
+            _messageListView.SelectedIndex = selectIndex;
+            _messageListViewUpdate();
+        }
+
+        #endregion
+
+        private void _okButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = true;
+
+            _category.Name = _nameTextBox.Text;
+
+            var digitalSignatureComboBoxItem = _filterUploadSignatureComboBox.SelectedItem as DigitalSignatureComboBoxItem;
+            DigitalSignature digitalSignature = digitalSignatureComboBoxItem == null ? null : digitalSignatureComboBoxItem.Value;
+
+            _category.FilterUploadDigitalSignature = digitalSignature;
+            _category.FilterUpload_IsEnabled = _filterUploadCheckBox.IsChecked.Value;
+
+            _category.SearchWordCollection.Clear();
+            _category.SearchWordCollection.AddRange(_searchKeywordCollection.Select(n => n.DeepClone()).ToList());
+            _category.SearchRegexCollection.Clear();
+            _category.SearchRegexCollection.AddRange(_searchNameRegexCollection.Select(n => n.DeepClone()).ToList());
+            _category.SearchSignatureCollection.Clear();
+            _category.SearchSignatureCollection.AddRange(_searchSignatureCollection.Select(n => n.DeepClone()).ToList());
+            _category.SearchMessageCollection.Clear();
+            _category.SearchMessageCollection.AddRange(_searchMessageCollection.Select(n => n.DeepClone()).ToList());
+        }
+
+        private void _cancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = false;
+        }
     }
 }

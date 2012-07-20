@@ -45,7 +45,14 @@ namespace Lair.Windows
             _commentTextBox.Text = _message.Content;
 
             _signatureComboBox.ItemsSource = digitalSignatureCollection;
-            _signatureComboBox.SelectedIndex = 1;
+
+            var index = Settings.Instance.Global_DigitalSignatureCollection.IndexOf(Settings.Instance.Global_UploadDigitalSignature);
+            _signatureComboBox.SelectedIndex = index + 1;
+        }
+
+        private void _commentTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            _okButton.IsEnabled = !string.IsNullOrWhiteSpace(_commentTextBox.Text);
         }
 
         private void _okButton_Click(object sender, RoutedEventArgs e)
@@ -55,6 +62,8 @@ namespace Lair.Windows
             string comment = _commentTextBox.Text;
             var digitalSignatureComboBoxItem = _signatureComboBox.SelectedItem as DigitalSignatureComboBoxItem;
             DigitalSignature digitalSignature = digitalSignatureComboBoxItem == null ? null : digitalSignatureComboBoxItem.Value;
+
+            Settings.Instance.Global_UploadDigitalSignature = digitalSignature;
 
             lock (_message.ThisLock)
             {

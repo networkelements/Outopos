@@ -18,7 +18,6 @@
             <Style TargetType="{x:Type local:CategoryTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" />
             <Style TargetType="{x:Type local:BoardTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" />
             <Style TargetType="{x:Type local:ListViewEx}" BasedOn="{StaticResource {x:Type ListView}}" />
-            <Style TargetType="{x:Type local:ListBoxEx}" BasedOn="{StaticResource {x:Type ListBox}}" />
             <Style TargetType="{x:Type local:DigitalSignatureComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}" />
 
             <local:TopRelativeDoubleConverter x:Key="_topRelativeDoubleConverter"/>

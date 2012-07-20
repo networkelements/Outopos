@@ -21,6 +21,7 @@ namespace Lair.Properties
             : base(new List<Library.Configuration.ISettingsContext>()
             {
                 new Library.Configuration.SettingsContext<List<DigitalSignature>>() { Name = "Global_DigitalSignatureCollection", Value = new List<DigitalSignature>() },
+                new Library.Configuration.SettingsContext<DigitalSignature>() { Name = "Global_UploadDigitalSignature", Value = null },
                 new Library.Configuration.SettingsContext<string>() { Name = "Global_UseLanguage", Value = "English" },
                 new Library.Configuration.SettingsContext<bool>() { Name = "Global_IsStart", Value = true },
                 new Library.Configuration.SettingsContext<bool>() { Name = "Global_AutoBaseNodeSetting_IsEnabled", Value = true },
@@ -29,6 +30,7 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<string>() { Name = "Global_Update_ProxyUri", Value = "tcp:127.0.0.1:8118" },
                 new Library.Configuration.SettingsContext<string>() { Name = "Global_Update_Signature", Value = "Lyrise@iMK5aPkz6n_VLfaQWyXisi6C2yo53V" },
                 new Library.Configuration.SettingsContext<UpdateOption>() { Name = "Global_Update_Option", Value = UpdateOption.AutoCheck },
+                new Library.Configuration.SettingsContext<string>() { Name = "Global_Amoeba_Path", Value = "" },
 
                 new Library.Configuration.SettingsContext<double>() { Name = "MainWindow_Top", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "MainWindow_Left", Value = 120 },
@@ -148,6 +150,25 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     this["Global_DigitalSignatureCollection"] = value;
+                }
+            }
+        }
+
+        public DigitalSignature Global_UploadDigitalSignature
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (DigitalSignature)this["Global_UploadDigitalSignature"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["Global_UploadDigitalSignature"] = value;
                 }
             }
         }
@@ -300,6 +321,25 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     this["Global_Update_Option"] = value;
+                }
+            }
+        }
+
+        public string Global_Amoeba_Path
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (string)this["Global_Amoeba_Path"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["Global_Amoeba_Path"] = value;
                 }
             }
         }

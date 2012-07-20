@@ -13,9 +13,35 @@ using System.Windows.Media.Imaging;
 using Lair.Properties;
 using Library;
 using Library.Net.Lair;
+using System.Windows.Controls;
+using System.Text.RegularExpressions;
+using System.Windows.Media;
+using System.Windows.Input;
+using System.Diagnostics;
 
 namespace Lair.Windows
 {
+    [ValueConversion(typeof(ListView), typeof(double))]
+    public class ListViewWidthConverter : IValueConverter
+    {
+        public object Convert(object o, Type type, object parameter, CultureInfo culture)
+        {
+            ListView l = o as ListView;
+            GridView g = l.View as GridView;
+            double total = 0;
+            for (int i = 0; i < g.Columns.Count - 1; i++)
+            {
+                total += g.Columns[i].Width;
+            }
+            return (l.ActualWidth - total);
+        }
+
+        public object ConvertBack(object o, Type type, object parameter, CultureInfo culture)
+        {
+            throw new NotSupportedException();
+        }
+    }
+    
     [ValueConversion(typeof(string), typeof(string))]
     class StringRegularizationConverter : IValueConverter
     {
@@ -25,6 +51,23 @@ namespace Lair.Windows
             if (item == null) return null;
 
             return item.Replace('\r', ' ').Replace('\n', ' ');
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotSupportedException();
+        }
+    }
+
+    [ValueConversion(typeof(string), typeof(string))]
+    class StringRegularization2Converter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var item = value as string;
+            if (item == null) return null;
+
+            return item;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -130,6 +173,37 @@ namespace Lair.Windows
             }
 
             return 0;
+        }
+    }
+
+    [ValueConversion(typeof(object), typeof(string))]
+    class ObjectToInfoStringConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is Library.Net.Amoeba.Seed)
+            {
+                return MessageConverter.ToInfoMessage((Library.Net.Amoeba.Seed)value);
+            }
+            else if (value is Library.Net.Amoeba.Box)
+            {
+                return MessageConverter.ToInfoMessage((Library.Net.Amoeba.Box)value);
+            }
+            else if (value is Channel)
+            {
+                return MessageConverter.ToInfoMessage((Channel)value);
+            }
+            else if (value is Message)
+            {
+                return MessageConverter.ToInfoMessage((Message)value);
+            }
+
+            return null;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotSupportedException();
         }
     }
 

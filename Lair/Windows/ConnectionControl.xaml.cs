@@ -47,27 +47,23 @@ namespace Lair.Windows
 
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_CreateConnectionCount" });
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_AcceptConnectionCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_RelayBlockCount" });
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem());
  
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_NodeCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_SeedCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_BlockCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_DownloadCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_UploadCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_ShareCount" });
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_MessageCount" });
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_FilterCount" });
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem());
 
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PushNodeCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PushBlockLinkCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PushBlockRequestCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PushBlockCount" });
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PushChannelRequestCount" });
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PushMessageCount" });
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PushFilterCount" });
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem());
 
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullNodeCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullBlockLinkCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullBlockRequestCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullBlockCount" });
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullChannelRequestCount" });
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullMessageCount" });
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullFilterCount" });
 
             _infomationListView.ItemsSource = _infomationListViewItemCollection;
 
@@ -93,25 +89,19 @@ namespace Lair.Windows
                     dic["ConnectionControl_SentByteCount"] = NetworkConverter.ToSizeString(_lairManager.SentByteCount);
                     dic["ConnectionControl_ReceivedByteCount"] = NetworkConverter.ToSizeString(_lairManager.ReceivedByteCount);
 
-                    dic["ConnectionControl_PullNodeCount"] = ((int)information["PullNodeCount"]).ToString();
-                    dic["ConnectionControl_PullBlockLinkCount"] = ((int)information["PullBlockLinkCount"]).ToString();
-                    dic["ConnectionControl_PullBlockRequestCount"] = ((int)information["PullBlockRequestCount"]).ToString();
-                    dic["ConnectionControl_PullBlockCount"] = ((int)information["PullBlockCount"]).ToString();
-
                     dic["ConnectionControl_PushNodeCount"] = ((int)information["PushNodeCount"]).ToString();
-                    dic["ConnectionControl_PushBlockLinkCount"] = ((int)information["PushBlockLinkCount"]).ToString();
-                    dic["ConnectionControl_PushBlockRequestCount"] = ((int)information["PushBlockRequestCount"]).ToString();
-                    dic["ConnectionControl_PushBlockCount"] = ((int)information["PushBlockCount"]).ToString();
+                    dic["ConnectionControl_PushChannelRequestCount"] = ((int)information["PushChannelRequestCount"]).ToString();
+                    dic["ConnectionControl_PushMessageCount"] = ((int)information["PushMessageCount"]).ToString();
+                    dic["ConnectionControl_PushFilterCount"] = ((int)information["PushFilterCount"]).ToString();
 
-                    dic["ConnectionControl_RelayBlockCount"] = ((int)information["RelayBlockCount"]).ToString();
+                    dic["ConnectionControl_PullNodeCount"] = ((int)information["PullNodeCount"]).ToString();
+                    dic["ConnectionControl_PullChannelRequestCount"] = ((int)information["PullChannelRequestCount"]).ToString();
+                    dic["ConnectionControl_PullMessageCount"] = ((int)information["PullMessageCount"]).ToString();
+                    dic["ConnectionControl_PullFilterCount"] = ((int)information["PullFilterCount"]).ToString();
 
                     dic["ConnectionControl_NodeCount"] = ((int)information["OtherNodeCount"]).ToString();
-                    dic["ConnectionControl_SeedCount"] = ((int)information["SeedCount"]).ToString();
-
-                    dic["ConnectionControl_DownloadCount"] = ((int)information["DownloadingCount"]).ToString();
-                    dic["ConnectionControl_UploadCount"] = ((int)information["UploadingCount"]).ToString();
-                    dic["ConnectionControl_ShareCount"] = ((int)information["ShareCount"]).ToString();
-                    dic["ConnectionControl_BlockCount"] = ((int)information["BlockCount"]).ToString();
+                    dic["ConnectionControl_MessageCount"] = ((int)information["MessageCount"]).ToString();
+                    dic["ConnectionControl_FilterCount"] = ((int)information["FilterCount"]).ToString();
 
                     this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
                     {

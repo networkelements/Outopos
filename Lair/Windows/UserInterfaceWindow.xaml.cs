@@ -43,7 +43,6 @@ namespace Lair.Windows
 
             _updateUrlTextBox.Text = Settings.Instance.Global_Update_Url;
             _updateProxyUriTextBox.Text = Settings.Instance.Global_Update_ProxyUri;
-            _updateSignatureTextBox.Text = Settings.Instance.Global_Update_Signature;
 
             if (Settings.Instance.Global_Update_Option == UpdateOption.None)
             {
@@ -57,6 +56,8 @@ namespace Lair.Windows
             {
                 _updateOptionAutoUpdateRadioButton.IsChecked = true;
             }
+
+            _amoebaPathTextBox.Text = Settings.Instance.Global_Amoeba_Path;
         }
 
         #region Signature
@@ -240,7 +241,6 @@ namespace Lair.Windows
 
             Settings.Instance.Global_Update_Url = _updateUrlTextBox.Text;
             Settings.Instance.Global_Update_ProxyUri = _updateProxyUriTextBox.Text;
-            Settings.Instance.Global_Update_Signature = _updateSignatureTextBox.Text;
 
             if (_updateOptionNoneRadioButton.IsChecked.Value)
             {
@@ -254,6 +254,8 @@ namespace Lair.Windows
             {
                 Settings.Instance.Global_Update_Option = UpdateOption.AutoUpdate;
             }
+
+            Settings.Instance.Global_Amoeba_Path = _amoebaPathTextBox.Text;
         }
 
         private void _cancelButton_Click(object sender, RoutedEventArgs e)

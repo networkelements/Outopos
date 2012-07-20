@@ -16,6 +16,7 @@ using Ionic.Zip;
 using Library;
 using Library.Io;
 using Library.Net.Lair;
+using System.ComponentModel;
 
 namespace Lair
 {
@@ -492,6 +493,10 @@ namespace Lair
 
                                         }
                                     }
+                                }
+                                catch (Win32Exception)
+                                {
+
                                 }
                                 catch (Exception)
                                 {
