@@ -232,6 +232,28 @@ namespace Lair.Windows
 
         #endregion
 
+        #region Amoeba
+
+        private void _amoebaPathTextBox_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            using (System.Windows.Forms.OpenFileDialog dialog = new System.Windows.Forms.OpenFileDialog())
+            {
+                dialog.Multiselect = false;
+                dialog.DefaultExt = ".exe";
+                dialog.Filter = "Exe files (*.exe)|*.exe";
+
+                if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    foreach (var fileName in dialog.FileNames)
+                    {
+                        _amoebaPathTextBox.Text = fileName;
+                    }
+                }
+            }
+        }
+
+        #endregion
+        
         private void _okButton_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = true;

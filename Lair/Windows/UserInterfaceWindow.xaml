@@ -69,7 +69,7 @@
             <TabItem Header="{Binding Path=UserInterfaceWindow_Amoeba, Source={StaticResource ResourcesInstance}}">
                 <Grid>
                     <Label Content="{Binding Path=UserInterfaceWindow_AmoebaPath, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="120" />
-                    <TextBox Height="24" Margin="132,6,6,0" Name="_amoebaPathTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" />
+                    <TextBox Height="24" Margin="132,6,6,0" Name="_amoebaPathTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" PreviewMouseDoubleClick="_amoebaPathTextBox_PreviewMouseDoubleClick" />
                 </Grid>
             </TabItem>
         </TabControl>
