@@ -44,6 +44,7 @@ namespace Lair.Windows
         private Thread _cacheThread = null;
         private Thread _filterThread = null;
         private volatile bool _refresh = false;
+        private volatile bool _isEditing = false;
 
         private ObservableCollection<Message> _listViewItemCollection = new ObservableCollection<Message>();
 
@@ -99,10 +100,14 @@ namespace Lair.Windows
                                 _listViewItemCollection.Clear();
 
                                 _signatureComboBox.Items.Clear();
-                                _signatureComboBox.Items.Add(new ComboBoxItem() { Content = "" });
                                 _signatureComboBox.Text = "";
+                                _signatureComboBox.IsEnabled = false;
 
-                               if (App.SelectTab == "Channel")
+                                _signButton.IsEnabled = false;
+
+                                _newMessageButton.IsEnabled = false;
+
+                                if (App.SelectTab == "Channel")
                                     _mainWindow.Title = string.Format("Lair {0} - {1}", App.LairVersion, item.Value.Name);
                             }
                             else if (_treeView.SelectedItem is BoardTreeViewItem)
@@ -134,23 +139,24 @@ namespace Lair.Windows
 
                         this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
                         {
+                            _isEditing = true;
+
                             _signatureComboBox.Items.Clear();
-                            _signatureComboBox.Items.Add(new ComboBoxItem() { Content = "" });
+                            _signatureComboBox.Items.Add("");
 
                             foreach (var item in filters)
                             {
-                                _signatureComboBox.Items.Add(new ComboBoxItem() { Content = MessageConverter.ToSignatureString(item.Certificate) });
+                                _signatureComboBox.Items.Add(MessageConverter.ToSignatureString(item.Certificate));
                             }
 
-                            foreach (var item in _signatureComboBox.Items.OfType<ComboBoxItem>())
-                            {
-                                if (((string)item.Content) == selectTreeViewItem.Value.Signature)
-                                {
-                                    item.IsSelected = true;
+                            _signatureComboBox.Text = selectTreeViewItem.Value.Signature;
+                            _signatureComboBox.IsEnabled = true;
 
-                                    break;
-                                }
-                            }
+                            _isEditing = false;
+
+                            _signButton.IsEnabled = true;
+
+                            _newMessageButton.IsEnabled = true;
                         }), null);
 
                         Filter filter = filters.FirstOrDefault(n => selectTreeViewItem.Value.Signature == MessageConverter.ToSignatureString(n.Certificate));
@@ -159,7 +165,7 @@ namespace Lair.Windows
                         {
                             foreach (var message in messages)
                             {
-                                if (filter.Keys.Any(n => message.VerifyKey(n)))
+                                if (filter.Keys.Any(n => message.VerifyHash(n.HashAlgorithm, n.Hash)))
                                 {
                                     newList.Add(message);
                                 }
@@ -304,7 +310,7 @@ namespace Lair.Windows
                                 {
                                     foreach (var message in messages)
                                     {
-                                        if (filter.Keys.Any(n => message.VerifyKey(n)))
+                                        if (filter.Keys.Any(n => message.VerifyHash(n.HashAlgorithm, n.Hash)))
                                         {
                                             newList.Add(message);
                                         }
@@ -333,12 +339,12 @@ namespace Lair.Windows
                                 if (!_messages.ContainsKey(selectTreeViewItem.Value.Channel))
                                 {
                                     _messages[selectTreeViewItem.Value.Channel] = new List<Message>();
-                                    _messages[selectTreeViewItem.Value.Channel].AddRange(messages);
+                                    _messages[selectTreeViewItem.Value.Channel].AddRange(newList);
                                 }
-                                else if (!Collection.Equals(_messages[selectTreeViewItem.Value.Channel], messages))
+                                else if (!Collection.Equals(_messages[selectTreeViewItem.Value.Channel], newList))
                                 {
                                     _messages[selectTreeViewItem.Value.Channel].Clear();
-                                    _messages[selectTreeViewItem.Value.Channel].AddRange(messages);
+                                    _messages[selectTreeViewItem.Value.Channel].AddRange(newList);
 
                                     this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
                                     {
@@ -374,59 +380,56 @@ namespace Lair.Windows
             {
                 try
                 {
-                    List<BoardTreeViewItem> boardTreeViewItems = new List<BoardTreeViewItem>();
-
                     for (; ; )
                     {
                         Thread.Sleep(new TimeSpan(1, 0, 0));
 
-                        var list = new List<TreeViewItem>();
+                        List<BoardTreeViewItem> items = new List<BoardTreeViewItem>();
 
                         this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
                         {
+                            var list = new List<TreeViewItem>();
                             list.Add(_treeViewItem);
 
                             for (int i = 0; i < list.Count; i++)
                             {
-                                foreach (TreeViewItem item in list[i].Items.OfType<CategoryTreeViewItem>())
+                                foreach (TreeViewItem item in list[i].Items)
                                 {
                                     list.Add(item);
                                 }
                             }
+
+                            foreach (BoardTreeViewItem item in list.OfType<BoardTreeViewItem>())
+                            {
+                                items.Add(item);
+                            }
                         }), null);
 
-
-                        foreach (CategoryTreeViewItem item in list.OfType<CategoryTreeViewItem>())
+                        foreach (BoardTreeViewItem item in items)
                         {
-                            if (item.Value.FilterUpload_IsEnabled && item.Value.FilterUploadDigitalSignature != null)
+                            if (item.Value.FilterUploadDigitalSignature != null)
                             {
-                                foreach (var board in item.Value.Boards)
+                                if (_messages.ContainsKey(item.Value.Channel))
                                 {
-                                    if (_messages.ContainsKey(board.Channel))
+                                    List<Library.Net.Lair.Key> keys = new List<Library.Net.Lair.Key>();
+
+                                    foreach (var m in _messages[item.Value.Channel])
                                     {
-                                        List<Library.Net.Lair.Key> keys = new List<Library.Net.Lair.Key>();
+                                        var key = new Library.Net.Lair.Key();
 
-                                        foreach (var m in _messages[board.Channel])
-                                        {
-                                            using (Stream stream = m.Export(bufferManager))
-                                            {
-                                                var key = new Library.Net.Lair.Key();
+                                        key.HashAlgorithm = HashAlgorithm.Sha512;
+                                        key.Hash = m.GetHash(HashAlgorithm.Sha512);
 
-                                                key.HashAlgorithm = HashAlgorithm.Sha512;
-                                                key.Hash = Sha512.ComputeHash(stream);
-
-                                                keys.Add(key);
-                                            }
-                                        }
-
-                                        var filter = new Filter();
-                                        filter.CreationTime = DateTime.UtcNow;
-                                        filter.Channel = board.Channel;
-                                        filter.Keys.AddRange(keys);
-                                        filter.CreateCertificate(item.Value.FilterUploadDigitalSignature);
-
-                                        _lairManager.Upload(filter);
+                                        keys.Add(key);
                                     }
+
+                                    var filter = new Filter();
+                                    filter.CreationTime = DateTime.UtcNow;
+                                    filter.Channel = item.Value.Channel;
+                                    filter.Keys.AddRange(keys);
+                                    filter.CreateCertificate(item.Value.FilterUploadDigitalSignature);
+
+                                    _lairManager.Upload(filter);
                                 }
                             }
                         }
@@ -940,6 +943,8 @@ namespace Lair.Windows
 
             foreach (var channel in Clipboard.GetChannels())
             {
+                if (channel.Name == null || channel.Id == null) continue;
+
                 selectTreeViewItem.Value.Boards.Add(new Board() { Channel = channel });
             }
 
@@ -975,7 +980,7 @@ namespace Lair.Windows
             var peer = ItemsControlAutomationPeer.CreatePeerForElement(_listView);
             var scrollProvider = peer.GetPattern(PatternInterface.Scroll) as IScrollProvider;
 
-            _gridViewColumn.Width = _listView.ActualWidth -21;
+            _gridViewColumn.Width = _listView.ActualWidth - 21;
 
             _listView.Items.Refresh();
         }
@@ -1084,15 +1089,42 @@ namespace Lair.Windows
             var selectTreeViewItem = _treeView.SelectedItem as BoardTreeViewItem;
             if (selectTreeViewItem == null) return;
 
-            var comboBoxItem = _signatureComboBox.SelectedItem as ComboBoxItem;
-            if (comboBoxItem == null) return;
+            if (_isEditing || selectTreeViewItem.Value.Signature == _signatureComboBox.Text) return;
 
-            selectTreeViewItem.Value.Signature = (string)comboBoxItem.Content;
+            selectTreeViewItem.Value.Signature = _signatureComboBox.Text;
+            
+            this.Update();
+        }
+
+        private void _signatureComboBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var selectTreeViewItem = _treeView.SelectedItem as BoardTreeViewItem;
+            if (selectTreeViewItem == null) return;
+
+            if (_isEditing || selectTreeViewItem.Value.Signature == _signatureComboBox.Text) return;
+
+            selectTreeViewItem.Value.Signature = _signatureComboBox.Text;
 
             this.Update();
         }
 
-        private void _sendMessageButton_Click(object sender, RoutedEventArgs e)
+        private void _signButton_Click(object sender, RoutedEventArgs e)
+        {
+            var selectTreeViewItem = _treeView.SelectedItem as BoardTreeViewItem;
+            if (selectTreeViewItem == null) return;
+
+            var board = selectTreeViewItem.Value;
+
+            SignWindow window = new SignWindow(ref board);
+            window.Owner = _mainWindow;
+
+            if (window.ShowDialog() == true)
+            {
+                this.Update();
+            }
+        }
+
+        private void _newMessageButton_Click(object sender, RoutedEventArgs e)
         {
             var selectTreeViewItem = _treeView.SelectedItem as BoardTreeViewItem;
             if (selectTreeViewItem == null) return;
@@ -1352,8 +1384,13 @@ namespace Lair.Windows
             Grid grid = new Grid();
             grid.Children.Add(new Image() { Source = _image, Height = 16, Width = 16, HorizontalAlignment = System.Windows.HorizontalAlignment.Left });
 
-            if (_hit) grid.Children.Add(new TextBlock() { Margin = new Thickness(22, 0, 0, 0), Text = _value.Channel.Name, FontWeight = FontWeights.ExtraBlack });
-            else grid.Children.Add(new TextBlock() { Margin = new Thickness(22, 0, 0, 0), Text = _value.Channel.Name });
+            string text = "";
+
+            if (_value.FilterUploadDigitalSignature == null) text = _value.Channel.Name;
+            else text = string.Format("{0} - {1}", _value.Channel.Name, MessageConverter.ToSignatureString(_value.FilterUploadDigitalSignature));
+
+            if (_hit) grid.Children.Add(new TextBlock() { Margin = new Thickness(22, 0, 0, 0), Text = text, FontWeight = FontWeights.ExtraBlack });
+            else grid.Children.Add(new TextBlock() { Margin = new Thickness(22, 0, 0, 0), Text = text });
 
             this.Header = grid;
         }
@@ -1393,8 +1430,6 @@ namespace Lair.Windows
         private string _name;
         private List<Board> _boards;
         private List<Category> _categories;
-        private DigitalSignature _filterUploadDigitalSignature;
-        private bool _filterUpload_IsEnabled;
         private List<SearchContains<string>> _searchWordCollection;
         private List<SearchContains<SearchRegex>> _searchRegexCollection;
         private List<SearchContains<string>> _searchSignatureCollection;
@@ -1434,32 +1469,6 @@ namespace Lair.Windows
                     _categories = new List<Category>();
 
                 return _categories;
-            }
-        }
-
-        [DataMember(Name = "FilterUploadDigitalSignature")]
-        public DigitalSignature FilterUploadDigitalSignature
-        {
-            get
-            {
-                return _filterUploadDigitalSignature;
-            }
-            set
-            {
-                _filterUploadDigitalSignature = value;
-            }
-        }
-
-        [DataMember(Name = "FilterUpload_IsEnabled")]
-        public bool FilterUpload_IsEnabled
-        {
-            get
-            {
-                return _filterUpload_IsEnabled;
-            }
-            set
-            {
-                _filterUpload_IsEnabled = value;
             }
         }
 
@@ -1541,6 +1550,7 @@ namespace Lair.Windows
     {
         private Channel _channel;
         private string _signature;
+        private DigitalSignature _filterUploadDigitalSignature;
 
         [DataMember(Name = "Channel")]
         public Channel Channel
@@ -1565,6 +1575,19 @@ namespace Lair.Windows
             set
             {
                 _signature = value;
+            }
+        }
+
+        [DataMember(Name = "FilterUploadDigitalSignature")]
+        public DigitalSignature FilterUploadDigitalSignature
+        {
+            get
+            {
+                return _filterUploadDigitalSignature;
+            }
+            set
+            {
+                _filterUploadDigitalSignature = value;
             }
         }
 

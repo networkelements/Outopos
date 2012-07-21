@@ -480,6 +480,46 @@ namespace Lair.Windows
             }
         }
 
+        private WebProxy GetProxy()
+        {
+            var proxyUri = Settings.Instance.Global_Update_ProxyUri;
+
+            if (!string.IsNullOrWhiteSpace(proxyUri))
+            {
+                string proxyScheme = null;
+                string proxyHost = null;
+                int proxyPort = -1;
+
+                {
+                    Regex regex = new Regex(@"(.*?):(.*):(\d*)");
+                    var match = regex.Match(proxyUri);
+
+                    if (match.Success)
+                    {
+                        proxyScheme = match.Groups[1].Value;
+                        proxyHost = match.Groups[2].Value;
+                        proxyPort = int.Parse(match.Groups[3].Value);
+                    }
+                    else
+                    {
+                        Regex regex2 = new Regex(@"(.*?):(.*)");
+                        var match2 = regex2.Match(proxyUri);
+
+                        if (match2.Success)
+                        {
+                            proxyScheme = match2.Groups[1].Value;
+                            proxyHost = match2.Groups[2].Value;
+                            proxyPort = 80;
+                        }
+                    }
+                }
+
+                return new WebProxy(proxyHost, proxyPort);
+            }
+
+            return null;
+        }
+
         private object _updateLockObject = new object();
 
         private void UpdateCheck(bool isShow)
@@ -499,9 +539,7 @@ namespace Lair.Windows
                     }
 
                     var url = Settings.Instance.Global_Update_Url;
-                    var proxyUri = Settings.Instance.Global_Update_ProxyUri;
                     var signature = Settings.Instance.Global_Update_Signature;
-                    WebProxy proxy = null;
                     string line1;
                     string line2;
 
@@ -515,41 +553,8 @@ namespace Lair.Windows
                         rq.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore);
                         rq.KeepAlive = true;
                         rq.Headers.Add(HttpRequestHeader.AcceptCharset, "utf-8");
+                        rq.Proxy = this.GetProxy();
 
-                        if (!string.IsNullOrWhiteSpace(proxyUri))
-                        {
-                            string proxyScheme = null;
-                            string proxyHost = null;
-                            int proxyPort = -1;
-
-                            {
-                                Regex regex = new Regex(@"(.*?):(.*):(\d*)");
-                                var match = regex.Match(proxyUri);
-
-                                if (match.Success)
-                                {
-                                    proxyScheme = match.Groups[1].Value;
-                                    proxyHost = match.Groups[2].Value;
-                                    proxyPort = int.Parse(match.Groups[3].Value);
-                                }
-                                else
-                                {
-                                    Regex regex2 = new Regex(@"(.*?):(.*)");
-                                    var match2 = regex2.Match(proxyUri);
-
-                                    if (match2.Success)
-                                    {
-                                        proxyScheme = match2.Groups[1].Value;
-                                        proxyHost = match2.Groups[2].Value;
-                                        proxyPort = 80;
-                                    }
-                                }
-                            }
-
-                            proxy = new WebProxy(proxyHost, proxyPort);
-                            rq.Proxy = proxy;
-                        }
-                     
                         using (HttpWebResponse rs = (HttpWebResponse)rq.GetResponse())
                         using (Stream stream = rs.GetResponseStream())
                         using (StreamReader r = new StreamReader(stream))
@@ -609,71 +614,96 @@ namespace Lair.Windows
 
                             if (flag)
                             {
-                                HttpWebRequest rq = (HttpWebRequest)HttpWebRequest.Create(line2);
-                                rq.Method = "GET";
-                                rq.ContentType = "text/html; charset=UTF-8";
-                                rq.UserAgent = "";
-                                rq.ReadWriteTimeout = 1000 * 60;
-                                rq.Timeout = 1000 * 60;
-                                rq.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore);
-                                rq.KeepAlive = true;
-                                rq.Proxy = proxy;
-                                rq.Headers.Add(HttpRequestHeader.AcceptCharset, "utf-8");
-
-                                using (HttpWebResponse rs = (HttpWebResponse)rq.GetResponse())
+                                for (int i = 0; ; i++)
                                 {
-                                    string fileName = null;
-
-                                    if (rs.Headers.AllKeys.Contains("Content-Disposition"))
+                                    try
                                     {
-                                        string dispos = rs.Headers["Content-Disposition"];
+                                        HttpWebRequest rq = (HttpWebRequest)HttpWebRequest.Create(line2);
+                                        rq.Method = "GET";
+                                        rq.ContentType = "text/html; charset=UTF-8";
+                                        rq.UserAgent = "";
+                                        rq.ReadWriteTimeout = 1000 * 60;
+                                        rq.Timeout = 1000 * 60;
+                                        rq.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore);
+                                        rq.KeepAlive = true;
+                                        rq.Headers.Add(HttpRequestHeader.AcceptCharset, "utf-8");
+                                        rq.Proxy = this.GetProxy();
 
-                                        if (!String.IsNullOrEmpty(dispos))
+                                        using (HttpWebResponse rs = (HttpWebResponse)rq.GetResponse())
                                         {
-                                            Regex re = new Regex(@"
-                                            filename\s*=\s*
-                                            (?:
-                                              ""(?<filename>[^""]*)""
-                                              |
-                                              (?<filename>[^;]*)
-                                            )
-                                            ", RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace);
+                                            string fileName = null;
 
-                                            Match m = re.Match(dispos);
-
-                                            if (m.Success)
+                                            if (rs.Headers.AllKeys.Contains("Content-Disposition"))
                                             {
-                                                fileName = m.Groups["filename"].Value;
+                                                string dispos = rs.Headers["Content-Disposition"];
+
+                                                if (!String.IsNullOrEmpty(dispos))
+                                                {
+                                                    Regex re = new Regex(@"
+                                                        filename\s*=\s*
+                                                        (?:
+                                                          ""(?<filename>[^""]*)""
+                                                          |
+                                                          (?<filename>[^;]*)
+                                                        )
+                                                        ", RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace);
+
+                                                    Match m = re.Match(dispos);
+
+                                                    if (m.Success)
+                                                    {
+                                                        fileName = m.Groups["filename"].Value;
+                                                    }
+                                                }
                                             }
+                                            else
+                                            {
+                                                fileName = Path.GetFileName(line2);
+                                            }
+
+                                            long size = 0;
+
+                                            using (Stream inStream = rs.GetResponseStream())
+                                            using (FileStream outStream = new FileStream(string.Format(@"{0}\{1}", App.DirectoryPaths["Update"], fileName), FileMode.Create))
+                                            {
+                                                byte[] buffer = new byte[1024 * 4];
+
+                                                int length = 0;
+
+                                                while (0 < (length = inStream.Read(buffer, 0, buffer.Length)))
+                                                {
+                                                    outStream.Write(buffer, 0, length);
+                                                    size += length;
+                                                }
+                                            }
+
+                                            if (size != rs.ContentLength)
+                                            {
+                                                continue;
+                                            }
+
+                                            this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                                            {
+                                                MessageBox.Show(
+                                                    this,
+                                                    LanguagesManager.Instance.MainWindow_Restart_Message,
+                                                    "Update",
+                                                    MessageBoxButton.OK,
+                                                    MessageBoxImage.Information);
+                                            }), null);
                                         }
                                     }
-                                    else
+                                    catch (ThreadAbortException e)
                                     {
-                                        fileName = Path.GetFileName(line2);
+                                        throw e;
                                     }
-
-                                    using (Stream inStream = rs.GetResponseStream())
-                                    using (FileStream outStream = new FileStream(string.Format(@"{0}\{1}", App.DirectoryPaths["Update"], fileName), FileMode.Create))
+                                    catch (Exception e)
                                     {
-                                        byte[] buffer = new byte[1024 * 4];
+                                        Log.Error(e);
 
-                                        int length = 0;
-
-                                        while (0 < (length = inStream.Read(buffer, 0, buffer.Length)))
-                                        {
-                                            outStream.Write(buffer, 0, length);
-                                        }
+                                        if (i < 10) continue;
+                                        else return;
                                     }
-
-                                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
-                                    {
-                                        MessageBox.Show(
-                                            this,
-                                            LanguagesManager.Instance.MainWindow_Restart_Message,
-                                            "Update",
-                                            MessageBoxButton.OK,
-                                            MessageBoxImage.Information);
-                                    }), null);
                                 }
                             }
                         }

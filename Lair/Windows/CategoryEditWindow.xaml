@@ -45,17 +45,6 @@
         <Button Height="23" HorizontalAlignment="Right" Margin="0,0,93,12" Name="_okButton" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CategoryEditWindow_Ok, Source={StaticResource ResourcesInstance}}" Click="_okButton_Click" />
         <Button Height="23" HorizontalAlignment="Right" Margin="0,0,12,12" Name="_cancelButton" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CategoryEditWindow_Cancel, Source={StaticResource ResourcesInstance}}" Click="_cancelButton_Click" />
         <TabControl Margin="0,42,0,41">
-            <TabItem Header="{Binding Path=CategoryEditWindow_Upload, Source={StaticResource ResourcesInstance}}">
-                <Grid>
-                    <Label Content="{Binding Path=CategoryEditWindow_Signature, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" Width="120" VerticalContentAlignment="Center" />
-                    <ComboBox Height="24" Margin="132,6,6,0" Name="_filterUploadSignatureComboBox" VerticalAlignment="Top" VerticalContentAlignment="Center" SelectionChanged="_filterUploadSignatureComboBox_SelectionChanged" />
-                    <GroupBox Header="{Binding Path=UserInterfaceWindow_UpdateOption, Source={StaticResource ResourcesInstance}}" Height="58" Margin="6,36,6,0" Name="groupBox1" VerticalAlignment="Top">
-                        <Grid>
-                            <CheckBox Content="{Binding Path=CategoryEditWindow_FilterUpload, Source={StaticResource ResourcesInstance}}" Height="16" HorizontalAlignment="Left" Margin="6,6,0,0" Name="_filterUploadCheckBox" VerticalAlignment="Top" />
-                        </Grid>
-                    </GroupBox>
-                </Grid>
-            </TabItem>
             <TabItem Header="{Binding Path=CategoryEditWindow_Word, Source={StaticResource ResourcesInstance}}">
                 <Grid>
                     <Button Name="_wordUpButton" Height="23" HorizontalAlignment="Right" Margin="0,0,330,6" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CategoryEditWindow_Up, Source={StaticResource ResourcesInstance}}" Click="_wordUpButton_Click" IsEnabled="False" />

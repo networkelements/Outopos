@@ -80,6 +80,12 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<ListSortDirection>() { Name = "ChannelControl_ListSortDirection", Value = ListSortDirection.Ascending },
                 new Library.Configuration.SettingsContext<double>() { Name = "ChannelControl_Grid_ColumnDefinitions_Width", Value = 200 },
               
+                new Library.Configuration.SettingsContext<double>() { Name = "SignWindow_Top", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SignWindow_Left", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SignWindow_Height", Value = 500 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SignWindow_Width", Value = 700 },
+                new Library.Configuration.SettingsContext<WindowState>() { Name = "SignWindow_WindowState", Value = WindowState.Normal },
+              
                 new Library.Configuration.SettingsContext<double>() { Name = "MessageEditWindow_Top", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "MessageEditWindow_Left", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "MessageEditWindow_Height", Value = 500 },
@@ -1144,6 +1150,102 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     this["ChannelControl_Grid_ColumnDefinitions_Width"] = value;
+                }
+            }
+        }
+
+
+        public double SignWindow_Top
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SignWindow_Top"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SignWindow_Top"] = value;
+                }
+            }
+        }
+
+        public double SignWindow_Left
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SignWindow_Left"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SignWindow_Left"] = value;
+                }
+            }
+        }
+
+        public double SignWindow_Height
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SignWindow_Height"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SignWindow_Height"] = value;
+                }
+            }
+        }
+
+        public double SignWindow_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SignWindow_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SignWindow_Width"] = value;
+                }
+            }
+        }
+
+        public WindowState SignWindow_WindowState
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (WindowState)this["SignWindow_WindowState"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SignWindow_WindowState"] = value;
                 }
             }
         }

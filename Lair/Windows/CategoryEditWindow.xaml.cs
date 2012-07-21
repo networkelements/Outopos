@@ -50,13 +50,6 @@ namespace Lair.Windows
                 this.Icon = BitmapFrame.Create(stream);
             }
 
-            _filterUploadSignatureComboBox.ItemsSource = digitalSignatureCollection;
-
-            var index = Settings.Instance.Global_DigitalSignatureCollection.IndexOf(_category.FilterUploadDigitalSignature);
-            _filterUploadSignatureComboBox.SelectedIndex = index + 1;
-
-            _filterUploadCheckBox.IsChecked = category.FilterUpload_IsEnabled;
-
             _nameTextBox.Text = category.Name;
 
             _wordContainsCheckBox.IsChecked = true;
@@ -69,15 +62,6 @@ namespace Lair.Windows
             _signatureListView.ItemsSource = _searchSignatureCollection;
             _messageListView.ItemsSource = _searchMessageCollection;
         }
-
-        #region Upload
-
-        private void _filterUploadSignatureComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            _filterUploadCheckBox.IsEnabled = _filterUploadSignatureComboBox.SelectedIndex != 0;
-        }
-
-        #endregion
 
         #region _wordListView
 
@@ -978,12 +962,6 @@ namespace Lair.Windows
             this.DialogResult = true;
 
             _category.Name = _nameTextBox.Text;
-
-            var digitalSignatureComboBoxItem = _filterUploadSignatureComboBox.SelectedItem as DigitalSignatureComboBoxItem;
-            DigitalSignature digitalSignature = digitalSignatureComboBoxItem == null ? null : digitalSignatureComboBoxItem.Value;
-
-            _category.FilterUploadDigitalSignature = digitalSignature;
-            _category.FilterUpload_IsEnabled = _filterUploadCheckBox.IsChecked.Value;
 
             _category.SearchWordCollection.Clear();
             _category.SearchWordCollection.AddRange(_searchKeywordCollection.Select(n => n.DeepClone()).ToList());

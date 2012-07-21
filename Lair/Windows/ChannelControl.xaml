@@ -45,7 +45,8 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="{Binding Path=ChannelControl_Grid_ColumnDefinitions_Width, Mode=TwoWay, Converter={StaticResource _doubleToGridLengthConverter}, Source={x:Static prop:Settings.Instance}}" />
             <ColumnDefinition Width="4" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="506*" />
+            <ColumnDefinition Width="40" />
             <ColumnDefinition Width="40" />
         </Grid.ColumnDefinitions>
 
@@ -141,8 +142,9 @@
                 </GridView>
             </ListView.View>
         </local:ListViewEx>
-        
-        <ComboBox Name="_signatureComboBox" Grid.Column="2" SelectionChanged="_signatureComboBox_SelectionChanged" />
-        <Button Name="_sendMessageButton" Content="{Binding Path=ChannelControl_SendMessage, Source={StaticResource ResourcesInstance}}" Click="_sendMessageButton_Click" Grid.Column="3" />
+
+        <ComboBox Name="_signatureComboBox" Grid.Column="2" SelectionChanged="_signatureComboBox_SelectionChanged" TextBoxBase.TextChanged="_signatureComboBox_TextChanged" IsEditable="True" IsEnabled="False" Grid.ColumnSpan="1" />
+        <Button Name="_newMessageButton" Content="{Binding Path=ChannelControl_NewMessage, Source={StaticResource ResourcesInstance}}" Click="_newMessageButton_Click" Grid.Column="4" IsEnabled="False" />
+        <Button Name="_signButton" Content="{Binding Path=ChannelControl_Sign, Source={StaticResource ResourcesInstance}}" Click="_signButton_Click" Grid.Column="3" IsEnabled="False" />
     </Grid>
 </UserControl>

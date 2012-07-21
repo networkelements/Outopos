@@ -135,6 +135,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Windows\SignWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Windows\NewChannelWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -176,6 +180,9 @@
     </Compile>
     <Compile Include="Windows\CategoryEditWindow.xaml.cs">
       <DependentUpon>CategoryEditWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\SignWindow.xaml.cs">
+      <DependentUpon>SignWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\NewChannelWindow.xaml.cs">
       <DependentUpon>NewChannelWindow.xaml</DependentUpon>

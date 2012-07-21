@@ -263,6 +263,12 @@ namespace Lair.Windows
             var selectItems = _listView.SelectedItems;
 
             _listViewCopyMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
+
+            {
+                var nodes = Clipboard.GetNodes();
+
+                _listViewPasteMenuItem.IsEnabled = (nodes.Count() > 0) ? true : false;
+            }
         }
 
         private void _listViewCopyMenuItem_Click(object sender, RoutedEventArgs e)
@@ -281,6 +287,11 @@ namespace Lair.Windows
             }
 
             Clipboard.SetNodes(nodes);
+        }
+
+        private void _listViewPasteMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            _lairManager.SetOtherNodes(Clipboard.GetNodes());
         }
 
         #region Sort

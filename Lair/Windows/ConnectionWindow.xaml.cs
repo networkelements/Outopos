@@ -88,6 +88,11 @@ namespace Lair.Windows
             _baseNodeUrisListView_SelectionChanged(this, null);
         }
 
+        private void _baseNodeTextBox_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            _baseNodeTextBox.SelectAll();
+        }
+
         private void _baseNodeUrisListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try

@@ -114,6 +114,7 @@
 
   <Translate Key="ConnectionControl_Uri" Value="Uri" />
   <Translate Key="ConnectionControl_Copy" Value="Copy" />
+  <Translate Key="ConnectionControl_Paste" Value="Paste" />
   <Translate Key="ConnectionControl_Priority" Value="Priority" />
   <Translate Key="ConnectionControl_ReceivedByteCount" Value="Received Byte Count" />
   <Translate Key="ConnectionControl_SentByteCount" Value="Sent Byte Count" />
@@ -168,7 +169,13 @@
   <Translate Key="ChannelControl_FilterMessage" Value="Filter Message" />
   <Translate Key="ChannelControl_Channel" Value="Channel" />
   <Translate Key="ChannelControl_Content" Value="Content" />
-  <Translate Key="ChannelControl_SendMessage" Value="Send" />
+  <Translate Key="ChannelControl_Sign" Value="Sign" />
+  <Translate Key="ChannelControl_NewMessage" Value="New" />
+
+  <Translate Key="SignWindow_Title" Value="Filter Upload Signature" />
+  <Translate Key="SignWindow_Signature" Value="Signature" />
+  <Translate Key="SignWindow_Cancel" Value="Cancel" />
+  <Translate Key="SignWindow_Ok" Value="Ok" />
 
   <Translate Key="MessageEditWindow_Title" Value="Message Edit" />
   <Translate Key="MessageEditWindow_Signature" Value="Signature" />

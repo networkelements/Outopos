@@ -1327,6 +1327,17 @@ namespace Lair.Properties
             }
         }
 
+        public string ConnectionControl_Paste
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionControl_Paste");
+                }
+            }
+        }
+
         public string ConnectionControl_Priority
         {
             get
@@ -1901,13 +1912,69 @@ namespace Lair.Properties
             }
         }
 
-        public string ChannelControl_SendMessage
+        public string ChannelControl_Sign
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_SendMessage");
+                    return this.Translate("ChannelControl_Sign");
+                }
+            }
+        }
+
+        public string ChannelControl_NewMessage
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChannelControl_NewMessage");
+                }
+            }
+        }
+
+
+        public string SignWindow_Title
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SignWindow_Title");
+                }
+            }
+        }
+
+        public string SignWindow_Signature
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SignWindow_Signature");
+                }
+            }
+        }
+
+        public string SignWindow_Cancel
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SignWindow_Cancel");
+                }
+            }
+        }
+
+        public string SignWindow_Ok
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SignWindow_Ok");
                 }
             }
         }

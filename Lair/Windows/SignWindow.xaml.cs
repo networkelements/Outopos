@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,22 +19,19 @@ using Library.Security;
 namespace Lair.Windows
 {
     /// <summary>
-    /// NewChannelWindow.xaml の相互作用ロジック
+    /// SignWindow.xaml の相互作用ロジック
     /// </summary>
-    partial class NewChannelWindow : Window
+    partial class SignWindow : Window
     {
-        private Channel _channel;
+        private Board _board;
 
-        public NewChannelWindow(out Channel channel)
+        public SignWindow(ref Board board)
         {
-            channel = new Channel();
+            _board = board;
 
-            _channel = channel;
-
-            byte[] buffer = new byte[64];
-            (new RNGCryptoServiceProvider()).GetBytes(buffer);
-
-            _channel.Id = buffer;
+            var digitalSignatureCollection = new List<object>();
+            digitalSignatureCollection.Add(new ComboBoxItem() { Content = "" });
+            digitalSignatureCollection.AddRange(Settings.Instance.Global_DigitalSignatureCollection.Select(n => new DigitalSignatureComboBoxItem(n)).ToArray());
 
             InitializeComponent();
 
@@ -43,21 +39,22 @@ namespace Lair.Windows
             {
                 this.Icon = BitmapFrame.Create(stream);
             }
-        }
 
-        private void _nameTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            _okButton.IsEnabled = !string.IsNullOrWhiteSpace(_nameTextBox.Text);
+            _signatureComboBox.ItemsSource = digitalSignatureCollection;
+
+            var index = Settings.Instance.Global_DigitalSignatureCollection.IndexOf(_board.FilterUploadDigitalSignature);
+            _signatureComboBox.SelectedIndex = index + 1;
         }
 
         private void _okButton_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = true;
 
-            string name = _nameTextBox.Text;
+            var digitalSignatureComboBoxItem = _signatureComboBox.SelectedItem as DigitalSignatureComboBoxItem;
+            DigitalSignature digitalSignature = digitalSignatureComboBoxItem == null ? null : digitalSignatureComboBoxItem.Value;
 
             {
-                _channel.Name = name;
+                _board.FilterUploadDigitalSignature = digitalSignature;
             }
         }
 

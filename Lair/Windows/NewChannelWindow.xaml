@@ -11,11 +11,12 @@
         Top="{Binding Path=NewChannelWindow_Top, Mode=TwoWay, Source={x:Static prop:Settings.Instance}, Converter={StaticResource _topRelativeDoubleConverter}}"
         Left="{Binding Path=NewChannelWindow_Left, Mode=TwoWay, Source={x:Static prop:Settings.Instance}, Converter={StaticResource _leftRelativeDoubleConverter}}"
         Width="{Binding Path=NewChannelWindow_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}"
-        WindowState="{Binding Path=NewChannelWindow_WindowState, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" SizeToContent="Height">
+        WindowState="{Binding Path=NewChannelWindow_WindowState, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" 
+        SizeToContent="Height">
 
     <Grid FocusManager.FocusedElement="{Binding ElementName=_nameTextBox}">
         <Label Content="{Binding Path=NewChannelWindow_Name, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="12,12,0,0" VerticalAlignment="Top" Width="120" VerticalContentAlignment="Center" />
-        <TextBox Height="24" Margin="138,12,12,0" Name="_nameTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" />
+        <TextBox Height="24" Margin="138,12,12,0" Name="_nameTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" IsEnabled="False" TextChanged="_nameTextBox_TextChanged" />
         <Button Content="{Binding Path=NewChannelWindow_Ok, Source={StaticResource ResourcesInstance}}" Height="23" HorizontalAlignment="Right" Margin="0,42,93,0" Name="_okButton" VerticalAlignment="Top" Width="75" Click="_okButton_Click" IsDefault="True" />
         <Button Content="{Binding Path=NewChannelWindow_Cancel, Source={StaticResource ResourcesInstance}}" Height="23" HorizontalAlignment="Right" Margin="0,42,12,12" Name="_cancelButton" VerticalAlignment="Top" Width="75" Click="_cancelButton_Click" IsCancel="True" />
     </Grid>
