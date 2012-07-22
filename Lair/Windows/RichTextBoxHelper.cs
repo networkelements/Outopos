@@ -67,7 +67,7 @@ namespace Lair.Windows
 
                     Regex regex = new Regex(@"(.*)(http(s)?://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?)(.*)");
 
-                    foreach (var line in message.Content.Trim().Split('\r', '\n'))
+                    foreach (var line in message.Content.Trim().Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None))
                     {
                         try
                         {
@@ -89,7 +89,6 @@ namespace Lair.Windows
                                     Hyperlink l = new Hyperlink();
                                     l.Foreground = new SolidColorBrush(Color.FromRgb(0xDF, 0xDF, 0xDF));
                                     l.Cursor = Cursors.Hand;
-                                    l.ToolTip = new TextBlock() { Text = "aaaaaaaaaa" };
                                     l.PreviewMouseLeftButtonDown += (object sender, MouseButtonEventArgs ex) =>
                                     {
                                         if (RichTextBoxHelper.SeedClickEvent != null)
@@ -153,7 +152,7 @@ namespace Lair.Windows
 
                                 {
                                     var span = new Span();
-                                    
+
                                     var rl1 = rl.Substring(0, 64);
                                     var rl2 = (64 < rl.Length) ? rl.Substring(64, Math.Min(rl.Length - 64, 16)) : "";
                                     var rl3 = (80 < rl.Length) ? rl.Substring(80) : "";

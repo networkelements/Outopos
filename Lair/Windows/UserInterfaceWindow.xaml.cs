@@ -242,12 +242,19 @@ namespace Lair.Windows
                 dialog.DefaultExt = ".exe";
                 dialog.Filter = "Exe files (*.exe)|*.exe";
 
+                try
+                {
+                    dialog.InitialDirectory = Path.GetDirectoryName(_amoebaPathTextBox.Text);
+                    dialog.FileName = Path.GetFileName(_amoebaPathTextBox.Text);
+                }
+                catch (Exception)
+                {
+
+                }
+
                 if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    foreach (var fileName in dialog.FileNames)
-                    {
-                        _amoebaPathTextBox.Text = fileName;
-                    }
+                    _amoebaPathTextBox.Text = dialog.FileName;
                 }
             }
         }

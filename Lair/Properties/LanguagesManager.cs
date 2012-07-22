@@ -1714,6 +1714,17 @@ namespace Lair.Properties
             }
         }
 
+        public string ChannelControl_Respons
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChannelControl_Respons");
+                }
+            }
+        }
+
         public string ChannelControl_NewChannel
         {
             get

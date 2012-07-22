@@ -151,6 +151,7 @@
   <Translate Key="ChannelControl_Length" Value="Length" />
   <Translate Key="ChannelControl_Comment" Value="Comment" />
   <Translate Key="ChannelControl_Id" Value="Id" />
+  <Translate Key="ChannelControl_Respons" Value="Respons" />
   <Translate Key="ChannelControl_NewChannel" Value="New Channel" />
   <Translate Key="ChannelControl_AddCategory" Value="Add Category" />
   <Translate Key="ChannelControl_Edit" Value="Edit" />
@@ -177,7 +178,7 @@
   <Translate Key="SignWindow_Cancel" Value="Cancel" />
   <Translate Key="SignWindow_Ok" Value="Ok" />
 
-  <Translate Key="MessageEditWindow_Title" Value="Message Edit" />
+  <Translate Key="MessageEditWindow_Title" Value="New Message" />
   <Translate Key="MessageEditWindow_Signature" Value="Signature" />
   <Translate Key="MessageEditWindow_Comment" Value="Comment" />
   <Translate Key="MessageEditWindow_Cancel" Value="Cancel" />

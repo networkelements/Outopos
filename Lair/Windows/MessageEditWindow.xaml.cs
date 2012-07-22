@@ -48,6 +48,9 @@ namespace Lair.Windows
 
             var index = Settings.Instance.Global_DigitalSignatureCollection.IndexOf(Settings.Instance.Global_UploadDigitalSignature);
             _signatureComboBox.SelectedIndex = index + 1;
+
+            _commentTextBox.CaretIndex = _commentTextBox.Text.Length;
+            _commentTextBox.ScrollToEnd();
         }
 
         private void _commentTextBox_TextChanged(object sender, TextChangedEventArgs e)

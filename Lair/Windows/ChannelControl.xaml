@@ -27,6 +27,8 @@
                         <ContextMenu Name="_richTextBoxContextMenu">
                             <MenuItem Name="_richTextBoxCopyMenuItem" Header="{Binding Path=ChannelControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxCopyMenuItem_Click" />
                             <Separator />
+                            <MenuItem Name="_richTextBoxResponsMenuItem" Header="{Binding Path=ChannelControl_Respons, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxResponsMenuItem_Click" />
+                            <Separator />
                             <MenuItem Name="_richTextBoxFilterWordMenuItem" Header="{Binding Path=ChannelControl_FilterWord, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxFilterWordMenuItem_Click"/>
                             <MenuItem Name="_richTextBoxFilterSignatureMenuItem" Header="{Binding Path=ChannelControl_FilterSignature, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxFilterSignatureMenuItem_Click"/>
                             <MenuItem Name="_richTextBoxFilterMessageMenuItem" Header="{Binding Path=ChannelControl_FilterMessage, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxFilterMessageMenuItem_Click"/>
