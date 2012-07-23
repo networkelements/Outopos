@@ -129,7 +129,7 @@ namespace Lair.Windows
             {
                 for (; ; )
                 {
-                    Thread.Sleep(1000 * 3);
+                    Thread.Sleep(100);
                     if (App.SelectTab != "Connection") continue;
 
                     var connectionInformation = _lairManager.ConnectionInformation.ToArray();
@@ -250,6 +250,8 @@ namespace Lair.Windows
 
                         if (sortFlag && _listViewItemCollection.Count < 3000) this.Sort();
                     }), null);
+
+                    Thread.Sleep(1000 * 3);
                 }
             }
             catch (Exception)
