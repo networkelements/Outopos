@@ -208,7 +208,6 @@ namespace Lair.Windows
                 }
             }));
             _timerThread.Priority = ThreadPriority.Highest;
-            _timerThread.IsBackground = true;
             _timerThread.Name = "TimerThread";
             _timerThread.Start();
         }
@@ -957,6 +956,9 @@ namespace Lair.Windows
             _notifyIcon.Visible = false;
 
             _isRun = false;
+
+            _timerThread.Join();
+            _timerThread = null;
 
             _autoBaseNodeSettingManager.Stop();
             _autoBaseNodeSettingManager.Save(_configrationDirectoryPaths["AutoBaseNodeSettingManager"]);
