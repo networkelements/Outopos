@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using Lair.Properties;
 using Library;
 using Library.Net.Lair;
+using System.Threading;
 
 namespace Lair.Windows
 {
@@ -990,15 +991,6 @@ namespace Lair.Windows
             if (Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled != _miscellaneousAutoBaseNodeSettingCheckBox.IsChecked.Value)
             {
                 Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled = _miscellaneousAutoBaseNodeSettingCheckBox.IsChecked.Value;
-
-                if (Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled)
-                {
-                    _autoBaseNodeSettingManager.Start();
-                }
-                else
-                {
-                    _autoBaseNodeSettingManager.Stop();
-                }
             }
         }
 

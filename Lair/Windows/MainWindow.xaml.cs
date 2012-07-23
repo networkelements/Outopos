@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -24,12 +25,11 @@ using System.Windows.Threading;
 using Lair.Properties;
 using Library;
 using Library.Io;
-using Library.Net.Lair;
 using Library.Net.Connection;
+using Library.Net.Lair;
 using Library.Net.Proxy;
 using Library.Net.Upnp;
 using Library.Security;
-using System.ComponentModel;
 
 namespace Lair.Windows
 {
@@ -48,6 +48,12 @@ namespace Lair.Windows
         private Dictionary<string, string> _configrationDirectoryPaths = new Dictionary<string, string>();
         private string _logPath = null;
 
+        private ManagerState _state = ManagerState.Stop;
+
+        private bool _isRun = true;
+
+        private Thread _timerThread = null;
+        
         public MainWindow()
         {
             _bufferManager = new BufferManager();
@@ -88,6 +94,123 @@ namespace Lair.Windows
 
                 _notifyIcon.Visible = false;
             };
+
+            _timerThread = new Thread(new ThreadStart(() =>
+            {
+                try
+                {
+                    Stopwatch spaceCheckStopwatch = new Stopwatch();
+                    Stopwatch backupStopwatch = new Stopwatch();
+                    Stopwatch updateStopwatch = new Stopwatch();
+                    spaceCheckStopwatch.Start();
+                    backupStopwatch.Start();
+
+                    for (; ; )
+                    {
+                        Thread.Sleep(1000);
+                        if (!_isRun) return;
+
+                        {
+                            if (_autoBaseNodeSettingManager.State == ManagerState.Stop
+                                && (Settings.Instance.Global_IsStart && Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled))
+                            {
+                                _autoBaseNodeSettingManager.Start();
+                            }
+                            else if (_autoBaseNodeSettingManager.State == ManagerState.Start
+                                && (!Settings.Instance.Global_IsStart || !Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled))
+                            {
+                                _autoBaseNodeSettingManager.Stop();
+                            }
+
+                            if (_lairManager.State == ManagerState.Stop
+                                && Settings.Instance.Global_IsStart)
+                            {
+                                _lairManager.Start();
+
+                                Log.Information("Start");
+                            }
+                            else if (_lairManager.State == ManagerState.Start
+                                && !Settings.Instance.Global_IsStart)
+                            {
+                                _lairManager.Stop();
+
+                                Log.Information("Stop");
+                            }
+                        }
+
+                        if (spaceCheckStopwatch.Elapsed > new TimeSpan(0, 1, 0))
+                        {
+                            spaceCheckStopwatch.Restart();
+
+                            try
+                            {
+                                DriveInfo drive = new DriveInfo(Directory.GetCurrentDirectory());
+
+                                if (drive.AvailableFreeSpace < NetworkConverter.FromSizeString("256MB"))
+                                {
+                                    if (_lairManager.State == ManagerState.Start)
+                                    {
+                                        this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                                        {
+                                            _menuItemStop_Click(null, null);
+                                        }), null);
+
+                                        Log.Warning(LanguagesManager.Instance.MainWindow_SpaceNotFound);
+                                    }
+                                }
+                            }
+                            catch (Exception)
+                            {
+
+                            }
+                        }
+
+                        if (backupStopwatch.Elapsed > new TimeSpan(0, 5, 0))
+                        {
+                            backupStopwatch.Restart();
+
+                            try
+                            {
+                                _autoBaseNodeSettingManager.Save(_configrationDirectoryPaths["AutoBaseNodeSettingManager"]);
+                                _lairManager.Save(_configrationDirectoryPaths["AmoebaManager"]);
+                                Settings.Instance.Save(_configrationDirectoryPaths["MainWindow"]);
+                            }
+                            catch (Exception)
+                            {
+
+                            }
+                        }
+
+
+                        if (!updateStopwatch.IsRunning && updateStopwatch.Elapsed > new TimeSpan(3, 0, 0, 0))
+                        {
+                            updateStopwatch.Restart();
+
+                            try
+                            {
+                                if (Settings.Instance.Global_Update_Option == UpdateOption.AutoCheck
+                                   || Settings.Instance.Global_Update_Option == UpdateOption.AutoUpdate)
+                                {
+                                    _menuItemUpdateCheck_Click(null, null);
+                                }
+                            }
+                            catch (Exception)
+                            {
+
+                            }
+                        }
+
+                    }
+                }
+                catch (Exception)
+                {
+
+                }
+            }));
+            _timerThread.Priority = ThreadPriority.Highest;
+            _timerThread.IsBackground = true;
+            _timerThread.Name = "TimerThread";
+            _timerThread.Start();
         }
 
         private static string GetMachineInfomation()
@@ -776,82 +899,6 @@ namespace Lair.Windows
             }
         }
 
-        private void Timer(object state)
-        {
-            Stopwatch spaceCheckStopwatch = new Stopwatch();
-            Stopwatch backupStopwatch = new Stopwatch();
-            Stopwatch updateStopwatch = new Stopwatch();
-            spaceCheckStopwatch.Start();
-            backupStopwatch.Start();
-
-            for (; ; )
-            {
-                Thread.Sleep(1000);
-
-                if (spaceCheckStopwatch.Elapsed > new TimeSpan(0, 1, 0))
-                {
-                    spaceCheckStopwatch.Restart();
-
-                    try
-                    {
-                        DriveInfo drive = new DriveInfo(Directory.GetCurrentDirectory());
-
-                        if (drive.AvailableFreeSpace < NetworkConverter.FromSizeString("256MB"))
-                        {
-                            if (_lairManager.State == ManagerState.Start)
-                            {
-                                this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
-                                {
-                                    _menuItemStop_Click(null, null);
-                                }), null);
-
-                                Log.Warning(LanguagesManager.Instance.MainWindow_SpaceNotFound);
-                            }
-                        }
-                    }
-                    catch (Exception)
-                    {
-
-                    }
-                }
-
-                if (backupStopwatch.Elapsed > new TimeSpan(0, 5, 0))
-                {
-                    backupStopwatch.Restart();
-
-                    try
-                    {
-                        _autoBaseNodeSettingManager.Save(_configrationDirectoryPaths["AutoBaseNodeSettingManager"]);
-                        _lairManager.Save(_configrationDirectoryPaths["LairManager"]);
-                        Settings.Instance.Save(_configrationDirectoryPaths["MainWindow"]);
-                    }
-                    catch (Exception)
-                    {
-
-                    }
-                }
-
-
-                if (!updateStopwatch.IsRunning && updateStopwatch.Elapsed > new TimeSpan(3, 0, 0, 0))
-                {
-                    updateStopwatch.Restart();
-
-                    try
-                    {
-                        if (Settings.Instance.Global_Update_Option == UpdateOption.AutoCheck
-                           || Settings.Instance.Global_Update_Option == UpdateOption.AutoUpdate)
-                        {
-                            _menuItemUpdateCheck_Click(null, null);
-                        }
-                    }
-                    catch (Exception)
-                    {
-
-                    }
-                }
-            }
-        }
-
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
@@ -878,7 +925,6 @@ namespace Lair.Windows
             _channelTabItem.Content = _channelControl;
 
             ThreadPool.QueueUserWorkItem(new WaitCallback(this.ConnectionsInformationShow), this);
-            ThreadPool.QueueUserWorkItem(new WaitCallback(this.Timer), this);
 
             if (Settings.Instance.Global_IsStart)
             {
@@ -909,6 +955,8 @@ namespace Lair.Windows
             NativeMethods.SetThreadExecutionState(ExecutionState.Continuous);
 
             _notifyIcon.Visible = false;
+
+            _isRun = false;
 
             _autoBaseNodeSettingManager.Stop();
             _autoBaseNodeSettingManager.Save(_configrationDirectoryPaths["AutoBaseNodeSettingManager"]);
@@ -964,36 +1012,18 @@ namespace Lair.Windows
 
         private void _menuItemStart_Click(object sender, RoutedEventArgs e)
         {
-            ThreadPool.QueueUserWorkItem(new WaitCallback((object state) =>
-            {
-                if (Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled)
-                {
-                    _autoBaseNodeSettingManager.Start();
-                }
-
-                _lairManager.Start();
-            }));
-
             _menuItemStart.IsEnabled = false;
             _menuItemStop.IsEnabled = true;
 
             Settings.Instance.Global_IsStart = true;
-            Log.Information("Start");
         }
 
         private void _menuItemStop_Click(object sender, RoutedEventArgs e)
         {
-            ThreadPool.QueueUserWorkItem(new WaitCallback((object state) =>
-            {
-                _autoBaseNodeSettingManager.Stop();
-                _lairManager.Stop();
-            }));
-
             _menuItemStart.IsEnabled = true;
             _menuItemStop.IsEnabled = false;
 
             Settings.Instance.Global_IsStart = false;
-            Log.Information("Stop");
         }
 
         private void _menuItemConnectionSetting_Click(object sender, RoutedEventArgs e)

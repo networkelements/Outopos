@@ -200,15 +200,15 @@ namespace Lair
 
                     using (UpnpClient upnpClient = new UpnpClient())
                     {
-                        upnpClient.Connect(new TimeSpan(0, 0, 30));
+                        upnpClient.Connect(new TimeSpan(0, 0, 5));
 
-                        string ip = upnpClient.GetExternalIpAddress(new TimeSpan(0, 0, 30));
+                        string ip = upnpClient.GetExternalIpAddress(new TimeSpan(0, 0, 5));
 
                         if (!string.IsNullOrWhiteSpace(ip))
                         {
-                            upnpClient.ClosePort(UpnpProtocolType.Tcp, port, new TimeSpan(0, 0, 30));
+                            upnpClient.ClosePort(UpnpProtocolType.Tcp, port, new TimeSpan(0, 0, 5));
 
-                            if (upnpClient.OpenPort(UpnpProtocolType.Tcp, port, port, "Lair", new TimeSpan(0, 0, 30)))
+                            if (upnpClient.OpenPort(UpnpProtocolType.Tcp, port, port, "Lair", new TimeSpan(0, 0, 5)))
                             {
                                 Log.Information(string.Format("UPnP Open Port: {0}", port));
 
@@ -264,14 +264,14 @@ namespace Lair
                     {
                         using (UpnpClient client = new UpnpClient())
                         {
-                            client.Connect(new TimeSpan(0, 0, 30));
+                            client.Connect(new TimeSpan(0, 0, 5));
 
                             Regex regex = new Regex(@"(.*?)\:(.*)\:(\d*)");
                             var match = regex.Match(_settings.UpnpUri);
                             if (!match.Success) return;
                             int port = int.Parse(match.Groups[3].Value);
 
-                            client.ClosePort(UpnpProtocolType.Tcp, port, new TimeSpan(0, 0, 30));
+                            client.ClosePort(UpnpProtocolType.Tcp, port, new TimeSpan(0, 0, 5));
 
                             Log.Information(string.Format("UPnP Close Port: {0}", port));
                         }
