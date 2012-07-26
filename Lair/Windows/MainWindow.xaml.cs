@@ -566,7 +566,7 @@ namespace Lair.Windows
 
                 if (string.IsNullOrWhiteSpace(Settings.Instance.Global_Amoeba_Path))
                 {
-                    foreach (var p in Process.GetProcesses())
+                    foreach (var p in Process.GetProcessesByName("Amoeba"))
                     {
                         try
                         {
@@ -575,13 +575,9 @@ namespace Lair.Windows
                             if (Path.GetFileName(path) == "Amoeba.exe")
                             {
                                 Settings.Instance.Global_Amoeba_Path = path;
-                                
+
                                 break;
                             }
-                        }
-                        catch (Win32Exception)
-                        {
-
                         }
                         catch (Exception)
                         {
@@ -665,24 +661,41 @@ namespace Lair.Windows
                     string line1;
                     string line2;
 
+                    for (int i = 0; ; i++)
                     {
-                        HttpWebRequest rq = (HttpWebRequest)HttpWebRequest.Create(url);
-                        rq.Method = "GET";
-                        rq.ContentType = "text/html; charset=UTF-8";
-                        rq.UserAgent = "";
-                        rq.ReadWriteTimeout = 1000 * 60;
-                        rq.Timeout = 1000 * 60;
-                        rq.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore);
-                        rq.KeepAlive = true;
-                        rq.Headers.Add(HttpRequestHeader.AcceptCharset, "utf-8");
-                        rq.Proxy = this.GetProxy();
-
-                        using (HttpWebResponse rs = (HttpWebResponse)rq.GetResponse())
-                        using (Stream stream = rs.GetResponseStream())
-                        using (StreamReader r = new StreamReader(stream))
+                        try
                         {
-                            line1 = r.ReadLine();
-                            line2 = r.ReadLine();
+                            HttpWebRequest rq = (HttpWebRequest)HttpWebRequest.Create(url);
+                            rq.Method = "GET";
+                            rq.ContentType = "text/html; charset=UTF-8";
+                            rq.UserAgent = "";
+                            rq.ReadWriteTimeout = 1000 * 60;
+                            rq.Timeout = 1000 * 60;
+                            rq.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore);
+                            rq.KeepAlive = true;
+                            rq.Headers.Add(HttpRequestHeader.AcceptCharset, "utf-8");
+                            rq.Proxy = this.GetProxy();
+
+                            using (HttpWebResponse rs = (HttpWebResponse)rq.GetResponse())
+                            using (Stream stream = rs.GetResponseStream())
+                            using (StreamReader r = new StreamReader(stream))
+                            {
+                                line1 = r.ReadLine();
+                                line2 = r.ReadLine();
+                            }
+
+                            break;
+                        }
+                        catch (ThreadAbortException e)
+                        {
+                            throw e;
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Error(e);
+
+                            if (i < 10) continue;
+                            else return;
                         }
                     }
 
@@ -803,17 +816,19 @@ namespace Lair.Windows
                                             {
                                                 continue;
                                             }
-
-                                            this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
-                                            {
-                                                MessageBox.Show(
-                                                    this,
-                                                    LanguagesManager.Instance.MainWindow_Restart_Message,
-                                                    "Update",
-                                                    MessageBoxButton.OK,
-                                                    MessageBoxImage.Information);
-                                            }), null);
                                         }
+
+                                        this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                                        {
+                                            MessageBox.Show(
+                                                this,
+                                                LanguagesManager.Instance.MainWindow_Restart_Message,
+                                                "Update",
+                                                MessageBoxButton.OK,
+                                                MessageBoxImage.Information);
+                                        }), null);
+
+                                        break;
                                     }
                                     catch (ThreadAbortException e)
                                     {
