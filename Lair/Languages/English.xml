@@ -46,6 +46,10 @@
   <Translate Key="UserInterfaceWindow_AutoUpdate" Value="Auto Update" />
   <Translate Key="UserInterfaceWindow_Amoeba" Value="Amoeba" />
   <Translate Key="UserInterfaceWindow_AmoebaPath" Value="Amoeba Path" />
+  <Translate Key="UserInterfaceWindow_Fonts" Value="Fonts" />
+  <Translate Key="UserInterfaceWindow_MessageFontFamily" Value="Message Font Family" />
+  <Translate Key="UserInterfaceWindow_MessageFontSize" Value="Message Font Size" />
+
   <Translate Key="UserInterfaceWindow_Value" Value="Value" />
   <Translate Key="UserInterfaceWindow_Up" Value="Up" />
   <Translate Key="UserInterfaceWindow_Down" Value="Down" />

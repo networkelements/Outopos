@@ -26,11 +26,13 @@ namespace Lair.Windows
     {
         private BufferManager _bufferManager = new BufferManager();
         private List<SignatureListViewItem> _signatureListViewItemCollection = new List<SignatureListViewItem>();
+        private List<string> _messageFontFamilyComboBoxItemCollection = new List<string>();
 
         public UserInterfaceWindow(BufferManager bufferManager)
         {
             _bufferManager = bufferManager;
             _signatureListViewItemCollection.AddRange(Settings.Instance.Global_DigitalSignatureCollection.Select(n => new SignatureListViewItem(n.DeepClone())));
+            _messageFontFamilyComboBoxItemCollection.AddRange(Fonts.SystemFontFamilies.Select(n => n.ToString()));
 
             InitializeComponent();
 
@@ -58,6 +60,14 @@ namespace Lair.Windows
             }
 
             _amoebaPathTextBox.Text = Settings.Instance.Global_Amoeba_Path;
+
+            _messageFontFamilyComboBox.ItemsSource = _messageFontFamilyComboBoxItemCollection;
+
+            var index = _messageFontFamilyComboBoxItemCollection.IndexOf(Settings.Instance.Global_Fonts_MessageFontFamily);
+            _messageFontFamilyComboBox.SelectedIndex = index;
+            //_messageFontFamilyComboBox.SelectedItem = _messageFontFamilyComboBox.Items[index];
+
+            _messageFontSizeTextBox.Text = Settings.Instance.Global_Fonts_MessageFontSize.ToString();
         }
 
         #region Signature
@@ -260,7 +270,55 @@ namespace Lair.Windows
         }
 
         #endregion
-        
+
+        #region Fonts
+
+        private static double GetStringToDouble(string value)
+        {
+            StringBuilder builder = new StringBuilder("0");
+
+            foreach (var item in value)
+            {
+                if (Regex.IsMatch(item.ToString(), "[0-9\\.]"))
+                {
+                    builder.Append(item.ToString());
+                }
+            }
+
+            double count = 0;
+
+            try
+            {
+                count = double.Parse(builder.ToString());
+            }
+            catch (OverflowException)
+            {
+                count = double.MaxValue;
+            }
+
+            return count;
+        }
+
+        private void _messageFontSizeTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(_messageFontSizeTextBox.Text)) _messageFontSizeTextBox.Text = "0";
+
+            StringBuilder builder = new StringBuilder("");
+
+            foreach (var item in _messageFontSizeTextBox.Text)
+            {
+                if (Regex.IsMatch(item.ToString(), "[0-9\\.]"))
+                {
+                    builder.Append(item.ToString());
+                }
+            }
+
+            var value = builder.ToString();
+            if (_messageFontSizeTextBox.Text != value) _messageFontSizeTextBox.Text = value;
+        }
+       
+        #endregion
+
         private void _okButton_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = true;
@@ -285,6 +343,11 @@ namespace Lair.Windows
             }
 
             Settings.Instance.Global_Amoeba_Path = _amoebaPathTextBox.Text;
+
+            Settings.Instance.Global_Fonts_MessageFontFamily = (string)_messageFontFamilyComboBox.SelectedItem;
+
+            double messageFontSize = double.Parse(_messageFontSizeTextBox.Text);
+            Settings.Instance.Global_Fonts_MessageFontSize = messageFontSize;
         }
 
         private void _cancelButton_Click(object sender, RoutedEventArgs e)

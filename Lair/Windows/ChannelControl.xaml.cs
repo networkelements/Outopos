@@ -28,6 +28,7 @@ using Library.Net.Lair;
 using Library.Security;
 using System.Diagnostics;
 using System.ComponentModel;
+using System.Windows.Controls.Primitives;
 
 namespace Lair.Windows
 {
@@ -253,8 +254,8 @@ namespace Lair.Windows
 
                             if (sortFlag) this.Sort();
 
-                            if (_listView.Items.Count > 0)
-                                _listView.ScrollIntoView(_listView.Items[_listView.Items.Count - 1]);
+                            //if (_listView.Items.Count > 0)
+                            //    _listView.ScrollIntoView(_listView.Items[_listView.Items.Count - 1]);
 
                             if (App.SelectTab == "Channel")
                                 _mainWindow.Title = string.Format("Lair {0} - {1}", App.LairVersion, MessageConverter.ToChannelString(selectTreeViewItem.Value.Channel));
@@ -463,6 +464,10 @@ namespace Lair.Windows
             RichTextBoxHelper.ChannelClickEvent += new ChannelClickEventHandler(RichTextBoxHelper_ChannelClickEvent);
             RichTextBoxHelper.SeedClickEvent += new SeedClickEventHandler(RichTextBoxHelper_SeedClickEvent);
             RichTextBoxHelper.LinkClickEvent += new LinkClickEventHandler(RichTextBoxHelper_LinkClickEvent);
+            RichTextBoxHelper.GetMaxHeightEvent += (object sender) =>
+            {
+                return _listView.ActualHeight - 18;
+            };
         }
 
         void RichTextBoxHelper_ChannelClickEvent(object sender, Channel channel)
@@ -677,6 +682,11 @@ namespace Lair.Windows
             _treeViewItem.Sort();
         }
 
+        public void Refresh()
+        {
+            _listView.Items.Refresh();
+        }
+
         #region _treeView
 
         private Point _startPoint = new Point(-1, -1);
@@ -779,8 +789,8 @@ namespace Lair.Windows
                 _treeViewNewChannelMenuItem.IsEnabled = true;
                 _treeViewAddCategoryMenuItem.IsEnabled = true;
                 _treeViewEditMenuItem.IsEnabled = true;
-                _treeViewDeleteMenuItem.IsEnabled = true;
-                _treeViewCutMenuItem.IsEnabled = true;
+                _treeViewDeleteMenuItem.IsEnabled = !(selectTreeViewItem == _treeViewItem);
+                _treeViewCutMenuItem.IsEnabled = !(selectTreeViewItem == _treeViewItem);
                 _treeViewCopyMenuItem.IsEnabled = true;
 
                 {
@@ -969,24 +979,6 @@ namespace Lair.Windows
         #endregion
 
         #region _listView
-
-        private void _listView_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            e.Handled = true;
-
-            var peer = ItemsControlAutomationPeer.CreatePeerForElement(_listView);
-            var scrollProvider = peer.GetPattern(PatternInterface.Scroll) as IScrollProvider;
-
-            try
-            {
-                if (e.Delta > 0) scrollProvider.Scroll(System.Windows.Automation.ScrollAmount.NoAmount, System.Windows.Automation.ScrollAmount.SmallDecrement);
-                if (e.Delta < 0) scrollProvider.Scroll(System.Windows.Automation.ScrollAmount.NoAmount, System.Windows.Automation.ScrollAmount.SmallIncrement);
-            }
-            catch (Exception)
-            {
-
-            }
-        }
 
         private void _listView_SizeChanged(object sender, SizeChangedEventArgs e)
         {

@@ -22,6 +22,8 @@ using System.Windows.Navigation;
 using System.Windows.Threading;
 using System.Xml;
 using Lair.Properties;
+using System.Windows.Automation.Peers;
+using System.Windows.Automation.Provider;
 
 namespace Lair.Windows
 {

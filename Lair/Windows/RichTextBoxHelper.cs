@@ -20,12 +20,14 @@ namespace Lair.Windows
     delegate void LinkClickEventHandler(object sender, string link);
     delegate void SeedClickEventHandler(object sender, Library.Net.Amoeba.Seed seed);
     delegate void ChannelClickEventHandler(object sender, Channel channel);
+    delegate double GetMaxHeightEventHandler(object sender);
 
     class RichTextBoxHelper : DependencyObject
     {
         public static event LinkClickEventHandler LinkClickEvent;
         public static event SeedClickEventHandler SeedClickEvent;
         public static event ChannelClickEventHandler ChannelClickEvent;
+        public static GetMaxHeightEventHandler GetMaxHeightEvent;
 
         public static Message GetDocumentMessage(DependencyObject obj)
         {
@@ -44,11 +46,17 @@ namespace Lair.Windows
                 {
                     var richTextBox = (RichTextBox)obj;
 
+                    richTextBox.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
+                    richTextBox.FontSize = (double)new FontSizeConverter().ConvertFromString(Settings.Instance.Global_Fonts_MessageFontSize + "pt");
+
+                    richTextBox.MaxHeight = RichTextBoxHelper.GetMaxHeightEvent(richTextBox);
+
                     var message = e.NewValue as Message;
                     if (message == null) return;
 
                     var fd = new FlowDocument();
                     var p = new Paragraph();
+                    p.LineHeight = richTextBox.FontSize + 2;
 
                     if (message.Certificate == null)
                     {
@@ -67,7 +75,7 @@ namespace Lair.Windows
 
                     Regex regex = new Regex(@"(.*)(http(s)?://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?)(.*)");
 
-                    foreach (var line in message.Content.Trim().Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None))
+                    foreach (var line in message.Content.Trim('\r', '\n').Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None))
                     {
                         try
                         {

@@ -9,6 +9,7 @@ using Lair.Windows;
 using Library.Security;
 using Library.Net.Lair;
 using System.ComponentModel;
+using System.Windows.Media;
 
 namespace Lair.Properties
 {
@@ -25,12 +26,13 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<string>() { Name = "Global_UseLanguage", Value = "English" },
                 new Library.Configuration.SettingsContext<bool>() { Name = "Global_IsStart", Value = true },
                 new Library.Configuration.SettingsContext<bool>() { Name = "Global_AutoBaseNodeSetting_IsEnabled", Value = true },
-                new Library.Configuration.SettingsContext<bool>() { Name = "Global_RelateBoxFile_IsEnabled", Value = true },
                 new Library.Configuration.SettingsContext<string>() { Name = "Global_Update_Url", Value = "http://lyrise.web.fc2.com/update/Lair" },
                 new Library.Configuration.SettingsContext<string>() { Name = "Global_Update_ProxyUri", Value = "tcp:127.0.0.1:8118" },
                 new Library.Configuration.SettingsContext<string>() { Name = "Global_Update_Signature", Value = "Lyrise@iMK5aPkz6n_VLfaQWyXisi6C2yo53V" },
                 new Library.Configuration.SettingsContext<UpdateOption>() { Name = "Global_Update_Option", Value = UpdateOption.AutoCheck },
                 new Library.Configuration.SettingsContext<string>() { Name = "Global_Amoeba_Path", Value = "" },
+                new Library.Configuration.SettingsContext<string>() { Name = "Global_Fonts_MessageFontFamily", Value = "MS PGothic" },
+                new Library.Configuration.SettingsContext<double>() { Name = "Global_Fonts_MessageFontSize", Value = 12 },
 
                 new Library.Configuration.SettingsContext<double>() { Name = "MainWindow_Top", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "MainWindow_Left", Value = 120 },
@@ -236,25 +238,6 @@ namespace Lair.Properties
             }
         }
 
-        public bool Global_RelateBoxFile_IsEnabled
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (bool)this["Global_RelateBoxFile_IsEnabled"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["Global_RelateBoxFile_IsEnabled"] = value;
-                }
-            }
-        }
-
         public string Global_Update_Url
         {
             get
@@ -346,6 +329,44 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     this["Global_Amoeba_Path"] = value;
+                }
+            }
+        }
+
+        public string Global_Fonts_MessageFontFamily
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (string)this["Global_Fonts_MessageFontFamily"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["Global_Fonts_MessageFontFamily"] = value;
+                }
+            }
+        }
+
+        public double Global_Fonts_MessageFontSize
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["Global_Fonts_MessageFontSize"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["Global_Fonts_MessageFontSize"] = value;
                 }
             }
         }

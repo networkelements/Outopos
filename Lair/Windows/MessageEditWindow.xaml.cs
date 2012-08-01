@@ -49,6 +49,9 @@ namespace Lair.Windows
             var index = Settings.Instance.Global_DigitalSignatureCollection.IndexOf(Settings.Instance.Global_UploadDigitalSignature);
             _signatureComboBox.SelectedIndex = index + 1;
 
+            _commentTextBox.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
+            _commentTextBox.FontSize = Settings.Instance.Global_Fonts_MessageFontSize;
+
             _commentTextBox.CaretIndex = _commentTextBox.Text.Length;
             _commentTextBox.ScrollToEnd();
         }

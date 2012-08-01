@@ -48,8 +48,6 @@ namespace Lair.Windows
         private Dictionary<string, string> _configrationDirectoryPaths = new Dictionary<string, string>();
         private string _logPath = null;
 
-        private ManagerState _state = ManagerState.Stop;
-
         private bool _isRun = true;
 
         private Thread _timerThread = null;
@@ -146,7 +144,7 @@ namespace Lair.Windows
                             {
                                 DriveInfo drive = new DriveInfo(Directory.GetCurrentDirectory());
 
-                                if (drive.AvailableFreeSpace < NetworkConverter.FromSizeString("256MB"))
+                                if (drive.AvailableFreeSpace < NetworkConverter.FromSizeString("32MB"))
                                 {
                                     if (_lairManager.State == ManagerState.Start)
                                     {
@@ -1055,6 +1053,8 @@ namespace Lair.Windows
             UserInterfaceWindow window = new UserInterfaceWindow(_bufferManager);
             window.Owner = this;
             window.ShowDialog();
+
+            ((ChannelControl)_channelTabItem.Content).Refresh();
         }
 
         private void _menuItemUpdateCheck_Click(object sender, RoutedEventArgs e)

@@ -72,6 +72,20 @@
                     <TextBox Height="24" Margin="132,6,6,0" Name="_amoebaPathTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" PreviewMouseDoubleClick="_amoebaPathTextBox_PreviewMouseDoubleClick" />
                 </Grid>
             </TabItem>
+            <TabItem Header="{Binding Path=UserInterfaceWindow_Fonts, Source={StaticResource ResourcesInstance}}">
+                <Grid>
+                    <Label Content="{Binding Path=UserInterfaceWindow_MessageFontFamily, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="120" />
+                    <ComboBox Name="_messageFontFamilyComboBox" VerticalAlignment="Top" Margin="132,6,6,0" Height="24">
+                        <ComboBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                        </ComboBox.ItemsPanel>
+                    </ComboBox>
+                    <Label Content="{Binding Path=UserInterfaceWindow_MessageFontSize, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,36,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="120" />
+                    <TextBox Height="24" Margin="132,36,6,0" Name="_messageFontSizeTextBox" VerticalAlignment="Top" TextChanged="_messageFontSizeTextBox_TextChanged" />
+                </Grid>
+            </TabItem>
         </TabControl>
     </Grid>
 </Window>

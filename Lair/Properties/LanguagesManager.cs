@@ -619,6 +619,40 @@ namespace Lair.Properties
             }
         }
 
+        public string UserInterfaceWindow_Fonts
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("UserInterfaceWindow_Fonts");
+                }
+            }
+        }
+
+        public string UserInterfaceWindow_MessageFontFamily
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("UserInterfaceWindow_MessageFontFamily");
+                }
+            }
+        }
+
+        public string UserInterfaceWindow_MessageFontSize
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("UserInterfaceWindow_MessageFontSize");
+                }
+            }
+        }
+
+
         public string UserInterfaceWindow_Value
         {
             get

@@ -48,7 +48,7 @@ namespace Lair.Windows
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_CreateConnectionCount" });
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_AcceptConnectionCount" });
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem());
- 
+
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_NodeCount" });
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_MessageCount" });
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_FilterCount" });
@@ -75,7 +75,7 @@ namespace Lair.Windows
         {
             Thread.CurrentThread.Priority = ThreadPriority.Highest;
             Thread.CurrentThread.IsBackground = true;
-            
+
             try
             {
                 for (; ; )
