@@ -22,7 +22,15 @@ namespace Lair.Windows
         {
             base.OnItemsChanged(sender, args);
 
-            this.ScrollOwner.ScrollToBottom();
+            try
+            {
+                this.ScrollOwner.ScrollToBottom();
+                this.ScrollOwner.PageDown();
+            }
+            catch (Exception)
+            {
+
+            }
         }
 
         protected override void OnMouseWheel(System.Windows.Input.MouseWheelEventArgs e)

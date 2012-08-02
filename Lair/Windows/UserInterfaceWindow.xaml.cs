@@ -279,9 +279,12 @@ namespace Lair.Windows
 
             foreach (var item in value)
             {
-                if (Regex.IsMatch(item.ToString(), "[0-9\\.]"))
+                var w = item.ToString();
+
+                if (Regex.IsMatch(w, "[0-9\\.]"))
                 {
-                    builder.Append(item.ToString());
+                    if (w == ".") builder.Replace(".", "");
+                    builder.Append(w);
                 }
             }
 
@@ -289,7 +292,7 @@ namespace Lair.Windows
 
             try
             {
-                count = double.Parse(builder.ToString());
+                count = double.Parse(builder.ToString().TrimEnd('.'));
             }
             catch (OverflowException)
             {
@@ -301,7 +304,7 @@ namespace Lair.Windows
 
         private void _messageFontSizeTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(_messageFontSizeTextBox.Text)) _messageFontSizeTextBox.Text = "0";
+            if (string.IsNullOrWhiteSpace(_messageFontSizeTextBox.Text)) return;
 
             StringBuilder builder = new StringBuilder("");
 
@@ -346,8 +349,8 @@ namespace Lair.Windows
 
             Settings.Instance.Global_Fonts_MessageFontFamily = (string)_messageFontFamilyComboBox.SelectedItem;
 
-            double messageFontSize = double.Parse(_messageFontSizeTextBox.Text);
-            Settings.Instance.Global_Fonts_MessageFontSize = messageFontSize;
+            double messageFontSize = UserInterfaceWindow.GetStringToDouble(_messageFontSizeTextBox.Text);
+            Settings.Instance.Global_Fonts_MessageFontSize = Math.Max(Math.Min(messageFontSize, 100), 1);
         }
 
         private void _cancelButton_Click(object sender, RoutedEventArgs e)

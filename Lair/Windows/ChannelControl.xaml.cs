@@ -47,8 +47,6 @@ namespace Lair.Windows
         private volatile bool _refresh = false;
         private volatile bool _isEditing = false;
 
-        private ObservableCollection<Message> _listViewItemCollection = new ObservableCollection<Message>();
-
         private LockedDictionary<Channel, List<Message>> _messages = new LockedDictionary<Channel, List<Message>>();
 
         public ChannelControl(MainWindow mainWindow, LairManager lairManager, BufferManager bufferManager)
@@ -60,7 +58,6 @@ namespace Lair.Windows
             InitializeComponent();
 
             _treeViewItem.Value = Settings.Instance.ChannelControl_Category;
-            _listView.ItemsSource = _listViewItemCollection;
 
             try
             {
@@ -97,7 +94,7 @@ namespace Lair.Windows
                             {
                                 var item = (CategoryTreeViewItem)_treeView.SelectedItem;
 
-                                _listViewItemCollection.Clear();
+                                _listView.Items.Clear();
 
                                 _signatureComboBox.Items.Clear();
                                 _signatureComboBox.Text = "";
@@ -129,7 +126,7 @@ namespace Lair.Windows
 
                         this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
                         {
-                            oldList.UnionWith(_listViewItemCollection.ToArray());
+                            oldList.UnionWith(_listView.Items.OfType<Message>().ToArray());
                         }), null);
 
                         IList<Message> messages;
@@ -229,11 +226,11 @@ namespace Lair.Windows
                             {
                                 sortFlag = true;
 
-                                _listViewItemCollection.Clear();
+                                _listView.Items.Clear();
 
                                 foreach (var item in newList)
                                 {
-                                    _listViewItemCollection.Add(item);
+                                    _listView.Items.Add(item);
                                 }
                             }
                             else
@@ -243,19 +240,22 @@ namespace Lair.Windows
 
                                 foreach (var item in addList)
                                 {
-                                    _listViewItemCollection.Add(item);
+                                    _listView.Items.Add(item);
                                 }
 
                                 foreach (var item in removeList)
                                 {
-                                    _listViewItemCollection.Remove(item);
+                                    _listView.Items.Remove(item);
                                 }
                             }
 
-                            if (sortFlag) this.Sort();
+                            if (sortFlag)
+                            {
+                                this.Sort();
 
-                            //if (_listView.Items.Count > 0)
-                            //    _listView.ScrollIntoView(_listView.Items[_listView.Items.Count - 1]);
+                                if (_listView.Items.Count > 0)
+                                    _listView.ScrollIntoView(_listView.Items[_listView.Items.Count - 1]);
+                            }
 
                             if (App.SelectTab == "Channel")
                                 _mainWindow.Title = string.Format("Lair {0} - {1}", App.LairVersion, MessageConverter.ToChannelString(selectTreeViewItem.Value.Channel));
@@ -1133,7 +1133,7 @@ namespace Lair.Windows
             if (_isEditing || selectTreeViewItem.Value.Signature == _signatureComboBox.Text) return;
 
             selectTreeViewItem.Value.Signature = _signatureComboBox.Text;
-            
+
             this.Update();
         }
 
@@ -1188,24 +1188,8 @@ namespace Lair.Windows
 
         private void Sort()
         {
-            List<Message> list = new List<Message>(_listViewItemCollection);
-
-            list.Sort(delegate(Message x, Message y)
-            {
-                int c = x.CreationTime.CompareTo(y.CreationTime);
-                if (c != 0) return c;
-                c = x.GetHashCode().CompareTo(y.GetHashCode());
-                if (c != 0) return c;
-
-                return 0;
-            });
-
-            for (int i = 0; i < list.Count; i++)
-            {
-                var o = _listViewItemCollection.IndexOf(list[i]);
-
-                if (i != o) _listViewItemCollection.Move(o, i);
-            }
+            _listView.Items.SortDescriptions.Clear();
+            _listView.Items.SortDescriptions.Add(new SortDescription("CreationTime", ListSortDirection.Ascending));
         }
 
         #endregion
