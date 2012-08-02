@@ -365,13 +365,13 @@ namespace Lair.Properties
             }
         }
 
-        public string MainWindow_UpdateCheck
+        public string MainWindow_CheckUpdate
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("MainWindow_UpdateCheck");
+                    return this.Translate("MainWindow_CheckUpdate");
                 }
             }
         }
@@ -464,13 +464,13 @@ namespace Lair.Properties
             }
         }
 
-        public string MainWindow_UpdateCheck_Message
+        public string MainWindow_CheckUpdate_Message
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("MainWindow_UpdateCheck_Message");
+                    return this.Translate("MainWindow_CheckUpdate_Message");
                 }
             }
         }

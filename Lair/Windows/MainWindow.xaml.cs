@@ -189,7 +189,7 @@ namespace Lair.Windows
                                 if (Settings.Instance.Global_Update_Option == UpdateOption.AutoCheck
                                    || Settings.Instance.Global_Update_Option == UpdateOption.AutoUpdate)
                                 {
-                                    _menuItemUpdateCheck_Click(null, null);
+                                    _menuItemCheckUpdate_Click(null, null);
                                 }
                             }
                             catch (Exception)
@@ -638,22 +638,12 @@ namespace Lair.Windows
 
         private object _updateLockObject = new object();
 
-        private void UpdateCheck(bool isShow)
+        private void CheckUpdate()
         {
             lock (_updateLockObject)
             {
                 try
                 {
-                    Version updateVersion = new Version();
-
-                    if (File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Lair.update")))
-                    {
-                        using (StreamReader reader = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Lair.update"), new UTF8Encoding(false)))
-                        {
-                            updateVersion = new Version(reader.ReadLine());
-                        }
-                    }
-
                     var url = Settings.Instance.Global_Update_Url;
                     var signature = Settings.Instance.Global_Update_Signature;
                     string line1;
@@ -690,10 +680,16 @@ namespace Lair.Windows
                         }
                         catch (Exception e)
                         {
-                            Log.Error(e);
+                            if (i < 10)
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                Log.Error(e);
 
-                            if (i < 10) continue;
-                            else return;
+                                return;
+                            }
                         }
                     }
 
@@ -706,21 +702,11 @@ namespace Lair.Windows
 
                         if (tempVersion <= App.LairVersion)
                         {
-                            if (!isShow) return;
-
-                            this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
-                            {
-                                MessageBox.Show(
-                                    this,
-                                    LanguagesManager.Instance.MainWindow_LatestVersion_Message,
-                                    "Update",
-                                    MessageBoxButton.OK,
-                                    MessageBoxImage.Information);
-                            }), null);
+                            Log.Information(string.Format("Check Update: {0}", LanguagesManager.Instance.MainWindow_LatestVersion_Message));
                         }
                         else
                         {
-                            if (!isShow && tempVersion <= updateVersion) return;
+                            if (tempVersion <= App.LairVersion) return;
 
                             bool flag = true;
 
@@ -730,7 +716,7 @@ namespace Lair.Windows
                                 {
                                     if (MessageBox.Show(
                                         this,
-                                        string.Format(LanguagesManager.Instance.MainWindow_UpdateCheck_Message, line1),
+                                        string.Format(LanguagesManager.Instance.MainWindow_CheckUpdate_Message, line1),
                                         "Update",
                                         MessageBoxButton.OKCancel,
                                         MessageBoxImage.Information) == MessageBoxResult.Cancel)
@@ -738,11 +724,6 @@ namespace Lair.Windows
                                         flag = false;
                                     }
                                 }), null);
-                            }
-
-                            using (StreamWriter writer = new StreamWriter(Path.Combine(App.DirectoryPaths["Configuration"], "Lair.update"), false, new UTF8Encoding(false)))
-                            {
-                                writer.WriteLine(tempVersion.ToString());
                             }
 
                             if (flag)
@@ -834,10 +815,16 @@ namespace Lair.Windows
                                     }
                                     catch (Exception e)
                                     {
-                                        Log.Error(e);
+                                        if (i < 10)
+                                        {
+                                            continue;
+                                        }
+                                        else
+                                        {
+                                            Log.Error(e);
 
-                                        if (i < 10) continue;
-                                        else return;
+                                            return;
+                                        }
                                     }
                                 }
                             }
@@ -943,23 +930,11 @@ namespace Lair.Windows
                 _menuItemStart_Click(null, null);
             }
 
-            ThreadPool.QueueUserWorkItem(new WaitCallback((object state) =>
+            if (Settings.Instance.Global_Update_Option == UpdateOption.AutoCheck
+               || Settings.Instance.Global_Update_Option == UpdateOption.AutoUpdate)
             {
-                Thread.Sleep(1000 * 60);
-
-                try
-                {
-                    if (Settings.Instance.Global_Update_Option == UpdateOption.AutoCheck
-                       || Settings.Instance.Global_Update_Option == UpdateOption.AutoUpdate)
-                    {
-                        _menuItemUpdateCheck_Click(null, null);
-                    }
-                }
-                catch (Exception)
-                {
-
-                }
-            }));
+                _menuItemCheckUpdate_Click(null, null);
+            }
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -1057,13 +1032,29 @@ namespace Lair.Windows
             ((ChannelControl)_channelTabItem.Content).Refresh();
         }
 
-        private void _menuItemUpdateCheck_Click(object sender, RoutedEventArgs e)
+        private volatile bool _updateCheckIsRunning = false;
+
+        private void _menuItemCheckUpdate_Click(object sender, RoutedEventArgs e)
         {
+            if (_updateCheckIsRunning) return;
+            _updateCheckIsRunning = true;
+
             ThreadPool.QueueUserWorkItem(new WaitCallback((object state) =>
             {
                 Thread.CurrentThread.IsBackground = true;
 
-                this.UpdateCheck(sender != null);
+                try
+                {
+                    this.CheckUpdate();
+                }
+                catch (Exception)
+                {
+
+                }
+                finally
+                {
+                    _updateCheckIsRunning = false;
+                }
             }));
         }
 
