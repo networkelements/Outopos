@@ -237,10 +237,9 @@ namespace Lair.Windows
                         {
                             if (!_messages.ContainsKey(selectTreeViewItem.Value.Channel))
                             {
-                                _messages[selectTreeViewItem.Value.Channel] = new List<Message>();
-                                _messages[selectTreeViewItem.Value.Channel].AddRange(newList);
+                                _messages[selectTreeViewItem.Value.Channel] = new List<Message>(newList);
                             }
-                            else if (!_messages[selectTreeViewItem.Value.Channel].All(n => newList.Contains(n)))
+                            else if (!newList.SetEquals(_messages[selectTreeViewItem.Value.Channel]))
                             {
                                 _messages[selectTreeViewItem.Value.Channel].Clear();
                                 _messages[selectTreeViewItem.Value.Channel].AddRange(newList);
@@ -413,10 +412,9 @@ namespace Lair.Windows
                                 {
                                     if (!_messages.ContainsKey(selectTreeViewItem.Value.Channel))
                                     {
-                                        _messages[selectTreeViewItem.Value.Channel] = new List<Message>();
-                                        _messages[selectTreeViewItem.Value.Channel].AddRange(newList);
+                                        _messages[selectTreeViewItem.Value.Channel] = new List<Message>(newList);
                                     }
-                                    else if (!_messages[selectTreeViewItem.Value.Channel].All(n => newList.Contains(n)))
+                                    else if (!newList.SetEquals(_messages[selectTreeViewItem.Value.Channel]))
                                     {
                                         _messages[selectTreeViewItem.Value.Channel].Clear();
                                         _messages[selectTreeViewItem.Value.Channel].AddRange(newList);
