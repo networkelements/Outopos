@@ -124,6 +124,11 @@ namespace Lair
                                     version = tempVersion;
                                     updateZipPath = path;
                                 }
+                                else
+                                {
+                                    if (File.Exists(path))
+                                        File.Delete(path);
+                                }
                             }
                         }
                     }

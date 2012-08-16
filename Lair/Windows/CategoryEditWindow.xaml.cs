@@ -38,11 +38,6 @@ namespace Lair.Windows
             digitalSignatureCollection.Add(new ComboBoxItem() { Content = "" });
             digitalSignatureCollection.AddRange(Settings.Instance.Global_DigitalSignatureCollection.Select(n => new DigitalSignatureComboBoxItem(n)).ToArray());
 
-            _searchKeywordCollection = _category.SearchWordCollection.Select(n => n.DeepClone()).ToList();
-            _searchNameRegexCollection = _category.SearchRegexCollection.Select(n => n.DeepClone()).ToList();
-            _searchSignatureCollection = _category.SearchSignatureCollection.Select(n => n.DeepClone()).ToList();
-            _searchMessageCollection = _category.SearchMessageCollection.Select(n => n.DeepClone()).ToList();
-
             InitializeComponent();
 
             using (FileStream stream = new FileStream(System.IO.Path.Combine(App.DirectoryPaths["Icons"], "Lair.ico"), FileMode.Open))
@@ -50,7 +45,15 @@ namespace Lair.Windows
                 this.Icon = BitmapFrame.Create(stream);
             }
 
-            _nameTextBox.Text = category.Name;
+            lock (_category.ThisLock)
+            {
+                _nameTextBox.Text = category.Name;
+
+                _searchKeywordCollection = _category.SearchWordCollection.Select(n => n.DeepClone()).ToList();
+                _searchNameRegexCollection = _category.SearchRegexCollection.Select(n => n.DeepClone()).ToList();
+                _searchSignatureCollection = _category.SearchSignatureCollection.Select(n => n.DeepClone()).ToList();
+                _searchMessageCollection = _category.SearchMessageCollection.Select(n => n.DeepClone()).ToList();
+            }
 
             _wordContainsCheckBox.IsChecked = true;
             _regexContainsCheckBox.IsChecked = true;
@@ -961,16 +964,34 @@ namespace Lair.Windows
         {
             this.DialogResult = true;
 
-            _category.Name = _nameTextBox.Text;
+            lock (_category.ThisLock)
+            {
+                _category.Name = _nameTextBox.Text;
 
-            _category.SearchWordCollection.Clear();
-            _category.SearchWordCollection.AddRange(_searchKeywordCollection.Select(n => n.DeepClone()).ToList());
-            _category.SearchRegexCollection.Clear();
-            _category.SearchRegexCollection.AddRange(_searchNameRegexCollection.Select(n => n.DeepClone()).ToList());
-            _category.SearchSignatureCollection.Clear();
-            _category.SearchSignatureCollection.AddRange(_searchSignatureCollection.Select(n => n.DeepClone()).ToList());
-            _category.SearchMessageCollection.Clear();
-            _category.SearchMessageCollection.AddRange(_searchMessageCollection.Select(n => n.DeepClone()).ToList());
+                lock (_category.SearchWordCollection)
+                {
+                    _category.SearchWordCollection.Clear();
+                    _category.SearchWordCollection.AddRange(_searchKeywordCollection.Select(n => n.DeepClone()).ToList());
+                }
+
+                lock (_category.SearchRegexCollection)
+                {
+                    _category.SearchRegexCollection.Clear();
+                    _category.SearchRegexCollection.AddRange(_searchNameRegexCollection.Select(n => n.DeepClone()).ToList());
+                }
+
+                lock (_category.SearchSignatureCollection.ThisLock)
+                {
+                    _category.SearchSignatureCollection.Clear();
+                    _category.SearchSignatureCollection.AddRange(_searchSignatureCollection.Select(n => n.DeepClone()).ToList());
+                }
+
+                lock (_category.SearchMessageCollection.ThisLock)
+                {
+                    _category.SearchMessageCollection.Clear();
+                    _category.SearchMessageCollection.AddRange(_searchMessageCollection.Select(n => n.DeepClone()).ToList());
+                }
+            }
         }
 
         private void _cancelButton_Click(object sender, RoutedEventArgs e)

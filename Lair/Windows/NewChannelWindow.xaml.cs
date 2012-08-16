@@ -26,22 +26,21 @@ namespace Lair.Windows
     {
         private Channel _channel;
 
-        public NewChannelWindow(out Channel channel)
+        public NewChannelWindow()
         {
-            channel = new Channel();
-
-            _channel = channel;
-
-            byte[] buffer = new byte[64];
-            (new RNGCryptoServiceProvider()).GetBytes(buffer);
-
-            _channel.Id = buffer;
-
             InitializeComponent();
 
             using (FileStream stream = new FileStream(System.IO.Path.Combine(App.DirectoryPaths["Icons"], "Lair.ico"), FileMode.Open))
             {
                 this.Icon = BitmapFrame.Create(stream);
+            }
+        }
+
+        public Channel Channel
+        {
+            get
+            {
+                return _channel;
             }
         }
 
@@ -54,11 +53,12 @@ namespace Lair.Windows
         {
             this.DialogResult = true;
 
+            byte[] buffer = new byte[64];
+            (new RNGCryptoServiceProvider()).GetBytes(buffer);
+
             string name = _nameTextBox.Text;
 
-            {
-                _channel.Name = name;
-            }
+            _channel = new Channel(buffer, name);
         }
 
         private void _cancelButton_Click(object sender, RoutedEventArgs e)

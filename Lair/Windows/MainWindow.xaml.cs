@@ -693,20 +693,39 @@ namespace Lair.Windows
                         }
                     }
 
-                    Regex regex3 = new Regex(@"Lair ((\d*)\.(\d*)\.(\d*)).*");
-                    var match3 = regex3.Match(line1);
+                    Regex regex = new Regex(@"Lair ((\d*)\.(\d*)\.(\d*)).*\.zip");
+                    var match = regex.Match(line1);
 
-                    if (match3.Success)
+                    if (match.Success)
                     {
-                        var tempVersion = new Version(match3.Groups[1].Value);
+                        var targetVersion = new Version(match.Groups[1].Value);
 
-                        if (tempVersion <= App.LairVersion)
+                        if (targetVersion <= App.LairVersion)
                         {
                             Log.Information(string.Format("Check Update: {0}", LanguagesManager.Instance.MainWindow_LatestVersion_Message));
                         }
                         else
                         {
-                            if (tempVersion <= App.LairVersion) return;
+                            Log.Information(string.Format("Check Update: {0}", line1));
+
+                            {
+                                foreach (var path in Directory.GetFiles(App.DirectoryPaths["Update"]))
+                                {
+                                    string name = Path.GetFileName(path);
+
+                                    if (name.StartsWith("Lair"))
+                                    {
+                                        var match2 = regex.Match(name);
+
+                                        if (match2.Success)
+                                        {
+                                            var tempVersion = new Version(match2.Groups[1].Value);
+
+                                            if (targetVersion <= tempVersion) return;
+                                        }
+                                    }
+                                }
+                            }
 
                             bool flag = true;
 
@@ -775,10 +794,11 @@ namespace Lair.Windows
                                                 fileName = Path.GetFileName(line2);
                                             }
 
+                                            var path = string.Format(@"{0}\{1}", App.DirectoryPaths["Update"], fileName);
                                             long size = 0;
 
                                             using (Stream inStream = rs.GetResponseStream())
-                                            using (FileStream outStream = new FileStream(string.Format(@"{0}\{1}", App.DirectoryPaths["Update"], fileName), FileMode.Create))
+                                            using (FileStream outStream = new FileStream(path, FileMode.Create))
                                             {
                                                 byte[] buffer = new byte[1024 * 4];
 
@@ -793,6 +813,15 @@ namespace Lair.Windows
 
                                             if (size != rs.ContentLength)
                                             {
+                                                try
+                                                {
+                                                    File.Delete(path);
+                                                }
+                                                catch (Exception)
+                                                {
+
+                                                }
+
                                                 continue;
                                             }
                                         }
