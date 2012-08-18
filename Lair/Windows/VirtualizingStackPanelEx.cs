@@ -15,7 +15,7 @@ namespace Lair.Windows
     {
         public VirtualizingStackPanelEx()
         {
-       
+
         }
 
         protected override void OnItemsChanged(object sender, System.Windows.Controls.Primitives.ItemsChangedEventArgs args)
@@ -25,7 +25,6 @@ namespace Lair.Windows
             try
             {
                 this.ScrollOwner.ScrollToBottom();
-                this.ScrollOwner.PageDown();
             }
             catch (Exception)
             {
@@ -33,21 +32,19 @@ namespace Lair.Windows
             }
         }
 
-        protected override void OnMouseWheel(System.Windows.Input.MouseWheelEventArgs e)
+        protected override Size ArrangeOverride(Size arrangeSize)
         {
-            base.OnMouseWheel(e);
+            return base.ArrangeOverride(new Size(arrangeSize.Width, arrangeSize.Height * 3));
+        }
 
-            try
-            {
-                if (e.Delta > 0) this.ScrollOwner.LineUp();
-                if (e.Delta < 0) this.ScrollOwner.LineDown();
+        public override void MouseWheelUp()
+        {
+            this.ScrollOwner.LineUp();
+        }
 
-                e.Handled = true;
-            }
-            catch (Exception)
-            {
-
-            }
+        public override void MouseWheelDown()
+        {
+            this.ScrollOwner.LineDown();
         }
     }
 }
