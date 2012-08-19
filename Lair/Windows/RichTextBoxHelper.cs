@@ -46,6 +46,8 @@ namespace Lair.Windows
                 {
                     var richTextBox = (RichTextBox)obj;
 
+                    richTextBox.ScrollToHome();
+
                     richTextBox.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
                     richTextBox.FontSize = (double)new FontSizeConverter().ConvertFromString(Settings.Instance.Global_Fonts_MessageFontSize + "pt");
 
@@ -73,7 +75,7 @@ namespace Lair.Windows
                     p.Inlines.Add(new LineBreak());
                     p.Inlines.Add(new LineBreak());
 
-                    Regex regex = new Regex(@"(.*)(http(s)?://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?)(.*)");
+                    Regex regex = new Regex(@"(.*)(http(s)?://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?)");
 
                     foreach (var line in message.Content.Trim('\r', '\n').Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None))
                     {
@@ -243,7 +245,6 @@ namespace Lair.Windows
 
                                 p.Inlines.Add(l);
 
-                                p.Inlines.Add(match.Groups[3].Value);
                                 p.Inlines.Add(new LineBreak());
                             }
                             else

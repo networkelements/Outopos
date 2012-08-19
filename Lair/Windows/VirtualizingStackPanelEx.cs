@@ -18,25 +18,6 @@ namespace Lair.Windows
 
         }
 
-        protected override void OnItemsChanged(object sender, System.Windows.Controls.Primitives.ItemsChangedEventArgs args)
-        {
-            base.OnItemsChanged(sender, args);
-
-            try
-            {
-                this.ScrollOwner.ScrollToBottom();
-            }
-            catch (Exception)
-            {
-
-            }
-        }
-
-        protected override Size ArrangeOverride(Size arrangeSize)
-        {
-            return base.ArrangeOverride(new Size(arrangeSize.Width, arrangeSize.Height * 3));
-        }
-
         public override void MouseWheelUp()
         {
             this.ScrollOwner.LineUp();

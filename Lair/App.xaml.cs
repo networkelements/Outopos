@@ -100,6 +100,7 @@ namespace Lair
             }
 
             // Update
+            try
             {
                 if (Directory.Exists(App.DirectoryPaths["Update"]))
                 {
@@ -183,24 +184,143 @@ namespace Lair
                     }
                 }
             }
+            finally
+            {
+                this.CheckProcess();
+            }
 
-            this.Setting();
+            this.RunProcess();
+
+            // Setting
+            {
+                Version version = new Version();
+
+                if (File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Lair.version")))
+                {
+                    using (StreamReader reader = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Lair.version"), new UTF8Encoding(false)))
+                    {
+                        version = new Version(reader.ReadLine());
+                    }
+                }
+
+                if (version <= new Version(0, 0, 5))
+                {
+                    try
+                    {
+                        File.Delete(Path.Combine(App.DirectoryPaths["Configuration"], @"Library\Net\Lair\LairManager\ConnectionManager\Messages.gz"));
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                }
+            }
 
             this.StartupUri = new Uri("Windows/MainWindow.xaml", UriKind.Relative);
         }
 
-        private void Setting()
+        private void CheckProcess()
         {
-            Version version = new Version();
+            if (!File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Run.xml"))) return;
 
-            if (File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Lair.version")))
+            var runList = new List<dynamic>();
+
+            using (StreamReader r = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Run.xml"), new UTF8Encoding(false)))
+            using (XmlTextReader xml = new XmlTextReader(r))
             {
-                using (StreamReader reader = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Lair.version"), new UTF8Encoding(false)))
+                while (xml.Read())
                 {
-                    version = new Version(reader.ReadLine());
+                    if (xml.NodeType == XmlNodeType.Element)
+                    {
+                        if (xml.LocalName == "Process")
+                        {
+                            string path = null;
+                            string arguments = null;
+                            string workingDirectory = null;
+
+                            using (var xmlReader = xml.ReadSubtree())
+                            {
+                                while (xmlReader.Read())
+                                {
+                                    if (xmlReader.NodeType == XmlNodeType.Element)
+                                    {
+                                        if (xmlReader.LocalName == "Path")
+                                        {
+                                            try
+                                            {
+                                                path = xmlReader.ReadString();
+                                            }
+                                            catch (Exception)
+                                            {
+
+                                            }
+                                        }
+                                        else if (xml.LocalName == "Arguments")
+                                        {
+                                            try
+                                            {
+                                                arguments = xmlReader.ReadString();
+                                            }
+                                            catch (Exception)
+                                            {
+
+                                            }
+                                        }
+                                        else if (xmlReader.LocalName == "WorkingDirectory")
+                                        {
+                                            try
+                                            {
+                                                workingDirectory = xmlReader.ReadString();
+                                            }
+                                            catch (Exception)
+                                            {
+
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            runList.Add(new
+                            {
+                                Path = path,
+                                Arguments = arguments,
+                                WorkingDirectory = workingDirectory
+                            });
+                        }
+                    }
                 }
             }
 
+            Parallel.ForEach(runList, new ParallelOptions() { MaxDegreeOfParallelism = 8 }, item =>
+            {
+                foreach (var p in Process.GetProcessesByName(Path.GetFileNameWithoutExtension((string)item.Path)))
+                {
+                    try
+                    {
+                        if (p.MainModule.FileName == Path.GetFullPath(item.Path))
+                        {
+                            try
+                            {
+                                p.Kill();
+                                p.WaitForExit();
+                            }
+                            catch (Exception)
+                            {
+
+                            }
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                }
+            });
+        }
+
+        private void RunProcess()
+        {
             if (!File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Run.xml")))
             {
                 using (XmlTextWriter xml = new XmlTextWriter(Path.Combine(App.DirectoryPaths["Configuration"], "Run.xml"), new UTF8Encoding(false)))
@@ -309,29 +429,6 @@ namespace Lair
 
             Parallel.ForEach(runList, new ParallelOptions() { MaxDegreeOfParallelism = 8 }, item =>
             {
-                foreach (var p in Process.GetProcessesByName(Path.GetFileNameWithoutExtension((string)item.Path)))
-                {
-                    try
-                    {
-                        if (p.MainModule.FileName == Path.GetFullPath(item.Path))
-                        {
-                            try
-                            {
-                                p.Kill();
-                                p.WaitForExit();
-                            }
-                            catch (Exception)
-                            {
-
-                            }
-                        }
-                    }
-                    catch (Exception)
-                    {
-
-                    }
-                }
-
                 try
                 {
                     Process process = new Process();

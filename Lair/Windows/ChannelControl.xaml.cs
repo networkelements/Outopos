@@ -46,6 +46,7 @@ namespace Lair.Windows
         private Thread _filterThread = null;
         private volatile bool _refresh = false;
         private volatile bool _isEditing = false;
+        private volatile bool _sort = false;
 
         private ObservableCollection<Message> _listViewItemCollection = new ObservableCollection<Message>();
 
@@ -80,28 +81,28 @@ namespace Lair.Windows
                     _mainWindow.Title = string.Format("Lair {0} - {1}", App.LairVersion, MessageConverter.ToChannelString(selectTreeViewItem.Value.Channel));
             };
 
-            var testChannel = LairConverter.FromChannelString("Channel@AAAAAEAABLayeuui_MRoo_WZtehT-RzwG0C2I8QvzAH-TIaC5ymz14eTw9MUCAldzM3qZ3RZF6-DB90Sgl4wbs3lz58REQAAAAQBMTAxOdNgSYQ=");
+            //{
+            //    var testChannel = LairConverter.FromChannelString("Channel@AAAAAEAABLayeuui_MRoo_WZtehT-RzwG0C2I8QvzAH-TIaC5ymz14eTw9MUCAldzM3qZ3RZF6-DB90Sgl4wbs3lz58REQAAAAQBMTAxOdNgSYQ=");
 
-            {
-                Random random = new Random();
+            //    Random random = new Random();
 
-                for (int i = 0; i < 1024; i++)
-                {
-                    StringBuilder stringBuilder = new StringBuilder();
+            //    for (int i = 0; i < 1024; i++)
+            //    {
+            //        StringBuilder stringBuilder = new StringBuilder();
 
-                    for (int j = 0; j < 200; j++)
-                    {
-                        stringBuilder.AppendLine("01234567");
-                    }
+            //        for (int j = 0; j < 200; j++)
+            //        {
+            //            stringBuilder.AppendLine("01234567");
+            //        }
 
-                    stringBuilder.AppendLine(random.Next().ToString());
+            //        stringBuilder.AppendLine(random.Next().ToString());
 
-                    byte[] id = new byte[64];
-                    random.NextBytes(id);
+            //        byte[] id = new byte[64];
+            //        random.NextBytes(id);
 
-                    lairManager.Upload(new Message(testChannel, stringBuilder.ToString(), null));
-                }
-            }
+            //        lairManager.Upload(new Message(testChannel, stringBuilder.ToString(), null));
+            //    }
+            //}
 
             _searchThread = new Thread(new ThreadStart(() =>
             {
@@ -289,10 +290,10 @@ namespace Lair.Windows
 
                             selectTreeViewItem.Count = _listViewItemCollection.Count;
 
-                            if (sortFlag)
-                            {
-                                this.Sort();
+                            if (sortFlag) this.Sort();
 
+                            if (_sort)
+                            {
                                 if (_listViewItemCollection.Count > 0)
                                     _listView.ScrollIntoView(_listViewItemCollection[_listViewItemCollection.Count - 1]);
                             }
@@ -923,11 +924,13 @@ namespace Lair.Windows
             }
         }
 
-        private void Update()
+        private void Update(bool sort = false)
         {
             Settings.Instance.ChannelControl_Category = _treeViewItem.Value;
 
-            _treeView_SelectedItemChanged(this, null);
+            if (sort) _treeView_SelectedItemChanged(this, null);
+            else _treeView_SelectedItemChanged(null, null);
+
             _treeViewItem.Sort();
         }
 
@@ -1026,6 +1029,7 @@ namespace Lair.Windows
 
             _mainWindow.Title = string.Format("Lair {0}", App.LairVersion);
             _refresh = true;
+            _sort = (sender != null);
         }
 
         private void _treeView_ContextMenuOpening(object sender, ContextMenuEventArgs e)
@@ -1321,21 +1325,38 @@ namespace Lair.Windows
             var richTextBox = ((e.Source as MenuItem).Parent as ContextMenu).PlacementTarget as RichTextBox;
             if (richTextBox == null) return;
 
-            if (string.IsNullOrWhiteSpace(richTextBox.Selection.Text)) return;
+            if (richTextBox.Selection.IsEmpty) return;
 
             var selectTreeViewItem = _treeView.SelectedItem as BoardTreeViewItem;
             if (selectTreeViewItem == null) return;
 
             var list = _treeViewItem.GetLineage(selectTreeViewItem).OfType<TreeViewItem>().ToList();
 
-            var item = new SearchContains<string>()
-            {
-                Contains = false,
-                Value = richTextBox.Selection.Text,
-            };
+            var text = richTextBox.Selection.Text.Trim('\r', '\n');
+            if (text.Length == 0) return;
 
-            if (((CategoryTreeViewItem)list[list.Count - 2]).Value.SearchWordCollection.Contains(item)) return;
-            ((CategoryTreeViewItem)list[list.Count - 2]).Value.SearchWordCollection.Add(item);
+            if (text == text.Replace("\r", "").Replace("\n", ""))
+            {
+                var item = new SearchContains<string>()
+                {
+                    Contains = false,
+                    Value = text,
+                };
+
+                if (((CategoryTreeViewItem)list[list.Count - 2]).Value.SearchWordCollection.Contains(item)) return;
+                ((CategoryTreeViewItem)list[list.Count - 2]).Value.SearchWordCollection.Add(item);
+            }
+            else
+            {
+                var item = new SearchContains<SearchRegex>()
+                {
+                    Contains = false,
+                    Value = new SearchRegex() { IsIgnoreCase = true, Value = Regex.Escape(text) },
+                };
+
+                if (((CategoryTreeViewItem)list[list.Count - 2]).Value.SearchRegexCollection.Contains(item)) return;
+                ((CategoryTreeViewItem)list[list.Count - 2]).Value.SearchRegexCollection.Add(item);
+            }
 
             this.Update();
         }
@@ -1438,7 +1459,7 @@ namespace Lair.Windows
 
             if (window.ShowDialog() == true)
             {
-                this.Update();
+                this.Update(true);
             }
         }
 
