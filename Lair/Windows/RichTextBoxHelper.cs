@@ -28,6 +28,7 @@ namespace Lair.Windows
         public static event SeedClickEventHandler SeedClickEvent;
         public static event ChannelClickEventHandler ChannelClickEvent;
         public static GetMaxHeightEventHandler GetMaxHeightEvent;
+        private static Regex _urlRegex = new Regex(@"^(?<start>.*?)(?<url>http(s)?://([\w-]+\.)+[\w-]+(/[\w-./?%&=]*)?)(?<end>.*?)$", RegexOptions.Compiled | RegexOptions.Singleline);
 
         public static Message GetDocumentMessage(DependencyObject obj)
         {
@@ -45,8 +46,6 @@ namespace Lair.Windows
                 PropertyChangedCallback = (obj, e) =>
                 {
                     var richTextBox = (RichTextBox)obj;
-
-                    richTextBox.ScrollToHome();
 
                     richTextBox.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
                     richTextBox.FontSize = (double)new FontSizeConverter().ConvertFromString(Settings.Instance.Global_Fonts_MessageFontSize + "pt");
@@ -75,14 +74,11 @@ namespace Lair.Windows
                     p.Inlines.Add(new LineBreak());
                     p.Inlines.Add(new LineBreak());
 
-                    Regex regex = new Regex(@"(.*)(http(s)?://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?)");
-
                     foreach (var line in message.Content.Trim('\r', '\n').Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None))
                     {
                         try
                         {
                             var rl = line.Trim();
-                            Match match = regex.Match(line);
 
                             if (rl.StartsWith("Seed@"))
                             {
@@ -227,30 +223,42 @@ namespace Lair.Windows
 
                                 p.Inlines.Add(new LineBreak());
                             }
-                            else if (match.Success)
-                            {
-                                p.Inlines.Add(match.Groups[1].Value);
-
-                                Hyperlink l = new Hyperlink();
-                                l.Foreground = new SolidColorBrush(Color.FromRgb(0xDF, 0xDF, 0xDF));
-                                l.Inlines.Add(match.Groups[2].Value);
-                                l.Cursor = Cursors.Hand;
-                                l.PreviewMouseLeftButtonDown += (object sender, MouseButtonEventArgs ex) =>
-                                {
-                                    if (RichTextBoxHelper.LinkClickEvent != null)
-                                    {
-                                        RichTextBoxHelper.LinkClickEvent(sender, match.Groups[2].Value);
-                                    }
-                                };
-
-                                p.Inlines.Add(l);
-
-                                p.Inlines.Add(new LineBreak());
-                            }
                             else
                             {
-                                p.Inlines.Add(line);
-                                p.Inlines.Add(new LineBreak());
+                                var line2 = line;
+
+                                for (; ; )
+                                {
+                                    Match match = _urlRegex.Match(line2);
+
+                                    if (match.Success)
+                                    {
+                                        p.Inlines.Add(match.Groups["start"].Value);
+
+                                        Hyperlink l = new Hyperlink();
+                                        l.Foreground = new SolidColorBrush(Color.FromRgb(0xDF, 0xDF, 0xDF));
+                                        l.Inlines.Add(match.Groups["url"].Value);
+                                        l.Cursor = Cursors.Hand;
+                                        l.PreviewMouseLeftButtonDown += (object sender, MouseButtonEventArgs ex) =>
+                                        {
+                                            if (RichTextBoxHelper.LinkClickEvent != null)
+                                            {
+                                                RichTextBoxHelper.LinkClickEvent(sender, match.Groups["url"].Value);
+                                            }
+                                        };
+
+                                        p.Inlines.Add(l);
+
+                                        line2 = match.Groups["end"].Value;
+                                    }
+                                    else
+                                    {
+                                        p.Inlines.Add(line2);
+                                        p.Inlines.Add(new LineBreak());
+
+                                        break;
+                                    }
+                                }
                             }
                         }
                         catch (Exception)
