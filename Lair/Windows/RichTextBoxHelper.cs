@@ -50,7 +50,7 @@ namespace Lair.Windows
                     richTextBox.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
                     richTextBox.FontSize = (double)new FontSizeConverter().ConvertFromString(Settings.Instance.Global_Fonts_MessageFontSize + "pt");
 
-                    richTextBox.MaxHeight = RichTextBoxHelper.GetMaxHeightEvent(richTextBox);
+                    richTextBox.MaxHeight = Math.Max(0, RichTextBoxHelper.GetMaxHeightEvent(richTextBox));
 
                     var message = e.NewValue as Message;
                     if (message == null) return;
