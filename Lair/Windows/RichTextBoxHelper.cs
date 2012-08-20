@@ -62,13 +62,13 @@ namespace Lair.Windows
                     if (message.Certificate == null)
                     {
                         p.Inlines.Add(string.Format(" - Anonymous - {0}",
-                            message.CreationTime.ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
+                            message.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
                     }
                     else
                     {
                         p.Inlines.Add(string.Format(" - {0} - {1}",
                             MessageConverter.ToSignatureString(message.Certificate),
-                            message.CreationTime.ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
+                            message.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
                     }
 
                     p.Inlines.Add(new LineBreak());
