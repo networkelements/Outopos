@@ -81,6 +81,7 @@ namespace Lair.Windows
                     _mainWindow.Title = string.Format("Lair {0} - {1}", App.LairVersion, MessageConverter.ToChannelString(selectTreeViewItem.Value.Channel));
             };
 
+#if DEBUG
             {
                 var testChannel = LairConverter.FromChannelString("Channel@AAAAAEAABLayeuui_MRoo_WZtehT-RzwG0C2I8QvzAH-TIaC5ymz14eTw9MUCAldzM3qZ3RZF6-DB90Sgl4wbs3lz58REQAAAAQBMTAxOdNgSYQ=");
 
@@ -103,6 +104,7 @@ namespace Lair.Windows
                     lairManager.Upload(new Message(testChannel, stringBuilder.ToString(), null));
                 }
             }
+#endif
 
             _searchThread = new Thread(new ThreadStart(() =>
             {
