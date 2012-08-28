@@ -966,6 +966,19 @@ namespace Lair.Windows
             }
         }
 
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            if (MessageBox.Show(
+                this,
+                LanguagesManager.Instance.MainWindow_Close_Message,
+                "Close",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Information) == MessageBoxResult.No)
+            {
+                e.Cancel = true;
+            }
+        }
+
         private void Window_Closed(object sender, EventArgs e)
         {
             NativeMethods.SetThreadExecutionState(ExecutionState.Continuous);

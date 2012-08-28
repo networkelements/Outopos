@@ -34,6 +34,7 @@
   <Translate Key="MainWindow_CheckUpdate_Message" Value="Do you want to update to &quot;{0}&quot;?" />
   <Translate Key="MainWindow_LatestVersion_Message" Value="It is the latest version." />
   <Translate Key="MainWindow_Restart_Message" Value="Update has been completed. Please restart." />
+  <Translate Key="MainWindow_Close_Message" Value="Do you want to quit?" />
 
   <Translate Key="UserInterfaceWindow_Title" Value="User Interface Setting" />
   <Translate Key="UserInterfaceWindow_Update" Value="Update" />

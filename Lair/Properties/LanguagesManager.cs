@@ -497,6 +497,17 @@ namespace Lair.Properties
             }
         }
 
+        public string MainWindow_Close_Message
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("MainWindow_Close_Message");
+                }
+            }
+        }
+
 
         public string UserInterfaceWindow_Title
         {
