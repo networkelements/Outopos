@@ -1272,11 +1272,7 @@ namespace Lair.Windows
 
             foreach (var item in richTextBox.ContextMenu.Items.OfType<MenuItem>())
             {
-                if (item.Name == "_richTextBoxCopyMenuItem")
-                {
-                    item.IsEnabled = !richTextBox.Selection.IsEmpty;
-                }
-                else if (item.Name == "_richTextBoxFilterWordMenuItem")
+                if (item.Name == "_richTextBoxFilterWordMenuItem")
                 {
                     item.IsEnabled = !richTextBox.Selection.IsEmpty;
                 }
@@ -1291,21 +1287,29 @@ namespace Lair.Windows
             var selectTreeViewItem = _treeView.SelectedItem as BoardTreeViewItem;
             if (selectTreeViewItem == null) return;
 
-            if (richTextBox.Selection.IsEmpty)
+            var selectItem = _listView.SelectedItem as Message;
+            if (selectItem == null) return;
+
+            string text = richTextBox.Selection.Text;
+
+            if (string.IsNullOrWhiteSpace(text))
             {
-                richTextBox.SelectAll();
+                text = RichTextBoxHelper.GetMessageToString(selectItem);
             }
 
             StringBuilder builder = new StringBuilder();
 
-            foreach (var line in richTextBox.Selection.Text.Trim('\r', '\n').Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None))
+            builder.AppendLine();
+            builder.AppendLine();
+
+            foreach (var line in text.Trim('\r', '\n').Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None))
             {
                 builder.AppendLine("> " + line);
             }
 
             richTextBox.Selection.Select(richTextBox.Document.ContentStart, richTextBox.Document.ContentStart);
 
-            MessageEditWindow window = new MessageEditWindow(selectTreeViewItem.Value.Channel, builder.ToString() + "\r\n", _lairManager);
+            MessageEditWindow window = new MessageEditWindow(selectTreeViewItem.Value.Channel, builder.ToString(), _lairManager);
             window.Owner = _mainWindow;
 
             if (window.ShowDialog() == true)
@@ -1319,7 +1323,17 @@ namespace Lair.Windows
             var richTextBox = ((e.Source as MenuItem).Parent as ContextMenu).PlacementTarget as RichTextBox;
             if (richTextBox == null) return;
 
-            Clipboard.SetText(richTextBox.Selection.Text);
+            var selectItem = _listView.SelectedItem as Message;
+            if (selectItem == null) return;
+
+            string text = richTextBox.Selection.Text;
+
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                text = RichTextBoxHelper.GetMessageToString(selectItem);
+            }
+
+            Clipboard.SetText(text);
         }
 
         private void _richTextBoxFilterWordMenuItem_Click(object sender, RoutedEventArgs e)

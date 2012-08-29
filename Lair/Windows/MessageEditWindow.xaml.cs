@@ -52,13 +52,27 @@ namespace Lair.Windows
             _commentTextBox.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
             _commentTextBox.FontSize = Settings.Instance.Global_Fonts_MessageFontSize;
 
-            _commentTextBox.CaretIndex = _commentTextBox.Text.Length;
-            _commentTextBox.ScrollToEnd();
+            //_commentTextBox.CaretIndex = _commentTextBox.Text.Length;
+            //_commentTextBox.ScrollToEnd();
+
+            _commentTextBox_TextChanged(null, null);
         }
 
         private void _commentTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            _okButton.IsEnabled = !string.IsNullOrWhiteSpace(_commentTextBox.Text);
+            if (string.IsNullOrWhiteSpace(_commentTextBox.Text) || _commentTextBox.Text.Length > 2048)
+            {
+                _okButton.IsEnabled = false;
+            }
+            else
+            {
+                _okButton.IsEnabled = true;
+            }
+
+            if (_commentTextBox.Text != null)
+            {
+                _countLabel.Content = string.Format("{0} / 2048", _commentTextBox.Text.Length);
+            }
         }
 
         private void _okButton_Click(object sender, RoutedEventArgs e)

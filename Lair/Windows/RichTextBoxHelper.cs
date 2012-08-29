@@ -14,6 +14,7 @@ using System.Windows.Media;
 using Lair.Properties;
 using Library;
 using Library.Net.Lair;
+using System.Windows.Data;
 
 namespace Lair.Windows
 {
@@ -29,6 +30,29 @@ namespace Lair.Windows
         public static event ChannelClickEventHandler ChannelClickEvent;
         public static GetMaxHeightEventHandler GetMaxHeightEvent;
         private static Regex _urlRegex = new Regex(@"^(?<start>.*?)(?<url>http(s)?://([\w-]+\.)+[\w-]+(/[\w-./?%&=]*)?)(?<end>.*?)$", RegexOptions.Compiled | RegexOptions.Singleline);
+
+        public static string GetMessageToString(Message message)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            if (message.Certificate == null)
+            {
+                stringBuilder.AppendLine(string.Format(" - Anonymous - {0}",
+                            message.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
+            }
+            else
+            {
+                stringBuilder.AppendLine(string.Format(" - {0} - {1}",
+                   MessageConverter.ToSignatureString(message.Certificate),
+                   message.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
+            }
+
+            stringBuilder.AppendLine();
+
+            stringBuilder.Append(message.Content);
+
+            return stringBuilder.ToString().TrimEnd('\r', '\n');
+        }
 
         public static Message GetDocumentMessage(DependencyObject obj)
         {
@@ -55,7 +79,10 @@ namespace Lair.Windows
                     var message = e.NewValue as Message;
                     if (message == null) return;
 
-                    var fd = new FlowDocument();
+                    var fd = new EnabledFlowDocument();
+                    fd.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
+                    fd.FontSize = (double)new FontSizeConverter().ConvertFromString(Settings.Instance.Global_Fonts_MessageFontSize + "pt");
+
                     var p = new Paragraph();
                     p.LineHeight = richTextBox.FontSize + 2;
 
@@ -74,208 +101,348 @@ namespace Lair.Windows
                     p.Inlines.Add(new LineBreak());
                     p.Inlines.Add(new LineBreak());
 
-                    foreach (var line in message.Content.Trim('\r', '\n').Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None))
-                    {
-                        try
-                        {
-                            var rl = line.Trim();
-
-                            if (rl.StartsWith("Seed@"))
-                            {
-                                var seed = Library.Net.Amoeba.AmoebaConverter.FromSeedString(rl);
-                                if (!seed.VerifyCertificate()) throw new Exception();
-
-                                {
-                                    var span = new Span();
-
-                                    var rl1 = rl.Substring(0, 64);
-                                    var rl2 = (64 < rl.Length) ? rl.Substring(64, Math.Min(rl.Length - 64, 16)) : "";
-                                    var rl3 = (80 < rl.Length) ? rl.Substring(80) : "";
-
-                                    Hyperlink l = new Hyperlink();
-                                    l.Foreground = new SolidColorBrush(Color.FromRgb(0xDF, 0xDF, 0xDF));
-                                    l.Cursor = Cursors.Hand;
-                                    l.PreviewMouseLeftButtonDown += (object sender, MouseButtonEventArgs ex) =>
-                                    {
-                                        if (RichTextBoxHelper.SeedClickEvent != null)
-                                        {
-                                            RichTextBoxHelper.SeedClickEvent(sender, seed);
-                                        }
-                                    };
-
-                                    {
-                                        Run r = new Run();
-                                        r.Text = rl1;
-
-                                        l.Inlines.Add(r);
-                                    }
-
-                                    if (!string.IsNullOrWhiteSpace(rl2))
-                                    {
-                                        Run r = new Run();
-                                        r.Text = rl2;
-                                        r.FontSize = 1;
-
-                                        l.Inlines.Add(r);
-                                    }
-
-                                    span.Inlines.Add(l);
-
-                                    if (!string.IsNullOrWhiteSpace(rl3))
-                                    {
-                                        Run r = new Run();
-                                        r.Foreground = new SolidColorBrush(Color.FromRgb(0x33, 0x33, 0x33));
-                                        r.Text = rl3;
-                                        r.FontSize = 0.1;
-                                        r.FontStretch = FontStretches.UltraCondensed;
-
-                                        span.Inlines.Add(r);
-                                    }
-
-                                    l.PreviewMouseRightButtonDown += (object sender, MouseButtonEventArgs ex) =>
-                                    {
-                                        richTextBox.Selection.Select(span.ContentStart, span.ContentEnd);
-                                    };
-
-                                    p.Inlines.Add(span);
-                                }
-
-                                p.Inlines.Add(new LineBreak());
-
-                                {
-                                    Run r = new Run();
-                                    r.Foreground = new SolidColorBrush(Color.FromRgb(0xEF, 0xEF, 0xEF));
-                                    r.Text = MessageConverter.ToInfoMessage(seed);
-
-                                    p.Inlines.Add(r);
-                                }
-
-                                p.Inlines.Add(new LineBreak());
-                            }
-                            else if (rl.StartsWith("Channel@"))
-                            {
-                                var channel = Library.Net.Lair.LairConverter.FromChannelString(rl);
-
-                                {
-                                    var span = new Span();
-
-                                    var rl1 = rl.Substring(0, 64);
-                                    var rl2 = (64 < rl.Length) ? rl.Substring(64, Math.Min(rl.Length - 64, 16)) : "";
-                                    var rl3 = (80 < rl.Length) ? rl.Substring(80) : "";
-
-                                    Hyperlink l = new Hyperlink();
-                                    l.Foreground = new SolidColorBrush(Color.FromRgb(0xDF, 0xDF, 0xDF));
-                                    l.Cursor = Cursors.Hand;
-                                    l.PreviewMouseLeftButtonDown += (object sender, MouseButtonEventArgs ex) =>
-                                    {
-                                        if (RichTextBoxHelper.ChannelClickEvent != null)
-                                        {
-                                            RichTextBoxHelper.ChannelClickEvent(sender, channel);
-                                        }
-                                    };
-
-                                    {
-                                        Run r = new Run();
-                                        r.Text = rl1;
-
-                                        l.Inlines.Add(r);
-                                    }
-
-                                    if (!string.IsNullOrWhiteSpace(rl2))
-                                    {
-                                        Run r = new Run();
-                                        r.Text = rl2;
-                                        r.FontSize = 1;
-
-                                        l.Inlines.Add(r);
-                                    }
-
-                                    span.Inlines.Add(l);
-
-                                    if (!string.IsNullOrWhiteSpace(rl3))
-                                    {
-                                        Run r = new Run();
-                                        r.Foreground = new SolidColorBrush(Color.FromRgb(0x33, 0x33, 0x33));
-                                        r.Text = rl3;
-                                        r.FontSize = 0.1;
-                                        r.FontStretch = FontStretches.UltraCondensed;
-
-                                        span.Inlines.Add(r);
-                                    }
-
-                                    l.PreviewMouseRightButtonDown += (object sender, MouseButtonEventArgs ex) =>
-                                    {
-                                        richTextBox.Selection.Select(span.ContentStart, span.ContentEnd);
-                                    };
-
-                                    p.Inlines.Add(span);
-                                }
-
-                                p.Inlines.Add(new LineBreak());
-
-                                {
-                                    Run r = new Run();
-                                    r.Foreground = new SolidColorBrush(Color.FromRgb(0xEF, 0xEF, 0xEF));
-                                    r.Text = MessageConverter.ToInfoMessage(channel);
-
-                                    p.Inlines.Add(r);
-                                }
-
-                                p.Inlines.Add(new LineBreak());
-                            }
-                            else
-                            {
-                                var line2 = line;
-
-                                for (; ; )
-                                {
-                                    Match match = _urlRegex.Match(line2);
-
-                                    if (match.Success)
-                                    {
-                                        p.Inlines.Add(match.Groups["start"].Value);
-
-                                        Hyperlink l = new Hyperlink();
-                                        l.Foreground = new SolidColorBrush(Color.FromRgb(0xDF, 0xDF, 0xDF));
-                                        l.Inlines.Add(match.Groups["url"].Value);
-                                        l.Cursor = Cursors.Hand;
-                                        l.PreviewMouseLeftButtonDown += (object sender, MouseButtonEventArgs ex) =>
-                                        {
-                                            if (RichTextBoxHelper.LinkClickEvent != null)
-                                            {
-                                                RichTextBoxHelper.LinkClickEvent(sender, match.Groups["url"].Value);
-                                            }
-                                        };
-
-                                        p.Inlines.Add(l);
-
-                                        line2 = match.Groups["end"].Value;
-                                    }
-                                    else
-                                    {
-                                        p.Inlines.Add(line2);
-                                        p.Inlines.Add(new LineBreak());
-
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                        catch (Exception)
-                        {
-                            p.Inlines.Add(line);
-                            p.Inlines.Add(new LineBreak());
-                        }
-                    }
-
-                    while (p.Inlines.LastInline is LineBreak)
-                    {
-                        p.Inlines.Remove(p.Inlines.LastInline);
-                    }
+                    p.Inlines.Add(RichTextBoxHelper.GetParagraph(richTextBox, message.Content, richTextBox.Width));
 
                     fd.Blocks.Add(p);
                     richTextBox.Document = fd;
                 }
             });
+
+        private static Span GetParagraph(RichTextBox richTextBox, string text, double w)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            Span p = new Span();
+
+            foreach (var line in text.Trim('\r', '\n').Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None))
+            {
+                try
+                {
+                    var rl = line.Trim();
+
+                    if (rl.StartsWith("Seed@"))
+                    {
+                        var seed = Library.Net.Amoeba.AmoebaConverter.FromSeedString(rl);
+                        if (!seed.VerifyCertificate()) throw new Exception();
+
+                        {
+                            var span = new Span();
+
+                            var rl1 = rl.Substring(0, 64);
+                            var rl2 = (64 < rl.Length) ? rl.Substring(64, Math.Min(rl.Length - 64, 16)) : "";
+                            var rl3 = (80 < rl.Length) ? rl.Substring(80) : "";
+
+                            Hyperlink l = new Hyperlink();
+                            l.Foreground = new SolidColorBrush(Color.FromRgb(0xDF, 0xDF, 0xDF));
+                            l.Cursor = Cursors.Hand;
+                            l.PreviewMouseLeftButtonDown += (object sender, MouseButtonEventArgs ex) =>
+                            {
+                                if (RichTextBoxHelper.SeedClickEvent != null)
+                                {
+                                    RichTextBoxHelper.SeedClickEvent(sender, seed);
+                                }
+                            };
+
+                            {
+                                Run r = new Run();
+                                r.Text = rl1;
+
+                                l.Inlines.Add(r);
+                            }
+
+                            if (!string.IsNullOrWhiteSpace(rl2))
+                            {
+                                Run r = new Run();
+                                r.Text = rl2;
+                                r.FontSize = 1;
+
+                                l.Inlines.Add(r);
+                            }
+
+                            span.Inlines.Add(l);
+
+                            if (!string.IsNullOrWhiteSpace(rl3))
+                            {
+                                Run r = new Run();
+                                r.Foreground = new SolidColorBrush(Color.FromRgb(0x33, 0x33, 0x33));
+                                r.Text = rl3;
+                                r.FontSize = 0.1;
+                                r.FontStretch = FontStretches.UltraCondensed;
+
+                                span.Inlines.Add(r);
+                            }
+
+                            l.PreviewMouseRightButtonDown += (object sender, MouseButtonEventArgs ex) =>
+                            {
+                                richTextBox.Selection.Select(span.ContentStart, span.ContentEnd);
+                            };
+
+                            p.Inlines.Add(span);
+                        }
+
+                        p.Inlines.Add(new LineBreak());
+
+                        {
+                            Run r = new Run();
+                            r.Foreground = new SolidColorBrush(Color.FromRgb(0xEF, 0xEF, 0xEF));
+                            r.Text = MessageConverter.ToInfoMessage(seed);
+
+                            p.Inlines.Add(r);
+                        }
+
+                        p.Inlines.Add(new LineBreak());
+                    }
+                    else if (rl.StartsWith("Channel@"))
+                    {
+                        var channel = Library.Net.Lair.LairConverter.FromChannelString(rl);
+
+                        {
+                            var span = new Span();
+
+                            var rl1 = rl.Substring(0, 64);
+                            var rl2 = (64 < rl.Length) ? rl.Substring(64, Math.Min(rl.Length - 64, 16)) : "";
+                            var rl3 = (80 < rl.Length) ? rl.Substring(80) : "";
+
+                            Hyperlink l = new Hyperlink();
+                            l.Foreground = new SolidColorBrush(Color.FromRgb(0xDF, 0xDF, 0xDF));
+                            l.Cursor = Cursors.Hand;
+                            l.PreviewMouseLeftButtonDown += (object sender, MouseButtonEventArgs ex) =>
+                            {
+                                if (RichTextBoxHelper.ChannelClickEvent != null)
+                                {
+                                    RichTextBoxHelper.ChannelClickEvent(sender, channel);
+                                }
+                            };
+
+                            {
+                                Run r = new Run();
+                                r.Text = rl1;
+
+                                l.Inlines.Add(r);
+                            }
+
+                            if (!string.IsNullOrWhiteSpace(rl2))
+                            {
+                                Run r = new Run();
+                                r.Text = rl2;
+                                r.FontSize = 1;
+
+                                l.Inlines.Add(r);
+                            }
+
+                            span.Inlines.Add(l);
+
+                            if (!string.IsNullOrWhiteSpace(rl3))
+                            {
+                                Run r = new Run();
+                                r.Foreground = new SolidColorBrush(Color.FromRgb(0x33, 0x33, 0x33));
+                                r.Text = rl3;
+                                r.FontSize = 0.1;
+                                r.FontStretch = FontStretches.UltraCondensed;
+
+                                span.Inlines.Add(r);
+                            }
+
+                            l.PreviewMouseRightButtonDown += (object sender, MouseButtonEventArgs ex) =>
+                            {
+                                richTextBox.Selection.Select(span.ContentStart, span.ContentEnd);
+                            };
+
+                            p.Inlines.Add(span);
+                        }
+
+                        p.Inlines.Add(new LineBreak());
+
+                        {
+                            Run r = new Run();
+                            r.Foreground = new SolidColorBrush(Color.FromRgb(0xEF, 0xEF, 0xEF));
+                            r.Text = MessageConverter.ToInfoMessage(channel);
+
+                            p.Inlines.Add(r);
+                        }
+
+                        p.Inlines.Add(new LineBreak());
+                    }
+                    else
+                    {
+                        var line2 = line;
+
+                        if (line2.StartsWith("> "))
+                        {
+                            stringBuilder.AppendLine(line2.Remove(0, 2));
+                        }
+                        else
+                        {
+                            if (stringBuilder.Length != 0)
+                            {
+                                var richTextBox2 = new RichTextBox();
+
+                                richTextBox2.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
+                                richTextBox2.FontSize = (double)new FontSizeConverter().ConvertFromString(Settings.Instance.Global_Fonts_MessageFontSize + "pt");
+                                richTextBox2.MaxHeight = Math.Max(0, RichTextBoxHelper.GetMaxHeightEvent(richTextBox));
+
+                                var fd = new EnabledFlowDocument();
+                                fd.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
+                                fd.FontSize = (double)new FontSizeConverter().ConvertFromString(Settings.Instance.Global_Fonts_MessageFontSize + "pt");
+
+                                var p2 = new Paragraph();
+                                p2.LineHeight = richTextBox.FontSize + 2;
+
+                                p2.Inlines.Add(RichTextBoxHelper.GetParagraph(richTextBox2, stringBuilder.ToString(), w));
+
+                                fd.Blocks.Add(p2);
+                                richTextBox2.Document = fd;
+
+                                var grid = new Grid();
+                                grid.Children.Add(richTextBox2);
+
+                                var header = stringBuilder.ToString().Replace("\r\n", " ").Replace('\r', ' ').Replace('\n', ' ');
+                                var label = new Label() { Content = header, Width = w };
+
+                                var expander = new Expander()
+                                {
+                                    IsEnabled = true,
+                                    IsExpanded = false,
+                                    Header = label,
+                                    Content = grid,
+                                    Margin = new Thickness(2, 2, 2, 8),
+                                };
+
+                                expander.Expanded += (object sender, RoutedEventArgs e) =>
+                                {
+                                    expander.Header = " ";
+
+                                    e.Handled = true;
+                                };
+
+                                expander.Collapsed += (object sender, RoutedEventArgs e) =>
+                                {
+                                    expander.Header = label;
+
+                                    e.Handled = true;
+                                };
+
+                                p.Inlines.Add(expander);
+
+                                stringBuilder.Clear();
+                            }
+
+                            for (; ; )
+                            {
+                                Match match = _urlRegex.Match(line2);
+
+                                if (match.Success)
+                                {
+                                    p.Inlines.Add(match.Groups["start"].Value);
+
+                                    Hyperlink l = new Hyperlink();
+                                    l.Foreground = new SolidColorBrush(Color.FromRgb(0xDF, 0xDF, 0xDF));
+                                    l.Inlines.Add(match.Groups["url"].Value);
+                                    l.Cursor = Cursors.Hand;
+                                    l.PreviewMouseLeftButtonDown += (object sender, MouseButtonEventArgs ex) =>
+                                    {
+                                        if (RichTextBoxHelper.LinkClickEvent != null)
+                                        {
+                                            RichTextBoxHelper.LinkClickEvent(sender, match.Groups["url"].Value);
+                                        }
+                                    };
+                                    l.PreviewMouseRightButtonDown += (object sender, MouseButtonEventArgs ex) =>
+                                    {
+                                        richTextBox.Selection.Select(l.ContentStart, l.ContentEnd);
+                                    };
+
+                                    p.Inlines.Add(l);
+
+                                    line2 = match.Groups["end"].Value;
+                                }
+                                else
+                                {
+                                    p.Inlines.Add(line2);
+                                    p.Inlines.Add(new LineBreak());
+
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    p.Inlines.Add(line);
+                    p.Inlines.Add(new LineBreak());
+                }
+            }
+
+            while (p.Inlines.LastInline is LineBreak)
+            {
+                p.Inlines.Remove(p.Inlines.LastInline);
+            }
+
+            if (stringBuilder.Length != 0)
+            {
+                var richTextBox2 = new RichTextBox();
+
+                richTextBox2.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
+                richTextBox2.FontSize = (double)new FontSizeConverter().ConvertFromString(Settings.Instance.Global_Fonts_MessageFontSize + "pt");
+                richTextBox2.MaxHeight = Math.Max(0, RichTextBoxHelper.GetMaxHeightEvent(richTextBox));
+
+                var fd = new EnabledFlowDocument();
+                fd.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
+                fd.FontSize = (double)new FontSizeConverter().ConvertFromString(Settings.Instance.Global_Fonts_MessageFontSize + "pt");
+
+                var p2 = new Paragraph();
+                p2.LineHeight = richTextBox.FontSize + 2;
+
+                p2.Inlines.Add(RichTextBoxHelper.GetParagraph(richTextBox2, stringBuilder.ToString(), w));
+
+                fd.Blocks.Add(p2);
+                richTextBox2.Document = fd;
+
+                var grid = new Grid();
+                grid.Children.Add(richTextBox2);
+
+                var header = stringBuilder.ToString().Replace("\r\n", " ").Replace('\r', ' ').Replace('\n', ' ');
+                var label = new Label() { Content = header, Width = w };
+
+                var expander = new Expander()
+                {
+                    IsEnabled = true,
+                    IsExpanded = false,
+                    Header = label,
+                    Content = grid,
+                    Margin = new Thickness(2, 2, 2, 8),
+                };
+
+                expander.Expanded += (object sender, RoutedEventArgs e) =>
+                {
+                    expander.Header = " ";
+
+                    e.Handled = true;
+                };
+
+                expander.Collapsed += (object sender, RoutedEventArgs e) =>
+                {
+                    expander.Header = label;
+
+                    e.Handled = true;
+                };
+
+                p.Inlines.Add(expander);
+
+                stringBuilder.Clear();
+            }
+
+            return p;
+        }
+    }
+
+    class EnabledFlowDocument : FlowDocument
+    {
+        protected override bool IsEnabledCore
+        {
+            get
+            {
+                return true;
+            }
+        }
     }
 }
