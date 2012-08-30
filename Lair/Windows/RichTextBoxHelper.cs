@@ -101,14 +101,14 @@ namespace Lair.Windows
                     p.Inlines.Add(new LineBreak());
                     p.Inlines.Add(new LineBreak());
 
-                    p.Inlines.Add(RichTextBoxHelper.GetParagraph(richTextBox, message.Content, richTextBox.Width));
+                    p.Inlines.Add(RichTextBoxHelper.GetParagraph(richTextBox, message.Content));
 
                     fd.Blocks.Add(p);
                     richTextBox.Document = fd;
                 }
             });
 
-        private static Span GetParagraph(RichTextBox richTextBox, string text, double w)
+        private static Span GetParagraph(RichTextBox richTextBox, string text)
         {
             StringBuilder stringBuilder = new StringBuilder();
             Span p = new Span();
@@ -289,7 +289,7 @@ namespace Lair.Windows
                                 var p2 = new Paragraph();
                                 p2.LineHeight = richTextBox.FontSize + 2;
 
-                                p2.Inlines.Add(RichTextBoxHelper.GetParagraph(richTextBox2, stringBuilder.ToString(), w));
+                                p2.Inlines.Add(RichTextBoxHelper.GetParagraph(richTextBox2, stringBuilder.ToString()));
 
                                 fd.Blocks.Add(p2);
                                 richTextBox2.Document = fd;
@@ -298,7 +298,14 @@ namespace Lair.Windows
                                 grid.Children.Add(richTextBox2);
 
                                 var header = stringBuilder.ToString().Replace("\r\n", " ").Replace('\r', ' ').Replace('\n', ' ');
-                                var label = new Label() { Content = header, Width = w };
+                                var label = new Label() { Content = header };
+
+                                var binding = new Binding("ActualWidth")
+                                {
+                                    Source = richTextBox
+                                };
+
+                                label.SetBinding(Label.WidthProperty, binding);
 
                                 var expander = new Expander()
                                 {
@@ -394,7 +401,7 @@ namespace Lair.Windows
                 var p2 = new Paragraph();
                 p2.LineHeight = richTextBox.FontSize + 2;
 
-                p2.Inlines.Add(RichTextBoxHelper.GetParagraph(richTextBox2, stringBuilder.ToString(), w));
+                p2.Inlines.Add(RichTextBoxHelper.GetParagraph(richTextBox2, stringBuilder.ToString()));
 
                 fd.Blocks.Add(p2);
                 richTextBox2.Document = fd;
@@ -403,7 +410,14 @@ namespace Lair.Windows
                 grid.Children.Add(richTextBox2);
 
                 var header = stringBuilder.ToString().Replace("\r\n", " ").Replace('\r', ' ').Replace('\n', ' ');
-                var label = new Label() { Content = header, Width = w };
+                var label = new Label() { Content = header };
+
+                var binding = new Binding("ActualWidth")
+                {
+                    Source = richTextBox
+                };
+
+                label.SetBinding(Label.WidthProperty, binding);
 
                 var expander = new Expander()
                 {
