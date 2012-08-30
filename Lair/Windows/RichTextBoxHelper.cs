@@ -122,6 +122,7 @@ namespace Lair.Windows
                     if (rl.StartsWith("Seed@"))
                     {
                         var seed = Library.Net.Amoeba.AmoebaConverter.FromSeedString(rl);
+                        if (seed == null) throw new Exception();
                         if (!seed.VerifyCertificate()) throw new Exception();
 
                         {
@@ -194,6 +195,7 @@ namespace Lair.Windows
                     else if (rl.StartsWith("Channel@"))
                     {
                         var channel = Library.Net.Lair.LairConverter.FromChannelString(rl);
+                        if (channel == null) throw new Exception();
 
                         {
                             var span = new Span();
@@ -304,7 +306,7 @@ namespace Lair.Windows
                                     IsExpanded = false,
                                     Header = label,
                                     Content = grid,
-                                    Margin = new Thickness(2, 2, 2, 8),
+                                    Margin = new Thickness(2, 6, 2, 6),
                                 };
 
                                 expander.Expanded += (object sender, RoutedEventArgs e) =>
@@ -409,7 +411,7 @@ namespace Lair.Windows
                     IsExpanded = false,
                     Header = label,
                     Content = grid,
-                    Margin = new Thickness(2, 2, 2, 8),
+                    Margin = new Thickness(2, 6, 2, 6),
                 };
 
                 expander.Expanded += (object sender, RoutedEventArgs e) =>

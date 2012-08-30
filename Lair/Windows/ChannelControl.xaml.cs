@@ -694,11 +694,41 @@ namespace Lair.Windows
 
         void RichTextBoxHelper_ChannelClickEvent(object sender, Channel channel)
         {
-            var selectTreeViewItem = _treeView.SelectedItem as CategoryTreeViewItem;
-            if (selectTreeViewItem == null) return;
+            var selectBoardTreeViewItem = _treeView.SelectedItem as BoardTreeViewItem;
+            if (selectBoardTreeViewItem == null) return;
 
-            selectTreeViewItem.Value.Boards.Add(new Board() { Channel = channel });
-            selectTreeViewItem.Update();
+            var list2 = _treeViewItem.GetLineage(selectBoardTreeViewItem).OfType<TreeViewItem>().ToList();
+            var selectCategoryTreeViewItem = ((CategoryTreeViewItem)list2[list2.Count - 2]) as CategoryTreeViewItem;
+
+            HashSet<Channel> items = new HashSet<Channel>();
+
+            this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+            {
+                var list = new List<TreeViewItem>();
+                list.Add(_treeViewItem);
+
+                for (int i = 0; i < list.Count; i++)
+                {
+                    foreach (TreeViewItem item in list[i].Items)
+                    {
+                        list.Add(item);
+                    }
+                }
+
+                foreach (BoardTreeViewItem item in list.OfType<BoardTreeViewItem>())
+                {
+                    items.Add(item.Value.Channel);
+                }
+            }), null);
+
+            {
+                if (channel.Name == null || channel.Id == null) return;
+                if (items.Contains(channel)) return;
+
+                selectCategoryTreeViewItem.Value.Boards.Add(new Board() { Channel = channel });
+            }
+
+            selectCategoryTreeViewItem.Update();
 
             this.Update();
         }
