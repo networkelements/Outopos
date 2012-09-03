@@ -1001,6 +1001,8 @@ namespace Lair.Windows
         {
             this.DialogResult = true;
 
+            bool flag = false;
+
             lock (_lairManager.ThisLock)
             {
                 _lairManager.BaseNode = _baseNode.DeepClone();
@@ -1023,14 +1025,19 @@ namespace Lair.Windows
                     _lairManager.ListenUris.Clear();
                     _lairManager.ListenUris.AddRange(_listenUris);
 
+                    flag = true;
+                }
+            }
+
+            lock (_autoBaseNodeSettingManager.ThisLock)
+            {
+                if (flag && _autoBaseNodeSettingManager.State == ManagerState.Start)
+                {
                     _autoBaseNodeSettingManager.Restart();
                 }
             }
 
-            if (Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled != _miscellaneousAutoBaseNodeSettingCheckBox.IsChecked.Value)
-            {
-                Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled = _miscellaneousAutoBaseNodeSettingCheckBox.IsChecked.Value;
-            }
+            Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled = _miscellaneousAutoBaseNodeSettingCheckBox.IsChecked.Value;
         }
 
         private void _cancelButton_Click(object sender, RoutedEventArgs e)
