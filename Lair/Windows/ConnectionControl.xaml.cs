@@ -33,6 +33,9 @@ namespace Lair.Windows
         private ObservableCollection<LairInfomationListViewItem> _infomationListViewItemCollection = new ObservableCollection<LairInfomationListViewItem>();
         private ObservableCollection<ConnectionListViewItem> _listViewItemCollection = new ObservableCollection<ConnectionListViewItem>();
 
+        private Thread _showLairInfomationThread;
+        private Thread _showConnectionInfomationwThread;
+
         public ConnectionControl(LairManager lairManager)
         {
             _lairManager = lairManager;
@@ -47,6 +50,9 @@ namespace Lair.Windows
 
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_CreateConnectionCount" });
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_AcceptConnectionCount" });
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem());
+
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_SurroundingNodeCount" });
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem());
 
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_NodeCount" });
@@ -67,15 +73,21 @@ namespace Lair.Windows
 
             _infomationListView.ItemsSource = _infomationListViewItemCollection;
 
-            ThreadPool.QueueUserWorkItem(new WaitCallback(this.LairInfomationShow), this);
-            ThreadPool.QueueUserWorkItem(new WaitCallback(this.ConnectionInfomationShow), this);
+            _showLairInfomationThread = new Thread(new ThreadStart(this.ShowLairInfomation));
+            _showLairInfomationThread.Priority = ThreadPriority.Highest;
+            _showLairInfomationThread.IsBackground = true;
+            _showLairInfomationThread.Name = "ShowLairInfomation";
+            _showLairInfomationThread.Start();
+
+            _showConnectionInfomationwThread = new Thread(new ThreadStart(this.ShowConnectionInfomation));
+            _showConnectionInfomationwThread.Priority = ThreadPriority.Highest;
+            _showConnectionInfomationwThread.IsBackground = true;
+            _showConnectionInfomationwThread.Name = "ShowConnectionInfomation";
+            _showConnectionInfomationwThread.Start();
         }
 
-        private void LairInfomationShow(object state)
+        private void ShowLairInfomation()
         {
-            Thread.CurrentThread.Priority = ThreadPriority.Highest;
-            Thread.CurrentThread.IsBackground = true;
-
             try
             {
                 for (; ; )
@@ -99,6 +111,8 @@ namespace Lair.Windows
                     dic["ConnectionControl_PullMessageCount"] = ((int)information["PullMessageCount"]).ToString();
                     dic["ConnectionControl_PullFilterCount"] = ((int)information["PullFilterCount"]).ToString();
 
+                    dic["ConnectionControl_SurroundingNodeCount"] = ((int)information["SurroundingNodeCount"]).ToString();
+                    
                     dic["ConnectionControl_NodeCount"] = ((int)information["OtherNodeCount"]).ToString();
                     dic["ConnectionControl_MessageCount"] = ((int)information["MessageCount"]).ToString();
                     dic["ConnectionControl_FilterCount"] = ((int)information["FilterCount"]).ToString();
@@ -120,11 +134,8 @@ namespace Lair.Windows
             }
         }
 
-        private void ConnectionInfomationShow(object state)
+        private void ShowConnectionInfomation()
         {
-            Thread.CurrentThread.Priority = ThreadPriority.Highest;
-            Thread.CurrentThread.IsBackground = true;
-
             try
             {
                 for (; ; )

@@ -1526,13 +1526,13 @@ namespace Lair.Properties
             }
         }
 
-        public string ConnectionControl_RelayBlockCount
+        public string ConnectionControl_SurroundingNodeCount
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ConnectionControl_RelayBlockCount");
+                    return this.Translate("ConnectionControl_SurroundingNodeCount");
                 }
             }
         }

@@ -133,7 +133,7 @@
   <Translate Key="ConnectionControl_PushChannelRequestCount" Value="PushChannelRequest Count" />
   <Translate Key="ConnectionControl_PushMessageCount" Value="PushMessage Count" />
   <Translate Key="ConnectionControl_PushFilterCount" Value="PushFilter Count" />
-  <Translate Key="ConnectionControl_RelayBlockCount" Value="Relay Block Count" />
+  <Translate Key="ConnectionControl_SurroundingNodeCount" Value="Surrounding Node Count" />
   <Translate Key="ConnectionControl_NodeCount" Value="Node Count" />
   <Translate Key="ConnectionControl_MessageCount" Value="Message Count" />
   <Translate Key="ConnectionControl_FilterCount" Value="Filter Count" />
