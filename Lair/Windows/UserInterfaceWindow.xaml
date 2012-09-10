@@ -28,13 +28,26 @@
         </DataTemplate>
     </Window.Resources>
 
+    <Window.CommandBindings>
+        <CommandBinding Command="Delete" Executed="Execute_Delete" />
+    </Window.CommandBindings>
+
+    <Window.InputBindings>
+        <KeyBinding Gesture="Delete" Command="Delete" />
+    </Window.InputBindings>
+
     <Grid>
-        <Button Height="23" HorizontalAlignment="Right" Margin="0,0,93,12" Name="_okButton" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=UserInterfaceWindow_Ok, Source={StaticResource ResourcesInstance}}" Click="_okButton_Click" />
-        <Button Height="23" HorizontalAlignment="Right" Margin="0,0,12,12" Name="_cancelButton" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=UserInterfaceWindow_Cancel, Source={StaticResource ResourcesInstance}}" Click="_cancelButton_Click" />
+        <Button Height="23" HorizontalAlignment="Right" Margin="0,0,93,12" Name="_okButton" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=UserInterfaceWindow_Ok, Source={StaticResource ResourcesInstance}}" Click="_okButton_Click" IsDefault="True" />
+        <Button Height="23" HorizontalAlignment="Right" Margin="0,0,12,12" Name="_cancelButton" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=UserInterfaceWindow_Cancel, Source={StaticResource ResourcesInstance}}" Click="_cancelButton_Click" IsCancel="True" />
         <TabControl Margin="0,0,0,41">
-            <TabItem Header="{Binding Path=UserInterfaceWindow_Signature, Source={StaticResource ResourcesInstance}}" IsSelected="True">
-                <Grid>
-                    <local:ListViewEx x:Name="_signatureListView" SelectionChanged="_signatureListView_SelectionChanged" PreviewMouseLeftButtonDown="_signatureListView_PreviewMouseLeftButtonDown" Margin="0,0,0,64">
+            <TabItem Name="_signatureTabItem" Header="{Binding Path=UserInterfaceWindow_Signature, Source={StaticResource ResourcesInstance}}">
+                <Grid FocusManager.FocusedElement="{Binding ElementName=_signatureTextBox}">
+                    <local:ListViewEx x:Name="_signatureListView" SelectionChanged="_signatureListView_SelectionChanged" PreviewMouseLeftButtonDown="_signatureListView_PreviewMouseLeftButtonDown" Margin="0,0,0,64" ContextMenuOpening="_signatureListView_ContextMenuOpening" PreviewDragOver="_signatureListView_PreviewDragOver" PreviewDrop="_signatureListView_PreviewDrop">
+                        <ListView.ContextMenu>
+                            <ContextMenu Name="_signatureListViewContextMenu" >
+                                <MenuItem Name="_signatureListViewDeleteMenuItem" Header="{Binding Path=UserInterfaceWindow_Delete, Source={StaticResource ResourcesInstance}}" Click="_signatureListViewDeleteMenuItem_Click"/>
+                            </ContextMenu>
+                        </ListView.ContextMenu>
                         <ListView.View>
                             <GridView AllowsColumnReorder="False">
                                 <GridViewColumn Header="{Binding Path=UserInterfaceWindow_Value, Source={StaticResource ResourcesInstance}}"  CellTemplate="{StaticResource _myTemplate_Signature}" 
@@ -48,11 +61,11 @@
                     <Button Name="_signatureDownButton" Height="23" Margin="0,0,168,6" VerticalAlignment="Bottom" Content="{Binding Path=UserInterfaceWindow_Down, Source={StaticResource ResourcesInstance}}" Click="_signatureDownButton_Click" HorizontalAlignment="Right" Width="75" IsEnabled="False" />
                     <Button Name="_signatureAddButton" Height="23" Margin="0,0,87,6" VerticalAlignment="Bottom" Content="{Binding Path=UserInterfaceWindow_Add, Source={StaticResource ResourcesInstance}}" Click="_signatureAddButton_Click" HorizontalAlignment="Right" Width="75" />
                     <Button Name="_signatureDeleteButton" Height="23" Margin="0,0,6,6" VerticalAlignment="Bottom" Content="{Binding Path=UserInterfaceWindow_Delete, Source={StaticResource ResourcesInstance}}" Click="_signatureDeleteButton_Click" HorizontalAlignment="Right" Width="75" />
-                    <TextBox Height="23" Margin="6,0,6,35" Name="_signatureTextBox" VerticalAlignment="Bottom" VerticalContentAlignment="Center" />
+                    <TextBox Height="23" Margin="6,0,6,35" Name="_signatureTextBox" VerticalAlignment="Bottom" VerticalContentAlignment="Center" KeyDown="_signatureTextBox_KeyDown" />
                 </Grid>
             </TabItem>
             <TabItem Header="{Binding Path=UserInterfaceWindow_Update, Source={StaticResource ResourcesInstance}}">
-                <Grid>
+                <Grid FocusManager.FocusedElement="{Binding ElementName=_updateUrlTextBox}">
                     <Label Content="{Binding Path=UserInterfaceWindow_UpdateUrl, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="120" />
                     <TextBox Height="24" Margin="132,6,6,0" Name="_updateUrlTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" />
                     <Label Content="{Binding Path=UserInterfaceWindow_ProxyUri, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,36,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="120" />
@@ -67,13 +80,13 @@
                 </Grid>
             </TabItem>
             <TabItem Header="{Binding Path=UserInterfaceWindow_Amoeba, Source={StaticResource ResourcesInstance}}">
-                <Grid>
+                <Grid FocusManager.FocusedElement="{Binding ElementName=_keywordTextBox}">
                     <Label Content="{Binding Path=UserInterfaceWindow_AmoebaPath, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="120" />
                     <TextBox Height="24" Margin="132,6,6,0" Name="_amoebaPathTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" PreviewMouseDoubleClick="_amoebaPathTextBox_PreviewMouseDoubleClick" />
                 </Grid>
             </TabItem>
             <TabItem Header="{Binding Path=UserInterfaceWindow_Fonts, Source={StaticResource ResourcesInstance}}">
-                <Grid>
+                <Grid FocusManager.FocusedElement="{Binding ElementName=_messageFontFamilyComboBox}">
                     <Label Content="{Binding Path=UserInterfaceWindow_MessageFontFamily, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="120" />
                     <ComboBox Name="_messageFontFamilyComboBox" VerticalAlignment="Top" Margin="132,6,6,0" Height="24">
                         <ComboBox.ItemsPanel>

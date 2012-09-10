@@ -12,6 +12,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
+using System.Windows.Automation.Peers;
+using System.Windows.Automation.Provider;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -22,8 +24,6 @@ using System.Windows.Navigation;
 using System.Windows.Threading;
 using System.Xml;
 using Lair.Properties;
-using System.Windows.Automation.Peers;
-using System.Windows.Automation.Provider;
 
 namespace Lair.Windows
 {
@@ -50,35 +50,16 @@ namespace Lair.Windows
 
             if (posithonIndex == -1 || lposition.Y < 25)
             {
-                if (this.SelectionMode != System.Windows.Controls.SelectionMode.Single)
-                {
-                    try
-                    {
-                        this.SelectedItems.Clear();
-                    }
-                    catch (Exception)
-                    {
-
-                    }
-                }
-
                 try
                 {
-                    this.SelectedItem = null;
+                    this.UnselectAll();
                 }
                 catch (Exception)
                 {
 
                 }
 
-                try
-                {
-                    this.SelectedIndex = -1;
-                }
-                catch (Exception)
-                {
-
-                }
+                base.Focus();
             }
         }
 
@@ -98,35 +79,16 @@ namespace Lair.Windows
 
             if (posithonIndex == -1 || lposition.Y < 25)
             {
-                if (this.SelectionMode != System.Windows.Controls.SelectionMode.Single)
-                {
-                    try
-                    {
-                        this.SelectedItems.Clear();
-                    }
-                    catch (Exception)
-                    {
-
-                    }
-                }
-
                 try
                 {
-                    this.SelectedItem = null;
+                    this.UnselectAll();
                 }
                 catch (Exception)
                 {
 
                 }
 
-                try
-                {
-                    this.SelectedIndex = -1;
-                }
-                catch (Exception)
-                {
-
-                }
+                base.Focus();
             }
         }
     }

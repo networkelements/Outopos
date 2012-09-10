@@ -35,6 +35,7 @@
   <Translate Key="MainWindow_LatestVersion_Message" Value="It is the latest version." />
   <Translate Key="MainWindow_Restart_Message" Value="Update has been completed. Please restart." />
   <Translate Key="MainWindow_Close_Message" Value="Do you want to quit?" />
+  <Translate Key="MainWindow_Delete_Message" Value="Are you sure you want to Delete?" />
 
   <Translate Key="UserInterfaceWindow_Title" Value="User Interface Setting" />
   <Translate Key="UserInterfaceWindow_Update" Value="Update" />
@@ -105,6 +106,7 @@
   <Translate Key="ConnectionWindow_Extends" Value="Extends" />
   <Translate Key="ConnectionWindow_AutoSetting" Value="Auto Setting" />
   <Translate Key="ConnectionWindow_Copy" Value="Copy" />
+  <Translate Key="ConnectionWindow_Cut" Value="Cut" />
   <Translate Key="ConnectionWindow_Paste" Value="Paste" />
 
   <Translate Key="ProgressWindow_Title" Value="Progress State" />
@@ -194,6 +196,7 @@
   <Translate Key="CategoryEditWindow_Cancel" Value="Cancel" />
   <Translate Key="CategoryEditWindow_Ok" Value="Ok" />
   <Translate Key="CategoryEditWindow_Copy" Value="Copy" />
+  <Translate Key="CategoryEditWindow_Cut" Value="Cut" />
   <Translate Key="CategoryEditWindow_Paste" Value="Paste" />
   <Translate Key="CategoryEditWindow_Upload" Value="Upload" />
   <Translate Key="CategoryEditWindow_Word" Value="Word" />

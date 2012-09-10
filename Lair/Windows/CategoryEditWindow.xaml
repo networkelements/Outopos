@@ -39,26 +39,43 @@
         </DataTemplate>
     </Window.Resources>
 
-    <Grid>
+    <Window.CommandBindings>
+        <CommandBinding Command="Delete" Executed="Execute_Delete" />
+        <CommandBinding Command="Copy" Executed="Execute_Copy" />
+        <CommandBinding Command="Cut" Executed="Execute_Cut" />
+        <CommandBinding Command="Paste" Executed="Execute_Paste" />
+    </Window.CommandBindings>
+
+    <Window.InputBindings>
+        <KeyBinding Gesture="Delete" Command="Delete" />
+        <KeyBinding Gesture="CTRL+C" Command="Copy" />
+        <KeyBinding Gesture="CTRL+X" Command="Cut" />
+        <KeyBinding Gesture="CTRL+V" Command="Paste" />
+    </Window.InputBindings>
+
+    <Grid FocusManager.FocusedElement="{Binding ElementName=_nameTextBox}">
         <Label Height="24" HorizontalAlignment="Left" Margin="12,12,0,0" VerticalAlignment="Top" Width="120" Content="{Binding Path=CategoryEditWindow_Name, Source={StaticResource ResourcesInstance}}" VerticalContentAlignment="Center" />
         <TextBox Height="24" Margin="138,12,12,0" Name="_nameTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" />
-        <Button Height="23" HorizontalAlignment="Right" Margin="0,0,93,12" Name="_okButton" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CategoryEditWindow_Ok, Source={StaticResource ResourcesInstance}}" Click="_okButton_Click" />
-        <Button Height="23" HorizontalAlignment="Right" Margin="0,0,12,12" Name="_cancelButton" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CategoryEditWindow_Cancel, Source={StaticResource ResourcesInstance}}" Click="_cancelButton_Click" />
+        <Button Height="23" HorizontalAlignment="Right" Margin="0,0,93,12" Name="_okButton" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CategoryEditWindow_Ok, Source={StaticResource ResourcesInstance}}" Click="_okButton_Click" IsDefault="True" />
+        <Button Height="23" HorizontalAlignment="Right" Margin="0,0,12,12" Name="_cancelButton" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CategoryEditWindow_Cancel, Source={StaticResource ResourcesInstance}}" Click="_cancelButton_Click" IsCancel="True" />
         <TabControl Margin="0,42,0,41">
-            <TabItem Header="{Binding Path=CategoryEditWindow_Word, Source={StaticResource ResourcesInstance}}">
-                <Grid>
+            <TabItem Header="{Binding Path=CategoryEditWindow_Word, Source={StaticResource ResourcesInstance}}" Name="_wordTabItem">
+                <Grid FocusManager.FocusedElement="{Binding ElementName=_wordTextBox}">
                     <Button Name="_wordUpButton" Height="23" HorizontalAlignment="Right" Margin="0,0,330,6" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CategoryEditWindow_Up, Source={StaticResource ResourcesInstance}}" Click="_wordUpButton_Click" IsEnabled="False" />
                     <Button Name="_wordDownButton" Height="23" HorizontalAlignment="Right" Margin="0,0,249,6" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CategoryEditWindow_Down, Source={StaticResource ResourcesInstance}}" Click="_wordDownButton_Click" IsEnabled="False" />
                     <Button Name="_wordAddButton" Height="23" HorizontalAlignment="Right" Margin="0,0,168,6" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CategoryEditWindow_Add, Source={StaticResource ResourcesInstance}}" Click="_wordAddButton_Click" />
                     <Button Name="_wordEditButton" Height="23" HorizontalAlignment="Right" Margin="0,0,87,6" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CategoryEditWindow_Edit, Source={StaticResource ResourcesInstance}}" Click="_wordEditButton_Click"/>
                     <Button Name="_wordDeleteButton" Height="23" HorizontalAlignment="Right" Margin="0,0,6,6" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CategoryEditWindow_Delete, Source={StaticResource ResourcesInstance}}" Click="_wordDeleteButton_Click" />
-                    <TextBox Name="_wordTextBox" Height="24" Margin="6,0,6,35" VerticalAlignment="Bottom" VerticalContentAlignment="Center" />
+                    <TextBox Name="_wordTextBox" Height="24" Margin="6,0,6,35" VerticalAlignment="Bottom" VerticalContentAlignment="Center" KeyDown="_wordTextBox_KeyDown" />
                     <CheckBox Name="_wordContainsCheckBox" Height="16" HorizontalAlignment="Left" Margin="6,0,0,65" VerticalAlignment="Bottom" Width="120"  Content="{Binding Path=CategoryEditWindow_Contains, Source={StaticResource ResourcesInstance}}" />
                     <local:ListViewEx x:Name="_wordListView" Margin="0,0,0,87" SelectionChanged="_wordListView_SelectionChanged" PreviewMouseLeftButtonDown="_wordListView_PreviewMouseLeftButtonDown" ContextMenuOpening="_wordListView_ContextMenuOpening">
                         <ListView.ContextMenu>
                             <ContextMenu Name="_wordListViewContextMenu" >
-                                <MenuItem Name="_wordListViewCopyMenuItem" Header="{Binding Path=CategoryEditWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_wordListViewCopyMenuItem_Click"/>
-                                <MenuItem Name="_wordListViewPasteMenuItem" Header="{Binding Path=CategoryEditWindow_Paste, Source={StaticResource ResourcesInstance}}" Click="_wordListViewPasteMenuItem_Click"/>
+                                <MenuItem Name="_wordListViewDeleteMenuItem" Header="{Binding Path=SearchItemEditWindow_Delete, Source={StaticResource ResourcesInstance}}" Click="_wordListViewDeleteMenuItem_Click"/>
+                                <Separator />
+                                <MenuItem Name="_wordListViewCopyMenuItem" Header="{Binding Path=SearchItemEditWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_wordListViewCopyMenuItem_Click"/>
+                                <MenuItem Name="_wordListViewCutMenuItem" Header="{Binding Path=SearchItemEditWindow_Cut, Source={StaticResource ResourcesInstance}}" Click="_wordListViewCutMenuItem_Click"/>
+                                <MenuItem Name="_wordListViewPasteMenuItem" Header="{Binding Path=SearchItemEditWindow_Paste, Source={StaticResource ResourcesInstance}}" Click="_wordListViewPasteMenuItem_Click"/>
                             </ContextMenu>
                         </ListView.ContextMenu>
                         <ListView.View>
@@ -72,20 +89,23 @@
                     </local:ListViewEx>
                 </Grid>
             </TabItem>
-            <TabItem Header="{Binding Path=CategoryEditWindow_Regex, Source={StaticResource ResourcesInstance}}">
-                <Grid>
+            <TabItem Header="{Binding Path=CategoryEditWindow_Regex, Source={StaticResource ResourcesInstance}}" Name="_regexTabItem">
+                <Grid FocusManager.FocusedElement="{Binding ElementName=_regexTextBox}">
                     <Button Name="_regexUpButton" Height="23" HorizontalAlignment="Right" Margin="0,0,330,6" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CategoryEditWindow_Up, Source={StaticResource ResourcesInstance}}" Click="_regexUpButton_Click" IsEnabled="False" />
                     <Button Name="_regexDownButton" Height="23" HorizontalAlignment="Right" Margin="0,0,249,6" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CategoryEditWindow_Down, Source={StaticResource ResourcesInstance}}" Click="_regexDownButton_Click" IsEnabled="False" />
                     <Button Name="_regexAddButton" Height="23" HorizontalAlignment="Right" Margin="0,0,168,6" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CategoryEditWindow_Add, Source={StaticResource ResourcesInstance}}" Click="_regexAddButton_Click" />
                     <Button Name="_regexEditButton" Height="23" HorizontalAlignment="Right" Margin="0,0,87,6" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CategoryEditWindow_Edit, Source={StaticResource ResourcesInstance}}" Click="_regexEditButton_Click"/>
                     <Button Name="_regexDeleteButton" Height="23" HorizontalAlignment="Right" Margin="0,0,6,6" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CategoryEditWindow_Delete, Source={StaticResource ResourcesInstance}}" Click="_regexDeleteButton_Click" />
-                    <TextBox Name="_regexTextBox" Height="24" Margin="6,0,6,35" VerticalAlignment="Bottom" VerticalContentAlignment="Center" />
+                    <TextBox Name="_regexTextBox" Height="24" Margin="6,0,6,35" VerticalAlignment="Bottom" VerticalContentAlignment="Center" KeyDown="_regexTextBox_KeyDown" />
                     <CheckBox Name="_regexContainsCheckBox" Height="16" HorizontalAlignment="Left" Margin="6,0,0,65" VerticalAlignment="Bottom" Width="120"  Content="{Binding Path=CategoryEditWindow_Contains, Source={StaticResource ResourcesInstance}}" />
                     <local:ListViewEx x:Name="_regexListView" Margin="0,0,0,87" SelectionChanged="_regexListView_SelectionChanged" PreviewMouseLeftButtonDown="_regexListView_PreviewMouseLeftButtonDown" ContextMenuOpening="_regexListView_ContextMenuOpening">
                         <ListView.ContextMenu>
                             <ContextMenu Name="_regexListViewContextMenu" >
-                                <MenuItem Name="_regexListViewCopyMenuItem" Header="{Binding Path=CategoryEditWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_regexListViewCopyMenuItem_Click"/>
-                                <MenuItem Name="_regexListViewPasteMenuItem" Header="{Binding Path=CategoryEditWindow_Paste, Source={StaticResource ResourcesInstance}}" Click="_regexListViewPasteMenuItem_Click"/>
+                                <MenuItem Name="_regexListViewDeleteMenuItem" Header="{Binding Path=SearchItemEditWindow_Delete, Source={StaticResource ResourcesInstance}}" Click="_regexListViewDeleteMenuItem_Click"/>
+                                <Separator />
+                                <MenuItem Name="_regexListViewCopyMenuItem" Header="{Binding Path=SearchItemEditWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_regexListViewCopyMenuItem_Click"/>
+                                <MenuItem Name="_regexListViewCutMenuItem" Header="{Binding Path=SearchItemEditWindow_Cut, Source={StaticResource ResourcesInstance}}" Click="_regexListViewCutMenuItem_Click"/>
+                                <MenuItem Name="_regexListViewPasteMenuItem" Header="{Binding Path=SearchItemEditWindow_Paste, Source={StaticResource ResourcesInstance}}" Click="_regexListViewPasteMenuItem_Click"/>
                             </ContextMenu>
                         </ListView.ContextMenu>
                         <ListView.View>
@@ -102,20 +122,23 @@
                     <CheckBox Content="{Binding Path=CategoryEditWindow_IsIgnoreCase, Source={StaticResource ResourcesInstance}}" Height="16" HorizontalAlignment="Left" Margin="138,0,0,65" Name="_regexIsIgnoreCaseCheckBox" VerticalAlignment="Bottom" Width="120" />
                 </Grid>
             </TabItem>
-            <TabItem Header="{Binding Path=CategoryEditWindow_Signature, Source={StaticResource ResourcesInstance}}">
-                <Grid>
+            <TabItem Header="{Binding Path=CategoryEditWindow_Signature, Source={StaticResource ResourcesInstance}}" Name="_signatureTabItem">
+                <Grid FocusManager.FocusedElement="{Binding ElementName=_signatureTextBox}">
                     <Button Name="_signatureUpButton" Height="23" HorizontalAlignment="Right" Margin="0,0,330,6" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CategoryEditWindow_Up, Source={StaticResource ResourcesInstance}}" Click="_signatureUpButton_Click" IsEnabled="False" />
                     <Button Name="_signatureDownButton" Height="23" HorizontalAlignment="Right" Margin="0,0,249,6" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CategoryEditWindow_Down, Source={StaticResource ResourcesInstance}}" Click="_signatureDownButton_Click" IsEnabled="False" />
                     <Button Name="_signatureAddButton" Height="23" HorizontalAlignment="Right" Margin="0,0,168,6" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CategoryEditWindow_Add, Source={StaticResource ResourcesInstance}}" Click="_signatureAddButton_Click" />
                     <Button Name="_signatureEditButton" Height="23" HorizontalAlignment="Right" Margin="0,0,87,6" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CategoryEditWindow_Edit, Source={StaticResource ResourcesInstance}}" Click="_signatureEditButton_Click"/>
                     <Button Name="_signatureDeleteButton" Height="23" HorizontalAlignment="Right" Margin="0,0,6,6" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CategoryEditWindow_Delete, Source={StaticResource ResourcesInstance}}" Click="_signatureDeleteButton_Click" />
-                    <TextBox Name="_signatureTextBox" Height="24" Margin="6,0,6,35" VerticalAlignment="Bottom" VerticalContentAlignment="Center" />
+                    <TextBox Name="_signatureTextBox" Height="24" Margin="6,0,6,35" VerticalAlignment="Bottom" VerticalContentAlignment="Center" KeyDown="_signatureTextBox_KeyDown" />
                     <CheckBox Name="_signatureContainsCheckBox" Height="16" HorizontalAlignment="Left" Margin="6,0,0,65" VerticalAlignment="Bottom" Width="120"  Content="{Binding Path=CategoryEditWindow_Contains, Source={StaticResource ResourcesInstance}}" />
                     <local:ListViewEx x:Name="_signatureListView" Margin="0,0,0,87" SelectionChanged="_signatureListView_SelectionChanged" PreviewMouseLeftButtonDown="_signatureListView_PreviewMouseLeftButtonDown" ContextMenuOpening="_signatureListView_ContextMenuOpening">
                         <ListView.ContextMenu>
                             <ContextMenu Name="_signatureListViewContextMenu" >
-                                <MenuItem Name="_signatureListViewCopyMenuItem" Header="{Binding Path=CategoryEditWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_signatureListViewCopyMenuItem_Click"/>
-                                <MenuItem Name="_signatureListViewPasteMenuItem" Header="{Binding Path=CategoryEditWindow_Paste, Source={StaticResource ResourcesInstance}}" Click="_signatureListViewPasteMenuItem_Click"/>
+                                <MenuItem Name="_signatureListViewDeleteMenuItem" Header="{Binding Path=SearchItemEditWindow_Delete, Source={StaticResource ResourcesInstance}}" Click="_signatureListViewDeleteMenuItem_Click"/>
+                                <Separator />
+                                <MenuItem Name="_signatureListViewCopyMenuItem" Header="{Binding Path=SearchItemEditWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_signatureListViewCopyMenuItem_Click"/>
+                                <MenuItem Name="_signatureListViewCutMenuItem" Header="{Binding Path=SearchItemEditWindow_Cut, Source={StaticResource ResourcesInstance}}" Click="_signatureListViewCutMenuItem_Click"/>
+                                <MenuItem Name="_signatureListViewPasteMenuItem" Header="{Binding Path=SearchItemEditWindow_Paste, Source={StaticResource ResourcesInstance}}" Click="_signatureListViewPasteMenuItem_Click"/>
                             </ContextMenu>
                         </ListView.ContextMenu>
                         <ListView.View>
@@ -129,20 +152,23 @@
                     </local:ListViewEx>
                 </Grid>
             </TabItem>
-            <TabItem Header="{Binding Path=CategoryEditWindow_Message, Source={StaticResource ResourcesInstance}}">
-                <Grid>
+            <TabItem Header="{Binding Path=CategoryEditWindow_Message, Source={StaticResource ResourcesInstance}}" Name="_messageTabItem">
+                <Grid FocusManager.FocusedElement="{Binding ElementName=_messageTextBox}">
                     <Button Name="_messageUpButton" Height="23" HorizontalAlignment="Right" Margin="0,0,330,6" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CategoryEditWindow_Up, Source={StaticResource ResourcesInstance}}" Click="_messageUpButton_Click" IsEnabled="False" />
                     <Button Name="_messageDownButton" Height="23" HorizontalAlignment="Right" Margin="0,0,249,6" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CategoryEditWindow_Down, Source={StaticResource ResourcesInstance}}" Click="_messageDownButton_Click" IsEnabled="False" />
                     <Button Name="_messageAddButton" Height="23" HorizontalAlignment="Right" Margin="0,0,168,6" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CategoryEditWindow_Add, Source={StaticResource ResourcesInstance}}" Click="_messageAddButton_Click" />
                     <Button Name="_messageEditButton" Height="23" HorizontalAlignment="Right" Margin="0,0,87,6" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CategoryEditWindow_Edit, Source={StaticResource ResourcesInstance}}" Click="_messageEditButton_Click"/>
                     <Button Name="_messageDeleteButton" Height="23" HorizontalAlignment="Right" Margin="0,0,6,6" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CategoryEditWindow_Delete, Source={StaticResource ResourcesInstance}}" Click="_messageDeleteButton_Click" />
-                    <TextBox Name="_messageTextBox" Height="24" Margin="6,0,6,35" VerticalAlignment="Bottom" VerticalContentAlignment="Center" />
+                    <TextBox Name="_messageTextBox" Height="24" Margin="6,0,6,35" VerticalAlignment="Bottom" VerticalContentAlignment="Center" KeyDown="_messageTextBox_KeyDown" />
                     <CheckBox Name="_messageContainsCheckBox" Height="16" HorizontalAlignment="Left" Margin="6,0,0,65" VerticalAlignment="Bottom" Width="120"  Content="{Binding Path=CategoryEditWindow_Contains, Source={StaticResource ResourcesInstance}}" />
                     <local:ListViewEx x:Name="_messageListView" Margin="0,0,0,87" SelectionChanged="_messageListView_SelectionChanged" PreviewMouseLeftButtonDown="_messageListView_PreviewMouseLeftButtonDown" ContextMenuOpening="_messageListView_ContextMenuOpening">
                         <ListView.ContextMenu>
                             <ContextMenu Name="_messageListViewContextMenu" >
-                                <MenuItem Name="_messageListViewCopyMenuItem" Header="{Binding Path=CategoryEditWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_messageListViewCopyMenuItem_Click"/>
-                                <MenuItem Name="_messageListViewPasteMenuItem" Header="{Binding Path=CategoryEditWindow_Paste, Source={StaticResource ResourcesInstance}}" Click="_messageListViewPasteMenuItem_Click"/>
+                                <MenuItem Name="_messageListViewDeleteMenuItem" Header="{Binding Path=SearchItemEditWindow_Delete, Source={StaticResource ResourcesInstance}}" Click="_messageListViewDeleteMenuItem_Click"/>
+                                <Separator />
+                                <MenuItem Name="_messageListViewCopyMenuItem" Header="{Binding Path=SearchItemEditWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_messageListViewCopyMenuItem_Click"/>
+                                <MenuItem Name="_messageListViewCutMenuItem" Header="{Binding Path=SearchItemEditWindow_Cut, Source={StaticResource ResourcesInstance}}" Click="_messageListViewCutMenuItem_Click"/>
+                                <MenuItem Name="_messageListViewPasteMenuItem" Header="{Binding Path=SearchItemEditWindow_Paste, Source={StaticResource ResourcesInstance}}" Click="_messageListViewPasteMenuItem_Click"/>
                             </ContextMenu>
                         </ListView.ContextMenu>
                         <ListView.View>

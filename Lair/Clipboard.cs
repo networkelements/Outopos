@@ -6,143 +6,304 @@ using System.Text;
 using Library;
 using Library.Net.Lair;
 using Lair.Windows;
+using Library.Collections;
+using System.Runtime.InteropServices;
 
 namespace Lair
 {
     static class Clipboard
     {
         private static List<Category> _categoryList = new List<Category>();
-        private static List<Board> _boardList = new List<Board>();
+
+        private static ClipboardWatcher _clipboardWatcher;
+
+        private static object _thisLock = new object();
+
+        static Clipboard()
+        {
+            _clipboardWatcher = new ClipboardWatcher();
+            _clipboardWatcher.DrawClipboard += (sender2, e2) =>
+            {
+                _categoryList.Clear();
+            };
+        }
+
 
         public static IEnumerable<string> GetPaths()
         {
-            try
+            lock (_thisLock)
             {
-                return System.Windows.Clipboard.GetFileDropList().Cast<string>();
-            }
-            catch (Exception)
-            {
+                try
+                {
+                    return System.Windows.Clipboard.GetFileDropList().Cast<string>();
+                }
+                catch (Exception)
+                {
 
-            }
+                }
 
-            return new string[0];
+                return new string[0];
+            }
         }
 
         public static void SetPaths(IEnumerable<string> collection)
         {
-            try
+            lock (_thisLock)
             {
-                var list = new System.Collections.Specialized.StringCollection();
-                list.AddRange(collection.ToArray());
-                System.Windows.Clipboard.SetFileDropList(list);
-            }
-            catch (Exception)
-            {
+                try
+                {
+                    var list = new System.Collections.Specialized.StringCollection();
+                    list.AddRange(collection.ToArray());
+                    System.Windows.Clipboard.SetFileDropList(list);
+                }
+                catch (Exception)
+                {
 
+                }
             }
         }
 
         public static string GetText()
         {
-            try
+            lock (_thisLock)
             {
-                return System.Windows.Clipboard.GetText();
-            }
-            catch (Exception)
-            {
+                try
+                {
+                    return System.Windows.Clipboard.GetText();
+                }
+                catch (Exception)
+                {
 
-            }
+                }
 
-            return "";
+                return "";
+            }
         }
 
         public static void SetText(string text)
         {
-            try
+            lock (_thisLock)
             {
-                System.Windows.Clipboard.SetText(text);
-            }
-            catch (Exception)
-            {
+                try
+                {
+                    System.Windows.Clipboard.SetText(text);
+                }
+                catch (Exception)
+                {
 
+                }
             }
         }
 
         public static IEnumerable<Node> GetNodes()
         {
-            var list = new List<Node>();
-
-            foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
+            lock (_thisLock)
             {
-                if (!item.StartsWith("Node@")) continue;
+                var list = new List<Node>();
 
-                try
+                foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    list.Add(LairConverter.FromNodeString(item));
-                }
-                catch (Exception)
-                {
+                    if (!item.StartsWith("Node@")) continue;
 
+                    try
+                    {
+                        list.Add(LairConverter.FromNodeString(item));
+                    }
+                    catch (Exception)
+                    {
+
+                    }
                 }
+
+                return list;
             }
-
-            return list;
         }
 
         public static void SetNodes(IEnumerable<Node> nodes)
         {
-            var sb = new StringBuilder();
-
-            foreach (var item in nodes)
+            lock (_thisLock)
             {
-                sb.AppendLine(LairConverter.ToNodeString(item));
-            }
+                var sb = new StringBuilder();
 
-            Clipboard.SetText(sb.ToString());
+                foreach (var item in nodes)
+                {
+                    sb.AppendLine(LairConverter.ToNodeString(item));
+                }
+
+                Clipboard.SetText(sb.ToString());
+            }
         }
 
         public static IEnumerable<Channel> GetChannels()
         {
-            var list = new List<Channel>();
-
-            foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
+            lock (_thisLock)
             {
-                if (!item.StartsWith("Channel@")) continue;
+                if (_categoryList.Count != 0) return new Channel[0];
 
-                try
-                {
-                    list.Add(LairConverter.FromChannelString(item));
-                }
-                catch (Exception)
-                {
+                var list = new List<Channel>();
 
+                foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    if (!item.StartsWith("Channel@")) continue;
+
+                    try
+                    {
+                        list.Add(LairConverter.FromChannelString(item));
+                    }
+                    catch (Exception)
+                    {
+
+                    }
                 }
+
+                return list;
             }
-
-            return list;
         }
 
         public static void SetChannels(IEnumerable<Channel> channels)
         {
-            var sb = new StringBuilder();
-
-            foreach (var item in channels)
+            lock (_thisLock)
             {
-                sb.AppendLine(LairConverter.ToChannelString(item));
-            }
+                var sb = new StringBuilder();
 
-            Clipboard.SetText(sb.ToString());
+                foreach (var item in channels)
+                {
+                    sb.AppendLine(LairConverter.ToChannelString(item));
+                }
+
+                Clipboard.SetText(sb.ToString());
+            }
         }
 
         public static IEnumerable<Category> GetCategories()
         {
-            return _categoryList.Select(n => n.DeepClone()).ToArray();
+            lock (_thisLock)
+            {
+                return _categoryList.Select(n => n.DeepClone()).ToArray();
+            }
         }
 
-        public static void SetCategories(IEnumerable<Category> categoryies)
+        public static void SetCategories(IEnumerable<Category> categories)
         {
-            _categoryList.Clear();
-            _categoryList.AddRange(categoryies.Select(n => n.DeepClone()));
+            lock (_thisLock)
+            {
+                {
+                    List<Channel> channels = new List<Channel>();
+                    List<Category> categoryList = new List<Category>();
+
+                    categoryList.AddRange(categories);
+
+                    for (int i = 0; i < categoryList.Count; i++)
+                    {
+                        categoryList.AddRange(categoryList[i].Categories);
+                        channels.AddRange(categoryList[i].Boards.Select(n => n.Channel));
+                    }
+
+                    var sb = new StringBuilder();
+
+                    foreach (var item in channels)
+                    {
+                        sb.AppendLine(LairConverter.ToChannelString(item));
+                    }
+
+                    Clipboard.SetText(sb.ToString());
+                }
+
+                {
+                    _categoryList.Clear();
+                    _categoryList.AddRange(categories.Select(n => n.DeepClone()));
+                }
+            }
+        }
+
+        public class ClipboardWatcher : IDisposable
+        {
+            private ClipBoardWatcherForm form;
+
+            public event EventHandler DrawClipboard;
+
+            public ClipboardWatcher()
+            {
+                form = new ClipBoardWatcherForm();
+                form.StartWatch(raiseDrawClipboard);
+            }
+
+            ~ClipboardWatcher()
+            {
+                this.Dispose();
+            }
+
+            private void raiseDrawClipboard()
+            {
+                if (DrawClipboard != null)
+                {
+                    DrawClipboard(this, EventArgs.Empty);
+                }
+            }
+
+            public void Dispose()
+            {
+                form.Dispose();
+            }
+
+            private class ClipBoardWatcherForm : System.Windows.Forms.Form
+            {
+                [DllImport("user32.dll")]
+                private static extern IntPtr SetClipboardViewer(IntPtr hwnd);
+
+                [DllImport("user32.dll")]
+                private static extern int SendMessage(IntPtr hwnd, int wMsg, IntPtr wParam, IntPtr lParam);
+
+                [DllImport("user32.dll")]
+                private static extern bool ChangeClipboardChain(IntPtr hwnd, IntPtr hWndNext);
+
+                const int WM_DRAWCLIPBOARD = 0x0308;
+                const int WM_CHANGECBCHAIN = 0x030D;
+
+                IntPtr nextHandle;
+                System.Threading.ThreadStart proc;
+
+                public void StartWatch(System.Threading.ThreadStart proc)
+                {
+                    this.proc = proc;
+                    nextHandle = SetClipboardViewer(this.Handle);
+                }
+
+                protected override void WndProc(ref System.Windows.Forms.Message m)
+                {
+                    if (m.Msg == WM_DRAWCLIPBOARD)
+                    {
+                        SendMessage(nextHandle, m.Msg, m.WParam, m.LParam);
+                        proc();
+                    }
+                    else if (m.Msg == WM_CHANGECBCHAIN)
+                    {
+                        if (m.WParam == nextHandle)
+                        {
+                            nextHandle = m.LParam;
+                        }
+                        else
+                        {
+                            SendMessage(nextHandle, m.Msg, m.WParam, m.LParam);
+                        }
+                    }
+
+                    base.WndProc(ref m);
+                }
+
+                protected override void Dispose(bool disposing)
+                {
+                    try
+                    {
+                        ChangeClipboardChain(this.Handle, nextHandle);
+                        base.Dispose(disposing);
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                }
+            }
         }
     }
 }

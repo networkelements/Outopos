@@ -132,6 +132,8 @@ namespace Lair.Windows
             RichTextBoxHelper.SeedClickEvent += new SeedClickEventHandler(RichTextBoxHelper_SeedClickEvent);
             RichTextBoxHelper.LinkClickEvent += new LinkClickEventHandler(RichTextBoxHelper_LinkClickEvent);
             RichTextBoxHelper.GetMaxHeightEvent += new GetMaxHeightEventHandler(RichTextBoxHelper_GetMaxHeightEvent);
+
+            _searchRowDefinition.Height = new GridLength(0);
         }
 
         private void Search()
@@ -163,130 +165,11 @@ namespace Lair.Windows
 
                             if (App.SelectTab == "Channel")
                                 _mainWindow.Title = string.Format("Lair {0} - {1}", App.LairVersion, selectitem.Value.Name);
-
-                            {
-                                StringBuilder sb = new StringBuilder();
-
-                                var items = new List<TreeViewItem>();
-                                items.Add((TreeViewItem)selectitem);
-
-                                for (int i = 0; i < items.Count; i++)
-                                {
-                                    foreach (TreeViewItem item in items[i].Items)
-                                    {
-                                        items.Add(item);
-                                    }
-                                }
-
-                                foreach (var item in items)
-                                {
-                                    foreach (var board in item.Items.OfType<BoardTreeViewItem>().Select(n => n.Value))
-                                    {
-                                        sb.AppendLine(LairConverter.ToChannelString(board.Channel));
-                                        sb.AppendLine();
-                                    }
-                                }
-
-                                var fd = new FlowDocument();
-                                fd.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
-                                fd.FontSize = (double)new FontSizeConverter().ConvertFromString(Settings.Instance.Global_Fonts_MessageFontSize + "pt");
-
-                                var p = new Paragraph();
-                                p.LineHeight = _channelsRichTextBox.FontSize + 2;
-
-                                foreach (var line in sb.ToString().Trim('\r', '\n').Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None))
-                                {
-                                    if (line.StartsWith("Channel@"))
-                                    {
-                                        var channel = Library.Net.Lair.LairConverter.FromChannelString(line);
-                                        if (channel == null) throw new Exception();
-
-                                        {
-                                            var span = new Span();
-
-                                            var rl1 = line.Substring(0, 64);
-                                            var rl2 = (64 < line.Length) ? line.Substring(64, Math.Min(line.Length - 64, 16)) : "";
-                                            var rl3 = (80 < line.Length) ? line.Substring(80) : "";
-
-                                            Hyperlink l = new Hyperlink();
-                                            l.Foreground = new SolidColorBrush(Color.FromRgb(0xDF, 0xDF, 0xDF));
-                                            l.Cursor = Cursors.Hand;
-
-                                            {
-                                                Run r = new Run();
-                                                r.Text = rl1;
-
-                                                l.Inlines.Add(r);
-                                            }
-
-                                            if (!string.IsNullOrWhiteSpace(rl2))
-                                            {
-                                                Run r = new Run();
-                                                r.Text = rl2;
-                                                r.FontSize = 1;
-
-                                                l.Inlines.Add(r);
-                                            }
-
-                                            span.Inlines.Add(l);
-
-                                            if (!string.IsNullOrWhiteSpace(rl3))
-                                            {
-                                                Run r = new Run();
-                                                r.Foreground = new SolidColorBrush(Color.FromRgb(0x33, 0x33, 0x33));
-                                                r.Text = rl3;
-                                                r.FontSize = 0.1;
-                                                r.FontStretch = FontStretches.UltraCondensed;
-
-                                                span.Inlines.Add(r);
-                                            }
-
-                                            l.PreviewMouseRightButtonDown += (object sender, MouseButtonEventArgs ex) =>
-                                            {
-                                                _channelsRichTextBox.Selection.Select(span.ContentStart, span.ContentEnd);
-                                            };
-
-                                            p.Inlines.Add(span);
-                                        }
-
-                                        p.Inlines.Add(new LineBreak());
-
-                                        {
-                                            Run r = new Run();
-                                            r.Foreground = new SolidColorBrush(Color.FromRgb(0xEF, 0xEF, 0xEF));
-                                            r.Text = MessageConverter.ToInfoMessage(channel);
-
-                                            p.Inlines.Add(r);
-                                        }
-
-                                        p.Inlines.Add(new LineBreak());
-                                    }
-                                    else
-                                    {
-                                        p.Inlines.Add(line);
-                                        p.Inlines.Add(new LineBreak());
-                                    }
-                                }
-
-                                while (p.Inlines.LastInline is LineBreak)
-                                {
-                                    p.Inlines.Remove(p.Inlines.LastInline);
-                                }
-
-                                fd.Blocks.Add(p);
-                                _channelsRichTextBox.Document = fd;
-                            }
-
-                            _listView.Visibility = System.Windows.Visibility.Hidden;
-                            _channelsBorder.Visibility = System.Windows.Visibility.Visible;
                         }
                         else if (_treeView.SelectedItem is BoardTreeViewItem)
                         {
                             selectTreeViewItem = (BoardTreeViewItem)_treeView.SelectedItem;
                             selectTreeViewItem.Hit = false;
-
-                            _listView.Visibility = System.Windows.Visibility.Visible;
-                            _channelsBorder.Visibility = System.Windows.Visibility.Hidden;
                         }
                     }), null);
 
@@ -362,6 +245,31 @@ namespace Lair.Windows
                     foreach (var item in categoryTreeViewItems)
                     {
                         ChannelControl.Filter(ref newList, item.Value);
+                    }
+
+                    {
+                        string searchText = null;
+
+                        this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                        {
+                            searchText = _searchTextBox.Text.ToLower();
+                        }), null);
+
+                        if (!string.IsNullOrWhiteSpace(searchText))
+                        {
+                            List<Message> list = new List<Message>();
+
+                            foreach (var item in newList)
+                            {
+                                if (item.Content.ToLower().Contains(searchText))
+                                {
+                                    list.Add(item);
+                                }
+                            }
+
+                            newList.Clear();
+                            newList.UnionWith(list);
+                        }
                     }
 
                     List<Message> sortList = new List<Message>();
@@ -446,7 +354,7 @@ namespace Lair.Windows
                             if (_listViewItemCollection.Count > 0)
                             {
                                 _listView.ScrollIntoView(_listView.Items[_listView.Items.Count - 1]);
-                                
+
                                 this.Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state3)
                                 {
                                     _listView.ScrollIntoView(_listView.Items[_listView.Items.Count - 1]);
@@ -841,30 +749,9 @@ namespace Lair.Windows
             var list2 = _treeViewItem.GetLineage(selectBoardTreeViewItem).OfType<TreeViewItem>().ToList();
             var selectCategoryTreeViewItem = ((CategoryTreeViewItem)list2[list2.Count - 2]) as CategoryTreeViewItem;
 
-            HashSet<Channel> items = new HashSet<Channel>();
-
-            this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
-            {
-                var list = new List<TreeViewItem>();
-                list.Add(_treeViewItem);
-
-                for (int i = 0; i < list.Count; i++)
-                {
-                    foreach (TreeViewItem item in list[i].Items)
-                    {
-                        list.Add(item);
-                    }
-                }
-
-                foreach (BoardTreeViewItem item in list.OfType<BoardTreeViewItem>())
-                {
-                    items.Add(item.Value.Channel);
-                }
-            }), null);
-
             {
                 if (channel.Name == null || channel.Id == null) return;
-                if (items.Contains(channel)) return;
+                if (selectCategoryTreeViewItem.Value.Boards.Any(n => n.Channel == channel)) return;
 
                 selectCategoryTreeViewItem.Value.Boards.Add(new Board() { Channel = channel });
             }
@@ -1170,7 +1057,7 @@ namespace Lair.Windows
                 }
 
                 if (s.Value is Category) t.Value.Categories.Add(s.Value);
-                else if (s.Value is Board) t.Value.Boards.Add(s.Value);
+                else if (s.Value is Board && !t.Value.Boards.Any(n => n.Channel == s.Value.Channel)) t.Value.Boards.Add(s.Value);
 
                 ((CategoryTreeViewItem)list[list.Count - 2]).Update();
                 t.Update();
@@ -1304,12 +1191,13 @@ namespace Lair.Windows
             if (_treeView.SelectedItem is CategoryTreeViewItem)
             {
                 var selectTreeViewItem = _treeView.SelectedItem as CategoryTreeViewItem;
-                if (selectTreeViewItem == null) return;
-
+                if (selectTreeViewItem == null || selectTreeViewItem == _treeViewItem) return;
+                
+                if (MessageBox.Show(_mainWindow, LanguagesManager.Instance.MainWindow_Delete_Message, "Channel", MessageBoxButton.OKCancel, MessageBoxImage.Information) != MessageBoxResult.OK) return;
+                
                 var list = _treeViewItem.GetLineage(selectTreeViewItem).OfType<TreeViewItem>().ToList();
 
                 ((CategoryTreeViewItem)list[list.Count - 2]).Value.Categories.Remove(selectTreeViewItem.Value);
-
                 ((CategoryTreeViewItem)list[list.Count - 2]).Update();
 
                 this.Update();
@@ -1319,10 +1207,11 @@ namespace Lair.Windows
                 var selectTreeViewItem = _treeView.SelectedItem as BoardTreeViewItem;
                 if (selectTreeViewItem == null) return;
 
+                if (MessageBox.Show(_mainWindow, LanguagesManager.Instance.MainWindow_Delete_Message, "Channel", MessageBoxButton.OKCancel, MessageBoxImage.Information) != MessageBoxResult.OK) return;
+                
                 var list = _treeViewItem.GetLineage(selectTreeViewItem).OfType<TreeViewItem>().ToList();
 
                 ((CategoryTreeViewItem)list[list.Count - 2]).Value.Boards.Remove(selectTreeViewItem.Value);
-
                 ((CategoryTreeViewItem)list[list.Count - 2]).Update();
 
                 this.Update();
@@ -1334,12 +1223,11 @@ namespace Lair.Windows
             if (_treeView.SelectedItem is CategoryTreeViewItem)
             {
                 var selectTreeViewItem = _treeView.SelectedItem as CategoryTreeViewItem;
-                if (selectTreeViewItem == null) return;
-
+                if (selectTreeViewItem == null || selectTreeViewItem == _treeViewItem) return;
+                
                 var list = _treeViewItem.GetLineage(selectTreeViewItem).OfType<TreeViewItem>().ToList();
 
                 Clipboard.SetCategories(new Category[] { selectTreeViewItem.Value });
-                Clipboard.SetChannels(new Channel[0]);
 
                 ((CategoryTreeViewItem)list[list.Count - 2]).Value.Categories.Remove(selectTreeViewItem.Value);
 
@@ -1355,7 +1243,6 @@ namespace Lair.Windows
                 var list = _treeViewItem.GetLineage(selectTreeViewItem).OfType<TreeViewItem>().ToList();
 
                 Clipboard.SetChannels(new Channel[] { selectTreeViewItem.Value.Channel });
-                Clipboard.SetCategories(new Category[0]);
 
                 ((CategoryTreeViewItem)list[list.Count - 2]).Value.Boards.Remove(selectTreeViewItem.Value);
 
@@ -1373,7 +1260,6 @@ namespace Lair.Windows
                 if (selectTreeViewItem == null) return;
 
                 Clipboard.SetCategories(new Category[] { selectTreeViewItem.Value });
-                Clipboard.SetChannels(new Channel[0]);
             }
             else if (_treeView.SelectedItem is BoardTreeViewItem)
             {
@@ -1381,7 +1267,52 @@ namespace Lair.Windows
                 if (selectTreeViewItem == null) return;
 
                 Clipboard.SetChannels(new Channel[] { selectTreeViewItem.Value.Channel });
-                Clipboard.SetCategories(new Category[0]);
+            }
+        }
+
+        private void _treeViewCopyInfoMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (_treeView.SelectedItem is CategoryTreeViewItem)
+            {
+                var selectTreeViewItem = _treeView.SelectedItem as CategoryTreeViewItem;
+                if (selectTreeViewItem == null) return;
+
+                List<Channel> channels = new List<Channel>();
+                List<Category> categoryList = new List<Category>();
+
+                categoryList.Add(selectTreeViewItem.Value);
+
+                for (int i = 0; i < categoryList.Count; i++)
+                {
+                    categoryList.AddRange(categoryList[i].Categories);
+                    channels.AddRange(categoryList[i].Boards.Select(n => n.Channel));
+                }
+
+                var sb = new StringBuilder();
+
+                foreach (var channel in channels)
+                {
+                    sb.AppendLine(LairConverter.ToChannelString(channel));
+                    sb.AppendLine(MessageConverter.ToInfoMessage(channel));
+                    sb.AppendLine();
+                }
+
+                Clipboard.SetText(sb.ToString().TrimEnd('\r', '\n'));
+            }
+            else if (_treeView.SelectedItem is BoardTreeViewItem)
+            {
+                var selectTreeViewItem = _treeView.SelectedItem as BoardTreeViewItem;
+                if (selectTreeViewItem == null) return;
+
+                var sb = new StringBuilder();
+
+                {
+                    sb.AppendLine(LairConverter.ToChannelString(selectTreeViewItem.Value.Channel));
+                    sb.AppendLine(MessageConverter.ToInfoMessage(selectTreeViewItem.Value.Channel));
+                    sb.AppendLine();
+                }
+
+                Clipboard.SetText(sb.ToString().TrimEnd('\r', '\n'));
             }
         }
 
@@ -1391,33 +1322,11 @@ namespace Lair.Windows
             if (selectTreeViewItem == null) return;
 
             selectTreeViewItem.Value.Categories.AddRange(Clipboard.GetCategories());
-            Clipboard.SetCategories(new Category[0]);
-
-            HashSet<Channel> items = new HashSet<Channel>();
-
-            this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
-            {
-                var list = new List<TreeViewItem>();
-                list.Add(_treeViewItem);
-
-                for (int i = 0; i < list.Count; i++)
-                {
-                    foreach (TreeViewItem item in list[i].Items)
-                    {
-                        list.Add(item);
-                    }
-                }
-
-                foreach (BoardTreeViewItem item in list.OfType<BoardTreeViewItem>())
-                {
-                    items.Add(item.Value.Channel);
-                }
-            }), null);
 
             foreach (var channel in Clipboard.GetChannels())
             {
                 if (channel.Name == null || channel.Id == null) continue;
-                if (items.Contains(channel)) continue;
+                if (selectTreeViewItem.Value.Boards.Any(n => n.Channel == channel)) return;
 
                 selectTreeViewItem.Value.Boards.Add(new Board() { Channel = channel });
             }
@@ -1425,23 +1334,6 @@ namespace Lair.Windows
             selectTreeViewItem.Update();
 
             this.Update();
-        }
-
-        #endregion
-
-        #region _channelRichTextBox
-
-        private void _channelsRichTextBox_ContextMenuOpening(object sender, ContextMenuEventArgs e)
-        {
-            _channelRichTextBoxCopyMenuItem.IsEnabled = !_channelsRichTextBox.Selection.IsEmpty;
-        }
-
-        private void _channelRichTextBoxCopyMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            string text = _channelsRichTextBox.Selection.Text;
-            if (string.IsNullOrWhiteSpace(text)) return;
-
-            Clipboard.SetText(text);
         }
 
         #endregion
@@ -1672,6 +1564,22 @@ namespace Lair.Windows
             }
         }
 
+        private void _serachCloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            _searchRowDefinition.Height = new GridLength(0);
+            _searchTextBox.Text = "";
+
+            this.Update();
+        }
+
+        private void _searchTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Enter)
+            {
+                this.Update();
+            }
+        }
+
         #region Sort
 
         private void Sort()
@@ -1697,6 +1605,58 @@ namespace Lair.Windows
         }
 
         #endregion
+
+        private void Execute_New(object sender, ExecutedRoutedEventArgs e)
+        {
+            _newMessageButton_Click(null, null);
+        }
+
+        private void Execute_Delete(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (_listView.SelectedItems.Count == 0)
+            {
+                _treeViewDeleteMenuItem_Click(null, null);
+            }
+            else
+            {
+                
+            }
+        }
+
+        private void Execute_Copy(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (_listView.SelectedItems.Count == 0)
+            {
+                _treeViewCopyMenuItem_Click(null, null);
+            }
+            else
+            {
+                
+            }
+        }
+
+        private void Execute_Cut(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (_listView.SelectedItems.Count == 0)
+            {
+                _treeViewCutMenuItem_Click(null, null);
+            }
+            else
+            {
+
+            }
+        }
+
+        private void Execute_Paste(object sender, ExecutedRoutedEventArgs e)
+        {
+            _treeViewPasteMenuItem_Click(null, null);
+        }
+
+        private void Execute_Search(object sender, ExecutedRoutedEventArgs e)
+        {
+            _searchRowDefinition.Height = new GridLength(24);
+            _searchTextBox.Focus();
+        }
     }
 
     class CategoryTreeViewItem : TreeViewItem
@@ -2220,7 +2180,7 @@ namespace Lair.Windows
             }
         }
 
-        #region IDeepClone<Thread>
+        #region IDeepClone<Board>
 
         public Board DeepClone()
         {
@@ -2317,7 +2277,8 @@ namespace Lair.Windows
         {
             lock (this.ThisLock)
             {
-                return this.Value.GetHashCode();
+                if (this.Value == null) return 0;
+                else return this.Value.GetHashCode();
             }
         }
 
@@ -2457,15 +2418,8 @@ namespace Lair.Windows
                 var o = RegexOptions.Compiled | RegexOptions.Singleline;
                 if (_isIgnoreCase) o |= RegexOptions.IgnoreCase;
 
-                try
-                {
-                    if (_value != null) _regex = new Regex(_value, o);
-                    else _regex = null;
-                }
-                catch (Exception)
-                {
-                    _regex = null;
-                }
+                if (_value != null) _regex = new Regex(_value, o);
+                else _regex = null;
             }
         }
 

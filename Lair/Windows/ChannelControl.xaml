@@ -215,10 +215,29 @@
         </DataTemplate>
     </UserControl.Resources>
 
+    <UserControl.CommandBindings>
+        <CommandBinding Command="New" Executed="Execute_New" />
+        <CommandBinding Command="Delete" Executed="Execute_Delete" />
+        <CommandBinding Command="Copy" Executed="Execute_Copy" />
+        <CommandBinding Command="Cut" Executed="Execute_Cut" />
+        <CommandBinding Command="Paste" Executed="Execute_Paste" />
+        <CommandBinding Command="Search"  Executed="Execute_Search" />
+    </UserControl.CommandBindings>
+
+    <UserControl.InputBindings>
+        <KeyBinding Gesture="CTRL+N" Command="New" />
+        <KeyBinding Gesture="Delete" Command="Delete" />
+        <KeyBinding Gesture="CTRL+C" Command="Copy" />
+        <KeyBinding Gesture="CTRL+X" Command="Cut" />
+        <KeyBinding Gesture="CTRL+V" Command="Paste" />
+        <KeyBinding Gesture="CTRL+F" Command="Search" />
+    </UserControl.InputBindings>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="23" />
-            <RowDefinition Height="559*" />
+            <RowDefinition Height="546*" />
+            <RowDefinition Name="_searchRowDefinition" Height="24" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="{Binding Path=ChannelControl_Grid_ColumnDefinitions_Width, Mode=TwoWay, Converter={StaticResource _doubleToGridLengthConverter}, Source={x:Static prop:Settings.Instance}}" />
@@ -228,10 +247,10 @@
             <ColumnDefinition Width="40" />
         </Grid.ColumnDefinitions>
 
-        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.RowSpan="2" />
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.RowSpan="3" />
 
         <TreeView Name="_treeView" ContextMenuOpening="_treeView_ContextMenuOpening" SelectedItemChanged="_treeView_SelectedItemChanged" PreviewMouseMove="_treeView_PreviewMouseMove" AllowDrop="True" PreviewDrop="_treeView_PreviewDrop" PreviewMouseLeftButtonDown="_treeView_PreviewMouseLeftButtonDown" PreviewMouseRightButtonDown="_treeView_PreviewMouseRightButtonDown" 
-                VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" Grid.RowSpan="2">
+                VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" Grid.RowSpan="3">
             <local:CategoryTreeViewItem x:Name="_treeViewItem" IsExpanded="True">
                 <local:CategoryTreeViewItem.ContextMenu>
                     <ContextMenu Name="_treeViewContextMenu">
@@ -243,6 +262,7 @@
                         <Separator />
                         <MenuItem Name="_treeViewCutMenuItem" Header="{Binding Path=ChannelControl_Cut, Source={StaticResource ResourcesInstance}}" Click="_treeViewCutMenuItem_Click" />
                         <MenuItem Name="_treeViewCopyMenuItem" Header="{Binding Path=ChannelControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_treeViewCopyMenuItem_Click" />
+                        <MenuItem Name="_treeViewCopyInfoMenuItem" Header="{Binding Path=ChannelControl_CopyInfo, Source={StaticResource ResourcesInstance}}" Click="_treeViewCopyInfoMenuItem_Click" />
                         <MenuItem Name="_treeViewPasteMenuItem" Header="{Binding Path=ChannelControl_Paste, Source={StaticResource ResourcesInstance}}" Click="_treeViewPasteMenuItem_Click" />
                     </ContextMenu>
                 </local:CategoryTreeViewItem.ContextMenu>
@@ -290,20 +310,11 @@
             </ListView.View>
         </local:ListViewEx>
 
-        <Border Name="_channelsBorder" SnapsToDevicePixels="true" BorderThickness="1" Grid.Column="2" Grid.ColumnSpan="3" CornerRadius="0,0,0,0" BorderBrush="{DynamicResource DefaultedBorderBrush}" Background="{DynamicResource ControlBackgroundBrush}" Grid.RowSpan="2" Panel.ZIndex="1">
-            <Border SnapsToDevicePixels="true" BorderBrush="Black" BorderThickness="1" CornerRadius="2" Margin="7">
-                <RichTextBox Name="_channelsRichTextBox" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ContextMenuOpening="_channelsRichTextBox_ContextMenuOpening">
-                    <RichTextBox.ContextMenu>
-                        <ContextMenu Name="_channelRichTextBoxContextMenu" FontFamily="{Binding Path=FontFamily, Mode=OneWay, Source={StaticResource ResourcesInstance}, Converter={StaticResource _stringToFontFamilyConverter}}" FontSize="{Binding Path=FontSize, Mode=OneWay, Source={StaticResource ResourcesInstance}, Converter={StaticResource _stringToDoubleConverter}}">
-                            <MenuItem Name="_channelRichTextBoxCopyMenuItem" Header="{Binding Path=ChannelControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_channelRichTextBoxCopyMenuItem_Click" />
-                        </ContextMenu>
-                    </RichTextBox.ContextMenu>
-                </RichTextBox>
-            </Border>
-        </Border>
-
         <ComboBox Name="_signatureComboBox" Grid.Column="2" SelectionChanged="_signatureComboBox_SelectionChanged" TextBoxBase.TextChanged="_signatureComboBox_TextChanged" IsEditable="True" IsEnabled="False" Grid.ColumnSpan="1" />
         <Button Name="_newMessageButton" Content="{Binding Path=ChannelControl_NewMessage, Source={StaticResource ResourcesInstance}}" Click="_newMessageButton_Click" Grid.Column="4" IsEnabled="False" />
         <Button Name="_signButton" Content="{Binding Path=ChannelControl_Sign, Source={StaticResource ResourcesInstance}}" Click="_signButton_Click" Grid.Column="3" IsEnabled="False" />
+
+        <TextBox Grid.Column="2" Grid.Row="2" Margin="24,0,0,0" Name="_searchTextBox" Grid.ColumnSpan="3" KeyDown="_searchTextBox_KeyDown" />
+        <Button Content="×" Grid.Column="2" Grid.Row="2" Height="16" HorizontalAlignment="Left" Margin="4,4,0,0" Name="_serachCloseButton" VerticalAlignment="Top" Width="16" Padding="0,-2,0,0" Click="_serachCloseButton_Click" />
     </Grid>
 </UserControl>

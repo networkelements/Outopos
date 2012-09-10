@@ -62,15 +62,69 @@ namespace Lair.Windows
             _amoebaPathTextBox.Text = Settings.Instance.Global_Amoeba_Path;
 
             _messageFontFamilyComboBox.ItemsSource = _messageFontFamilyComboBoxItemCollection;
-
-            var index = _messageFontFamilyComboBoxItemCollection.IndexOf(Settings.Instance.Global_Fonts_MessageFontFamily);
-            _messageFontFamilyComboBox.SelectedIndex = index;
-            //_messageFontFamilyComboBox.SelectedItem = _messageFontFamilyComboBox.Items[index];
+            _messageFontFamilyComboBox.SelectedItem = Settings.Instance.Global_Fonts_MessageFontFamily;
 
             _messageFontSizeTextBox.Text = Settings.Instance.Global_Fonts_MessageFontSize.ToString();
         }
 
         #region Signature
+
+        private void _signatureTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Enter)
+            {
+                _signatureAddButton_Click(null, null);
+
+                e.Handled = true;
+            }
+        }
+
+        private void _signatureListView_PreviewDragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effects = DragDropEffects.All;
+                e.Handled = true;
+            }
+        }
+
+        private void _signatureListView_PreviewDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                foreach (string filePath in ((string[])e.Data.GetData(DataFormats.FileDrop)).Where(item => File.Exists(item)))
+                {
+                    using (FileStream stream = new FileStream(filePath, FileMode.Open))
+                    {
+                        try
+                        {
+                            var signature = LairConverter.FromSignatureStream(stream);
+                            if (_signatureListViewItemCollection.Any(n => n.Value == signature)) continue;
+
+                            _signatureListViewItemCollection.Add(new SignatureListViewItem(signature));
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                    }
+                }
+
+                _signatureListView.Items.Refresh();
+            }
+        }
+
+        private void _signatureListView_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            var selectItems = _signatureListView.SelectedItems;
+
+            _signatureListViewDeleteMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
+        }
+
+        private void _signatureListViewDeleteMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            _signatureDeleteButton_Click(null, null);
+        }
 
         private void _signatureListViewUpdate()
         {
@@ -132,9 +186,9 @@ namespace Lair.Windows
 
                 if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    foreach (var fileName in dialog.FileNames)
+                    foreach (var filePath in dialog.FileNames)
                     {
-                        using (FileStream stream = new FileStream(fileName, FileMode.Open))
+                        using (FileStream stream = new FileStream(filePath, FileMode.Open))
                         {
                             try
                             {
@@ -142,8 +196,6 @@ namespace Lair.Windows
                                 if (_signatureListViewItemCollection.Any(n => n.Value == signature)) continue;
 
                                 _signatureListViewItemCollection.Add(new SignatureListViewItem(signature));
-
-                                _signatureListView.Items.Refresh();
                             }
                             catch (Exception)
                             {
@@ -151,6 +203,8 @@ namespace Lair.Windows
                             }
                         }
                     }
+
+                    _signatureListView.Items.Refresh();
                 }
             }
         }
@@ -400,6 +454,14 @@ namespace Lair.Windows
                 {
                     return _text;
                 }
+            }
+        }
+
+        private void Execute_Delete(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (_signatureTabItem.IsSelected)
+            {
+                _signatureListViewDeleteMenuItem_Click(null, null);
             }
         }
     }

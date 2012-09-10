@@ -184,7 +184,7 @@ namespace Lair.Windows
 
                         {
                             Run r = new Run();
-                            r.Foreground = new SolidColorBrush(Color.FromRgb(0xEF, 0xEF, 0xEF));
+                            r.Foreground = new SolidColorBrush(Color.FromRgb(0xCF, 0xCF, 0xCF));
                             r.Text = MessageConverter.ToInfoMessage(seed);
 
                             p.Inlines.Add(r);
@@ -256,7 +256,7 @@ namespace Lair.Windows
 
                         {
                             Run r = new Run();
-                            r.Foreground = new SolidColorBrush(Color.FromRgb(0xEF, 0xEF, 0xEF));
+                            r.Foreground = new SolidColorBrush(Color.FromRgb(0xCF, 0xCF, 0xCF));
                             r.Text = MessageConverter.ToInfoMessage(channel);
 
                             p.Inlines.Add(r);

@@ -508,6 +508,17 @@ namespace Lair.Properties
             }
         }
 
+        public string MainWindow_Delete_Message
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("MainWindow_Delete_Message");
+                }
+            }
+        }
+
 
         public string UserInterfaceWindow_Title
         {
@@ -1244,6 +1255,17 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("ConnectionWindow_Copy");
+                }
+            }
+        }
+
+        public string ConnectionWindow_Cut
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionWindow_Cut");
                 }
             }
         }
@@ -2143,6 +2165,17 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("CategoryEditWindow_Copy");
+                }
+            }
+        }
+
+        public string CategoryEditWindow_Cut
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("CategoryEditWindow_Cut");
                 }
             }
         }
