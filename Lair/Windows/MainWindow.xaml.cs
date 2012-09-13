@@ -70,9 +70,15 @@ namespace Lair.Windows
 
             this.Title = string.Format("Lair {0}", App.LairVersion);
 
-            using (FileStream stream = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], "Lair.ico"), FileMode.Open))
             {
-                this.Icon = BitmapFrame.Create(stream);
+                var icon = new BitmapImage();
+
+                icon.BeginInit();
+                icon.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], "Lair.ico"), FileMode.Open, FileAccess.Read, FileShare.Read);
+                icon.EndInit();
+                if (icon.CanFreeze) icon.Freeze();
+
+                this.Icon = icon;
             }
 
             this.Setting_Languages();
@@ -534,6 +540,11 @@ namespace Lair.Windows
                     using (StreamReader reader = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Lair.version"), new UTF8Encoding(false)))
                     {
                         version = new Version(reader.ReadLine());
+                    }
+
+                    if (version <= new Version(0, 0, 16))
+                    {
+                        Settings.Instance.ChannelControl_Category.Name = "Channel";
                     }
                 }
 

@@ -76,7 +76,7 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<double>() { Name = "ConnectionControl_GridViewColumn_Name_Width", Value = -1 },
                 new Library.Configuration.SettingsContext<double>() { Name = "ConnectionControl_GridViewColumn_Value_Width", Value = 100 },
 
-                new Library.Configuration.SettingsContext<Windows.Category>() { Name = "ChannelControl_Category", Value = new Category() { Name = "Lair" } },
+                new Library.Configuration.SettingsContext<Windows.Category>() { Name = "ChannelControl_Category", Value = new Category() { Name = "Channel" } },
                 new Library.Configuration.SettingsContext<string>() { Name = "ChannelControl_LastHeaderClicked", Value = "Uri" },
                 new Library.Configuration.SettingsContext<ListSortDirection>() { Name = "ChannelControl_ListSortDirection", Value = ListSortDirection.Ascending },
                 new Library.Configuration.SettingsContext<double>() { Name = "ChannelControl_Grid_ColumnDefinitions_Width", Value = 200 },

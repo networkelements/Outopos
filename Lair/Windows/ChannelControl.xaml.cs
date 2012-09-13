@@ -1661,30 +1661,8 @@ namespace Lair.Windows
 
     class CategoryTreeViewItem : TreeViewItem
     {
-        private static BitmapImage _image;
         private Category _value;
         private ObservableCollection<object> _listViewItemCollection = new ObservableCollection<object>();
-
-        static CategoryTreeViewItem()
-        {
-            try
-            {
-                _image = CategoryTreeViewItem.GetImage(Path.Combine(App.DirectoryPaths["Icons"], "Category.png"));
-            }
-            catch (Exception)
-            {
-
-            }
-        }
-
-        private static BitmapImage GetImage(string path)
-        {
-            var icon = new BitmapImage();
-            icon.BeginInit();
-            icon.StreamSource = new FileStream(path, FileMode.Open);
-            icon.EndInit();
-            return icon;
-        }
 
         public CategoryTreeViewItem()
             : base()
@@ -1723,11 +1701,7 @@ namespace Lair.Windows
 
         public void Update()
         {
-            Grid grid = new Grid();
-            grid.Children.Add(new Image() { Source = _image, Height = 16, Width = 16, HorizontalAlignment = System.Windows.HorizontalAlignment.Left });
-            grid.Children.Add(new TextBlock() { Margin = new Thickness(22, 0, 0, 0), Text = string.Format("{0}", _value.Name) });
-
-            this.Header = grid;
+            this.Header = string.Format("{0}", _value.Name);
 
             List<dynamic> list = new List<dynamic>();
 
@@ -1846,27 +1820,6 @@ namespace Lair.Windows
         private bool _hit;
         private int _count;
 
-        static BoardTreeViewItem()
-        {
-            try
-            {
-                _image = BoardTreeViewItem.GetImage(Path.Combine(App.DirectoryPaths["Icons"], "Board.png"));
-            }
-            catch (Exception)
-            {
-
-            }
-        }
-
-        private static BitmapImage GetImage(string path)
-        {
-            var icon = new BitmapImage();
-            icon.BeginInit();
-            icon.StreamSource = new FileStream(path, FileMode.Open);
-            icon.EndInit();
-            return icon;
-        }
-
         public BoardTreeViewItem(Board board)
             : base()
         {
@@ -1887,18 +1840,25 @@ namespace Lair.Windows
 
         public void Update()
         {
-            Grid grid = new Grid();
-            grid.Children.Add(new Image() { Source = _image, Height = 16, Width = 16, HorizontalAlignment = System.Windows.HorizontalAlignment.Left });
-
             string text = "";
 
-            if (_value.FilterUploadDigitalSignature == null) text = string.Format("{0} ({1})", _value.Channel.Name, _count);
-            else text = string.Format("{0} ({1}) - {2}", _value.Channel.Name, _count, MessageConverter.ToSignatureString(_value.FilterUploadDigitalSignature));
+            if (_value.FilterUploadDigitalSignature == null)
+            {
+                text = string.Format("{0} ({1})", _value.Channel.Name, _count);
+            }
+            else
+            {
+                text = string.Format("{0} ({1}) - {2}", _value.Channel.Name, _count, MessageConverter.ToSignatureString(_value.FilterUploadDigitalSignature));
+            }
 
-            if (_hit) grid.Children.Add(new TextBlock() { Margin = new Thickness(22, 0, 0, 0), Text = text, FontWeight = FontWeights.ExtraBlack });
-            else grid.Children.Add(new TextBlock() { Margin = new Thickness(22, 0, 0, 0), Text = text });
-
-            this.Header = grid;
+            if (_hit)
+            {
+                this.Header = new TextBlock() { Text = text, FontWeight = FontWeights.ExtraBlack };
+            }
+            else
+            {
+                this.Header = new TextBlock() { Text = text };
+            }
         }
 
         public Board Value
