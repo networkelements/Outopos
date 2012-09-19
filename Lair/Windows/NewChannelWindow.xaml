@@ -12,7 +12,7 @@
         Left="{Binding Path=NewChannelWindow_Left, Mode=TwoWay, Source={x:Static prop:Settings.Instance}, Converter={StaticResource _leftRelativeDoubleConverter}}"
         Width="{Binding Path=NewChannelWindow_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}"
         WindowState="{Binding Path=NewChannelWindow_WindowState, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" 
-        SizeToContent="Height">
+        SizeToContent="Height" Loaded="Window_Loaded">
 
     <Grid FocusManager.FocusedElement="{Binding ElementName=_nameTextBox}">
         <Label Content="{Binding Path=NewChannelWindow_Name, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="12,12,0,0" VerticalAlignment="Top" Width="120" VerticalContentAlignment="Center" />

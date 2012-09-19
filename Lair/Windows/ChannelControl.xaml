@@ -218,8 +218,8 @@
     <UserControl.CommandBindings>
         <CommandBinding Command="New" Executed="Execute_New" />
         <CommandBinding Command="Delete" Executed="Execute_Delete" />
-        <CommandBinding Command="Copy" Executed="Execute_Copy" />
         <CommandBinding Command="Cut" Executed="Execute_Cut" />
+        <CommandBinding Command="Copy" Executed="Execute_Copy" />
         <CommandBinding Command="Paste" Executed="Execute_Paste" />
         <CommandBinding Command="Search"  Executed="Execute_Search" />
     </UserControl.CommandBindings>
@@ -227,8 +227,8 @@
     <UserControl.InputBindings>
         <KeyBinding Gesture="CTRL+N" Command="New" />
         <KeyBinding Gesture="Delete" Command="Delete" />
-        <KeyBinding Gesture="CTRL+C" Command="Copy" />
         <KeyBinding Gesture="CTRL+X" Command="Cut" />
+        <KeyBinding Gesture="CTRL+C" Command="Copy" />
         <KeyBinding Gesture="CTRL+V" Command="Paste" />
         <KeyBinding Gesture="CTRL+F" Command="Search" />
     </UserControl.InputBindings>
@@ -256,7 +256,7 @@
                     <ContextMenu Name="_treeViewContextMenu">
                         <MenuItem Name="_treeViewNewChannelMenuItem" Header="{Binding Path=ChannelControl_NewChannel, Source={StaticResource ResourcesInstance}}" Click="_treeViewNewChannelMenuItem_Click"/>
                         <Separator />
-                        <MenuItem Name="_treeViewAddCategoryMenuItem" Header="{Binding Path=ChannelControl_AddCategory, Source={StaticResource ResourcesInstance}}" Click="_treeViewAddCategoryMenuItem_Click"/>
+                        <MenuItem Name="_treeViewNewCategoryMenuItem" Header="{Binding Path=ChannelControl_NewCategory, Source={StaticResource ResourcesInstance}}" Click="_treeViewNewCategoryMenuItem_Click"/>
                         <MenuItem Name="_treeViewEditMenuItem" Header="{Binding Path=ChannelControl_Edit, Source={StaticResource ResourcesInstance}}" Click="_treeViewEditMenuItem_Click"/>
                         <MenuItem Name="_treeViewDeleteMenuItem" Header="{Binding Path=ChannelControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_treeViewDeleteMenuItem_Click"/>
                         <Separator />
@@ -311,8 +311,8 @@
         </local:ListViewEx>
 
         <ComboBox Name="_signatureComboBox" Grid.Column="2" SelectionChanged="_signatureComboBox_SelectionChanged" TextBoxBase.TextChanged="_signatureComboBox_TextChanged" IsEditable="True" IsEnabled="False" Grid.ColumnSpan="1" />
-        <Button Name="_newMessageButton" Content="{Binding Path=ChannelControl_NewMessage, Source={StaticResource ResourcesInstance}}" Click="_newMessageButton_Click" Grid.Column="4" IsEnabled="False" />
-        <Button Name="_signButton" Content="{Binding Path=ChannelControl_Sign, Source={StaticResource ResourcesInstance}}" Click="_signButton_Click" Grid.Column="3" IsEnabled="False" />
+        <Button Name="_newMessageButton" Content="{Binding Path=ChannelControl_New_Message, Source={StaticResource ResourcesInstance}}" Click="_newMessageButton_Click" Grid.Column="4" IsEnabled="False" />
+        <Button Name="_signButton" Content="{Binding Path=ChannelControl_Signature_Filter, Source={StaticResource ResourcesInstance}}" Click="_signButton_Click" Grid.Column="3" IsEnabled="False" />
 
         <TextBox Grid.Column="2" Grid.Row="2" Margin="24,0,0,0" Name="_searchTextBox" Grid.ColumnSpan="3" KeyDown="_searchTextBox_KeyDown" />
         <Button Content="×" Grid.Column="2" Grid.Row="2" Height="16" HorizontalAlignment="Left" Margin="4,4,0,0" Name="_serachCloseButton" VerticalAlignment="Top" Width="16" Padding="0,-2,0,0" Click="_serachCloseButton_Click" />

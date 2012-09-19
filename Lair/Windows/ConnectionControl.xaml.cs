@@ -140,7 +140,7 @@ namespace Lair.Windows
             {
                 for (; ; )
                 {
-                    Thread.Sleep(100);
+                    Thread.Sleep(1000);
                     if (App.SelectTab != "Connection") continue;
 
                     var connectionInformation = _lairManager.ConnectionInformation.ToArray();
@@ -458,6 +458,16 @@ namespace Lair.Windows
                 {
                     PropertyChanged(this, new PropertyChangedEventArgs(info));
                 }
+            }
+
+            public LairInfomationListViewItem()
+            {
+                LanguagesManager.UsingLanguageChangedEvent += new UsingLanguageChangedEventHandler(this.LanguagesManager_UsingLanguageChangedEvent);
+            }
+
+            void LanguagesManager_UsingLanguageChangedEvent(object sender)
+            {
+                this.NotifyPropertyChanged("Name");
             }
 
             private string _id = null;

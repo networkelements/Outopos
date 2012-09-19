@@ -142,7 +142,7 @@ namespace Lair.Windows
             {
                 for (; ; )
                 {
-                    Thread.Sleep(100);
+                    Thread.Sleep(1000);
                     if (!_refresh) continue;
 
                     BoardTreeViewItem selectTreeViewItem = null;
@@ -1105,7 +1105,7 @@ namespace Lair.Windows
                 if (selectTreeViewItem == null) return;
 
                 _treeViewNewChannelMenuItem.IsEnabled = true;
-                _treeViewAddCategoryMenuItem.IsEnabled = true;
+                _treeViewNewCategoryMenuItem.IsEnabled = true;
                 _treeViewEditMenuItem.IsEnabled = true;
                 _treeViewDeleteMenuItem.IsEnabled = !(selectTreeViewItem == _treeViewItem);
                 _treeViewCutMenuItem.IsEnabled = !(selectTreeViewItem == _treeViewItem);
@@ -1121,7 +1121,7 @@ namespace Lair.Windows
             else if (_treeView.SelectedItem is BoardTreeViewItem)
             {
                 _treeViewNewChannelMenuItem.IsEnabled = false;
-                _treeViewAddCategoryMenuItem.IsEnabled = false;
+                _treeViewNewCategoryMenuItem.IsEnabled = false;
                 _treeViewEditMenuItem.IsEnabled = false;
                 _treeViewDeleteMenuItem.IsEnabled = true;
                 _treeViewCutMenuItem.IsEnabled = true;
@@ -1148,7 +1148,7 @@ namespace Lair.Windows
             this.Update();
         }
 
-        private void _treeViewAddCategoryMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _treeViewNewCategoryMenuItem_Click(object sender, RoutedEventArgs e)
         {
             var selectTreeViewItem = _treeView.SelectedItem as CategoryTreeViewItem;
             if (selectTreeViewItem == null) return;
@@ -1326,7 +1326,7 @@ namespace Lair.Windows
             foreach (var channel in Clipboard.GetChannels())
             {
                 if (channel.Name == null || channel.Id == null) continue;
-                if (selectTreeViewItem.Value.Boards.Any(n => n.Channel == channel)) return;
+                if (selectTreeViewItem.Value.Boards.Any(n => n.Channel == channel)) continue;
 
                 selectTreeViewItem.Value.Boards.Add(new Board() { Channel = channel });
             }
@@ -1815,7 +1815,6 @@ namespace Lair.Windows
 
     class BoardTreeViewItem : TreeViewItem
     {
-        private static BitmapImage _image;
         private Board _value;
         private bool _hit;
         private int _count;

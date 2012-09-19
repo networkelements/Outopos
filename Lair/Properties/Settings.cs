@@ -39,6 +39,13 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<double>() { Name = "MainWindow_Width", Value = 700 },
                 new Library.Configuration.SettingsContext<WindowState>() { Name = "MainWindow_WindowState", Value = WindowState.Maximized },
 
+                new Library.Configuration.SettingsContext<double>() { Name = "UserInterfaceWindow_Top", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "UserInterfaceWindow_Left", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "UserInterfaceWindow_Height", Value = 500 },
+                new Library.Configuration.SettingsContext<double>() { Name = "UserInterfaceWindow_Width", Value = 700 },
+                new Library.Configuration.SettingsContext<WindowState>() { Name = "UserInterfaceWindow_WindowState", Value = WindowState.Normal },
+                new Library.Configuration.SettingsContext<double>() { Name = "UserInterfaceWindow_Signature_GridViewColumn_Value_Width", Value = 600 },
+
                 new Library.Configuration.SettingsContext<double>() { Name = "ConnectionWindow_Top", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "ConnectionWindow_Left", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "ConnectionWindow_Height", Value = 500 },
@@ -50,13 +57,6 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<double>() { Name = "ConnectionWindow_Client_Filters_GridViewColumn_ProxyUri_Width", Value = 200 },
                 new Library.Configuration.SettingsContext<double>() { Name = "ConnectionWindow_Client_Filters_GridViewColumn_UriCondition_Width", Value = 300 },
                 new Library.Configuration.SettingsContext<double>() { Name = "ConnectionWindow_Server_ListenUris_GridViewColumn_Uri_Width", Value = 600 },
-
-                new Library.Configuration.SettingsContext<double>() { Name = "UserInterfaceWindow_Top", Value = 120 },
-                new Library.Configuration.SettingsContext<double>() { Name = "UserInterfaceWindow_Left", Value = 120 },
-                new Library.Configuration.SettingsContext<double>() { Name = "UserInterfaceWindow_Height", Value = 500 },
-                new Library.Configuration.SettingsContext<double>() { Name = "UserInterfaceWindow_Width", Value = 700 },
-                new Library.Configuration.SettingsContext<WindowState>() { Name = "UserInterfaceWindow_WindowState", Value = WindowState.Normal },
-                new Library.Configuration.SettingsContext<double>() { Name = "UserInterfaceWindow_Signature_GridViewColumn_Value_Width", Value = 600 },
 
                 new Library.Configuration.SettingsContext<double>() { Name = "VersionInformationWindow_Top", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "VersionInformationWindow_Left", Value = 120 },
@@ -83,13 +83,11 @@ namespace Lair.Properties
               
                 new Library.Configuration.SettingsContext<double>() { Name = "SignWindow_Top", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "SignWindow_Left", Value = 120 },
-                new Library.Configuration.SettingsContext<double>() { Name = "SignWindow_Height", Value = 500 },
                 new Library.Configuration.SettingsContext<double>() { Name = "SignWindow_Width", Value = 700 },
                 new Library.Configuration.SettingsContext<WindowState>() { Name = "SignWindow_WindowState", Value = WindowState.Normal },
               
                 new Library.Configuration.SettingsContext<double>() { Name = "MessageEditWindow_Top", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "MessageEditWindow_Left", Value = 120 },
-                new Library.Configuration.SettingsContext<double>() { Name = "MessageEditWindow_Height", Value = 500 },
                 new Library.Configuration.SettingsContext<double>() { Name = "MessageEditWindow_Width", Value = 700 },
                 new Library.Configuration.SettingsContext<WindowState>() { Name = "MessageEditWindow_WindowState", Value = WindowState.Normal },
               
@@ -448,6 +446,121 @@ namespace Lair.Properties
         }
 
 
+        public double UserInterfaceWindow_Top
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["UserInterfaceWindow_Top"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["UserInterfaceWindow_Top"] = value;
+                }
+            }
+        }
+
+        public double UserInterfaceWindow_Left
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["UserInterfaceWindow_Left"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["UserInterfaceWindow_Left"] = value;
+                }
+            }
+        }
+
+        public double UserInterfaceWindow_Height
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["UserInterfaceWindow_Height"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["UserInterfaceWindow_Height"] = value;
+                }
+            }
+        }
+
+        public double UserInterfaceWindow_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["UserInterfaceWindow_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["UserInterfaceWindow_Width"] = value;
+                }
+            }
+        }
+
+        public WindowState UserInterfaceWindow_WindowState
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (WindowState)this["UserInterfaceWindow_WindowState"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["UserInterfaceWindow_WindowState"] = value;
+                }
+            }
+        }
+
+        public double UserInterfaceWindow_Signature_GridViewColumn_Value_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["UserInterfaceWindow_Signature_GridViewColumn_Value_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["UserInterfaceWindow_Signature_GridViewColumn_Value_Width"] = value;
+                }
+            }
+        }
+
+
         public double ConnectionWindow_Top
         {
             get
@@ -653,121 +766,6 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     this["ConnectionWindow_Server_ListenUris_GridViewColumn_Uri_Width"] = value;
-                }
-            }
-        }
-
-
-        public double UserInterfaceWindow_Top
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["UserInterfaceWindow_Top"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["UserInterfaceWindow_Top"] = value;
-                }
-            }
-        }
-
-        public double UserInterfaceWindow_Left
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["UserInterfaceWindow_Left"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["UserInterfaceWindow_Left"] = value;
-                }
-            }
-        }
-
-        public double UserInterfaceWindow_Height
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["UserInterfaceWindow_Height"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["UserInterfaceWindow_Height"] = value;
-                }
-            }
-        }
-
-        public double UserInterfaceWindow_Width
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["UserInterfaceWindow_Width"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["UserInterfaceWindow_Width"] = value;
-                }
-            }
-        }
-
-        public WindowState UserInterfaceWindow_WindowState
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (WindowState)this["UserInterfaceWindow_WindowState"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["UserInterfaceWindow_WindowState"] = value;
-                }
-            }
-        }
-
-        public double UserInterfaceWindow_Signature_GridViewColumn_Value_Width
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["UserInterfaceWindow_Signature_GridViewColumn_Value_Width"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["UserInterfaceWindow_Signature_GridViewColumn_Value_Width"] = value;
                 }
             }
         }
@@ -1194,25 +1192,6 @@ namespace Lair.Properties
             }
         }
 
-        public double SignWindow_Height
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["SignWindow_Height"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["SignWindow_Height"] = value;
-                }
-            }
-        }
-
         public double SignWindow_Width
         {
             get
@@ -1286,25 +1265,6 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     this["MessageEditWindow_Left"] = value;
-                }
-            }
-        }
-
-        public double MessageEditWindow_Height
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["MessageEditWindow_Height"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["MessageEditWindow_Height"] = value;
                 }
             }
         }

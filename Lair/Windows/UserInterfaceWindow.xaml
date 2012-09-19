@@ -87,16 +87,16 @@
             </TabItem>
             <TabItem Header="{Binding Path=UserInterfaceWindow_Fonts, Source={StaticResource ResourcesInstance}}">
                 <Grid FocusManager.FocusedElement="{Binding ElementName=_messageFontFamilyComboBox}">
-                    <Label Content="{Binding Path=UserInterfaceWindow_MessageFontFamily, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="120" />
-                    <ComboBox Name="_messageFontFamilyComboBox" VerticalAlignment="Top" Margin="132,6,6,0" Height="24">
+                    <Label Content="{Binding Path=UserInterfaceWindow_MessageFontFamily, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="240" />
+                    <ComboBox Name="_messageFontFamilyComboBox" VerticalAlignment="Top" Margin="252,6,6,0" Height="24" Width="420">
                         <ComboBox.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <VirtualizingStackPanel />
                             </ItemsPanelTemplate>
                         </ComboBox.ItemsPanel>
                     </ComboBox>
-                    <Label Content="{Binding Path=UserInterfaceWindow_MessageFontSize, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,36,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="120" />
-                    <TextBox Height="24" Margin="132,36,6,0" Name="_messageFontSizeTextBox" VerticalAlignment="Top" TextChanged="_messageFontSizeTextBox_TextChanged" />
+                    <Label Content="{Binding Path=UserInterfaceWindow_MessageFontSize, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,36,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="240" />
+                    <TextBox Height="24" Margin="252,36,6,0" Name="_messageFontSizeTextBox" VerticalAlignment="Top" TextChanged="_messageFontSizeTextBox_TextChanged" Width="420" />
                 </Grid>
             </TabItem>
         </TabControl>

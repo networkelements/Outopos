@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -14,7 +15,6 @@ using Lair.Properties;
 using Library.Net;
 using Library.Net.Lair;
 using Library.Security;
-using System.Text.RegularExpressions;
 
 namespace Lair.Windows
 {

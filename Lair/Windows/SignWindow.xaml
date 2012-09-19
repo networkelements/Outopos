@@ -12,7 +12,8 @@
         Left="{Binding Path=SignWindow_Left, Mode=TwoWay, Source={x:Static prop:Settings.Instance}, Converter={StaticResource _leftRelativeDoubleConverter}}"
         Width="{Binding Path=SignWindow_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}"
         WindowState="{Binding Path=SignWindow_WindowState, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}"
-        SizeToContent="Height">
+        SizeToContent="Height" 
+        Loaded="Window_Loaded">
 
     <Grid FocusManager.FocusedElement="{Binding ElementName=_signatureComboBox}">
         <Label Content="{Binding Path=SignWindow_Signature, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="12,12,0,0" VerticalAlignment="Top" Width="120" VerticalContentAlignment="Center" />

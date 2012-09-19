@@ -51,6 +51,12 @@ namespace Lair.Windows
             _signatureComboBox.SelectedIndex = index + 1;
         }
 
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.MaxHeight = this.RenderSize.Height;
+            this.MinHeight = this.RenderSize.Height;
+        }
+
         private void _okButton_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = true;

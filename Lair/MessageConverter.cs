@@ -97,12 +97,12 @@ namespace Lair
 
                 StringBuilder builder = new StringBuilder();
 
-                if (!string.IsNullOrWhiteSpace(seed.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.ChannelControl_Name, seed.Name));
-                if (seed.Certificate != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.ChannelControl_Signature, MessageConverter.ToSignatureString(seed.Certificate)));
-                builder.AppendLine(string.Format("{0}: {1:#,0}", LanguagesManager.Instance.ChannelControl_Length, seed.Length));
-                if (keywords.Count != 0) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.ChannelControl_Keywords, String.Join(", ", keywords)));
-                builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.ChannelControl_CreationTime, seed.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
-                if (!string.IsNullOrWhiteSpace(seed.Comment)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.ChannelControl_Comment, seed.Comment));
+                if (!string.IsNullOrWhiteSpace(seed.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Seed_Name, seed.Name));
+                if (seed.Certificate != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Seed_Signature, MessageConverter.ToSignatureString(seed.Certificate)));
+                builder.AppendLine(string.Format("{0}: {1:#,0}", LanguagesManager.Instance.Seed_Length, seed.Length));
+                if (keywords.Count != 0) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Seed_Keywords, String.Join(", ", keywords)));
+                builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Seed_CreationTime, seed.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
+                if (!string.IsNullOrWhiteSpace(seed.Comment)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Seed_Comment, seed.Comment));
 
                 if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
                 else return null;
@@ -119,10 +119,10 @@ namespace Lair
             {
                 StringBuilder builder = new StringBuilder();
 
-                if (!string.IsNullOrWhiteSpace(box.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.ChannelControl_Name, box.Name));
-                if (box.Certificate != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.ChannelControl_Signature, MessageConverter.ToSignatureString(box.Certificate)));
-                builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.ChannelControl_CreationTime, box.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
-                if (!string.IsNullOrWhiteSpace(box.Comment)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.ChannelControl_Comment, box.Comment));
+                if (!string.IsNullOrWhiteSpace(box.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Box_Name, box.Name));
+                if (box.Certificate != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Box_Signature, MessageConverter.ToSignatureString(box.Certificate)));
+                builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Box_CreationTime, box.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
+                if (!string.IsNullOrWhiteSpace(box.Comment)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Box_Comment, box.Comment));
 
                 if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
                 else return null;
@@ -139,8 +139,8 @@ namespace Lair
             {
                 StringBuilder builder = new StringBuilder();
 
-                if (!string.IsNullOrWhiteSpace(channel.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.ChannelControl_Name, channel.Name));
-                if (channel.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.ChannelControl_Id, Convert.ToBase64String(channel.Id)
+                if (!string.IsNullOrWhiteSpace(channel.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Channel_Name, channel.Name));
+                if (channel.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Channel_Id, Convert.ToBase64String(channel.Id)
                     .Replace('+', '-').Replace('/', '_').Substring(0, 64)));
 
                 if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
@@ -158,10 +158,10 @@ namespace Lair
             {
                 StringBuilder builder = new StringBuilder();
 
-                if (message.Channel != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.ChannelControl_Channel, MessageConverter.ToChannelString(message.Channel)));
-                if (message.Certificate != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.ChannelControl_Signature, MessageConverter.ToSignatureString(message.Certificate)));
-                builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.ChannelControl_CreationTime, message.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
-                if (!string.IsNullOrWhiteSpace(message.Content)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.ChannelControl_Content, message.Content));
+                if (message.Channel != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Message_Channel, MessageConverter.ToChannelString(message.Channel)));
+                if (message.Certificate != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Message_Signature, MessageConverter.ToSignatureString(message.Certificate)));
+                builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Message_CreationTime, message.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
+                if (!string.IsNullOrWhiteSpace(message.Content)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Message_Content, message.Content));
 
                 if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
                 else return null;

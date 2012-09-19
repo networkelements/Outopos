@@ -20,6 +20,7 @@
             <Style TargetType="{x:Type local:ListViewEx}" BasedOn="{StaticResource {x:Type ListView}}" />
             <Style TargetType="{x:Type local:DigitalSignatureComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}" />
             <Style TargetType="{x:Type local:EnabledFlowDocument}" BasedOn="{StaticResource {x:Type FlowDocument}}" />
+            <Style TargetType="{x:Type local:LanguageMenuItem}" BasedOn="{StaticResource {x:Type MenuItem}}" />
 
             <local:TopRelativeDoubleConverter x:Key="_topRelativeDoubleConverter"/>
             <local:LeftRelativeDoubleConverter x:Key="_leftRelativeDoubleConverter"/>

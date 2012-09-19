@@ -41,15 +41,15 @@
 
     <Window.CommandBindings>
         <CommandBinding Command="Delete" Executed="Execute_Delete" />
-        <CommandBinding Command="Copy" Executed="Execute_Copy" />
         <CommandBinding Command="Cut" Executed="Execute_Cut" />
+        <CommandBinding Command="Copy" Executed="Execute_Copy" />
         <CommandBinding Command="Paste" Executed="Execute_Paste" />
     </Window.CommandBindings>
 
     <Window.InputBindings>
         <KeyBinding Gesture="Delete" Command="Delete" />
-        <KeyBinding Gesture="CTRL+C" Command="Copy" />
         <KeyBinding Gesture="CTRL+X" Command="Cut" />
+        <KeyBinding Gesture="CTRL+C" Command="Copy" />
         <KeyBinding Gesture="CTRL+V" Command="Paste" />
     </Window.InputBindings>
 
@@ -71,11 +71,11 @@
                     <local:ListViewEx x:Name="_wordListView" Margin="0,0,0,87" SelectionChanged="_wordListView_SelectionChanged" PreviewMouseLeftButtonDown="_wordListView_PreviewMouseLeftButtonDown" ContextMenuOpening="_wordListView_ContextMenuOpening">
                         <ListView.ContextMenu>
                             <ContextMenu Name="_wordListViewContextMenu" >
-                                <MenuItem Name="_wordListViewDeleteMenuItem" Header="{Binding Path=SearchItemEditWindow_Delete, Source={StaticResource ResourcesInstance}}" Click="_wordListViewDeleteMenuItem_Click"/>
+                                <MenuItem Name="_wordListViewDeleteMenuItem" Header="{Binding Path=CategoryEditWindow_Delete, Source={StaticResource ResourcesInstance}}" Click="_wordListViewDeleteMenuItem_Click"/>
                                 <Separator />
-                                <MenuItem Name="_wordListViewCopyMenuItem" Header="{Binding Path=SearchItemEditWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_wordListViewCopyMenuItem_Click"/>
-                                <MenuItem Name="_wordListViewCutMenuItem" Header="{Binding Path=SearchItemEditWindow_Cut, Source={StaticResource ResourcesInstance}}" Click="_wordListViewCutMenuItem_Click"/>
-                                <MenuItem Name="_wordListViewPasteMenuItem" Header="{Binding Path=SearchItemEditWindow_Paste, Source={StaticResource ResourcesInstance}}" Click="_wordListViewPasteMenuItem_Click"/>
+                                <MenuItem Name="_wordListViewCutMenuItem" Header="{Binding Path=CategoryEditWindow_Cut, Source={StaticResource ResourcesInstance}}" Click="_wordListViewCutMenuItem_Click"/>
+                                <MenuItem Name="_wordListViewCopyMenuItem" Header="{Binding Path=CategoryEditWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_wordListViewCopyMenuItem_Click"/>
+                                <MenuItem Name="_wordListViewPasteMenuItem" Header="{Binding Path=CategoryEditWindow_Paste, Source={StaticResource ResourcesInstance}}" Click="_wordListViewPasteMenuItem_Click"/>
                             </ContextMenu>
                         </ListView.ContextMenu>
                         <ListView.View>
@@ -101,11 +101,11 @@
                     <local:ListViewEx x:Name="_regexListView" Margin="0,0,0,87" SelectionChanged="_regexListView_SelectionChanged" PreviewMouseLeftButtonDown="_regexListView_PreviewMouseLeftButtonDown" ContextMenuOpening="_regexListView_ContextMenuOpening">
                         <ListView.ContextMenu>
                             <ContextMenu Name="_regexListViewContextMenu" >
-                                <MenuItem Name="_regexListViewDeleteMenuItem" Header="{Binding Path=SearchItemEditWindow_Delete, Source={StaticResource ResourcesInstance}}" Click="_regexListViewDeleteMenuItem_Click"/>
+                                <MenuItem Name="_regexListViewDeleteMenuItem" Header="{Binding Path=CategoryEditWindow_Delete, Source={StaticResource ResourcesInstance}}" Click="_regexListViewDeleteMenuItem_Click"/>
                                 <Separator />
-                                <MenuItem Name="_regexListViewCopyMenuItem" Header="{Binding Path=SearchItemEditWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_regexListViewCopyMenuItem_Click"/>
-                                <MenuItem Name="_regexListViewCutMenuItem" Header="{Binding Path=SearchItemEditWindow_Cut, Source={StaticResource ResourcesInstance}}" Click="_regexListViewCutMenuItem_Click"/>
-                                <MenuItem Name="_regexListViewPasteMenuItem" Header="{Binding Path=SearchItemEditWindow_Paste, Source={StaticResource ResourcesInstance}}" Click="_regexListViewPasteMenuItem_Click"/>
+                                <MenuItem Name="_regexListViewCutMenuItem" Header="{Binding Path=CategoryEditWindow_Cut, Source={StaticResource ResourcesInstance}}" Click="_regexListViewCutMenuItem_Click"/>
+                                <MenuItem Name="_regexListViewCopyMenuItem" Header="{Binding Path=CategoryEditWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_regexListViewCopyMenuItem_Click"/>
+                                <MenuItem Name="_regexListViewPasteMenuItem" Header="{Binding Path=CategoryEditWindow_Paste, Source={StaticResource ResourcesInstance}}" Click="_regexListViewPasteMenuItem_Click"/>
                             </ContextMenu>
                         </ListView.ContextMenu>
                         <ListView.View>
@@ -119,7 +119,7 @@
                             </GridView>
                         </ListView.View>
                     </local:ListViewEx>
-                    <CheckBox Content="{Binding Path=CategoryEditWindow_IsIgnoreCase, Source={StaticResource ResourcesInstance}}" Height="16" HorizontalAlignment="Left" Margin="138,0,0,65" Name="_regexIsIgnoreCaseCheckBox" VerticalAlignment="Bottom" Width="120" />
+                    <CheckBox Content="{Binding Path=CategoryEditWindow_IsIgnoreCase, Source={StaticResource ResourcesInstance}}" Height="16" HorizontalAlignment="Left" Margin="138,0,0,65" Name="_regexIsIgnoreCaseCheckBox" VerticalAlignment="Bottom" Width="240" />
                 </Grid>
             </TabItem>
             <TabItem Header="{Binding Path=CategoryEditWindow_Signature, Source={StaticResource ResourcesInstance}}" Name="_signatureTabItem">
@@ -134,11 +134,11 @@
                     <local:ListViewEx x:Name="_signatureListView" Margin="0,0,0,87" SelectionChanged="_signatureListView_SelectionChanged" PreviewMouseLeftButtonDown="_signatureListView_PreviewMouseLeftButtonDown" ContextMenuOpening="_signatureListView_ContextMenuOpening">
                         <ListView.ContextMenu>
                             <ContextMenu Name="_signatureListViewContextMenu" >
-                                <MenuItem Name="_signatureListViewDeleteMenuItem" Header="{Binding Path=SearchItemEditWindow_Delete, Source={StaticResource ResourcesInstance}}" Click="_signatureListViewDeleteMenuItem_Click"/>
+                                <MenuItem Name="_signatureListViewDeleteMenuItem" Header="{Binding Path=CategoryEditWindow_Delete, Source={StaticResource ResourcesInstance}}" Click="_signatureListViewDeleteMenuItem_Click"/>
                                 <Separator />
-                                <MenuItem Name="_signatureListViewCopyMenuItem" Header="{Binding Path=SearchItemEditWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_signatureListViewCopyMenuItem_Click"/>
-                                <MenuItem Name="_signatureListViewCutMenuItem" Header="{Binding Path=SearchItemEditWindow_Cut, Source={StaticResource ResourcesInstance}}" Click="_signatureListViewCutMenuItem_Click"/>
-                                <MenuItem Name="_signatureListViewPasteMenuItem" Header="{Binding Path=SearchItemEditWindow_Paste, Source={StaticResource ResourcesInstance}}" Click="_signatureListViewPasteMenuItem_Click"/>
+                                <MenuItem Name="_signatureListViewCutMenuItem" Header="{Binding Path=CategoryEditWindow_Cut, Source={StaticResource ResourcesInstance}}" Click="_signatureListViewCutMenuItem_Click"/>
+                                <MenuItem Name="_signatureListViewCopyMenuItem" Header="{Binding Path=CategoryEditWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_signatureListViewCopyMenuItem_Click"/>
+                                <MenuItem Name="_signatureListViewPasteMenuItem" Header="{Binding Path=CategoryEditWindow_Paste, Source={StaticResource ResourcesInstance}}" Click="_signatureListViewPasteMenuItem_Click"/>
                             </ContextMenu>
                         </ListView.ContextMenu>
                         <ListView.View>
@@ -164,11 +164,11 @@
                     <local:ListViewEx x:Name="_messageListView" Margin="0,0,0,87" SelectionChanged="_messageListView_SelectionChanged" PreviewMouseLeftButtonDown="_messageListView_PreviewMouseLeftButtonDown" ContextMenuOpening="_messageListView_ContextMenuOpening">
                         <ListView.ContextMenu>
                             <ContextMenu Name="_messageListViewContextMenu" >
-                                <MenuItem Name="_messageListViewDeleteMenuItem" Header="{Binding Path=SearchItemEditWindow_Delete, Source={StaticResource ResourcesInstance}}" Click="_messageListViewDeleteMenuItem_Click"/>
+                                <MenuItem Name="_messageListViewDeleteMenuItem" Header="{Binding Path=CategoryEditWindow_Delete, Source={StaticResource ResourcesInstance}}" Click="_messageListViewDeleteMenuItem_Click"/>
                                 <Separator />
-                                <MenuItem Name="_messageListViewCopyMenuItem" Header="{Binding Path=SearchItemEditWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_messageListViewCopyMenuItem_Click"/>
-                                <MenuItem Name="_messageListViewCutMenuItem" Header="{Binding Path=SearchItemEditWindow_Cut, Source={StaticResource ResourcesInstance}}" Click="_messageListViewCutMenuItem_Click"/>
-                                <MenuItem Name="_messageListViewPasteMenuItem" Header="{Binding Path=SearchItemEditWindow_Paste, Source={StaticResource ResourcesInstance}}" Click="_messageListViewPasteMenuItem_Click"/>
+                                <MenuItem Name="_messageListViewCutMenuItem" Header="{Binding Path=CategoryEditWindow_Cut, Source={StaticResource ResourcesInstance}}" Click="_messageListViewCutMenuItem_Click"/>
+                                <MenuItem Name="_messageListViewCopyMenuItem" Header="{Binding Path=CategoryEditWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_messageListViewCopyMenuItem_Click"/>
+                                <MenuItem Name="_messageListViewPasteMenuItem" Header="{Binding Path=CategoryEditWindow_Paste, Source={StaticResource ResourcesInstance}}" Click="_messageListViewPasteMenuItem_Click"/>
                             </ContextMenu>
                         </ListView.ContextMenu>
                         <ListView.View>

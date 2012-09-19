@@ -41,6 +41,12 @@ namespace Lair.Windows
             }
         }
 
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.MaxHeight = this.RenderSize.Height;
+            this.MinHeight = this.RenderSize.Height;
+        }
+
         public Channel Channel
         {
             get
