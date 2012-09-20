@@ -11,7 +11,7 @@
   <Translate Key="Seed_Name" Value="名前" />
   <Translate Key="Seed_Signature" Value="署名" />
   <Translate Key="Seed_Length" Value="サイズ" />
-  <Translate Key="Seed_Keywords" Value="キー単語" />
+  <Translate Key="Seed_Keywords" Value="キーワード" />
   <Translate Key="Seed_CreationTime" Value="作成日" />
   <Translate Key="Seed_Comment" Value="コメント" />
 

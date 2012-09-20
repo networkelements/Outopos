@@ -140,7 +140,7 @@ namespace Lair.Windows
             {
                 for (; ; )
                 {
-                    Thread.Sleep(1000);
+                    Thread.Sleep(100);
                     if (App.SelectTab != "Connection") continue;
 
                     var connectionInformation = _lairManager.ConnectionInformation.ToArray();
