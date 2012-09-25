@@ -88,6 +88,7 @@ namespace Lair.Properties
               
                 new Library.Configuration.SettingsContext<double>() { Name = "MessageEditWindow_Top", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "MessageEditWindow_Left", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "MessageEditWindow_Height", Value = 500 },
                 new Library.Configuration.SettingsContext<double>() { Name = "MessageEditWindow_Width", Value = 700 },
                 new Library.Configuration.SettingsContext<WindowState>() { Name = "MessageEditWindow_WindowState", Value = WindowState.Normal },
               
@@ -99,7 +100,6 @@ namespace Lair.Properties
               
                 new Library.Configuration.SettingsContext<double>() { Name = "NewChannelWindow_Top", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "NewChannelWindow_Left", Value = 120 },
-                new Library.Configuration.SettingsContext<double>() { Name = "NewChannelWindow_Height", Value = 500 },
                 new Library.Configuration.SettingsContext<double>() { Name = "NewChannelWindow_Width", Value = 700 },
                 new Library.Configuration.SettingsContext<WindowState>() { Name = "NewChannelWindow_WindowState", Value = WindowState.Normal },
             })
@@ -1269,6 +1269,25 @@ namespace Lair.Properties
             }
         }
 
+        public double MessageEditWindow_Height
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["MessageEditWindow_Height"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["MessageEditWindow_Height"] = value;
+                }
+            }
+        }
+
         public double MessageEditWindow_Width
         {
             get
@@ -1438,25 +1457,6 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     this["NewChannelWindow_Left"] = value;
-                }
-            }
-        }
-
-        public double NewChannelWindow_Height
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["NewChannelWindow_Height"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["NewChannelWindow_Height"] = value;
                 }
             }
         }

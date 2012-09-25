@@ -81,13 +81,12 @@ namespace Lair.Windows
                 this.Icon = icon;
             }
 
-            this.Setting_Languages();
-
             System.Drawing.Icon myIcon = new System.Drawing.Icon(Path.Combine(App.DirectoryPaths["Icons"], "Lair.ico"));
             _notifyIcon.Icon = new System.Drawing.Icon(myIcon, new System.Drawing.Size(16, 16));
             _notifyIcon.Visible = true;
 
             this.Setting_Init();
+            this.Setting_Languages();
 
             _notifyIcon.Visible = false;
             _notifyIcon.Click += (object sender2, EventArgs e2) =>
@@ -171,9 +170,9 @@ namespace Lair.Windows
                                 }
                             }
                         }
-                        catch (Exception)
+                        catch (Exception e)
                         {
-
+                            Log.Warning(e);
                         }
                     }
 
@@ -184,12 +183,12 @@ namespace Lair.Windows
                         try
                         {
                             _autoBaseNodeSettingManager.Save(_configrationDirectoryPaths["AutoBaseNodeSettingManager"]);
-                            _lairManager.Save(_configrationDirectoryPaths["AmoebaManager"]);
+                            _lairManager.Save(_configrationDirectoryPaths["LairManager"]);
                             Settings.Instance.Save(_configrationDirectoryPaths["MainWindow"]);
                         }
-                        catch (Exception)
+                        catch (Exception e)
                         {
-
+                            Log.Warning(e);
                         }
                     }
 
@@ -206,9 +205,9 @@ namespace Lair.Windows
                                 _checkUpdateMenuItem_Click(null, null);
                             }
                         }
-                        catch (Exception)
+                        catch (Exception e)
                         {
-
+                            Log.Warning(e);
                         }
                     }
                 }
@@ -448,7 +447,7 @@ namespace Lair.Windows
             {
                 bool initFlag = false;
 
-                _lairManager = new LairManager(Path.Combine(App.DirectoryPaths["Configuration"], "Cache.blocks"), _bufferManager);
+                _lairManager = new LairManager(_bufferManager);
                 _lairManager.Load(_configrationDirectoryPaths["LairManager"]);
 
                 if (_lairManager.BaseNode == null || _lairManager.BaseNode.Id == null)
@@ -466,10 +465,11 @@ namespace Lair.Windows
                 {
                     initFlag = true;
 
-                    Settings.Instance.ChannelControl_Category.Boards.Add(new Board() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAAnsVLtnbRdm22in0qQhQ8Smdqc9Yro90PXOiF3lkIF2RREEbGiQmRmpukx0tPytNON6UiN35jYs3xCSNoxmmnhwAAAAYBQW1vZWJhhggnHQ==") });
-                    Settings.Instance.ChannelControl_Category.Boards.Add(new Board() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAACeKcl3zp_ff2hFIhIHWjxxEt1tBcqZvmt4X9a1t3ilY7rUXHbWLPJ6rwu1sLvbHB0KhP81b1J7XvVUV_wi991gAAAAQBTGFpcl1EKAI=") });
-                    Settings.Instance.ChannelControl_Category.Boards.Add(new Board() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAAtsMEuKHe-iQje0OeLoHfbSLvKXFo4zv7xP7j2IW1ZK_st0yVK4kO7Hcl9SDnqNTSxAvShddBiOg_2q6tSLsMTwAAAAYBUHVibGljMXNfWw==") });
-                    Settings.Instance.ChannelControl_Category.Boards.Add(new Board() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAASaqqritqZRVYlzfkcVhMAT0tm8PTp3Vu_KWBUEloBtnZ_WnRQO5pcEq60gQOktBz5qFxg_Saiqo6lwtDP-bIdgAAAAQBVGVzdITgoiw=") });
+                    Settings.Instance.ChannelControl_Category.Boards.Add(new Board() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAAnsVLtnbRdm22in0qQhQ8Smdqc9Yro90PXOiF3lkIF2RREEbGiQmRmpukx0tPytNON6UiN35jYs3xCSNoxmmnhwAAAAYBQW1vZWJhhggnHQ") });
+                    Settings.Instance.ChannelControl_Category.Boards.Add(new Board() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAACeKcl3zp_ff2hFIhIHWjxxEt1tBcqZvmt4X9a1t3ilY7rUXHbWLPJ6rwu1sLvbHB0KhP81b1J7XvVUV_wi991gAAAAQBTGFpcl1EKAI") });
+                    Settings.Instance.ChannelControl_Category.Boards.Add(new Board() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAAtsMEuKHe-iQje0OeLoHfbSLvKXFo4zv7xP7j2IW1ZK_st0yVK4kO7Hcl9SDnqNTSxAvShddBiOg_2q6tSLsMTwAAAAYBUHVibGljMXNfWw") });
+                    Settings.Instance.ChannelControl_Category.Boards.Add(new Board() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAASaqqritqZRVYlzfkcVhMAT0tm8PTp3Vu_KWBUEloBtnZ_WnRQO5pcEq60gQOktBz5qFxg_Saiqo6lwtDP-bIdgAAAAQBVGVzdITgoiw") });
+                    Settings.Instance.ChannelControl_Category.Boards.Add(new Board() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAA_omn14n4bPDbXAO-aohxIR_AEr0h5d9Xav9AhnZKKExdgOzoE-esnOVtILx6H1fJFvQHhJAZEIKY_0qIZplWCwAAAAQBUm9zYaCh9AE") });
 
                     _lairManager.ConnectionCountLimit = 12;
                     _lairManager.DownloadingConnectionCountLowerLimit = 3;
