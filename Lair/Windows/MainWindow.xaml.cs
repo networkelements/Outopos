@@ -661,7 +661,7 @@ namespace Lair.Windows
 
         private object _updateLockObject = new object();
 
-        private void CheckUpdate()
+        private void CheckUpdate(bool isLogFlag)
         {
             lock (_updateLockObject)
             {
@@ -724,7 +724,10 @@ namespace Lair.Windows
 
                         if (targetVersion <= App.LairVersion)
                         {
-                            Log.Information(string.Format("Check Update: {0}", LanguagesManager.Instance.MainWindow_LatestVersion_Message));
+                            if (isLogFlag)
+                            {
+                                Log.Information(string.Format("Check Update: {0}", LanguagesManager.Instance.MainWindow_LatestVersion_Message));
+                            }
                         }
                         else
                         {
@@ -1124,7 +1127,7 @@ namespace Lair.Windows
 
                 try
                 {
-                    this.CheckUpdate();
+                    this.CheckUpdate(sender != null);
                 }
                 catch (Exception)
                 {

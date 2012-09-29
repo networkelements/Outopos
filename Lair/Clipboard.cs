@@ -196,7 +196,18 @@ namespace Lair
                     for (int i = 0; i < categoryList.Count; i++)
                     {
                         categoryList.AddRange(categoryList[i].Categories);
-                        channels.AddRange(categoryList[i].Boards.Select(n => n.Channel));
+
+                        var tempList = categoryList[i].Boards.Select(n => n.Channel).ToList();
+
+                        tempList.Sort(delegate(Channel x, Channel y)
+                        {
+                            int c = x.Name.CompareTo(y.Name);
+                            if (c != 0) return c;
+
+                            return Collection.Compare(x.Id, y.Id);
+                        });
+
+                        channels.AddRange(tempList);
                     }
 
                     var sb = new StringBuilder();

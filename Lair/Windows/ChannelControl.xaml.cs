@@ -81,31 +81,6 @@ namespace Lair.Windows
                     _mainWindow.Title = string.Format("Lair {0} - {1}", App.LairVersion, MessageConverter.ToChannelString(selectTreeViewItem.Value.Channel));
             };
 
-#if DEBUG
-            {
-                var testChannel = LairConverter.FromChannelString("Channel@AAAAAEAABLayeuui_MRoo_WZtehT-RzwG0C2I8QvzAH-TIaC5ymz14eTw9MUCAldzM3qZ3RZF6-DB90Sgl4wbs3lz58REQAAAAQBMTAxOdNgSYQ=");
-
-                Random random = new Random();
-
-                for (int i = 0; i < 1024; i++)
-                {
-                    StringBuilder stringBuilder = new StringBuilder();
-
-                    for (int j = 0; j < 200; j++)
-                    {
-                        stringBuilder.AppendLine("01234567");
-                    }
-
-                    stringBuilder.AppendLine(random.Next().ToString());
-
-                    byte[] id = new byte[64];
-                    random.NextBytes(id);
-
-                    lairManager.Upload(new Message(testChannel, stringBuilder.ToString(), null));
-                }
-            }
-#endif
-
             _searchThread = new Thread(new ThreadStart(this.Search));
             _searchThread.Priority = ThreadPriority.Highest;
             _searchThread.IsBackground = true;
@@ -379,9 +354,9 @@ namespace Lair.Windows
                     }), null);
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
+                Log.Error(e);
             }
         }
 
@@ -510,9 +485,9 @@ namespace Lair.Windows
                     Thread.Sleep(1000 * 60);
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
+                Log.Error(e);
             }
         }
 
@@ -567,9 +542,9 @@ namespace Lair.Windows
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
+                Log.Error(e);
             }
         }
 
@@ -1285,7 +1260,18 @@ namespace Lair.Windows
                 for (int i = 0; i < categoryList.Count; i++)
                 {
                     categoryList.AddRange(categoryList[i].Categories);
-                    channels.AddRange(categoryList[i].Boards.Select(n => n.Channel));
+
+                    var tempList = categoryList[i].Boards.Select(n => n.Channel).ToList();
+
+                    tempList.Sort(delegate(Channel x, Channel y)
+                    {
+                        int c = x.Name.CompareTo(y.Name);
+                        if (c != 0) return c;
+
+                        return Collection.Compare(x.Id, y.Id);
+                    });
+
+                    channels.AddRange(tempList);
                 }
 
                 var sb = new StringBuilder();
