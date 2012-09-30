@@ -472,8 +472,6 @@ namespace Lair.Windows
                     Settings.Instance.ChannelControl_Category.Boards.Add(new Board() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAA_omn14n4bPDbXAO-aohxIR_AEr0h5d9Xav9AhnZKKExdgOzoE-esnOVtILx6H1fJFvQHhJAZEIKY_0qIZplWCwAAAAQBUm9zYaCh9AE") });
 
                     _lairManager.ConnectionCountLimit = 12;
-                    _lairManager.DownloadingConnectionCountLowerLimit = 3;
-                    _lairManager.UploadingConnectionCountLowerLimit = 3;
 
                     Random random = new Random();
                     _lairManager.ListenUris.Clear();

@@ -41,7 +41,7 @@ namespace Lair.Windows
             throw new NotSupportedException();
         }
     }
-    
+
     [ValueConversion(typeof(string), typeof(string))]
     class StringRegularizationConverter : IValueConverter
     {
@@ -410,6 +410,21 @@ namespace Lair.Windows
             }
 
             return 0;
+        }
+    }
+
+    [ValueConversion(typeof(int), typeof(bool))]
+    class ExpanderToBooleanConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return ((string)value == (string)parameter);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (System.Convert.ToBoolean(value)) return (string)parameter;
+            return null;
         }
     }
 }

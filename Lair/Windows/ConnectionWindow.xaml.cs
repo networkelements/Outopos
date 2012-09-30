@@ -49,6 +49,8 @@ namespace Lair.Windows
 
             InitializeComponent();
 
+            _miscellaneousStackPanel.DataContext = new ExpanderListViewModel();
+
             {
                 var icon = new BitmapImage();
 
@@ -67,8 +69,6 @@ namespace Lair.Windows
             _clientFiltersListView.ItemsSource = _clientFilters;
             _serverListenUrisListView.ItemsSource = _listenUris;
             _miscellaneousConnectionCountTextBox.Text = _lairManager.ConnectionCountLimit.ToString();
-            _miscellaneousDownloadingConnectionCountTextBox.Text = _lairManager.DownloadingConnectionCountLowerLimit.ToString();
-            _miscellaneousUploadingConnectionCountTextBox.Text = _lairManager.UploadingConnectionCountLowerLimit.ToString();
             _miscellaneousAutoBaseNodeSettingCheckBox.IsChecked = Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled;
 
             foreach (var item in Enum.GetValues(typeof(ConnectionType)).Cast<ConnectionType>())
@@ -1224,42 +1224,6 @@ namespace Lair.Windows
             if (_miscellaneousConnectionCountTextBox.Text != value) _miscellaneousConnectionCountTextBox.Text = value;
         }
 
-        private void _miscellaneousCacheConnectionCountTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(_miscellaneousDownloadingConnectionCountTextBox.Text)) return;
-
-            StringBuilder builder = new StringBuilder("");
-
-            foreach (var item in _miscellaneousDownloadingConnectionCountTextBox.Text)
-            {
-                if (Regex.IsMatch(item.ToString(), "[0-9]"))
-                {
-                    builder.Append(item.ToString());
-                }
-            }
-
-            var value = builder.ToString();
-            if (_miscellaneousDownloadingConnectionCountTextBox.Text != value) _miscellaneousDownloadingConnectionCountTextBox.Text = value;
-        }
-
-        private void _miscellaneousUploadingConnectionCountTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(_miscellaneousUploadingConnectionCountTextBox.Text)) return;
-
-            StringBuilder builder = new StringBuilder("");
-
-            foreach (var item in _miscellaneousUploadingConnectionCountTextBox.Text)
-            {
-                if (Regex.IsMatch(item.ToString(), "[0-9]"))
-                {
-                    builder.Append(item.ToString());
-                }
-            }
-
-            var value = builder.ToString();
-            if (_miscellaneousUploadingConnectionCountTextBox.Text != value) _miscellaneousUploadingConnectionCountTextBox.Text = value;
-        }
-
         #endregion
 
         private void _okButton_Click(object sender, RoutedEventArgs e)
@@ -1277,12 +1241,6 @@ namespace Lair.Windows
 
                 int count = ConnectionWindow.GetStringToInt(_miscellaneousConnectionCountTextBox.Text);
                 _lairManager.ConnectionCountLimit = Math.Max(Math.Min(count, 50), 1);
-
-                int scount = ConnectionWindow.GetStringToInt(_miscellaneousDownloadingConnectionCountTextBox.Text);
-                _lairManager.DownloadingConnectionCountLowerLimit = Math.Max(Math.Min(scount, 50), 1);
-
-                int ucount = ConnectionWindow.GetStringToInt(_miscellaneousUploadingConnectionCountTextBox.Text);
-                _lairManager.UploadingConnectionCountLowerLimit = Math.Max(Math.Min(ucount, 50), 1);
 
                 _lairManager.Filters.Clear();
                 _lairManager.Filters.AddRange(_clientFilters.Select(n => n.DeepClone()));
@@ -1390,6 +1348,16 @@ namespace Lair.Windows
             {
                 _serverListenUrisListViewPasteMenuItem_Click(null, null);
             }
+        }
+
+        public class ExpanderListViewModel
+        {
+            public ExpanderListViewModel()
+            {
+                this.SelectedExpander = "1";
+            }
+
+            public string SelectedExpander { get; set; }
         }
     }
 }
