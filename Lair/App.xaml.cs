@@ -37,7 +37,7 @@ namespace Lair
         {
             //System.Windows.Media.RenderOptions.ProcessRenderMode = System.Windows.Interop.RenderMode.SoftwareOnly;
 
-            App.LairVersion = new Version(0, 0, 21);
+            App.LairVersion = new Version(0, 0, 22);
 
             Directory.SetCurrentDirectory(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
 
@@ -152,12 +152,10 @@ namespace Lair
                         }
                         catch (Exception)
                         {
-                            return;
-                        }
-                        finally
-                        {
                             if (File.Exists(updateZipPath))
                                 File.Delete(updateZipPath);
+
+                            return;
                         }
 
                         var tempUpdateExePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName() + "-Library.Update.exe");
@@ -169,11 +167,12 @@ namespace Lair
 
                         ProcessStartInfo startInfo = new ProcessStartInfo();
                         startInfo.FileName = tempUpdateExePath;
-                        startInfo.Arguments = string.Format("\"{0}\" \"{1}\" \"{2}\" \"{3}\"",
+                        startInfo.Arguments = string.Format("\"{0}\" \"{1}\" \"{2}\" \"{3}\" \"{4}\"",
                             Process.GetCurrentProcess().Id,
                             Path.Combine(tempPath, "Core"),
                             Directory.GetCurrentDirectory(),
-                            Path.Combine(Directory.GetCurrentDirectory(), "Lair.exe"));
+                            Path.Combine(Directory.GetCurrentDirectory(), "Lair.exe"),
+                            Path.GetFullPath(updateZipPath));
                         startInfo.WorkingDirectory = Path.GetDirectoryName(startInfo.FileName);
 
                         Process.Start(startInfo);
