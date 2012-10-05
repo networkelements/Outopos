@@ -460,10 +460,13 @@ namespace Lair.Windows
                                 }
                                 else if (!newList.SetEquals(_messages[selectTreeViewItem.Value.Channel]))
                                 {
+                                    if (!newList.IsSubsetOf(_messages[selectTreeViewItem.Value.Channel]))
+                                    {
+                                        updateFlag = true;
+                                    }
+
                                     _messages[selectTreeViewItem.Value.Channel].Clear();
                                     _messages[selectTreeViewItem.Value.Channel].AddRange(sortList);
-
-                                    updateFlag = true;
                                 }
                             }
 
