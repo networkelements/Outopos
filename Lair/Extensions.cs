@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.Windows.Controls.Primitives;
 
 namespace Lair
 {
@@ -140,7 +141,7 @@ namespace Lair
         private static bool IsMouseOverTarget(TreeView myTreeView, Visual target, GetPositionDelegate getPosition)
         {
             if (target == null) return false;
-            
+
             Rect bounds = VisualTreeHelper.GetDescendantBounds(target);
             Point mousePos = MouseUtilities.GetMousePosition(target);
             return bounds.Contains(mousePos);
@@ -221,6 +222,61 @@ namespace Lair
             Win32Point mouse = new Win32Point();
             GetCursorPos(ref mouse);
             return relativeTo.PointFromScreen(new Point((double)mouse.X, (double)mouse.Y));
+        }
+    }
+
+    // http://pro.art55.jp/?eid=1160884
+    public static class ItemsControlUtilities
+    {
+        public static void GoBottom(this ItemsControl itemsControl)
+        {
+            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
+            panel.SetVerticalOffset(double.PositiveInfinity);
+        }
+
+        public static void GoTop(this ItemsControl itemsControl)
+        {
+            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
+            panel.SetVerticalOffset(0);
+        }
+
+        public static void GoRight(this ItemsControl itemsControl)
+        {
+            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
+            panel.SetHorizontalOffset(double.PositiveInfinity);
+        }
+
+        public static void GoLeft(this ItemsControl itemsControl)
+        {
+            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
+            panel.SetHorizontalOffset(0);
+        }
+
+        public static Panel FindItemsHostPanel(this ItemsControl itemsControl)
+        {
+            return Find(itemsControl.ItemContainerGenerator, itemsControl);
+        }
+
+        private static Panel Find(this IItemContainerGenerator generator, DependencyObject control)
+        {
+            int count = VisualTreeHelper.GetChildrenCount(control);
+            for (int i = 0; i < count; i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(control, i);
+                if (IsItemsHostPanel(generator, child))
+                    return (Panel)child;
+
+                Panel panel = Find(generator, child);
+                if (panel != null)
+                    return panel;
+            }
+            return null;
+        }
+
+        private static bool IsItemsHostPanel(IItemContainerGenerator generator, DependencyObject target)
+        {
+            var panel = target as Panel;
+            return panel != null && panel.IsItemsHost && generator == generator.GetItemContainerGeneratorForPanel(panel);
         }
     }
 }

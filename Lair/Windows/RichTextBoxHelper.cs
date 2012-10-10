@@ -30,7 +30,7 @@ namespace Lair.Windows
         public static event ChannelClickEventHandler ChannelClickEvent;
         public static GetMaxHeightEventHandler GetMaxHeightEvent;
 
-        private static Regex _urlRegex = new Regex(@"^(?<start>.*?)(?<url>http(s)?://([\w-]+\.)+[\w-]+(/[\w-./?%&=]*)?)(?<end>.*?)$", RegexOptions.Compiled | RegexOptions.Singleline);
+        private static Regex _urlRegex = new Regex(@"^(?<start>.*?)(?<url>http(s)?://(\S)+)(?<end>.*?)$", RegexOptions.Compiled | RegexOptions.Singleline);
 
         public static string GetMessageToString(Message message)
         {

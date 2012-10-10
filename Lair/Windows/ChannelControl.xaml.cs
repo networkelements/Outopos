@@ -335,24 +335,7 @@ namespace Lair.Windows
                         {
                             if (_listViewItemCollection.Count > 0)
                             {
-                                _listView.ScrollIntoView(_listView.Items[_listView.Items.Count - 1]);
-
-                                this.Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state3)
-                                {
-                                    _listView.ScrollIntoView(_listView.Items[_listView.Items.Count - 1]);
-
-                                    //var peer = ItemsControlAutomationPeer.CreatePeerForElement(_listView);
-                                    //var scrollProvider = peer.GetPattern(PatternInterface.Scroll) as IScrollProvider;
-
-                                    //try
-                                    //{
-                                    //    scrollProvider.Scroll(System.Windows.Automation.ScrollAmount.NoAmount, System.Windows.Automation.ScrollAmount.LargeIncrement);
-                                    //}
-                                    //catch (Exception)
-                                    //{
-
-                                    //}
-                                }), null);
+                                _listView.GoBottom();
                             }
                         }
 
