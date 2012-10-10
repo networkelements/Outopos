@@ -1527,7 +1527,7 @@ namespace Lair.Windows
 
         private void _richTextBoxFilterWordMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            var richTextBox = ((e.Source as MenuItem).Parent as ContextMenu).PlacementTarget as RichTextBox;
+            var richTextBox = (((e.Source as MenuItem).Parent as MenuItem).Parent as ContextMenu).PlacementTarget as RichTextBox;
             if (richTextBox == null) return;
 
             if (richTextBox.Selection.IsEmpty) return;
