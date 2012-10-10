@@ -24,8 +24,8 @@ namespace Lair.Windows
     partial class CategoryEditWindow : Window
     {
         private Category _category;
-        private List<SearchContains<string>> _searchKeywordCollection;
-        private List<SearchContains<SearchRegex>> _searchNameRegexCollection;
+        private List<SearchContains<string>> _searchWordCollection;
+        private List<SearchContains<SearchRegex>> _searchRegexCollection;
         private List<SearchContains<string>> _searchSignatureCollection;
         private List<SearchContains<Message>> _searchMessageCollection;
 
@@ -54,8 +54,8 @@ namespace Lair.Windows
             {
                 _nameTextBox.Text = category.Name;
 
-                _searchKeywordCollection = _category.SearchWordCollection.Select(n => n.DeepClone()).ToList();
-                _searchNameRegexCollection = _category.SearchRegexCollection.Select(n => n.DeepClone()).ToList();
+                _searchWordCollection = _category.SearchWordCollection.Select(n => n.DeepClone()).ToList();
+                _searchRegexCollection = _category.SearchRegexCollection.Select(n => n.DeepClone()).ToList();
                 _searchSignatureCollection = _category.SearchSignatureCollection.Select(n => n.DeepClone()).ToList();
                 _searchMessageCollection = _category.SearchMessageCollection.Select(n => n.DeepClone()).ToList();
             }
@@ -65,8 +65,8 @@ namespace Lair.Windows
             _signatureContainsCheckBox.IsChecked = true;
             _messageContainsCheckBox.IsChecked = true;
 
-            _wordListView.ItemsSource = _searchKeywordCollection;
-            _regexListView.ItemsSource = _searchNameRegexCollection;
+            _wordListView.ItemsSource = _searchWordCollection;
+            _regexListView.ItemsSource = _searchRegexCollection;
             _signatureListView.ItemsSource = _searchSignatureCollection;
             _messageListView.ItemsSource = _searchMessageCollection;
         }
@@ -110,7 +110,7 @@ namespace Lair.Windows
                         _wordUpButton.IsEnabled = true;
                     }
 
-                    if (selectIndex == _searchKeywordCollection.Count - 1)
+                    if (selectIndex == _searchWordCollection.Count - 1)
                     {
                         _wordDownButton.IsEnabled = false;
                     }
@@ -205,8 +205,8 @@ namespace Lair.Windows
                         Value = match.Groups[2].Value,
                     };
 
-                    if (_searchKeywordCollection.Contains(item)) continue;
-                    _searchKeywordCollection.Add(item);
+                    if (_searchWordCollection.Contains(item)) continue;
+                    _searchWordCollection.Add(item);
                 }
                 catch (Exception)
                 {
@@ -215,7 +215,7 @@ namespace Lair.Windows
             }
 
             _wordTextBox.Text = "";
-            _wordListView.SelectedIndex = _searchKeywordCollection.Count - 1;
+            _wordListView.SelectedIndex = _searchWordCollection.Count - 1;
 
             _wordListView.Items.Refresh();
             _wordListViewUpdate();
@@ -229,8 +229,8 @@ namespace Lair.Windows
             var selectIndex = _wordListView.SelectedIndex;
             if (selectIndex == -1) return;
 
-            _searchKeywordCollection.Remove(item);
-            _searchKeywordCollection.Insert(selectIndex - 1, item);
+            _searchWordCollection.Remove(item);
+            _searchWordCollection.Insert(selectIndex - 1, item);
             _wordListView.Items.Refresh();
 
             _wordListViewUpdate();
@@ -244,8 +244,8 @@ namespace Lair.Windows
             var selectIndex = _wordListView.SelectedIndex;
             if (selectIndex == -1) return;
 
-            _searchKeywordCollection.Remove(item);
-            _searchKeywordCollection.Insert(selectIndex + 1, item);
+            _searchWordCollection.Remove(item);
+            _searchWordCollection.Insert(selectIndex + 1, item);
             _wordListView.Items.Refresh();
 
             _wordListViewUpdate();
@@ -261,11 +261,11 @@ namespace Lair.Windows
                 Value = _wordTextBox.Text,
             };
 
-            if (_searchKeywordCollection.Contains(item)) return;
-            _searchKeywordCollection.Add(item);
+            if (_searchWordCollection.Contains(item)) return;
+            _searchWordCollection.Add(item);
 
             _wordTextBox.Text = "";
-            _wordListView.SelectedIndex = _searchKeywordCollection.Count - 1;
+            _wordListView.SelectedIndex = _searchWordCollection.Count - 1;
 
             _wordListView.Items.Refresh();
             _wordListViewUpdate();
@@ -281,7 +281,7 @@ namespace Lair.Windows
                 Value = _wordTextBox.Text,
             };
 
-            if (_searchKeywordCollection.Contains(uitem)) return;
+            if (_searchWordCollection.Contains(uitem)) return;
 
             var item = _wordListView.SelectedItem as SearchContains<string>;
             if (item == null) return;
@@ -295,13 +295,16 @@ namespace Lair.Windows
 
         private void _wordDeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            var item = _wordListView.SelectedItem as SearchContains<string>;
-            if (item == null) return;
+            int selectIndex = _wordListView.SelectedIndex;
+            if (selectIndex == -1) return;
 
             _wordTextBox.Text = "";
 
-            int selectIndex = _wordListView.SelectedIndex;
-            _searchKeywordCollection.Remove(item);
+            foreach (var item in _wordListView.SelectedItems.OfType<SearchContains<string>>().ToArray())
+            {
+                _searchWordCollection.Remove(item);
+            }
+
             _wordListView.Items.Refresh();
             _wordListView.SelectedIndex = selectIndex;
             _wordListViewUpdate();
@@ -348,7 +351,7 @@ namespace Lair.Windows
                         _regexUpButton.IsEnabled = true;
                     }
 
-                    if (selectIndex == _searchNameRegexCollection.Count - 1)
+                    if (selectIndex == _searchRegexCollection.Count - 1)
                     {
                         _regexDownButton.IsEnabled = false;
                     }
@@ -458,8 +461,8 @@ namespace Lair.Windows
                         },
                     };
 
-                    if (_searchNameRegexCollection.Contains(item)) continue;
-                    _searchNameRegexCollection.Add(item);
+                    if (_searchRegexCollection.Contains(item)) continue;
+                    _searchRegexCollection.Add(item);
                 }
                 catch (Exception)
                 {
@@ -468,7 +471,7 @@ namespace Lair.Windows
             }
 
             _regexTextBox.Text = "";
-            _regexListView.SelectedIndex = _searchNameRegexCollection.Count - 1;
+            _regexListView.SelectedIndex = _searchRegexCollection.Count - 1;
 
             _regexListView.Items.Refresh();
             _regexListViewUpdate();
@@ -482,8 +485,8 @@ namespace Lair.Windows
             var selectIndex = _regexListView.SelectedIndex;
             if (selectIndex == -1) return;
 
-            _searchNameRegexCollection.Remove(item);
-            _searchNameRegexCollection.Insert(selectIndex - 1, item);
+            _searchRegexCollection.Remove(item);
+            _searchRegexCollection.Insert(selectIndex - 1, item);
             _regexListView.Items.Refresh();
 
             _regexListViewUpdate();
@@ -497,8 +500,8 @@ namespace Lair.Windows
             var selectIndex = _regexListView.SelectedIndex;
             if (selectIndex == -1) return;
 
-            _searchNameRegexCollection.Remove(item);
-            _searchNameRegexCollection.Insert(selectIndex + 1, item);
+            _searchRegexCollection.Remove(item);
+            _searchRegexCollection.Insert(selectIndex + 1, item);
             _regexListView.Items.Refresh();
 
             _regexListViewUpdate();
@@ -520,8 +523,8 @@ namespace Lair.Windows
                     },
                 };
 
-                if (_searchNameRegexCollection.Contains(item)) return;
-                _searchNameRegexCollection.Add(item);
+                if (_searchRegexCollection.Contains(item)) return;
+                _searchRegexCollection.Add(item);
             }
             catch (Exception)
             {
@@ -529,7 +532,7 @@ namespace Lair.Windows
             }
 
             _regexTextBox.Text = "";
-            _regexListView.SelectedIndex = _searchNameRegexCollection.Count - 1;
+            _regexListView.SelectedIndex = _searchRegexCollection.Count - 1;
 
             _regexListView.Items.Refresh();
             _regexListViewUpdate();
@@ -551,7 +554,7 @@ namespace Lair.Windows
                     },
                 };
 
-                if (_searchNameRegexCollection.Contains(uitem)) return;
+                if (_searchRegexCollection.Contains(uitem)) return;
 
                 var item = _regexListView.SelectedItem as SearchContains<SearchRegex>;
                 if (item == null) return;
@@ -570,13 +573,16 @@ namespace Lair.Windows
 
         private void _regexDeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            var item = _regexListView.SelectedItem as SearchContains<SearchRegex>;
-            if (item == null) return;
+            int selectIndex = _regexListView.SelectedIndex;
+            if (selectIndex == -1) return;
 
             _regexTextBox.Text = "";
 
-            int selectIndex = _regexListView.SelectedIndex;
-            _searchNameRegexCollection.Remove(item);
+            foreach (var item in _regexListView.SelectedItems.OfType<SearchContains<SearchRegex>>().ToArray())
+            {
+                _searchRegexCollection.Remove(item);
+            }
+
             _regexListView.Items.Refresh();
             _regexListView.SelectedIndex = selectIndex;
             _regexListViewUpdate();
@@ -808,13 +814,16 @@ namespace Lair.Windows
 
         private void _signatureDeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            var item = _signatureListView.SelectedItem as SearchContains<string>;
-            if (item == null) return;
+            int selectIndex = _signatureListView.SelectedIndex;
+            if (selectIndex == -1) return;
 
             _signatureTextBox.Text = "";
 
-            int selectIndex = _signatureListView.SelectedIndex;
-            _searchSignatureCollection.Remove(item);
+            foreach (var item in _signatureListView.SelectedItems.OfType<SearchContains<string>>().ToArray())
+            {
+                _searchSignatureCollection.Remove(item);
+            }
+
             _signatureListView.Items.Refresh();
             _signatureListView.SelectedIndex = selectIndex;
             _signatureListViewUpdate();
@@ -1065,13 +1074,16 @@ namespace Lair.Windows
 
         private void _messageDeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            var item = _messageListView.SelectedItem as SearchContains<Message>;
-            if (item == null) return;
+            int selectIndex = _messageListView.SelectedIndex;
+            if (selectIndex == -1) return;
 
             _messageTextBox.Text = "";
 
-            int selectIndex = _messageListView.SelectedIndex;
-            _searchMessageCollection.Remove(item);
+            foreach (var item in _messageListView.SelectedItems.OfType<SearchContains<Message>>().ToArray())
+            {
+                _searchMessageCollection.Remove(item);
+            }
+
             _messageListView.Items.Refresh();
             _messageListView.SelectedIndex = selectIndex;
             _messageListViewUpdate();
@@ -1090,13 +1102,13 @@ namespace Lair.Windows
                 lock (_category.SearchWordCollection)
                 {
                     _category.SearchWordCollection.Clear();
-                    _category.SearchWordCollection.AddRange(_searchKeywordCollection.Select(n => n.DeepClone()).ToList());
+                    _category.SearchWordCollection.AddRange(_searchWordCollection.Select(n => n.DeepClone()).ToList());
                 }
 
                 lock (_category.SearchRegexCollection)
                 {
                     _category.SearchRegexCollection.Clear();
-                    _category.SearchRegexCollection.AddRange(_searchNameRegexCollection.Select(n => n.DeepClone()).ToList());
+                    _category.SearchRegexCollection.AddRange(_searchRegexCollection.Select(n => n.DeepClone()).ToList());
                 }
 
                 lock (_category.SearchSignatureCollection.ThisLock)

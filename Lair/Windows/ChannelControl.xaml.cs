@@ -1417,6 +1417,26 @@ namespace Lair.Windows
                 if (index == -1) return;
 
                 var mx = _listViewItemCollection[index];
+                var list = _treeViewItem.GetLineage(selectTreeViewItem).OfType<TreeViewItem>().ToList();
+
+                var item = new SearchContains<Message>()
+                {
+                    Contains = false,
+                    Value = mx.Value,
+                };
+
+                if (((CategoryTreeViewItem)list[list.Count - 2]).Value.SearchMessageCollection.Contains(item)) return;
+                ((CategoryTreeViewItem)list[list.Count - 2]).Value.SearchMessageCollection.Add(item);
+
+                this.Update();
+            }
+
+            if (Keyboard.IsKeyDown(System.Windows.Input.Key.LeftCtrl) && e.ChangedButton == MouseButton.Left)
+            {
+                var index = _listView.GetCurrentIndex(e.GetPosition);
+                if (index == -1) return;
+
+                var mx = _listViewItemCollection[index];
                 mx.IsLock = !mx.IsLock;
             }
         }
