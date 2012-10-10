@@ -17,7 +17,8 @@
         <local:StringRegularization2Converter x:Key="_stringRegularization2Converter" />
         <local:BytesToHexStringConverter x:Key="_bytesToHexStringConverter" />
         <local:DateTimeToStringConverter x:Key="_dateTimeToStringConverter" />
-
+        <local:BoolToBorderBrushConverter x:Key="_boolToBorderBrushConverter" />
+        
         <Style x:Key="_headerStyle" TargetType="{x:Type GridViewColumnHeader}">
             <Setter Property="Visibility" Value="Collapsed"/>
         </Style>
@@ -27,9 +28,17 @@
             <Separator />
             <MenuItem Name="_richTextBoxResponsMenuItem" Header="{Binding Path=ChannelControl_Respons, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxResponsMenuItem_Click" />
             <Separator />
-            <MenuItem Name="_richTextBoxFilterWordMenuItem" Header="{Binding Path=ChannelControl_FilterWord, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxFilterWordMenuItem_Click"/>
-            <MenuItem Name="_richTextBoxFilterSignatureMenuItem" Header="{Binding Path=ChannelControl_FilterSignature, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxFilterSignatureMenuItem_Click"/>
-            <MenuItem Name="_richTextBoxFilterMessageMenuItem" Header="{Binding Path=ChannelControl_FilterMessage, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxFilterMessageMenuItem_Click"/>
+            <MenuItem Name="_richTextBoxLockMenuItem" Header="{Binding Path=ChannelControl_Lock, Source={StaticResource ResourcesInstance}}" >
+                <MenuItem Name="_richTextBoxLockThisMenuItem" Header="{Binding Path=ChannelControl_LockThis, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxLockThisMenuItem_Click"/>
+                <MenuItem Name="_richTextBoxUnlockThisMenuItem" Header="{Binding Path=ChannelControl_UnlockThis, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxUnlockThisMenuItem_Click"/>
+                <MenuItem Name="_richTextBoxLockAllMenuItem" Header="{Binding Path=ChannelControl_LockAll, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxLockAllMenuItem_Click"/>
+                <MenuItem Name="_richTextBoxUnlockAllMenuItem" Header="{Binding Path=ChannelControl_UnlockAll, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxUnlockAllMenuItem_Click"/>
+            </MenuItem>
+            <MenuItem Name="_richTextBoxFilterMenuItem" Header="{Binding Path=ChannelControl_Filter, Source={StaticResource ResourcesInstance}}" >
+                <MenuItem Name="_richTextBoxFilterWordMenuItem" Header="{Binding Path=ChannelControl_FilterWord, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxFilterWordMenuItem_Click"/>
+                <MenuItem Name="_richTextBoxFilterSignatureMenuItem" Header="{Binding Path=ChannelControl_FilterSignature, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxFilterSignatureMenuItem_Click"/>
+                <MenuItem Name="_richTextBoxFilterMessageMenuItem" Header="{Binding Path=ChannelControl_FilterMessage, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxFilterMessageMenuItem_Click"/>
+            </MenuItem>
         </ContextMenu>
 
         <Style x:Key="ExpanderDownHeaderStyle" TargetType="{x:Type ToggleButton}">
@@ -181,7 +190,7 @@
 
         <DataTemplate x:Key="_myTemplate_ListView">
             <Grid>
-                <RichTextBox x:Name="_richTextBox" IsReadOnly="True" local:RichTextBoxHelper.DocumentMessage="{Binding}" Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType=Grid}}" VerticalScrollBarVisibility="Auto" ContextMenuOpening="_richTextBox_ContextMenuOpening">
+                <RichTextBox x:Name="_richTextBox" IsReadOnly="True" BorderBrush="{Binding Path=IsLock, Mode=OneWay, Converter={StaticResource _boolToBorderBrushConverter}}" local:RichTextBoxHelper.DocumentMessage="{Binding Path=Value}" Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType=Grid}}" VerticalScrollBarVisibility="Auto" ContextMenuOpening="_richTextBox_ContextMenuOpening">
                     <RichTextBox.Style>
                         <Style TargetType="{x:Type RichTextBox}">
                             <Setter Property="KeyboardNavigation.TabNavigation" Value="None" />
@@ -269,7 +278,7 @@
             </local:CategoryTreeViewItem>
         </TreeView>
         <local:ListViewEx Grid.Column="2" Grid.Row="1" x:Name="_listView" Padding="0,1,0,0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SizeChanged="_listView_SizeChanged" 
-                VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" Grid.ColumnSpan="3">
+                VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" Grid.ColumnSpan="3" PreviewMouseDown="_listView_PreviewMouseDown">
             <ListView.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}">
                     <Setter Property="OverridesDefaultStyle" Value="True" />

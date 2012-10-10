@@ -163,6 +163,12 @@
   <Translate Key="ChannelControl_CopyInfo" Value="Copy info" />
   <Translate Key="ChannelControl_Paste" Value="Paste" />
   <Translate Key="ChannelControl_Respons" Value="Respons" />
+  <Translate Key="ChannelControl_Lock" Value="Lock" />
+  <Translate Key="ChannelControl_LockThis" Value="Lock This" />
+  <Translate Key="ChannelControl_UnlockThis" Value="Unlock This" />
+  <Translate Key="ChannelControl_LockAll" Value="Lock All" />
+  <Translate Key="ChannelControl_UnlockAll" Value="Unlock All" />
+  <Translate Key="ChannelControl_Filter" Value="Filter" />
   <Translate Key="ChannelControl_FilterWord" Value="Filter word" />
   <Translate Key="ChannelControl_FilterSignature" Value="Filter signature" />
   <Translate Key="ChannelControl_FilterMessage" Value="Filter message" />

@@ -21,6 +21,30 @@ using Library.Net.Lair;
 
 namespace Lair.Windows
 {
+    [ValueConversion(typeof(bool), typeof(SolidColorBrush))]
+    class BoolToBorderBrushConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var item = value as bool?;
+            if (item == null) return null;
+
+            if (item.Value)
+            {
+                return new SolidColorBrush(System.Windows.Media.Color.FromArgb(0xFF, 0x60, 0x60, 0x60));
+            }
+            else
+            {
+                return new SolidColorBrush(System.Windows.Media.Color.FromArgb(0xFF, 0x00, 0x00, 0x00));
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotSupportedException();
+        }
+    }
+
     [ValueConversion(typeof(ListView), typeof(double))]
     public class ListViewWidthConverter : IValueConverter
     {

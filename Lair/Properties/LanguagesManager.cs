@@ -1809,6 +1809,72 @@ namespace Lair.Properties
             }
         }
 
+        public string ChannelControl_Lock
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChannelControl_Lock");
+                }
+            }
+        }
+
+        public string ChannelControl_LockThis
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChannelControl_LockThis");
+                }
+            }
+        }
+
+        public string ChannelControl_UnlockThis
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChannelControl_UnlockThis");
+                }
+            }
+        }
+
+        public string ChannelControl_LockAll
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChannelControl_LockAll");
+                }
+            }
+        }
+
+        public string ChannelControl_UnlockAll
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChannelControl_UnlockAll");
+                }
+            }
+        }
+
+        public string ChannelControl_Filter
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChannelControl_Filter");
+                }
+            }
+        }
+
         public string ChannelControl_FilterWord
         {
             get

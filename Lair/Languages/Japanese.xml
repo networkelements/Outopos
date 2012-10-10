@@ -9,14 +9,14 @@
   <Translate Key="Languages_Japanese" Value="日本語" />
 
   <Translate Key="Seed_Name" Value="名前" />
-  <Translate Key="Seed_Signature" Value="署名" />
+  <Translate Key="Seed_Signature" Value="サイン" />
   <Translate Key="Seed_Length" Value="サイズ" />
   <Translate Key="Seed_Keywords" Value="キーワード" />
   <Translate Key="Seed_CreationTime" Value="作成日" />
   <Translate Key="Seed_Comment" Value="コメント" />
 
   <Translate Key="Box_Name" Value="名前" />
-  <Translate Key="Box_Signature" Value="署名" />
+  <Translate Key="Box_Signature" Value="サイン" />
   <Translate Key="Box_CreationTime" Value="作成日" />
   <Translate Key="Box_Comment" Value="コメント" />
 
@@ -24,7 +24,7 @@
   <Translate Key="Channel_Id" Value="ID" />
 
   <Translate Key="Message_Channel" Value="チャンネル" />
-  <Translate Key="Message_Signature" Value="署名" />
+  <Translate Key="Message_Signature" Value="サイン" />
   <Translate Key="Message_CreationTime" Value="作成日" />
   <Translate Key="Message_Content" Value="コンテンツ" />
 
@@ -56,7 +56,7 @@
   <Translate Key="UserInterfaceWindow_Update" Value="更新" />
   <Translate Key="UserInterfaceWindow_UpdateUrl" Value="更新 Url" />
   <Translate Key="UserInterfaceWindow_ProxyUri" Value="プロキシ Uri" />
-  <Translate Key="UserInterfaceWindow_Signature" Value="署名" />
+  <Translate Key="UserInterfaceWindow_Signature" Value="サイン" />
   <Translate Key="UserInterfaceWindow_UpdateOption" Value="更新オプション" />
   <Translate Key="UserInterfaceWindow_None" Value="無し" />
   <Translate Key="UserInterfaceWindow_AutoCheck" Value="自動チェック" />
@@ -149,10 +149,10 @@
 
   <Translate Key="ConnectionType_None" Value="None" />
   <Translate Key="ConnectionType_Tcp" Value="Tcp" />
-  <Translate Key="ConnectionType_Socks4Proxy" Value="Socks4 Proxy" />
-  <Translate Key="ConnectionType_Socks4aProxy" Value="Socks4a Proxy" />
-  <Translate Key="ConnectionType_Socks5Proxy" Value="Socks5 Proxy" />
-  <Translate Key="ConnectionType_HttpProxy" Value="Http Proxy" />
+  <Translate Key="ConnectionType_Socks4Proxy" Value="Socks4 プロキシ" />
+  <Translate Key="ConnectionType_Socks4aProxy" Value="Socks4a プロキシ" />
+  <Translate Key="ConnectionType_Socks5Proxy" Value="Socks5 プロキシ" />
+  <Translate Key="ConnectionType_HttpProxy" Value="Http プロキシ" />
 
   <Translate Key="ChannelControl_NewChannel" Value="チャンネルの作成" />
   <Translate Key="ChannelControl_NewCategory" Value="カテゴリの作成" />
@@ -163,19 +163,25 @@
   <Translate Key="ChannelControl_CopyInfo" Value="コピー (詳細情報)" />
   <Translate Key="ChannelControl_Paste" Value="貼り付け" />
   <Translate Key="ChannelControl_Respons" Value="返信" />
-  <Translate Key="ChannelControl_FilterWord" Value="単語でフィルタ" />
-  <Translate Key="ChannelControl_FilterSignature" Value="署名でフィルタ" />
-  <Translate Key="ChannelControl_FilterMessage" Value="メッセージでフィルタ" />
-  <Translate Key="ChannelControl_Signature_Filter" Value="署名" />
+  <Translate Key="ChannelControl_Lock" Value="ロック" />
+  <Translate Key="ChannelControl_LockThis" Value="このメッセージをロック" />
+  <Translate Key="ChannelControl_UnlockThis" Value="このメッセージのロックを解除" />
+  <Translate Key="ChannelControl_LockAll" Value="全てのメッセージをロック" />
+  <Translate Key="ChannelControl_UnlockAll" Value="全てのメッセージのロックを解除" />
+  <Translate Key="ChannelControl_Filter" Value="フィルタ" />
+  <Translate Key="ChannelControl_FilterWord" Value="この単語でフィルタ" />
+  <Translate Key="ChannelControl_FilterSignature" Value="このサインでフィルタ" />
+  <Translate Key="ChannelControl_FilterMessage" Value="このメッセージでフィルタ" />
+  <Translate Key="ChannelControl_Signature_Filter" Value="サイン" />
   <Translate Key="ChannelControl_New_Message" Value="新規" />
 
   <Translate Key="SignWindow_Title" Value="フィルタ" />
-  <Translate Key="SignWindow_Signature" Value="署名" />
+  <Translate Key="SignWindow_Signature" Value="サイン" />
   <Translate Key="SignWindow_Ok" Value="Ok" />
   <Translate Key="SignWindow_Cancel" Value="キャンセル" />
 
   <Translate Key="MessageEditWindow_Title" Value="新しいメッセージ" />
-  <Translate Key="MessageEditWindow_Signature" Value="署名" />
+  <Translate Key="MessageEditWindow_Signature" Value="サイン" />
   <Translate Key="MessageEditWindow_Comment" Value="コメント" />
   <Translate Key="MessageEditWindow_Ok" Value="Ok" />
   <Translate Key="MessageEditWindow_Cancel" Value="キャンセル" />
@@ -184,7 +190,7 @@
   <Translate Key="CategoryEditWindow_Name" Value="カテゴリ名" />
   <Translate Key="CategoryEditWindow_Word" Value="単語" />
   <Translate Key="CategoryEditWindow_Regex" Value="正規表現" />
-  <Translate Key="CategoryEditWindow_Signature" Value="署名" />
+  <Translate Key="CategoryEditWindow_Signature" Value="サイン" />
   <Translate Key="CategoryEditWindow_Message" Value="メッセージ" />
   <Translate Key="CategoryEditWindow_Contains" Value="有効" />
   <Translate Key="CategoryEditWindow_IsIgnoreCase" Value="大文字小文字の違いを無視" />

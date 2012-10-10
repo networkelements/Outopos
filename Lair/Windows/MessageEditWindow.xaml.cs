@@ -22,12 +22,12 @@ namespace Lair.Windows
     /// </summary>
     partial class MessageEditWindow : Window
     {
-        private Channel _channel;
+        private Board _board;
         private LairManager _lairManager;
 
-        public MessageEditWindow(Channel channel, string content, LairManager lairManager)
+        public MessageEditWindow(Board board, string content, LairManager lairManager)
         {
-            _channel = channel;
+            _board = board;
             _lairManager = lairManager;
 
             var digitalSignatureCollection = new List<object>();
@@ -90,7 +90,10 @@ namespace Lair.Windows
 
             Settings.Instance.Global_UploadDigitalSignature = digitalSignature;
 
-            _lairManager.Upload(new Message(_channel, comment, digitalSignature));
+            var m = new Message(_board.Channel, comment, digitalSignature);
+
+            _board.LockMessages.Add(m);
+            _lairManager.Upload(m);
         }
 
         private void _cancelButton_Click(object sender, RoutedEventArgs e)
