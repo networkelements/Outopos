@@ -37,6 +37,7 @@
   <Translate Key="MainWindow_Settings" Value="Settings" />
   <Translate Key="MainWindow_UserInterfaceSetting" Value="User interface setting" />
   <Translate Key="MainWindow_ConnectionSetting" Value="Connection setting" />
+  <Translate Key="MainWindow_ClearUrlHistory" Value="Clear Url History" />
   <Translate Key="MainWindow_Languages" Value="Languages" />
   <Translate Key="MainWindow_Help" Value="Help" />
   <Translate Key="MainWindow_DeveloperSite" Value="Developer site" />
@@ -66,6 +67,9 @@
   <Translate Key="UserInterfaceWindow_Fonts" Value="Fonts" />
   <Translate Key="UserInterfaceWindow_MessageFontFamily" Value="Message font family" />
   <Translate Key="UserInterfaceWindow_MessageFontSize" Value="Message font size" />
+  <Translate Key="UserInterfaceWindow_Miscellaneous" Value="Miscellaneous" />
+  <Translate Key="UserInterfaceWindow_Clear" Value="Clear" />
+  <Translate Key="UserInterfaceWindow_ClearUrlHistory" Value="Clear Url History" />
   <Translate Key="UserInterfaceWindow_Value" Value="Value" />
   <Translate Key="UserInterfaceWindow_Import" Value="Import" />
   <Translate Key="UserInterfaceWindow_Export" Value="Export" />
@@ -174,6 +178,7 @@
   <Translate Key="ChannelControl_FilterMessage" Value="Filter message" />
   <Translate Key="ChannelControl_Signature_Filter" Value="Sign" />
   <Translate Key="ChannelControl_New_Message" Value="New" />
+  <Translate Key="ChannelControl_AmoebaNotFound_Message" Value="Amoeba Not Found" />
 
   <Translate Key="SignWindow_Title" Value="Filter" />
   <Translate Key="SignWindow_Signature" Value="Signature" />

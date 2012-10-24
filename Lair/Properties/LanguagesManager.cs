@@ -493,6 +493,17 @@ namespace Lair.Properties
             }
         }
 
+        public string MainWindow_ClearUrlHistory
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("MainWindow_ClearUrlHistory");
+                }
+            }
+        }
+
         public string MainWindow_Languages
         {
             get
@@ -798,6 +809,39 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("UserInterfaceWindow_MessageFontSize");
+                }
+            }
+        }
+
+        public string UserInterfaceWindow_Miscellaneous
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("UserInterfaceWindow_Miscellaneous");
+                }
+            }
+        }
+
+        public string UserInterfaceWindow_Clear
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("UserInterfaceWindow_Clear");
+                }
+            }
+        }
+
+        public string UserInterfaceWindow_ClearUrlHistory
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("UserInterfaceWindow_ClearUrlHistory");
                 }
             }
         }
@@ -1926,6 +1970,17 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("ChannelControl_New_Message");
+                }
+            }
+        }
+
+        public string ChannelControl_AmoebaNotFound_Message
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChannelControl_AmoebaNotFound_Message");
                 }
             }
         }

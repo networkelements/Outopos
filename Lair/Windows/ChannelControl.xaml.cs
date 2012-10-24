@@ -224,31 +224,6 @@ namespace Lair.Windows
                         ChannelControl.Filter(ref newList, item.Value);
                     }
 
-                    {
-                        string searchText = null;
-
-                        this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
-                        {
-                            searchText = _searchTextBox.Text.ToLower();
-                        }), null);
-
-                        if (!string.IsNullOrWhiteSpace(searchText))
-                        {
-                            List<Message> list = new List<Message>();
-
-                            foreach (var item in newList)
-                            {
-                                if (item.Content.ToLower().Contains(searchText))
-                                {
-                                    list.Add(item);
-                                }
-                            }
-
-                            newList.Clear();
-                            newList.UnionWith(list);
-                        }
-                    }
-
                     List<Message> sortList = new List<Message>();
 
                     {
@@ -278,6 +253,26 @@ namespace Lair.Windows
                         }
                     }
 
+                    {
+                        string searchText = null;
+
+                        this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                        {
+                            searchText = (_searchTextBox.Text ?? "").ToLower();
+                        }), null);
+
+                        if (!string.IsNullOrWhiteSpace(searchText))
+                        {
+                            foreach (var item in sortList.ToArray())
+                            {
+                                if (!item.Content.ToLower().Contains(searchText))
+                                {
+                                    sortList.Remove(item);
+                                }
+                            }
+                        }
+                    }
+
                     var removeList = new List<Message>();
                     var addList = new List<Message>();
 
@@ -304,7 +299,7 @@ namespace Lair.Windows
 
                             _listViewItemCollection.Clear();
 
-                            foreach (var item in newList)
+                            foreach (var item in sortList)
                             {
                                 _listViewItemCollection.Add(new MessageEx(selectTreeViewItem.Value, item));
                             }
@@ -437,13 +432,12 @@ namespace Lair.Windows
                                 }));
 
                                 sortList = tempList.Skip(tempList.Count - 256).ToList();
-
+                             
                                 newList.Clear();
                                 newList.UnionWith(sortList);
                             }
 
                             bool updateFlag = false;
-                            int count = sortList.Count;
 
                             lock (_messages.ThisLock)
                             {
@@ -463,9 +457,39 @@ namespace Lair.Windows
                                 }
                             }
 
+                            {
+                                bool flag = false;
+
+                                this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                                {
+                                    flag = (_treeView.SelectedItem == selectTreeViewItem);
+                                }), null);
+
+                                if (flag)
+                                {
+                                    string searchText = null;
+
+                                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                                    {
+                                        searchText = (_searchTextBox.Text ?? "").ToLower();
+                                    }), null);
+
+                                    if (!string.IsNullOrWhiteSpace(searchText))
+                                    {
+                                        foreach (var item in sortList.ToArray())
+                                        {
+                                            if (!item.Content.ToLower().Contains(searchText))
+                                            {
+                                                sortList.Remove(item);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
                             this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
                             {
-                                selectTreeViewItem.Count = count;
+                                selectTreeViewItem.Count = sortList.Count;
                             }), null);
 
                             if (updateFlag)
@@ -791,7 +815,7 @@ namespace Lair.Windows
                 }
             }
 
-            if (!string.IsNullOrWhiteSpace(Settings.Instance.Global_Amoeba_Path))
+            if (File.Exists(Settings.Instance.Global_Amoeba_Path))
             {
                 try
                 {
@@ -807,6 +831,16 @@ namespace Lair.Windows
                 {
 
                 }
+            }
+            else
+            {
+                MessageBox.Show(LanguagesManager.Instance.ChannelControl_AmoebaNotFound_Message);
+
+                UserInterfaceWindow window = new UserInterfaceWindow(2, _bufferManager);
+                window.Owner = _mainWindow;
+                window.ShowDialog();
+
+                this.Refresh();
             }
         }
 
@@ -1932,6 +1966,28 @@ namespace Lair.Windows
             {
                 e.Handled = true;
             };
+
+            base.Selected += (object sender, RoutedEventArgs e) =>
+            {
+                if (_hit)
+                {
+                    var header = this.Header as TextBlock;
+                    if (header == null) return;
+
+                    header.Foreground = new SolidColorBrush(Color.FromRgb(0x00, 0x00, 0x00));
+                }
+            };
+
+            base.Unselected += (object sender, RoutedEventArgs e) =>
+            {
+                if (_hit)
+                {
+                    var header = this.Header as TextBlock;
+                    if (header == null) return;
+
+                    header.Foreground = new SolidColorBrush(Color.FromRgb(0xDF, 0xc0, 0xDF));
+                }
+            };
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e)
@@ -1956,11 +2012,26 @@ namespace Lair.Windows
 
             if (_hit)
             {
-                this.Header = new TextBlock() { Text = text, FontWeight = FontWeights.ExtraBlack };
+                this.Header = new TextBlock() { Text = text, FontWeight = FontWeights.UltraBlack };
             }
             else
             {
                 this.Header = new TextBlock() { Text = text };
+            }
+
+            if (_hit)
+            {
+                var header = this.Header as TextBlock;
+                if (header == null) return;
+
+                if (!base.IsSelected)
+                {
+                    header.Foreground = new SolidColorBrush(Color.FromRgb(0xDF, 0xc0, 0xDF));
+                }
+                else
+                {
+                    header.Foreground = new SolidColorBrush(Color.FromRgb(0x00, 0x00, 0x00));
+                }
             }
         }
 

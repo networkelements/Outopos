@@ -10,6 +10,7 @@ using Library.Security;
 using Library.Net.Lair;
 using System.ComponentModel;
 using System.Windows.Media;
+using Library.Collections;
 
 namespace Lair.Properties
 {
@@ -25,9 +26,12 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<DigitalSignature>() { Name = "Global_UploadDigitalSignature", Value = null },
                 new Library.Configuration.SettingsContext<string>() { Name = "Global_UseLanguage", Value = "English" },
                 new Library.Configuration.SettingsContext<bool>() { Name = "Global_IsStart", Value = true },
+                new Library.Configuration.SettingsContext<LockedHashSet<string>>() { Name = "Global_UrlHistorys", Value = new LockedHashSet<string>() },
+                new Library.Configuration.SettingsContext<bool>() { Name = "Global_UrlClearHistory_IsEnabled", Value = false },
                 new Library.Configuration.SettingsContext<bool>() { Name = "Global_AutoBaseNodeSetting_IsEnabled", Value = true },
                 new Library.Configuration.SettingsContext<string>() { Name = "Global_Update_Url", Value = "http://lyrise.web.fc2.com/update/Lair" },
                 new Library.Configuration.SettingsContext<string>() { Name = "Global_Update_ProxyUri", Value = "tcp:127.0.0.1:8118" },
+                new Library.Configuration.SettingsContext<string>() { Name = "Global_Update_Signature", Value = "Lyrise@iMK5aPkz6n_VLfaQWyXisi6C2yo53VbhMGTwJ4N2yGDTMXZwIdcZb8ayuGIOg-1V" },
                 new Library.Configuration.SettingsContext<UpdateOption>() { Name = "Global_Update_Option", Value = UpdateOption.AutoCheck },
                 new Library.Configuration.SettingsContext<string>() { Name = "Global_Amoeba_Path", Value = "" },
                 new Library.Configuration.SettingsContext<string>() { Name = "Global_Fonts_MessageFontFamily", Value = "MS PGothic" },
@@ -225,6 +229,44 @@ namespace Lair.Properties
             }
         }
 
+        public LockedHashSet<string> Global_UrlHistorys
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (LockedHashSet<string>)this["Global_UrlHistorys"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["Global_UrlHistorys"] = value;
+                }
+            }
+        }
+
+        public bool Global_UrlClearHistory_IsEnabled
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (bool)this["Global_UrlClearHistory_IsEnabled"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["Global_UrlClearHistory_IsEnabled"] = value;
+                }
+            }
+        }
+
         public bool Global_AutoBaseNodeSetting_IsEnabled
         {
             get
@@ -278,6 +320,25 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     this["Global_Update_ProxyUri"] = value;
+                }
+            }
+        }
+
+        public string Global_Update_Signature
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (string)this["Global_Update_Signature"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["Global_Update_Signature"] = value;
                 }
             }
         }

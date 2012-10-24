@@ -36,6 +36,8 @@ namespace Lair.Windows
 
             InitializeComponent();
 
+            _miscellaneousStackPanel.DataContext = new ExpanderListViewModel();
+
             {
                 var icon = new BitmapImage();
 
@@ -51,6 +53,7 @@ namespace Lair.Windows
 
             _updateUrlTextBox.Text = Settings.Instance.Global_Update_Url;
             _updateProxyUriTextBox.Text = Settings.Instance.Global_Update_ProxyUri;
+            _updateSignatureTextBox.Text = Settings.Instance.Global_Update_Signature;
 
             if (Settings.Instance.Global_Update_Option == UpdateOption.None)
             {
@@ -71,6 +74,14 @@ namespace Lair.Windows
             _messageFontFamilyComboBox.SelectedItem = Settings.Instance.Global_Fonts_MessageFontFamily;
 
             _messageFontSizeTextBox.Text = Settings.Instance.Global_Fonts_MessageFontSize.ToString();
+
+            _miscellaneousClearUrlHistoryCheckBox.IsChecked = Settings.Instance.Global_UrlClearHistory_IsEnabled;
+        }
+
+        public UserInterfaceWindow(int i, BufferManager bufferManager)
+            : this(bufferManager)
+        {
+            ((TabItem)_tabControl.Items[i]).IsSelected = true;
         }
 
         #region Signature
@@ -104,7 +115,7 @@ namespace Lair.Windows
                     {
                         try
                         {
-                            var signature = LairConverter.FromSignatureStream(stream);
+                            var signature = DigitalSignatureConverter.FromSignatureStream(stream);
                             if (_signatureListViewItemCollection.Any(n => n.Value == signature)) continue;
 
                             _signatureListViewItemCollection.Add(new SignatureListViewItem(signature));
@@ -198,7 +209,7 @@ namespace Lair.Windows
                         {
                             try
                             {
-                                var signature = LairConverter.FromSignatureStream(stream);
+                                var signature = DigitalSignatureConverter.FromSignatureStream(stream);
                                 if (_signatureListViewItemCollection.Any(n => n.Value == signature)) continue;
 
                                 _signatureListViewItemCollection.Add(new SignatureListViewItem(signature));
@@ -233,7 +244,7 @@ namespace Lair.Windows
                     var fileName = dialog.FileName;
 
                     using (FileStream stream = new FileStream(fileName, FileMode.Create))
-                    using (Stream signatureStream = LairConverter.ToSignatureStream(signature))
+                    using (Stream signatureStream = DigitalSignatureConverter.ToSignatureStream(signature))
                     {
                         int i = -1;
                         byte[] buffer = _bufferManager.TakeBuffer(1024);
@@ -389,6 +400,21 @@ namespace Lair.Windows
        
         #endregion
 
+        #region Miscellaneous
+
+        private void _miscellaneousStackPanel_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            Expander expander = e.Source as Expander;
+            if (expander == null) return;
+
+            foreach (var item in _miscellaneousStackPanel.Children.OfType<Expander>())
+            {
+                if (expander != item) item.IsExpanded = false;
+            }
+        }
+
+        #endregion
+
         private void _okButton_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = true;
@@ -398,6 +424,7 @@ namespace Lair.Windows
 
             Settings.Instance.Global_Update_Url = _updateUrlTextBox.Text;
             Settings.Instance.Global_Update_ProxyUri = _updateProxyUriTextBox.Text;
+            Settings.Instance.Global_Update_Signature = _updateSignatureTextBox.Text;
 
             if (_updateOptionNoneRadioButton.IsChecked.Value)
             {
@@ -418,6 +445,8 @@ namespace Lair.Windows
 
             double messageFontSize = UserInterfaceWindow.GetStringToDouble(_messageFontSizeTextBox.Text);
             Settings.Instance.Global_Fonts_MessageFontSize = Math.Max(Math.Min(messageFontSize, 100), 1);
+
+            Settings.Instance.Global_UrlClearHistory_IsEnabled = _miscellaneousClearUrlHistoryCheckBox.IsChecked.Value;
         }
 
         private void _cancelButton_Click(object sender, RoutedEventArgs e)
@@ -469,6 +498,16 @@ namespace Lair.Windows
             {
                 _signatureListViewDeleteMenuItem_Click(null, null);
             }
+        }
+
+        public class ExpanderListViewModel
+        {
+            public ExpanderListViewModel()
+            {
+                this.SelectedExpander = "1";
+            }
+
+            public string SelectedExpander { get; set; }
         }
     }
 

@@ -98,7 +98,7 @@ namespace Lair
             return bounds.Contains(mousePos);
         }
     }
-
+         
     static class TreeViewExtensions
     {
         public delegate Point GetPositionDelegate(IInputElement element);

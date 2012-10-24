@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Markup;
@@ -14,7 +15,6 @@ using System.Windows.Media;
 using Lair.Properties;
 using Library;
 using Library.Net.Lair;
-using System.Windows.Data;
 
 namespace Lair.Windows
 {
@@ -31,6 +31,9 @@ namespace Lair.Windows
         public static GetMaxHeightEventHandler GetMaxHeightEvent;
 
         private static Regex _urlRegex = new Regex(@"^(?<start>.*?)(?<url>http(s)?://(\S)+)(?<end>.*?)$", RegexOptions.Compiled | RegexOptions.Singleline);
+        private static Regex _titleRegex = new Regex(@"^ - (.*) - (\S*) (\S*) UTC$", RegexOptions.Compiled | RegexOptions.Singleline);
+        private static Color _d = Color.FromRgb(0xDF, 0xc0, 0xDF);
+        private static Color _h = Color.FromRgb(0xDF, 0xDF, 0xDF);
 
         public static string GetMessageToString(Message message)
         {
@@ -38,14 +41,14 @@ namespace Lair.Windows
 
             if (message.Certificate == null)
             {
-                stringBuilder.AppendLine(string.Format(" - Anonymous - {0}",
-                            message.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
+                stringBuilder.AppendLine(string.Format(" - Anonymous - {0} UTC",
+                    message.CreationTime.ToUniversalTime().ToString("yyyy/MM/dd HH:mm:ss", System.Globalization.DateTimeFormatInfo.InvariantInfo)));
             }
             else
             {
-                stringBuilder.AppendLine(string.Format(" - {0} - {1}",
-                   MessageConverter.ToSignatureString(message.Certificate),
-                   message.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
+                stringBuilder.AppendLine(string.Format(" - {0} - {1} UTC",
+                    MessageConverter.ToSignatureString(message.Certificate),
+                    message.CreationTime.ToUniversalTime().ToString("yyyy/MM/dd HH:mm:ss", System.Globalization.DateTimeFormatInfo.InvariantInfo)));
             }
 
             stringBuilder.AppendLine();
@@ -114,7 +117,30 @@ namespace Lair.Windows
             StringBuilder stringBuilder = new StringBuilder();
             Span p = new Span();
 
+            List<string> list = new List<string>();
+
             foreach (var line in text.Trim('\r', '\n').Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None))
+            {
+                var match = _titleRegex.Match(line);
+
+                if (match.Success)
+                {
+                    var dateText = match.Groups[2] + " " + match.Groups[3];
+                    var creationTime = DateTime.ParseExact(dateText, "yyyy/MM/dd HH:mm:ss", System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeUniversal).ToLocalTime();
+
+                    var item = string.Format(" - {0} - {1}",
+                         match.Groups[1].Value,
+                         creationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo));
+
+                    list.Add(item);
+                }
+                else
+                {
+                    list.Add(line);
+                }
+            }
+
+            foreach (var line in list)
             {
                 try
                 {
@@ -134,7 +160,7 @@ namespace Lair.Windows
                             var rl3 = (80 < rl.Length) ? rl.Substring(80) : "";
 
                             Hyperlink l = new Hyperlink();
-                            l.Foreground = new SolidColorBrush(Color.FromRgb(0xDF, 0xDF, 0xDF));
+                            l.Foreground = new SolidColorBrush(_d);
                             l.Cursor = Cursors.Hand;
                             l.PreviewMouseLeftButtonDown += (object sender, MouseButtonEventArgs ex) =>
                             {
@@ -142,7 +168,15 @@ namespace Lair.Windows
                                 {
                                     RichTextBoxHelper.SeedClickEvent(sender, seed);
                                 }
+
+                                l.Foreground = new SolidColorBrush(_h);
+                                Settings.Instance.Global_UrlHistorys.Add(rl);
                             };
+
+                            if (Settings.Instance.Global_UrlHistorys.Contains(rl))
+                            {
+                                l.Foreground = new SolidColorBrush(_h);
+                            }
 
                             {
                                 Run r = new Run();
@@ -206,7 +240,7 @@ namespace Lair.Windows
                             var rl3 = (80 < rl.Length) ? rl.Substring(80) : "";
 
                             Hyperlink l = new Hyperlink();
-                            l.Foreground = new SolidColorBrush(Color.FromRgb(0xDF, 0xDF, 0xDF));
+                            l.Foreground = new SolidColorBrush(_d);
                             l.Cursor = Cursors.Hand;
                             l.PreviewMouseLeftButtonDown += (object sender, MouseButtonEventArgs ex) =>
                             {
@@ -214,7 +248,15 @@ namespace Lair.Windows
                                 {
                                     RichTextBoxHelper.ChannelClickEvent(sender, channel);
                                 }
+
+                                l.Foreground = new SolidColorBrush(_h);
+                                Settings.Instance.Global_UrlHistorys.Add(rl);
                             };
+
+                            if (Settings.Instance.Global_UrlHistorys.Contains(rl))
+                            {
+                                l.Foreground = new SolidColorBrush(_h);
+                            }
 
                             {
                                 Run r = new Run();
@@ -298,7 +340,10 @@ namespace Lair.Windows
                                 var grid = new Grid();
                                 grid.Children.Add(richTextBox2);
 
-                                var header = stringBuilder.ToString().Replace("\r\n", " ").Replace('\r', ' ').Replace('\n', ' ');
+                                richTextBox2.SelectAll();
+                                var header = richTextBox2.Selection.Text.Replace("\r\n", " ").Replace('\r', ' ').Replace('\n', ' ');
+                                richTextBox2.Selection.Select(richTextBox2.Document.ContentStart, richTextBox2.Document.ContentStart);
+
                                 var label = new Label() { Content = header };
 
                                 var binding = new Binding("ActualWidth")
@@ -344,21 +389,30 @@ namespace Lair.Windows
                                 {
                                     p.Inlines.Add(match.Groups["start"].Value);
 
+                                    var url = match.Groups["url"].Value;
                                     Hyperlink l = new Hyperlink();
-                                    l.Foreground = new SolidColorBrush(Color.FromRgb(0xDF, 0xDF, 0xDF));
-                                    l.Inlines.Add(match.Groups["url"].Value);
+                                    l.Foreground = new SolidColorBrush(_d);
+                                    l.Inlines.Add(url);
                                     l.Cursor = Cursors.Hand;
                                     l.PreviewMouseLeftButtonDown += (object sender, MouseButtonEventArgs ex) =>
                                     {
                                         if (RichTextBoxHelper.LinkClickEvent != null)
                                         {
-                                            RichTextBoxHelper.LinkClickEvent(sender, match.Groups["url"].Value);
+                                            RichTextBoxHelper.LinkClickEvent(sender, url);
                                         }
+
+                                        l.Foreground = new SolidColorBrush(_h);
+                                        Settings.Instance.Global_UrlHistorys.Add(url);
                                     };
                                     l.PreviewMouseRightButtonDown += (object sender, MouseButtonEventArgs ex) =>
                                     {
                                         richTextBox.Selection.Select(l.ContentStart, l.ContentEnd);
                                     };
+
+                                    if (Settings.Instance.Global_UrlHistorys.Contains(url))
+                                    {
+                                        l.Foreground = new SolidColorBrush(_h);
+                                    }
 
                                     p.Inlines.Add(l);
 
@@ -410,7 +464,10 @@ namespace Lair.Windows
                 var grid = new Grid();
                 grid.Children.Add(richTextBox2);
 
-                var header = stringBuilder.ToString().Replace("\r\n", " ").Replace('\r', ' ').Replace('\n', ' ');
+                richTextBox2.SelectAll();
+                var header = richTextBox2.Selection.Text.Replace("\r\n", " ").Replace('\r', ' ').Replace('\n', ' ');
+                richTextBox2.Selection.Select(richTextBox2.Document.ContentStart, richTextBox2.Document.ContentStart);
+
                 var label = new Label() { Content = header };
 
                 var binding = new Binding("ActualWidth")

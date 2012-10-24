@@ -37,6 +37,7 @@
   <Translate Key="MainWindow_Settings" Value="設定" />
   <Translate Key="MainWindow_UserInterfaceSetting" Value="ユーザーインターフェイス設定" />
   <Translate Key="MainWindow_ConnectionSetting" Value="接続設定" />
+  <Translate Key="MainWindow_ClearUrlHistory" Value="URLクリック履歴の削除" />
   <Translate Key="MainWindow_Languages" Value="言語" />
   <Translate Key="MainWindow_Help" Value="ヘルプ" />
   <Translate Key="MainWindow_DeveloperSite" Value="デベロッパーサイト" />
@@ -66,6 +67,9 @@
   <Translate Key="UserInterfaceWindow_Fonts" Value="フォント" />
   <Translate Key="UserInterfaceWindow_MessageFontFamily" Value="メッセージフォント" />
   <Translate Key="UserInterfaceWindow_MessageFontSize" Value="メッセージフォントサイズ" />
+  <Translate Key="UserInterfaceWindow_Miscellaneous" Value="その他" />
+  <Translate Key="UserInterfaceWindow_Clear" Value="削除" />
+  <Translate Key="UserInterfaceWindow_ClearUrlHistory" Value="Lairの終了時にURLクリック履歴を削除する" />
   <Translate Key="UserInterfaceWindow_Value" Value="値" />
   <Translate Key="UserInterfaceWindow_Import" Value="インポート" />
   <Translate Key="UserInterfaceWindow_Export" Value="エクスポート" />
@@ -174,6 +178,7 @@
   <Translate Key="ChannelControl_FilterMessage" Value="このメッセージでフィルタ" />
   <Translate Key="ChannelControl_Signature_Filter" Value="サイン" />
   <Translate Key="ChannelControl_New_Message" Value="新規" />
+  <Translate Key="ChannelControl_AmoebaNotFound_Message" Value="Amoebaが見つかりません。Amoeba.exeへのパスを設定してください。" />
 
   <Translate Key="SignWindow_Title" Value="フィルタ" />
   <Translate Key="SignWindow_Signature" Value="サイン" />

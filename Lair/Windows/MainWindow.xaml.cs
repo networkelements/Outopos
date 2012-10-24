@@ -105,6 +105,25 @@ namespace Lair.Windows
             _timerThread.Start();
         }
 
+        public static void CopyDirectory(string sourceDirectoryPath, string destDirectoryPath)
+        {
+            if (!Directory.Exists(destDirectoryPath))
+            {
+                Directory.CreateDirectory(destDirectoryPath);
+                File.SetAttributes(destDirectoryPath, File.GetAttributes(sourceDirectoryPath));
+            }
+
+            foreach (string file in Directory.GetFiles(sourceDirectoryPath))
+            {
+                File.Copy(file, Path.Combine(destDirectoryPath, Path.GetFileName(file)), true);
+            }
+
+            foreach (string dir in Directory.GetDirectories(sourceDirectoryPath))
+            {
+                CopyDirectory(dir, Path.Combine(destDirectoryPath, Path.GetFileName(dir)));
+            }
+        }
+
         private void Timer()
         {
             try
@@ -614,6 +633,34 @@ namespace Lair.Windows
                     _lairManager.Save(_configrationDirectoryPaths["LairManager"]);
                     Settings.Instance.Save(_configrationDirectoryPaths["MainWindow"]);
                 }
+
+                {
+                    var lairPath = Path.Combine(App.DirectoryPaths["Configuration"], "Lair");
+                    var libraryPath = Path.Combine(App.DirectoryPaths["Configuration"], "Library");
+
+                    try
+                    {
+                        if (Directory.Exists(lairPath))
+                        {
+                            if (Directory.Exists(lairPath + ".old"))
+                                Directory.Delete(lairPath + ".old", true);
+
+                            MainWindow.CopyDirectory(lairPath, lairPath + ".old");
+                        }
+
+                        if (Directory.Exists(libraryPath))
+                        {
+                            if (Directory.Exists(libraryPath + ".old"))
+                                Directory.Delete(libraryPath + ".old", true);
+
+                            MainWindow.CopyDirectory(libraryPath, libraryPath + ".old");
+                        }
+                    }
+                    catch (Exception e2)
+                    {
+                        Log.Warning(e2);
+                    }
+                }
             }
         }
 
@@ -668,6 +715,7 @@ namespace Lair.Windows
                     var url = Settings.Instance.Global_Update_Url;
                     string line1;
                     string line2;
+                    string line3;
 
                     for (int i = 0; ; i++)
                     {
@@ -690,6 +738,7 @@ namespace Lair.Windows
                             {
                                 line1 = r.ReadLine();
                                 line2 = r.ReadLine();
+                                line3 = r.ReadLine();
                             }
 
                             break;
@@ -770,115 +819,35 @@ namespace Lair.Windows
 
                             if (flag)
                             {
-                                for (int i = 0; ; i++)
+                                var path = string.Format(@"{0}\{1}", App.DirectoryPaths["Work"], System.Web.HttpUtility.UrlDecode(Path.GetFileName(line2)));
+                                this.GetFile(line2, path);
+
+                                var signPath = string.Format(@"{0}\{1}", App.DirectoryPaths["Work"], System.Web.HttpUtility.UrlDecode(Path.GetFileName(line3)));
+                                this.GetFile(line3, signPath);
+
+                                using (var stream = new FileStream(path, FileMode.Open))
+                                using (var signStream = new FileStream(signPath, FileMode.Open))
                                 {
-                                    try
-                                    {
-                                        HttpWebRequest rq = (HttpWebRequest)HttpWebRequest.Create(line2);
-                                        rq.Method = "GET";
-                                        rq.ContentType = "text/html; charset=UTF-8";
-                                        rq.UserAgent = "";
-                                        rq.ReadWriteTimeout = 1000 * 60;
-                                        rq.Timeout = 1000 * 60;
-                                        rq.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore);
-                                        rq.KeepAlive = true;
-                                        rq.Headers.Add(HttpRequestHeader.AcceptCharset, "utf-8");
-                                        rq.Proxy = this.GetProxy();
+                                    Certificate certificate = DigitalSignatureConverter.FromCertificateStream(signStream);
 
-                                        using (HttpWebResponse rs = (HttpWebResponse)rq.GetResponse())
-                                        {
-                                            string fileName = null;
-
-                                            if (rs.Headers.AllKeys.Contains("Content-Disposition"))
-                                            {
-                                                string dispos = rs.Headers["Content-Disposition"];
-
-                                                if (!String.IsNullOrEmpty(dispos))
-                                                {
-                                                    Regex re = new Regex(@"
-                                                        filename\s*=\s*
-                                                        (?:
-                                                          ""(?<filename>[^""]*)""
-                                                          |
-                                                          (?<filename>[^;]*)
-                                                        )
-                                                        ", RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace);
-
-                                                    Match m = re.Match(dispos);
-
-                                                    if (m.Success)
-                                                    {
-                                                        fileName = m.Groups["filename"].Value;
-                                                    }
-                                                }
-                                            }
-                                            else
-                                            {
-                                                fileName = Path.GetFileName(line2);
-                                            }
-
-                                            var path = string.Format(@"{0}\{1}", App.DirectoryPaths["Update"], fileName);
-                                            long size = 0;
-
-                                            using (Stream inStream = rs.GetResponseStream())
-                                            using (FileStream outStream = new FileStream(path, FileMode.Create))
-                                            {
-                                                byte[] buffer = new byte[1024 * 4];
-
-                                                int length = 0;
-
-                                                while (0 < (length = inStream.Read(buffer, 0, buffer.Length)))
-                                                {
-                                                    outStream.Write(buffer, 0, length);
-                                                    size += length;
-                                                }
-                                            }
-
-                                            if (size != rs.ContentLength)
-                                            {
-                                                try
-                                                {
-                                                    File.Delete(path);
-                                                }
-                                                catch (Exception)
-                                                {
-
-                                                }
-
-                                                continue;
-                                            }
-                                        }
-
-                                        this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
-                                        {
-                                            MessageBox.Show(
-                                                this,
-                                                LanguagesManager.Instance.MainWindow_Restart_Message,
-                                                "Update",
-                                                MessageBoxButton.OK,
-                                                MessageBoxImage.Information);
-                                        }), null);
-
-                                        break;
-                                    }
-                                    catch (ThreadAbortException e)
-                                    {
-                                        throw e;
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        if (i < 10)
-                                        {
-                                            continue;
-                                        }
-                                        else
-                                        {
-                                            Log.Error(e);
-
-                                            return;
-                                        }
-                                    }
+                                    if (Settings.Instance.Global_Update_Signature != MessageConverter.ToSignatureString(certificate)) throw new Exception("Update DigitalSignature #1");
+                                    if (!DigitalSignature.VerifyCertificate(certificate, stream, new BufferManager())) throw new Exception("Update DigitalSignature #2");
                                 }
+
+                                if (File.Exists(path))
+                                {
+                                    File.Move(path, Path.Combine(App.DirectoryPaths["Update"], Path.GetFileName(path)));
+                                }
+
+                                this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                                {
+                                    MessageBox.Show(
+                                        this,
+                                        LanguagesManager.Instance.MainWindow_Restart_Message,
+                                        "Update",
+                                        MessageBoxButton.OK,
+                                        MessageBoxImage.Information);
+                                }), null);
                             }
                         }
                     }
@@ -886,6 +855,78 @@ namespace Lair.Windows
                 catch (Exception e)
                 {
                     Log.Error(e);
+                }
+            }
+        }
+
+        private void GetFile(string url, string path)
+        {
+            for (int i = 0; ; i++)
+            {
+                try
+                {
+                    HttpWebRequest rq = (HttpWebRequest)HttpWebRequest.Create(url);
+                    rq.Method = "GET";
+                    rq.ContentType = "text/html; charset=UTF-8";
+                    rq.UserAgent = "";
+                    rq.ReadWriteTimeout = 1000 * 60;
+                    rq.Timeout = 1000 * 60;
+                    rq.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore);
+                    rq.KeepAlive = true;
+                    rq.Headers.Add(HttpRequestHeader.AcceptCharset, "utf-8");
+                    rq.Proxy = this.GetProxy();
+
+                    using (HttpWebResponse rs = (HttpWebResponse)rq.GetResponse())
+                    {
+                        long size = 0;
+
+                        using (Stream inStream = rs.GetResponseStream())
+                        using (FileStream outStream = new FileStream(path, FileMode.Create))
+                        {
+                            byte[] buffer = new byte[1024 * 4];
+
+                            int length = 0;
+
+                            while (0 < (length = inStream.Read(buffer, 0, buffer.Length)))
+                            {
+                                outStream.Write(buffer, 0, length);
+                                size += length;
+                            }
+                        }
+
+                        if (size != rs.ContentLength)
+                        {
+                            try
+                            {
+                                File.Delete(path);
+                            }
+                            catch (Exception)
+                            {
+
+                            }
+
+                            continue;
+                        }
+                    }
+
+                    break;
+                }
+                catch (ThreadAbortException e)
+                {
+                    throw e;
+                }
+                catch (Exception e)
+                {
+                    if (i < 10)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        Log.Error(e);
+
+                        return;
+                    }
                 }
             }
         }
@@ -1013,6 +1054,11 @@ namespace Lair.Windows
             _timerThread.Join();
             _timerThread = null;
 
+            if (Settings.Instance.Global_UrlClearHistory_IsEnabled)
+            {
+                Settings.Instance.Global_UrlHistorys.Clear();
+            }
+
             _autoBaseNodeSettingManager.Stop();
             _autoBaseNodeSettingManager.Save(_configrationDirectoryPaths["AutoBaseNodeSettingManager"]);
             _autoBaseNodeSettingManager.Dispose();
@@ -1097,6 +1143,15 @@ namespace Lair.Windows
             ((ChannelControl)_channelTabItem.Content).Refresh();
         }
 
+        private void _clearUrlHistoryMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show(this, LanguagesManager.Instance.MainWindow_Delete_Message, "Channel", MessageBoxButton.OKCancel, MessageBoxImage.Information) != MessageBoxResult.OK) return;
+            
+            Settings.Instance.Global_UrlHistorys.Clear();
+
+            ((ChannelControl)_channelTabItem.Content).Refresh();
+        }
+        
         private void _helpMenuItem_SubmenuOpened(object sender, RoutedEventArgs e)
         {
             _checkUpdateMenuItem.IsEnabled = _checkUpdateMenuItem_IsEnabled;
