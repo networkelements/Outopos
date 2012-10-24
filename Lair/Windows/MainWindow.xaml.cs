@@ -572,6 +572,11 @@ namespace Lair.Windows
                     {
                         Settings.Instance.ChannelControl_Category.Name = "Channel";
                     }
+
+                    if (version <= new Version(0, 0, 28))
+                    {
+                        Settings.Instance.Global_Update_Signature = "Lyrise@iMK5aPkz6n_VLfaQWyXisi6C2yo53VbhMGTwJ4N2yGDTMXZwIdcZb8ayuGIOg-1V";
+                    }
                 }
 
                 using (StreamWriter writer = new StreamWriter(Path.Combine(App.DirectoryPaths["Configuration"], "Lair.version"), false, new UTF8Encoding(false)))
@@ -831,7 +836,7 @@ namespace Lair.Windows
                                     Certificate certificate = DigitalSignatureConverter.FromCertificateStream(signStream);
 
                                     if (Settings.Instance.Global_Update_Signature != MessageConverter.ToSignatureString(certificate)) throw new Exception("Update DigitalSignature #1");
-                                    if (!DigitalSignature.VerifyCertificate(certificate, stream, new BufferManager())) throw new Exception("Update DigitalSignature #2");
+                                    if (!DigitalSignature.VerifyFileCertificate(certificate, stream, new BufferManager())) throw new Exception("Update DigitalSignature #2");
                                 }
 
                                 if (File.Exists(path))
