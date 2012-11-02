@@ -209,10 +209,6 @@ namespace Lair.Windows
             {
                 return MessageConverter.ToInfoMessage((Library.Net.Amoeba.Seed)value);
             }
-            else if (value is Library.Net.Amoeba.Box)
-            {
-                return MessageConverter.ToInfoMessage((Library.Net.Amoeba.Box)value);
-            }
             else if (value is Channel)
             {
                 return MessageConverter.ToInfoMessage((Channel)value);

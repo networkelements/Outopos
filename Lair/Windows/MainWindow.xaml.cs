@@ -131,9 +131,11 @@ namespace Lair.Windows
                 Stopwatch spaceCheckStopwatch = new Stopwatch();
                 Stopwatch backupStopwatch = new Stopwatch();
                 Stopwatch updateStopwatch = new Stopwatch();
+                Stopwatch uriUpdateStopwatch = new Stopwatch();
                 spaceCheckStopwatch.Start();
                 backupStopwatch.Start();
                 updateStopwatch.Start();
+                uriUpdateStopwatch.Start();
 
                 for (; ; )
                 {
@@ -223,6 +225,20 @@ namespace Lair.Windows
                             {
                                 _checkUpdateMenuItem_Click(null, null);
                             }
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Warning(e);
+                        }
+                    }
+
+                    if (uriUpdateStopwatch.Elapsed > new TimeSpan(1, 0, 0))
+                    {
+                        uriUpdateStopwatch.Restart();
+
+                        try
+                        {
+                            _autoBaseNodeSettingManager.Update();
                         }
                         catch (Exception e)
                         {

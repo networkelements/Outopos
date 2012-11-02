@@ -68,7 +68,7 @@
   <Translate Key="UserInterfaceWindow_MessageFontFamily" Value="メッセージフォント" />
   <Translate Key="UserInterfaceWindow_MessageFontSize" Value="メッセージフォントサイズ" />
   <Translate Key="UserInterfaceWindow_Miscellaneous" Value="その他" />
-  <Translate Key="UserInterfaceWindow_Clear" Value="削除" />
+  <Translate Key="UserInterfaceWindow_Event" Value="イベント" />
   <Translate Key="UserInterfaceWindow_ClearUrlHistory" Value="Lairの終了時にURLクリック履歴を削除する" />
   <Translate Key="UserInterfaceWindow_Value" Value="値" />
   <Translate Key="UserInterfaceWindow_Import" Value="インポート" />

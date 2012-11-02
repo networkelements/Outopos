@@ -824,13 +824,13 @@ namespace Lair.Properties
             }
         }
 
-        public string UserInterfaceWindow_Clear
+        public string UserInterfaceWindow_Event
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("UserInterfaceWindow_Clear");
+                    return this.Translate("UserInterfaceWindow_Event");
                 }
             }
         }

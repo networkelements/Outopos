@@ -101,28 +101,8 @@ namespace Lair
                 if (seed.Certificate != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Seed_Signature, MessageConverter.ToSignatureString(seed.Certificate)));
                 builder.AppendLine(string.Format("{0}: {1:#,0}", LanguagesManager.Instance.Seed_Length, seed.Length));
                 if (keywords.Count != 0) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Seed_Keywords, String.Join(", ", keywords)));
-                builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Seed_CreationTime, seed.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
+                builder.AppendLine(string.Format("{0}: {1} UTC", LanguagesManager.Instance.Seed_CreationTime, seed.CreationTime.ToUniversalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
                 if (!string.IsNullOrWhiteSpace(seed.Comment)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Seed_Comment, seed.Comment));
-
-                if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
-                else return null;
-            }
-            catch (Exception e)
-            {
-                throw new ArgumentException("ArgumentException", e);
-            }
-        }
-
-        public static string ToInfoMessage(Library.Net.Amoeba.Box box)
-        {
-            try
-            {
-                StringBuilder builder = new StringBuilder();
-
-                if (!string.IsNullOrWhiteSpace(box.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Box_Name, box.Name));
-                if (box.Certificate != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Box_Signature, MessageConverter.ToSignatureString(box.Certificate)));
-                builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Box_CreationTime, box.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
-                if (!string.IsNullOrWhiteSpace(box.Comment)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Box_Comment, box.Comment));
 
                 if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
                 else return null;
@@ -160,7 +140,7 @@ namespace Lair
 
                 if (message.Channel != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Message_Channel, MessageConverter.ToChannelString(message.Channel)));
                 if (message.Certificate != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Message_Signature, MessageConverter.ToSignatureString(message.Certificate)));
-                builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Message_CreationTime, message.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
+                builder.AppendLine(string.Format("{0}: {1} UTC", LanguagesManager.Instance.Message_CreationTime, message.CreationTime.ToUniversalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
                 if (!string.IsNullOrWhiteSpace(message.Content)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Message_Content, message.Content));
 
                 if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);

@@ -1254,12 +1254,13 @@ namespace Lair.Windows
                 }
             }
 
-            lock (_autoBaseNodeSettingManager.ThisLock)
+            if (flag && _miscellaneousAutoBaseNodeSettingCheckBox.IsChecked.Value
+                && _autoBaseNodeSettingManager.State == ManagerState.Start)
             {
-                if (flag && _autoBaseNodeSettingManager.State == ManagerState.Start)
+                ThreadPool.QueueUserWorkItem(new WaitCallback((object state) =>
                 {
-                    _autoBaseNodeSettingManager.Restart();
-                }
+                    _autoBaseNodeSettingManager.Update();
+                }));
             }
 
             Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled = _miscellaneousAutoBaseNodeSettingCheckBox.IsChecked.Value;

@@ -68,7 +68,7 @@
   <Translate Key="UserInterfaceWindow_MessageFontFamily" Value="Message font family" />
   <Translate Key="UserInterfaceWindow_MessageFontSize" Value="Message font size" />
   <Translate Key="UserInterfaceWindow_Miscellaneous" Value="Miscellaneous" />
-  <Translate Key="UserInterfaceWindow_Clear" Value="Clear" />
+  <Translate Key="UserInterfaceWindow_Event" Value="Event" />
   <Translate Key="UserInterfaceWindow_ClearUrlHistory" Value="Clear Url History" />
   <Translate Key="UserInterfaceWindow_Value" Value="Value" />
   <Translate Key="UserInterfaceWindow_Import" Value="Import" />

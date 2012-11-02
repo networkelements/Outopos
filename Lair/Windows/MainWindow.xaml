@@ -43,8 +43,8 @@
                 <MenuItem Name="_stopMenuItem" Header="{Binding Path=MainWindow_Stop, Source={StaticResource ResourcesInstance}}" IsEnabled="False"  Click="_stopMenuItem_Click" />
             </MenuItem>
             <MenuItem Name="_settingsMenuItem" Header="{Binding Path=MainWindow_Settings, Source={StaticResource ResourcesInstance}}">
-                <MenuItem Name="_userInterfaceSettingMenuItem" Header="{Binding Path=MainWindow_UserInterfaceSetting, Source={StaticResource ResourcesInstance}}" Click="_userInterfaceSettingMenuItem_Click" />
                 <MenuItem Name="_clearUrlHistoryMenuItem" Header="{Binding Path=MainWindow_ClearUrlHistory, Source={StaticResource ResourcesInstance}}" Click="_clearUrlHistoryMenuItem_Click" />
+                <MenuItem Name="_userInterfaceSettingMenuItem" Header="{Binding Path=MainWindow_UserInterfaceSetting, Source={StaticResource ResourcesInstance}}" Click="_userInterfaceSettingMenuItem_Click" />
                 <Separator />
                 <MenuItem Name="_connectionSettingMenuItem" Header="{Binding Path=MainWindow_ConnectionSetting, Source={StaticResource ResourcesInstance}}" Click="_connectionSettingMenuItem_Click" />
             </MenuItem>

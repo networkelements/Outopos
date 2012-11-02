@@ -28,7 +28,6 @@ namespace Lair
             };
         }
 
-
         public static IEnumerable<string> GetPaths()
         {
             lock (_thisLock)

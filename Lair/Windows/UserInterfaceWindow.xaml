@@ -81,34 +81,36 @@
                     </GroupBox>
                 </Grid>
             </TabItem>
-            <TabItem Header="{Binding Path=UserInterfaceWindow_Amoeba, Source={StaticResource ResourcesInstance}}">
-                <Grid FocusManager.FocusedElement="{Binding ElementName=_keywordTextBox}">
-                    <Label Content="{Binding Path=UserInterfaceWindow_AmoebaPath, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="120" />
-                    <TextBox Height="24" Margin="132,6,6,0" Name="_amoebaPathTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" PreviewMouseDoubleClick="_amoebaPathTextBox_PreviewMouseDoubleClick" />
-                </Grid>
-            </TabItem>
-            <TabItem Header="{Binding Path=UserInterfaceWindow_Fonts, Source={StaticResource ResourcesInstance}}">
-                <Grid FocusManager.FocusedElement="{Binding ElementName=_messageFontFamilyComboBox}">
-                    <Label Content="{Binding Path=UserInterfaceWindow_MessageFontFamily, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="240" />
-                    <ComboBox Name="_messageFontFamilyComboBox" VerticalAlignment="Top" Margin="252,6,6,0" Height="24" Width="420">
-                        <ComboBox.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <VirtualizingStackPanel />
-                            </ItemsPanelTemplate>
-                        </ComboBox.ItemsPanel>
-                    </ComboBox>
-                    <Label Content="{Binding Path=UserInterfaceWindow_MessageFontSize, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,36,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="240" />
-                    <TextBox Height="24" Margin="252,36,6,0" Name="_messageFontSizeTextBox" VerticalAlignment="Top" TextChanged="_messageFontSizeTextBox_TextChanged" Width="420" />
-                </Grid>
-            </TabItem>
             <TabItem Name="_miscellaneousTabItem" Header="{Binding Path=UserInterfaceWindow_Miscellaneous, Source={StaticResource ResourcesInstance}}">
                 <Grid>
                     <StackPanel Name="_miscellaneousStackPanel">
                         <StackPanel.Resources>
                             <local:ExpanderToBooleanConverter x:Key="_expanderToBooleanConverter" />
                         </StackPanel.Resources>
-                        <Expander Header="{Binding Path=UserInterfaceWindow_Clear, Source={StaticResource ResourcesInstance}}" VerticalAlignment="Top" Margin="6,6,6,0"
+                        <Expander Header="{Binding Path=UserInterfaceWindow_Amoeba, Source={StaticResource ResourcesInstance}}" VerticalAlignment="Top" Margin="6,6,6,0"
                                     IsExpanded="{Binding SelectedExpander, Mode=TwoWay, Converter={StaticResource _expanderToBooleanConverter}, ConverterParameter=1}">
+                            <Grid Margin="0,0,0,6">
+                                <Label Content="{Binding Path=UserInterfaceWindow_AmoebaPath, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="120" />
+                                <TextBox Height="24" Margin="132,6,6,0" Name="_amoebaPathTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" />
+                            </Grid>
+                        </Expander>
+                        <Expander Header="{Binding Path=UserInterfaceWindow_Fonts, Source={StaticResource ResourcesInstance}}" VerticalAlignment="Top" Margin="6,6,6,0"
+                                    IsExpanded="{Binding SelectedExpander, Mode=TwoWay, Converter={StaticResource _expanderToBooleanConverter}, ConverterParameter=2}">
+                            <Grid Margin="0,0,0,6">
+                                <Label Content="{Binding Path=UserInterfaceWindow_MessageFontFamily, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="240" />
+                                <ComboBox Height="24" Margin="252,6,6,0" Name="_messageFontFamilyComboBox" VerticalAlignment="Top">
+                                    <ComboBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <VirtualizingStackPanel />
+                                        </ItemsPanelTemplate>
+                                    </ComboBox.ItemsPanel>
+                                </ComboBox>
+                                <Label Content="{Binding Path=UserInterfaceWindow_MessageFontSize, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,36,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="240" />
+                                <TextBox Height="24" Margin="252,36,6,0" Name="_messageFontSizeTextBox" VerticalAlignment="Top" />
+                            </Grid>
+                        </Expander>
+                        <Expander Header="{Binding Path=UserInterfaceWindow_Event, Source={StaticResource ResourcesInstance}}" VerticalAlignment="Top" Margin="6,6,6,0"
+                                    IsExpanded="{Binding SelectedExpander, Mode=TwoWay, Converter={StaticResource _expanderToBooleanConverter}, ConverterParameter=3}">
                             <Grid Margin="0,0,0,6">
                                 <CheckBox Content="{Binding Path=UserInterfaceWindow_ClearUrlHistory, Source={StaticResource ResourcesInstance}}" Height="16" HorizontalAlignment="Left" Margin="6,6,0,0" Name="_miscellaneousClearUrlHistoryCheckBox" VerticalAlignment="Top" />
                             </Grid>

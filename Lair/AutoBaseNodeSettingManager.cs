@@ -9,8 +9,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Library;
-using Library.Net.Lair;
 using Library.Net.Upnp;
+using Library.Net.Lair;
 
 namespace Lair
 {
@@ -79,19 +79,20 @@ namespace Lair
             return Collection.Compare(x.GetAddressBytes(), y.GetAddressBytes());
         }
 
-        public override void Start()
+        public void Update()
         {
             lock (this.ThisLock)
             {
-                if (this.State == ManagerState.Start) return;
-                _state = ManagerState.Start;
+                if (this.State == ManagerState.Stop) return;
 
                 try
                 {
                     string uri = _lairManager.ListenUris.FirstOrDefault(n => n.StartsWith(string.Format("tcp:{0}:", IPAddress.Any.ToString())));
+
                     Regex regex = new Regex(@"(.*?):(.*):(\d*)");
                     var match = regex.Match(uri);
-                    if (!match.Success) return;
+                    if (!match.Success) goto End;
+
                     int port = int.Parse(match.Groups[3].Value);
 
                     List<IPAddress> myIpAddresses = new List<IPAddress>(AutoBaseNodeSettingManager.GetIpAddresses());
@@ -125,17 +126,30 @@ namespace Lair
                             continue;
                         }
 
-                        _settings.Ipv4Uri = string.Format("tcp:{0}:{1}", myIpAddress.ToString(), port);
+                        var ipv4Uri = string.Format("tcp:{0}:{1}", myIpAddress.ToString(), port);
 
-                        if (!_lairManager.BaseNode.Uris.Any(n => n == _settings.Ipv4Uri))
+                        if (_settings.Ipv4Uri != ipv4Uri)
                         {
-                            _lairManager.BaseNode.Uris.Add(_settings.Ipv4Uri);
+                            if (_settings.Ipv4Uri != null)
+                            {
+                                _lairManager.BaseNode.Uris.Remove(_settings.Ipv4Uri);
 
-                            Log.Information(string.Format("Add Node Uri: {0}", _settings.Ipv4Uri));
+                                Log.Information(string.Format("Remove Node Uri: {0}", _settings.Ipv4Uri));
+                            }
+                            _settings.Ipv4Uri = ipv4Uri;
+
+                            if (!_lairManager.BaseNode.Uris.Any(n => n == _settings.Ipv4Uri))
+                            {
+                                _lairManager.BaseNode.Uris.Add(_settings.Ipv4Uri);
+
+                                Log.Information(string.Format("Add Node Uri: {0}", _settings.Ipv4Uri));
+                            }
                         }
 
                         break;
                     }
+
+                End: ;
                 }
                 catch (Exception)
                 {
@@ -145,9 +159,11 @@ namespace Lair
                 try
                 {
                     string uri = _lairManager.ListenUris.FirstOrDefault(n => n.StartsWith(string.Format("tcp:[{0}]:", IPAddress.IPv6Any.ToString())));
+
                     Regex regex = new Regex(@"(.*?):(.*):(\d*)");
                     var match = regex.Match(uri);
-                    if (!match.Success) return;
+                    if (!match.Success) goto End;
+
                     int port = int.Parse(match.Groups[3].Value);
 
                     List<IPAddress> myIpAddresses = new List<IPAddress>(AutoBaseNodeSettingManager.GetIpAddresses());
@@ -173,17 +189,30 @@ namespace Lair
                             continue;
                         }
 
-                        _settings.Ipv6Uri = string.Format("tcp:[{0}]:{1}", myIpAddress.ToString(), port);
+                        var ipv6Uri = string.Format("tcp:[{0}]:{1}", myIpAddress.ToString(), port);
 
-                        if (!_lairManager.BaseNode.Uris.Any(n => n == _settings.Ipv6Uri))
+                        if (_settings.Ipv6Uri != ipv6Uri)
                         {
-                            _lairManager.BaseNode.Uris.Add(_settings.Ipv6Uri);
+                            if (_settings.Ipv6Uri != null)
+                            {
+                                _lairManager.BaseNode.Uris.Remove(_settings.Ipv6Uri);
 
-                            Log.Information(string.Format("Add Node Uri: {0}", _settings.Ipv6Uri));
+                                Log.Information(string.Format("Remove Node Uri: {0}", _settings.Ipv6Uri));
+                            }
+                            _settings.Ipv6Uri = ipv6Uri;
+
+                            if (!_lairManager.BaseNode.Uris.Any(n => n == _settings.Ipv6Uri))
+                            {
+                                _lairManager.BaseNode.Uris.Add(_settings.Ipv6Uri);
+
+                                Log.Information(string.Format("Add Node Uri: {0}", _settings.Ipv6Uri));
+                            }
                         }
 
                         break;
                     }
+
+                End: ;
                 }
                 catch (Exception)
                 {
@@ -193,41 +222,93 @@ namespace Lair
                 try
                 {
                     string uri = _lairManager.ListenUris.FirstOrDefault(n => n.StartsWith(string.Format("tcp:{0}:", IPAddress.Any.ToString())));
+
                     Regex regex = new Regex(@"(.*?):(.*):(\d*)");
                     var match = regex.Match(uri);
-                    if (!match.Success) return;
-                    int port = int.Parse(match.Groups[3].Value);
+                    if (!match.Success) goto End;
 
                     using (UpnpClient upnpClient = new UpnpClient())
                     {
                         upnpClient.Connect(new TimeSpan(0, 0, 5));
 
+                        int port = int.Parse(match.Groups[3].Value);
+
                         string ip = upnpClient.GetExternalIpAddress(new TimeSpan(0, 0, 5));
+                        if (string.IsNullOrWhiteSpace(ip)) goto End;
 
-                        if (!string.IsNullOrWhiteSpace(ip))
+                        var upnpUri = string.Format("tcp:{0}:{1}", ip, port);
+
+                        if (_settings.UpnpUri != upnpUri)
                         {
-                            upnpClient.ClosePort(UpnpProtocolType.Tcp, port, new TimeSpan(0, 0, 5));
-
-                            if (upnpClient.OpenPort(UpnpProtocolType.Tcp, port, port, "Lair", new TimeSpan(0, 0, 5)))
+                            if (_settings.UpnpUri != null)
                             {
-                                Log.Information(string.Format("UPnP Open Port: {0}", port));
+                                _lairManager.BaseNode.Uris.Remove(_settings.UpnpUri);
 
-                                _settings.UpnpUri = string.Format("tcp:{0}:{1}", ip, port);
+                                Log.Information(string.Format("Remove Node Uri: {0}", _settings.UpnpUri));
 
-                                if (!_lairManager.BaseNode.Uris.Any(n => n == _settings.UpnpUri))
+                                try
                                 {
-                                    _lairManager.BaseNode.Uris.Add(_settings.UpnpUri);
+                                    var match2 = regex.Match(_settings.UpnpUri);
+                                    if (!match2.Success) goto End;
+                                    int port2 = int.Parse(match2.Groups[3].Value);
 
-                                    Log.Information(string.Format("Add Node Uri: {0}", _settings.UpnpUri));
+                                    if (port != port2)
+                                    {
+                                        upnpClient.ClosePort(UpnpProtocolType.Tcp, port2, new TimeSpan(0, 0, 5));
+
+                                        Log.Information(string.Format("UPnP Close Port: {0}", port2));
+
+                                        upnpClient.ClosePort(UpnpProtocolType.Tcp, port, new TimeSpan(0, 0, 5));
+                                        if (!upnpClient.OpenPort(UpnpProtocolType.Tcp, port, port, "Amoeba", new TimeSpan(0, 0, 5))) goto End;
+
+                                        Log.Information(string.Format("UPnP Open Port: {0}", port));
+                                    }
                                 }
+                                catch (Exception)
+                                {
+
+                                }
+                            }
+                            else
+                            {
+                                upnpClient.ClosePort(UpnpProtocolType.Tcp, port, new TimeSpan(0, 0, 5));
+                                if (!upnpClient.OpenPort(UpnpProtocolType.Tcp, port, port, "Amoeba", new TimeSpan(0, 0, 5))) goto End;
+
+                                Log.Information(string.Format("UPnP Open Port: {0}", port));
+                            }
+
+                            _settings.UpnpUri = upnpUri;
+
+                            if (!_lairManager.BaseNode.Uris.Any(n => n == _settings.UpnpUri))
+                            {
+                                _lairManager.BaseNode.Uris.Add(_settings.UpnpUri);
+
+                                Log.Information(string.Format("Add Node Uri: {0}", _settings.UpnpUri));
                             }
                         }
                     }
+
+                End: ;
                 }
                 catch (Exception)
                 {
+                    _lairManager.BaseNode.Uris.Remove(_settings.UpnpUri);
 
+                    Log.Information(string.Format("Remove Node Uri: {0}", _settings.UpnpUri));
+
+                    _settings.UpnpUri = null;
                 }
+            }
+        }
+
+        public override void Start()
+        {
+            lock (this.ThisLock)
+            {
+                if (this.State == ManagerState.Start) return;
+                _state = ManagerState.Start;
+
+                this.Update();
             }
         }
 
@@ -262,19 +343,22 @@ namespace Lair
 
                     try
                     {
-                        using (UpnpClient client = new UpnpClient())
+                        using (UpnpClient upnpClient = new UpnpClient())
                         {
-                            client.Connect(new TimeSpan(0, 0, 5));
+                            upnpClient.Connect(new TimeSpan(0, 0, 5));
 
-                            Regex regex = new Regex(@"(.*?)\:(.*)\:(\d*)");
+                            Regex regex = new Regex(@"(.*?):(.*):(\d*)");
                             var match = regex.Match(_settings.UpnpUri);
-                            if (!match.Success) return;
+                            if (!match.Success) goto End;
+
                             int port = int.Parse(match.Groups[3].Value);
 
-                            client.ClosePort(UpnpProtocolType.Tcp, port, new TimeSpan(0, 0, 5));
+                            upnpClient.ClosePort(UpnpProtocolType.Tcp, port, new TimeSpan(0, 0, 5));
 
                             Log.Information(string.Format("UPnP Close Port: {0}", port));
                         }
+
+                    End: ;
                     }
                     catch (Exception)
                     {
