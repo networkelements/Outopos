@@ -1234,8 +1234,6 @@ namespace Lair.Windows
 
             lock (_lairManager.ThisLock)
             {
-                long size = (long)NetworkConverter.FromSizeString("50 GB");
-
                 _lairManager.BaseNode = _baseNode.DeepClone();
                 _lairManager.SetOtherNodes(_otherNodes.Where(n => n != null && n.Id != null && n.Uris.Count != 0));
 
