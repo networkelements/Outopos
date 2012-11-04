@@ -232,7 +232,7 @@ namespace Lair.Windows
                         }
                     }
 
-                    if (uriUpdateStopwatch.Elapsed > new TimeSpan(1, 0, 0))
+                    if (uriUpdateStopwatch.Elapsed > new TimeSpan(3, 0, 0))
                     {
                         uriUpdateStopwatch.Restart();
 
