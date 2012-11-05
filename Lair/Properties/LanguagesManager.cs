@@ -592,13 +592,13 @@ namespace Lair.Properties
             }
         }
 
-        public string MainWindow_SpaceNotFound_Message
+        public string MainWindow_DiskSpaceNotFound_Message
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("MainWindow_SpaceNotFound_Message");
+                    return this.Translate("MainWindow_DiskSpaceNotFound_Message");
                 }
             }
         }

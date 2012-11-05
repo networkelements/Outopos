@@ -52,6 +52,8 @@ namespace Lair.Windows
 
         private Thread _timerThread = null;
 
+        private volatile bool _diskSpaceNotFoundException = false;
+        
         public MainWindow()
         {
             _bufferManager = new BufferManager();
@@ -143,6 +145,14 @@ namespace Lair.Windows
                     if (!_isRun) return;
 
                     {
+                        if (_diskSpaceNotFoundException)
+                        {
+                            this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                            {
+                                _stopMenuItem_Click(null, null);
+                            }), null);
+                        }
+                        
                         if (_autoBaseNodeSettingManager.State == ManagerState.Stop
                             && (Settings.Instance.Global_IsStart && Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled))
                         {
@@ -168,6 +178,23 @@ namespace Lair.Windows
 
                             Log.Information("Stop");
                         }
+
+                        if (_diskSpaceNotFoundException)
+                        {
+                            Log.Warning(LanguagesManager.Instance.MainWindow_DiskSpaceNotFound_Message);
+
+                            this.Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                            {
+                                MessageBox.Show(
+                                    this,
+                                    LanguagesManager.Instance.MainWindow_DiskSpaceNotFound_Message,
+                                    "Warning",
+                                    MessageBoxButton.OK,
+                                    MessageBoxImage.Warning);
+                            }), null);
+
+                            _diskSpaceNotFoundException = false;
+                        }
                     }
 
                     if (spaceCheckStopwatch.Elapsed > new TimeSpan(0, 1, 0))
@@ -180,15 +207,7 @@ namespace Lair.Windows
 
                             if (drive.AvailableFreeSpace < NetworkConverter.FromSizeString("32MB"))
                             {
-                                if (_lairManager.State == ManagerState.Start)
-                                {
-                                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
-                                    {
-                                        _stopMenuItem_Click(null, null);
-                                    }), null);
-
-                                    Log.Warning(LanguagesManager.Instance.MainWindow_SpaceNotFound_Message);
-                                }
+                                _diskSpaceNotFoundException = true;
                             }
                         }
                         catch (Exception e)
