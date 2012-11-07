@@ -37,7 +37,7 @@ namespace Lair
         {
             //System.Windows.Media.RenderOptions.ProcessRenderMode = System.Windows.Interop.RenderMode.SoftwareOnly;
 
-            App.LairVersion = new Version(0, 0, 35);
+            App.LairVersion = new Version(0, 0, 36);
 
             Directory.SetCurrentDirectory(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
 
