@@ -37,7 +37,7 @@ namespace Lair
         {
             //System.Windows.Media.RenderOptions.ProcessRenderMode = System.Windows.Interop.RenderMode.SoftwareOnly;
 
-            App.LairVersion = new Version(0, 0, 36);
+            App.LairVersion = new Version(0, 0, 37);
 
             Directory.SetCurrentDirectory(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
 
@@ -235,6 +235,7 @@ namespace Lair
                         startInfo.WorkingDirectory = Path.GetDirectoryName(startInfo.FileName);
 
                         var process = Process.Start(startInfo);
+                        process.WaitForInputIdle();
 
                         using (FileStream stream = new FileStream("update", FileMode.Create))
                         using (StreamWriter w = new StreamWriter(stream))

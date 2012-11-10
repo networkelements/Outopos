@@ -30,6 +30,7 @@ using Library.Net.Lair;
 using Library.Net.Proxy;
 using Library.Net.Upnp;
 using Library.Security;
+using Library.Collections;
 
 namespace Lair.Windows
 {
@@ -51,6 +52,7 @@ namespace Lair.Windows
         private bool _isRun = true;
 
         private Thread _timerThread = null;
+        private Thread _showThread = null;
 
         private volatile bool _diskSpaceNotFoundException = false;
         
@@ -93,11 +95,18 @@ namespace Lair.Windows
             _notifyIcon.Visible = false;
             _notifyIcon.Click += (object sender2, EventArgs e2) =>
             {
-                this.Show();
-                this.Activate();
-                this.WindowState = _windowState;
+                try
+                {
+                    this.Show();
+                    this.Activate();
+                    this.WindowState = _windowState;
 
-                _notifyIcon.Visible = false;
+                    _notifyIcon.Visible = false;
+                }
+                catch (Exception)
+                {
+
+                }
             };
 
             _timerThread = new Thread(new ThreadStart(this.Timer));
@@ -105,6 +114,12 @@ namespace Lair.Windows
             _timerThread.IsBackground = true;
             _timerThread.Name = "TimerThread";
             _timerThread.Start();
+
+            _showThread = new Thread(new ThreadStart(this.ConnectionsInformationShow));
+            _showThread.Priority = ThreadPriority.Highest;
+            _showThread.IsBackground = true;
+            _showThread.Name = "ShowThread";
+            _showThread.Start();
         }
 
         public static void CopyDirectory(string sourceDirectoryPath, string destDirectoryPath)
@@ -818,8 +833,6 @@ namespace Lair.Windows
                         }
                         else
                         {
-                            Log.Information(string.Format("Check Update: {0}", line1));
-
                             {
                                 foreach (var path in Directory.GetFiles(App.DirectoryPaths["Update"]))
                                 {
@@ -838,6 +851,8 @@ namespace Lair.Windows
                                     }
                                 }
                             }
+
+                            Log.Information(string.Format("Check Update: {0}", line1));
 
                             bool flag = true;
 
@@ -971,12 +986,12 @@ namespace Lair.Windows
             }
         }
 
-        private void ConnectionsInformationShow(object state)
+        private void ConnectionsInformationShow()
         {
             long sentByteCount = 0;
             long receivedByteCount = 0;
-            List<long> sentByteCountList = new List<long>(new long[3]);
-            List<long> receivedByteCountList = new List<long>(new long[3]);
+            LockedList<long> sentByteCountList = new LockedList<long>(new long[3]);
+            LockedList<long> receivedByteCountList = new LockedList<long>(new long[3]);
             int count = 0;
 
             for (; ; )
@@ -992,7 +1007,7 @@ namespace Lair.Windows
                     count++;
                     if (count >= sentByteCountList.Count) count = 0;
 
-                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                    this.Dispatcher.BeginInvoke(DispatcherPriority.Send, new Action<object>(delegate(object state2)
                     {
                         try
                         {
@@ -1003,10 +1018,7 @@ namespace Lair.Windows
                         {
 
                         }
-                    }), null);
 
-                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
-                    {
                         try
                         {
                             if (_lairManager.State == ManagerState.Start)
@@ -1055,8 +1067,6 @@ namespace Lair.Windows
             _channelControl.Height = Double.NaN;
             _channelControl.Width = Double.NaN;
             _channelTabItem.Content = _channelControl;
-
-            ThreadPool.QueueUserWorkItem(new WaitCallback(this.ConnectionsInformationShow), this);
 
             if (Settings.Instance.Global_IsStart)
             {
