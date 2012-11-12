@@ -236,7 +236,7 @@ namespace Lair.Windows
                             return x.CreationTime.CompareTo(y.CreationTime);
                         }));
 
-                        sortList = tempList.Skip(tempList.Count - 256).ToList();
+                        sortList = tempList.Skip(tempList.Count - 1024).ToList();
 
                         newList.Clear();
                         newList.UnionWith(sortList);
@@ -492,7 +492,7 @@ namespace Lair.Windows
                                     return x.CreationTime.CompareTo(y.CreationTime);
                                 }));
 
-                                sortList = tempList.Skip(tempList.Count - 256).ToList();
+                                sortList = tempList.Skip(tempList.Count - 1024).ToList();
                              
                                 newList.Clear();
                                 newList.UnionWith(sortList);
