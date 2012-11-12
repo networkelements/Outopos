@@ -47,10 +47,12 @@ namespace Lair.Windows
         private volatile bool _refresh = false;
         private volatile bool _isEditing = false;
         private volatile bool _scroll = false;
+        private volatile bool _firstRefresh = true;
 
         private ObservableCollection<MessageEx> _listViewItemCollection = new ObservableCollection<MessageEx>();
 
         private LockedDictionary<Channel, List<Message>> _messages = new LockedDictionary<Channel, List<Message>>();
+        private LockedDictionary<Channel, HashSet<Message>> _newMessages = new LockedDictionary<Channel, HashSet<Message>>();
 
         private static Random _random = new Random();
 
@@ -248,6 +250,24 @@ namespace Lair.Windows
                         }
                         else if (!Collection.Equals(sortList, _messages[selectTreeViewItem.Value.Channel]))
                         {
+                            if (!_firstRefresh)
+                            {
+                                if (!_newMessages.ContainsKey(selectTreeViewItem.Value.Channel))
+                                {
+                                    _newMessages[selectTreeViewItem.Value.Channel] = new HashSet<Message>();
+                                }
+                                
+                                var tempNewList = _newMessages[selectTreeViewItem.Value.Channel];
+                                var tempList = _messages[selectTreeViewItem.Value.Channel];
+
+                                foreach (var item in sortList)
+                                {
+                                    if (tempList.Contains(item)) continue;
+
+                                    tempNewList.Add(item);
+                                }
+                            }
+
                             _messages[selectTreeViewItem.Value.Channel].Clear();
                             _messages[selectTreeViewItem.Value.Channel].AddRange(sortList);
                         }
@@ -258,16 +278,25 @@ namespace Lair.Windows
 
                         this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
                         {
-                            searchText = (_searchTextBox.Text ?? "").ToLower();
+                            searchText = _searchTextBox.Text;
                         }), null);
 
                         if (!string.IsNullOrWhiteSpace(searchText))
                         {
+                            var words = searchText.ToLower().Split(new string[] { " ", "　" }, StringSplitOptions.RemoveEmptyEntries);
+
                             foreach (var item in sortList.ToArray())
                             {
-                                if (!item.Content.ToLower().Contains(searchText))
+                                var text = RichTextBoxHelper.GetMessageToShowString(item).ToLower();
+
+                                foreach (var word in words)
                                 {
-                                    sortList.Remove(item);
+                                    if (!text.Contains(word))
+                                    {
+                                        sortList.Remove(item);
+
+                                        break;
+                                    }
                                 }
                             }
                         }
@@ -292,6 +321,18 @@ namespace Lair.Windows
                         _refresh = false;
 
                         bool sortFlag = false;
+
+                        HashSet<Message> tempNewList = null;
+
+                        lock (_messages.ThisLock)
+                        {
+                            if (!_newMessages.ContainsKey(selectTreeViewItem.Value.Channel))
+                            {
+                                _newMessages[selectTreeViewItem.Value.Channel] = new HashSet<Message>();
+                            }
+
+                            tempNewList = _newMessages[selectTreeViewItem.Value.Channel];
+                        }
 
                         if (removeList.Count > 100)
                         {
@@ -319,6 +360,26 @@ namespace Lair.Windows
                             foreach (var item in tempList)
                             {
                                 _listViewItemCollection.Remove(item);
+                            }
+                        }
+
+                        foreach (var item in _listViewItemCollection)
+                        {
+                            if (item.State.HasFlag(MessageState.IsNew))
+                            {
+                                if (!tempNewList.Contains(item.Value)) item.State &= ~MessageState.IsNew;
+                            }
+                            else
+                            {
+                                if (tempNewList.Contains(item.Value)) item.State |= MessageState.IsNew;
+                            }
+                        }
+
+                        lock (_messages.ThisLock)
+                        {
+                            if (_newMessages.ContainsKey(selectTreeViewItem.Value.Channel))
+                            {
+                                _newMessages[selectTreeViewItem.Value.Channel].Clear();
                             }
                         }
 
@@ -452,6 +513,24 @@ namespace Lair.Windows
                                         updateFlag = true;
                                     }
 
+                                    if (!_firstRefresh)
+                                    {
+                                        if (!_newMessages.ContainsKey(selectTreeViewItem.Value.Channel))
+                                        {
+                                            _newMessages[selectTreeViewItem.Value.Channel] = new HashSet<Message>();
+                                        }
+
+                                        var tempNewList = _newMessages[selectTreeViewItem.Value.Channel];
+                                        var tempList = _messages[selectTreeViewItem.Value.Channel];
+
+                                        foreach (var item in sortList)
+                                        {
+                                            if (tempList.Contains(item)) continue;
+
+                                            tempNewList.Add(item);
+                                        }
+                                    }
+
                                     _messages[selectTreeViewItem.Value.Channel].Clear();
                                     _messages[selectTreeViewItem.Value.Channel].AddRange(sortList);
                                 }
@@ -501,6 +580,8 @@ namespace Lair.Windows
                             }
                         }
                     }
+
+                    _firstRefresh = false;
 
                     Thread.Sleep(1000 * 60);
                 }
@@ -879,7 +960,7 @@ namespace Lair.Windows
                         {
                             flag = category.SearchWordCollection.Any(searchContains =>
                             {
-                                if (searchContains.Contains) return searchItem.Content.Contains(searchContains.Value);
+                                if (searchContains.Contains) return RichTextBoxHelper.GetMessageToShowString(searchItem).Contains(searchContains.Value);
 
                                 return false;
                             });
@@ -931,7 +1012,7 @@ namespace Lair.Windows
                         {
                             flag = category.SearchRegexCollection.Any(searchContains =>
                             {
-                                if (searchContains.Contains) return searchContains.Value.IsMatch(searchItem.Content);
+                                if (searchContains.Contains) return searchContains.Value.IsMatch(RichTextBoxHelper.GetMessageToShowString(searchItem));
 
                                 return false;
                             });
@@ -952,7 +1033,7 @@ namespace Lair.Windows
                         {
                             flag = category.SearchWordCollection.Any(searchContains =>
                             {
-                                if (!searchContains.Contains) return searchItem.Content.Contains(searchContains.Value);
+                                if (!searchContains.Contains) return RichTextBoxHelper.GetMessageToShowString(searchItem).Contains(searchContains.Value);
 
                                 return false;
                             });
@@ -1004,7 +1085,7 @@ namespace Lair.Windows
                         {
                             flag = category.SearchRegexCollection.Any(searchContains =>
                             {
-                                if (!searchContains.Contains) return searchContains.Value.IsMatch(searchItem.Content);
+                                if (!searchContains.Contains) return searchContains.Value.IsMatch(RichTextBoxHelper.GetMessageToShowString(searchItem));
 
                                 return false;
                             });
@@ -1102,7 +1183,7 @@ namespace Lair.Windows
         private void _treeView_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             var item = _treeView.GetCurrentItem(e.GetPosition) as TreeViewItem;
-            if (item == null)
+            if (item == null || e.OriginalSource.GetType() == typeof(ScrollViewer))
             {
                 _startPoint = new Point(-1, -1);
 
@@ -1414,11 +1495,11 @@ namespace Lair.Windows
                 }
                 else if (item.Name == "_richTextBoxLockThisMenuItem")
                 {
-                    item.IsEnabled = !((MessageEx)_listView.SelectedItem).IsLock;
+                    item.IsEnabled = !((MessageEx)_listView.SelectedItem).State.HasFlag(MessageState.IsLock);
                 }
                 else if (item.Name == "_richTextBoxUnlockThisMenuItem")
                 {
-                    item.IsEnabled = ((MessageEx)_listView.SelectedItem).IsLock;
+                    item.IsEnabled = ((MessageEx)_listView.SelectedItem).State.HasFlag(MessageState.IsLock);
                 }
             }
         }
@@ -1454,7 +1535,15 @@ namespace Lair.Windows
                 if (index == -1) return;
 
                 var mx = _listViewItemCollection[index];
-                mx.IsLock = !mx.IsLock;
+
+                if (mx.State.HasFlag(MessageState.IsLock))
+                {
+                    mx.State &= ~MessageState.IsLock;
+                }
+                else
+                {
+                    mx.State |= MessageState.IsLock;
+                }
             }
         }
 
@@ -1521,7 +1610,7 @@ namespace Lair.Windows
             if (selectTreeViewItem == null) return;
 
             var item = (MessageEx)_listView.SelectedItem;
-            item.IsLock = true;
+            item.State |= MessageState.IsLock;
         }
 
         private void _richTextBoxUnlockThisMenuItem_Click(object sender, RoutedEventArgs e)
@@ -1530,7 +1619,7 @@ namespace Lair.Windows
             if (selectTreeViewItem == null) return;
 
             var item = (MessageEx)_listView.SelectedItem;
-            item.IsLock = false;
+            item.State &= ~MessageState.IsLock;
         }
 
         private void _richTextBoxLockAllMenuItem_Click(object sender, RoutedEventArgs e)
@@ -1542,7 +1631,7 @@ namespace Lair.Windows
 
             foreach (var item in _listViewItemCollection)
             {
-                item.IsLock = true;
+                item.State |= MessageState.IsLock;
             }
         }
 
@@ -1555,7 +1644,7 @@ namespace Lair.Windows
 
             foreach (var item in _listViewItemCollection)
             {
-                item.IsLock = false;
+                item.State &= ~MessageState.IsLock;
             }
         }
 
@@ -2078,6 +2167,13 @@ namespace Lair.Windows
         }
     }
 
+    [Flags]
+    enum MessageState
+    {
+        IsNew = 0x1,
+        IsLock = 0x2,
+    }
+
     class MessageEx : INotifyPropertyChanged, IEquatable<MessageEx>
     {
         public event PropertyChangedEventHandler PropertyChanged;
@@ -2092,6 +2188,7 @@ namespace Lair.Windows
 
         private Board _board;
         private Message _value;
+        private MessageState _messageState;
 
         public MessageEx(Board board, Message value)
         {
@@ -2118,7 +2215,7 @@ namespace Lair.Windows
             if (object.ReferenceEquals(this, other)) return true;
             if (this.GetHashCode() != other.GetHashCode()) return false;
 
-            if (this.IsLock != other.IsLock
+            if (this.State != other.State
                 || this.Value != other.Value)
             {
                 return false;
@@ -2127,15 +2224,20 @@ namespace Lair.Windows
             return true;
         }
 
-        public bool IsLock
+        public MessageState State
         {
             get
             {
-                return _board.LockMessages.Contains(_value);
+                MessageState state = 0;
+
+                if (_board.LockMessages.Contains(_value)) state |= MessageState.IsLock;
+                if (_messageState.HasFlag(MessageState.IsNew)) state |= MessageState.IsNew;
+
+                return state;
             }
             set
             {
-                if (value)
+                if (value.HasFlag(MessageState.IsLock))
                 {
                     _board.LockMessages.Add(_value);
                 }
@@ -2144,7 +2246,9 @@ namespace Lair.Windows
                     _board.LockMessages.Remove(_value);
                 }
 
-                this.NotifyPropertyChanged("IsLock");
+                _messageState = value;
+
+                this.NotifyPropertyChanged("State");
             }
         }
 

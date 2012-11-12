@@ -22,20 +22,27 @@ using Library.Net.Lair;
 namespace Lair.Windows
 {
     [ValueConversion(typeof(bool), typeof(SolidColorBrush))]
-    class BoolToBorderBrushConverter : IValueConverter
+    class MessageExToBorderBrushConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var item = value as bool?;
+            var item = value as MessageState?;
             if (item == null) return null;
 
-            if (item.Value)
+            if (item.Value.HasFlag(MessageState.IsLock))
             {
-                return new SolidColorBrush(System.Windows.Media.Color.FromArgb(0xFF, 0x60, 0x60, 0x60));
+                return new SolidColorBrush(System.Windows.Media.Color.FromArgb(0xFF, 0x90, 0x90, 0x90));
             }
             else
             {
-                return new SolidColorBrush(System.Windows.Media.Color.FromArgb(0xFF, 0x00, 0x00, 0x00));
+                if (item.Value.HasFlag(MessageState.IsNew))
+                {
+                    return new SolidColorBrush(System.Windows.Media.Color.FromArgb(0x90, 0xDF, 0xa0, 0xDF));
+                }
+                else
+                {
+                    return new SolidColorBrush(System.Windows.Media.Color.FromArgb(0xFF, 0x00, 0x00, 0x00));
+                }
             }
         }
 

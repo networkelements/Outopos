@@ -58,6 +58,83 @@ namespace Lair.Windows
             return stringBuilder.ToString().TrimEnd('\r', '\n');
         }
 
+        public static string GetMessageToShowString(Message message)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            if (message.Certificate == null)
+            {
+                stringBuilder.AppendLine(string.Format(" - Anonymous - {0}",
+                message.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
+            }
+            else
+            {
+                stringBuilder.AppendLine(string.Format(" - {0} - {1}",
+                    MessageConverter.ToSignatureString(message.Certificate),
+                    message.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
+            }
+
+            stringBuilder.AppendLine();
+
+            foreach (var line in message.Content.Trim('\r', '\n').Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None))
+            {
+                var text = line;
+
+                while (text.StartsWith("> "))
+                {
+                    text = text.Substring(2, text.Length - 2);
+                }
+
+                try
+                {
+                    var match = _titleRegex.Match(text);
+
+                    if (match.Success)
+                    {
+                        var dateText = match.Groups[2] + " " + match.Groups[3];
+                        var creationTime = DateTime.ParseExact(dateText, "yyyy/MM/dd HH:mm:ss", System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeUniversal).ToLocalTime();
+
+                        var item = string.Format(" - {0} - {1}",
+                             match.Groups[1].Value,
+                             creationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo));
+
+                        stringBuilder.AppendLine(item);
+                    }
+                    else
+                    {
+                        stringBuilder.AppendLine(text);
+                    }
+
+                    if (text.StartsWith("Seed@"))
+                    {
+                        var seed = Library.Net.Amoeba.AmoebaConverter.FromSeedString(text);
+                        if (seed == null) throw new Exception();
+                        if (!seed.VerifyCertificate()) throw new Exception();
+
+                        stringBuilder.AppendLine(MessageConverter.ToInfoMessage(seed));
+                        stringBuilder.AppendLine();
+                    }
+                    else if (text.StartsWith("Channel@"))
+                    {
+                        var channel = Library.Net.Lair.LairConverter.FromChannelString(text);
+                        if (channel == null) throw new Exception();
+
+                        stringBuilder.AppendLine(MessageConverter.ToInfoMessage(channel));
+                        stringBuilder.AppendLine();
+                    }
+                }
+                catch (Exception)
+                {
+                    stringBuilder.AppendLine(text);
+                    stringBuilder.AppendLine();
+                }
+            }
+
+            var ttt = stringBuilder.ToString().TrimEnd('\r', '\n');
+
+            return stringBuilder.ToString().TrimEnd('\r', '\n');
+        }
+
         public static Message GetDocumentMessage(DependencyObject obj)
         {
             return (Message)obj.GetValue(DocumentMessageProperty);

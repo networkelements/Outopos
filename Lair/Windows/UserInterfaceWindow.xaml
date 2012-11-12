@@ -87,11 +87,10 @@
                         <StackPanel.Resources>
                             <local:ExpanderToBooleanConverter x:Key="_expanderToBooleanConverter" />
                         </StackPanel.Resources>
-                        <Expander Header="{Binding Path=UserInterfaceWindow_Amoeba, Source={StaticResource ResourcesInstance}}" VerticalAlignment="Top" Margin="6,6,6,0"
+                        <Expander Header="{Binding Path=UserInterfaceWindow_Event, Source={StaticResource ResourcesInstance}}" VerticalAlignment="Top" Margin="6,6,6,0"
                                     IsExpanded="{Binding SelectedExpander, Mode=TwoWay, Converter={StaticResource _expanderToBooleanConverter}, ConverterParameter=1}">
                             <Grid Margin="0,0,0,6">
-                                <Label Content="{Binding Path=UserInterfaceWindow_AmoebaPath, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="120" />
-                                <TextBox Height="24" Margin="132,6,6,0" Name="_amoebaPathTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" />
+                                <CheckBox Content="{Binding Path=UserInterfaceWindow_ClearUrlHistory, Source={StaticResource ResourcesInstance}}" Height="16" HorizontalAlignment="Left" Margin="6,6,0,0" Name="_miscellaneousClearUrlHistoryCheckBox" VerticalAlignment="Top" />
                             </Grid>
                         </Expander>
                         <Expander Header="{Binding Path=UserInterfaceWindow_Fonts, Source={StaticResource ResourcesInstance}}" VerticalAlignment="Top" Margin="6,6,6,0"
@@ -109,10 +108,11 @@
                                 <TextBox Height="24" Margin="252,36,6,0" Name="_messageFontSizeTextBox" VerticalAlignment="Top" />
                             </Grid>
                         </Expander>
-                        <Expander Header="{Binding Path=UserInterfaceWindow_Event, Source={StaticResource ResourcesInstance}}" VerticalAlignment="Top" Margin="6,6,6,0"
+                        <Expander Header="{Binding Path=UserInterfaceWindow_Amoeba, Source={StaticResource ResourcesInstance}}" VerticalAlignment="Top" Margin="6,6,6,0"
                                     IsExpanded="{Binding SelectedExpander, Mode=TwoWay, Converter={StaticResource _expanderToBooleanConverter}, ConverterParameter=3}">
                             <Grid Margin="0,0,0,6">
-                                <CheckBox Content="{Binding Path=UserInterfaceWindow_ClearUrlHistory, Source={StaticResource ResourcesInstance}}" Height="16" HorizontalAlignment="Left" Margin="6,6,0,0" Name="_miscellaneousClearUrlHistoryCheckBox" VerticalAlignment="Top" />
+                                <Label Content="{Binding Path=UserInterfaceWindow_AmoebaPath, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="120" />
+                                <TextBox Height="24" Margin="132,6,6,0" Name="_amoebaPathTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" />
                             </Grid>
                         </Expander>
                     </StackPanel>

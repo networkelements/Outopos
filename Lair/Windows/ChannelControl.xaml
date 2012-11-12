@@ -17,7 +17,7 @@
         <local:StringRegularization2Converter x:Key="_stringRegularization2Converter" />
         <local:BytesToHexStringConverter x:Key="_bytesToHexStringConverter" />
         <local:DateTimeToStringConverter x:Key="_dateTimeToStringConverter" />
-        <local:BoolToBorderBrushConverter x:Key="_boolToBorderBrushConverter" />
+        <local:MessageExToBorderBrushConverter x:Key="_messageExToBorderBrushConverter" />
         
         <Style x:Key="_headerStyle" TargetType="{x:Type GridViewColumnHeader}">
             <Setter Property="Visibility" Value="Collapsed"/>
@@ -190,7 +190,7 @@
 
         <DataTemplate x:Key="_myTemplate_ListView">
             <Grid>
-                <RichTextBox x:Name="_richTextBox" IsReadOnly="True" BorderBrush="{Binding Path=IsLock, Mode=OneWay, Converter={StaticResource _boolToBorderBrushConverter}}" local:RichTextBoxHelper.DocumentMessage="{Binding Path=Value}" Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType=Grid}}" VerticalScrollBarVisibility="Auto" ContextMenuOpening="_richTextBox_ContextMenuOpening">
+                <RichTextBox x:Name="_richTextBox" IsReadOnly="True" BorderBrush="{Binding Path=State, Mode=OneWay, Converter={StaticResource _messageExToBorderBrushConverter}}" local:RichTextBoxHelper.DocumentMessage="{Binding Path=Value}" Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType=Grid}}" VerticalScrollBarVisibility="Auto" ContextMenuOpening="_richTextBox_ContextMenuOpening">
                     <RichTextBox.Style>
                         <Style TargetType="{x:Type RichTextBox}">
                             <Setter Property="KeyboardNavigation.TabNavigation" Value="None" />
@@ -198,6 +198,7 @@
                             <Setter Property="AllowDrop" Value="true" />
                             <Setter Property="ContextMenu" Value="{StaticResource TextBoxContextMenu}" />
                             <Setter Property="SnapsToDevicePixels" Value="True" />
+                            <Setter Property="UseLayoutRounding" Value="True" />
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="{x:Type RichTextBox}">
