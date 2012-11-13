@@ -1031,6 +1031,8 @@ namespace Lair.Windows
 
                 messages.ExceptWith(messages.ToArray().Where(searchItem =>
                 {
+                    if (searchItem.Content.Contains('\uFFFD')) return true;
+
                     bool flag;
 
                     lock (category.SearchWordCollection.ThisLock)
