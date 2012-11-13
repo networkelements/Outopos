@@ -65,6 +65,8 @@ namespace Lair.Windows
             InitializeComponent();
 
             _treeViewItem.Value = Settings.Instance.ChannelControl_Category;
+            _treeViewItem.PreviewMouseLeftButtonDown += new MouseButtonEventHandler(_treeViewItem_PreviewMouseLeftButtonDown);
+
             _listView.ItemsSource = _listViewItemCollection;
 
             try
@@ -149,6 +151,8 @@ namespace Lair.Windows
                         {
                             selectTreeViewItem = (BoardTreeViewItem)_treeView.SelectedItem;
                             selectTreeViewItem.Hit = false;
+
+                            _treeViewItem.UpdateColor();
                         }
                     }), null);
 
@@ -576,6 +580,8 @@ namespace Lair.Windows
                                 this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
                                 {
                                     selectTreeViewItem.Hit = true;
+
+                                    _treeViewItem.UpdateColor();
                                 }), null);
                             }
                         }
@@ -1117,6 +1123,40 @@ namespace Lair.Windows
 
         private Point _startPoint = new Point(-1, -1);
 
+        private void _treeView_PreviewDragOver(object sender, DragEventArgs e)
+        {
+            Point position = MouseUtilities.GetMousePosition(_treeView);
+
+            if (position.Y < 50)
+            {
+                var peer = ItemsControlAutomationPeer.CreatePeerForElement(_treeView);
+                var scrollProvider = peer.GetPattern(PatternInterface.Scroll) as IScrollProvider;
+
+                try
+                {
+                    scrollProvider.Scroll(System.Windows.Automation.ScrollAmount.NoAmount, System.Windows.Automation.ScrollAmount.SmallDecrement);
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+            else if ((_treeView.ActualHeight - position.Y) < 50)
+            {
+                var peer = ItemsControlAutomationPeer.CreatePeerForElement(_treeView);
+                var scrollProvider = peer.GetPattern(PatternInterface.Scroll) as IScrollProvider;
+
+                try
+                {
+                    scrollProvider.Scroll(System.Windows.Automation.ScrollAmount.NoAmount, System.Windows.Automation.ScrollAmount.SmallIncrement);
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+        }
+
         private void _treeView_PreviewMouseMove(object sender, MouseEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed && e.RightButton == MouseButtonState.Released)
@@ -1180,20 +1220,26 @@ namespace Lair.Windows
 
         }
 
-        private void _treeView_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void _treeViewItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             var item = _treeView.GetCurrentItem(e.GetPosition) as TreeViewItem;
-            if (item == null || e.OriginalSource.GetType() == typeof(ScrollViewer))
+            if (item == null)
             {
                 _startPoint = new Point(-1, -1);
 
                 return;
             }
 
-            _startPoint = e.GetPosition(null);
-
             if (item.IsSelected == true)
+            {
+                _startPoint = e.GetPosition(null);
                 _treeView_SelectedItemChanged(null, null);
+            }
+        }
+
+        private void _treeView_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            _startPoint = new Point(-1, -1);
         }
 
         private void _treeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -1204,6 +1250,8 @@ namespace Lair.Windows
             _mainWindow.Title = string.Format("Lair {0}", App.LairVersion);
             _refresh = true;
             _scroll = (sender != null);
+
+            _treeViewItem.UpdateColor();
         }
 
         private void _treeView_ContextMenuOpening(object sender, ContextMenuEventArgs e)
@@ -1888,8 +1936,8 @@ namespace Lair.Windows
 
     class CategoryTreeViewItem : TreeViewItem
     {
-        private Category _value;
         private ObservableCollection<object> _listViewItemCollection = new ObservableCollection<object>();
+        private Category _value;
 
         public CategoryTreeViewItem()
             : base()
@@ -1903,6 +1951,54 @@ namespace Lair.Windows
             {
                 e.Handled = true;
             };
+        }
+
+        public void UpdateColor()
+        {
+            var list = new List<TreeViewItem>();
+            list.Add(this);
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                foreach (TreeViewItem item in list[i].Items)
+                {
+                    list.Add(item);
+                }
+            }
+
+            foreach (var item in _listViewItemCollection.OfType<CategoryTreeViewItem>())
+            {
+                item.UpdateColor();
+            }
+
+            bool hit = false;
+
+            foreach (var item in list.OfType<BoardTreeViewItem>())
+            {
+                if (item.Hit)
+                {
+                    hit = true;
+
+                    break;
+                }
+            }
+
+            this.Header = new TextBlock() { Text = string.Format("{0}", _value.Name) };
+            
+            if (hit)
+            {
+                var header = this.Header as TextBlock;
+                if (header == null) return;
+
+                header.FontWeight = FontWeights.UltraBlack;
+
+                header.Foreground = new SolidColorBrush(Color.FromRgb(0xDF, 0xc0, 0xDF));
+
+                if (this.IsSelected)
+                {
+                    header.Foreground = new SolidColorBrush(Color.FromRgb(0x00, 0x00, 0x00));
+                }
+            }
         }
 
         public CategoryTreeViewItem(Category category)
@@ -1928,7 +2024,7 @@ namespace Lair.Windows
 
         public void Update()
         {
-            this.Header = string.Format("{0}", _value.Name);
+            this.UpdateColor();
 
             List<dynamic> list = new List<dynamic>();
 

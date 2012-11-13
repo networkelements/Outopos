@@ -37,7 +37,7 @@ namespace Lair.Windows
             {
                 if (item.Value.HasFlag(MessageState.IsNew))
                 {
-                    return new SolidColorBrush(System.Windows.Media.Color.FromArgb(0x90, 0xDF, 0xa0, 0xDF));
+                    return new SolidColorBrush(System.Windows.Media.Color.FromArgb(0x90, 0xDF, 0x90, 0xDF));
                 }
                 else
                 {

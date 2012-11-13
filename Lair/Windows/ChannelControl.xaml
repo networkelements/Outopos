@@ -40,7 +40,7 @@
                 <MenuItem Name="_richTextBoxFilterMessageMenuItem" Header="{Binding Path=ChannelControl_FilterMessage, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxFilterMessageMenuItem_Click"/>
             </MenuItem>
         </ContextMenu>
-
+        
         <Style x:Key="ExpanderDownHeaderStyle" TargetType="{x:Type ToggleButton}">
             <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
             <Setter Property="FocusVisualStyle" Value="{x:Null}" />
@@ -259,7 +259,7 @@
 
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.RowSpan="3" />
 
-        <TreeView Name="_treeView" ContextMenuOpening="_treeView_ContextMenuOpening" SelectedItemChanged="_treeView_SelectedItemChanged" PreviewMouseMove="_treeView_PreviewMouseMove" AllowDrop="True" PreviewDrop="_treeView_PreviewDrop" PreviewMouseLeftButtonDown="_treeView_PreviewMouseLeftButtonDown" PreviewMouseRightButtonDown="_treeView_PreviewMouseRightButtonDown" 
+        <TreeView Name="_treeView" ContextMenuOpening="_treeView_ContextMenuOpening" SelectedItemChanged="_treeView_SelectedItemChanged" PreviewMouseMove="_treeView_PreviewMouseMove" AllowDrop="True" PreviewDrop="_treeView_PreviewDrop" PreviewMouseLeftButtonDown="_treeView_PreviewMouseLeftButtonDown" PreviewDragOver="_treeView_PreviewDragOver"
                 VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" Grid.RowSpan="3">
             <local:CategoryTreeViewItem x:Name="_treeViewItem" IsExpanded="True">
                 <local:CategoryTreeViewItem.ContextMenu>
