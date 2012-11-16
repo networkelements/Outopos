@@ -70,7 +70,14 @@ namespace Lair.Windows
         {
             if (_tabControl.SelectedItem == _previewTabItem)
             {
-                string comment = _commentTextBox.Text ?? "";
+                if (string.IsNullOrWhiteSpace(_commentTextBox.Text))
+                {
+                    _richTextBox.Document = new FlowDocument();
+
+                    return;
+                }
+
+                string comment = _commentTextBox.Text;
 
                 if (comment.Length > Message.MaxContentLength)
                 {
@@ -109,7 +116,7 @@ namespace Lair.Windows
         {
             this.DialogResult = true;
 
-            string comment = _commentTextBox.Text ?? "";
+            string comment = _commentTextBox.Text;
             var digitalSignatureComboBoxItem = _signatureComboBox.SelectedItem as DigitalSignatureComboBoxItem;
             DigitalSignature digitalSignature = digitalSignatureComboBoxItem == null ? null : digitalSignatureComboBoxItem.Value;
 
