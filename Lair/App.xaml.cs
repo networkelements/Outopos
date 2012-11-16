@@ -45,7 +45,7 @@ namespace Lair
 
             App.DirectoryPaths["Base"] = @"..\";
             App.DirectoryPaths["Configuration"] = Path.Combine(@"..\", "Configuration");
-            App.DirectoryPaths["Update"] = Path.Combine(@"..\", "Update");
+            App.DirectoryPaths["Update"] = Path.GetFullPath(Path.Combine(@"..\", "Update"));
             App.DirectoryPaths["Log"] = Path.Combine(@"..\", "Log");
             App.DirectoryPaths["Input"] = Path.Combine(@"..\", "Input");
             App.DirectoryPaths["Work"] = Path.Combine(@"..\", "Work");
