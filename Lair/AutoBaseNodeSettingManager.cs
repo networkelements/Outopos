@@ -229,9 +229,9 @@ namespace Lair
 
                     using (UpnpClient client = new UpnpClient())
                     {
-                        client.Connect(new TimeSpan(0, 0, 30));
+                        client.Connect(new TimeSpan(0, 0, 10));
 
-                        string ip = client.GetExternalIpAddress(new TimeSpan(0, 0, 30));
+                        string ip = client.GetExternalIpAddress(new TimeSpan(0, 0, 10));
 
                         if (!string.IsNullOrWhiteSpace(ip))
                         {
@@ -256,7 +256,7 @@ namespace Lair
 
                                         if (flag)
                                         {
-                                            client.ClosePort(UpnpProtocolType.Tcp, port2, new TimeSpan(0, 0, 30));
+                                            client.ClosePort(UpnpProtocolType.Tcp, port2, new TimeSpan(0, 0, 10));
 
                                             Log.Information(string.Format("UPnP Close Port: {0}", port2));
                                         }
@@ -278,9 +278,9 @@ namespace Lair
 
                             if (flag)
                             {
-                                client.ClosePort(UpnpProtocolType.Tcp, port, new TimeSpan(0, 0, 30));
+                                client.ClosePort(UpnpProtocolType.Tcp, port, new TimeSpan(0, 0, 10));
 
-                                if (client.OpenPort(UpnpProtocolType.Tcp, port, port, "Lair", new TimeSpan(0, 0, 30)))
+                                if (client.OpenPort(UpnpProtocolType.Tcp, port, port, "Lair", new TimeSpan(0, 0, 10)))
                                 {
                                     Log.Information(string.Format("UPnP Open Port: {0}", port));
 
@@ -359,14 +359,14 @@ namespace Lair
                     {
                         using (UpnpClient client = new UpnpClient())
                         {
-                            client.Connect(new TimeSpan(0, 0, 30));
+                            client.Connect(new TimeSpan(0, 0, 10));
 
                             Regex regex = new Regex(@"(.*?):(.*):(\d*)");
                             var match = regex.Match(_settings.UpnpUri);
                             if (!match.Success) throw new Exception();
                             int port = int.Parse(match.Groups[3].Value);
 
-                            client.ClosePort(UpnpProtocolType.Tcp, port, new TimeSpan(0, 0, 30));
+                            client.ClosePort(UpnpProtocolType.Tcp, port, new TimeSpan(0, 0, 10));
 
                             Log.Information(string.Format("UPnP Close Port: {0}", port));
                         }
