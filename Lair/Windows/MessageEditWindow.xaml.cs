@@ -36,6 +36,9 @@ namespace Lair.Windows
 
             InitializeComponent();
 
+            _commentTextBox.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
+            _commentTextBox.FontSize = (double)new FontSizeConverter().ConvertFromString(Settings.Instance.Global_Fonts_MessageFontSize + "pt");
+
             {
                 var icon = new BitmapImage();
 
@@ -63,6 +66,28 @@ namespace Lair.Windows
             _commentTextBox_TextChanged(null, null);
         }
 
+        private void _tabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_tabControl.SelectedItem == _previewTabItem)
+            {
+                string comment = _commentTextBox.Text ?? "";
+
+                if (comment.Length > Message.MaxContentLength)
+                {
+                    comment = comment.Substring(0, Message.MaxContentLength);
+                }
+
+                var digitalSignatureComboBoxItem = _signatureComboBox.SelectedItem as DigitalSignatureComboBoxItem;
+                DigitalSignature digitalSignature = digitalSignatureComboBoxItem == null ? null : digitalSignatureComboBoxItem.Value;
+
+                Settings.Instance.Global_UploadDigitalSignature = digitalSignature;
+
+                var m = new Message(_board.Channel, comment, digitalSignature);
+
+                RichTextBoxHelper.SetRichTextBox(_richTextBox, m);
+            }
+        }
+
         private void _commentTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(_commentTextBox.Text) || _commentTextBox.Text.Length > 2048)
@@ -84,7 +109,7 @@ namespace Lair.Windows
         {
             this.DialogResult = true;
 
-            string comment = _commentTextBox.Text;
+            string comment = _commentTextBox.Text ?? "";
             var digitalSignatureComboBoxItem = _signatureComboBox.SelectedItem as DigitalSignatureComboBoxItem;
             DigitalSignature digitalSignature = digitalSignatureComboBoxItem == null ? null : digitalSignatureComboBoxItem.Value;
 

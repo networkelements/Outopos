@@ -186,6 +186,8 @@
   <Translate Key="SignWindow_Cancel" Value="Cancel" />
 
   <Translate Key="MessageEditWindow_Title" Value="New message" />
+  <Translate Key="MessageEditWindow_Edit" Value="Edit" />
+  <Translate Key="MessageEditWindow_Preview" Value="Preview" />
   <Translate Key="MessageEditWindow_Signature" Value="Signature" />
   <Translate Key="MessageEditWindow_Comment" Value="Comment" />
   <Translate Key="MessageEditWindow_Ok" Value="Ok" />

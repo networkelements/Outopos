@@ -2045,6 +2045,28 @@ namespace Lair.Properties
             }
         }
 
+        public string MessageEditWindow_Edit
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("MessageEditWindow_Edit");
+                }
+            }
+        }
+
+        public string MessageEditWindow_Preview
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("MessageEditWindow_Preview");
+                }
+            }
+        }
+
         public string MessageEditWindow_Signature
         {
             get

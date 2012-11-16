@@ -240,6 +240,8 @@ namespace Lair.Windows
                             _autoBaseNodeSettingManager.Save(_configrationDirectoryPaths["AutoBaseNodeSettingManager"]);
                             _lairManager.Save(_configrationDirectoryPaths["LairManager"]);
                             Settings.Instance.Save(_configrationDirectoryPaths["MainWindow"]);
+
+                            GC.Collect();
                         }
                         catch (Exception e)
                         {

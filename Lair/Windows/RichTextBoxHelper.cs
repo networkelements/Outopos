@@ -152,42 +152,47 @@ namespace Lair.Windows
                 {
                     var richTextBox = (RichTextBox)obj;
 
-                    richTextBox.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
-                    richTextBox.FontSize = (double)new FontSizeConverter().ConvertFromString(Settings.Instance.Global_Fonts_MessageFontSize + "pt");
-
-                    richTextBox.MaxHeight = Math.Max(0, RichTextBoxHelper.GetMaxHeightEvent(richTextBox));
-
                     var message = e.NewValue as Message;
                     if (message == null) return;
 
-                    var fd = new EnabledFlowDocument();
-                    fd.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
-                    fd.FontSize = (double)new FontSizeConverter().ConvertFromString(Settings.Instance.Global_Fonts_MessageFontSize + "pt");
-
-                    var p = new Paragraph();
-                    p.LineHeight = richTextBox.FontSize + 2;
-
-                    if (message.Certificate == null)
-                    {
-                        p.Inlines.Add(string.Format(" - Anonymous - {0}",
-                            message.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
-                    }
-                    else
-                    {
-                        p.Inlines.Add(string.Format(" - {0} - {1}",
-                            MessageConverter.ToSignatureString(message.Certificate),
-                            message.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
-                    }
-
-                    p.Inlines.Add(new LineBreak());
-                    p.Inlines.Add(new LineBreak());
-
-                    p.Inlines.Add(RichTextBoxHelper.GetParagraph(richTextBox, message.Content));
-
-                    fd.Blocks.Add(p);
-                    richTextBox.Document = fd;
+                    RichTextBoxHelper.SetRichTextBox(richTextBox, message);
                 }
             });
+
+        public static void SetRichTextBox(RichTextBox richTextBox, Message message)
+        {
+            richTextBox.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
+            richTextBox.FontSize = (double)new FontSizeConverter().ConvertFromString(Settings.Instance.Global_Fonts_MessageFontSize + "pt");
+
+            richTextBox.MaxHeight = Math.Max(0, RichTextBoxHelper.GetMaxHeightEvent(richTextBox));
+
+            var fd = new EnabledFlowDocument();
+            fd.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
+            fd.FontSize = (double)new FontSizeConverter().ConvertFromString(Settings.Instance.Global_Fonts_MessageFontSize + "pt");
+
+            var p = new Paragraph();
+            p.LineHeight = richTextBox.FontSize + 2;
+
+            if (message.Certificate == null)
+            {
+                p.Inlines.Add(string.Format(" - Anonymous - {0}",
+                    message.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
+            }
+            else
+            {
+                p.Inlines.Add(string.Format(" - {0} - {1}",
+                    MessageConverter.ToSignatureString(message.Certificate),
+                    message.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
+            }
+
+            p.Inlines.Add(new LineBreak());
+            p.Inlines.Add(new LineBreak());
+
+            p.Inlines.Add(RichTextBoxHelper.GetParagraph(richTextBox, message.Content));
+
+            fd.Blocks.Add(p);
+            richTextBox.Document = fd;
+        }
 
         private static Span GetParagraph(RichTextBox richTextBox, string text)
         {
