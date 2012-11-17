@@ -174,7 +174,6 @@
                             <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
                             <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}"/>
                             <Setter Property="BorderBrush" Value="#FF000000"/>
-                            <Setter Property="ContextMenu" Value="{StaticResource _richTextBoxContextMenu}" />
                         </Style>
                     </Grid.Resources>
                     <RichTextBox HorizontalAlignment="Stretch" Margin="6" Name="_richTextBox" VerticalAlignment="Stretch" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" />

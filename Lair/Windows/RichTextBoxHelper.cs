@@ -91,14 +91,21 @@ namespace Lair.Windows
 
                     if (match.Success)
                     {
-                        var dateText = match.Groups[2] + " " + match.Groups[3];
-                        var creationTime = DateTime.ParseExact(dateText, "yyyy/MM/dd HH:mm:ss", System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeUniversal).ToLocalTime();
+                        try
+                        {
+                            var dateText = match.Groups[2] + " " + match.Groups[3];
+                            var creationTime = DateTime.ParseExact(dateText, "yyyy/MM/dd HH:mm:ss", System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeUniversal).ToLocalTime();
 
-                        var item = string.Format(" - {0} - {1}",
-                             match.Groups[1].Value,
-                             creationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo));
+                            var item = string.Format(" - {0} - {1}",
+                                 match.Groups[1].Value,
+                                 creationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo));
 
-                        stringBuilder.AppendLine(item);
+                            stringBuilder.AppendLine(item);
+                        }
+                        catch (Exception)
+                        {
+                            stringBuilder.AppendLine(text);
+                        }
                     }
                     else
                     {
@@ -207,14 +214,21 @@ namespace Lair.Windows
 
                 if (match.Success)
                 {
-                    var dateText = match.Groups[2] + " " + match.Groups[3];
-                    var creationTime = DateTime.ParseExact(dateText, "yyyy/MM/dd HH:mm:ss", System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeUniversal).ToLocalTime();
+                    try
+                    {
+                        var dateText = match.Groups[2] + " " + match.Groups[3];
+                        var creationTime = DateTime.ParseExact(dateText, "yyyy/MM/dd HH:mm:ss", System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeUniversal).ToLocalTime();
 
-                    var item = string.Format(" - {0} - {1}",
-                         match.Groups[1].Value,
-                         creationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo));
+                        var item = string.Format(" - {0} - {1}",
+                             match.Groups[1].Value,
+                             creationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo));
 
-                    list.Add(item);
+                        list.Add(item);
+                    }
+                    catch (Exception)
+                    {
+                        list.Add(line);
+                    }
                 }
                 else
                 {
