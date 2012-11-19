@@ -1528,6 +1528,9 @@ namespace Lair.Windows
             var richTextBox = sender as RichTextBox;
             if (richTextBox == null) return;
 
+            var selectItem = _listView.SelectedItem as MessageEx;
+            if (selectItem == null) return;
+
             var list = new List<MenuItem>();
 
             list.AddRange(richTextBox.ContextMenu.Items.OfType<MenuItem>());
@@ -1545,11 +1548,11 @@ namespace Lair.Windows
                 }
                 else if (item.Name == "_richTextBoxLockThisMenuItem")
                 {
-                    item.IsEnabled = !((MessageEx)_listView.SelectedItem).State.HasFlag(MessageState.IsLock);
+                    item.IsEnabled = !selectItem.State.HasFlag(MessageState.IsLock);
                 }
                 else if (item.Name == "_richTextBoxUnlockThisMenuItem")
                 {
-                    item.IsEnabled = ((MessageEx)_listView.SelectedItem).State.HasFlag(MessageState.IsLock);
+                    item.IsEnabled = selectItem.State.HasFlag(MessageState.IsLock);
                 }
             }
         }
