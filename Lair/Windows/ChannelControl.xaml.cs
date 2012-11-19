@@ -1949,7 +1949,19 @@ namespace Lair.Windows
         {
             this.Value = new Category() { Name = "" };
 
-            base.IsExpanded = true;
+            base.ItemsSource = _listViewItemCollection;
+
+            base.RequestBringIntoView += (object sender, RequestBringIntoViewEventArgs e) =>
+            {
+                e.Handled = true;
+            };
+        }
+
+        public CategoryTreeViewItem(Category category)
+            : base()
+        {
+            this.Value = category;
+
             base.ItemsSource = _listViewItemCollection;
 
             base.RequestBringIntoView += (object sender, RequestBringIntoViewEventArgs e) =>
@@ -2006,25 +2018,25 @@ namespace Lair.Windows
             }
         }
 
-        public CategoryTreeViewItem(Category category)
-            : base()
-        {
-            this.Value = category;
-
-            base.IsExpanded = true;
-            base.ItemsSource = _listViewItemCollection;
-
-            base.RequestBringIntoView += (object sender, RequestBringIntoViewEventArgs e) =>
-            {
-                e.Handled = true;
-            };
-        }
-
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
             this.IsSelected = true;
 
             e.Handled = true;
+        }
+
+        protected override void OnExpanded(RoutedEventArgs e)
+        {
+            base.OnExpanded(e);
+
+            this.Value.IsExpanded = true;
+        }
+
+        protected override void OnCollapsed(RoutedEventArgs e)
+        {
+            base.OnCollapsed(e);
+
+            this.Value.IsExpanded = false;
         }
 
         public void Update()
@@ -2033,6 +2045,8 @@ namespace Lair.Windows
 
             List<dynamic> list = new List<dynamic>();
 
+            base.IsExpanded = this.Value.IsExpanded;
+            
             foreach (var item in this.Value.Categories)
             {
                 list.Add(new CategoryTreeViewItem(item));
@@ -2375,6 +2389,8 @@ namespace Lair.Windows
     class Category : IDeepCloneable<Category>, IThisLock
     {
         private string _name;
+        private bool _isExpanded = true;
+
         private LockedList<Board> _boards;
         private LockedList<Category> _categories;
         private LockedList<SearchContains<string>> _searchWordCollection;
@@ -2400,6 +2416,25 @@ namespace Lair.Windows
                 lock (this.ThisLock)
                 {
                     _name = value;
+                }
+            }
+        }
+
+        [DataMember(Name = "IsExpanded")]
+        public bool IsExpanded
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return _isExpanded;
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    _isExpanded = value;
                 }
             }
         }
