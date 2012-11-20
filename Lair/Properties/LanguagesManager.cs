@@ -2112,6 +2112,205 @@ namespace Lair.Properties
         }
 
 
+        public string BoardEditWindow_Title
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("BoardEditWindow_Title");
+                }
+            }
+        }
+
+        public string BoardEditWindow_Word
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("BoardEditWindow_Word");
+                }
+            }
+        }
+
+        public string BoardEditWindow_Regex
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("BoardEditWindow_Regex");
+                }
+            }
+        }
+
+        public string BoardEditWindow_Signature
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("BoardEditWindow_Signature");
+                }
+            }
+        }
+
+        public string BoardEditWindow_Message
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("BoardEditWindow_Message");
+                }
+            }
+        }
+
+        public string BoardEditWindow_Contains
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("BoardEditWindow_Contains");
+                }
+            }
+        }
+
+        public string BoardEditWindow_IsIgnoreCase
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("BoardEditWindow_IsIgnoreCase");
+                }
+            }
+        }
+
+        public string BoardEditWindow_Value
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("BoardEditWindow_Value");
+                }
+            }
+        }
+
+        public string BoardEditWindow_Up
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("BoardEditWindow_Up");
+                }
+            }
+        }
+
+        public string BoardEditWindow_Down
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("BoardEditWindow_Down");
+                }
+            }
+        }
+
+        public string BoardEditWindow_Add
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("BoardEditWindow_Add");
+                }
+            }
+        }
+
+        public string BoardEditWindow_Edit
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("BoardEditWindow_Edit");
+                }
+            }
+        }
+
+        public string BoardEditWindow_Delete
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("BoardEditWindow_Delete");
+                }
+            }
+        }
+
+        public string BoardEditWindow_Ok
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("BoardEditWindow_Ok");
+                }
+            }
+        }
+
+        public string BoardEditWindow_Cancel
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("BoardEditWindow_Cancel");
+                }
+            }
+        }
+
+        public string BoardEditWindow_Cut
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("BoardEditWindow_Cut");
+                }
+            }
+        }
+
+        public string BoardEditWindow_Copy
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("BoardEditWindow_Copy");
+                }
+            }
+        }
+
+        public string BoardEditWindow_Paste
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("BoardEditWindow_Paste");
+                }
+            }
+        }
+
+
         public string CategoryEditWindow_Title
         {
             get
@@ -2163,17 +2362,6 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("CategoryEditWindow_Signature");
-                }
-            }
-        }
-
-        public string CategoryEditWindow_Message
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("CategoryEditWindow_Message");
                 }
             }
         }

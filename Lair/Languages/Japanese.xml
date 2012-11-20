@@ -193,12 +193,30 @@
   <Translate Key="MessageEditWindow_Ok" Value="Ok" />
   <Translate Key="MessageEditWindow_Cancel" Value="キャンセル" />
 
-  <Translate Key="CategoryEditWindow_Title" Value="カテゴリ編集" />
+  <Translate Key="BoardEditWindow_Title" Value="フィルタ編集" />
+  <Translate Key="BoardEditWindow_Word" Value="単語" />
+  <Translate Key="BoardEditWindow_Regex" Value="正規表現" />
+  <Translate Key="BoardEditWindow_Signature" Value="サイン" />
+  <Translate Key="BoardEditWindow_Message" Value="メッセージ" />
+  <Translate Key="BoardEditWindow_Contains" Value="有効" />
+  <Translate Key="BoardEditWindow_IsIgnoreCase" Value="大文字小文字の違いを無視" />
+  <Translate Key="BoardEditWindow_Value" Value="値" />
+  <Translate Key="BoardEditWindow_Up" Value="上へ" />
+  <Translate Key="BoardEditWindow_Down" Value="下へ" />
+  <Translate Key="BoardEditWindow_Add" Value="追加" />
+  <Translate Key="BoardEditWindow_Edit" Value="編集" />
+  <Translate Key="BoardEditWindow_Delete" Value="削除" />
+  <Translate Key="BoardEditWindow_Ok" Value="Ok" />
+  <Translate Key="BoardEditWindow_Cancel" Value="キャンセル" />
+  <Translate Key="BoardEditWindow_Cut" Value="切り取り" />
+  <Translate Key="BoardEditWindow_Copy" Value="コピー" />
+  <Translate Key="BoardEditWindow_Paste" Value="貼り付け" />
+
+  <Translate Key="CategoryEditWindow_Title" Value="フィルタ編集" />
   <Translate Key="CategoryEditWindow_Name" Value="カテゴリ名" />
   <Translate Key="CategoryEditWindow_Word" Value="単語" />
   <Translate Key="CategoryEditWindow_Regex" Value="正規表現" />
   <Translate Key="CategoryEditWindow_Signature" Value="サイン" />
-  <Translate Key="CategoryEditWindow_Message" Value="メッセージ" />
   <Translate Key="CategoryEditWindow_Contains" Value="有効" />
   <Translate Key="CategoryEditWindow_IsIgnoreCase" Value="大文字小文字の違いを無視" />
   <Translate Key="CategoryEditWindow_Value" Value="値" />

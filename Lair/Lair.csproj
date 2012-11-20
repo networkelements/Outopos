@@ -115,6 +115,9 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="Hash\Sha512.cs" />
     <Compile Include="NativeMethods.cs" />
+    <Compile Include="Windows\BoardEditWindow.xaml.cs">
+      <DependentUpon>BoardEditWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\VirtualizingStackPanelEx.cs" />
     <Page Include="Windows\ChannelControl.xaml">
       <SubType>Designer</SubType>
@@ -133,6 +136,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\CategoryEditWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\BoardEditWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

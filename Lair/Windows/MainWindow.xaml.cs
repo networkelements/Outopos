@@ -167,7 +167,7 @@ namespace Lair.Windows
                                 _stopMenuItem_Click(null, null);
                             }), null);
                         }
-                        
+
                         if (_autoBaseNodeSettingManager.State == ManagerState.Stop
                             && (Settings.Instance.Global_IsStart && Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled))
                         {

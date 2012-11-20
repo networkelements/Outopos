@@ -195,13 +195,13 @@ namespace Lair.Windows
             p.Inlines.Add(new LineBreak());
             p.Inlines.Add(new LineBreak());
 
-            p.Inlines.Add(RichTextBoxHelper.GetParagraph(richTextBox, message.Content));
+            p.Inlines.Add(RichTextBoxHelper.GetParagraph(richTextBox, message.Content, 0));
 
             fd.Blocks.Add(p);
             richTextBox.Document = fd;
         }
 
-        private static Span GetParagraph(RichTextBox richTextBox, string text)
+        private static Span GetParagraph(RichTextBox richTextBox, string text, int nest)
         {
             StringBuilder stringBuilder = new StringBuilder();
             Span p = new Span();
@@ -413,7 +413,7 @@ namespace Lair.Windows
                         }
                         else
                         {
-                            if (stringBuilder.Length != 0)
+                            if (stringBuilder.Length != 0 && nest < 6)
                             {
                                 var richTextBox2 = new RichTextBox();
 
@@ -428,7 +428,7 @@ namespace Lair.Windows
                                 var p2 = new Paragraph();
                                 p2.LineHeight = richTextBox.FontSize + 2;
 
-                                p2.Inlines.Add(RichTextBoxHelper.GetParagraph(richTextBox2, stringBuilder.ToString()));
+                                p2.Inlines.Add(RichTextBoxHelper.GetParagraph(richTextBox2, stringBuilder.ToString(), nest + 1));
 
                                 fd.Blocks.Add(p2);
                                 richTextBox2.Document = fd;
@@ -473,9 +473,9 @@ namespace Lair.Windows
                                 };
 
                                 p.Inlines.Add(expander);
-
-                                stringBuilder.Clear();
                             }
+
+                            stringBuilder.Clear();
 
                             for (; ; )
                             {
@@ -537,7 +537,7 @@ namespace Lair.Windows
                 p.Inlines.Remove(p.Inlines.LastInline);
             }
 
-            if (stringBuilder.Length != 0)
+            if (stringBuilder.Length != 0 && nest < 6)
             {
                 var richTextBox2 = new RichTextBox();
 
@@ -552,7 +552,7 @@ namespace Lair.Windows
                 var p2 = new Paragraph();
                 p2.LineHeight = richTextBox.FontSize + 2;
 
-                p2.Inlines.Add(RichTextBoxHelper.GetParagraph(richTextBox2, stringBuilder.ToString()));
+                p2.Inlines.Add(RichTextBoxHelper.GetParagraph(richTextBox2, stringBuilder.ToString(), nest + 1));
 
                 fd.Blocks.Add(p2);
                 richTextBox2.Document = fd;
@@ -597,9 +597,9 @@ namespace Lair.Windows
                 };
 
                 p.Inlines.Add(expander);
-
-                stringBuilder.Clear();
             }
+
+            stringBuilder.Clear();
 
             return p;
         }

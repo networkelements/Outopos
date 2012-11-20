@@ -36,7 +36,7 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<string>() { Name = "Global_Amoeba_Path", Value = "" },
                 new Library.Configuration.SettingsContext<string>() { Name = "Global_Fonts_MessageFontFamily", Value = "MS PGothic" },
                 new Library.Configuration.SettingsContext<double>() { Name = "Global_Fonts_MessageFontSize", Value = 12 },
-
+                
                 new Library.Configuration.SettingsContext<double>() { Name = "MainWindow_Top", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "MainWindow_Left", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "MainWindow_Height", Value = 500 },
@@ -96,6 +96,21 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<double>() { Name = "MessageEditWindow_Width", Value = 700 },
                 new Library.Configuration.SettingsContext<WindowState>() { Name = "MessageEditWindow_WindowState", Value = WindowState.Normal },
               
+                new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_Top", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_Left", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_Height", Value = 500 },
+                new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_Width", Value = 700 },
+                new Library.Configuration.SettingsContext<WindowState>() { Name = "BoardEditWindow_WindowState", Value = WindowState.Normal },
+                new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_GridViewColumn_Word_Contains_Width", Value = -1 },
+                new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_GridViewColumn_Word_Value_Width", Value = 600 },
+                new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_GridViewColumn_Regex_Contains_Width", Value = -1 },
+                new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_GridViewColumn_Regex_Value_IsIgnoreCase_Width", Value = -1 },
+                new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_GridViewColumn_Regex_Value_Value_Width", Value = 600 },
+                new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_GridViewColumn_Signature_Contains_Width", Value = -1 },
+                new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_GridViewColumn_Signature_Value_Width", Value = 600 },
+                new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_GridViewColumn_Message_Contains_Width", Value = -1 },
+                new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_GridViewColumn_Message_Value_Width", Value = 600 },
+              
                 new Library.Configuration.SettingsContext<double>() { Name = "CategoryEditWindow_Top", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "CategoryEditWindow_Left", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "CategoryEditWindow_Height", Value = 500 },
@@ -108,8 +123,6 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<double>() { Name = "CategoryEditWindow_GridViewColumn_Regex_Value_Value_Width", Value = 600 },
                 new Library.Configuration.SettingsContext<double>() { Name = "CategoryEditWindow_GridViewColumn_Signature_Contains_Width", Value = -1 },
                 new Library.Configuration.SettingsContext<double>() { Name = "CategoryEditWindow_GridViewColumn_Signature_Value_Width", Value = 600 },
-                new Library.Configuration.SettingsContext<double>() { Name = "CategoryEditWindow_GridViewColumn_Message_Contains_Width", Value = -1 },
-                new Library.Configuration.SettingsContext<double>() { Name = "CategoryEditWindow_GridViewColumn_Message_Value_Width", Value = 600 },
               
                 new Library.Configuration.SettingsContext<double>() { Name = "NewChannelWindow_Top", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "NewChannelWindow_Left", Value = 120 },
@@ -1397,6 +1410,273 @@ namespace Lair.Properties
         }
 
 
+        public double BoardEditWindow_Top
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["BoardEditWindow_Top"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["BoardEditWindow_Top"] = value;
+                }
+            }
+        }
+
+        public double BoardEditWindow_Left
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["BoardEditWindow_Left"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["BoardEditWindow_Left"] = value;
+                }
+            }
+        }
+
+        public double BoardEditWindow_Height
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["BoardEditWindow_Height"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["BoardEditWindow_Height"] = value;
+                }
+            }
+        }
+
+        public double BoardEditWindow_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["BoardEditWindow_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["BoardEditWindow_Width"] = value;
+                }
+            }
+        }
+
+        public WindowState BoardEditWindow_WindowState
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (WindowState)this["BoardEditWindow_WindowState"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["BoardEditWindow_WindowState"] = value;
+                }
+            }
+        }
+
+        public double BoardEditWindow_GridViewColumn_Word_Contains_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["BoardEditWindow_GridViewColumn_Word_Contains_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["BoardEditWindow_GridViewColumn_Word_Contains_Width"] = value;
+                }
+            }
+        }
+
+        public double BoardEditWindow_GridViewColumn_Word_Value_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["BoardEditWindow_GridViewColumn_Word_Value_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["BoardEditWindow_GridViewColumn_Word_Value_Width"] = value;
+                }
+            }
+        }
+
+        public double BoardEditWindow_GridViewColumn_Regex_Contains_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["BoardEditWindow_GridViewColumn_Regex_Contains_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["BoardEditWindow_GridViewColumn_Regex_Contains_Width"] = value;
+                }
+            }
+        }
+
+        public double BoardEditWindow_GridViewColumn_Regex_Value_IsIgnoreCase_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["BoardEditWindow_GridViewColumn_Regex_Value_IsIgnoreCase_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["BoardEditWindow_GridViewColumn_Regex_Value_IsIgnoreCase_Width"] = value;
+                }
+            }
+        }
+
+        public double BoardEditWindow_GridViewColumn_Regex_Value_Value_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["BoardEditWindow_GridViewColumn_Regex_Value_Value_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["BoardEditWindow_GridViewColumn_Regex_Value_Value_Width"] = value;
+                }
+            }
+        }
+
+        public double BoardEditWindow_GridViewColumn_Signature_Contains_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["BoardEditWindow_GridViewColumn_Signature_Contains_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["BoardEditWindow_GridViewColumn_Signature_Contains_Width"] = value;
+                }
+            }
+        }
+
+        public double BoardEditWindow_GridViewColumn_Signature_Value_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["BoardEditWindow_GridViewColumn_Signature_Value_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["BoardEditWindow_GridViewColumn_Signature_Value_Width"] = value;
+                }
+            }
+        }
+
+        public double BoardEditWindow_GridViewColumn_Message_Contains_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["BoardEditWindow_GridViewColumn_Message_Contains_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["BoardEditWindow_GridViewColumn_Message_Contains_Width"] = value;
+                }
+            }
+        }
+
+        public double BoardEditWindow_GridViewColumn_Message_Value_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["BoardEditWindow_GridViewColumn_Message_Value_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["BoardEditWindow_GridViewColumn_Message_Value_Width"] = value;
+                }
+            }
+        }
+
+
         public double CategoryEditWindow_Top
         {
             get
@@ -1621,44 +1901,6 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     this["CategoryEditWindow_GridViewColumn_Signature_Value_Width"] = value;
-                }
-            }
-        }
-
-        public double CategoryEditWindow_GridViewColumn_Message_Contains_Width
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["CategoryEditWindow_GridViewColumn_Message_Contains_Width"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["CategoryEditWindow_GridViewColumn_Message_Contains_Width"] = value;
-                }
-            }
-        }
-
-        public double CategoryEditWindow_GridViewColumn_Message_Value_Width
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["CategoryEditWindow_GridViewColumn_Message_Value_Width"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["CategoryEditWindow_GridViewColumn_Message_Value_Width"] = value;
                 }
             }
         }

@@ -14,6 +14,7 @@ namespace Lair
     static class Clipboard
     {
         private static List<Category> _categoryList = new List<Category>();
+        private static List<Board> _boardList = new List<Board>();
 
         private static ClipboardWatcher _clipboardWatcher;
 
@@ -25,6 +26,7 @@ namespace Lair
             _clipboardWatcher.DrawClipboard += (sender2, e2) =>
             {
                 _categoryList.Clear();
+                _boardList.Clear();
             };
         }
 
@@ -171,6 +173,36 @@ namespace Lair
                 }
 
                 Clipboard.SetText(sb.ToString());
+            }
+        }
+
+        public static IEnumerable<Board> GetBoards()
+        {
+            lock (_thisLock)
+            {
+                return _boardList.Select(n => n.DeepClone()).ToArray();
+            }
+        }
+
+        public static void SetBoards(IEnumerable<Board> boards)
+        {
+            lock (_thisLock)
+            {
+                {
+                    var sb = new StringBuilder();
+
+                    foreach (var item in boards)
+                    {
+                        sb.AppendLine(LairConverter.ToChannelString(item.Channel));
+                    }
+
+                    Clipboard.SetText(sb.ToString());
+                }
+
+                {
+                    _boardList.Clear();
+                    _boardList.AddRange(boards.Select(n => n.DeepClone()));
+                }
             }
         }
 

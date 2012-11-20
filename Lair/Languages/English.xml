@@ -193,12 +193,30 @@
   <Translate Key="MessageEditWindow_Ok" Value="Ok" />
   <Translate Key="MessageEditWindow_Cancel" Value="Cancel" />
 
-  <Translate Key="CategoryEditWindow_Title" Value="Category edit" />
+  <Translate Key="BoardEditWindow_Title" Value="Board filters edit" />
+  <Translate Key="BoardEditWindow_Word" Value="Word" />
+  <Translate Key="BoardEditWindow_Regex" Value="Regex" />
+  <Translate Key="BoardEditWindow_Signature" Value="Signature" />
+  <Translate Key="BoardEditWindow_Message" Value="Message" />
+  <Translate Key="BoardEditWindow_Contains" Value="Contains" />
+  <Translate Key="BoardEditWindow_IsIgnoreCase" Value="Ignore case" />
+  <Translate Key="BoardEditWindow_Value" Value="Value" />
+  <Translate Key="BoardEditWindow_Up" Value="Up" />
+  <Translate Key="BoardEditWindow_Down" Value="Down" />
+  <Translate Key="BoardEditWindow_Add" Value="Add" />
+  <Translate Key="BoardEditWindow_Edit" Value="Edit" />
+  <Translate Key="BoardEditWindow_Delete" Value="Delete" />
+  <Translate Key="BoardEditWindow_Ok" Value="Ok" />
+  <Translate Key="BoardEditWindow_Cancel" Value="Cancel" />
+  <Translate Key="BoardEditWindow_Cut" Value="Cut" />
+  <Translate Key="BoardEditWindow_Copy" Value="Copy" />
+  <Translate Key="BoardEditWindow_Paste" Value="Paste" />
+
+  <Translate Key="CategoryEditWindow_Title" Value="Category filters edit" />
   <Translate Key="CategoryEditWindow_Name" Value="Name" />
   <Translate Key="CategoryEditWindow_Word" Value="Word" />
   <Translate Key="CategoryEditWindow_Regex" Value="Regex" />
   <Translate Key="CategoryEditWindow_Signature" Value="Signature" />
-  <Translate Key="CategoryEditWindow_Message" Value="Message" />
   <Translate Key="CategoryEditWindow_Contains" Value="Contains" />
   <Translate Key="CategoryEditWindow_IsIgnoreCase" Value="Ignore case" />
   <Translate Key="CategoryEditWindow_Value" Value="Value" />
