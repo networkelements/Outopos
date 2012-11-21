@@ -174,6 +174,7 @@ namespace Lair.Windows
             richTextBox.MaxHeight = Math.Max(0, RichTextBoxHelper.GetMaxHeightEvent(richTextBox));
 
             var fd = new EnabledFlowDocument();
+
             fd.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
             fd.FontSize = (double)new FontSizeConverter().ConvertFromString(Settings.Instance.Global_Fonts_MessageFontSize + "pt");
 
@@ -198,6 +199,7 @@ namespace Lair.Windows
             p.Inlines.Add(RichTextBoxHelper.GetParagraph(richTextBox, message.Content, 0));
 
             fd.Blocks.Add(p);
+
             richTextBox.Document = fd;
         }
 
@@ -472,7 +474,7 @@ namespace Lair.Windows
                                     e.Handled = true;
                                 };
 
-                                p.Inlines.Add(expander);
+                                p.Inlines.Add(new InlineUIContainer(expander));
                             }
 
                             stringBuilder.Clear();
@@ -596,7 +598,7 @@ namespace Lair.Windows
                     e.Handled = true;
                 };
 
-                p.Inlines.Add(expander);
+                p.Inlines.Add(new InlineUIContainer(expander));
             }
 
             stringBuilder.Clear();

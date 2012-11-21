@@ -49,7 +49,7 @@ namespace Lair.Windows
         private volatile bool _scroll = false;
 
         private ObservableCollection<MessageEx> _listViewItemCollection = new ObservableCollection<MessageEx>();
-        private LockedDictionary<Channel, List<Message>> _messages = new LockedDictionary<Channel, List<Message>>();
+        private LockedDictionary<Board, List<Message>> _messages = new LockedDictionary<Board, List<Message>>(new ReferenceEqualityComparer());
 
         private static Random _random = new Random();
 
@@ -247,15 +247,15 @@ namespace Lair.Windows
 
                     lock (_messages.ThisLock)
                     {
-                        if (!_messages.ContainsKey(selectTreeViewItem.Value.Channel))
+                        if (!_messages.ContainsKey(selectTreeViewItem.Value))
                         {
-                            _messages[selectTreeViewItem.Value.Channel] = new List<Message>();
+                            _messages[selectTreeViewItem.Value] = new List<Message>();
                         }
 
-                        if (!Collection.Equals(sortList, _messages[selectTreeViewItem.Value.Channel]))
+                        if (!Collection.Equals(sortList, _messages[selectTreeViewItem.Value]))
                         {
-                            _messages[selectTreeViewItem.Value.Channel].Clear();
-                            _messages[selectTreeViewItem.Value.Channel].AddRange(sortList);
+                            _messages[selectTreeViewItem.Value].Clear();
+                            _messages[selectTreeViewItem.Value].AddRange(sortList);
                         }
                     }
 
@@ -476,20 +476,20 @@ namespace Lair.Windows
 
                             lock (_messages.ThisLock)
                             {
-                                if (!_messages.ContainsKey(selectTreeViewItem.Value.Channel))
+                                if (!_messages.ContainsKey(selectTreeViewItem.Value))
                                 {
-                                    _messages[selectTreeViewItem.Value.Channel] = new List<Message>();
+                                    _messages[selectTreeViewItem.Value] = new List<Message>();
                                 }
 
-                                if (!Collection.Equals(sortList, _messages[selectTreeViewItem.Value.Channel]))
+                                if (!Collection.Equals(sortList, _messages[selectTreeViewItem.Value]))
                                 {
                                     if (!newList.IsSubsetOf(selectTreeViewItem.Value.OldMessages))
                                     {
                                         updateFlag = true;
                                     }
 
-                                    _messages[selectTreeViewItem.Value.Channel].Clear();
-                                    _messages[selectTreeViewItem.Value.Channel].AddRange(sortList);
+                                    _messages[selectTreeViewItem.Value].Clear();
+                                    _messages[selectTreeViewItem.Value].AddRange(sortList);
                                 }
                             }
 
@@ -584,11 +584,11 @@ namespace Lair.Windows
                         {
                             lock (_messages.ThisLock)
                             {
-                                if (_messages.ContainsKey(item.Value.Channel))
+                                if (_messages.ContainsKey(item.Value))
                                 {
                                     List<Library.Net.Lair.Key> keys = new List<Library.Net.Lair.Key>();
 
-                                    foreach (var m in _messages[item.Value.Channel])
+                                    foreach (var m in _messages[item.Value])
                                     {
                                         keys.Add(new Library.Net.Lair.Key(m.GetHash(HashAlgorithm.Sha512), HashAlgorithm.Sha512));
                                     }
@@ -603,6 +603,23 @@ namespace Lair.Windows
             catch (Exception e)
             {
                 Log.Error(e);
+            }
+        }
+
+        class ReferenceEqualityComparer : IEqualityComparer<object>
+        {
+            new public bool Equals(object x, object y)
+            {
+                if (x == null && y == null) return true;
+                if ((x == null) != (y == null)) return false;
+
+                return object.ReferenceEquals(x, y);
+            }
+
+            public int GetHashCode(object obj)
+            {
+                if (obj == null) return 0;
+                else return 1;
             }
         }
 
