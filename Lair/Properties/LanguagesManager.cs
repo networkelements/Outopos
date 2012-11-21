@@ -2123,6 +2123,17 @@ namespace Lair.Properties
             }
         }
 
+        public string BoardEditWindow_Name
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("BoardEditWindow_Name");
+                }
+            }
+        }
+
         public string BoardEditWindow_Word
         {
             get

@@ -52,6 +52,8 @@ namespace Lair.Windows
 
             lock (_board.ThisLock)
             {
+                _nameTextBox.Text = MessageConverter.ToChannelString(_board.Channel);
+
                 _searchWordCollection = _board.SearchWordCollection.Select(n => n.DeepClone()).ToList();
                 _searchRegexCollection = _board.SearchRegexCollection.Select(n => n.DeepClone()).ToList();
                 _searchSignatureCollection = _board.SearchSignatureCollection.Select(n => n.DeepClone()).ToList();

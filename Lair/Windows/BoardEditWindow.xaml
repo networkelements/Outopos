@@ -54,9 +54,11 @@
     </Window.InputBindings>
 
     <Grid FocusManager.FocusedElement="{Binding ElementName=_nameTextBox}">
+        <Label Height="24" HorizontalAlignment="Left" Margin="12,12,0,0" VerticalAlignment="Top" Width="120" Content="{Binding Path=BoardEditWindow_Name, Source={StaticResource ResourcesInstance}}" VerticalContentAlignment="Center" />
+        <TextBox Height="24" Margin="138,12,12,0" Name="_nameTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" IsReadOnly="True" />
         <Button Height="23" HorizontalAlignment="Right" Margin="0,0,93,12" Name="_okButton" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=BoardEditWindow_Ok, Source={StaticResource ResourcesInstance}}" Click="_okButton_Click" IsDefault="True" />
         <Button Height="23" HorizontalAlignment="Right" Margin="0,0,12,12" Name="_cancelButton" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=BoardEditWindow_Cancel, Source={StaticResource ResourcesInstance}}" Click="_cancelButton_Click" IsCancel="True" />
-        <TabControl Margin="0,0,0,41">
+        <TabControl Margin="0,42,0,41">
             <TabItem Header="{Binding Path=BoardEditWindow_Word, Source={StaticResource ResourcesInstance}}" Name="_wordTabItem">
                 <Grid FocusManager.FocusedElement="{Binding ElementName=_wordTextBox}">
                     <Button Name="_wordUpButton" Height="23" HorizontalAlignment="Right" Margin="0,0,330,6" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=BoardEditWindow_Up, Source={StaticResource ResourcesInstance}}" Click="_wordUpButton_Click" IsEnabled="False" />

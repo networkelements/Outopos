@@ -193,7 +193,8 @@
   <Translate Key="MessageEditWindow_Ok" Value="Ok" />
   <Translate Key="MessageEditWindow_Cancel" Value="キャンセル" />
 
-  <Translate Key="BoardEditWindow_Title" Value="フィルタ編集" />
+  <Translate Key="BoardEditWindow_Title" Value="チャンネルフィルタ編集" />
+  <Translate Key="BoardEditWindow_Name" Value="チャンネル名" />
   <Translate Key="BoardEditWindow_Word" Value="単語" />
   <Translate Key="BoardEditWindow_Regex" Value="正規表現" />
   <Translate Key="BoardEditWindow_Signature" Value="サイン" />
@@ -212,7 +213,7 @@
   <Translate Key="BoardEditWindow_Copy" Value="コピー" />
   <Translate Key="BoardEditWindow_Paste" Value="貼り付け" />
 
-  <Translate Key="CategoryEditWindow_Title" Value="フィルタ編集" />
+  <Translate Key="CategoryEditWindow_Title" Value="カテゴリフィルタ編集" />
   <Translate Key="CategoryEditWindow_Name" Value="カテゴリ名" />
   <Translate Key="CategoryEditWindow_Word" Value="単語" />
   <Translate Key="CategoryEditWindow_Regex" Value="正規表現" />

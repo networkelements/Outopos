@@ -306,12 +306,8 @@ namespace Lair.Windows
                         if (selectTreeViewItem != _treeView.SelectedItem) return;
                         _refresh = false;
 
-                        bool sortFlag = false;
-
                         if (removeList.Count > 100)
                         {
-                            sortFlag = true;
-
                             _listViewItemCollection.Clear();
 
                             foreach (var item in sortList)
@@ -321,9 +317,6 @@ namespace Lair.Windows
                         }
                         else
                         {
-                            if (addList.Count != 0) sortFlag = true;
-                            if (removeList.Count != 0) sortFlag = true;
-
                             foreach (var item in addList)
                             {
                                 _listViewItemCollection.Add(new MessageEx(selectTreeViewItem.Value, item));
@@ -357,7 +350,7 @@ namespace Lair.Windows
 
                         selectTreeViewItem.Count = _listViewItemCollection.Count;
 
-                        if (sortFlag) this.Sort();
+                        this.Sort();
 
                         if (_scroll)
                         {
@@ -915,19 +908,29 @@ namespace Lair.Windows
         {
             lock (category.ThisLock)
             {
-                DateTime now = DateTime.UtcNow;
-
-                messages.IntersectWith(messages.ToArray().Where(searchItem =>
+                messages.IntersectWith(messages.ToArray().Where(item =>
                 {
+                    var messageText = RichTextBoxHelper.GetMessageToShowString(item);
+                    string signatureText = null;
+
+                    if (item.Certificate == null)
+                    {
+                        signatureText = "Anonymous";
+                    }
+                    else
+                    {
+                        signatureText = MessageConverter.ToSignatureString(item.Certificate);
+                    }
+
                     bool flag;
 
-                    lock (category.SearchWordCollection.ThisLock)
+                    lock (category.ThisLock)
                     {
                         if (category.SearchWordCollection.Any(n => n.Contains == true))
                         {
                             flag = category.SearchWordCollection.Any(searchContains =>
                             {
-                                if (searchContains.Contains) return RichTextBoxHelper.GetMessageToShowString(searchItem).Contains(searchContains.Value);
+                                if (searchContains.Contains) return messageText.Contains(searchContains.Value);
 
                                 return false;
                             });
@@ -935,23 +938,13 @@ namespace Lair.Windows
                         }
                     }
 
-                    lock (category.SearchSignatureCollection.ThisLock)
+                    lock (category.ThisLock)
                     {
                         if (category.SearchSignatureCollection.Any(n => n.Contains == true))
                         {
                             flag = category.SearchSignatureCollection.Any(searchContains =>
                             {
-                                if (searchContains.Contains)
-                                {
-                                    if (searchContains.Value == "Anonymous")
-                                    {
-                                        return searchItem.Certificate == null;
-                                    }
-                                    else
-                                    {
-                                        return MessageConverter.ToSignatureString(searchItem.Certificate) == searchContains.Value;
-                                    }
-                                }
+                                if (searchContains.Contains) return signatureText == searchContains.Value;
 
                                 return false;
                             });
@@ -959,13 +952,13 @@ namespace Lair.Windows
                         }
                     }
 
-                    lock (category.SearchRegexCollection.ThisLock)
+                    lock (category.ThisLock)
                     {
                         if (category.SearchRegexCollection.Any(n => n.Contains == true))
                         {
                             flag = category.SearchRegexCollection.Any(searchContains =>
                             {
-                                if (searchContains.Contains) return searchContains.Value.IsMatch(RichTextBoxHelper.GetMessageToShowString(searchItem));
+                                if (searchContains.Contains) return searchContains.Value.IsMatch(messageText);
 
                                 return false;
                             });
@@ -976,19 +969,31 @@ namespace Lair.Windows
                     return true;
                 }));
 
-                messages.ExceptWith(messages.ToArray().Where(searchItem =>
+                messages.ExceptWith(messages.ToArray().Where(item =>
                 {
-                    if (searchItem.Content.Contains('\uFFFD')) return true;
+                    if (item.Content.Contains('\uFFFD')) return true;
+
+                    var messageText = RichTextBoxHelper.GetMessageToShowString(item);
+                    string signatureText = null;
+
+                    if (item.Certificate == null)
+                    {
+                        signatureText = "Anonymous";
+                    }
+                    else
+                    {
+                        signatureText = MessageConverter.ToSignatureString(item.Certificate);
+                    }
 
                     bool flag;
 
-                    lock (category.SearchWordCollection.ThisLock)
+                    lock (category.ThisLock)
                     {
                         if (category.SearchWordCollection.Any(n => n.Contains == false))
                         {
                             flag = category.SearchWordCollection.Any(searchContains =>
                             {
-                                if (!searchContains.Contains) return RichTextBoxHelper.GetMessageToShowString(searchItem).Contains(searchContains.Value);
+                                if (!searchContains.Contains) return messageText.Contains(searchContains.Value);
 
                                 return false;
                             });
@@ -996,23 +1001,13 @@ namespace Lair.Windows
                         }
                     }
 
-                    lock (category.SearchSignatureCollection.ThisLock)
+                    lock (category.ThisLock)
                     {
                         if (category.SearchSignatureCollection.Any(n => n.Contains == false))
                         {
                             flag = category.SearchSignatureCollection.Any(searchContains =>
                             {
-                                if (!searchContains.Contains)
-                                {
-                                    if (searchContains.Value == "Anonymous")
-                                    {
-                                        return searchItem.Certificate == null;
-                                    }
-                                    else
-                                    {
-                                        return MessageConverter.ToSignatureString(searchItem.Certificate) == searchContains.Value;
-                                    }
-                                }
+                                if (!searchContains.Contains) return searchContains.Value == signatureText;
 
                                 return false;
                             });
@@ -1020,13 +1015,13 @@ namespace Lair.Windows
                         }
                     }
 
-                    lock (category.SearchRegexCollection.ThisLock)
+                    lock (category.ThisLock)
                     {
                         if (category.SearchRegexCollection.Any(n => n.Contains == false))
                         {
                             flag = category.SearchRegexCollection.Any(searchContains =>
                             {
-                                if (!searchContains.Contains) return searchContains.Value.IsMatch(RichTextBoxHelper.GetMessageToShowString(searchItem));
+                                if (!searchContains.Contains) return searchContains.Value.IsMatch(messageText);
 
                                 return false;
                             });
@@ -1045,7 +1040,7 @@ namespace Lair.Windows
             {
                 DateTime now = DateTime.UtcNow;
 
-                lock (board.SearchMessageCollection.ThisLock)
+                lock (board.ThisLock)
                 {
                     foreach (var m in board.SearchMessageCollection.ToArray())
                     {
@@ -1054,17 +1049,29 @@ namespace Lair.Windows
                     }
                 }
 
-                messages.IntersectWith(messages.ToArray().Where(searchItem =>
+                messages.IntersectWith(messages.ToArray().Where(item =>
                 {
+                    var messageText = RichTextBoxHelper.GetMessageToShowString(item);
+                    string signatureText = null;
+
+                    if (item.Certificate == null)
+                    {
+                        signatureText = "Anonymous";
+                    }
+                    else
+                    {
+                        signatureText = MessageConverter.ToSignatureString(item.Certificate);
+                    }
+
                     bool flag;
 
-                    lock (board.SearchWordCollection.ThisLock)
+                    lock (board.ThisLock)
                     {
                         if (board.SearchWordCollection.Any(n => n.Contains == true))
                         {
                             flag = board.SearchWordCollection.Any(searchContains =>
                             {
-                                if (searchContains.Contains) return RichTextBoxHelper.GetMessageToShowString(searchItem).Contains(searchContains.Value);
+                                if (searchContains.Contains) return messageText.Contains(searchContains.Value);
 
                                 return false;
                             });
@@ -1072,23 +1079,13 @@ namespace Lair.Windows
                         }
                     }
 
-                    lock (board.SearchSignatureCollection.ThisLock)
+                    lock (board.ThisLock)
                     {
                         if (board.SearchSignatureCollection.Any(n => n.Contains == true))
                         {
                             flag = board.SearchSignatureCollection.Any(searchContains =>
                             {
-                                if (searchContains.Contains)
-                                {
-                                    if (searchContains.Value == "Anonymous")
-                                    {
-                                        return searchItem.Certificate == null;
-                                    }
-                                    else
-                                    {
-                                        return MessageConverter.ToSignatureString(searchItem.Certificate) == searchContains.Value;
-                                    }
-                                }
+                                if (searchContains.Contains) return signatureText == searchContains.Value;
 
                                 return false;
                             });
@@ -1096,13 +1093,13 @@ namespace Lair.Windows
                         }
                     }
 
-                    lock (board.SearchMessageCollection.ThisLock)
+                    lock (board.ThisLock)
                     {
                         if (board.SearchMessageCollection.Any(n => n.Contains == true))
                         {
                             flag = board.SearchMessageCollection.Any(searchContains =>
                             {
-                                if (searchContains.Contains) return searchItem == searchContains.Value;
+                                if (searchContains.Contains) return item == searchContains.Value;
 
                                 return false;
                             });
@@ -1110,13 +1107,13 @@ namespace Lair.Windows
                         }
                     }
 
-                    lock (board.SearchRegexCollection.ThisLock)
+                    lock (board.ThisLock)
                     {
                         if (board.SearchRegexCollection.Any(n => n.Contains == true))
                         {
                             flag = board.SearchRegexCollection.Any(searchContains =>
                             {
-                                if (searchContains.Contains) return searchContains.Value.IsMatch(RichTextBoxHelper.GetMessageToShowString(searchItem));
+                                if (searchContains.Contains) return searchContains.Value.IsMatch(messageText);
 
                                 return false;
                             });
@@ -1127,19 +1124,31 @@ namespace Lair.Windows
                     return true;
                 }));
 
-                messages.ExceptWith(messages.ToArray().Where(searchItem =>
+                messages.ExceptWith(messages.ToArray().Where(item =>
                 {
-                    if (searchItem.Content.Contains('\uFFFD')) return true;
+                    if (item.Content.Contains('\uFFFD')) return true;
+
+                    var messageText = RichTextBoxHelper.GetMessageToShowString(item);
+                    string signatureText = null;
+
+                    if (item.Certificate == null)
+                    {
+                        signatureText = "Anonymous";
+                    }
+                    else
+                    {
+                        signatureText = MessageConverter.ToSignatureString(item.Certificate);
+                    }
 
                     bool flag;
 
-                    lock (board.SearchWordCollection.ThisLock)
+                    lock (board.ThisLock)
                     {
                         if (board.SearchWordCollection.Any(n => n.Contains == false))
                         {
                             flag = board.SearchWordCollection.Any(searchContains =>
                             {
-                                if (!searchContains.Contains) return RichTextBoxHelper.GetMessageToShowString(searchItem).Contains(searchContains.Value);
+                                if (!searchContains.Contains) return messageText.Contains(searchContains.Value);
 
                                 return false;
                             });
@@ -1147,23 +1156,13 @@ namespace Lair.Windows
                         }
                     }
 
-                    lock (board.SearchSignatureCollection.ThisLock)
+                    lock (board.ThisLock)
                     {
                         if (board.SearchSignatureCollection.Any(n => n.Contains == false))
                         {
                             flag = board.SearchSignatureCollection.Any(searchContains =>
                             {
-                                if (!searchContains.Contains)
-                                {
-                                    if (searchContains.Value == "Anonymous")
-                                    {
-                                        return searchItem.Certificate == null;
-                                    }
-                                    else
-                                    {
-                                        return MessageConverter.ToSignatureString(searchItem.Certificate) == searchContains.Value;
-                                    }
-                                }
+                                if (!searchContains.Contains) return searchContains.Value == signatureText;
 
                                 return false;
                             });
@@ -1171,13 +1170,13 @@ namespace Lair.Windows
                         }
                     }
 
-                    lock (board.SearchMessageCollection.ThisLock)
+                    lock (board.ThisLock)
                     {
                         if (board.SearchMessageCollection.Any(n => n.Contains == false))
                         {
                             flag = board.SearchMessageCollection.Any(searchContains =>
                             {
-                                if (!searchContains.Contains) return searchItem == searchContains.Value;
+                                if (!searchContains.Contains) return item == searchContains.Value;
 
                                 return false;
                             });
@@ -1185,13 +1184,13 @@ namespace Lair.Windows
                         }
                     }
 
-                    lock (board.SearchRegexCollection.ThisLock)
+                    lock (board.ThisLock)
                     {
                         if (board.SearchRegexCollection.Any(n => n.Contains == false))
                         {
                             flag = board.SearchRegexCollection.Any(searchContains =>
                             {
-                                if (!searchContains.Contains) return searchContains.Value.IsMatch(RichTextBoxHelper.GetMessageToShowString(searchItem));
+                                if (!searchContains.Contains) return searchContains.Value.IsMatch(messageText);
 
                                 return false;
                             });
@@ -1836,8 +1835,6 @@ namespace Lair.Windows
             var selectTreeViewItem = _treeView.SelectedItem as BoardTreeViewItem;
             if (selectTreeViewItem == null) return;
 
-            var list = _treeViewItem.GetLineage(selectTreeViewItem).OfType<TreeViewItem>().ToList();
-
             var text = richTextBox.Selection.Text.Trim('\r', '\n');
             if (text.Length == 0) return;
 
@@ -1849,8 +1846,8 @@ namespace Lair.Windows
                     Value = text,
                 };
 
-                if (((CategoryTreeViewItem)list[list.Count - 2]).Value.SearchWordCollection.Contains(item)) return;
-                ((CategoryTreeViewItem)list[list.Count - 2]).Value.SearchWordCollection.Add(item);
+                if (selectTreeViewItem.Value.SearchWordCollection.Contains(item)) return;
+                selectTreeViewItem.Value.SearchWordCollection.Add(item);
             }
             else
             {
@@ -1860,8 +1857,8 @@ namespace Lair.Windows
                     Value = new SearchRegex() { IsIgnoreCase = true, Value = Regex.Escape(text) },
                 };
 
-                if (((CategoryTreeViewItem)list[list.Count - 2]).Value.SearchRegexCollection.Contains(item)) return;
-                ((CategoryTreeViewItem)list[list.Count - 2]).Value.SearchRegexCollection.Add(item);
+                if (selectTreeViewItem.Value.SearchRegexCollection.Contains(item)) return;
+                selectTreeViewItem.Value.SearchRegexCollection.Add(item);
             }
 
             this.Update();
@@ -1875,7 +1872,6 @@ namespace Lair.Windows
             var selectTreeViewItem = _treeView.SelectedItem as BoardTreeViewItem;
             if (selectTreeViewItem == null) return;
 
-            var list = _treeViewItem.GetLineage(selectTreeViewItem).OfType<TreeViewItem>().ToList();
             var signature = MessageConverter.ToSignatureString(message.Value.Certificate);
             if (signature == null) signature = "Anonymous";
 
@@ -1885,8 +1881,8 @@ namespace Lair.Windows
                 Value = signature,
             };
 
-            if (((CategoryTreeViewItem)list[list.Count - 2]).Value.SearchSignatureCollection.Contains(item)) return;
-            ((CategoryTreeViewItem)list[list.Count - 2]).Value.SearchSignatureCollection.Add(item);
+            if (selectTreeViewItem.Value.SearchSignatureCollection.Contains(item)) return;
+            selectTreeViewItem.Value.SearchSignatureCollection.Add(item);
 
             this.Update();
         }
@@ -1898,8 +1894,6 @@ namespace Lair.Windows
 
             var selectTreeViewItem = _treeView.SelectedItem as BoardTreeViewItem;
             if (selectTreeViewItem == null) return;
-
-            var list = _treeViewItem.GetLineage(selectTreeViewItem).OfType<TreeViewItem>().ToList();
 
             var item = new SearchContains<Message>()
             {

@@ -194,6 +194,7 @@
   <Translate Key="MessageEditWindow_Cancel" Value="Cancel" />
 
   <Translate Key="BoardEditWindow_Title" Value="Board filters edit" />
+  <Translate Key="BoardEditWindow_Name" Value="Name" />
   <Translate Key="BoardEditWindow_Word" Value="Word" />
   <Translate Key="BoardEditWindow_Regex" Value="Regex" />
   <Translate Key="BoardEditWindow_Signature" Value="Signature" />
