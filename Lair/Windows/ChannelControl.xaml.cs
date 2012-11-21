@@ -259,35 +259,6 @@ namespace Lair.Windows
                         }
                     }
 
-                    {
-                        string searchText = null;
-
-                        this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
-                        {
-                            searchText = _searchTextBox.Text;
-                        }), null);
-
-                        if (!string.IsNullOrWhiteSpace(searchText))
-                        {
-                            var words = searchText.ToLower().Split(new string[] { " ", "　" }, StringSplitOptions.RemoveEmptyEntries);
-
-                            foreach (var item in sortList.ToArray())
-                            {
-                                var text = RichTextBoxHelper.GetMessageToShowString(item).ToLower();
-
-                                foreach (var word in words)
-                                {
-                                    if (!text.Contains(word))
-                                    {
-                                        sortList.Remove(item);
-
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
-
                     var removeList = new List<Message>();
                     var addList = new List<Message>();
 
@@ -349,6 +320,30 @@ namespace Lair.Windows
                         }
 
                         selectTreeViewItem.Count = _listViewItemCollection.Count;
+
+                        {
+                            string searchText = _searchTextBox.Text;
+
+                            if (!string.IsNullOrWhiteSpace(searchText))
+                            {
+                                var words = searchText.ToLower().Split(new string[] { " ", "　" }, StringSplitOptions.RemoveEmptyEntries);
+
+                                foreach (var item in _listViewItemCollection.ToArray())
+                                {
+                                    var text = RichTextBoxHelper.GetMessageToShowString(item.Value).ToLower();
+
+                                    foreach (var word in words)
+                                    {
+                                        if (!text.Contains(word))
+                                        {
+                                            _listViewItemCollection.Remove(item);
+
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
 
                         this.Sort();
 
@@ -483,36 +478,6 @@ namespace Lair.Windows
 
                                     _messages[selectTreeViewItem.Value].Clear();
                                     _messages[selectTreeViewItem.Value].AddRange(sortList);
-                                }
-                            }
-
-                            {
-                                bool flag = false;
-
-                                this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
-                                {
-                                    flag = (_treeView.SelectedItem == selectTreeViewItem);
-                                }), null);
-
-                                if (flag)
-                                {
-                                    string searchText = null;
-
-                                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
-                                    {
-                                        searchText = (_searchTextBox.Text ?? "").ToLower();
-                                    }), null);
-
-                                    if (!string.IsNullOrWhiteSpace(searchText))
-                                    {
-                                        foreach (var item in sortList.ToArray())
-                                        {
-                                            if (!item.Content.ToLower().Contains(searchText))
-                                            {
-                                                sortList.Remove(item);
-                                            }
-                                        }
-                                    }
                                 }
                             }
 
