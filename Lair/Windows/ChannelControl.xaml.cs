@@ -1993,7 +1993,9 @@ namespace Lair.Windows
 
             list.Sort(delegate(MessageEx x, MessageEx y)
             {
-                int c = x.Value.CreationTime.CompareTo(y.Value.CreationTime);
+                int c = x.State.HasFlag(MessageState.IsNew).CompareTo(y.State.HasFlag(MessageState.IsNew));
+                if (c != 0) return c;
+                c = x.Value.CreationTime.CompareTo(y.Value.CreationTime);
                 if (c != 0) return c;
                 c = x.GetHashCode().CompareTo(y.GetHashCode());
                 if (c != 0) return c;
