@@ -41,7 +41,7 @@
             </Grid.ColumnDefinitions>
                 
             <TreeView HorizontalAlignment="Stretch" Name="_treeView" VerticalAlignment="Stretch">
-                <TreeViewItem Name="_updateTreeViewItem" Header="{Binding Path=ViewSettingsWindow_Update, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
+                <TreeViewItem Name="_updateTreeViewItem" Header="{Binding Path=ViewSettingsWindow_Update, Source={StaticResource ResourcesInstance}}" IsSelected="False" IsEnabled="True" />
                 <TreeViewItem Name="_signatureTreeViewItem" Header="{Binding Path=ViewSettingsWindow_Signature, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
                 <TreeViewItem Name="_fontsTreeViewItem" Header="{Binding Path=ViewSettingsWindow_Fonts, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
                 <TreeViewItem Name="_eventsTreeViewItem" Header="{Binding Path=ViewSettingsWindow_Events, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
@@ -108,8 +108,8 @@
                         </ItemsPanelTemplate>
                     </ComboBox.ItemsPanel>
                 </ComboBox>
-                <Label Content="{Binding Path=ViewSettingsWindow_MessageFontSize, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,36,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="240" />
-                <TextBox Height="24" Margin="252,36,6,0" Name="_fontMessageFontSizeTextBox" VerticalAlignment="Top" TextChanged="_fontMessageFontSizeTextBox_TextChanged" />
+                <Label Content="{Binding Path=ViewSettingsWindow_MessageFontSize, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,36,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="360" />
+                <TextBox Height="24" Margin="372,36,6,0" Name="_fontMessageFontSizeTextBox" VerticalAlignment="Top" TextChanged="_fontMessageFontSizeTextBox_TextChanged" />
             </Grid>
         </Grid>
         <Button Height="23" HorizontalAlignment="Right" Margin="0,0,93,12" Name="_okButton" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=ViewSettingsWindow_Ok, Source={StaticResource ResourcesInstance}}" Click="_okButton_Click" IsDefault="True" />

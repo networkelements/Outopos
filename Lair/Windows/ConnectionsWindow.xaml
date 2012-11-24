@@ -214,8 +214,8 @@
             </Grid>
 
             <Grid Grid.Column="2" FocusManager.FocusedElement="{Binding ElementName=_bandwidthListenUriTextBox}" Visibility="{Binding ElementName=_bandwidthTreeViewItem, Path=IsSelected, Converter={StaticResource _boolToVisibilityConverter}}">
-                <Label Content="{Binding Path=ConnectionsWindow_ConnectionCount, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" Width="240" VerticalContentAlignment="Center" />
-                <TextBox Height="24" Margin="252,6,6,0" Name="_bandwidthConnectionCountTextBox" VerticalAlignment="Top" TextChanged="_bandwidthConnectionCountTextBox_TextChanged" VerticalContentAlignment="Center" />
+                <Label Content="{Binding Path=ConnectionsWindow_ConnectionCount, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" Width="360" VerticalContentAlignment="Center" />
+                <TextBox Height="24" Margin="372,6,6,0" Name="_bandwidthConnectionCountTextBox" VerticalAlignment="Top" TextChanged="_bandwidthConnectionCountTextBox_TextChanged" VerticalContentAlignment="Center" />
             </Grid>
         </Grid>
         <Button Height="23" HorizontalAlignment="Right" Margin="0,0,93,12" Name="_okButton" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=ConnectionsWindow_Ok, Source={StaticResource ResourcesInstance}}" Click="_okButton_Click" IsDefault="True" />
