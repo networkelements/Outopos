@@ -30,14 +30,15 @@
 
   <Translate Key="MainWindow_Connection" Value="コネクション" />
   <Translate Key="MainWindow_Channel" Value="チャンネル" />
+  <Translate Key="MainWindow_Search" Value="サーチ" />
   <Translate Key="MainWindow_Log" Value="ログ" />
   <Translate Key="MainWindow_Connections" Value="接続" />
   <Translate Key="MainWindow_Start" Value="開始" />
   <Translate Key="MainWindow_Stop" Value="停止" />
-  <Translate Key="MainWindow_Settings" Value="設定" />
-  <Translate Key="MainWindow_UserInterfaceSetting" Value="ユーザーインターフェイス設定" />
-  <Translate Key="MainWindow_ConnectionSetting" Value="接続設定" />
+  <Translate Key="MainWindow_ConnectionsSettings" Value="接続設定" />
+  <Translate Key="MainWindow_View" Value="表示" />
   <Translate Key="MainWindow_ClearUrlHistory" Value="URLクリック履歴の削除" />
+  <Translate Key="MainWindow_ViewSettings" Value="表示設定" />
   <Translate Key="MainWindow_Languages" Value="言語" />
   <Translate Key="MainWindow_Help" Value="ヘルプ" />
   <Translate Key="MainWindow_DeveloperSite" Value="デベロッパーサイト" />
@@ -53,70 +54,71 @@
   <Translate Key="MainWindow_Close_Message" Value="終了しますか？" />
   <Translate Key="MainWindow_Delete_Message" Value="本当に削除しますか？" />
 
-  <Translate Key="UserInterfaceWindow_Title" Value="ユーザーインターフェイス設定" />
-  <Translate Key="UserInterfaceWindow_Update" Value="更新" />
-  <Translate Key="UserInterfaceWindow_UpdateUrl" Value="更新 Url" />
-  <Translate Key="UserInterfaceWindow_ProxyUri" Value="プロキシ Uri" />
-  <Translate Key="UserInterfaceWindow_Signature" Value="サイン" />
-  <Translate Key="UserInterfaceWindow_UpdateOption" Value="更新オプション" />
-  <Translate Key="UserInterfaceWindow_None" Value="無し" />
-  <Translate Key="UserInterfaceWindow_AutoCheck" Value="自動チェック" />
-  <Translate Key="UserInterfaceWindow_AutoUpdate" Value="自動更新" />
-  <Translate Key="UserInterfaceWindow_Amoeba" Value="Amoeba" />
-  <Translate Key="UserInterfaceWindow_AmoebaPath" Value="Amoeba パス" />
-  <Translate Key="UserInterfaceWindow_Fonts" Value="フォント" />
-  <Translate Key="UserInterfaceWindow_MessageFontFamily" Value="メッセージフォント" />
-  <Translate Key="UserInterfaceWindow_MessageFontSize" Value="メッセージフォントサイズ" />
-  <Translate Key="UserInterfaceWindow_Miscellaneous" Value="その他" />
-  <Translate Key="UserInterfaceWindow_Event" Value="イベント" />
-  <Translate Key="UserInterfaceWindow_ClearUrlHistory" Value="Lairの終了時にURLクリック履歴を削除する" />
-  <Translate Key="UserInterfaceWindow_Value" Value="値" />
-  <Translate Key="UserInterfaceWindow_Import" Value="インポート" />
-  <Translate Key="UserInterfaceWindow_Export" Value="エクスポート" />
-  <Translate Key="UserInterfaceWindow_Up" Value="上へ" />
-  <Translate Key="UserInterfaceWindow_Down" Value="下へ" />
-  <Translate Key="UserInterfaceWindow_Add" Value="追加" />
-  <Translate Key="UserInterfaceWindow_Edit" Value="編集" />
-  <Translate Key="UserInterfaceWindow_Delete" Value="削除" />
-  <Translate Key="UserInterfaceWindow_Ok" Value="Ok" />
-  <Translate Key="UserInterfaceWindow_Cancel" Value="キャンセル" />
+  <Translate Key="ViewSettingsWindow_Title" Value="表示設定" />
+  <Translate Key="ViewSettingsWindow_Update" Value="アップデート" />
+  <Translate Key="ViewSettingsWindow_UpdateUrl" Value="アップデート Url" />
+  <Translate Key="ViewSettingsWindow_ProxyUri" Value="プロキシ Uri" />
+  <Translate Key="ViewSettingsWindow_Signature" Value="サイン" />
+  <Translate Key="ViewSettingsWindow_UpdateOption" Value="アップデートオプション" />
+  <Translate Key="ViewSettingsWindow_None" Value="無し" />
+  <Translate Key="ViewSettingsWindow_AutoCheck" Value="自動でチェックする" />
+  <Translate Key="ViewSettingsWindow_AutoUpdate" Value="自動でアップデートする" />
+  <Translate Key="ViewSettingsWindow_Amoeba" Value="Amoeba" />
+  <Translate Key="ViewSettingsWindow_AmoebaPath" Value="Amoeba パス" />
+  <Translate Key="ViewSettingsWindow_SeedDeleteExpires" Value="Seedを破棄する作成日からの日数 (要再起動)" />
+  <Translate Key="ViewSettingsWindow_Fonts" Value="フォント" />
+  <Translate Key="ViewSettingsWindow_MessageFontFamily" Value="メッセージフォント" />
+  <Translate Key="ViewSettingsWindow_MessageFontSize" Value="メッセージフォントサイズ" />
+  <Translate Key="ViewSettingsWindow_Events" Value="イベント" />
+  <Translate Key="ViewSettingsWindow_ClearUrlHistory" Value="Lairの終了時にURLクリック履歴を削除する" />
+  <Translate Key="ViewSettingsWindow_Value" Value="値" />
+  <Translate Key="ViewSettingsWindow_Import" Value="インポート" />
+  <Translate Key="ViewSettingsWindow_Export" Value="エクスポート" />
+  <Translate Key="ViewSettingsWindow_Up" Value="上へ" />
+  <Translate Key="ViewSettingsWindow_Down" Value="下へ" />
+  <Translate Key="ViewSettingsWindow_Add" Value="追加" />
+  <Translate Key="ViewSettingsWindow_Edit" Value="編集" />
+  <Translate Key="ViewSettingsWindow_Delete" Value="削除" />
+  <Translate Key="ViewSettingsWindow_Ok" Value="Ok" />
+  <Translate Key="ViewSettingsWindow_Cancel" Value="キャンセル" />
 
-  <Translate Key="ConnectionWindow_Title" Value="接続設定" />
-  <Translate Key="ConnectionWindow_BaseNode" Value="基礎ノード" />
-  <Translate Key="ConnectionWindow_Node" Value="ノード" />
-  <Translate Key="ConnectionWindow_Uris" Value="Uris" />
-  <Translate Key="ConnectionWindow_Uri" Value="Uri" />
-  <Translate Key="ConnectionWindow_OtherNodes" Value="周辺ノード" />
-  <Translate Key="ConnectionWindow_Nodes" Value="ノードリスト" />
-  <Translate Key="ConnectionWindow_Client" Value="クライアント" />
-  <Translate Key="ConnectionWindow_Filters" Value="フィルタ" />
-  <Translate Key="ConnectionWindow_ConnectionType" Value="接続タイプ" />
-  <Translate Key="ConnectionWindow_ProxyUri" Value="プロキシ Uri" />
-  <Translate Key="ConnectionWindow_UriCondition" Value="正規表現" />
-  <Translate Key="ConnectionWindow_Type" Value="Uri タイプ" />
-  <Translate Key="ConnectionWindow_Host" Value="ホスト" />
-  <Translate Key="ConnectionWindow_Server" Value="サーバー" />
-  <Translate Key="ConnectionWindow_ListenUris" Value="受信 Uris" />
-  <Translate Key="ConnectionWindow_Miscellaneous" Value="その他" />
-  <Translate Key="ConnectionWindow_CoreSettings" Value="基本設定" />
-  <Translate Key="ConnectionWindow_ConnectionCount" Value="接続数上限" />
-  <Translate Key="ConnectionWindow_DownloadingLowerLimit" Value="ダウンロード開始接続数" />
-  <Translate Key="ConnectionWindow_UploadingLowerLimit" Value="アップロード開始接続数" />
-  <Translate Key="ConnectionWindow_AutoSettings" Value="自動設定" />
-  <Translate Key="ConnectionWindow_AutoBaseNodeSetting" Value="自動基礎ノード設定" />
-  <Translate Key="ConnectionWindow_Tor" Value="Tor" />
-  <Translate Key="ConnectionWindow_Ipv4" Value="Ipv4" />
-  <Translate Key="ConnectionWindow_Ipv6" Value="Ipv6" />
-  <Translate Key="ConnectionWindow_Up" Value="上へ" />
-  <Translate Key="ConnectionWindow_Down" Value="下へ" />
-  <Translate Key="ConnectionWindow_Add" Value="追加" />
-  <Translate Key="ConnectionWindow_Edit" Value="編集" />
-  <Translate Key="ConnectionWindow_Delete" Value="削除" />
-  <Translate Key="ConnectionWindow_Ok" Value="Ok" />
-  <Translate Key="ConnectionWindow_Cancel" Value="キャンセル" />
-  <Translate Key="ConnectionWindow_Cut" Value="切り取り" />
-  <Translate Key="ConnectionWindow_Copy" Value="コピー" />
-  <Translate Key="ConnectionWindow_Paste" Value="貼り付け" />
+  <Translate Key="ConnectionsWindow_Title" Value="接続設定" />
+  <Translate Key="ConnectionsWindow_BaseNode" Value="基礎ノード" />
+  <Translate Key="ConnectionsWindow_Node" Value="ノード" />
+  <Translate Key="ConnectionsWindow_Uris" Value="Uris" />
+  <Translate Key="ConnectionsWindow_Uri" Value="Uri" />
+  <Translate Key="ConnectionsWindow_OtherNodes" Value="周辺ノード" />
+  <Translate Key="ConnectionsWindow_Nodes" Value="ノードリスト" />
+  <Translate Key="ConnectionsWindow_Client" Value="クライアント" />
+  <Translate Key="ConnectionsWindow_Filters" Value="フィルタ" />
+  <Translate Key="ConnectionsWindow_ConnectionType" Value="接続タイプ" />
+  <Translate Key="ConnectionsWindow_ProxyUri" Value="プロキシ Uri" />
+  <Translate Key="ConnectionsWindow_UriCondition" Value="正規表現" />
+  <Translate Key="ConnectionsWindow_Type" Value="Uri タイプ" />
+  <Translate Key="ConnectionsWindow_Host" Value="ホスト" />
+  <Translate Key="ConnectionsWindow_Server" Value="サーバー" />
+  <Translate Key="ConnectionsWindow_ListenUris" Value="受信 Uris" />
+  <Translate Key="ConnectionsWindow_Events" Value="イベント" />
+  <Translate Key="ConnectionsWindow_Bandwidth" Value="帯域幅" />
+  <Translate Key="ConnectionsWindow_CoreSettings" Value="基本設定" />
+  <Translate Key="ConnectionsWindow_ConnectionCount" Value="接続数上限" />
+  <Translate Key="ConnectionsWindow_DownloadingLowerLimit" Value="ダウンロード開始接続数" />
+  <Translate Key="ConnectionsWindow_UploadingLowerLimit" Value="アップロード開始接続数" />
+  <Translate Key="ConnectionsWindow_AutoSettings" Value="自動設定" />
+  <Translate Key="ConnectionsWindow_AutoBaseNodeSetting" Value="基礎ノードを自動で設定する" />
+  <Translate Key="ConnectionsWindow_Tor" Value="Tor" />
+  <Translate Key="ConnectionsWindow_Ipv4" Value="Ipv4" />
+  <Translate Key="ConnectionsWindow_Ipv6" Value="Ipv6" />
+  <Translate Key="ConnectionsWindow_Up" Value="上へ" />
+  <Translate Key="ConnectionsWindow_Down" Value="下へ" />
+  <Translate Key="ConnectionsWindow_Add" Value="追加" />
+  <Translate Key="ConnectionsWindow_Edit" Value="編集" />
+  <Translate Key="ConnectionsWindow_Delete" Value="削除" />
+  <Translate Key="ConnectionsWindow_Ok" Value="Ok" />
+  <Translate Key="ConnectionsWindow_Cancel" Value="キャンセル" />
+  <Translate Key="ConnectionsWindow_Cut" Value="切り取り" />
+  <Translate Key="ConnectionsWindow_Copy" Value="コピー" />
+  <Translate Key="ConnectionsWindow_Paste" Value="貼り付け" />
 
   <Translate Key="ProgressWindow_Title" Value="進行状況" />
   <Translate Key="ProgressWindow_Cancel" Value="キャンセル" />
@@ -176,9 +178,12 @@
   <Translate Key="ChannelControl_FilterWord" Value="この単語でフィルタ" />
   <Translate Key="ChannelControl_FilterSignature" Value="このサインでフィルタ" />
   <Translate Key="ChannelControl_FilterMessage" Value="このメッセージでフィルタ" />
-  <Translate Key="ChannelControl_Signature_Filter" Value="サイン" />
-  <Translate Key="ChannelControl_New_Message" Value="新規" />
+  <Translate Key="ChannelControl_SignatureFilter" Value="Sign" />
+  <Translate Key="ChannelControl_NewMessage" Value="New" />
+  <Translate Key="ChannelControl_OnlyUnread" Value="Only" />
   <Translate Key="ChannelControl_AmoebaNotFound_Message" Value="Amoebaが見つかりません。Amoeba.exeへのパスを設定してください。" />
+  <Translate Key="ChannelControl_MarkAllMessagesRead" Value="全てのメッセージを既読にする" />
+  <Translate Key="ChannelControl_MarkAllMessagesRead_Message" Value="全てのメッセージを既読にしますか？" />
 
   <Translate Key="SignWindow_Title" Value="フィルタ" />
   <Translate Key="SignWindow_Signature" Value="サイン" />
@@ -236,5 +241,74 @@
   <Translate Key="NewChannelWindow_Name" Value="チャンネル名" />
   <Translate Key="NewChannelWindow_Ok" Value="Ok" />
   <Translate Key="NewChannelWindow_Cancel" Value="キャンセル" />
+
+  <Translate Key="SearchControl_Name" Value="名前" />
+  <Translate Key="SearchControl_Signature" Value="サイン" />
+  <Translate Key="SearchControl_Length" Value="サイズ" />
+  <Translate Key="SearchControl_Keywords" Value="キーワード" />
+  <Translate Key="SearchControl_CreationTime" Value="作成日" />
+  <Translate Key="SearchControl_Comment" Value="コメント" />
+  <Translate Key="SearchControl_State" Value="状態" />
+  <Translate Key="SearchControl_Hash" Value="ハッシュ" />
+  <Translate Key="SearchControl_New" Value="新規" />
+  <Translate Key="SearchControl_Edit" Value="編集" />
+  <Translate Key="SearchControl_Delete" Value="削除" />
+  <Translate Key="SearchControl_Cut" Value="切り取り" />
+  <Translate Key="SearchControl_Copy" Value="コピー" />
+  <Translate Key="SearchControl_CopyInfo" Value="コピー  (詳細情報)" />
+  <Translate Key="SearchControl_Paste" Value="貼り付け" />
+  <Translate Key="SearchControl_Export" Value="エクスポート" />
+  <Translate Key="SearchControl_DeleteCache" Value="キャッシュ削除" />
+  <Translate Key="SearchControl_DeleteShare" Value="シェア削除" />
+  <Translate Key="SearchControl_DeleteDownload" Value="ダウンロード削除" />
+  <Translate Key="SearchControl_DeleteUpload" Value="アップロード削除" />
+  <Translate Key="SearchControl_DeleteDownloadHistory" Value="ダウンロード履歴削除" />
+  <Translate Key="SearchControl_DeleteUploadHistory" Value="アップロード履歴削除" />
+  <Translate Key="SearchControl_Download" Value="ダウンロード" />
+  <Translate Key="SearchControl_Search" Value="検索" />
+  <Translate Key="SearchControl_SearchSignature" Value="このサインで検索" />
+  <Translate Key="SearchControl_SearchKeyword" Value="このキーワードで検索" />
+  <Translate Key="SearchControl_SearchCreationTimeRange" Value="この作成日で検索" />
+  <Translate Key="SearchControl_Filter" Value="フィルタ" />
+  <Translate Key="SearchControl_FilterName" Value="この名前でフィルタ" />
+  <Translate Key="SearchControl_FilterSignature" Value="このサインでフィルタ" />
+  <Translate Key="SearchControl_FilterKeyword" Value="このキーワードでフィルタ" />
+  <Translate Key="SearchControl_FilterCreationTimeRange" Value="この作成日でフィルタ" />
+  <Translate Key="SearchControl_FilterSeed" Value="このシードでフィルタ" />
+
+  <Translate Key="SearchState_Clicked" Value="C" />
+
+  <Translate Key="SearchItemEditWindow_Title" Value="検索アイテム編集" />
+  <Translate Key="SearchItemEditWindow_Name" Value="名前" />
+  <Translate Key="SearchItemEditWindow_NameRegex" Value="正規表現" />
+  <Translate Key="SearchItemEditWindow_Signature" Value="サイン" />
+  <Translate Key="SearchItemEditWindow_Keyword" Value="キーワード" />
+  <Translate Key="SearchItemEditWindow_CreationTimeRange" Value="作成日 範囲" />
+  <Translate Key="SearchItemEditWindow_LengthRange" Value="サイズ 範囲" />
+  <Translate Key="SearchItemEditWindow_Seed" Value="シード" />
+  <Translate Key="SearchItemEditWindow_SearchState" Value="状態" />
+  <Translate Key="SearchItemEditWindow_Contains" Value="有効" />
+  <Translate Key="SearchItemEditWindow_IsIgnoreCase" Value="大文字小文字の違いを無視" />
+  <Translate Key="SearchItemEditWindow_Value" Value="値" />
+  <Translate Key="SearchItemEditWindow_Min" Value="最小" />
+  <Translate Key="SearchItemEditWindow_Max" Value="最大" />
+  <Translate Key="SearchItemEditWindow_Up" Value="上へ" />
+  <Translate Key="SearchItemEditWindow_Down" Value="下へ" />
+  <Translate Key="SearchItemEditWindow_Add" Value="追加" />
+  <Translate Key="SearchItemEditWindow_Edit" Value="編集" />
+  <Translate Key="SearchItemEditWindow_Delete" Value="削除" />
+  <Translate Key="SearchItemEditWindow_Ok" Value="Ok" />
+  <Translate Key="SearchItemEditWindow_Cancel" Value="キャンセル" />
+  <Translate Key="SearchItemEditWindow_Cut" Value="切り取り" />
+  <Translate Key="SearchItemEditWindow_Copy" Value="コピー" />
+  <Translate Key="SearchItemEditWindow_Paste" Value="貼り付け" />
+  <Translate Key="SearchItemEditWindow_SearchState_Clicked" Value="Clicked" />
+
+  <Translate Key="BoxEditWindow_Title" Value="ボックス編集" />
+  <Translate Key="BoxEditWindow_Name" Value="名前" />
+  <Translate Key="BoxEditWindow_Signature" Value="署名" />
+  <Translate Key="BoxEditWindow_Comment" Value="コメント" />
+  <Translate Key="BoxEditWindow_Ok" Value="Ok" />
+  <Translate Key="BoxEditWindow_Cancel" Value="キャンセル" />
 
 </Configuration>

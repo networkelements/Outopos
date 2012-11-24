@@ -267,11 +267,13 @@ namespace Lair.Windows
                                     RichTextBoxHelper.SeedClickEvent(sender, seed);
                                 }
 
-                                l.Foreground = new SolidColorBrush(_h);
-                                Settings.Instance.Global_UrlHistorys.Add(rl);
+                                if (Settings.Instance.Global_SeedHistorys.Contains(seed))
+                                {
+                                    l.Foreground = new SolidColorBrush(_h);
+                                }
                             };
 
-                            if (Settings.Instance.Global_UrlHistorys.Contains(rl))
+                            if (Settings.Instance.Global_SeedHistorys.Contains(seed))
                             {
                                 l.Foreground = new SolidColorBrush(_h);
                             }
@@ -347,11 +349,13 @@ namespace Lair.Windows
                                     RichTextBoxHelper.ChannelClickEvent(sender, channel);
                                 }
 
-                                l.Foreground = new SolidColorBrush(_h);
-                                Settings.Instance.Global_UrlHistorys.Add(rl);
+                                if (Settings.Instance.Global_ChannelHistorys.Contains(channel))
+                                {
+                                    l.Foreground = new SolidColorBrush(_h);
+                                }
                             };
 
-                            if (Settings.Instance.Global_UrlHistorys.Contains(rl))
+                            if (Settings.Instance.Global_ChannelHistorys.Contains(channel))
                             {
                                 l.Foreground = new SolidColorBrush(_h);
                             }
@@ -415,66 +419,76 @@ namespace Lair.Windows
                         }
                         else
                         {
-                            if (stringBuilder.Length != 0 && nest < 6)
+                            if (stringBuilder.Length != 0)
                             {
-                                var richTextBox2 = new RichTextBox();
+                                var list2 = stringBuilder.ToString().TrimEnd('\r', '\n').Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
 
-                                richTextBox2.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
-                                richTextBox2.FontSize = (double)new FontSizeConverter().ConvertFromString(Settings.Instance.Global_Fonts_MessageFontSize + "pt");
-                                richTextBox2.MaxHeight = Math.Max(0, RichTextBoxHelper.GetMaxHeightEvent(richTextBox));
-
-                                var fd = new EnabledFlowDocument();
-                                fd.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
-                                fd.FontSize = (double)new FontSizeConverter().ConvertFromString(Settings.Instance.Global_Fonts_MessageFontSize + "pt");
-
-                                var p2 = new Paragraph();
-                                p2.LineHeight = richTextBox.FontSize + 2;
-
-                                p2.Inlines.Add(RichTextBoxHelper.GetParagraph(richTextBox2, stringBuilder.ToString(), nest + 1));
-
-                                fd.Blocks.Add(p2);
-                                richTextBox2.Document = fd;
-
-                                var grid = new Grid();
-                                grid.Children.Add(richTextBox2);
-
-                                richTextBox2.SelectAll();
-                                var header = richTextBox2.Selection.Text.Replace("\r\n", " ").Replace('\r', ' ').Replace('\n', ' ');
-                                richTextBox2.Selection.Select(richTextBox2.Document.ContentStart, richTextBox2.Document.ContentStart);
-
-                                var label = new Label() { Content = header };
-
-                                var binding = new Binding("ActualWidth")
+                                if (list2.Length == 1)
                                 {
-                                    Source = richTextBox
-                                };
-
-                                label.SetBinding(Label.WidthProperty, binding);
-
-                                var expander = new Expander()
+                                    p.Inlines.Add("> " + list2[0]);
+                                    p.Inlines.Add(new LineBreak());
+                                }
+                                else if (nest < 6)
                                 {
-                                    IsEnabled = true,
-                                    IsExpanded = false,
-                                    Header = label,
-                                    Content = grid,
-                                    Margin = new Thickness(2, 6, 2, 6),
-                                };
+                                    var richTextBox2 = new RichTextBox();
 
-                                expander.Expanded += (object sender, RoutedEventArgs e) =>
-                                {
-                                    expander.Header = " ";
+                                    richTextBox2.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
+                                    richTextBox2.FontSize = (double)new FontSizeConverter().ConvertFromString(Settings.Instance.Global_Fonts_MessageFontSize + "pt");
+                                    richTextBox2.MaxHeight = Math.Max(0, RichTextBoxHelper.GetMaxHeightEvent(richTextBox));
 
-                                    e.Handled = true;
-                                };
+                                    var fd = new EnabledFlowDocument();
+                                    fd.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
+                                    fd.FontSize = (double)new FontSizeConverter().ConvertFromString(Settings.Instance.Global_Fonts_MessageFontSize + "pt");
 
-                                expander.Collapsed += (object sender, RoutedEventArgs e) =>
-                                {
-                                    expander.Header = label;
+                                    var p2 = new Paragraph();
+                                    p2.LineHeight = richTextBox.FontSize + 2;
 
-                                    e.Handled = true;
-                                };
+                                    p2.Inlines.Add(RichTextBoxHelper.GetParagraph(richTextBox2, stringBuilder.ToString(), nest + 1));
 
-                                p.Inlines.Add(new InlineUIContainer(expander));
+                                    fd.Blocks.Add(p2);
+                                    richTextBox2.Document = fd;
+
+                                    var grid = new Grid();
+                                    grid.Children.Add(richTextBox2);
+
+                                    richTextBox2.SelectAll();
+                                    var header = richTextBox2.Selection.Text.Replace("\r\n", " ").Replace('\r', ' ').Replace('\n', ' ');
+                                    richTextBox2.Selection.Select(richTextBox2.Document.ContentStart, richTextBox2.Document.ContentStart);
+
+                                    var label = new Label() { Content = header };
+
+                                    var binding = new Binding("ActualWidth")
+                                    {
+                                        Source = richTextBox
+                                    };
+
+                                    label.SetBinding(Label.WidthProperty, binding);
+
+                                    var expander = new Expander()
+                                    {
+                                        IsEnabled = true,
+                                        IsExpanded = false,
+                                        Header = label,
+                                        Content = grid,
+                                        Margin = new Thickness(2, 6, 2, 6),
+                                    };
+
+                                    expander.Expanded += (object sender, RoutedEventArgs e) =>
+                                    {
+                                        expander.Header = " ";
+
+                                        e.Handled = true;
+                                    };
+
+                                    expander.Collapsed += (object sender, RoutedEventArgs e) =>
+                                    {
+                                        expander.Header = label;
+
+                                        e.Handled = true;
+                                    };
+
+                                    p.Inlines.Add(new InlineUIContainer(expander));
+                                }
                             }
 
                             stringBuilder.Clear();
@@ -499,8 +513,10 @@ namespace Lair.Windows
                                             RichTextBoxHelper.LinkClickEvent(sender, url);
                                         }
 
-                                        l.Foreground = new SolidColorBrush(_h);
-                                        Settings.Instance.Global_UrlHistorys.Add(url);
+                                        if (Settings.Instance.Global_UrlHistorys.Contains(url))
+                                        {
+                                            l.Foreground = new SolidColorBrush(_h);
+                                        }
                                     };
                                     l.PreviewMouseRightButtonDown += (object sender, MouseButtonEventArgs ex) =>
                                     {
@@ -534,71 +550,81 @@ namespace Lair.Windows
                 }
             }
 
+            if (stringBuilder.Length != 0)
+            {
+                var list3 = stringBuilder.ToString().TrimEnd('\r', '\n').Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+
+                if (list3.Length == 1)
+                {
+                    p.Inlines.Add("> " + list3[0]);
+                    p.Inlines.Add(new LineBreak());
+                }
+                else if (nest < 6)
+                {
+                    var richTextBox2 = new RichTextBox();
+
+                    richTextBox2.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
+                    richTextBox2.FontSize = (double)new FontSizeConverter().ConvertFromString(Settings.Instance.Global_Fonts_MessageFontSize + "pt");
+                    richTextBox2.MaxHeight = Math.Max(0, RichTextBoxHelper.GetMaxHeightEvent(richTextBox));
+
+                    var fd = new EnabledFlowDocument();
+                    fd.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
+                    fd.FontSize = (double)new FontSizeConverter().ConvertFromString(Settings.Instance.Global_Fonts_MessageFontSize + "pt");
+
+                    var p2 = new Paragraph();
+                    p2.LineHeight = richTextBox.FontSize + 2;
+
+                    p2.Inlines.Add(RichTextBoxHelper.GetParagraph(richTextBox2, stringBuilder.ToString(), nest + 1));
+
+                    fd.Blocks.Add(p2);
+                    richTextBox2.Document = fd;
+
+                    var grid = new Grid();
+                    grid.Children.Add(richTextBox2);
+
+                    richTextBox2.SelectAll();
+                    var header = richTextBox2.Selection.Text.Replace("\r\n", " ").Replace('\r', ' ').Replace('\n', ' ');
+                    richTextBox2.Selection.Select(richTextBox2.Document.ContentStart, richTextBox2.Document.ContentStart);
+
+                    var label = new Label() { Content = header };
+
+                    var binding = new Binding("ActualWidth")
+                    {
+                        Source = richTextBox
+                    };
+
+                    label.SetBinding(Label.WidthProperty, binding);
+
+                    var expander = new Expander()
+                    {
+                        IsEnabled = true,
+                        IsExpanded = false,
+                        Header = label,
+                        Content = grid,
+                        Margin = new Thickness(2, 6, 2, 6),
+                    };
+
+                    expander.Expanded += (object sender, RoutedEventArgs e) =>
+                    {
+                        expander.Header = " ";
+
+                        e.Handled = true;
+                    };
+
+                    expander.Collapsed += (object sender, RoutedEventArgs e) =>
+                    {
+                        expander.Header = label;
+
+                        e.Handled = true;
+                    };
+
+                    p.Inlines.Add(new InlineUIContainer(expander));
+                }
+            }
+
             while (p.Inlines.LastInline is LineBreak)
             {
                 p.Inlines.Remove(p.Inlines.LastInline);
-            }
-
-            if (stringBuilder.Length != 0 && nest < 6)
-            {
-                var richTextBox2 = new RichTextBox();
-
-                richTextBox2.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
-                richTextBox2.FontSize = (double)new FontSizeConverter().ConvertFromString(Settings.Instance.Global_Fonts_MessageFontSize + "pt");
-                richTextBox2.MaxHeight = Math.Max(0, RichTextBoxHelper.GetMaxHeightEvent(richTextBox));
-
-                var fd = new EnabledFlowDocument();
-                fd.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
-                fd.FontSize = (double)new FontSizeConverter().ConvertFromString(Settings.Instance.Global_Fonts_MessageFontSize + "pt");
-
-                var p2 = new Paragraph();
-                p2.LineHeight = richTextBox.FontSize + 2;
-
-                p2.Inlines.Add(RichTextBoxHelper.GetParagraph(richTextBox2, stringBuilder.ToString(), nest + 1));
-
-                fd.Blocks.Add(p2);
-                richTextBox2.Document = fd;
-
-                var grid = new Grid();
-                grid.Children.Add(richTextBox2);
-
-                richTextBox2.SelectAll();
-                var header = richTextBox2.Selection.Text.Replace("\r\n", " ").Replace('\r', ' ').Replace('\n', ' ');
-                richTextBox2.Selection.Select(richTextBox2.Document.ContentStart, richTextBox2.Document.ContentStart);
-
-                var label = new Label() { Content = header };
-
-                var binding = new Binding("ActualWidth")
-                {
-                    Source = richTextBox
-                };
-
-                label.SetBinding(Label.WidthProperty, binding);
-
-                var expander = new Expander()
-                {
-                    IsEnabled = true,
-                    IsExpanded = false,
-                    Header = label,
-                    Content = grid,
-                    Margin = new Thickness(2, 6, 2, 6),
-                };
-
-                expander.Expanded += (object sender, RoutedEventArgs e) =>
-                {
-                    expander.Header = " ";
-
-                    e.Handled = true;
-                };
-
-                expander.Collapsed += (object sender, RoutedEventArgs e) =>
-                {
-                    expander.Header = label;
-
-                    e.Handled = true;
-                };
-
-                p.Inlines.Add(new InlineUIContainer(expander));
             }
 
             stringBuilder.Clear();

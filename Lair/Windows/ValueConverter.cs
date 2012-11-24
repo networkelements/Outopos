@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -18,9 +19,207 @@ using System.Windows.Media.Imaging;
 using Lair.Properties;
 using Library;
 using Library.Net.Lair;
+using a = Library.Net.Amoeba;
 
 namespace Lair.Windows
 {
+    [ValueConversion(typeof(object), typeof(BitmapImage))]
+    class ObjectToImageConverter : IValueConverter
+    {
+        private static BitmapSource _boxIcon;
+        private static Dictionary<string, BitmapSource> _icon = new Dictionary<string, BitmapSource>();
+
+        static ObjectToImageConverter()
+        {
+            var ext = ".box";
+
+            var icon = IconUtilities.FileAssociatedImage(ext, false, false);
+            if (icon.CanFreeze) icon.Freeze();
+
+            _boxIcon = icon;
+        }
+
+        public class IconUtilities
+        {
+            [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+            struct SHFILEINFO
+            {
+                public IntPtr hIcon;
+                public IntPtr iIcon;
+                public uint dwAttributes;
+                [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+                public string szDisplayName;
+                [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 80)]
+                public string szTypeName;
+            }
+
+            const uint SHGFI_LARGEICON = 0x00000000;
+            const uint SHGFI_SMALLICON = 0x00000001;
+            const uint SHGFI_USEFILEATTRIBUTES = 0x00000010;
+            const uint SHGFI_ICON = 0x00000100;
+
+            [DllImport("shell32.dll", CharSet = CharSet.Auto)]
+            static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttributes, ref SHFILEINFO psfi, uint cbFileInfo, uint uFlags);
+
+            [DllImport("user32.dll", CharSet = CharSet.Auto)]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            static extern bool DestroyIcon(IntPtr hIcon);
+
+            public static BitmapSource FileAssociatedImage(string path, bool isLarge, bool isExist)
+            {
+                SHFILEINFO fileInfo = new SHFILEINFO();
+                uint flags = SHGFI_ICON;
+                if (!isLarge) flags |= SHGFI_SMALLICON;
+                if (!isExist) flags |= SHGFI_USEFILEATTRIBUTES;
+
+                try
+                {
+                    SHGetFileInfo(path, 0, ref fileInfo, (uint)Marshal.SizeOf(fileInfo), flags);
+
+                    if (fileInfo.hIcon == IntPtr.Zero)
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        return System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(fileInfo.hIcon, new Int32Rect(0, 0, 16, 16), BitmapSizeOptions.FromEmptyOptions());
+                    }
+                }
+                finally
+                {
+                    if (fileInfo.hIcon != IntPtr.Zero)
+                    {
+                        DestroyIcon(fileInfo.hIcon);
+                    }
+                }
+            }
+        }
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value == null) return null;
+            var key = value.GetType().Name.ToString();
+
+            try
+            {
+                if (value is a.Seed)
+                {
+                    a.Seed seed = (a.Seed)value;
+                    if (string.IsNullOrWhiteSpace(seed.Name)) return null;
+
+                    var ext = Path.GetExtension(seed.Name);
+                    if (string.IsNullOrWhiteSpace(ext)) return null;
+
+                    if (!_icon.ContainsKey(ext))
+                    {
+                        var icon = IconUtilities.FileAssociatedImage(ext, false, false);
+                        if (icon.CanFreeze) icon.Freeze();
+
+                        _icon[ext] = icon;
+                    }
+
+                    return _icon[ext];
+                }
+                else if (value is a.Box)
+                {
+                    return _boxIcon;
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+
+            return null;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotSupportedException();
+        }
+    }
+
+    [ValueConversion(typeof(a.Seed), typeof(string))]
+    class SeedToStringConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var item = value as a.Seed;
+            if (item == null) return null;
+
+            return a.AmoebaConverter.ToSeedString(item);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotSupportedException();
+        }
+    }
+
+    [ValueConversion(typeof(bool), typeof(System.Windows.Visibility))]
+    class BoolToVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var item = value as bool?;
+            if (item == null) return null;
+
+            return item.Value ? System.Windows.Visibility.Visible : System.Windows.Visibility.Hidden;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    [ValueConversion(typeof(SearchState), typeof(string))]
+    class SearchStateToStringConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (!(value is SearchState)) return null;
+            var item = (SearchState)value;
+
+            string text = "";
+
+            if ((item & SearchState.Clicked) == SearchState.Clicked)
+            {
+                text += LanguagesManager.Instance.SearchState_Clicked + ", ";
+            }
+
+            if (text.Length < 2) return "";
+            return text.Remove(text.Length - 2);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    [ValueConversion(typeof(SearchState), typeof(string))]
+    class SearchStateFlagToStringConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (!(value is SearchState)) return null;
+            var item = (SearchState)value;
+
+            if ((item & SearchState.Clicked) == SearchState.Clicked)
+            {
+                return LanguagesManager.Instance.SearchItemEditWindow_SearchState_Clicked;
+            }
+
+            return "";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    
     [ValueConversion(typeof(bool), typeof(SolidColorBrush))]
     class MessageExToBorderBrushConverter : IValueConverter
     {
@@ -437,21 +636,6 @@ namespace Lair.Windows
             }
 
             return 0;
-        }
-    }
-
-    [ValueConversion(typeof(int), typeof(bool))]
-    class ExpanderToBooleanConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return ((string)value == (string)parameter);
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (System.Convert.ToBoolean(value)) return (string)parameter;
-            return null;
         }
     }
 }

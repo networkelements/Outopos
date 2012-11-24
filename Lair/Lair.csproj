@@ -118,10 +118,30 @@
     <Compile Include="Windows\BoardEditWindow.xaml.cs">
       <DependentUpon>BoardEditWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\BoxEditWindow.xaml.cs">
+      <DependentUpon>BoxEditWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\SearchControl.xaml.cs">
+      <DependentUpon>SearchControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ChannelControl.xaml.cs">
+      <DependentUpon>ChannelControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\SearchItemEditWindow.xaml.cs">
+      <DependentUpon>SearchItemEditWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\VirtualizingStackPanelEx.cs" />
-    <Page Include="Windows\ChannelControl.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Windows\BoxEditWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\SearchControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\ChannelControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\ConnectionControl.xaml">
       <SubType>Designer</SubType>
@@ -129,7 +149,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\ConnectionWindow.xaml">
+    <Page Include="Windows\ConnectionsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <Generator>MSBuild:Compile</Generator>
@@ -140,6 +160,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\BoardEditWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\SearchItemEditWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -155,7 +179,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\UserInterfaceWindow.xaml">
+    <Page Include="Windows\ViewSettingsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -179,9 +203,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Windows\ChannelControl.xaml.cs">
-      <DependentUpon>ChannelControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Windows\CategoryEditWindow.xaml.cs">
       <DependentUpon>CategoryEditWindow.xaml</DependentUpon>
     </Compile>
@@ -195,8 +216,8 @@
       <DependentUpon>MessageEditWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\RichTextBoxHelper.cs" />
-    <Compile Include="Windows\UserInterfaceWindow.xaml.cs">
-      <DependentUpon>UserInterfaceWindow.xaml</DependentUpon>
+    <Compile Include="Windows\ViewSettingsWindow.xaml.cs">
+      <DependentUpon>ViewSettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\ListViewEx.cs" />
     <Compile Include="Windows\MainWindow.xaml.cs">
@@ -209,8 +230,8 @@
     <Compile Include="Windows\ConnectionControl.xaml.cs">
       <DependentUpon>ConnectionControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\ConnectionWindow.xaml.cs">
-      <DependentUpon>ConnectionWindow.xaml</DependentUpon>
+    <Compile Include="Windows\ConnectionsWindow.xaml.cs">
+      <DependentUpon>ConnectionsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="MessageConverter.cs" />
     <Compile Include="Properties\LanguagesManager.cs" />

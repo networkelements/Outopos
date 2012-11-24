@@ -31,6 +31,7 @@ using Library.Net.Proxy;
 using Library.Net.Upnp;
 using Library.Security;
 using Library.Collections;
+using a = Library.Net.Amoeba;
 
 namespace Lair.Windows
 {
@@ -149,6 +150,7 @@ namespace Lair.Windows
                 Stopwatch backupStopwatch = new Stopwatch();
                 Stopwatch updateStopwatch = new Stopwatch();
                 Stopwatch uriUpdateStopwatch = new Stopwatch();
+                Stopwatch seedDeleteStopwatch = new Stopwatch();
                 spaceCheckStopwatch.Start();
                 backupStopwatch.Start();
                 updateStopwatch.Start();
@@ -251,6 +253,7 @@ namespace Lair.Windows
 
 
                     if (updateStopwatch.Elapsed > new TimeSpan(1, 0, 0, 0))
+                    //if (updateStopwatch.Elapsed > new TimeSpan(0, 0, 1))
                     {
                         updateStopwatch.Restart();
 
@@ -275,6 +278,28 @@ namespace Lair.Windows
                         try
                         {
                             _autoBaseNodeSettingManager.Update();
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Warning(e);
+                        }
+                    }
+
+                    if (!seedDeleteStopwatch.IsRunning || seedDeleteStopwatch.Elapsed > new TimeSpan(12, 0, 0))
+                    {
+                        seedDeleteStopwatch.Restart();
+
+                        try
+                        {
+                            var now = DateTime.UtcNow;
+
+                            foreach (var seed in Settings.Instance.Global_Seeds.ToArray())
+                            {
+                                if ((now - seed.CreationTime).TotalDays > Settings.Instance.Global_SeedDelete_Expires)
+                                {
+                                    Settings.Instance.Global_Seeds.Remove(seed);
+                                }
+                            }
                         }
                         catch (Exception e)
                         {
@@ -544,6 +569,92 @@ namespace Lair.Windows
 
                     _lairManager.ConnectionCountLimit = 12;
 
+                    SearchItem pictureSearchItem = new SearchItem()
+                    {
+                        Name = "Keyword - \"Picture\""
+                    };
+                    pictureSearchItem.SearchKeywordCollection.Add(new SearchContains<string>()
+                    {
+                        Contains = true,
+                        Value = "Picture",
+                    });
+
+                    SearchItem movieSearchItem = new SearchItem()
+                    {
+                        Name = "Keyword - \"Movie\""
+                    };
+                    movieSearchItem.SearchKeywordCollection.Add(new SearchContains<string>()
+                    {
+                        Contains = true,
+                        Value = "Movie",
+                    });
+
+                    SearchItem musicSearchItem = new SearchItem()
+                    {
+                        Name = "Keyword - \"Music\""
+                    };
+                    musicSearchItem.SearchKeywordCollection.Add(new SearchContains<string>()
+                    {
+                        Contains = true,
+                        Value = "Music",
+                    });
+
+                    SearchItem archiveSearchItem = new SearchItem()
+                    {
+                        Name = "Keyword - \"Archive\""
+                    };
+                    archiveSearchItem.SearchKeywordCollection.Add(new SearchContains<string>()
+                    {
+                        Contains = true,
+                        Value = "Archive",
+                    });
+
+                    SearchItem documentSearchItem = new SearchItem()
+                    {
+                        Name = "Keyword - \"Document\""
+                    };
+                    documentSearchItem.SearchKeywordCollection.Add(new SearchContains<string>()
+                    {
+                        Contains = true,
+                        Value = "Document",
+                    });
+
+                    SearchItem ExecutableSearchItem = new SearchItem()
+                    {
+                        Name = "Keyword - \"Executable\""
+                    };
+                    ExecutableSearchItem.SearchKeywordCollection.Add(new SearchContains<string>()
+                    {
+                        Contains = true,
+                        Value = "Executable",
+                    });
+
+                    Settings.Instance.SearchControl_SearchTreeItem.Items.Clear();
+                    Settings.Instance.SearchControl_SearchTreeItem.Items.Add(new SearchTreeItem()
+                    {
+                        SearchItem = pictureSearchItem
+                    });
+                    Settings.Instance.SearchControl_SearchTreeItem.Items.Add(new SearchTreeItem()
+                    {
+                        SearchItem = movieSearchItem
+                    });
+                    Settings.Instance.SearchControl_SearchTreeItem.Items.Add(new SearchTreeItem()
+                    {
+                        SearchItem = musicSearchItem
+                    });
+                    Settings.Instance.SearchControl_SearchTreeItem.Items.Add(new SearchTreeItem()
+                    {
+                        SearchItem = archiveSearchItem
+                    });
+                    Settings.Instance.SearchControl_SearchTreeItem.Items.Add(new SearchTreeItem()
+                    {
+                        SearchItem = documentSearchItem
+                    });
+                    Settings.Instance.SearchControl_SearchTreeItem.Items.Add(new SearchTreeItem()
+                    {
+                        SearchItem = ExecutableSearchItem
+                    });
+
                     Random random = new Random();
                     _lairManager.ListenUris.Clear();
                     _lairManager.ListenUris.Add(string.Format("tcp:{0}:{1}", IPAddress.Any.ToString(), random.Next(1024, 65536)));
@@ -628,6 +739,122 @@ namespace Lair.Windows
                     if (version <= new Version(0, 0, 28))
                     {
                         Settings.Instance.Global_Update_Signature = "Lyrise@iMK5aPkz6n_VLfaQWyXisi6C2yo53VbhMGTwJ4N2yGDTMXZwIdcZb8ayuGIOg-1V";
+                    }
+
+                    if (version <= new Version(0, 0, 44))
+                    {
+                        SearchItem pictureSearchItem = new SearchItem()
+                        {
+                            Name = "Keyword - \"Picture\""
+                        };
+                        pictureSearchItem.SearchKeywordCollection.Add(new SearchContains<string>()
+                        {
+                            Contains = true,
+                            Value = "Picture",
+                        });
+
+                        SearchItem movieSearchItem = new SearchItem()
+                        {
+                            Name = "Keyword - \"Movie\""
+                        };
+                        movieSearchItem.SearchKeywordCollection.Add(new SearchContains<string>()
+                        {
+                            Contains = true,
+                            Value = "Movie",
+                        });
+
+                        SearchItem musicSearchItem = new SearchItem()
+                        {
+                            Name = "Keyword - \"Music\""
+                        };
+                        musicSearchItem.SearchKeywordCollection.Add(new SearchContains<string>()
+                        {
+                            Contains = true,
+                            Value = "Music",
+                        });
+
+                        SearchItem archiveSearchItem = new SearchItem()
+                        {
+                            Name = "Keyword - \"Archive\""
+                        };
+                        archiveSearchItem.SearchKeywordCollection.Add(new SearchContains<string>()
+                        {
+                            Contains = true,
+                            Value = "Archive",
+                        });
+
+                        SearchItem documentSearchItem = new SearchItem()
+                        {
+                            Name = "Keyword - \"Document\""
+                        };
+                        documentSearchItem.SearchKeywordCollection.Add(new SearchContains<string>()
+                        {
+                            Contains = true,
+                            Value = "Document",
+                        });
+
+                        SearchItem ExecutableSearchItem = new SearchItem()
+                        {
+                            Name = "Keyword - \"Executable\""
+                        };
+                        ExecutableSearchItem.SearchKeywordCollection.Add(new SearchContains<string>()
+                        {
+                            Contains = true,
+                            Value = "Executable",
+                        });
+
+                        Settings.Instance.SearchControl_SearchTreeItem.Items.Clear();
+                        Settings.Instance.SearchControl_SearchTreeItem.Items.Add(new SearchTreeItem()
+                        {
+                            SearchItem = pictureSearchItem
+                        });
+                        Settings.Instance.SearchControl_SearchTreeItem.Items.Add(new SearchTreeItem()
+                        {
+                            SearchItem = movieSearchItem
+                        });
+                        Settings.Instance.SearchControl_SearchTreeItem.Items.Add(new SearchTreeItem()
+                        {
+                            SearchItem = musicSearchItem
+                        });
+                        Settings.Instance.SearchControl_SearchTreeItem.Items.Add(new SearchTreeItem()
+                        {
+                            SearchItem = archiveSearchItem
+                        });
+                        Settings.Instance.SearchControl_SearchTreeItem.Items.Add(new SearchTreeItem()
+                        {
+                            SearchItem = documentSearchItem
+                        });
+                        Settings.Instance.SearchControl_SearchTreeItem.Items.Add(new SearchTreeItem()
+                        {
+                            SearchItem = ExecutableSearchItem
+                        });
+
+                        foreach (var item in Settings.Instance.Global_UrlHistorys.ToArray())
+                        {
+                            try
+                            {
+                                if (item.StartsWith("Channel@"))
+                                {
+                                    var channel = LairConverter.FromChannelString(item);
+                                    if (channel == null) continue;
+
+                                    Settings.Instance.Global_ChannelHistorys.Add(channel);
+                                    Settings.Instance.Global_UrlHistorys.Remove(item);
+                                }
+                                else if (item.StartsWith("Seed@"))
+                                {
+                                    var seed = a.AmoebaConverter.FromSeedString(item);
+                                    if (seed == null) continue;
+
+                                    Settings.Instance.Global_SeedHistorys.Add(seed);
+                                    Settings.Instance.Global_UrlHistorys.Remove(item);
+                                }
+                            }
+                            catch (Exception)
+                            {
+
+                            }
+                        }
                     }
                 }
 
@@ -762,6 +989,7 @@ namespace Lair.Windows
         }
 
         private object _updateLockObject = new object();
+        private Version _updateCancelVersion = null;
 
         private void CheckUpdate(bool isLogFlag)
         {
@@ -835,6 +1063,8 @@ namespace Lair.Windows
                         }
                         else
                         {
+                            if (!isLogFlag && targetVersion == _updateCancelVersion) return;
+
                             {
                                 foreach (var path in Directory.GetFiles(App.DirectoryPaths["Update"]))
                                 {
@@ -905,6 +1135,10 @@ namespace Lair.Windows
                                         MessageBoxButton.OK,
                                         MessageBoxImage.Information);
                                 }), null);
+                            }
+                            else
+                            {
+                                _updateCancelVersion = targetVersion;
                             }
                         }
                     }
@@ -1070,6 +1304,11 @@ namespace Lair.Windows
             _channelControl.Width = Double.NaN;
             _channelTabItem.Content = _channelControl;
 
+            SearchControl _searchControl = new SearchControl(this, _lairManager, _bufferManager);
+            _searchControl.Height = Double.NaN;
+            _searchControl.Width = Double.NaN;
+            _searchTabItem.Content = _searchControl;
+
             if (Settings.Instance.Global_IsStart)
             {
                 _startMenuItem_Click(null, null);
@@ -1109,6 +1348,8 @@ namespace Lair.Windows
             if (Settings.Instance.Global_UrlClearHistory_IsEnabled)
             {
                 Settings.Instance.Global_UrlHistorys.Clear();
+                Settings.Instance.Global_SeedHistorys.Clear();
+                Settings.Instance.Global_ChannelHistorys.Clear();
             }
 
             _autoBaseNodeSettingManager.Stop();
@@ -1150,6 +1391,10 @@ namespace Lair.Windows
             {
                 App.SelectTab = "Channel";
             }
+            else if ((string)tabItem.Header == LanguagesManager.Instance.MainWindow_Search)
+            {
+                App.SelectTab = "Search";
+            }
             else if ((string)tabItem.Header == LanguagesManager.Instance.MainWindow_Log)
             {
                 App.SelectTab = "Log";
@@ -1179,31 +1424,33 @@ namespace Lair.Windows
             Settings.Instance.Global_IsStart = false;
         }
 
-        private void _connectionSettingMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _connectionsSettingsMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            ConnectionWindow window = new ConnectionWindow(_lairManager, _autoBaseNodeSettingManager, _bufferManager);
+            ConnectionsWindow window = new ConnectionsWindow(_lairManager, _autoBaseNodeSettingManager, _bufferManager);
             window.Owner = this;
             window.ShowDialog();
-        }
-
-        private void _userInterfaceSettingMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            UserInterfaceWindow window = new UserInterfaceWindow(_bufferManager);
-            window.Owner = this;
-            window.ShowDialog();
-
-            ((ChannelControl)_channelTabItem.Content).Refresh();
         }
 
         private void _clearUrlHistoryMenuItem_Click(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show(this, LanguagesManager.Instance.MainWindow_Delete_Message, "Channel", MessageBoxButton.OKCancel, MessageBoxImage.Information) != MessageBoxResult.OK) return;
-            
+
             Settings.Instance.Global_UrlHistorys.Clear();
+            Settings.Instance.Global_SeedHistorys.Clear();
+            Settings.Instance.Global_ChannelHistorys.Clear();
 
             ((ChannelControl)_channelTabItem.Content).Refresh();
         }
         
+        private void _viewSettingsMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            ViewSettingsWindow window = new ViewSettingsWindow(_bufferManager);
+            window.Owner = this;
+            window.ShowDialog();
+
+            ((ChannelControl)_channelTabItem.Content).Refresh();
+        }
+
         private void _helpMenuItem_SubmenuOpened(object sender, RoutedEventArgs e)
         {
             _checkUpdateMenuItem.IsEnabled = _checkUpdateMenuItem_IsEnabled;

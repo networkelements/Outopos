@@ -20,9 +20,9 @@ using Library.Net.Lair;
 namespace Lair.Windows
 {
     /// <summary>
-    /// ConnectionWindow.xaml の相互作用ロジック
+    /// ConnectionsWindow.xaml の相互作用ロジック
     /// </summary>
-    partial class ConnectionWindow : Window
+    partial class ConnectionsWindow : Window
     {
         private BufferManager _bufferManager;
         private LairManager _lairManager;
@@ -33,7 +33,7 @@ namespace Lair.Windows
         private ConnectionFilterCollection _clientFilters = new ConnectionFilterCollection();
         private UriCollection _listenUris = new UriCollection();
 
-        public ConnectionWindow(LairManager lairManager, AutoBaseNodeSettingManager autoBaseNodeSettingManager, BufferManager bufferManager)
+        public ConnectionsWindow(LairManager lairManager, AutoBaseNodeSettingManager autoBaseNodeSettingManager, BufferManager bufferManager)
         {
             _lairManager = lairManager;
             _autoBaseNodeSettingManager = autoBaseNodeSettingManager;
@@ -48,8 +48,6 @@ namespace Lair.Windows
             }
 
             InitializeComponent();
-
-            _miscellaneousStackPanel.DataContext = new ExpanderListViewModel();
 
             {
                 var icon = new BitmapImage();
@@ -68,8 +66,8 @@ namespace Lair.Windows
             _otherNodesListView.ItemsSource = _otherNodes;
             _clientFiltersListView.ItemsSource = _clientFilters;
             _serverListenUrisListView.ItemsSource = _listenUris;
-            _miscellaneousConnectionCountTextBox.Text = _lairManager.ConnectionCountLimit.ToString();
-            _miscellaneousAutoBaseNodeSettingCheckBox.IsChecked = Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled;
+            _bandwidthConnectionCountTextBox.Text = _lairManager.ConnectionCountLimit.ToString();
+            _eventAutoBaseNodeSettingCheckBox.IsChecked = Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled;
 
             foreach (var item in Enum.GetValues(typeof(ConnectionType)).Cast<ConnectionType>())
             {
@@ -77,6 +75,11 @@ namespace Lair.Windows
             }
 
             _clientFiltersConnectionTypeComboBox.SelectedItem = ConnectionType.Tcp;
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            _baseNodeTreeViewItem.IsSelected = true;
         }
 
         #region BaseNode
@@ -1167,7 +1170,7 @@ namespace Lair.Windows
 
         #endregion
 
-        #region Miscellaneous
+        #region Bandwidth
 
         private static int GetStringToInt(string value)
         {
@@ -1195,24 +1198,13 @@ namespace Lair.Windows
             return count;
         }
 
-        private void _miscellaneousStackPanel_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void _bandwidthConnectionCountTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            Expander expander = e.Source as Expander;
-            if (expander == null) return;
-
-            foreach (var item in _miscellaneousStackPanel.Children.OfType<Expander>())
-            {
-                if (expander != item) item.IsExpanded = false;
-            }
-        }
-
-        private void _miscellaneousConnectionCountTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(_miscellaneousConnectionCountTextBox.Text)) return;
+            if (string.IsNullOrWhiteSpace(_bandwidthConnectionCountTextBox.Text)) return;
 
             StringBuilder builder = new StringBuilder("");
 
-            foreach (var item in _miscellaneousConnectionCountTextBox.Text)
+            foreach (var item in _bandwidthConnectionCountTextBox.Text)
             {
                 if (Regex.IsMatch(item.ToString(), "[0-9]"))
                 {
@@ -1221,7 +1213,7 @@ namespace Lair.Windows
             }
 
             var value = builder.ToString();
-            if (_miscellaneousConnectionCountTextBox.Text != value) _miscellaneousConnectionCountTextBox.Text = value;
+            if (_bandwidthConnectionCountTextBox.Text != value) _bandwidthConnectionCountTextBox.Text = value;
         }
 
         #endregion
@@ -1237,7 +1229,7 @@ namespace Lair.Windows
                 _lairManager.BaseNode = _baseNode.DeepClone();
                 _lairManager.SetOtherNodes(_otherNodes.Where(n => n != null && n.Id != null && n.Uris.Count != 0));
 
-                int count = ConnectionWindow.GetStringToInt(_miscellaneousConnectionCountTextBox.Text);
+                int count = ConnectionsWindow.GetStringToInt(_bandwidthConnectionCountTextBox.Text);
                 _lairManager.ConnectionCountLimit = Math.Max(Math.Min(count, 50), 1);
 
                 _lairManager.Filters.Clear();
@@ -1252,7 +1244,7 @@ namespace Lair.Windows
                 }
             }
 
-            if (flag && _miscellaneousAutoBaseNodeSettingCheckBox.IsChecked.Value
+            if (flag && _eventAutoBaseNodeSettingCheckBox.IsChecked.Value
                 && _autoBaseNodeSettingManager.State == ManagerState.Start)
             {
                 ThreadPool.QueueUserWorkItem(new WaitCallback((object state) =>
@@ -1261,7 +1253,7 @@ namespace Lair.Windows
                 }));
             }
 
-            Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled = _miscellaneousAutoBaseNodeSettingCheckBox.IsChecked.Value;
+            Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled = _eventAutoBaseNodeSettingCheckBox.IsChecked.Value;
         }
 
         private void _cancelButton_Click(object sender, RoutedEventArgs e)
@@ -1271,19 +1263,19 @@ namespace Lair.Windows
 
         private void Execute_Delete(object sender, ExecutedRoutedEventArgs e)
         {
-            if (_baseNodeTabItem.IsSelected)
+            if (_baseNodeTreeViewItem.IsSelected)
             {
                 _baseNodeUrisListViewDeleteMenuItem_Click(null, null);
             }
-            else if (_otherNodesTabItem.IsSelected)
+            else if (_otherNodesTreeViewItem.IsSelected)
             {
 
             }
-            else if (_clientTabItem.IsSelected)
+            else if (_clientTreeViewItem.IsSelected)
             {
                 _clientFiltersListViewDeleteMenuItem_Click(null, null);
             }
-            else if (_serverTabItem.IsSelected)
+            else if (_serverTreeViewItem.IsSelected)
             {
                 _serverListenUrisListViewDeleteMenuItem_Click(null, null);
             }
@@ -1291,19 +1283,19 @@ namespace Lair.Windows
 
         private void Execute_Copy(object sender, ExecutedRoutedEventArgs e)
         {
-            if (_baseNodeTabItem.IsSelected)
+            if (_baseNodeTreeViewItem.IsSelected)
             {
                 _baseNodeUrisListViewCopyMenuItem_Click(null, null);
             }
-            else if (_otherNodesTabItem.IsSelected)
+            else if (_otherNodesTreeViewItem.IsSelected)
             {
                 _otherNodesCopyMenuItem_Click(null, null);
             }
-            else if (_clientTabItem.IsSelected)
+            else if (_clientTreeViewItem.IsSelected)
             {
                 _clientFiltersListViewCopyMenuItem_Click(null, null);
             }
-            else if (_serverTabItem.IsSelected)
+            else if (_serverTreeViewItem.IsSelected)
             {
                 _serverListenUrisListViewCopyMenuItem_Click(null, null);
             }
@@ -1311,19 +1303,19 @@ namespace Lair.Windows
 
         private void Execute_Cut(object sender, ExecutedRoutedEventArgs e)
         {
-            if (_baseNodeTabItem.IsSelected)
+            if (_baseNodeTreeViewItem.IsSelected)
             {
                 _baseNodeUrisListViewCutMenuItem_Click(null, null);
             }
-            else if (_otherNodesTabItem.IsSelected)
+            else if (_otherNodesTreeViewItem.IsSelected)
             {
 
             }
-            else if (_clientTabItem.IsSelected)
+            else if (_clientTreeViewItem.IsSelected)
             {
                 _clientFiltersListViewCutMenuItem_Click(null, null);
             }
-            else if (_serverTabItem.IsSelected)
+            else if (_serverTreeViewItem.IsSelected)
             {
                 _serverListenUrisListViewCutMenuItem_Click(null, null);
             }
@@ -1331,32 +1323,22 @@ namespace Lair.Windows
 
         private void Execute_Paste(object sender, ExecutedRoutedEventArgs e)
         {
-            if (_baseNodeTabItem.IsSelected)
+            if (_baseNodeTreeViewItem.IsSelected)
             {
                 _baseNodeUrisListViewPasteMenuItem_Click(null, null);
             }
-            else if (_otherNodesTabItem.IsSelected)
+            else if (_otherNodesTreeViewItem.IsSelected)
             {
                 _otherNodesPasteMenuItem_Click(null, null);
             }
-            else if (_clientTabItem.IsSelected)
+            else if (_clientTreeViewItem.IsSelected)
             {
                 _clientFiltersListViewPasteMenuItem_Click(null, null);
             }
-            else if (_serverTabItem.IsSelected)
+            else if (_serverTreeViewItem.IsSelected)
             {
                 _serverListenUrisListViewPasteMenuItem_Click(null, null);
             }
-        }
-
-        public class ExpanderListViewModel
-        {
-            public ExpanderListViewModel()
-            {
-                this.SelectedExpander = "1";
-            }
-
-            public string SelectedExpander { get; set; }
         }
     }
 }

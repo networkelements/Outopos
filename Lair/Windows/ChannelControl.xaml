@@ -10,15 +10,6 @@
         d:DesignHeight="600" d:DesignWidth="800">
     
     <UserControl.Resources>
-        <local:StringsToStringConverter x:Key="_stringsToStringConverter"/>
-        <local:LongToSizeStringConverter x:Key="_longToSizeStringConverter"/>
-        <local:DoubleToGridLengthConverter x:Key="_doubleToGridLengthConverter" />
-        <local:StringRegularizationConverter x:Key="_stringRegularizationConverter" />
-        <local:StringRegularization2Converter x:Key="_stringRegularization2Converter" />
-        <local:BytesToHexStringConverter x:Key="_bytesToHexStringConverter" />
-        <local:DateTimeToStringConverter x:Key="_dateTimeToStringConverter" />
-        <local:MessageExToBorderBrushConverter x:Key="_messageExToBorderBrushConverter" />
-        
         <Style x:Key="_headerStyle" TargetType="{x:Type GridViewColumnHeader}">
             <Setter Property="Visibility" Value="Collapsed"/>
         </Style>
@@ -253,8 +244,6 @@
             <ColumnDefinition Width="{Binding Path=ChannelControl_Grid_ColumnDefinitions_Width, Mode=TwoWay, Converter={StaticResource _doubleToGridLengthConverter}, Source={x:Static prop:Settings.Instance}}" />
             <ColumnDefinition Width="4" />
             <ColumnDefinition Width="506*" />
-            <ColumnDefinition Width="40" />
-            <ColumnDefinition Width="40" />
         </Grid.ColumnDefinitions>
 
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.RowSpan="3" />
@@ -274,6 +263,8 @@
                         <MenuItem Name="_treeViewCopyMenuItem" Header="{Binding Path=ChannelControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_treeViewCopyMenuItem_Click" />
                         <MenuItem Name="_treeViewCopyInfoMenuItem" Header="{Binding Path=ChannelControl_CopyInfo, Source={StaticResource ResourcesInstance}}" Click="_treeViewCopyInfoMenuItem_Click" />
                         <MenuItem Name="_treeViewPasteMenuItem" Header="{Binding Path=ChannelControl_Paste, Source={StaticResource ResourcesInstance}}" Click="_treeViewPasteMenuItem_Click" />
+                        <Separator />
+                        <MenuItem Name="_treeViewMarkAllMessagesReadMenuItem" Header="{Binding Path=ChannelControl_MarkAllMessagesRead, Source={StaticResource ResourcesInstance}}" Click="_treeViewMarkAllMessagesReadMenuItem_Click"/>
                     </ContextMenu>
                 </local:CategoryTreeViewItem.ContextMenu>
             </local:CategoryTreeViewItem>
@@ -320,9 +311,10 @@
             </ListView.View>
         </local:ListViewEx>
 
-        <ComboBox Name="_signatureComboBox" Grid.Column="2" SelectionChanged="_signatureComboBox_SelectionChanged" TextBoxBase.TextChanged="_signatureComboBox_TextChanged" IsEditable="True" IsEnabled="False" Grid.ColumnSpan="1" />
-        <Button Name="_newMessageButton" Content="{Binding Path=ChannelControl_New_Message, Source={StaticResource ResourcesInstance}}" Click="_newMessageButton_Click" Grid.Column="4" IsEnabled="False" />
-        <Button Name="_signButton" Content="{Binding Path=ChannelControl_Signature_Filter, Source={StaticResource ResourcesInstance}}" Click="_signButton_Click" Grid.Column="3" IsEnabled="False" />
+        <ComboBox Name="_signatureComboBox" Grid.Column="2" SelectionChanged="_signatureComboBox_SelectionChanged" TextBoxBase.TextChanged="_signatureComboBox_TextChanged" IsEditable="True" IsEnabled="False" Margin="0,0,138,0" />
+        <Button Name="_newMessageButton" Content="{Binding Path=ChannelControl_NewMessage, Source={StaticResource ResourcesInstance}}" Click="_newMessageButton_Click" Grid.Column="2" IsEnabled="False" Width="40" HorizontalAlignment="Right" />
+        <Button Name="_signButton" Content="{Binding Path=ChannelControl_SignatureFilter, Source={StaticResource ResourcesInstance}}" Click="_signButton_Click" Grid.Column="2" IsEnabled="False" Margin="0,0,46,0" Width="40" HorizontalAlignment="Right" />
+        <ToggleButton Name="_onlyUnreadButton" Content="{Binding Path=ChannelControl_OnlyUnread, Source={StaticResource ResourcesInstance}}" Grid.Column="2" IsEnabled="False" Margin="0,0,92,0" Width="40" HorizontalAlignment="Right" Checked="_onlyUnreadButton_Checked" Unchecked="_onlyUnreadButton_Unchecked" />
 
         <TextBox Grid.Column="2" Grid.Row="2" Margin="24,0,0,0" Name="_searchTextBox" Grid.ColumnSpan="3" KeyDown="_searchTextBox_KeyDown" />
         <Button Content="×" Grid.Column="2" Grid.Row="2" Height="16" HorizontalAlignment="Left" Margin="4,4,0,0" Name="_serachCloseButton" VerticalAlignment="Top" Width="16" Padding="0,-2,0,0" Click="_serachCloseButton_Click" />

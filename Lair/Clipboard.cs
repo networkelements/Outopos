@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using Library;
-using Library.Net.Lair;
-using Lair.Windows;
-using Library.Collections;
 using System.Runtime.InteropServices;
+using System.Text;
+using Lair.Windows;
+using Library;
+using Library.Collections;
+using Library.Net.Lair;
+using a = Library.Net.Amoeba;
 
 namespace Lair
 {
@@ -15,6 +16,7 @@ namespace Lair
     {
         private static List<Category> _categoryList = new List<Category>();
         private static List<Board> _boardList = new List<Board>();
+        private static LockedList<Windows.SearchTreeItem> _searchTreeItemList = new LockedList<Windows.SearchTreeItem>();
 
         private static ClipboardWatcher _clipboardWatcher;
 
@@ -27,6 +29,7 @@ namespace Lair
             {
                 _categoryList.Clear();
                 _boardList.Clear();
+                _searchTreeItemList.Clear();
             };
         }
 
@@ -255,6 +258,67 @@ namespace Lair
                     _categoryList.Clear();
                     _categoryList.AddRange(categories.Select(n => n.DeepClone()));
                 }
+            }
+        }
+
+        public static IEnumerable<a.Seed> GetSeeds()
+        {
+            lock (_thisLock)
+            {
+                var list = new List<a.Seed>();
+
+                foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    if (!item.StartsWith("Seed@")) continue;
+
+                    try
+                    {
+                        var seed = a.AmoebaConverter.FromSeedString(item);
+                        if (!seed.VerifyCertificate()) seed.CreateCertificate(null);
+
+                        list.Add(seed);
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                }
+
+                return list;
+            }
+        }
+
+        public static void SetSeeds(IEnumerable<a.Seed> seeds)
+        {
+            lock (_thisLock)
+            {
+                var sb = new StringBuilder();
+
+                foreach (var item in seeds)
+                {
+                    sb.AppendLine(a.AmoebaConverter.ToSeedString(item));
+                }
+
+                Clipboard.SetText(sb.ToString());
+            }
+        }
+
+        public static IEnumerable<Windows.SearchTreeItem> GetSearchTreeItems()
+        {
+            lock (_thisLock)
+            {
+                return _searchTreeItemList.Select(n => n.DeepClone()).ToArray();
+            }
+        }
+
+        public static void SetSearchTreeItems(IEnumerable<Windows.SearchTreeItem> searchTreeItems)
+        {
+            lock (_thisLock)
+            {
+                System.Windows.Clipboard.Clear();
+
+                _searchTreeItemList.Clear();
+                _searchTreeItemList.AddRange(searchTreeItems.Select(n => n.DeepClone()));
             }
         }
 

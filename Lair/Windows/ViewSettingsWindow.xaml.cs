@@ -20,23 +20,21 @@ using Library.Security;
 namespace Lair.Windows
 {
     /// <summary>
-    /// UserInterfaceWindow.xaml の相互作用ロジック
+    /// ViewSettingsWindow.xaml の相互作用ロジック
     /// </summary>
-    partial class UserInterfaceWindow : Window
+    partial class ViewSettingsWindow : Window
     {
         private BufferManager _bufferManager = new BufferManager();
         private List<SignatureListViewItem> _signatureListViewItemCollection = new List<SignatureListViewItem>();
-        private List<string> _messageFontFamilyComboBoxItemCollection = new List<string>();
+        private List<string> _fontMessageFontFamilyComboBoxItemCollection = new List<string>();
 
-        public UserInterfaceWindow(BufferManager bufferManager)
+        public ViewSettingsWindow(BufferManager bufferManager)
         {
             _bufferManager = bufferManager;
             _signatureListViewItemCollection.AddRange(Settings.Instance.Global_DigitalSignatureCollection.Select(n => new SignatureListViewItem(n.DeepClone())));
-            _messageFontFamilyComboBoxItemCollection.AddRange(Fonts.SystemFontFamilies.Select(n => n.ToString()));
+            _fontMessageFontFamilyComboBoxItemCollection.AddRange(Fonts.SystemFontFamilies.Select(n => n.ToString()));
 
             InitializeComponent();
-
-            _miscellaneousStackPanel.DataContext = new ExpanderListViewModel();
 
             {
                 var icon = new BitmapImage();
@@ -69,19 +67,19 @@ namespace Lair.Windows
             }
 
             _amoebaPathTextBox.Text = Settings.Instance.Global_Amoeba_Path;
+            _seedDeleteExpiresTextBox.Text = Settings.Instance.Global_SeedDelete_Expires.ToString();
 
-            _messageFontFamilyComboBox.ItemsSource = _messageFontFamilyComboBoxItemCollection;
-            _messageFontFamilyComboBox.SelectedItem = Settings.Instance.Global_Fonts_MessageFontFamily;
+            _fontMessageFontFamilyComboBox.ItemsSource = _fontMessageFontFamilyComboBoxItemCollection;
+            _fontMessageFontFamilyComboBox.SelectedItem = Settings.Instance.Global_Fonts_MessageFontFamily;
 
-            _messageFontSizeTextBox.Text = Settings.Instance.Global_Fonts_MessageFontSize.ToString();
+            _fontMessageFontSizeTextBox.Text = Settings.Instance.Global_Fonts_MessageFontSize.ToString();
 
-            _miscellaneousClearUrlHistoryCheckBox.IsChecked = Settings.Instance.Global_UrlClearHistory_IsEnabled;
+            _eventClearUrlHistoryCheckBox.IsChecked = Settings.Instance.Global_UrlClearHistory_IsEnabled;
         }
 
-        public UserInterfaceWindow(int i, BufferManager bufferManager)
-            : this(bufferManager)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            ((TabItem)_tabControl.Items[i]).IsSelected = true;
+            _updateTreeViewItem.IsSelected = true;
         }
 
         #region Signature
@@ -329,38 +327,8 @@ namespace Lair.Windows
 
         #endregion
 
-        #region Amoeba
-
-        private void _amoebaPathTextBox_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            using (System.Windows.Forms.OpenFileDialog dialog = new System.Windows.Forms.OpenFileDialog())
-            {
-                dialog.Multiselect = false;
-                dialog.RestoreDirectory = true;
-                dialog.DefaultExt = ".exe";
-                dialog.Filter = "Exe files (*.exe)|*.exe";
-
-                try
-                {
-                    dialog.InitialDirectory = Path.GetDirectoryName(_amoebaPathTextBox.Text);
-                    dialog.FileName = Path.GetFileName(_amoebaPathTextBox.Text);
-                }
-                catch (Exception)
-                {
-
-                }
-
-                if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    _amoebaPathTextBox.Text = dialog.FileName;
-                }
-            }
-        }
-
-        #endregion
-
-        #region Fonts
-
+        #region Font
+        
         private static double GetStringToDouble(string value)
         {
             StringBuilder builder = new StringBuilder("0");
@@ -390,13 +358,13 @@ namespace Lair.Windows
             return count;
         }
 
-        private void _messageFontSizeTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void _fontMessageFontSizeTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(_messageFontSizeTextBox.Text)) return;
+            if (string.IsNullOrWhiteSpace(_fontMessageFontSizeTextBox.Text)) return;
 
             StringBuilder builder = new StringBuilder("");
 
-            foreach (var item in _messageFontSizeTextBox.Text)
+            foreach (var item in _fontMessageFontSizeTextBox.Text)
             {
                 if (Regex.IsMatch(item.ToString(), "[0-9\\.]"))
                 {
@@ -405,22 +373,81 @@ namespace Lair.Windows
             }
 
             var value = builder.ToString();
-            if (_messageFontSizeTextBox.Text != value) _messageFontSizeTextBox.Text = value;
+            if (_fontMessageFontSizeTextBox.Text != value) _fontMessageFontSizeTextBox.Text = value;
         }
-       
+
         #endregion
 
-        #region Miscellaneous
+        #region Amoeba
 
-        private void _miscellaneousStackPanel_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void _amoebaPathTextBox_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            Expander expander = e.Source as Expander;
-            if (expander == null) return;
-
-            foreach (var item in _miscellaneousStackPanel.Children.OfType<Expander>())
+            using (System.Windows.Forms.OpenFileDialog dialog = new System.Windows.Forms.OpenFileDialog())
             {
-                if (expander != item) item.IsExpanded = false;
+                dialog.Multiselect = false;
+                dialog.RestoreDirectory = true;
+                dialog.DefaultExt = ".exe";
+                dialog.Filter = "Exe files (*.exe)|*.exe";
+
+                try
+                {
+                    dialog.InitialDirectory = Path.GetDirectoryName(_amoebaPathTextBox.Text);
+                    dialog.FileName = Path.GetFileName(_amoebaPathTextBox.Text);
+                }
+                catch (Exception)
+                {
+
+                }
+
+                if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    _amoebaPathTextBox.Text = dialog.FileName;
+                }
             }
+        }
+
+        private static int GetStringToInt(string value)
+        {
+            StringBuilder builder = new StringBuilder("0");
+
+            foreach (var item in value)
+            {
+                if (Regex.IsMatch(item.ToString(), "[0-9]"))
+                {
+                    builder.Append(item.ToString());
+                }
+            }
+
+            int count = 0;
+
+            try
+            {
+                count = int.Parse(builder.ToString());
+            }
+            catch (OverflowException)
+            {
+                count = int.MaxValue;
+            }
+
+            return count;
+        }
+
+        private void _seedDeleteExpiresTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(_seedDeleteExpiresTextBox.Text)) return;
+
+            StringBuilder builder = new StringBuilder("");
+
+            foreach (var item in _seedDeleteExpiresTextBox.Text)
+            {
+                if (Regex.IsMatch(item.ToString(), "[0-9\\.]"))
+                {
+                    builder.Append(item.ToString());
+                }
+            }
+
+            var value = builder.ToString();
+            if (_seedDeleteExpiresTextBox.Text != value) _seedDeleteExpiresTextBox.Text = value;
         }
 
         #endregion
@@ -451,12 +478,15 @@ namespace Lair.Windows
 
             Settings.Instance.Global_Amoeba_Path = _amoebaPathTextBox.Text;
 
-            Settings.Instance.Global_Fonts_MessageFontFamily = (string)_messageFontFamilyComboBox.SelectedItem;
+            Settings.Instance.Global_Fonts_MessageFontFamily = (string)_fontMessageFontFamilyComboBox.SelectedItem;
 
-            double messageFontSize = UserInterfaceWindow.GetStringToDouble(_messageFontSizeTextBox.Text);
+            double messageFontSize = ViewSettingsWindow.GetStringToDouble(_fontMessageFontSizeTextBox.Text);
             Settings.Instance.Global_Fonts_MessageFontSize = Math.Max(Math.Min(messageFontSize, 100), 1);
 
-            Settings.Instance.Global_UrlClearHistory_IsEnabled = _miscellaneousClearUrlHistoryCheckBox.IsChecked.Value;
+            Settings.Instance.Global_UrlClearHistory_IsEnabled = _eventClearUrlHistoryCheckBox.IsChecked.Value;
+
+            int expires = ViewSettingsWindow.GetStringToInt(_seedDeleteExpiresTextBox.Text);
+            Settings.Instance.Global_SeedDelete_Expires = Math.Max(Math.Min(expires, 90), 0);
         }
 
         private void _cancelButton_Click(object sender, RoutedEventArgs e)
@@ -504,20 +534,10 @@ namespace Lair.Windows
 
         private void Execute_Delete(object sender, ExecutedRoutedEventArgs e)
         {
-            if (_signatureTabItem.IsSelected)
+            if (_signatureTreeViewItem.IsSelected)
             {
                 _signatureListViewDeleteMenuItem_Click(null, null);
             }
-        }
-
-        public class ExpanderListViewModel
-        {
-            public ExpanderListViewModel()
-            {
-                this.SelectedExpander = "1";
-            }
-
-            public string SelectedExpander { get; set; }
         }
     }
 
