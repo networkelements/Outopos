@@ -372,6 +372,10 @@ namespace Lair.Windows
                             {
                                 _listView.GoBottom();
                             }
+
+                            var topItem = _listViewItemCollection.FirstOrDefault(n => n.State.HasFlag(MessageState.IsNew));
+                            if (topItem == null) _listViewItemCollection.LastOrDefault();
+                            if (topItem != null) _listView.ScrollIntoView(topItem);
                         }
 
                         if (App.SelectTab == "Channel")
@@ -706,7 +710,7 @@ namespace Lair.Windows
                             selectTreeViewItem.Value.LockMessages.Remove(lm);
                     }
                 }
-                
+
                 HashSet<Message> newList = new HashSet<Message>();
 
                 IList<Message> messages;
@@ -747,7 +751,7 @@ namespace Lair.Windows
                 }
 
                 ChannelControl.Filter(ref newList, selectTreeViewItem.Value);
-                
+
                 {
                     List<Message> list1 = new List<Message>();
 
@@ -1717,6 +1721,18 @@ namespace Lair.Windows
 
         #region _listView
 
+        private void _listView_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Home)
+            {
+                _listView.GoTop();
+            }
+            else if (e.Key == System.Windows.Input.Key.End)
+            {
+                _listView.GoBottom();
+            }
+        }
+
         private void _listView_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             var peer = ItemsControlAutomationPeer.CreatePeerForElement(_listView);
@@ -2062,6 +2078,22 @@ namespace Lair.Windows
             }
         }
 
+        private void _onlyUnreadButton_Checked(object sender, RoutedEventArgs e)
+        {
+            var view = CollectionViewSource.GetDefaultView(_listView.ItemsSource);
+            view.Refresh();
+
+            _listView.GoBottom();
+        }
+
+        private void _onlyUnreadButton_Unchecked(object sender, RoutedEventArgs e)
+        {
+            var view = CollectionViewSource.GetDefaultView(_listView.ItemsSource);
+            view.Refresh();
+
+            _listView.GoBottom(); 
+        }
+
         #region Sort
 
         private void Sort()
@@ -2138,18 +2170,6 @@ namespace Lair.Windows
         {
             _searchRowDefinition.Height = new GridLength(24);
             _searchTextBox.Focus();
-        }
-
-        private void _onlyUnreadButton_Checked(object sender, RoutedEventArgs e)
-        {
-            var view = CollectionViewSource.GetDefaultView(_listView.ItemsSource);
-            view.Refresh();
-        }
-
-        private void _onlyUnreadButton_Unchecked(object sender, RoutedEventArgs e)
-        {
-            var view = CollectionViewSource.GetDefaultView(_listView.ItemsSource);
-            view.Refresh();
         }
     }
 
