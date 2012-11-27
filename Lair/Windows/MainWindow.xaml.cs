@@ -690,7 +690,7 @@ namespace Lair.Windows
                     var torConnectionFilter = new ConnectionFilter()
                     {
                         ConnectionType = ConnectionType.Socks5Proxy,
-                        ProxyUri = "tcp:127.0.0.1:9050",
+                        ProxyUri = "tcp:127.0.0.1:29050",
                         UriCondition = new UriCondition()
                         {
                             Value = @"tor:.*",
@@ -855,6 +855,24 @@ namespace Lair.Windows
 
                             }
                         }
+                    }
+
+                    if (version <= new Version(0, 0, 46))
+                    {
+                        if (Settings.Instance.Global_Update_ProxyUri == "tcp:127.0.0.1:8118")
+                            Settings.Instance.Global_Update_ProxyUri = "tcp:127.0.0.1:28118";
+
+                        var torConnectionFilter = new ConnectionFilter()
+                        {
+                            ConnectionType = ConnectionType.Socks5Proxy,
+                            ProxyUri = "tcp:127.0.0.1:29050",
+                            UriCondition = new UriCondition()
+                            {
+                                Value = @"tor:.*",
+                            },
+                        };
+
+                        _lairManager.Filters.Add(torConnectionFilter);
                     }
                 }
 
@@ -1426,7 +1444,7 @@ namespace Lair.Windows
 
         private void _connectionsSettingsMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            ConnectionsWindow window = new ConnectionsWindow(_lairManager, _autoBaseNodeSettingManager, _bufferManager);
+            ConnectionsSettingsWindow window = new ConnectionsSettingsWindow(_lairManager, _autoBaseNodeSettingManager, _bufferManager);
             window.Owner = this;
             window.ShowDialog();
         }

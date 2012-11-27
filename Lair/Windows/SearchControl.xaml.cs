@@ -247,7 +247,7 @@ namespace Lair.Windows
             {
                 items.IntersectWith(items.ToArray().Where(item =>
                 {
-                    bool flag;
+                    bool flag = true;
 
                     lock (searchItem.ThisLock)
                     {
@@ -259,7 +259,7 @@ namespace Lair.Windows
 
                                 return false;
                             });
-                            if (!flag) return false;
+                            if (flag) return true;
                         }
                     }
 
@@ -273,7 +273,7 @@ namespace Lair.Windows
 
                                 return false;
                             });
-                            if (!flag) return false;
+                            if (flag) return true;
                         }
                     }
 
@@ -287,7 +287,7 @@ namespace Lair.Windows
 
                                 return false;
                             });
-                            if (!flag) return false;
+                            if (flag) return true;
                         }
                     }
 
@@ -301,7 +301,7 @@ namespace Lair.Windows
 
                                 return false;
                             });
-                            if (!flag) return false;
+                            if (flag) return true;
                         }
                     }
 
@@ -325,7 +325,7 @@ namespace Lair.Windows
 
                                 return false;
                             });
-                            if (!flag) return false;
+                            if (flag) return true;
                         }
                     }
 
@@ -343,7 +343,7 @@ namespace Lair.Windows
 
                                 return false;
                             });
-                            if (!flag) return false;
+                            if (flag) return true;
                         }
                     }
 
@@ -357,7 +357,7 @@ namespace Lair.Windows
 
                                 return false;
                             });
-                            if (!flag) return false;
+                            if (flag) return true;
                         }
                     }
 
@@ -373,16 +373,16 @@ namespace Lair.Windows
 
                                 return false;
                             });
-                            if (!flag) return false;
+                            if (flag) return true;
                         }
                     }
 
-                    return true;
+                    return flag;
                 }));
 
                 items.ExceptWith(items.ToArray().Where(item =>
                 {
-                    bool flag;
+                    bool flag = false;
 
                     lock (searchItem.ThisLock)
                     {
@@ -512,7 +512,7 @@ namespace Lair.Windows
                         }
                     }
 
-                    return false;
+                    return flag;
                 }));
             }
         }

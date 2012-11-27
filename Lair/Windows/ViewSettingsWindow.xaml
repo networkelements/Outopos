@@ -41,16 +41,32 @@
             </Grid.ColumnDefinitions>
                 
             <TreeView HorizontalAlignment="Stretch" Name="_treeView" VerticalAlignment="Stretch">
-                <TreeViewItem Name="_updateTreeViewItem" Header="{Binding Path=ViewSettingsWindow_Update, Source={StaticResource ResourcesInstance}}" IsSelected="False" IsEnabled="True" />
-                <TreeViewItem Name="_signatureTreeViewItem" Header="{Binding Path=ViewSettingsWindow_Signature, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
+                <TreeViewItem Name="_updateTreeViewItem" Header="{Binding Path=ViewSettingsWindow_Update, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
+                <TreeViewItem Name="_signaturesTreeViewItem" Header="{Binding Path=ViewSettingsWindow_Signatures, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
                 <TreeViewItem Name="_fontsTreeViewItem" Header="{Binding Path=ViewSettingsWindow_Fonts, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
-                <TreeViewItem Name="_eventsTreeViewItem" Header="{Binding Path=ViewSettingsWindow_Events, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
                 <TreeViewItem Name="_amoebaTreeViewItem" Header="{Binding Path=ViewSettingsWindow_Amoeba, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
+                <TreeViewItem Name="_eventsTreeViewItem" Header="{Binding Path=ViewSettingsWindow_Events, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
             </TreeView>
             
             <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.RowSpan="3" />
 
-            <Grid Grid.Column="2" FocusManager.FocusedElement="{Binding ElementName=_signatureTextBox}" Visibility="{Binding ElementName=_signatureTreeViewItem, Path=IsSelected, Converter={StaticResource _boolToVisibilityConverter}}">
+            <Grid Grid.Column="2" FocusManager.FocusedElement="{Binding ElementName=_updateUrlTextBox}" Visibility="{Binding ElementName=_updateTreeViewItem, Path=IsSelected, Converter={StaticResource _boolToVisibilityConverter}}">
+                <Label Content="{Binding Path=ViewSettingsWindow_UpdateUrl, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="120" />
+                <TextBox Height="24" Margin="132,6,6,0" Name="_updateUrlTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" />
+                <Label Content="{Binding Path=ViewSettingsWindow_ProxyUri, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,36,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="120" />
+                <TextBox Height="24" Margin="132,36,6,0" Name="_updateProxyUriTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" />
+                <Label Content="{Binding Path=ViewSettingsWindow_Signature, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,66,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="120" />
+                <TextBox Height="24" Margin="132,66,6,0" Name="_updateSignatureTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" />
+                <GroupBox Header="{Binding Path=ViewSettingsWindow_UpdateOption, Source={StaticResource ResourcesInstance}}" Height="103" Margin="6,96,6,0" Name="groupBox1" VerticalAlignment="Top">
+                    <Grid>
+                        <RadioButton Content="{Binding Path=ViewSettingsWindow_None, Source={StaticResource ResourcesInstance}}" Height="16" HorizontalAlignment="Left" Margin="6,6,0,0" Name="_updateOptionNoneRadioButton" VerticalAlignment="Top" />
+                        <RadioButton Content="{Binding Path=ViewSettingsWindow_AutoCheck, Source={StaticResource ResourcesInstance}}" Height="16" HorizontalAlignment="Left" Margin="6,28,0,0" Name="_updateOptionAutoCheckRadioButton" VerticalAlignment="Top" />
+                        <RadioButton Content="{Binding Path=ViewSettingsWindow_AutoUpdate, Source={StaticResource ResourcesInstance}}" Height="16" HorizontalAlignment="Left" Margin="6,50,0,0" Name="_updateOptionAutoUpdateRadioButton" VerticalAlignment="Top" />
+                    </Grid>
+                </GroupBox>
+            </Grid>
+
+            <Grid Grid.Column="2" FocusManager.FocusedElement="{Binding ElementName=_signatureTextBox}" Visibility="{Binding ElementName=_signaturesTreeViewItem, Path=IsSelected, Converter={StaticResource _boolToVisibilityConverter}}">
                 <local:ListViewEx x:Name="_signatureListView" SelectionChanged="_signatureListView_SelectionChanged" PreviewMouseLeftButtonDown="_signatureListView_PreviewMouseLeftButtonDown" Margin="0,0,0,64" ContextMenuOpening="_signatureListView_ContextMenuOpening" PreviewDragOver="_signatureListView_PreviewDragOver" PreviewDrop="_signatureListView_PreviewDrop">
                     <ListView.ContextMenu>
                         <ContextMenu Name="_signatureListViewContextMenu">
@@ -72,36 +88,9 @@
                 <TextBox Height="23" Margin="6,0,6,35" Name="_signatureTextBox" VerticalAlignment="Bottom" VerticalContentAlignment="Center" KeyDown="_signatureTextBox_KeyDown" />
             </Grid>
 
-            <Grid Grid.Column="2" FocusManager.FocusedElement="{Binding ElementName=_updateUrlTextBox}" Visibility="{Binding ElementName=_updateTreeViewItem, Path=IsSelected, Converter={StaticResource _boolToVisibilityConverter}}">
-                <Label Content="{Binding Path=ViewSettingsWindow_UpdateUrl, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="120" />
-                <TextBox Height="24" Margin="132,6,6,0" Name="_updateUrlTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" />
-                <Label Content="{Binding Path=ViewSettingsWindow_ProxyUri, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,36,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="120" />
-                <TextBox Height="24" Margin="132,36,6,0" Name="_updateProxyUriTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" />
-                <Label Content="{Binding Path=ViewSettingsWindow_Signature, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,66,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="120" />
-                <TextBox Height="24" Margin="132,66,6,0" Name="_updateSignatureTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" />
-                <GroupBox Header="{Binding Path=ViewSettingsWindow_UpdateOption, Source={StaticResource ResourcesInstance}}" Height="103" Margin="6,96,6,0" Name="groupBox1" VerticalAlignment="Top">
-                    <Grid>
-                        <RadioButton Content="{Binding Path=ViewSettingsWindow_None, Source={StaticResource ResourcesInstance}}" Height="16" HorizontalAlignment="Left" Margin="6,6,0,0" Name="_updateOptionNoneRadioButton" VerticalAlignment="Top" />
-                        <RadioButton Content="{Binding Path=ViewSettingsWindow_AutoCheck, Source={StaticResource ResourcesInstance}}" Height="16" HorizontalAlignment="Left" Margin="6,28,0,0" Name="_updateOptionAutoCheckRadioButton" VerticalAlignment="Top" />
-                        <RadioButton Content="{Binding Path=ViewSettingsWindow_AutoUpdate, Source={StaticResource ResourcesInstance}}" Height="16" HorizontalAlignment="Left" Margin="6,50,0,0" Name="_updateOptionAutoUpdateRadioButton" VerticalAlignment="Top" />
-                    </Grid>
-                </GroupBox>
-            </Grid>
-
-            <Grid Grid.Column="2" FocusManager.FocusedElement="{Binding ElementName=_amoebaPathTextBox}" Visibility="{Binding ElementName=_amoebaTreeViewItem, Path=IsSelected, Converter={StaticResource _boolToVisibilityConverter}}">
-                <Label Content="{Binding Path=ViewSettingsWindow_AmoebaPath, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="120" />
-                <TextBox Height="24" Margin="132,6,6,0" Name="_amoebaPathTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" PreviewMouseDoubleClick="_amoebaPathTextBox_PreviewMouseDoubleClick" />
-                <Label Content="{Binding Path=ViewSettingsWindow_SeedDeleteExpires, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,36,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="360" />
-                <TextBox Height="24" Margin="372,36,6,0" Name="_seedDeleteExpiresTextBox" VerticalAlignment="Top" TextChanged="_seedDeleteExpiresTextBox_TextChanged"/>
-            </Grid>
-
-            <Grid Grid.Column="2" Visibility="{Binding ElementName=_eventsTreeViewItem, Path=IsSelected, Converter={StaticResource _boolToVisibilityConverter}}">
-                <CheckBox Content="{Binding Path=ViewSettingsWindow_ClearUrlHistory, Source={StaticResource ResourcesInstance}}" Height="16" HorizontalAlignment="Left" Margin="6,6,0,0" Name="_eventClearUrlHistoryCheckBox" VerticalAlignment="Top" />
-            </Grid>
-
             <Grid Grid.Column="2" Visibility="{Binding ElementName=_fontsTreeViewItem, Path=IsSelected, Converter={StaticResource _boolToVisibilityConverter}}">
-                <Label Content="{Binding Path=ViewSettingsWindow_MessageFontFamily, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="240" />
-                <ComboBox Height="24" Margin="252,6,6,0" Name="_fontMessageFontFamilyComboBox" VerticalAlignment="Top">
+                <Label Content="{Binding Path=ViewSettingsWindow_MessageFontFamily, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="360" />
+                <ComboBox Height="24" Margin="372,6,6,0" Name="_fontMessageFontFamilyComboBox" VerticalAlignment="Top">
                     <ComboBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <VirtualizingStackPanel />
@@ -111,7 +100,19 @@
                 <Label Content="{Binding Path=ViewSettingsWindow_MessageFontSize, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,36,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="360" />
                 <TextBox Height="24" Margin="372,36,6,0" Name="_fontMessageFontSizeTextBox" VerticalAlignment="Top" TextChanged="_fontMessageFontSizeTextBox_TextChanged" />
             </Grid>
+
+            <Grid Grid.Column="2" FocusManager.FocusedElement="{Binding ElementName=_amoebaPathTextBox}" Visibility="{Binding ElementName=_amoebaTreeViewItem, Path=IsSelected, Converter={StaticResource _boolToVisibilityConverter}}">
+                <Label Content="{Binding Path=ViewSettingsWindow_AmoebaPath, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="360" />
+                <TextBox Height="24" Margin="372,6,6,0" Name="_amoebaPathTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" PreviewMouseDoubleClick="_amoebaPathTextBox_PreviewMouseDoubleClick" />
+                <Label Content="{Binding Path=ViewSettingsWindow_SeedDeleteExpires, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,36,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="360" />
+                <TextBox Height="24" Margin="372,36,6,0" Name="_seedDeleteExpiresTextBox" VerticalAlignment="Top" TextChanged="_seedDeleteExpiresTextBox_TextChanged"/>
+            </Grid>
+
+            <Grid Grid.Column="2" Visibility="{Binding ElementName=_eventsTreeViewItem, Path=IsSelected, Converter={StaticResource _boolToVisibilityConverter}}">
+                <CheckBox Content="{Binding Path=ViewSettingsWindow_ClearUrlHistory, Source={StaticResource ResourcesInstance}}" Height="16" HorizontalAlignment="Left" Margin="6,6,0,0" Name="_eventClearUrlHistoryCheckBox" VerticalAlignment="Top" />
+            </Grid>
         </Grid>
+        
         <Button Height="23" HorizontalAlignment="Right" Margin="0,0,93,12" Name="_okButton" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=ViewSettingsWindow_Ok, Source={StaticResource ResourcesInstance}}" Click="_okButton_Click" IsDefault="True" />
         <Button Height="23" HorizontalAlignment="Right" Margin="0,0,12,12" Name="_cancelButton" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=ViewSettingsWindow_Cancel, Source={StaticResource ResourcesInstance}}" Click="_cancelButton_Click" IsCancel="True" />
     </Grid>

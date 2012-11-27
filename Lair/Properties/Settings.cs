@@ -34,7 +34,7 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<bool>() { Name = "Global_UrlClearHistory_IsEnabled", Value = false },
                 new Library.Configuration.SettingsContext<bool>() { Name = "Global_AutoBaseNodeSetting_IsEnabled", Value = true },
                 new Library.Configuration.SettingsContext<string>() { Name = "Global_Update_Url", Value = "http://lyrise.web.fc2.com/update/Lair" },
-                new Library.Configuration.SettingsContext<string>() { Name = "Global_Update_ProxyUri", Value = "tcp:127.0.0.1:8118" },
+                new Library.Configuration.SettingsContext<string>() { Name = "Global_Update_ProxyUri", Value = "tcp:127.0.0.1:28118" },
                 new Library.Configuration.SettingsContext<string>() { Name = "Global_Update_Signature", Value = "Lyrise@iMK5aPkz6n_VLfaQWyXisi6C2yo53VbhMGTwJ4N2yGDTMXZwIdcZb8ayuGIOg-1V" },
                 new Library.Configuration.SettingsContext<UpdateOption>() { Name = "Global_Update_Option", Value = UpdateOption.AutoCheck },
                 new Library.Configuration.SettingsContext<string>() { Name = "Global_Amoeba_Path", Value = "" },
@@ -49,18 +49,18 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<double>() { Name = "MainWindow_Width", Value = 700 },
                 new Library.Configuration.SettingsContext<WindowState>() { Name = "MainWindow_WindowState", Value = WindowState.Maximized },
 
-                new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsWindow_Top", Value = 120 },
-                new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsWindow_Left", Value = 120 },
-                new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsWindow_Height", Value = 500 },
-                new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsWindow_Width", Value = 700 },
-                new Library.Configuration.SettingsContext<WindowState>() { Name = "ConnectionsWindow_WindowState", Value = WindowState.Normal },
-                new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsWindow_BaseNode_Uris_Uri_Width", Value = 400 },
-                new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsWindow_OtherNodes_Node_Width", Value = 400 },
-                new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsWindow_Client_Filters_GridViewColumn_ConnectionType_Width", Value = -1 },
-                new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsWindow_Client_Filters_GridViewColumn_ProxyUri_Width", Value = 200 },
-                new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsWindow_Client_Filters_GridViewColumn_UriCondition_Width", Value = 150 },
-                new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsWindow_Server_ListenUris_GridViewColumn_Uri_Width", Value = 400 },
-                new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsWindow_Grid_ColumnDefinitions_Width", Value = 160 },
+                new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsSettingsWindow_Top", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsSettingsWindow_Left", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsSettingsWindow_Height", Value = 500 },
+                new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsSettingsWindow_Width", Value = 700 },
+                new Library.Configuration.SettingsContext<WindowState>() { Name = "ConnectionsSettingsWindow_WindowState", Value = WindowState.Normal },
+                new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsSettingsWindow_BaseNode_Uris_Uri_Width", Value = 400 },
+                new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsSettingsWindow_OtherNodes_Node_Width", Value = 400 },
+                new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsSettingsWindow_Client_Filters_GridViewColumn_ConnectionType_Width", Value = -1 },
+                new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsSettingsWindow_Client_Filters_GridViewColumn_ProxyUri_Width", Value = 200 },
+                new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsSettingsWindow_Client_Filters_GridViewColumn_UriCondition_Width", Value = 150 },
+                new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsSettingsWindow_Server_ListenUris_GridViewColumn_Uri_Width", Value = 400 },
+                new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsSettingsWindow_Grid_ColumnDefinitions_Width", Value = 160 },
 
                 new Library.Configuration.SettingsContext<double>() { Name = "ViewSettingsWindow_Top", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "ViewSettingsWindow_Left", Value = 120 },
@@ -626,13 +626,13 @@ namespace Lair.Properties
         }
 
 
-        public double ConnectionsWindow_Top
+        public double ConnectionsSettingsWindow_Top
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ConnectionsWindow_Top"];
+                   return (double)this["ConnectionsSettingsWindow_Top"];
                 }
             }
 
@@ -640,18 +640,18 @@ namespace Lair.Properties
             {
                 lock (this.ThisLock)
                 {
-                    this["ConnectionsWindow_Top"] = value;
+                    this["ConnectionsSettingsWindow_Top"] = value;
                 }
             }
         }
 
-        public double ConnectionsWindow_Left
+        public double ConnectionsSettingsWindow_Left
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ConnectionsWindow_Left"];
+                   return (double)this["ConnectionsSettingsWindow_Left"];
                 }
             }
 
@@ -659,18 +659,18 @@ namespace Lair.Properties
             {
                 lock (this.ThisLock)
                 {
-                    this["ConnectionsWindow_Left"] = value;
+                    this["ConnectionsSettingsWindow_Left"] = value;
                 }
             }
         }
 
-        public double ConnectionsWindow_Height
+        public double ConnectionsSettingsWindow_Height
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ConnectionsWindow_Height"];
+                   return (double)this["ConnectionsSettingsWindow_Height"];
                 }
             }
 
@@ -678,18 +678,18 @@ namespace Lair.Properties
             {
                 lock (this.ThisLock)
                 {
-                    this["ConnectionsWindow_Height"] = value;
+                    this["ConnectionsSettingsWindow_Height"] = value;
                 }
             }
         }
 
-        public double ConnectionsWindow_Width
+        public double ConnectionsSettingsWindow_Width
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ConnectionsWindow_Width"];
+                   return (double)this["ConnectionsSettingsWindow_Width"];
                 }
             }
 
@@ -697,18 +697,18 @@ namespace Lair.Properties
             {
                 lock (this.ThisLock)
                 {
-                    this["ConnectionsWindow_Width"] = value;
+                    this["ConnectionsSettingsWindow_Width"] = value;
                 }
             }
         }
 
-        public WindowState ConnectionsWindow_WindowState
+        public WindowState ConnectionsSettingsWindow_WindowState
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (WindowState)this["ConnectionsWindow_WindowState"];
+                   return (WindowState)this["ConnectionsSettingsWindow_WindowState"];
                 }
             }
 
@@ -716,18 +716,18 @@ namespace Lair.Properties
             {
                 lock (this.ThisLock)
                 {
-                    this["ConnectionsWindow_WindowState"] = value;
+                    this["ConnectionsSettingsWindow_WindowState"] = value;
                 }
             }
         }
 
-        public double ConnectionsWindow_BaseNode_Uris_Uri_Width
+        public double ConnectionsSettingsWindow_BaseNode_Uris_Uri_Width
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ConnectionsWindow_BaseNode_Uris_Uri_Width"];
+                   return (double)this["ConnectionsSettingsWindow_BaseNode_Uris_Uri_Width"];
                 }
             }
 
@@ -735,18 +735,18 @@ namespace Lair.Properties
             {
                 lock (this.ThisLock)
                 {
-                    this["ConnectionsWindow_BaseNode_Uris_Uri_Width"] = value;
+                    this["ConnectionsSettingsWindow_BaseNode_Uris_Uri_Width"] = value;
                 }
             }
         }
 
-        public double ConnectionsWindow_OtherNodes_Node_Width
+        public double ConnectionsSettingsWindow_OtherNodes_Node_Width
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ConnectionsWindow_OtherNodes_Node_Width"];
+                   return (double)this["ConnectionsSettingsWindow_OtherNodes_Node_Width"];
                 }
             }
 
@@ -754,18 +754,18 @@ namespace Lair.Properties
             {
                 lock (this.ThisLock)
                 {
-                    this["ConnectionsWindow_OtherNodes_Node_Width"] = value;
+                    this["ConnectionsSettingsWindow_OtherNodes_Node_Width"] = value;
                 }
             }
         }
 
-        public double ConnectionsWindow_Client_Filters_GridViewColumn_ConnectionType_Width
+        public double ConnectionsSettingsWindow_Client_Filters_GridViewColumn_ConnectionType_Width
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ConnectionsWindow_Client_Filters_GridViewColumn_ConnectionType_Width"];
+                   return (double)this["ConnectionsSettingsWindow_Client_Filters_GridViewColumn_ConnectionType_Width"];
                 }
             }
 
@@ -773,18 +773,18 @@ namespace Lair.Properties
             {
                 lock (this.ThisLock)
                 {
-                    this["ConnectionsWindow_Client_Filters_GridViewColumn_ConnectionType_Width"] = value;
+                    this["ConnectionsSettingsWindow_Client_Filters_GridViewColumn_ConnectionType_Width"] = value;
                 }
             }
         }
 
-        public double ConnectionsWindow_Client_Filters_GridViewColumn_ProxyUri_Width
+        public double ConnectionsSettingsWindow_Client_Filters_GridViewColumn_ProxyUri_Width
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ConnectionsWindow_Client_Filters_GridViewColumn_ProxyUri_Width"];
+                   return (double)this["ConnectionsSettingsWindow_Client_Filters_GridViewColumn_ProxyUri_Width"];
                 }
             }
 
@@ -792,18 +792,18 @@ namespace Lair.Properties
             {
                 lock (this.ThisLock)
                 {
-                    this["ConnectionsWindow_Client_Filters_GridViewColumn_ProxyUri_Width"] = value;
+                    this["ConnectionsSettingsWindow_Client_Filters_GridViewColumn_ProxyUri_Width"] = value;
                 }
             }
         }
 
-        public double ConnectionsWindow_Client_Filters_GridViewColumn_UriCondition_Width
+        public double ConnectionsSettingsWindow_Client_Filters_GridViewColumn_UriCondition_Width
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ConnectionsWindow_Client_Filters_GridViewColumn_UriCondition_Width"];
+                   return (double)this["ConnectionsSettingsWindow_Client_Filters_GridViewColumn_UriCondition_Width"];
                 }
             }
 
@@ -811,18 +811,18 @@ namespace Lair.Properties
             {
                 lock (this.ThisLock)
                 {
-                    this["ConnectionsWindow_Client_Filters_GridViewColumn_UriCondition_Width"] = value;
+                    this["ConnectionsSettingsWindow_Client_Filters_GridViewColumn_UriCondition_Width"] = value;
                 }
             }
         }
 
-        public double ConnectionsWindow_Server_ListenUris_GridViewColumn_Uri_Width
+        public double ConnectionsSettingsWindow_Server_ListenUris_GridViewColumn_Uri_Width
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ConnectionsWindow_Server_ListenUris_GridViewColumn_Uri_Width"];
+                   return (double)this["ConnectionsSettingsWindow_Server_ListenUris_GridViewColumn_Uri_Width"];
                 }
             }
 
@@ -830,18 +830,18 @@ namespace Lair.Properties
             {
                 lock (this.ThisLock)
                 {
-                    this["ConnectionsWindow_Server_ListenUris_GridViewColumn_Uri_Width"] = value;
+                    this["ConnectionsSettingsWindow_Server_ListenUris_GridViewColumn_Uri_Width"] = value;
                 }
             }
         }
 
-        public double ConnectionsWindow_Grid_ColumnDefinitions_Width
+        public double ConnectionsSettingsWindow_Grid_ColumnDefinitions_Width
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ConnectionsWindow_Grid_ColumnDefinitions_Width"];
+                   return (double)this["ConnectionsSettingsWindow_Grid_ColumnDefinitions_Width"];
                 }
             }
 
@@ -849,7 +849,7 @@ namespace Lair.Properties
             {
                 lock (this.ThisLock)
                 {
-                    this["ConnectionsWindow_Grid_ColumnDefinitions_Width"] = value;
+                    this["ConnectionsSettingsWindow_Grid_ColumnDefinitions_Width"] = value;
                 }
             }
         }

@@ -59,6 +59,7 @@
   <Translate Key="ViewSettingsWindow_UpdateUrl" Value="アップデート Url" />
   <Translate Key="ViewSettingsWindow_ProxyUri" Value="プロキシ Uri" />
   <Translate Key="ViewSettingsWindow_Signature" Value="サイン" />
+  <Translate Key="ViewSettingsWindow_Signatures" Value="サイン" />
   <Translate Key="ViewSettingsWindow_UpdateOption" Value="アップデートオプション" />
   <Translate Key="ViewSettingsWindow_None" Value="無し" />
   <Translate Key="ViewSettingsWindow_AutoCheck" Value="自動でチェックする" />
@@ -82,43 +83,43 @@
   <Translate Key="ViewSettingsWindow_Ok" Value="Ok" />
   <Translate Key="ViewSettingsWindow_Cancel" Value="キャンセル" />
 
-  <Translate Key="ConnectionsWindow_Title" Value="接続設定" />
-  <Translate Key="ConnectionsWindow_BaseNode" Value="基礎ノード" />
-  <Translate Key="ConnectionsWindow_Node" Value="ノード" />
-  <Translate Key="ConnectionsWindow_Uris" Value="Uris" />
-  <Translate Key="ConnectionsWindow_Uri" Value="Uri" />
-  <Translate Key="ConnectionsWindow_OtherNodes" Value="周辺ノード" />
-  <Translate Key="ConnectionsWindow_Nodes" Value="ノードリスト" />
-  <Translate Key="ConnectionsWindow_Client" Value="クライアント" />
-  <Translate Key="ConnectionsWindow_Filters" Value="フィルタ" />
-  <Translate Key="ConnectionsWindow_ConnectionType" Value="接続タイプ" />
-  <Translate Key="ConnectionsWindow_ProxyUri" Value="プロキシ Uri" />
-  <Translate Key="ConnectionsWindow_UriCondition" Value="正規表現" />
-  <Translate Key="ConnectionsWindow_Type" Value="Uri タイプ" />
-  <Translate Key="ConnectionsWindow_Host" Value="ホスト" />
-  <Translate Key="ConnectionsWindow_Server" Value="サーバー" />
-  <Translate Key="ConnectionsWindow_ListenUris" Value="受信 Uris" />
-  <Translate Key="ConnectionsWindow_Events" Value="イベント" />
-  <Translate Key="ConnectionsWindow_Bandwidth" Value="帯域幅" />
-  <Translate Key="ConnectionsWindow_CoreSettings" Value="基本設定" />
-  <Translate Key="ConnectionsWindow_ConnectionCount" Value="接続数上限" />
-  <Translate Key="ConnectionsWindow_DownloadingLowerLimit" Value="ダウンロード開始接続数" />
-  <Translate Key="ConnectionsWindow_UploadingLowerLimit" Value="アップロード開始接続数" />
-  <Translate Key="ConnectionsWindow_AutoSettings" Value="自動設定" />
-  <Translate Key="ConnectionsWindow_AutoBaseNodeSetting" Value="基礎ノードを自動で設定する" />
-  <Translate Key="ConnectionsWindow_Tor" Value="Tor" />
-  <Translate Key="ConnectionsWindow_Ipv4" Value="Ipv4" />
-  <Translate Key="ConnectionsWindow_Ipv6" Value="Ipv6" />
-  <Translate Key="ConnectionsWindow_Up" Value="上へ" />
-  <Translate Key="ConnectionsWindow_Down" Value="下へ" />
-  <Translate Key="ConnectionsWindow_Add" Value="追加" />
-  <Translate Key="ConnectionsWindow_Edit" Value="編集" />
-  <Translate Key="ConnectionsWindow_Delete" Value="削除" />
-  <Translate Key="ConnectionsWindow_Ok" Value="Ok" />
-  <Translate Key="ConnectionsWindow_Cancel" Value="キャンセル" />
-  <Translate Key="ConnectionsWindow_Cut" Value="切り取り" />
-  <Translate Key="ConnectionsWindow_Copy" Value="コピー" />
-  <Translate Key="ConnectionsWindow_Paste" Value="貼り付け" />
+  <Translate Key="ConnectionsSettingsWindow_Title" Value="接続設定" />
+  <Translate Key="ConnectionsSettingsWindow_BaseNode" Value="基礎ノード" />
+  <Translate Key="ConnectionsSettingsWindow_Node" Value="ノード" />
+  <Translate Key="ConnectionsSettingsWindow_Uris" Value="Uris" />
+  <Translate Key="ConnectionsSettingsWindow_Uri" Value="Uri" />
+  <Translate Key="ConnectionsSettingsWindow_OtherNodes" Value="周辺ノード" />
+  <Translate Key="ConnectionsSettingsWindow_Nodes" Value="ノードリスト" />
+  <Translate Key="ConnectionsSettingsWindow_Client" Value="クライアント" />
+  <Translate Key="ConnectionsSettingsWindow_Filters" Value="フィルタ" />
+  <Translate Key="ConnectionsSettingsWindow_ConnectionType" Value="接続タイプ" />
+  <Translate Key="ConnectionsSettingsWindow_ProxyUri" Value="プロキシ Uri" />
+  <Translate Key="ConnectionsSettingsWindow_UriCondition" Value="正規表現" />
+  <Translate Key="ConnectionsSettingsWindow_Type" Value="Uri タイプ" />
+  <Translate Key="ConnectionsSettingsWindow_Host" Value="ホスト" />
+  <Translate Key="ConnectionsSettingsWindow_Server" Value="サーバー" />
+  <Translate Key="ConnectionsSettingsWindow_ListenUris" Value="受信 Uris" />
+  <Translate Key="ConnectionsSettingsWindow_Events" Value="イベント" />
+  <Translate Key="ConnectionsSettingsWindow_Bandwidth" Value="帯域幅" />
+  <Translate Key="ConnectionsSettingsWindow_CoreSettings" Value="基本設定" />
+  <Translate Key="ConnectionsSettingsWindow_ConnectionCount" Value="接続数上限" />
+  <Translate Key="ConnectionsSettingsWindow_DownloadingLowerLimit" Value="ダウンロード開始接続数" />
+  <Translate Key="ConnectionsSettingsWindow_UploadingLowerLimit" Value="アップロード開始接続数" />
+  <Translate Key="ConnectionsSettingsWindow_AutoSettings" Value="自動設定" />
+  <Translate Key="ConnectionsSettingsWindow_AutoBaseNodeSetting" Value="基礎ノードを自動で設定する" />
+  <Translate Key="ConnectionsSettingsWindow_Tor" Value="Tor" />
+  <Translate Key="ConnectionsSettingsWindow_Ipv4" Value="Ipv4" />
+  <Translate Key="ConnectionsSettingsWindow_Ipv6" Value="Ipv6" />
+  <Translate Key="ConnectionsSettingsWindow_Up" Value="上へ" />
+  <Translate Key="ConnectionsSettingsWindow_Down" Value="下へ" />
+  <Translate Key="ConnectionsSettingsWindow_Add" Value="追加" />
+  <Translate Key="ConnectionsSettingsWindow_Edit" Value="編集" />
+  <Translate Key="ConnectionsSettingsWindow_Delete" Value="削除" />
+  <Translate Key="ConnectionsSettingsWindow_Ok" Value="Ok" />
+  <Translate Key="ConnectionsSettingsWindow_Cancel" Value="キャンセル" />
+  <Translate Key="ConnectionsSettingsWindow_Cut" Value="切り取り" />
+  <Translate Key="ConnectionsSettingsWindow_Copy" Value="コピー" />
+  <Translate Key="ConnectionsSettingsWindow_Paste" Value="貼り付け" />
 
   <Translate Key="ProgressWindow_Title" Value="進行状況" />
   <Translate Key="ProgressWindow_Cancel" Value="キャンセル" />

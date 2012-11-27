@@ -534,7 +534,7 @@ namespace Lair.Windows
 
         private void Execute_Delete(object sender, ExecutedRoutedEventArgs e)
         {
-            if (_signatureTreeViewItem.IsSelected)
+            if (_signaturesTreeViewItem.IsSelected)
             {
                 _signatureListViewDeleteMenuItem_Click(null, null);
             }

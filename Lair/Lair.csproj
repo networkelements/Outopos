@@ -149,7 +149,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\ConnectionsWindow.xaml">
+    <Page Include="Windows\ConnectionsSettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <Generator>MSBuild:Compile</Generator>
@@ -230,8 +230,8 @@
     <Compile Include="Windows\ConnectionControl.xaml.cs">
       <DependentUpon>ConnectionControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\ConnectionsWindow.xaml.cs">
-      <DependentUpon>ConnectionsWindow.xaml</DependentUpon>
+    <Compile Include="Windows\ConnectionsSettingsWindow.xaml.cs">
+      <DependentUpon>ConnectionsSettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="MessageConverter.cs" />
     <Compile Include="Properties\LanguagesManager.cs" />

@@ -20,9 +20,9 @@ using Library.Net.Lair;
 namespace Lair.Windows
 {
     /// <summary>
-    /// ConnectionsWindow.xaml の相互作用ロジック
+    /// ConnectionsSettingsWindow.xaml の相互作用ロジック
     /// </summary>
-    partial class ConnectionsWindow : Window
+    partial class ConnectionsSettingsWindow : Window
     {
         private BufferManager _bufferManager;
         private LairManager _lairManager;
@@ -33,7 +33,7 @@ namespace Lair.Windows
         private ConnectionFilterCollection _clientFilters = new ConnectionFilterCollection();
         private UriCollection _listenUris = new UriCollection();
 
-        public ConnectionsWindow(LairManager lairManager, AutoBaseNodeSettingManager autoBaseNodeSettingManager, BufferManager bufferManager)
+        public ConnectionsSettingsWindow(LairManager lairManager, AutoBaseNodeSettingManager autoBaseNodeSettingManager, BufferManager bufferManager)
         {
             _lairManager = lairManager;
             _autoBaseNodeSettingManager = autoBaseNodeSettingManager;
@@ -1229,7 +1229,7 @@ namespace Lair.Windows
                 _lairManager.BaseNode = _baseNode.DeepClone();
                 _lairManager.SetOtherNodes(_otherNodes.Where(n => n != null && n.Id != null && n.Uris.Count != 0));
 
-                int count = ConnectionsWindow.GetStringToInt(_bandwidthConnectionCountTextBox.Text);
+                int count = ConnectionsSettingsWindow.GetStringToInt(_bandwidthConnectionCountTextBox.Text);
                 _lairManager.ConnectionCountLimit = Math.Max(Math.Min(count, 50), 1);
 
                 _lairManager.Filters.Clear();

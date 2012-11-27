@@ -928,7 +928,7 @@ namespace Lair.Windows
 
         double RichTextBoxHelper_GetMaxHeightEvent(object sender)
         {
-            return _listView.ActualHeight - 18;
+            return _listView.ActualHeight - 20;
         }
 
         private static void Filter(ref HashSet<Message> messages, Category category)
@@ -949,7 +949,7 @@ namespace Lair.Windows
                         signatureText = MessageConverter.ToSignatureString(item.Certificate);
                     }
 
-                    bool flag;
+                    bool flag = true;
 
                     lock (category.ThisLock)
                     {
@@ -961,7 +961,7 @@ namespace Lair.Windows
 
                                 return false;
                             });
-                            if (!flag) return false;
+                            if (flag) return true;
                         }
                     }
 
@@ -975,7 +975,7 @@ namespace Lair.Windows
 
                                 return false;
                             });
-                            if (!flag) return false;
+                            if (flag) return true;
                         }
                     }
 
@@ -989,11 +989,11 @@ namespace Lair.Windows
 
                                 return false;
                             });
-                            if (!flag) return false;
+                            if (flag) return true;
                         }
                     }
 
-                    return true;
+                    return flag;
                 }));
 
                 messages.ExceptWith(messages.ToArray().Where(item =>
@@ -1012,7 +1012,7 @@ namespace Lair.Windows
                         signatureText = MessageConverter.ToSignatureString(item.Certificate);
                     }
 
-                    bool flag;
+                    bool flag = false;
 
                     lock (category.ThisLock)
                     {
@@ -1056,7 +1056,7 @@ namespace Lair.Windows
                         }
                     }
 
-                    return false;
+                    return flag;
                 }));
             }
         }
@@ -1090,7 +1090,7 @@ namespace Lair.Windows
                         signatureText = MessageConverter.ToSignatureString(item.Certificate);
                     }
 
-                    bool flag;
+                    bool flag = true;
 
                     lock (board.ThisLock)
                     {
@@ -1102,7 +1102,7 @@ namespace Lair.Windows
 
                                 return false;
                             });
-                            if (!flag) return false;
+                            if (flag) return true;
                         }
                     }
 
@@ -1116,7 +1116,7 @@ namespace Lair.Windows
 
                                 return false;
                             });
-                            if (!flag) return false;
+                            if (flag) return true;
                         }
                     }
 
@@ -1130,7 +1130,7 @@ namespace Lair.Windows
 
                                 return false;
                             });
-                            if (!flag) return false;
+                            if (flag) return true;
                         }
                     }
 
@@ -1144,11 +1144,11 @@ namespace Lair.Windows
 
                                 return false;
                             });
-                            if (!flag) return false;
+                            if (flag) return true;
                         }
                     }
 
-                    return true;
+                    return flag;
                 }));
 
                 messages.ExceptWith(messages.ToArray().Where(item =>
@@ -1167,7 +1167,7 @@ namespace Lair.Windows
                         signatureText = MessageConverter.ToSignatureString(item.Certificate);
                     }
 
-                    bool flag;
+                    bool flag = false;
 
                     lock (board.ThisLock)
                     {
@@ -1225,7 +1225,7 @@ namespace Lair.Windows
                         }
                     }
 
-                    return false;
+                    return flag;
                 }));
             }
         }
@@ -1738,7 +1738,7 @@ namespace Lair.Windows
             var peer = ItemsControlAutomationPeer.CreatePeerForElement(_listView);
             var scrollProvider = peer.GetPattern(PatternInterface.Scroll) as IScrollProvider;
 
-            _gridViewColumn.Width = _listView.ActualWidth - 21;
+            _gridViewColumn.Width = Math.Max(0, _listView.ActualWidth - 21);
 
             _listView.Items.Refresh();
         }
