@@ -928,7 +928,7 @@ namespace Lair.Windows
 
         double RichTextBoxHelper_GetMaxHeightEvent(object sender)
         {
-            return _listView.ActualHeight - 20;
+            return _listView.ActualHeight - 18;
         }
 
         private static void Filter(ref HashSet<Message> messages, Category category)
