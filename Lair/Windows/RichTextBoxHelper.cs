@@ -155,14 +155,27 @@ namespace Lair.Windows
         public static readonly DependencyProperty DocumentMessageProperty = DependencyProperty.RegisterAttached("DocumentMessage", typeof(Message), typeof(RichTextBoxHelper),
             new FrameworkPropertyMetadata()
             {
+                AffectsMeasure = true,
+                AffectsArrange = true,
+                AffectsParentMeasure = true,
+                AffectsParentArrange = true,
+                BindsTwoWayByDefault = false,
+                DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
                 PropertyChangedCallback = (obj, e) =>
                 {
-                    var richTextBox = (RichTextBox)obj;
+                    try
+                    {
+                        var richTextBox = (RichTextBox)obj;
 
-                    var message = e.NewValue as Message;
-                    if (message == null) return;
+                        var message = e.NewValue as Message;
+                        if (message == null) return;
 
-                    RichTextBoxHelper.SetRichTextBox(richTextBox, message);
+                        RichTextBoxHelper.SetRichTextBox(richTextBox, message);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex);
+                    }
                 }
             });
 

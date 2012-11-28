@@ -1526,6 +1526,10 @@ namespace Lair.Windows
             {
                 _treeViewCopyMenuItem_Click(null, null);
             }
+            else
+            {
+                _listViewCopyMenuItem_Click(null, null);
+            }
         }
 
         private void Execute_Cut(object sender, ExecutedRoutedEventArgs e)
