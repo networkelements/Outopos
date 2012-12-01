@@ -149,6 +149,37 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<double>() { Name = "SearchControl_GridViewColumn_Length_Width", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "SearchControl_GridViewColumn_Comment_Width", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "SearchControl_GridViewColumn_Hash_Width", Value = 120 },
+      
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_Top", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_Left", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_Height", Value = 500 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_Width", Value = 700 },
+                new Library.Configuration.SettingsContext<WindowState>() { Name = "SearchItemEditWindow_WindowState", Value = WindowState.Normal },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_Name_Contains_Width", Value = -1 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_Name_Value_Width", Value = 600 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_NameRegex_Contains_Width", Value = -1 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_NameRegex_Value_IsIgnoreCase_Width", Value = -1 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_NameRegex_Value_Value_Width", Value = 600 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_Signature_Contains_Width", Value = -1 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_Signature_Value_Width", Value = 600 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_Keyword_Contains_Width", Value = -1 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_Keyword_Value_Width", Value = 600 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_CreationTimeRange_Contains_Width", Value = -1 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_CreationTimeRange_Value_Max_Width", Value = 300 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_CreationTimeRange_Value_Min_Width", Value = 300 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_LengthRange_Contains_Width", Value = -1 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_LengthRange_Value_Max_Width", Value = 300 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_LengthRange_Value_Min_Width", Value = 300 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_Seed_Contains_Width", Value = -1 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_Seed_Value_Width", Value = 600 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_SearchState_Contains_Width", Value = -1 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_SearchState_Value_Width", Value = 600 },
+
+                new Library.Configuration.SettingsContext<double>() { Name = "BoxEditWindow_Top", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "BoxEditWindow_Left", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "BoxEditWindow_Height", Value = 500 },
+                new Library.Configuration.SettingsContext<double>() { Name = "BoxEditWindow_Width", Value = 700 },
+                new Library.Configuration.SettingsContext<WindowState>() { Name = "BoxEditWindow_WindowState", Value = WindowState.Normal },
             })
         {
 
@@ -2342,6 +2373,559 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     this["SearchControl_GridViewColumn_Hash_Width"] = value;
+                }
+            }
+        }
+
+
+        public double SearchItemEditWindow_Top
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_Top"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_Top"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_Left
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_Left"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_Left"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_Height
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_Height"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_Height"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_Width"] = value;
+                }
+            }
+        }
+
+        public WindowState SearchItemEditWindow_WindowState
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (WindowState)this["SearchItemEditWindow_WindowState"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_WindowState"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_GridViewColumn_Name_Contains_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_GridViewColumn_Name_Contains_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_GridViewColumn_Name_Contains_Width"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_GridViewColumn_Name_Value_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_GridViewColumn_Name_Value_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_GridViewColumn_Name_Value_Width"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_GridViewColumn_NameRegex_Contains_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_GridViewColumn_NameRegex_Contains_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_GridViewColumn_NameRegex_Contains_Width"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_GridViewColumn_NameRegex_Value_IsIgnoreCase_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_GridViewColumn_NameRegex_Value_IsIgnoreCase_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_GridViewColumn_NameRegex_Value_IsIgnoreCase_Width"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_GridViewColumn_NameRegex_Value_Value_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_GridViewColumn_NameRegex_Value_Value_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_GridViewColumn_NameRegex_Value_Value_Width"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_GridViewColumn_Signature_Contains_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_GridViewColumn_Signature_Contains_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_GridViewColumn_Signature_Contains_Width"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_GridViewColumn_Signature_Value_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_GridViewColumn_Signature_Value_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_GridViewColumn_Signature_Value_Width"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_GridViewColumn_Keyword_Contains_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_GridViewColumn_Keyword_Contains_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_GridViewColumn_Keyword_Contains_Width"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_GridViewColumn_Keyword_Value_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_GridViewColumn_Keyword_Value_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_GridViewColumn_Keyword_Value_Width"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_GridViewColumn_CreationTimeRange_Contains_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_GridViewColumn_CreationTimeRange_Contains_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_GridViewColumn_CreationTimeRange_Contains_Width"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_GridViewColumn_CreationTimeRange_Value_Max_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_GridViewColumn_CreationTimeRange_Value_Max_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_GridViewColumn_CreationTimeRange_Value_Max_Width"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_GridViewColumn_CreationTimeRange_Value_Min_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_GridViewColumn_CreationTimeRange_Value_Min_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_GridViewColumn_CreationTimeRange_Value_Min_Width"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_GridViewColumn_LengthRange_Contains_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_GridViewColumn_LengthRange_Contains_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_GridViewColumn_LengthRange_Contains_Width"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_GridViewColumn_LengthRange_Value_Max_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_GridViewColumn_LengthRange_Value_Max_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_GridViewColumn_LengthRange_Value_Max_Width"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_GridViewColumn_LengthRange_Value_Min_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_GridViewColumn_LengthRange_Value_Min_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_GridViewColumn_LengthRange_Value_Min_Width"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_GridViewColumn_Seed_Contains_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_GridViewColumn_Seed_Contains_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_GridViewColumn_Seed_Contains_Width"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_GridViewColumn_Seed_Value_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_GridViewColumn_Seed_Value_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_GridViewColumn_Seed_Value_Width"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_GridViewColumn_SearchState_Contains_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_GridViewColumn_SearchState_Contains_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_GridViewColumn_SearchState_Contains_Width"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_GridViewColumn_SearchState_Value_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_GridViewColumn_SearchState_Value_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_GridViewColumn_SearchState_Value_Width"] = value;
+                }
+            }
+        }
+
+
+        public double BoxEditWindow_Top
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["BoxEditWindow_Top"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["BoxEditWindow_Top"] = value;
+                }
+            }
+        }
+
+        public double BoxEditWindow_Left
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["BoxEditWindow_Left"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["BoxEditWindow_Left"] = value;
+                }
+            }
+        }
+
+        public double BoxEditWindow_Height
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["BoxEditWindow_Height"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["BoxEditWindow_Height"] = value;
+                }
+            }
+        }
+
+        public double BoxEditWindow_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["BoxEditWindow_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["BoxEditWindow_Width"] = value;
+                }
+            }
+        }
+
+        public WindowState BoxEditWindow_WindowState
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (WindowState)this["BoxEditWindow_WindowState"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["BoxEditWindow_WindowState"] = value;
                 }
             }
         }

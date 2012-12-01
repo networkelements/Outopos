@@ -701,20 +701,20 @@ namespace Lair.Windows
 
                 foreach (BoardTreeViewItem item in list.OfType<BoardTreeViewItem>())
                 {
+                    if (item.Value.Channel != channel) continue;
+
                     items.Add(item);
                 }
             }), null);
 
-            var selectTreeViewItem = items.FirstOrDefault(n => n.Value.Channel == channel);
-
-            if (selectTreeViewItem == null)
+            if (items.Count == 0)
             {
                 IList<Message> messages;
                 IList<Filter> filters;
 
                 _lairManager.GetChannelInfomation(channel, out messages, out filters);
 
-                foreach (var item in messages)
+                foreach (var item in messages.OrderBy(n => _random.Next()))
                 {
                     unlockMessages.Add(item);
                 }
@@ -723,63 +723,88 @@ namespace Lair.Windows
             {
                 DateTime now = DateTime.UtcNow;
 
-                lock (selectTreeViewItem.Value.ThisLock)
+                foreach (var item in items)
                 {
-                    foreach (var lm in selectTreeViewItem.Value.LockMessages.ToArray())
+                    lock (item.Value.ThisLock)
                     {
-                        if ((now - lm.CreationTime) > new TimeSpan(64, 0, 0, 0))
-                            selectTreeViewItem.Value.LockMessages.Remove(lm);
+                        foreach (var lm in item.Value.LockMessages.ToArray())
+                        {
+                            if ((now - lm.CreationTime) > new TimeSpan(64, 0, 0, 0))
+                                item.Value.LockMessages.Remove(lm);
+                        }
                     }
                 }
 
-                HashSet<Message> newList = new HashSet<Message>();
+                HashSet<Message> lockMessages = new HashSet<Message>();
+
+                foreach (var item in items)
+                {
+                    lockMessages.UnionWith(item.Value.LockMessages);
+                }
 
                 IList<Message> messages;
                 IList<Filter> filters;
 
-                _lairManager.GetChannelInfomation(selectTreeViewItem.Value.Channel, out messages, out filters);
+                _lairManager.GetChannelInfomation(channel, out messages, out filters);
 
-                Filter filter = filters.FirstOrDefault(n => selectTreeViewItem.Value.Signature == MessageConverter.ToSignatureString(n.Certificate));
+                HashSet<Message> newList = new HashSet<Message>();
 
-                if (filter != null)
                 {
-                    foreach (var message in messages)
+                    var targetFilters = filters.Where(n => items.Any(m => m.Value.Signature == MessageConverter.ToSignatureString(n.Certificate))).ToList();
+
+                    if (targetFilters.Count == 0)
                     {
-                        if (filter.Keys.Any(n => message.VerifyHash(n.Hash, n.HashAlgorithm)))
+                        foreach (var message in messages)
                         {
+                            if (lockMessages.Contains(message)) continue;
+
                             newList.Add(message);
                         }
                     }
-                }
-                else
-                {
-                    foreach (var message in messages)
+                    else
                     {
-                        newList.Add(message);
+                        foreach (var message in messages)
+                        {
+                            if (lockMessages.Contains(message)) continue;
+
+                            if (targetFilters.Any(m => m.Keys.Any(n => message.VerifyHash(n.Hash, n.HashAlgorithm))))
+                            {
+                                newList.Add(message);
+                            }
+                        }
                     }
                 }
 
-                List<CategoryTreeViewItem> categoryTreeViewItems = new List<CategoryTreeViewItem>();
+                HashSet<Message> previewList = new HashSet<Message>();
 
-                this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                foreach (var item in items)
                 {
-                    categoryTreeViewItems.AddRange(_treeViewItem.GetLineage(selectTreeViewItem).OfType<CategoryTreeViewItem>());
-                }), null);
+                    HashSet<Message> tempNewList = new HashSet<Message>(newList);
 
-                foreach (var item in categoryTreeViewItems)
-                {
-                    ChannelControl.Filter(ref newList, item.Value);
+                    List<CategoryTreeViewItem> categoryTreeViewItems = new List<CategoryTreeViewItem>();
+
+                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                    {
+                        categoryTreeViewItems.AddRange(_treeViewItem.GetLineage(item).OfType<CategoryTreeViewItem>());
+                    }), null);
+
+                    foreach (var categoryTreeViewItem in categoryTreeViewItems)
+                    {
+                        ChannelControl.Filter(ref tempNewList, categoryTreeViewItem.Value);
+                    }
+
+                    ChannelControl.Filter(ref tempNewList, item.Value);
+
+                    previewList.UnionWith(tempNewList);
                 }
-
-                ChannelControl.Filter(ref newList, selectTreeViewItem.Value);
 
                 {
                     List<Message> list1 = new List<Message>();
 
                     foreach (var item in messages)
                     {
-                        if (selectTreeViewItem.Value.LockMessages.Contains(item)) continue;
-                        if (newList.Contains(item)) continue;
+                        if (lockMessages.Contains(item)) continue;
+                        if (previewList.Contains(item)) continue;
 
                         list1.Add(item);
                     }
@@ -788,10 +813,8 @@ namespace Lair.Windows
 
                     List<Message> list2 = new List<Message>();
 
-                    foreach (var item in newList)
+                    foreach (var item in previewList)
                     {
-                        if (selectTreeViewItem.Value.LockMessages.Contains(item)) continue;
-
                         list2.Add(item);
                     }
 
@@ -815,7 +838,7 @@ namespace Lair.Windows
 
         void _lairManager_UnlockFiltersEvent(object sender, Channel channel, ref IList<Filter> unlockFilters)
         {
-            HashSet<string> items = new HashSet<string>();
+            List<BoardTreeViewItem> items = new List<BoardTreeViewItem>();
 
             this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
             {
@@ -832,7 +855,9 @@ namespace Lair.Windows
 
                 foreach (BoardTreeViewItem item in list.OfType<BoardTreeViewItem>())
                 {
-                    items.Add(item.Value.Signature);
+                    if (item.Value.Channel != channel) continue;
+
+                    items.Add(item);
                 }
             }), null);
 
@@ -841,13 +866,12 @@ namespace Lair.Windows
 
             _lairManager.GetChannelInfomation(channel, out messages, out filters);
 
-            foreach (var item in filters.Where(n =>
-               {
-                   var s = MessageConverter.ToSignatureString(n.Certificate);
+            var targetFilters = new HashSet<Filter>(filters.Where(n => items.Any(m => m.Value.Signature == MessageConverter.ToSignatureString(n.Certificate))));
 
-                   return !items.Contains(s);
-               }).OrderBy(n => _random.Next()))
+            foreach (var item in filters.OrderBy(n => _random.Next()))
             {
+                if (targetFilters.Contains(item)) continue;
+
                 unlockFilters.Add(item);
             }
         }
@@ -1673,7 +1697,7 @@ namespace Lair.Windows
 
             foreach (var channel in Clipboard.GetChannels())
             {
-                if (channel.Name == null || channel.Id == null) continue;
+                if (channel == null || channel.Name == null || channel.Id == null) continue;
                 if (selectTreeViewItem.Value.Boards.Any(n => n.Channel == channel)) continue;
 
                 selectTreeViewItem.Value.Boards.Add(new Board() { Channel = channel });

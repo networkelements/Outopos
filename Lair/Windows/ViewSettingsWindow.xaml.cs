@@ -486,7 +486,7 @@ namespace Lair.Windows
             Settings.Instance.Global_UrlClearHistory_IsEnabled = _eventClearUrlHistoryCheckBox.IsChecked.Value;
 
             int expires = ViewSettingsWindow.GetStringToInt(_seedDeleteExpiresTextBox.Text);
-            Settings.Instance.Global_SeedDelete_Expires = Math.Max(Math.Min(expires, 90), 0);
+            Settings.Instance.Global_SeedDelete_Expires = Math.Max(expires, 0);
         }
 
         private void _cancelButton_Click(object sender, RoutedEventArgs e)
