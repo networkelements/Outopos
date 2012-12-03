@@ -676,7 +676,9 @@ namespace Lair.Windows
 
             var channels = _lairManager.GetChannels();
 
-            foreach (var item in channels.Where(n => !items.Contains(n)).OrderBy(n => _random.Next()))
+            foreach (var item in channels
+                .Where(n => !items.Contains(n))
+                .OrderBy(n => _random.Next()))
             {
                 unlockChannels.Add(item);
             }
@@ -809,7 +811,9 @@ namespace Lair.Windows
                         list1.Add(item);
                     }
 
-                    list1 = list1.OrderBy(n => _random.Next()).ToList();
+                    list1 = list1
+                        .OrderBy(n => _random.Next())
+                        .ToList();
 
                     List<Message> list2 = new List<Message>();
 
@@ -866,7 +870,8 @@ namespace Lair.Windows
 
             _lairManager.GetChannelInfomation(channel, out messages, out filters);
 
-            var targetFilters = new HashSet<Filter>(filters.Where(n => items.Any(m => m.Value.Signature == MessageConverter.ToSignatureString(n.Certificate))));
+            var targetFilters = new HashSet<Filter>(filters
+                .Where(n => items.Any(m => m.Value.Signature == MessageConverter.ToSignatureString(n.Certificate))));
 
             foreach (var item in filters.OrderBy(n => _random.Next()))
             {
@@ -996,7 +1001,7 @@ namespace Lair.Windows
 
                     bool flag = true;
 
-                    lock (category.ThisLock)
+                    lock (category.SearchWordCollection.ThisLock)
                     {
                         if (category.SearchWordCollection.Any(n => n.Contains == true))
                         {
@@ -1010,7 +1015,7 @@ namespace Lair.Windows
                         }
                     }
 
-                    lock (category.ThisLock)
+                    lock (category.SearchSignatureCollection.ThisLock)
                     {
                         if (category.SearchSignatureCollection.Any(n => n.Contains == true))
                         {
@@ -1024,7 +1029,7 @@ namespace Lair.Windows
                         }
                     }
 
-                    lock (category.ThisLock)
+                    lock (category.SearchRegexCollection.ThisLock)
                     {
                         if (category.SearchRegexCollection.Any(n => n.Contains == true))
                         {
@@ -1059,7 +1064,7 @@ namespace Lair.Windows
 
                     bool flag = false;
 
-                    lock (category.ThisLock)
+                    lock (category.SearchWordCollection.ThisLock)
                     {
                         if (category.SearchWordCollection.Any(n => n.Contains == false))
                         {
@@ -1073,7 +1078,7 @@ namespace Lair.Windows
                         }
                     }
 
-                    lock (category.ThisLock)
+                    lock (category.SearchSignatureCollection.ThisLock)
                     {
                         if (category.SearchSignatureCollection.Any(n => n.Contains == false))
                         {
@@ -1087,7 +1092,7 @@ namespace Lair.Windows
                         }
                     }
 
-                    lock (category.ThisLock)
+                    lock (category.SearchRegexCollection.ThisLock)
                     {
                         if (category.SearchRegexCollection.Any(n => n.Contains == false))
                         {
@@ -1137,7 +1142,7 @@ namespace Lair.Windows
 
                     bool flag = true;
 
-                    lock (board.ThisLock)
+                    lock (board.SearchWordCollection.ThisLock)
                     {
                         if (board.SearchWordCollection.Any(n => n.Contains == true))
                         {
@@ -1151,7 +1156,7 @@ namespace Lair.Windows
                         }
                     }
 
-                    lock (board.ThisLock)
+                    lock (board.SearchSignatureCollection.ThisLock)
                     {
                         if (board.SearchSignatureCollection.Any(n => n.Contains == true))
                         {
@@ -1165,7 +1170,7 @@ namespace Lair.Windows
                         }
                     }
 
-                    lock (board.ThisLock)
+                    lock (board.SearchMessageCollection.ThisLock)
                     {
                         if (board.SearchMessageCollection.Any(n => n.Contains == true))
                         {
@@ -1179,7 +1184,7 @@ namespace Lair.Windows
                         }
                     }
 
-                    lock (board.ThisLock)
+                    lock (board.SearchRegexCollection.ThisLock)
                     {
                         if (board.SearchRegexCollection.Any(n => n.Contains == true))
                         {
@@ -1214,7 +1219,7 @@ namespace Lair.Windows
 
                     bool flag = false;
 
-                    lock (board.ThisLock)
+                    lock (board.SearchWordCollection.ThisLock)
                     {
                         if (board.SearchWordCollection.Any(n => n.Contains == false))
                         {
@@ -1228,7 +1233,7 @@ namespace Lair.Windows
                         }
                     }
 
-                    lock (board.ThisLock)
+                    lock (board.SearchSignatureCollection.ThisLock)
                     {
                         if (board.SearchSignatureCollection.Any(n => n.Contains == false))
                         {
@@ -1242,7 +1247,7 @@ namespace Lair.Windows
                         }
                     }
 
-                    lock (board.ThisLock)
+                    lock (board.SearchMessageCollection.ThisLock)
                     {
                         if (board.SearchMessageCollection.Any(n => n.Contains == false))
                         {
@@ -1256,7 +1261,7 @@ namespace Lair.Windows
                         }
                     }
 
-                    lock (board.ThisLock)
+                    lock (board.SearchRegexCollection.ThisLock)
                     {
                         if (board.SearchRegexCollection.Any(n => n.Contains == false))
                         {

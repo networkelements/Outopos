@@ -1097,13 +1097,13 @@ namespace Lair.Windows
 
             lock (_board.ThisLock)
             {
-                lock (_board.SearchWordCollection)
+                lock (_board.SearchWordCollection.ThisLock)
                 {
                     _board.SearchWordCollection.Clear();
                     _board.SearchWordCollection.AddRange(_searchWordCollection.Select(n => n.DeepClone()).ToList());
                 }
 
-                lock (_board.SearchRegexCollection)
+                lock (_board.SearchRegexCollection.ThisLock)
                 {
                     _board.SearchRegexCollection.Clear();
                     _board.SearchRegexCollection.AddRange(_searchRegexCollection.Select(n => n.DeepClone()).ToList());

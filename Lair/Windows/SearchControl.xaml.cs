@@ -249,7 +249,7 @@ namespace Lair.Windows
                 {
                     bool flag = true;
 
-                    lock (searchItem.ThisLock)
+                    lock (searchItem.SearchStateCollection.ThisLock)
                     {
                         if (searchItem.SearchStateCollection.Any(n => n.Contains == true))
                         {
@@ -263,7 +263,7 @@ namespace Lair.Windows
                         }
                     }
 
-                    lock (searchItem.ThisLock)
+                    lock (searchItem.SearchLengthRangeCollection.ThisLock)
                     {
                         if (searchItem.SearchLengthRangeCollection.Any(n => n.Contains == true))
                         {
@@ -277,7 +277,7 @@ namespace Lair.Windows
                         }
                     }
 
-                    lock (searchItem.ThisLock)
+                    lock (searchItem.SearchCreationTimeRangeCollection.ThisLock)
                     {
                         if (searchItem.SearchCreationTimeRangeCollection.Any(n => n.Contains == true))
                         {
@@ -291,7 +291,7 @@ namespace Lair.Windows
                         }
                     }
 
-                    lock (searchItem.ThisLock)
+                    lock (searchItem.SearchKeywordCollection.ThisLock)
                     {
                         if (searchItem.SearchKeywordCollection.Any(n => n.Contains == true))
                         {
@@ -305,7 +305,7 @@ namespace Lair.Windows
                         }
                     }
 
-                    lock (searchItem.ThisLock)
+                    lock (searchItem.SearchSignatureCollection.ThisLock)
                     {
                         if (searchItem.SearchSignatureCollection.Any(n => n.Contains == true))
                         {
@@ -329,7 +329,7 @@ namespace Lair.Windows
                         }
                     }
 
-                    lock (searchItem.ThisLock)
+                    lock (searchItem.SearchNameCollection.ThisLock)
                     {
                         if (searchItem.SearchNameCollection.Any(n => n.Contains == true))
                         {
@@ -347,7 +347,7 @@ namespace Lair.Windows
                         }
                     }
 
-                    lock (searchItem.ThisLock)
+                    lock (searchItem.SearchNameRegexCollection.ThisLock)
                     {
                         if (searchItem.SearchNameRegexCollection.Any(n => n.Contains == true))
                         {
@@ -361,7 +361,7 @@ namespace Lair.Windows
                         }
                     }
 
-                    lock (searchItem.ThisLock)
+                    lock (searchItem.SearchSeedCollection.ThisLock)
                     {
                         if (searchItem.SearchSeedCollection.Any(n => n.Contains == true))
                         {
@@ -384,7 +384,7 @@ namespace Lair.Windows
                 {
                     bool flag = false;
 
-                    lock (searchItem.ThisLock)
+                    lock (searchItem.SearchStateCollection.ThisLock)
                     {
                         if (searchItem.SearchStateCollection.Any(n => n.Contains == false))
                         {
@@ -398,7 +398,7 @@ namespace Lair.Windows
                         }
                     }
 
-                    lock (searchItem.ThisLock)
+                    lock (searchItem.SearchLengthRangeCollection.ThisLock)
                     {
                         if (searchItem.SearchLengthRangeCollection.Any(n => n.Contains == false))
                         {
@@ -412,7 +412,7 @@ namespace Lair.Windows
                         }
                     }
 
-                    lock (searchItem.ThisLock)
+                    lock (searchItem.SearchCreationTimeRangeCollection.ThisLock)
                     {
                         if (searchItem.SearchCreationTimeRangeCollection.Any(n => n.Contains == false))
                         {
@@ -426,7 +426,7 @@ namespace Lair.Windows
                         }
                     }
 
-                    lock (searchItem.ThisLock)
+                    lock (searchItem.SearchKeywordCollection.ThisLock)
                     {
                         if (searchItem.SearchKeywordCollection.Any(n => n.Contains == false))
                         {
@@ -440,7 +440,7 @@ namespace Lair.Windows
                         }
                     }
 
-                    lock (searchItem.ThisLock)
+                    lock (searchItem.SearchSignatureCollection.ThisLock)
                     {
                         if (searchItem.SearchSignatureCollection.Any(n => n.Contains == false))
                         {
@@ -464,7 +464,7 @@ namespace Lair.Windows
                         }
                     }
 
-                    lock (searchItem.ThisLock)
+                    lock (searchItem.SearchNameCollection.ThisLock)
                     {
                         if (searchItem.SearchNameCollection.Any(n => n.Contains == false))
                         {
@@ -482,7 +482,7 @@ namespace Lair.Windows
                         }
                     }
 
-                    lock (searchItem.ThisLock)
+                    lock (searchItem.SearchNameRegexCollection.ThisLock)
                     {
                         if (searchItem.SearchNameRegexCollection.Any(n => n.Contains == false))
                         {
@@ -496,7 +496,7 @@ namespace Lair.Windows
                         }
                     }
 
-                    lock (searchItem.ThisLock)
+                    lock (searchItem.SearchSeedCollection.ThisLock)
                     {
                         if (searchItem.SearchSeedCollection.Any(n => n.Contains == false))
                         {
@@ -590,7 +590,10 @@ namespace Lair.Windows
                 Debug.WriteLine("Search {0}", sw.ElapsedMilliseconds);
 
                 Random random = new Random();
-                _searchingCache = searchItems.OrderBy(n => random.Next()).Take(1000000).ToList();
+                _searchingCache = searchItems
+                    .OrderBy(n => random.Next())
+                    .Take(1000000)
+                    .ToList();
 
                 _updateStopwatch.Restart();
 
@@ -1255,11 +1258,8 @@ namespace Lair.Windows
                     Value = signature,
                 };
 
-                lock (selectTreeViewItem.Value.SearchItem.ThisLock)
-                {
-                    if (selectTreeViewItem.Value.SearchItem.SearchSignatureCollection.Contains(item)) continue;
-                    selectTreeViewItem.Value.SearchItem.SearchSignatureCollection.Add(item);
-                }
+                if (selectTreeViewItem.Value.SearchItem.SearchSignatureCollection.Contains(item)) continue;
+                selectTreeViewItem.Value.SearchItem.SearchSignatureCollection.Add(item);
             }
 
             this.Update();
@@ -1285,11 +1285,8 @@ namespace Lair.Windows
                         Value = keyword,
                     };
 
-                    lock (selectTreeViewItem.Value.SearchItem.ThisLock)
-                    {
-                        if (selectTreeViewItem.Value.SearchItem.SearchKeywordCollection.Contains(item)) continue;
-                        selectTreeViewItem.Value.SearchItem.SearchKeywordCollection.Add(item);
-                    }
+                    if (selectTreeViewItem.Value.SearchItem.SearchKeywordCollection.Contains(item)) continue;
+                    selectTreeViewItem.Value.SearchItem.SearchKeywordCollection.Add(item);
                 }
             }
 
@@ -1312,11 +1309,8 @@ namespace Lair.Windows
                     Value = new SearchRange<DateTime>() { Min = listItem.Value.CreationTime },
                 };
 
-                lock (selectTreeViewItem.Value.SearchItem.ThisLock)
-                {
-                    if (selectTreeViewItem.Value.SearchItem.SearchCreationTimeRangeCollection.Contains(item)) continue;
-                    selectTreeViewItem.Value.SearchItem.SearchCreationTimeRangeCollection.Add(item);
-                }
+                if (selectTreeViewItem.Value.SearchItem.SearchCreationTimeRangeCollection.Contains(item)) continue;
+                selectTreeViewItem.Value.SearchItem.SearchCreationTimeRangeCollection.Add(item);
             }
 
             this.Update();
@@ -1340,11 +1334,8 @@ namespace Lair.Windows
                     Value = listitem.Value
                 };
 
-                lock (selectTreeViewItem.Value.SearchItem.ThisLock)
-                {
-                    if (selectTreeViewItem.Value.SearchItem.SearchSeedCollection.Contains(item)) continue;
-                    selectTreeViewItem.Value.SearchItem.SearchSeedCollection.Add(item);
-                }
+                if (selectTreeViewItem.Value.SearchItem.SearchSeedCollection.Contains(item)) continue;
+                selectTreeViewItem.Value.SearchItem.SearchSeedCollection.Add(item);
             }
 
             this.Update();

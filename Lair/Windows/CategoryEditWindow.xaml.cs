@@ -835,13 +835,13 @@ namespace Lair.Windows
             {
                 _category.Name = _nameTextBox.Text;
 
-                lock (_category.SearchWordCollection)
+                lock (_category.SearchWordCollection.ThisLock)
                 {
                     _category.SearchWordCollection.Clear();
                     _category.SearchWordCollection.AddRange(_searchWordCollection.Select(n => n.DeepClone()).ToList());
                 }
 
-                lock (_category.SearchRegexCollection)
+                lock (_category.SearchRegexCollection.ThisLock)
                 {
                     _category.SearchRegexCollection.Clear();
                     _category.SearchRegexCollection.AddRange(_searchRegexCollection.Select(n => n.DeepClone()).ToList());
