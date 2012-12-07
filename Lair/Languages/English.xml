@@ -35,6 +35,7 @@
   <Translate Key="MainWindow_Connections" Value="Connections" />
   <Translate Key="MainWindow_Start" Value="Start" />
   <Translate Key="MainWindow_Stop" Value="Stop" />
+  <Translate Key="MainWindow_UpdateBaseNode" Value="Update Base Node Uri" />
   <Translate Key="MainWindow_ConnectionsSettings" Value="Connections settings" />
   <Translate Key="MainWindow_View" Value="View" />
   <Translate Key="MainWindow_ClearUrlHistory" Value="Clear Url History" />

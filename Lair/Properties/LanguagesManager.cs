@@ -474,6 +474,17 @@ namespace Lair.Properties
             }
         }
 
+        public string MainWindow_UpdateBaseNode
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("MainWindow_UpdateBaseNode");
+                }
+            }
+        }
+
         public string MainWindow_ConnectionsSettings
         {
             get
