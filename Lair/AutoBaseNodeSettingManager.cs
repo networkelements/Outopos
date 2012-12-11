@@ -23,7 +23,7 @@ namespace Lair
         private ManagerState _state = ManagerState.Stop;
 
         private object _thisLock = new object();
-        private bool _disposed = false;
+        private volatile bool _disposed = false;
 
         public AutoBaseNodeSettingManager(LairManager lairManager)
         {

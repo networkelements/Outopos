@@ -54,35 +54,7 @@
   <Translate Key="MainWindow_Restart_Message" Value="Update has been completed. Please restart." />
   <Translate Key="MainWindow_Close_Message" Value="Do you want to quit?" />
   <Translate Key="MainWindow_Delete_Message" Value="Are you sure you want to Delete?" />
-
-  <Translate Key="ViewSettingsWindow_Title" Value="View settings" />
-  <Translate Key="ViewSettingsWindow_Update" Value="Update" />
-  <Translate Key="ViewSettingsWindow_UpdateUrl" Value="Update url" />
-  <Translate Key="ViewSettingsWindow_ProxyUri" Value="Proxy uri" />
-  <Translate Key="ViewSettingsWindow_Signature" Value="Signature" />
-  <Translate Key="ViewSettingsWindow_Signatures" Value="Signatures" />
-  <Translate Key="ViewSettingsWindow_UpdateOption" Value="Update option" />
-  <Translate Key="ViewSettingsWindow_None" Value="None" />
-  <Translate Key="ViewSettingsWindow_AutoCheck" Value="Auto check" />
-  <Translate Key="ViewSettingsWindow_AutoUpdate" Value="Auto update" />
-  <Translate Key="ViewSettingsWindow_Amoeba" Value="Amoeba" />
-  <Translate Key="ViewSettingsWindow_AmoebaPath" Value="Amoeba path" />
-  <Translate Key="ViewSettingsWindow_SeedDeleteExpires" Value="Seed Delete Expires" />
-  <Translate Key="ViewSettingsWindow_Fonts" Value="Fonts" />
-  <Translate Key="ViewSettingsWindow_MessageFontFamily" Value="Message font family" />
-  <Translate Key="ViewSettingsWindow_MessageFontSize" Value="Message font size" />
-  <Translate Key="ViewSettingsWindow_Events" Value="Events" />
-  <Translate Key="ViewSettingsWindow_ClearUrlHistory" Value="Clear Url History" />
-  <Translate Key="ViewSettingsWindow_Value" Value="Value" />
-  <Translate Key="ViewSettingsWindow_Import" Value="Import" />
-  <Translate Key="ViewSettingsWindow_Export" Value="Export" />
-  <Translate Key="ViewSettingsWindow_Up" Value="Up" />
-  <Translate Key="ViewSettingsWindow_Down" Value="Down" />
-  <Translate Key="ViewSettingsWindow_Add" Value="Add" />
-  <Translate Key="ViewSettingsWindow_Edit" Value="Edit" />
-  <Translate Key="ViewSettingsWindow_Delete" Value="Delete" />
-  <Translate Key="ViewSettingsWindow_Ok" Value="Ok" />
-  <Translate Key="ViewSettingsWindow_Cancel" Value="Cancel" />
+  <Translate Key="MainWindow_TransferLimit_Message" Value="Transfer limit" />
 
   <Translate Key="ConnectionsSettingsWindow_Title" Value="Connections settings" />
   <Translate Key="ConnectionsSettingsWindow_BaseNode" Value="Base node" />
@@ -102,11 +74,17 @@
   <Translate Key="ConnectionsSettingsWindow_ListenUris" Value="Listen uris" />
   <Translate Key="ConnectionsSettingsWindow_Events" Value="Events" />
   <Translate Key="ConnectionsSettingsWindow_Bandwidth" Value="Bandwidth" />
-  <Translate Key="ConnectionsSettingsWindow_CoreSettings" Value="Core settings" />
+  <Translate Key="ConnectionsSettingsWindow_BandwidthLimit" Value="Bandwidth Limit [0 Byte: unlimited]" />
+  <Translate Key="ConnectionsSettingsWindow_Transfer" Value="Transfer" />
+  <Translate Key="ConnectionsSettingsWindow_TransferLimitType" Value="Limit Type" />
+  <Translate Key="ConnectionsSettingsWindow_TransferLimitSpan" Value="Limit Span (day)" />
+  <Translate Key="ConnectionsSettingsWindow_TransferLimitSize" Value="Limit Size" />
+  <Translate Key="ConnectionsSettingsWindow_TransferInformation" Value="Transfer Information" />
+  <Translate Key="ConnectionsSettingsWindow_Downloaded" Value="Downloaded" />
+  <Translate Key="ConnectionsSettingsWindow_Uploaded" Value="Uploaded" />
+  <Translate Key="ConnectionsSettingsWindow_Total" Value="Total" />
+  <Translate Key="ConnectionsSettingsWindow_Reset" Value="Reset" />
   <Translate Key="ConnectionsSettingsWindow_ConnectionCount" Value="Connection count" />
-  <Translate Key="ConnectionsSettingsWindow_DownloadingLowerLimit" Value="Connection count which start download" />
-  <Translate Key="ConnectionsSettingsWindow_UploadingLowerLimit" Value="Connection count which start upload" />
-  <Translate Key="ConnectionsSettingsWindow_AutoSettings" Value="Auto settings" />
   <Translate Key="ConnectionsSettingsWindow_AutoBaseNodeSetting" Value="Auto base node setting" />
   <Translate Key="ConnectionsSettingsWindow_Tor" Value="Tor" />
   <Translate Key="ConnectionsSettingsWindow_Ipv4" Value="Ipv4" />
@@ -122,9 +100,50 @@
   <Translate Key="ConnectionsSettingsWindow_Copy" Value="Copy" />
   <Translate Key="ConnectionsSettingsWindow_Paste" Value="Paste" />
 
+  <Translate Key="ConnectionType_None" Value="None" />
+  <Translate Key="ConnectionType_Tcp" Value="Tcp" />
+  <Translate Key="ConnectionType_Socks4Proxy" Value="Socks4 proxy" />
+  <Translate Key="ConnectionType_Socks4aProxy" Value="Socks4a proxy" />
+  <Translate Key="ConnectionType_Socks5Proxy" Value="Socks5 proxy" />
+  <Translate Key="ConnectionType_HttpProxy" Value="Http proxy" />
+
+  <Translate Key="TransferLimitType_None" Value="None" />
+  <Translate Key="TransferLimitType_Downloads" Value="Downloads" />
+  <Translate Key="TransferLimitType_Uploads" Value="Uploads" />
+  <Translate Key="TransferLimitType_Total" Value="Total" />
+
   <Translate Key="ProgressWindow_Title" Value="Progress state" />
   <Translate Key="ProgressWindow_Cancel" Value="Cancel" />
   <Translate Key="ProgressWindow_Ok" Value="Ok" />
+
+  <Translate Key="ViewSettingsWindow_Title" Value="View settings" />
+  <Translate Key="ViewSettingsWindow_Update" Value="Update" />
+  <Translate Key="ViewSettingsWindow_UpdateUrl" Value="Update url" />
+  <Translate Key="ViewSettingsWindow_ProxyUri" Value="Proxy uri" />
+  <Translate Key="ViewSettingsWindow_Signature" Value="Signature" />
+  <Translate Key="ViewSettingsWindow_Signatures" Value="Signatures" />
+  <Translate Key="ViewSettingsWindow_UpdateOption" Value="Update option" />
+  <Translate Key="ViewSettingsWindow_None" Value="None" />
+  <Translate Key="ViewSettingsWindow_AutoCheck" Value="Auto check" />
+  <Translate Key="ViewSettingsWindow_AutoUpdate" Value="Auto update" />
+  <Translate Key="ViewSettingsWindow_Amoeba" Value="Amoeba" />
+  <Translate Key="ViewSettingsWindow_AmoebaPath" Value="Amoeba path" />
+  <Translate Key="ViewSettingsWindow_SeedDeleteExpires" Value="Seed delete expires" />
+  <Translate Key="ViewSettingsWindow_Fonts" Value="Fonts" />
+  <Translate Key="ViewSettingsWindow_MessageFontFamily" Value="Message font family" />
+  <Translate Key="ViewSettingsWindow_MessageFontSize" Value="Message font size" />
+  <Translate Key="ViewSettingsWindow_Events" Value="Events" />
+  <Translate Key="ViewSettingsWindow_ClearUrlHistory" Value="Clear Url History" />
+  <Translate Key="ViewSettingsWindow_Value" Value="Value" />
+  <Translate Key="ViewSettingsWindow_Import" Value="Import" />
+  <Translate Key="ViewSettingsWindow_Export" Value="Export" />
+  <Translate Key="ViewSettingsWindow_Up" Value="Up" />
+  <Translate Key="ViewSettingsWindow_Down" Value="Down" />
+  <Translate Key="ViewSettingsWindow_Add" Value="Add" />
+  <Translate Key="ViewSettingsWindow_Edit" Value="Edit" />
+  <Translate Key="ViewSettingsWindow_Delete" Value="Delete" />
+  <Translate Key="ViewSettingsWindow_Ok" Value="Ok" />
+  <Translate Key="ViewSettingsWindow_Cancel" Value="Cancel" />
 
   <Translate Key="VersionInformationWindow_Title" Value="Version information" />
   <Translate Key="VersionInformationWindow_FileName" Value="File name" />
@@ -154,13 +173,6 @@
   <Translate Key="ConnectionControl_PullFilterCount" Value="PullFilter count" />
   <Translate Key="ConnectionControl_Copy" Value="Copy" />
   <Translate Key="ConnectionControl_Paste" Value="Paste" />
-
-  <Translate Key="ConnectionType_None" Value="None" />
-  <Translate Key="ConnectionType_Tcp" Value="Tcp" />
-  <Translate Key="ConnectionType_Socks4Proxy" Value="Socks4 proxy" />
-  <Translate Key="ConnectionType_Socks4aProxy" Value="Socks4a proxy" />
-  <Translate Key="ConnectionType_Socks5Proxy" Value="Socks5 proxy" />
-  <Translate Key="ConnectionType_HttpProxy" Value="Http proxy" />
 
   <Translate Key="ChannelControl_NewChannel" Value="New channel" />
   <Translate Key="ChannelControl_NewCategory" Value="New category" />

@@ -89,19 +89,19 @@ namespace Lair.Windows
             _searchThread = new Thread(new ThreadStart(this.Search));
             _searchThread.Priority = ThreadPriority.Highest;
             _searchThread.IsBackground = true;
-            _searchThread.Name = "SearchThread";
+            _searchThread.Name = "ChannelControl_SearchThread";
             _searchThread.Start();
 
             _cacheThread = new Thread(new ThreadStart(this.Cache));
             _cacheThread.Priority = ThreadPriority.Highest;
             _cacheThread.IsBackground = true;
-            _cacheThread.Name = "CacheThread";
+            _cacheThread.Name = "ChannelControl_CacheThread";
             _cacheThread.Start();
 
             _filterThread = new Thread(new ThreadStart(this.Filter));
             _filterThread.Priority = ThreadPriority.Highest;
             _filterThread.IsBackground = true;
-            _filterThread.Name = "FilterThread";
+            _filterThread.Name = "ChannelControl_FilterThread";
             _filterThread.Start();
 
             _lairManager.UnlockChannelsEvent += new UnlockChannelsEventHandler(_lairManager_UnlockChannelsEvent);

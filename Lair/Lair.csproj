@@ -115,6 +115,7 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="Hash\Sha512.cs" />
     <Compile Include="NativeMethods.cs" />
+    <Compile Include="TransfarLimitManager.cs" />
     <Compile Include="Windows\BoardEditWindow.xaml.cs">
       <DependentUpon>BoardEditWindow.xaml</DependentUpon>
     </Compile>

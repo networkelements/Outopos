@@ -76,13 +76,13 @@ namespace Lair.Windows
             _showLairInfomationThread = new Thread(new ThreadStart(this.ShowLairInfomation));
             _showLairInfomationThread.Priority = ThreadPriority.Highest;
             _showLairInfomationThread.IsBackground = true;
-            _showLairInfomationThread.Name = "ShowLairInfomation";
+            _showLairInfomationThread.Name = "ConnectionControl_ShowLairInfomationThread";
             _showLairInfomationThread.Start();
 
             _showConnectionInfomationwThread = new Thread(new ThreadStart(this.ShowConnectionInfomation));
             _showConnectionInfomationwThread.Priority = ThreadPriority.Highest;
             _showConnectionInfomationwThread.IsBackground = true;
-            _showConnectionInfomationwThread.Name = "ShowConnectionInfomation";
+            _showConnectionInfomationwThread.Name = "ConnectionControl_ShowConnectionInfomationThread";
             _showConnectionInfomationwThread.Start();
         }
 

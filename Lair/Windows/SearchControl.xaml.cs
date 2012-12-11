@@ -81,7 +81,7 @@ namespace Lair.Windows
             _searchThread = new Thread(new ThreadStart(this.Search));
             _searchThread.Priority = ThreadPriority.Highest;
             _searchThread.IsBackground = true;
-            _searchThread.Name = "SearchThread";
+            _searchThread.Name = "SearchControl_SearchThread";
             _searchThread.Start();
 
             _searchRowDefinition.Height = new GridLength(0);

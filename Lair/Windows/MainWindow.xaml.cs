@@ -43,16 +43,18 @@ namespace Lair.Windows
         private BufferManager _bufferManager;
         private LairManager _lairManager;
         private AutoBaseNodeSettingManager _autoBaseNodeSettingManager;
+        private TransfarLimitManager _transferLimitManager;
 
-        System.Windows.Forms.NotifyIcon _notifyIcon = new System.Windows.Forms.NotifyIcon();
+        private System.Windows.Forms.NotifyIcon _notifyIcon = new System.Windows.Forms.NotifyIcon();
         private WindowState _windowState;
 
         private Dictionary<string, string> _configrationDirectoryPaths = new Dictionary<string, string>();
         private string _logPath = null;
 
         private bool _isRun = true;
+        private bool _autoStop = false;
 
-        System.Timers.Timer _refreshTimer = new System.Timers.Timer();
+        private System.Timers.Timer _refreshTimer = new System.Timers.Timer();
         private Thread _timerThread = null;
         private Thread _timer2Thread = null;
 
@@ -65,8 +67,9 @@ namespace Lair.Windows
             this.Setting_Log();
 
             _configrationDirectoryPaths.Add("MainWindow", Path.Combine(App.DirectoryPaths["Configuration"], @"Lair/Properties/Settings"));
-            _configrationDirectoryPaths.Add("AutoBaseNodeSettingManager", Path.Combine(App.DirectoryPaths["Configuration"], @"Lair/AutoBaseNodeSettingManager"));
             _configrationDirectoryPaths.Add("LairManager", Path.Combine(App.DirectoryPaths["Configuration"], @"Library/Net/Lair/LairManager"));
+            _configrationDirectoryPaths.Add("AutoBaseNodeSettingManager", Path.Combine(App.DirectoryPaths["Configuration"], @"Lair/AutoBaseNodeSettingManager"));
+            _configrationDirectoryPaths.Add("TransfarLimitManager", Path.Combine(App.DirectoryPaths["Configuration"], @"Lair/TransfarLimitManager"));
 
             Settings.Instance.Load(_configrationDirectoryPaths["MainWindow"]);
 
@@ -120,14 +123,38 @@ namespace Lair.Windows
             _timerThread = new Thread(new ThreadStart(this.Timer));
             _timerThread.Priority = ThreadPriority.Highest;
             _timerThread.IsBackground = true;
-            _timerThread.Name = "TimerThread";
+            _timerThread.Name = "MainWindow_TimerThread";
             _timerThread.Start();
 
             _timer2Thread = new Thread(new ThreadStart(this.Timer2));
             _timer2Thread.Priority = ThreadPriority.Highest;
             _timer2Thread.IsBackground = true;
-            _timer2Thread.Name = "Timer2Thread";
+            _timer2Thread.Name = "MainWindow_Timer2Thread";
             _timer2Thread.Start();
+
+            _transferLimitManager.StartEvent += new EventHandler(_transferLimitManager_StartEvent);
+            _transferLimitManager.StopEvent += new EventHandler(_transferLimitManager_StopEvent);
+        }
+
+        void _transferLimitManager_StartEvent(object sender, EventArgs e)
+        {
+            if (_autoStop && !Settings.Instance.Global_IsStart)
+            {
+                this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                {
+                    _startMenuItem_Click(sender, null);
+                }), null);
+            }
+        }
+
+        void _transferLimitManager_StopEvent(object sender, EventArgs e)
+        {
+            Log.Information(LanguagesManager.Instance.MainWindow_TransferLimit_Message);
+
+            this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+            {
+                _stopMenuItem_Click(sender, null);
+            }), null);
         }
 
         public static void CopyDirectory(string sourceDirectoryPath, string destDirectoryPath)
@@ -246,6 +273,7 @@ namespace Lair.Windows
 
                         try
                         {
+                            _transferLimitManager.Save(_configrationDirectoryPaths["TransfarLimitManager"]);
                             _autoBaseNodeSettingManager.Save(_configrationDirectoryPaths["AutoBaseNodeSettingManager"]);
                             _lairManager.Save(_configrationDirectoryPaths["LairManager"]);
                             Settings.Instance.Save(_configrationDirectoryPaths["MainWindow"]);
@@ -1031,8 +1059,12 @@ namespace Lair.Windows
                 _autoBaseNodeSettingManager = new AutoBaseNodeSettingManager(_lairManager);
                 _autoBaseNodeSettingManager.Load(_configrationDirectoryPaths["AutoBaseNodeSettingManager"]);
 
+                _transferLimitManager = new TransfarLimitManager(_lairManager);
+                _transferLimitManager.Load(_configrationDirectoryPaths["TransfarLimitManager"]);
+
                 if (initFlag)
                 {
+                    _transferLimitManager.Save(_configrationDirectoryPaths["TransfarLimitManager"]);
                     _autoBaseNodeSettingManager.Save(_configrationDirectoryPaths["AutoBaseNodeSettingManager"]);
                     _lairManager.Save(_configrationDirectoryPaths["LairManager"]);
                     Settings.Instance.Save(_configrationDirectoryPaths["MainWindow"]);
@@ -1405,25 +1437,44 @@ namespace Lair.Windows
 
             _isRun = false;
 
-            _timerThread.Join();
-            _timerThread = null;
-
-            if (Settings.Instance.Global_UrlClearHistory_IsEnabled)
+            ThreadPool.QueueUserWorkItem(new WaitCallback((object wstate) =>
             {
-                Settings.Instance.Global_UrlHistorys.Clear();
-                Settings.Instance.Global_SeedHistorys.Clear();
-                Settings.Instance.Global_ChannelHistorys.Clear();
-            }
+                Thread.CurrentThread.IsBackground = false;
+                Thread.CurrentThread.Priority = ThreadPriority.Highest;
 
-            _autoBaseNodeSettingManager.Stop();
-            _autoBaseNodeSettingManager.Save(_configrationDirectoryPaths["AutoBaseNodeSettingManager"]);
-            _autoBaseNodeSettingManager.Dispose();
+                try
+                {
+                    _timerThread.Join();
+                    _timerThread = null;
 
-            _lairManager.Stop();
-            _lairManager.Save(_configrationDirectoryPaths["LairManager"]);
-            _lairManager.Dispose();
+                    _timer2Thread.Join();
+                    _timer2Thread = null;
 
-            Settings.Instance.Save(_configrationDirectoryPaths["MainWindow"]);
+                    if (Settings.Instance.Global_UrlClearHistory_IsEnabled)
+                    {
+                        Settings.Instance.Global_UrlHistorys.Clear();
+                        Settings.Instance.Global_SeedHistorys.Clear();
+                        Settings.Instance.Global_ChannelHistorys.Clear();
+                    }
+
+                    _transferLimitManager.Save(_configrationDirectoryPaths["TransfarLimitManager"]);
+                    _transferLimitManager.Dispose();
+
+                    _autoBaseNodeSettingManager.Stop();
+                    _autoBaseNodeSettingManager.Save(_configrationDirectoryPaths["AutoBaseNodeSettingManager"]);
+                    _autoBaseNodeSettingManager.Dispose();
+
+                    _lairManager.Stop();
+                    _lairManager.Save(_configrationDirectoryPaths["LairManager"]);
+                    _lairManager.Dispose();
+
+                    Settings.Instance.Save(_configrationDirectoryPaths["MainWindow"]);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex);
+                }
+            }));
         }
 
         private void Window_StateChanged(object sender, EventArgs e)
@@ -1486,6 +1537,8 @@ namespace Lair.Windows
 
         private void _stopMenuItem_Click(object sender, RoutedEventArgs e)
         {
+            _autoStop = (sender.GetType() == typeof(TransfarLimitManager));
+
             _startMenuItem.IsEnabled = true;
             _stopMenuItem.IsEnabled = false;
 
@@ -1530,7 +1583,7 @@ namespace Lair.Windows
 
         private void _connectionsSettingsMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            ConnectionsSettingsWindow window = new ConnectionsSettingsWindow(_lairManager, _autoBaseNodeSettingManager, _bufferManager);
+            ConnectionsSettingsWindow window = new ConnectionsSettingsWindow(_lairManager, _autoBaseNodeSettingManager, _transferLimitManager, _bufferManager);
             window.Owner = this;
             window.ShowDialog();
         }

@@ -45,7 +45,8 @@
             <local:StringToFontFamilyConverter x:Key="_stringToFontFamilyConverter"/>
             <local:StringToDoubleConverter x:Key="_stringToDoubleConverter"/>
             <local:ConnectionTypeToStringConverter x:Key="_connectionTypeToStringConverter"/>
-
+            <local:TransferLimitTypeToStringConverter x:Key="_transferLimitTypeToStringConverter"/>
+            
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -683,6 +683,637 @@ namespace Lair.Properties
             }
         }
 
+        public string MainWindow_TransferLimit_Message
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("MainWindow_TransferLimit_Message");
+                }
+            }
+        }
+
+
+        public string ConnectionsSettingsWindow_Title
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_Title");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_BaseNode
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_BaseNode");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_Node
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_Node");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_Uris
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_Uris");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_Uri
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_Uri");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_OtherNodes
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_OtherNodes");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_Nodes
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_Nodes");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_Client
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_Client");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_Filters
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_Filters");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_ConnectionType
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_ConnectionType");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_ProxyUri
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_ProxyUri");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_UriCondition
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_UriCondition");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_Type
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_Type");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_Host
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_Host");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_Server
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_Server");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_ListenUris
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_ListenUris");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_Events
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_Events");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_Bandwidth
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_Bandwidth");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_BandwidthLimit
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_BandwidthLimit");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_Transfer
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_Transfer");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_TransferLimitType
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_TransferLimitType");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_TransferLimitSpan
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_TransferLimitSpan");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_TransferLimitSize
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_TransferLimitSize");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_TransferInformation
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_TransferInformation");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_Downloaded
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_Downloaded");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_Uploaded
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_Uploaded");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_Total
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_Total");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_Reset
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_Reset");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_ConnectionCount
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_ConnectionCount");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_AutoBaseNodeSetting
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_AutoBaseNodeSetting");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_Tor
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_Tor");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_Ipv4
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_Ipv4");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_Ipv6
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_Ipv6");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_Up
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_Up");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_Down
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_Down");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_Add
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_Add");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_Edit
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_Edit");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_Delete
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_Delete");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_Ok
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_Ok");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_Cancel
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_Cancel");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_Cut
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_Cut");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_Copy
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_Copy");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_Paste
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_Paste");
+                }
+            }
+        }
+
+
+        public string ConnectionType_None
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionType_None");
+                }
+            }
+        }
+
+        public string ConnectionType_Tcp
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionType_Tcp");
+                }
+            }
+        }
+
+        public string ConnectionType_Socks4Proxy
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionType_Socks4Proxy");
+                }
+            }
+        }
+
+        public string ConnectionType_Socks4aProxy
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionType_Socks4aProxy");
+                }
+            }
+        }
+
+        public string ConnectionType_Socks5Proxy
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionType_Socks5Proxy");
+                }
+            }
+        }
+
+        public string ConnectionType_HttpProxy
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionType_HttpProxy");
+                }
+            }
+        }
+
+
+        public string TransferLimitType_None
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("TransferLimitType_None");
+                }
+            }
+        }
+
+        public string TransferLimitType_Downloads
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("TransferLimitType_Downloads");
+                }
+            }
+        }
+
+        public string TransferLimitType_Uploads
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("TransferLimitType_Uploads");
+                }
+            }
+        }
+
+        public string TransferLimitType_Total
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("TransferLimitType_Total");
+                }
+            }
+        }
+
+
+        public string ProgressWindow_Title
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ProgressWindow_Title");
+                }
+            }
+        }
+
+        public string ProgressWindow_Cancel
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ProgressWindow_Cancel");
+                }
+            }
+        }
+
+        public string ProgressWindow_Ok
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ProgressWindow_Ok");
+                }
+            }
+        }
+
 
         public string ViewSettingsWindow_Title
         {
@@ -993,448 +1624,6 @@ namespace Lair.Properties
         }
 
 
-        public string ConnectionsSettingsWindow_Title
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_Title");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_BaseNode
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_BaseNode");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_Node
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_Node");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_Uris
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_Uris");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_Uri
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_Uri");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_OtherNodes
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_OtherNodes");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_Nodes
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_Nodes");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_Client
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_Client");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_Filters
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_Filters");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_ConnectionType
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_ConnectionType");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_ProxyUri
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_ProxyUri");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_UriCondition
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_UriCondition");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_Type
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_Type");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_Host
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_Host");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_Server
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_Server");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_ListenUris
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_ListenUris");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_Events
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_Events");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_Bandwidth
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_Bandwidth");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_CoreSettings
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_CoreSettings");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_ConnectionCount
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_ConnectionCount");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_DownloadingLowerLimit
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_DownloadingLowerLimit");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_UploadingLowerLimit
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_UploadingLowerLimit");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_AutoSettings
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_AutoSettings");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_AutoBaseNodeSetting
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_AutoBaseNodeSetting");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_Tor
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_Tor");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_Ipv4
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_Ipv4");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_Ipv6
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_Ipv6");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_Up
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_Up");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_Down
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_Down");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_Add
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_Add");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_Edit
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_Edit");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_Delete
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_Delete");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_Ok
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_Ok");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_Cancel
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_Cancel");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_Cut
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_Cut");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_Copy
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_Copy");
-                }
-            }
-        }
-
-        public string ConnectionsSettingsWindow_Paste
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionsSettingsWindow_Paste");
-                }
-            }
-        }
-
-
-        public string ProgressWindow_Title
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ProgressWindow_Title");
-                }
-            }
-        }
-
-        public string ProgressWindow_Cancel
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ProgressWindow_Cancel");
-                }
-            }
-        }
-
-        public string ProgressWindow_Ok
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ProgressWindow_Ok");
-                }
-            }
-        }
-
-
         public string VersionInformationWindow_Title
         {
             get
@@ -1729,73 +1918,6 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("ConnectionControl_Paste");
-                }
-            }
-        }
-
-
-        public string ConnectionType_None
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionType_None");
-                }
-            }
-        }
-
-        public string ConnectionType_Tcp
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionType_Tcp");
-                }
-            }
-        }
-
-        public string ConnectionType_Socks4Proxy
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionType_Socks4Proxy");
-                }
-            }
-        }
-
-        public string ConnectionType_Socks4aProxy
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionType_Socks4aProxy");
-                }
-            }
-        }
-
-        public string ConnectionType_Socks5Proxy
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionType_Socks5Proxy");
-                }
-            }
-        }
-
-        public string ConnectionType_HttpProxy
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionType_HttpProxy");
                 }
             }
         }
