@@ -277,15 +277,12 @@ namespace Lair.Windows
                             _autoBaseNodeSettingManager.Save(_configrationDirectoryPaths["AutoBaseNodeSettingManager"]);
                             _lairManager.Save(_configrationDirectoryPaths["LairManager"]);
                             Settings.Instance.Save(_configrationDirectoryPaths["MainWindow"]);
-
-                            GC.Collect();
                         }
                         catch (Exception e)
                         {
                             Log.Warning(e);
                         }
                     }
-
 
                     if (updateStopwatch.Elapsed > new TimeSpan(1, 0, 0, 0))
                     //if (updateStopwatch.Elapsed > new TimeSpan(0, 0, 1))
