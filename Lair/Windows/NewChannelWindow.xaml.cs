@@ -29,6 +29,8 @@ namespace Lair.Windows
         {
             InitializeComponent();
 
+            _nameTextBox.MaxLength = Channel.MaxNameLength;
+
             {
                 var icon = new BitmapImage();
 

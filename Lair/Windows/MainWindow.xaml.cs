@@ -356,7 +356,9 @@ namespace Lair.Windows
                     Thread.Sleep(1000);
                     if (!_isRun) return;
 
-                    this.Dispatcher.Invoke(DispatcherPriority.Send, new Action<object>(delegate(object state2)
+                    var state = _lairManager.State;
+
+                    this.Dispatcher.Invoke(DispatcherPriority.Send, new TimeSpan(0, 0, 1), new Action<object>(delegate(object state2)
                     {
                         try
                         {
@@ -370,7 +372,7 @@ namespace Lair.Windows
 
                         try
                         {
-                            if (_lairManager.State == ManagerState.Start)
+                            if (state == ManagerState.Start)
                             {
                                 _stateTextBlock.Text = LanguagesManager.Instance.MainWindow_Start;
                             }
@@ -393,9 +395,13 @@ namespace Lair.Windows
         }
 
         private ConnectionInformation _ci = new ConnectionInformation();
+        private bool _refreshTimer_Running = false;
 
         void _refreshTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
+            if (_refreshTimer_Running) return;
+            _refreshTimer_Running = true;
+
             try
             {
                 var sentByteCount = _lairManager.SentByteCount;
@@ -412,6 +418,10 @@ namespace Lair.Windows
             catch (Exception)
             {
 
+            }
+            finally
+            {
+                _refreshTimer_Running = false;
             }
         }
 

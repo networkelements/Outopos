@@ -74,7 +74,7 @@
   <Translate Key="ConnectionsSettingsWindow_ListenUris" Value="Listen uris" />
   <Translate Key="ConnectionsSettingsWindow_Events" Value="Events" />
   <Translate Key="ConnectionsSettingsWindow_Bandwidth" Value="Bandwidth" />
-  <Translate Key="ConnectionsSettingsWindow_BandwidthLimit" Value="Bandwidth Limit [0 Byte: unlimited]" />
+  <Translate Key="ConnectionsSettingsWindow_BandwidthLimit" Value="Bandwidth Limit (*/s) [0 Byte: unlimited]" />
   <Translate Key="ConnectionsSettingsWindow_Transfer" Value="Transfer" />
   <Translate Key="ConnectionsSettingsWindow_TransferLimitType" Value="Limit Type" />
   <Translate Key="ConnectionsSettingsWindow_TransferLimitSpan" Value="Limit Span (day)" />

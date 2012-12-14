@@ -74,7 +74,7 @@
   <Translate Key="ConnectionsSettingsWindow_ListenUris" Value="受信 Uris" />
   <Translate Key="ConnectionsSettingsWindow_Events" Value="イベント" />
   <Translate Key="ConnectionsSettingsWindow_Bandwidth" Value="帯域幅" />
-  <Translate Key="ConnectionsSettingsWindow_BandwidthLimit" Value="帯域幅制限 [0 Byte: 無制限]" />
+  <Translate Key="ConnectionsSettingsWindow_BandwidthLimit" Value="帯域幅制限 (*/s) [0 Byte: 無制限]" />
   <Translate Key="ConnectionsSettingsWindow_Transfer" Value="転送量" />
   <Translate Key="ConnectionsSettingsWindow_TransferLimitType" Value="制限タイプ" />
   <Translate Key="ConnectionsSettingsWindow_TransferLimitSpan" Value="期間 (日)" />
