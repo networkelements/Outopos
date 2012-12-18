@@ -48,7 +48,6 @@ namespace Lair.Windows
         private volatile bool _refresh = false;
         private volatile bool _isEditing = false;
         private volatile bool _scroll = false;
-        private volatile uint _layoutUpdatedId = 0;
 
         private ObservableCollection<MessageEx> _listViewItemCollection = new ObservableCollection<MessageEx>();
         private LockedDictionary<Board, List<Message>> _messages = new LockedDictionary<Board, List<Message>>(new ReferenceEqualityComparer());
@@ -289,8 +288,6 @@ namespace Lair.Windows
                         if (!oldList.Contains(item)) addList.Add(item);
                     }
 
-                    uint layoutUpdatedId = 0;
-
                     this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
                     {
                         if (selectTreeViewItem != _treeView.SelectedItem) return;
@@ -370,9 +367,11 @@ namespace Lair.Windows
                         {
                             if (_listViewItemCollection.Count > 0)
                             {
+                                _listView.UpdateLayout();
                                 _listView.GoBottom();
 
-                                var topItem = _listViewItemCollection.LastOrDefault();
+                                var topItem = _listViewItemCollection.FirstOrDefault(n => n.State.HasFlag(MessageState.IsNew));
+                                if (topItem == null) topItem = _listViewItemCollection.LastOrDefault();
                                 if (topItem != null) _listView.ScrollIntoView(topItem);
                             }
                         }
@@ -380,28 +379,9 @@ namespace Lair.Windows
                         var view = CollectionViewSource.GetDefaultView(_listView.ItemsSource);
                         view.Refresh();
 
-                        layoutUpdatedId = _layoutUpdatedId;
-
                         if (App.SelectTab == "Channel")
                             _mainWindow.Title = string.Format("Lair {0} - {1}", App.LairVersion, MessageConverter.ToChannelString(selectTreeViewItem.Value.Channel));
                     }), null);
-
-                    if (_scroll)
-                    {
-                        while (layoutUpdatedId == _layoutUpdatedId) Thread.Sleep(100);
-
-                        this.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action<object>(delegate(object state2)
-                        {
-                            if (_listViewItemCollection.Count > 0)
-                            {
-                                _listView.GoBottom();
-
-                                var topItem = _listViewItemCollection.FirstOrDefault(n => n.State.HasFlag(MessageState.IsNew));
-                                if (topItem == null) topItem = _listViewItemCollection.LastOrDefault();
-                                if (topItem != null) _listView.ScrollIntoView(topItem);
-                            }
-                        }), null);
-                    }
                 }
             }
             catch (Exception e)
@@ -1770,11 +1750,6 @@ namespace Lair.Windows
         #endregion
 
         #region _listView
-
-        private void _listView_LayoutUpdated(object sender, EventArgs e)
-        {
-            _layoutUpdatedId++;
-        }
 
         private void _listView_PreviewKeyDown(object sender, KeyEventArgs e)
         {

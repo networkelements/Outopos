@@ -128,7 +128,7 @@
   <Translate Key="ViewSettingsWindow_AutoUpdate" Value="自動でアップデートする" />
   <Translate Key="ViewSettingsWindow_Amoeba" Value="Amoeba" />
   <Translate Key="ViewSettingsWindow_AmoebaPath" Value="Amoeba パス" />
-  <Translate Key="ViewSettingsWindow_SeedDeleteExpires" Value="Seedを破棄する作成日からの日数 (要再起動)" />
+  <Translate Key="ViewSettingsWindow_SeedDeleteExpires" Value="Seedを破棄する日数 (要再起動)" />
   <Translate Key="ViewSettingsWindow_Fonts" Value="フォント" />
   <Translate Key="ViewSettingsWindow_MessageFontFamily" Value="メッセージフォント" />
   <Translate Key="ViewSettingsWindow_MessageFontSize" Value="メッセージフォントサイズ" />

@@ -128,7 +128,7 @@
   <Translate Key="ViewSettingsWindow_AutoUpdate" Value="Auto update" />
   <Translate Key="ViewSettingsWindow_Amoeba" Value="Amoeba" />
   <Translate Key="ViewSettingsWindow_AmoebaPath" Value="Amoeba path" />
-  <Translate Key="ViewSettingsWindow_SeedDeleteExpires" Value="Seed delete expires" />
+  <Translate Key="ViewSettingsWindow_SeedDeleteExpires" Value="Seed expire date (need to restart)" />
   <Translate Key="ViewSettingsWindow_Fonts" Value="Fonts" />
   <Translate Key="ViewSettingsWindow_MessageFontFamily" Value="Message font family" />
   <Translate Key="ViewSettingsWindow_MessageFontSize" Value="Message font size" />

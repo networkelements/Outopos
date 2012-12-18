@@ -159,10 +159,12 @@ namespace Lair.Windows
                 AffectsArrange = true,
                 AffectsParentMeasure = true,
                 AffectsParentArrange = true,
-                BindsTwoWayByDefault = false,
+                BindsTwoWayByDefault = true,
                 DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
                 PropertyChangedCallback = (obj, e) =>
                 {
+                    if (obj == null || e.NewValue == e.OldValue) return;
+
                     try
                     {
                         var richTextBox = (RichTextBox)obj;
@@ -171,6 +173,7 @@ namespace Lair.Windows
                         if (message == null) return;
 
                         RichTextBoxHelper.SetRichTextBox(richTextBox, message);
+                        richTextBox.UpdateLayout();
                     }
                     catch (Exception ex)
                     {

@@ -20,12 +20,26 @@ namespace Lair.Windows
 
         public override void MouseWheelUp()
         {
-            this.ScrollOwner.LineUp();
+            try
+            {
+                base.ScrollOwner.LineUp();
+            }
+            catch (Exception)
+            {
+
+            }
         }
 
         public override void MouseWheelDown()
         {
-            this.ScrollOwner.LineDown();
+            try
+            {
+                base.ScrollOwner.LineDown();
+            }
+            catch (Exception)
+            {
+
+            }
         }
     }
 }

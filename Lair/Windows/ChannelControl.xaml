@@ -160,10 +160,11 @@
         </Style>
         
         <Style TargetType="{x:Type RichTextBox}">
-            <Setter Property="KeyboardNavigation.TabNavigation" Value="None" />
             <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-            <Setter Property="AllowDrop" Value="true" />
             <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="UseLayoutRounding" Value="True" />
+            <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+            <Setter Property="IsReadOnly" Value="True" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type RichTextBox}">
@@ -181,15 +182,14 @@
 
         <DataTemplate x:Key="_myTemplate_ListView">
             <Grid>
-                <RichTextBox x:Name="_richTextBox" IsReadOnly="True" BorderBrush="{Binding Path=State, Mode=OneWay, Converter={StaticResource _messageExToBorderBrushConverter}}" local:RichTextBoxHelper.DocumentMessage="{Binding Path=Value, Mode=OneWay}" Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType=Grid}}" VerticalScrollBarVisibility="Auto" ContextMenuOpening="_richTextBox_ContextMenuOpening">
+                <RichTextBox x:Name="_richTextBox" BorderBrush="{Binding Path=State, Mode=OneWay, Converter={StaticResource _messageExToBorderBrushConverter}}" local:RichTextBoxHelper.DocumentMessage="{Binding Path=Value, Mode=OneWay}" Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType=Grid}}" ContextMenuOpening="_richTextBox_ContextMenuOpening">
                     <RichTextBox.Style>
                         <Style TargetType="{x:Type RichTextBox}">
-                            <Setter Property="KeyboardNavigation.TabNavigation" Value="None" />
                             <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                            <Setter Property="AllowDrop" Value="true" />
-                            <Setter Property="ContextMenu" Value="{StaticResource TextBoxContextMenu}" />
                             <Setter Property="SnapsToDevicePixels" Value="True" />
                             <Setter Property="UseLayoutRounding" Value="True" />
+                            <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+                            <Setter Property="IsReadOnly" Value="True" />
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="{x:Type RichTextBox}">
@@ -269,8 +269,8 @@
                 </local:CategoryTreeViewItem.ContextMenu>
             </local:CategoryTreeViewItem>
         </TreeView>
-        <local:ListViewEx Grid.Column="2" Grid.Row="1" x:Name="_listView" Padding="0,1,0,0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SizeChanged="_listView_SizeChanged" PreviewKeyDown="_listView_PreviewKeyDown" LayoutUpdated="_listView_LayoutUpdated" 
-                VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" Grid.ColumnSpan="3" PreviewMouseDown="_listView_PreviewMouseDown">
+        <local:ListViewEx Grid.Column="2" Grid.Row="1" x:Name="_listView" Padding="0,1,0,0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SizeChanged="_listView_SizeChanged" PreviewKeyDown="_listView_PreviewKeyDown" SelectionMode="Single" 
+                VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Standard" Grid.ColumnSpan="3" PreviewMouseDown="_listView_PreviewMouseDown">
             <ListView.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}">
                     <Setter Property="OverridesDefaultStyle" Value="True" />

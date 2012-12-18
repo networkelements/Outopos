@@ -1544,7 +1544,7 @@ namespace Lair.Windows
 
         private void _stopMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            _autoStop = (sender.GetType() == typeof(TransfarLimitManager));
+            if (sender != null) _autoStop = (sender.GetType() == typeof(TransfarLimitManager));
 
             _startMenuItem.IsEnabled = true;
             _stopMenuItem.IsEnabled = false;

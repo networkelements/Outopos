@@ -14,4 +14,4 @@ using System.Windows;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: ThemeInfo(ResourceDictionaryLocation.None, ResourceDictionaryLocation.SourceAssembly)]
-[assembly: AssemblyVersion("0.0.0.1841")] // syt877F10HhC/dSDKoq4ahisxPYBLFi+N1LvNrysJRHAcijqbx/df0777l5TCeY90oPXy7cKTt8uLhSPiPrE8Q==
+[assembly: AssemblyVersion("0.0.0.1858")] // LQS36nKHx/lbHN59ehqN2+rmei6O5GOJM9y5HsKCXmNaeH9QSB2KHqXZOFEnHOUKteJxjFn1ZCNV6IxoRUOhZw==
