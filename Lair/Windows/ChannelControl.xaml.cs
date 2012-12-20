@@ -119,10 +119,12 @@ namespace Lair.Windows
 
                 view.Filter = delegate(object o)
                 {
+                    var item = o as MessageEx;
+                    if (o == null) return false;
+
                     if (_onlyUnreadButton.IsChecked.Value)
                     {
-                        var item = o as MessageEx;
-                        return item.State.HasFlag(MessageState.IsNew);
+                        if (!item.State.HasFlag(MessageState.IsNew)) return false;
                     }
 
                     return true;
@@ -231,6 +233,8 @@ namespace Lair.Windows
                         }
                     }
 
+                    newList.UnionWith(selectTreeViewItem.Value.LockMessages);
+                    
                     List<CategoryTreeViewItem> categoryTreeViewItems = new List<CategoryTreeViewItem>();
 
                     this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
@@ -363,21 +367,17 @@ namespace Lair.Windows
 
                         this.Sort();
 
+                        var view = CollectionViewSource.GetDefaultView(_listView.ItemsSource);
+                        view.Refresh();
+
                         if (_scroll)
                         {
                             if (_listViewItemCollection.Count > 0)
                             {
                                 _listView.UpdateLayout();
                                 _listView.GoBottom();
-
-                                var topItem = _listViewItemCollection.FirstOrDefault(n => n.State.HasFlag(MessageState.IsNew));
-                                if (topItem == null) topItem = _listViewItemCollection.LastOrDefault();
-                                if (topItem != null) _listView.ScrollIntoView(topItem);
                             }
                         }
-
-                        var view = CollectionViewSource.GetDefaultView(_listView.ItemsSource);
-                        view.Refresh();
 
                         if (App.SelectTab == "Channel")
                             _mainWindow.Title = string.Format("Lair {0} - {1}", App.LairVersion, MessageConverter.ToChannelString(selectTreeViewItem.Value.Channel));
@@ -453,6 +453,8 @@ namespace Lair.Windows
                                     newList.Add(message);
                                 }
                             }
+
+                            newList.UnionWith(selectTreeViewItem.Value.LockMessages);
 
                             List<CategoryTreeViewItem> categoryTreeViewItems = new List<CategoryTreeViewItem>();
 
@@ -703,25 +705,18 @@ namespace Lair.Windows
             }
             else
             {
-                DateTime now = DateTime.UtcNow;
-
-                foreach (var item in items)
-                {
-                    lock (item.Value.ThisLock)
-                    {
-                        foreach (var lm in item.Value.LockMessages.ToArray())
-                        {
-                            if ((now - lm.CreationTime) > new TimeSpan(64, 0, 0, 0))
-                                item.Value.LockMessages.Remove(lm);
-                        }
-                    }
-                }
-
                 HashSet<Message> lockMessages = new HashSet<Message>();
 
                 foreach (var item in items)
                 {
-                    lockMessages.UnionWith(item.Value.LockMessages);
+                    var tempList = item.Value.LockMessages.ToList();
+
+                    tempList.Sort(new Comparison<Message>((Message x, Message y) =>
+                    {
+                        return y.CreationTime.CompareTo(x.CreationTime);
+                    }));
+
+                    lockMessages.UnionWith(tempList.Take(1024 - 128));
                 }
 
                 IList<Message> messages;
@@ -878,8 +873,6 @@ namespace Lair.Windows
 
             selectCategoryTreeViewItem.Update();
 
-            this.Update();
-
             Settings.Instance.Global_ChannelHistorys.Add(channel);
         }
 
@@ -937,8 +930,6 @@ namespace Lair.Windows
                 ViewSettingsWindow window = new ViewSettingsWindow(_bufferManager);
                 window.Owner = _mainWindow;
                 window.ShowDialog();
-
-                this.Refresh();
             }
         }
 
@@ -967,7 +958,6 @@ namespace Lair.Windows
             {
                 messages.IntersectWith(messages.ToArray().Where(item =>
                 {
-                    var messageText = RichTextBoxHelper.GetMessageToShowString(item);
                     string signatureText = null;
 
                     if (item.Certificate == null)
@@ -987,7 +977,7 @@ namespace Lair.Windows
                         {
                             flag = category.SearchWordCollection.Any(searchContains =>
                             {
-                                if (searchContains.Contains) return messageText.Contains(searchContains.Value);
+                                if (searchContains.Contains) return item.Content.Contains(searchContains.Value);
 
                                 return false;
                             });
@@ -1015,7 +1005,7 @@ namespace Lair.Windows
                         {
                             flag = category.SearchRegexCollection.Any(searchContains =>
                             {
-                                if (searchContains.Contains) return searchContains.Value.IsMatch(messageText);
+                                if (searchContains.Contains) return searchContains.Value.IsMatch(item.Content);
 
                                 return false;
                             });
@@ -1030,7 +1020,6 @@ namespace Lair.Windows
                 {
                     if (item.Content.Contains('\uFFFD')) return true;
 
-                    var messageText = RichTextBoxHelper.GetMessageToShowString(item);
                     string signatureText = null;
 
                     if (item.Certificate == null)
@@ -1050,7 +1039,7 @@ namespace Lair.Windows
                         {
                             flag = category.SearchWordCollection.Any(searchContains =>
                             {
-                                if (!searchContains.Contains) return messageText.Contains(searchContains.Value);
+                                if (!searchContains.Contains) return item.Content.Contains(searchContains.Value);
 
                                 return false;
                             });
@@ -1078,7 +1067,7 @@ namespace Lair.Windows
                         {
                             flag = category.SearchRegexCollection.Any(searchContains =>
                             {
-                                if (!searchContains.Contains) return searchContains.Value.IsMatch(messageText);
+                                if (!searchContains.Contains) return searchContains.Value.IsMatch(item.Content);
 
                                 return false;
                             });
@@ -1108,7 +1097,6 @@ namespace Lair.Windows
 
                 messages.IntersectWith(messages.ToArray().Where(item =>
                 {
-                    var messageText = RichTextBoxHelper.GetMessageToShowString(item);
                     string signatureText = null;
 
                     if (item.Certificate == null)
@@ -1128,7 +1116,7 @@ namespace Lair.Windows
                         {
                             flag = board.SearchWordCollection.Any(searchContains =>
                             {
-                                if (searchContains.Contains) return messageText.Contains(searchContains.Value);
+                                if (searchContains.Contains) return item.Content.Contains(searchContains.Value);
 
                                 return false;
                             });
@@ -1170,7 +1158,7 @@ namespace Lair.Windows
                         {
                             flag = board.SearchRegexCollection.Any(searchContains =>
                             {
-                                if (searchContains.Contains) return searchContains.Value.IsMatch(messageText);
+                                if (searchContains.Contains) return searchContains.Value.IsMatch(item.Content);
 
                                 return false;
                             });
@@ -1185,7 +1173,6 @@ namespace Lair.Windows
                 {
                     if (item.Content.Contains('\uFFFD')) return true;
 
-                    var messageText = RichTextBoxHelper.GetMessageToShowString(item);
                     string signatureText = null;
 
                     if (item.Certificate == null)
@@ -1205,7 +1192,7 @@ namespace Lair.Windows
                         {
                             flag = board.SearchWordCollection.Any(searchContains =>
                             {
-                                if (!searchContains.Contains) return messageText.Contains(searchContains.Value);
+                                if (!searchContains.Contains) return item.Content.Contains(searchContains.Value);
 
                                 return false;
                             });
@@ -1247,7 +1234,7 @@ namespace Lair.Windows
                         {
                             flag = board.SearchRegexCollection.Any(searchContains =>
                             {
-                                if (!searchContains.Contains) return searchContains.Value.IsMatch(messageText);
+                                if (!searchContains.Contains) return searchContains.Value.IsMatch(item.Content);
 
                                 return false;
                             });
@@ -1747,6 +1734,80 @@ namespace Lair.Windows
             }
         }
 
+        private void _treeViewImportLockedMessagesMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var selectTreeViewItem = _treeView.SelectedItem as BoardTreeViewItem;
+            if (selectTreeViewItem == null) return;
+
+            using (System.Windows.Forms.OpenFileDialog dialog = new System.Windows.Forms.OpenFileDialog())
+            {
+                dialog.Multiselect = true;
+                dialog.RestoreDirectory = true;
+                dialog.DefaultExt = ".messages";
+                dialog.Filter = "Messages (*.messages)|*.messages";
+
+                if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    foreach (var filePath in dialog.FileNames)
+                    {
+                        try
+                        {
+                            using (FileStream stream = new FileStream(filePath, FileMode.Open))
+                            {
+                                foreach (var message in LairConverter.FromMessagesStream(stream))
+                                {
+                                    if (message == null || message.Channel == null || message.Content == null) continue;
+                                    if (message.Channel != selectTreeViewItem.Value.Channel) continue;
+
+                                    selectTreeViewItem.Value.LockMessages.Add(message);
+                                }
+                            }
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                    }
+
+                    selectTreeViewItem.Update();
+                    this.Update();
+                }
+            }
+        }
+
+        private void _treeViewExportLockedMessagesMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var selectTreeViewItem = _treeView.SelectedItem as BoardTreeViewItem;
+            if (selectTreeViewItem == null) return;
+
+            using (System.Windows.Forms.SaveFileDialog dialog = new System.Windows.Forms.SaveFileDialog())
+            {
+                dialog.RestoreDirectory = true;
+                dialog.FileName = selectTreeViewItem.Value.Channel.Name;
+                dialog.DefaultExt = ".messages";
+                dialog.Filter = "Messages (*.messages)|*.messages";
+
+                if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    var fileName = dialog.FileName;
+
+                    using (FileStream stream = new FileStream(fileName, FileMode.Create))
+                    using (Stream directoryStream = LairConverter.ToMessagesStream(selectTreeViewItem.Value.LockMessages))
+                    {
+                        int i = -1;
+                        byte[] buffer = _bufferManager.TakeBuffer(1024);
+
+                        while ((i = directoryStream.Read(buffer, 0, buffer.Length)) > 0)
+                        {
+                            stream.Write(buffer, 0, i);
+                        }
+
+                        _bufferManager.ReturnBuffer(buffer);
+                    }
+                }
+            }
+        }
+        
         #endregion
 
         #region _listView
@@ -1820,7 +1881,9 @@ namespace Lair.Windows
                 var index = _listView.GetCurrentIndex(e.GetPosition);
                 if (index == -1) return;
 
-                var mx = _listViewItemCollection[index];
+                var view = CollectionViewSource.GetDefaultView(_listView.ItemsSource);
+                var mx = view.OfType<MessageEx>().ToArray()[index];
+
                 var list = _treeViewItem.GetLineage(selectTreeViewItem).OfType<TreeViewItem>().ToList();
 
                 var item = new SearchContains<Message>()
@@ -1829,10 +1892,12 @@ namespace Lair.Windows
                     Value = mx.Value,
                 };
 
-                if (selectTreeViewItem.Value.SearchMessageCollection.Contains(item)) return;
-                selectTreeViewItem.Value.SearchMessageCollection.Add(item);
+                if (!selectTreeViewItem.Value.SearchMessageCollection.Contains(item))
+                    selectTreeViewItem.Value.SearchMessageCollection.Add(item);
 
-                this.Update();
+                _listViewItemCollection.Remove(mx);
+
+                view.Refresh();
             }
 
             if (Keyboard.IsKeyDown(System.Windows.Input.Key.LeftCtrl) && e.ChangedButton == MouseButton.Left)
@@ -1840,7 +1905,8 @@ namespace Lair.Windows
                 var index = _listView.GetCurrentIndex(e.GetPosition);
                 if (index == -1) return;
 
-                var mx = _listViewItemCollection[index];
+                var view = CollectionViewSource.GetDefaultView(_listView.ItemsSource);
+                var mx = view.OfType<MessageEx>().ToArray()[index];
 
                 if (mx.State.HasFlag(MessageState.IsLock))
                 {
@@ -2113,6 +2179,7 @@ namespace Lair.Windows
             var view = CollectionViewSource.GetDefaultView(_listView.ItemsSource);
             view.Refresh();
 
+            _listView.UpdateLayout();
             _listView.GoBottom();
         }
 
@@ -2121,7 +2188,8 @@ namespace Lair.Windows
             var view = CollectionViewSource.GetDefaultView(_listView.ItemsSource);
             view.Refresh();
 
-            _listView.GoBottom(); 
+            _listView.UpdateLayout();
+            _listView.GoBottom();
         }
 
         #region Sort

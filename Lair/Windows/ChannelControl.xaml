@@ -265,6 +265,9 @@
                         <MenuItem Name="_treeViewPasteMenuItem" Header="{Binding Path=ChannelControl_Paste, Source={StaticResource ResourcesInstance}}" Click="_treeViewPasteMenuItem_Click" />
                         <Separator />
                         <MenuItem Name="_treeViewMarkAllMessagesReadMenuItem" Header="{Binding Path=ChannelControl_MarkAllMessagesRead, Source={StaticResource ResourcesInstance}}" Click="_treeViewMarkAllMessagesReadMenuItem_Click"/>
+                        <Separator />
+                        <MenuItem Name="_treeViewImportLockedMessagesMenuItem" Header="{Binding Path=ChannelControl_ImportLockedMessages, Source={StaticResource ResourcesInstance}}" Click="_treeViewImportLockedMessagesMenuItem_Click"/>
+                        <MenuItem Name="_treeViewExportLockedMessagesMenuItem" Header="{Binding Path=ChannelControl_ExportLockedMessages, Source={StaticResource ResourcesInstance}}" Click="_treeViewExportLockedMessagesMenuItem_Click"/>
                     </ContextMenu>
                 </local:CategoryTreeViewItem.ContextMenu>
             </local:CategoryTreeViewItem>

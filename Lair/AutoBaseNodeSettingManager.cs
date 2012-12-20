@@ -32,17 +32,6 @@ namespace Lair
             _settings = new Settings();
         }
 
-        public override ManagerState State
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return _state;
-                }
-            }
-        }
-
         private static IEnumerable<IPAddress> GetIpAddresses()
         {
             List<IPAddress> list = new List<IPAddress>();
@@ -363,6 +352,17 @@ namespace Lair
                     }
                 }
                 _settings.UpnpUri = null;
+            }
+        }
+
+        public override ManagerState State
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return _state;
+                }
             }
         }
 

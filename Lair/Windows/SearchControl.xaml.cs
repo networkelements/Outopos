@@ -2210,7 +2210,7 @@ namespace Lair.Windows
         {
             lock (this.ThisLock)
             {
-                var o = RegexOptions.Compiled | RegexOptions.Singleline;
+                var o = RegexOptions.Compiled | RegexOptions.Multiline;
                 if (_isIgnoreCase) o |= RegexOptions.IgnoreCase;
 
                 if (_value != null) _regex = new Regex(_value, o);

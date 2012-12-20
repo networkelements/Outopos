@@ -2187,6 +2187,28 @@ namespace Lair.Properties
             }
         }
 
+        public string ChannelControl_ImportLockedMessages
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChannelControl_ImportLockedMessages");
+                }
+            }
+        }
+
+        public string ChannelControl_ExportLockedMessages
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChannelControl_ExportLockedMessages");
+                }
+            }
+        }
+
 
         public string SignWindow_Title
         {

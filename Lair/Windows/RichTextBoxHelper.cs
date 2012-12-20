@@ -137,8 +137,6 @@ namespace Lair.Windows
                 }
             }
 
-            var ttt = stringBuilder.ToString().TrimEnd('\r', '\n');
-
             return stringBuilder.ToString().TrimEnd('\r', '\n');
         }
 
@@ -173,7 +171,6 @@ namespace Lair.Windows
                         if (message == null) return;
 
                         RichTextBoxHelper.SetRichTextBox(richTextBox, message);
-                        richTextBox.UpdateLayout();
                     }
                     catch (Exception ex)
                     {

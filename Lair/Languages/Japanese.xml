@@ -198,6 +198,8 @@
   <Translate Key="ChannelControl_AmoebaNotFound_Message" Value="Amoebaが見つかりません。Amoeba.exeへのパスを設定してください。" />
   <Translate Key="ChannelControl_MarkAllMessagesRead" Value="全てのメッセージを既読にする" />
   <Translate Key="ChannelControl_MarkAllMessagesRead_Message" Value="全てのメッセージを既読にしますか？" />
+  <Translate Key="ChannelControl_ImportLockedMessages" Value="ロックされたメッセージのインポート" />
+  <Translate Key="ChannelControl_ExportLockedMessages" Value="ロックされたメッセージのエクスポート" />
 
   <Translate Key="SignWindow_Title" Value="フィルタ" />
   <Translate Key="SignWindow_Signature" Value="サイン" />

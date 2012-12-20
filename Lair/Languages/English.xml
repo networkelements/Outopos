@@ -198,6 +198,8 @@
   <Translate Key="ChannelControl_AmoebaNotFound_Message" Value="Amoeba Not Found" />
   <Translate Key="ChannelControl_MarkAllMessagesRead" Value="Mark all messages read" />
   <Translate Key="ChannelControl_MarkAllMessagesRead_Message" Value="Do you want to mark all messages read?" />
+  <Translate Key="ChannelControl_ImportLockedMessages" Value="Import locked messages" />
+  <Translate Key="ChannelControl_ExportLockedMessages" Value="Export locked messages" />
 
   <Translate Key="SignWindow_Title" Value="Filter" />
   <Translate Key="SignWindow_Signature" Value="Signature" />
