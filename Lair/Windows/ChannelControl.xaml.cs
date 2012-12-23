@@ -256,7 +256,14 @@ namespace Lair.Windows
 
                         tempList.Sort(new Comparison<Message>((Message x, Message y) =>
                         {
-                            return x.CreationTime.CompareTo(y.CreationTime);
+                            int c = x.CreationTime.CompareTo(y.CreationTime);
+                            if (c != 0) return c;
+                            c = x.Content.CompareTo(y.Content);
+                            if (c != 0) return c;
+                            c = Collection.Compare(x.GetHash(HashAlgorithm.Sha512), y.GetHash(HashAlgorithm.Sha512));
+                            if (c != 0) return c;
+
+                            return x.GetHashCode().CompareTo(y.GetHashCode());
                         }));
 
                         sortList = tempList.Skip(tempList.Count - 1024).ToList();
@@ -477,7 +484,14 @@ namespace Lair.Windows
 
                                 tempList.Sort(new Comparison<Message>((Message x, Message y) =>
                                 {
-                                    return x.CreationTime.CompareTo(y.CreationTime);
+                                    int c = x.CreationTime.CompareTo(y.CreationTime);
+                                    if (c != 0) return c;
+                                    c = x.Content.CompareTo(y.Content);
+                                    if (c != 0) return c;
+                                    c = Collection.Compare(x.GetHash(HashAlgorithm.Sha512), y.GetHash(HashAlgorithm.Sha512));
+                                    if (c != 0) return c;
+
+                                    return x.GetHashCode().CompareTo(y.GetHashCode());
                                 }));
 
                                 sortList = tempList.Skip(tempList.Count - 1024).ToList();
@@ -713,8 +727,16 @@ namespace Lair.Windows
 
                     tempList.Sort(new Comparison<Message>((Message x, Message y) =>
                     {
-                        return y.CreationTime.CompareTo(x.CreationTime);
+                        int c = x.CreationTime.CompareTo(y.CreationTime);
+                        if (c != 0) return c;
+                        c = x.Content.CompareTo(y.Content);
+                        if (c != 0) return c;
+                        c = Collection.Compare(x.GetHash(HashAlgorithm.Sha512), y.GetHash(HashAlgorithm.Sha512));
+                        if (c != 0) return c;
+
+                        return x.GetHashCode().CompareTo(y.GetHashCode());
                     }));
+                    tempList.Reverse();
 
                     lockMessages.UnionWith(tempList.Take(1024 - 128));
                 }
@@ -799,7 +821,14 @@ namespace Lair.Windows
 
                     list2.Sort(new Comparison<Message>((Message x, Message y) =>
                     {
-                        return x.CreationTime.CompareTo(y.CreationTime);
+                        int c = x.CreationTime.CompareTo(y.CreationTime);
+                        if (c != 0) return c;
+                        c = x.Content.CompareTo(y.Content);
+                        if (c != 0) return c;
+                        c = Collection.Compare(x.GetHash(HashAlgorithm.Sha512), y.GetHash(HashAlgorithm.Sha512));
+                        if (c != 0) return c;
+
+                        return x.GetHashCode().CompareTo(y.GetHashCode());
                     }));
 
                     foreach (var item in list1)
