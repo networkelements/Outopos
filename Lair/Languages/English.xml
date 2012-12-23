@@ -74,12 +74,12 @@
   <Translate Key="ConnectionsSettingsWindow_ListenUris" Value="Listen uris" />
   <Translate Key="ConnectionsSettingsWindow_Events" Value="Events" />
   <Translate Key="ConnectionsSettingsWindow_Bandwidth" Value="Bandwidth" />
-  <Translate Key="ConnectionsSettingsWindow_BandwidthLimit" Value="Bandwidth Limit (*/s) [0 Byte: unlimited]" />
+  <Translate Key="ConnectionsSettingsWindow_BandwidthLimit" Value="Bandwidth limit (*/s) [0 Byte: unlimited]" />
   <Translate Key="ConnectionsSettingsWindow_Transfer" Value="Transfer" />
-  <Translate Key="ConnectionsSettingsWindow_TransferLimitType" Value="Limit Type" />
-  <Translate Key="ConnectionsSettingsWindow_TransferLimitSpan" Value="Limit Span (day)" />
-  <Translate Key="ConnectionsSettingsWindow_TransferLimitSize" Value="Limit Size" />
-  <Translate Key="ConnectionsSettingsWindow_TransferInformation" Value="Transfer Information" />
+  <Translate Key="ConnectionsSettingsWindow_TransferLimitType" Value="Limit type" />
+  <Translate Key="ConnectionsSettingsWindow_TransferLimitSpan" Value="Limit span (day)" />
+  <Translate Key="ConnectionsSettingsWindow_TransferLimitSize" Value="Limit size" />
+  <Translate Key="ConnectionsSettingsWindow_TransferInformation" Value="Transfer information" />
   <Translate Key="ConnectionsSettingsWindow_Downloaded" Value="Downloaded" />
   <Translate Key="ConnectionsSettingsWindow_Uploaded" Value="Uploaded" />
   <Translate Key="ConnectionsSettingsWindow_Total" Value="Total" />
@@ -131,9 +131,9 @@
   <Translate Key="ViewSettingsWindow_SeedDeleteExpires" Value="Seed expire date (need to restart)" />
   <Translate Key="ViewSettingsWindow_Fonts" Value="Fonts" />
   <Translate Key="ViewSettingsWindow_MessageFontFamily" Value="Message font family" />
-  <Translate Key="ViewSettingsWindow_MessageFontSize" Value="Message font size" />
+  <Translate Key="ViewSettingsWindow_MessageFontSize" Value="Message font size (pt)" />
   <Translate Key="ViewSettingsWindow_Events" Value="Events" />
-  <Translate Key="ViewSettingsWindow_ClearUrlHistory" Value="Clear Url History" />
+  <Translate Key="ViewSettingsWindow_ClearUrlHistory" Value="Clear url history" />
   <Translate Key="ViewSettingsWindow_Value" Value="Value" />
   <Translate Key="ViewSettingsWindow_Import" Value="Import" />
   <Translate Key="ViewSettingsWindow_Export" Value="Export" />
@@ -184,10 +184,10 @@
   <Translate Key="ChannelControl_Paste" Value="Paste" />
   <Translate Key="ChannelControl_Respons" Value="Respons" />
   <Translate Key="ChannelControl_Lock" Value="Lock" />
-  <Translate Key="ChannelControl_LockThis" Value="Lock This" />
-  <Translate Key="ChannelControl_UnlockThis" Value="Unlock This" />
-  <Translate Key="ChannelControl_LockAll" Value="Lock All" />
-  <Translate Key="ChannelControl_UnlockAll" Value="Unlock All" />
+  <Translate Key="ChannelControl_LockThis" Value="Lock this" />
+  <Translate Key="ChannelControl_UnlockThis" Value="Unlock this" />
+  <Translate Key="ChannelControl_LockAll" Value="Lock all" />
+  <Translate Key="ChannelControl_UnlockAll" Value="Unlock all" />
   <Translate Key="ChannelControl_Filter" Value="Filter" />
   <Translate Key="ChannelControl_FilterWord" Value="Filter word" />
   <Translate Key="ChannelControl_FilterSignature" Value="Filter signature" />

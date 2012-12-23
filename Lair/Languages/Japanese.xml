@@ -131,7 +131,7 @@
   <Translate Key="ViewSettingsWindow_SeedDeleteExpires" Value="Seedを破棄する日数 (要再起動)" />
   <Translate Key="ViewSettingsWindow_Fonts" Value="フォント" />
   <Translate Key="ViewSettingsWindow_MessageFontFamily" Value="メッセージフォント" />
-  <Translate Key="ViewSettingsWindow_MessageFontSize" Value="メッセージフォントサイズ" />
+  <Translate Key="ViewSettingsWindow_MessageFontSize" Value="メッセージフォントサイズ (pt)" />
   <Translate Key="ViewSettingsWindow_Events" Value="イベント" />
   <Translate Key="ViewSettingsWindow_ClearUrlHistory" Value="Lairの終了時にURLクリック履歴を削除する" />
   <Translate Key="ViewSettingsWindow_Value" Value="値" />
