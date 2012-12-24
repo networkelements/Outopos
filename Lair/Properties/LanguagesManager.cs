@@ -2388,6 +2388,17 @@ namespace Lair.Properties
             }
         }
 
+        public string BoardEditWindow_CreationTimeRange
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("BoardEditWindow_CreationTimeRange");
+                }
+            }
+        }
+
         public string BoardEditWindow_Message
         {
             get
@@ -2428,6 +2439,28 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("BoardEditWindow_Value");
+                }
+            }
+        }
+
+        public string BoardEditWindow_Min
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("BoardEditWindow_Min");
+                }
+            }
+        }
+
+        public string BoardEditWindow_Max
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("BoardEditWindow_Max");
                 }
             }
         }
@@ -2598,6 +2631,17 @@ namespace Lair.Properties
             }
         }
 
+        public string CategoryEditWindow_CreationTimeRange
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("CategoryEditWindow_CreationTimeRange");
+                }
+            }
+        }
+
         public string CategoryEditWindow_Contains
         {
             get
@@ -2627,6 +2671,28 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("CategoryEditWindow_Value");
+                }
+            }
+        }
+
+        public string CategoryEditWindow_Min
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("CategoryEditWindow_Min");
+                }
+            }
+        }
+
+        public string CategoryEditWindow_Max
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("CategoryEditWindow_Max");
                 }
             }
         }

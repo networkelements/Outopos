@@ -384,9 +384,9 @@ namespace Lair.Windows
                         {
                             if (_listViewItemCollection.Count > 0)
                             {
-                                _listView.UpdateLayout();
                                 _listView.GoBottom();
 
+                                _listView.UpdateLayout();
                                 var topItem = _listViewItemCollection.FirstOrDefault(n => n.State.HasFlag(MessageState.IsNew));
                                 if (topItem == null) topItem = _listViewItemCollection.LastOrDefault();
                                 if (topItem != null) _listView.ScrollIntoView(topItem);
@@ -1027,7 +1027,23 @@ namespace Lair.Windows
                         signatureText = MessageConverter.ToSignatureString(item.Certificate);
                     }
 
+                    var messageText = RichTextBoxHelper.GetMessageToShowString(item);
+
                     bool flag = true;
+
+                    lock (category.SearchCreationTimeRangeCollection.ThisLock)
+                    {
+                        if (category.SearchCreationTimeRangeCollection.Any(n => n.Contains == true))
+                        {
+                            flag = category.SearchCreationTimeRangeCollection.Any(searchContains =>
+                            {
+                                if (searchContains.Contains) return searchContains.Value.Verify(item.CreationTime);
+
+                                return false;
+                            });
+                            if (flag) return true;
+                        }
+                    }
 
                     lock (category.SearchWordCollection.ThisLock)
                     {
@@ -1035,7 +1051,7 @@ namespace Lair.Windows
                         {
                             flag = category.SearchWordCollection.Any(searchContains =>
                             {
-                                if (searchContains.Contains) return item.Content.Contains(searchContains.Value);
+                                if (searchContains.Contains) return messageText.Contains(searchContains.Value);
 
                                 return false;
                             });
@@ -1063,7 +1079,7 @@ namespace Lair.Windows
                         {
                             flag = category.SearchRegexCollection.Any(searchContains =>
                             {
-                                if (searchContains.Contains) return searchContains.Value.IsMatch(item.Content);
+                                if (searchContains.Contains) return searchContains.Value.IsMatch(messageText);
 
                                 return false;
                             });
@@ -1089,7 +1105,23 @@ namespace Lair.Windows
                         signatureText = MessageConverter.ToSignatureString(item.Certificate);
                     }
 
+                    var messageText = RichTextBoxHelper.GetMessageToShowString(item); 
+                    
                     bool flag = false;
+
+                    lock (category.SearchCreationTimeRangeCollection.ThisLock)
+                    {
+                        if (category.SearchCreationTimeRangeCollection.Any(n => n.Contains == false))
+                        {
+                            flag = category.SearchCreationTimeRangeCollection.Any(searchContains =>
+                            {
+                                if (!searchContains.Contains) return searchContains.Value.Verify(item.CreationTime);
+
+                                return false;
+                            });
+                            if (flag) return true;
+                        }
+                    }
 
                     lock (category.SearchWordCollection.ThisLock)
                     {
@@ -1097,7 +1129,7 @@ namespace Lair.Windows
                         {
                             flag = category.SearchWordCollection.Any(searchContains =>
                             {
-                                if (!searchContains.Contains) return item.Content.Contains(searchContains.Value);
+                                if (!searchContains.Contains) return messageText.Contains(searchContains.Value);
 
                                 return false;
                             });
@@ -1125,7 +1157,7 @@ namespace Lair.Windows
                         {
                             flag = category.SearchRegexCollection.Any(searchContains =>
                             {
-                                if (!searchContains.Contains) return searchContains.Value.IsMatch(item.Content);
+                                if (!searchContains.Contains) return searchContains.Value.IsMatch(messageText);
 
                                 return false;
                             });
@@ -1166,7 +1198,23 @@ namespace Lair.Windows
                         signatureText = MessageConverter.ToSignatureString(item.Certificate);
                     }
 
+                    var messageText = RichTextBoxHelper.GetMessageToShowString(item);
+
                     bool flag = true;
+
+                    lock (board.SearchCreationTimeRangeCollection.ThisLock)
+                    {
+                        if (board.SearchCreationTimeRangeCollection.Any(n => n.Contains == true))
+                        {
+                            flag = board.SearchCreationTimeRangeCollection.Any(searchContains =>
+                            {
+                                if (searchContains.Contains) return searchContains.Value.Verify(item.CreationTime);
+
+                                return false;
+                            });
+                            if (flag) return true;
+                        }
+                    }
 
                     lock (board.SearchWordCollection.ThisLock)
                     {
@@ -1174,7 +1222,7 @@ namespace Lair.Windows
                         {
                             flag = board.SearchWordCollection.Any(searchContains =>
                             {
-                                if (searchContains.Contains) return item.Content.Contains(searchContains.Value);
+                                if (searchContains.Contains) return messageText.Contains(searchContains.Value);
 
                                 return false;
                             });
@@ -1216,7 +1264,7 @@ namespace Lair.Windows
                         {
                             flag = board.SearchRegexCollection.Any(searchContains =>
                             {
-                                if (searchContains.Contains) return searchContains.Value.IsMatch(item.Content);
+                                if (searchContains.Contains) return searchContains.Value.IsMatch(messageText);
 
                                 return false;
                             });
@@ -1242,7 +1290,23 @@ namespace Lair.Windows
                         signatureText = MessageConverter.ToSignatureString(item.Certificate);
                     }
 
+                    var messageText = RichTextBoxHelper.GetMessageToShowString(item);
+
                     bool flag = false;
+
+                    lock (board.SearchCreationTimeRangeCollection.ThisLock)
+                    {
+                        if (board.SearchCreationTimeRangeCollection.Any(n => n.Contains == false))
+                        {
+                            flag = board.SearchCreationTimeRangeCollection.Any(searchContains =>
+                            {
+                                if (!searchContains.Contains) return searchContains.Value.Verify(item.CreationTime);
+
+                                return false;
+                            });
+                            if (flag) return true;
+                        }
+                    }
 
                     lock (board.SearchWordCollection.ThisLock)
                     {
@@ -1250,7 +1314,7 @@ namespace Lair.Windows
                         {
                             flag = board.SearchWordCollection.Any(searchContains =>
                             {
-                                if (!searchContains.Contains) return item.Content.Contains(searchContains.Value);
+                                if (!searchContains.Contains) return messageText.Contains(searchContains.Value);
 
                                 return false;
                             });
@@ -1292,7 +1356,7 @@ namespace Lair.Windows
                         {
                             flag = board.SearchRegexCollection.Any(searchContains =>
                             {
-                                if (!searchContains.Contains) return searchContains.Value.IsMatch(item.Content);
+                                if (!searchContains.Contains) return searchContains.Value.IsMatch(messageText);
 
                                 return false;
                             });
@@ -2794,6 +2858,7 @@ namespace Lair.Windows
         private LockedList<SearchContains<string>> _searchWordCollection;
         private LockedList<SearchContains<SearchRegex>> _searchRegexCollection;
         private LockedList<SearchContains<string>> _searchSignatureCollection;
+        private LockedList<SearchContains<SearchRange<DateTime>>> _searchCreationTimeRangeCollection;
 
         private object _thisLock = new object();
         private static object _thisStaticLock = new object();
@@ -2911,6 +2976,21 @@ namespace Lair.Windows
             }
         }
 
+        [DataMember(Name = "SearchCreationTimeRangeCollection")]
+        public LockedList<SearchContains<SearchRange<DateTime>>> SearchCreationTimeRangeCollection
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    if (_searchCreationTimeRangeCollection == null)
+                        _searchCreationTimeRangeCollection = new LockedList<SearchContains<SearchRange<DateTime>>>();
+
+                    return _searchCreationTimeRangeCollection;
+                }
+            }
+        }
+
         #region IDeepClone<Category>
 
         public Category DeepClone()
@@ -2969,6 +3049,7 @@ namespace Lair.Windows
         private LockedList<SearchContains<string>> _searchWordCollection;
         private LockedList<SearchContains<SearchRegex>> _searchRegexCollection;
         private LockedList<SearchContains<string>> _searchSignatureCollection;
+        private LockedList<SearchContains<SearchRange<DateTime>>> _searchCreationTimeRangeCollection;
         private LockedList<SearchContains<Message>> _searchMessageCollection;
 
         private object _thisLock = new object();
@@ -3024,6 +3105,7 @@ namespace Lair.Windows
                 || (this.SearchWordCollection == null) != (other.SearchWordCollection == null)
                 || (this.SearchRegexCollection == null) != (other.SearchRegexCollection == null)
                 || (this.SearchSignatureCollection == null) != (other.SearchSignatureCollection == null)
+                || (this.SearchCreationTimeRangeCollection == null) != (other.SearchCreationTimeRangeCollection == null)
                 || (this.SearchMessageCollection == null) != (other.SearchMessageCollection == null))
             {
                 return false;
@@ -3031,10 +3113,11 @@ namespace Lair.Windows
 
             if (!Collection.Equals(this.LockMessages, other.LockMessages)) return false;
             if (!Collection.Equals(this.OldMessages, other.OldMessages)) return false;
-         
+
             if (!Collection.Equals(this.SearchWordCollection, other.SearchWordCollection)) return false;
             if (!Collection.Equals(this.SearchRegexCollection, other.SearchRegexCollection)) return false;
             if (!Collection.Equals(this.SearchSignatureCollection, other.SearchSignatureCollection)) return false;
+            if (!Collection.Equals(this.SearchCreationTimeRangeCollection, other.SearchCreationTimeRangeCollection)) return false;
             if (!Collection.Equals(this.SearchMessageCollection, other.SearchMessageCollection)) return false;
 
             return true;
@@ -3168,6 +3251,21 @@ namespace Lair.Windows
                         _searchSignatureCollection = new LockedList<SearchContains<string>>();
 
                     return _searchSignatureCollection;
+                }
+            }
+        }
+
+        [DataMember(Name = "SearchCreationTimeRangeCollection")]
+        public LockedList<SearchContains<SearchRange<DateTime>>> SearchCreationTimeRangeCollection
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    if (_searchCreationTimeRangeCollection == null)
+                        _searchCreationTimeRangeCollection = new LockedList<SearchContains<SearchRange<DateTime>>>();
+
+                    return _searchCreationTimeRangeCollection;
                 }
             }
         }

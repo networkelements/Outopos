@@ -219,10 +219,13 @@
   <Translate Key="BoardEditWindow_Word" Value="Word" />
   <Translate Key="BoardEditWindow_Regex" Value="Regex" />
   <Translate Key="BoardEditWindow_Signature" Value="Signature" />
+  <Translate Key="BoardEditWindow_CreationTimeRange" Value="Creation time range" />
   <Translate Key="BoardEditWindow_Message" Value="Message" />
   <Translate Key="BoardEditWindow_Contains" Value="Contains" />
   <Translate Key="BoardEditWindow_IsIgnoreCase" Value="Ignore case" />
   <Translate Key="BoardEditWindow_Value" Value="Value" />
+  <Translate Key="BoardEditWindow_Min" Value="Min" />
+  <Translate Key="BoardEditWindow_Max" Value="Max" />
   <Translate Key="BoardEditWindow_Up" Value="Up" />
   <Translate Key="BoardEditWindow_Down" Value="Down" />
   <Translate Key="BoardEditWindow_Add" Value="Add" />
@@ -239,9 +242,12 @@
   <Translate Key="CategoryEditWindow_Word" Value="Word" />
   <Translate Key="CategoryEditWindow_Regex" Value="Regex" />
   <Translate Key="CategoryEditWindow_Signature" Value="Signature" />
+  <Translate Key="CategoryEditWindow_CreationTimeRange" Value="Creation time range" />
   <Translate Key="CategoryEditWindow_Contains" Value="Contains" />
   <Translate Key="CategoryEditWindow_IsIgnoreCase" Value="Ignore case" />
   <Translate Key="CategoryEditWindow_Value" Value="Value" />
+  <Translate Key="CategoryEditWindow_Min" Value="Min" />
+  <Translate Key="CategoryEditWindow_Max" Value="Max" />
   <Translate Key="CategoryEditWindow_Up" Value="Up" />
   <Translate Key="CategoryEditWindow_Down" Value="Down" />
   <Translate Key="CategoryEditWindow_Add" Value="Add" />

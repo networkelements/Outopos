@@ -27,6 +27,12 @@
         <DataTemplate x:Key="_myTemplate_SearchContains_String_Value">
             <TextBlock Text="{Binding Path=Value, Mode=OneWay}" />
         </DataTemplate>
+        <DataTemplate x:Key="_myTemplate_SearchContains_SearchRange_DateTime_Max">
+            <TextBlock Text="{Binding Path=Value.Max, Mode=OneWay, Converter={StaticResource _dateTimeToStringConverter}}" />
+        </DataTemplate>
+        <DataTemplate x:Key="_myTemplate_SearchContains_SearchRange_DateTime_Min">
+            <TextBlock Text="{Binding Path=Value.Min, Mode=OneWay, Converter={StaticResource _dateTimeToStringConverter}}" />
+        </DataTemplate>
         <DataTemplate x:Key="_myTemplate_SearchContains_Message_Content">
             <TextBlock Text="{Binding Path=Value.Content, Mode=OneWay, Converter={StaticResource _stringRegularizationConverter}}" ToolTip="{Binding Path=Value, Mode=OneWay, Converter={StaticResource _objectToInfoStringConverter}}" />
         </DataTemplate>
@@ -140,6 +146,43 @@
                                     Width="{Binding Path=BoardEditWindow_GridViewColumn_Signature_Contains_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
                                 <GridViewColumn Header="{Binding Path=BoardEditWindow_Value, Source={StaticResource ResourcesInstance}}" CellTemplate="{StaticResource _myTemplate_SearchContains_String_Value}" 
                                     Width="{Binding Path=BoardEditWindow_GridViewColumn_Signature_Value_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
+                            </GridView>
+                        </ListView.View>
+                    </local:ListViewEx>
+                </Grid>
+            </TabItem>
+            <TabItem Header="{Binding Path=BoardEditWindow_CreationTimeRange, Source={StaticResource ResourcesInstance}}" Name="_creationTimeRangeTabItem">
+                <Grid FocusManager.FocusedElement="{Binding ElementName=_creationTimeRangeMinTextBox}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50*" />
+                        <ColumnDefinition Width="50*" />
+                    </Grid.ColumnDefinitions>
+                    <Button Name="_creationTimeRangeUpButton" Height="23" HorizontalAlignment="Right" Margin="0,0,330,6" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=BoardEditWindow_Up, Source={StaticResource ResourcesInstance}}" Click="_creationTimeRangeUpButton_Click" Grid.ColumnSpan="2" IsEnabled="False" />
+                    <Button Name="_creationTimeRangeDownButton" Height="23" HorizontalAlignment="Right" Margin="0,0,249,6" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=BoardEditWindow_Down, Source={StaticResource ResourcesInstance}}" Click="_creationTimeRangeDownButton_Click" Grid.ColumnSpan="2" IsEnabled="False" />
+                    <Button Name="_creationTimeRangeAddButton" Height="23" HorizontalAlignment="Right" Margin="0,0,168,6" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=BoardEditWindow_Add, Source={StaticResource ResourcesInstance}}" Click="_creationTimeRangeAddButton_Click" Grid.ColumnSpan="2"  />
+                    <Button Name="_creationTimeRangeEditButton" Height="23" HorizontalAlignment="Right" Margin="0,0,87,6" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=BoardEditWindow_Edit, Source={StaticResource ResourcesInstance}}" Click="_creationTimeRangeEditButton_Click" Grid.ColumnSpan="2" />
+                    <Button Name="_creationTimeRangeDeleteButton" Height="23" HorizontalAlignment="Right" Margin="0,0,6,6" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=BoardEditWindow_Delete, Source={StaticResource ResourcesInstance}}" Click="_creationTimeRangeDeleteButton_Click" Grid.ColumnSpan="2" />
+                    <TextBox Name="_creationTimeRangeMinTextBox" Height="24" Margin="6,0,0,35" VerticalAlignment="Bottom" Text="0001/01/01 00:00:00" VerticalContentAlignment="Center" KeyDown="_creationTimeRangeMinTextBox_KeyDown" />
+                    <TextBox Name="_creationTimeRangeMaxTextBox" Height="24" Margin="0,0,6,35" VerticalAlignment="Bottom" Grid.Column="1" Text="0001/01/01 00:00:00" VerticalContentAlignment="Center" KeyDown="_creationTimeRangeMaxTextBox_KeyDown" />
+                    <CheckBox Grid.ColumnSpan="2" Name="_creationTimeRangeContainsCheckBox" Height="16" HorizontalAlignment="Left" Margin="6,0,0,65" VerticalAlignment="Bottom" Width="120"  Content="{Binding Path=BoardEditWindow_Contains, Source={StaticResource ResourcesInstance}}" />
+                    <local:ListViewEx x:Name="_creationTimeRangeListView" Margin="0,0,0,87" SelectionChanged="_creationTimeRangeListView_SelectionChanged" PreviewMouseLeftButtonDown="_creationTimeRangeListView_PreviewMouseLeftButtonDown" ContextMenuOpening="_creationTimeRangeListView_ContextMenuOpening"  Grid.ColumnSpan="2">
+                        <ListView.ContextMenu>
+                            <ContextMenu Name="_creationTimeRangeListViewContextMenu" >
+                                <MenuItem Name="_creationTimeRangeListViewDeleteMenuItem" Header="{Binding Path=BoardEditWindow_Delete, Source={StaticResource ResourcesInstance}}" Click="_creationTimeRangeListViewDeleteMenuItem_Click"/>
+                                <Separator />
+                                <MenuItem Name="_creationTimeRangeListViewCutMenuItem" Header="{Binding Path=BoardEditWindow_Cut, Source={StaticResource ResourcesInstance}}" Click="_creationTimeRangeListViewCutMenuItem_Click"/>
+                                <MenuItem Name="_creationTimeRangeListViewCopyMenuItem" Header="{Binding Path=BoardEditWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_creationTimeRangeListViewCopyMenuItem_Click"/>
+                                <MenuItem Name="_creationTimeRangeListViewPasteMenuItem" Header="{Binding Path=BoardEditWindow_Paste, Source={StaticResource ResourcesInstance}}" Click="_creationTimeRangeListViewPasteMenuItem_Click"/>
+                            </ContextMenu>
+                        </ListView.ContextMenu>
+                        <ListView.View>
+                            <GridView AllowsColumnReorder="False">
+                                <GridViewColumn Header="{Binding Path=BoardEditWindow_Contains, Source={StaticResource ResourcesInstance}}" CellTemplate="{StaticResource _myTemplate_SearchContains_Contains}" 
+                                    Width="{Binding Path=BoardEditWindow_GridViewColumn_CreationTimeRange_Contains_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
+                                <GridViewColumn Header="{Binding Path=BoardEditWindow_Min, Source={StaticResource ResourcesInstance}}" CellTemplate="{StaticResource _myTemplate_SearchContains_SearchRange_DateTime_Min}" 
+                                    Width="{Binding Path=BoardEditWindow_GridViewColumn_CreationTimeRange_Value_Min_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
+                                <GridViewColumn Header="{Binding Path=BoardEditWindow_Max, Source={StaticResource ResourcesInstance}}" CellTemplate="{StaticResource _myTemplate_SearchContains_SearchRange_DateTime_Max}" 
+                                    Width="{Binding Path=BoardEditWindow_GridViewColumn_CreationTimeRange_Value_Max_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
                             </GridView>
                         </ListView.View>
                     </local:ListViewEx>

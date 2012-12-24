@@ -28,6 +28,7 @@ namespace Lair.Windows
         private List<SearchContains<SearchRegex>> _searchRegexCollection;
         private List<SearchContains<string>> _searchSignatureCollection;
         private List<SearchContains<Message>> _searchMessageCollection;
+        private List<SearchContains<SearchRange<DateTime>>> _searchCreationTimeRangeCollection;
 
         public BoardEditWindow(ref Board board)
         {
@@ -57,18 +58,24 @@ namespace Lair.Windows
                 _searchWordCollection = _board.SearchWordCollection.Select(n => n.DeepClone()).ToList();
                 _searchRegexCollection = _board.SearchRegexCollection.Select(n => n.DeepClone()).ToList();
                 _searchSignatureCollection = _board.SearchSignatureCollection.Select(n => n.DeepClone()).ToList();
+                _searchCreationTimeRangeCollection = _board.SearchCreationTimeRangeCollection.Select(n => n.DeepClone()).ToList();
                 _searchMessageCollection = _board.SearchMessageCollection.Select(n => n.DeepClone()).ToList();
             }
 
             _wordContainsCheckBox.IsChecked = true;
             _regexContainsCheckBox.IsChecked = true;
             _signatureContainsCheckBox.IsChecked = true;
+            _creationTimeRangeContainsCheckBox.IsChecked = true;
             _messageContainsCheckBox.IsChecked = true;
 
             _wordListView.ItemsSource = _searchWordCollection;
             _regexListView.ItemsSource = _searchRegexCollection;
             _signatureListView.ItemsSource = _searchSignatureCollection;
+            _creationTimeRangeListView.ItemsSource = _searchCreationTimeRangeCollection;
             _messageListView.ItemsSource = _searchMessageCollection;
+
+            _creationTimeRangeMinTextBox.Text = new DateTime(DateTime.UtcNow.Year, 1, 1, 0, 0, 0, DateTimeKind.Utc).ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
+            _creationTimeRangeMaxTextBox.Text = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 0, 0, 0, DateTimeKind.Utc).ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
         }
 
         #region _wordListView
@@ -831,6 +838,294 @@ namespace Lair.Windows
 
         #endregion
 
+        #region _creationTimeRangeListView
+
+        private void _creationTimeRangeMinTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Enter)
+            {
+                _creationTimeRangeMaxTextBox.Focus();
+
+                e.Handled = true;
+            }
+        }
+
+        private void _creationTimeRangeMaxTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Enter)
+            {
+                _creationTimeRangeAddButton_Click(null, null);
+                _creationTimeRangeMinTextBox.Focus();
+
+                e.Handled = true;
+            }
+        }
+
+        private void _creationTimeRangeListViewUpdate()
+        {
+            _creationTimeRangeListView_SelectionChanged(this, null);
+        }
+
+        private void _creationTimeRangeListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                var selectIndex = _creationTimeRangeListView.SelectedIndex;
+
+                if (selectIndex == -1)
+                {
+                    _creationTimeRangeUpButton.IsEnabled = false;
+                    _creationTimeRangeDownButton.IsEnabled = false;
+                }
+                else
+                {
+                    if (selectIndex == 0)
+                    {
+                        _creationTimeRangeUpButton.IsEnabled = false;
+                    }
+                    else
+                    {
+                        _creationTimeRangeUpButton.IsEnabled = true;
+                    }
+
+                    if (selectIndex == _searchCreationTimeRangeCollection.Count - 1)
+                    {
+                        _creationTimeRangeDownButton.IsEnabled = false;
+                    }
+                    else
+                    {
+                        _creationTimeRangeDownButton.IsEnabled = true;
+                    }
+                }
+
+                _creationTimeRangeListView_PreviewMouseLeftButtonDown(this, null);
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private void _creationTimeRangeListView_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var selectIndex = _creationTimeRangeListView.SelectedIndex;
+            if (selectIndex == -1)
+            {
+                _creationTimeRangeContainsCheckBox.IsChecked = true; ;
+                _creationTimeRangeMinTextBox.Text = new DateTime(DateTime.UtcNow.Year, 1, 1, 0, 0, 0, DateTimeKind.Utc).ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
+                _creationTimeRangeMaxTextBox.Text = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 0, 0, 0, DateTimeKind.Utc).ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
+                return;
+            }
+
+            var item = _creationTimeRangeListView.SelectedItem as SearchContains<SearchRange<DateTime>>;
+            if (item == null) return;
+
+            _creationTimeRangeContainsCheckBox.IsChecked = item.Contains;
+            _creationTimeRangeMinTextBox.Text = item.Value.Min.ToUniversalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
+            _creationTimeRangeMaxTextBox.Text = item.Value.Max.ToUniversalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
+        }
+
+        private void _creationTimeRangeListView_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            var selectItems = _creationTimeRangeListView.SelectedItems;
+
+            _creationTimeRangeListViewDeleteMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
+            _creationTimeRangeListViewCopyMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
+            _creationTimeRangeListViewCutMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
+
+            {
+                var line = Clipboard.GetText().Split('\r', '\n');
+
+                if (line.Length != 0)
+                {
+                    Regex regex = new Regex(@"^([\+-]) (.*), (.*)$");
+
+                    _creationTimeRangeListViewPasteMenuItem.IsEnabled = regex.IsMatch(line[0]);
+                }
+            }
+        }
+
+        private void _creationTimeRangeListViewDeleteMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            _creationTimeRangeDeleteButton_Click(null, null);
+        }
+
+        private void _creationTimeRangeListViewCopyMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var sb = new StringBuilder();
+
+            foreach (var item in _creationTimeRangeListView.SelectedItems.OfType<SearchContains<SearchRange<DateTime>>>())
+            {
+                sb.AppendLine(string.Format("{0} {1}, {2}", (item.Contains == true) ? "+" : "-",
+                    item.Value.Min.ToUniversalTime().ToString("yyyy/MM/dd HH:mm:ss"),
+                    item.Value.Max.ToUniversalTime().ToString("yyyy/MM/dd HH:mm:ss")));
+            }
+
+            Clipboard.SetText(sb.ToString());
+        }
+
+        private void _creationTimeRangeListViewCutMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            _creationTimeRangeListViewCopyMenuItem_Click(null, null);
+            _creationTimeRangeDeleteButton_Click(null, null);
+        }
+
+        private void _creationTimeRangeListViewPasteMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            Regex regex = new Regex(@"^([\+-]) (.*), (.*)$");
+
+            foreach (var line in Clipboard.GetText().Split('\r', '\n'))
+            {
+                try
+                {
+                    var match = regex.Match(line);
+                    if (!match.Success) continue;
+
+                    var item = new SearchContains<SearchRange<DateTime>>()
+                    {
+                        Contains = (match.Groups[1].Value == "+") ? true : false,
+                        Value = new SearchRange<DateTime>()
+                        {
+                            Max = DateTime.ParseExact(match.Groups[3].Value, LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime(),
+                            Min = DateTime.ParseExact(match.Groups[2].Value, LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime(),
+                        },
+                    };
+
+                    if (_searchCreationTimeRangeCollection.Contains(item)) continue;
+                    _searchCreationTimeRangeCollection.Add(item);
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
+            }
+
+            _creationTimeRangeMinTextBox.Text = new DateTime(DateTime.UtcNow.Year, 1, 1, 0, 0, 0, DateTimeKind.Utc).ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
+            _creationTimeRangeMaxTextBox.Text = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 0, 0, 0, DateTimeKind.Utc).ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
+            _creationTimeRangeListView.SelectedIndex = _searchCreationTimeRangeCollection.Count - 1;
+
+            _creationTimeRangeListView.Items.Refresh();
+            _creationTimeRangeListViewUpdate();
+        }
+
+        private void _creationTimeRangeUpButton_Click(object sender, RoutedEventArgs e)
+        {
+            var item = _creationTimeRangeListView.SelectedItem as SearchContains<SearchRange<DateTime>>;
+            if (item == null) return;
+
+            var selectIndex = _creationTimeRangeListView.SelectedIndex;
+            if (selectIndex == -1) return;
+
+            _searchCreationTimeRangeCollection.Remove(item);
+            _searchCreationTimeRangeCollection.Insert(selectIndex - 1, item);
+            _creationTimeRangeListView.Items.Refresh();
+
+            _creationTimeRangeListViewUpdate();
+        }
+
+        private void _creationTimeRangeDownButton_Click(object sender, RoutedEventArgs e)
+        {
+            var item = _creationTimeRangeListView.SelectedItem as SearchContains<SearchRange<DateTime>>;
+            if (item == null) return;
+
+            var selectIndex = _creationTimeRangeListView.SelectedIndex;
+            if (selectIndex == -1) return;
+
+            _searchCreationTimeRangeCollection.Remove(item);
+            _searchCreationTimeRangeCollection.Insert(selectIndex + 1, item);
+            _creationTimeRangeListView.Items.Refresh();
+
+            _creationTimeRangeListViewUpdate();
+        }
+
+        private void _creationTimeRangeAddButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_creationTimeRangeMinTextBox.Text == "") return;
+            if (_creationTimeRangeMaxTextBox.Text == "") return;
+
+            try
+            {
+                var item = new SearchContains<SearchRange<DateTime>>()
+                {
+                    Contains = _creationTimeRangeContainsCheckBox.IsChecked.Value,
+                    Value = new SearchRange<DateTime>()
+                    {
+                        Max = DateTime.ParseExact(_creationTimeRangeMaxTextBox.Text, LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime(),
+                        Min = DateTime.ParseExact(_creationTimeRangeMinTextBox.Text, LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime(),
+                    }
+                };
+
+                if (_searchCreationTimeRangeCollection.Contains(item)) return;
+                _searchCreationTimeRangeCollection.Add(item);
+            }
+            catch (Exception)
+            {
+                return;
+            }
+
+            _creationTimeRangeMinTextBox.Text = new DateTime(DateTime.UtcNow.Year, 1, 1, 0, 0, 0, DateTimeKind.Utc).ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
+            _creationTimeRangeMaxTextBox.Text = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 0, 0, 0, DateTimeKind.Utc).ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
+            _creationTimeRangeListView.SelectedIndex = _searchCreationTimeRangeCollection.Count - 1;
+
+            _creationTimeRangeListView.Items.Refresh();
+            _creationTimeRangeListViewUpdate();
+        }
+
+        private void _creationTimeRangeEditButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_creationTimeRangeMinTextBox.Text == "") return;
+            if (_creationTimeRangeMaxTextBox.Text == "") return;
+
+            try
+            {
+                var uitem = new SearchContains<SearchRange<DateTime>>()
+                {
+                    Contains = _creationTimeRangeContainsCheckBox.IsChecked.Value,
+                    Value = new SearchRange<DateTime>()
+                    {
+                        Max = DateTime.ParseExact(_creationTimeRangeMaxTextBox.Text, LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime(),
+                        Min = DateTime.ParseExact(_creationTimeRangeMinTextBox.Text, LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime(),
+                    }
+                };
+
+                if (_searchCreationTimeRangeCollection.Contains(uitem)) return;
+
+                var item = _creationTimeRangeListView.SelectedItem as SearchContains<SearchRange<DateTime>>;
+                if (item == null) return;
+
+                item.Contains = _creationTimeRangeContainsCheckBox.IsChecked.Value;
+                item.Value.Max = DateTime.ParseExact(_creationTimeRangeMaxTextBox.Text, LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime();
+                item.Value.Min = DateTime.ParseExact(_creationTimeRangeMinTextBox.Text, LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime();
+            }
+            catch (Exception)
+            {
+                return;
+            }
+
+            _creationTimeRangeListView.Items.Refresh();
+            _creationTimeRangeListViewUpdate();
+        }
+
+        private void _creationTimeRangeDeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            int selectIndex = _creationTimeRangeListView.SelectedIndex;
+            if (selectIndex == -1) return;
+
+            _creationTimeRangeMinTextBox.Text = new DateTime(DateTime.UtcNow.Year, 1, 1, 0, 0, 0, DateTimeKind.Utc).ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
+            _creationTimeRangeMaxTextBox.Text = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 0, 0, 0, DateTimeKind.Utc).ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
+
+            foreach (var item in _creationTimeRangeListView.SelectedItems.OfType<SearchContains<SearchRange<DateTime>>>().ToArray())
+            {
+                _searchCreationTimeRangeCollection.Remove(item);
+            }
+
+            _creationTimeRangeListView.Items.Refresh();
+            _creationTimeRangeListView.SelectedIndex = selectIndex;
+            _creationTimeRangeListViewUpdate();
+        }
+
+        #endregion
+
         #region _messageListView
 
         private void _messageTextBox_KeyDown(object sender, KeyEventArgs e)
@@ -1115,6 +1410,12 @@ namespace Lair.Windows
                     _board.SearchSignatureCollection.AddRange(_searchSignatureCollection.Select(n => n.DeepClone()).ToList());
                 }
 
+                lock (_board.SearchCreationTimeRangeCollection.ThisLock)
+                {
+                    _board.SearchCreationTimeRangeCollection.Clear();
+                    _board.SearchCreationTimeRangeCollection.AddRange(_searchCreationTimeRangeCollection.Select(n => n.DeepClone()).ToList());
+                }
+
                 lock (_board.SearchMessageCollection.ThisLock)
                 {
                     _board.SearchMessageCollection.Clear();
@@ -1142,6 +1443,10 @@ namespace Lair.Windows
             {
                 _signatureListViewDeleteMenuItem_Click(null, null);
             }
+            else if (_creationTimeRangeTabItem.IsSelected)
+            {
+                _creationTimeRangeListViewDeleteMenuItem_Click(null, null);
+            }
             else if (_messageTabItem.IsSelected)
             {
                 _messageListViewDeleteMenuItem_Click(null, null);
@@ -1161,6 +1466,10 @@ namespace Lair.Windows
             else if (_signatureTabItem.IsSelected)
             {
                 _signatureListViewCopyMenuItem_Click(null, null);
+            }
+            else if (_creationTimeRangeTabItem.IsSelected)
+            {
+                _creationTimeRangeListViewCopyMenuItem_Click(null, null);
             }
             else if (_messageTabItem.IsSelected)
             {
@@ -1182,6 +1491,10 @@ namespace Lair.Windows
             {
                 _signatureListViewCutMenuItem_Click(null, null);
             }
+            else if (_creationTimeRangeTabItem.IsSelected)
+            {
+                _creationTimeRangeListViewCutMenuItem_Click(null, null);
+            }
             else if (_messageTabItem.IsSelected)
             {
                 _messageListViewCutMenuItem_Click(null, null);
@@ -1201,6 +1514,10 @@ namespace Lair.Windows
             else if (_signatureTabItem.IsSelected)
             {
                 _signatureListViewPasteMenuItem_Click(null, null);
+            }
+            else if (_creationTimeRangeTabItem.IsSelected)
+            {
+                _creationTimeRangeListViewPasteMenuItem_Click(null, null);
             }
             else if (_messageTabItem.IsSelected)
             {

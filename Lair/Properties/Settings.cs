@@ -120,6 +120,9 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_GridViewColumn_Regex_Contains_Width", Value = -1 },
                 new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_GridViewColumn_Regex_Value_IsIgnoreCase_Width", Value = -1 },
                 new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_GridViewColumn_Regex_Value_Value_Width", Value = 600 },
+                new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_GridViewColumn_CreationTimeRange_Contains_Width", Value = -1 },
+                new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_GridViewColumn_CreationTimeRange_Value_Max_Width", Value = 300 },
+                new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_GridViewColumn_CreationTimeRange_Value_Min_Width", Value = 300 },
                 new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_GridViewColumn_Signature_Contains_Width", Value = -1 },
                 new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_GridViewColumn_Signature_Value_Width", Value = 600 },
                 new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_GridViewColumn_Message_Contains_Width", Value = -1 },
@@ -135,6 +138,9 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<double>() { Name = "CategoryEditWindow_GridViewColumn_Regex_Contains_Width", Value = -1 },
                 new Library.Configuration.SettingsContext<double>() { Name = "CategoryEditWindow_GridViewColumn_Regex_Value_IsIgnoreCase_Width", Value = -1 },
                 new Library.Configuration.SettingsContext<double>() { Name = "CategoryEditWindow_GridViewColumn_Regex_Value_Value_Width", Value = 600 },
+                new Library.Configuration.SettingsContext<double>() { Name = "CategoryEditWindow_GridViewColumn_CreationTimeRange_Contains_Width", Value = -1 },
+                new Library.Configuration.SettingsContext<double>() { Name = "CategoryEditWindow_GridViewColumn_CreationTimeRange_Value_Max_Width", Value = 300 },
+                new Library.Configuration.SettingsContext<double>() { Name = "CategoryEditWindow_GridViewColumn_CreationTimeRange_Value_Min_Width", Value = 300 },
                 new Library.Configuration.SettingsContext<double>() { Name = "CategoryEditWindow_GridViewColumn_Signature_Contains_Width", Value = -1 },
                 new Library.Configuration.SettingsContext<double>() { Name = "CategoryEditWindow_GridViewColumn_Signature_Value_Width", Value = 600 },
               
@@ -1868,6 +1874,63 @@ namespace Lair.Properties
             }
         }
 
+        public double BoardEditWindow_GridViewColumn_CreationTimeRange_Contains_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["BoardEditWindow_GridViewColumn_CreationTimeRange_Contains_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["BoardEditWindow_GridViewColumn_CreationTimeRange_Contains_Width"] = value;
+                }
+            }
+        }
+
+        public double BoardEditWindow_GridViewColumn_CreationTimeRange_Value_Max_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["BoardEditWindow_GridViewColumn_CreationTimeRange_Value_Max_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["BoardEditWindow_GridViewColumn_CreationTimeRange_Value_Max_Width"] = value;
+                }
+            }
+        }
+
+        public double BoardEditWindow_GridViewColumn_CreationTimeRange_Value_Min_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["BoardEditWindow_GridViewColumn_CreationTimeRange_Value_Min_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["BoardEditWindow_GridViewColumn_CreationTimeRange_Value_Min_Width"] = value;
+                }
+            }
+        }
+
         public double BoardEditWindow_GridViewColumn_Signature_Contains_Width
         {
             get
@@ -2131,6 +2194,63 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     this["CategoryEditWindow_GridViewColumn_Regex_Value_Value_Width"] = value;
+                }
+            }
+        }
+
+        public double CategoryEditWindow_GridViewColumn_CreationTimeRange_Contains_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["CategoryEditWindow_GridViewColumn_CreationTimeRange_Contains_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["CategoryEditWindow_GridViewColumn_CreationTimeRange_Contains_Width"] = value;
+                }
+            }
+        }
+
+        public double CategoryEditWindow_GridViewColumn_CreationTimeRange_Value_Max_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["CategoryEditWindow_GridViewColumn_CreationTimeRange_Value_Max_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["CategoryEditWindow_GridViewColumn_CreationTimeRange_Value_Max_Width"] = value;
+                }
+            }
+        }
+
+        public double CategoryEditWindow_GridViewColumn_CreationTimeRange_Value_Min_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["CategoryEditWindow_GridViewColumn_CreationTimeRange_Value_Min_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["CategoryEditWindow_GridViewColumn_CreationTimeRange_Value_Min_Width"] = value;
                 }
             }
         }
