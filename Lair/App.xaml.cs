@@ -86,15 +86,41 @@ namespace Lair
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            try
             {
-                _lockStream = new FileStream(Path.Combine(App.DirectoryPaths["Configuration"], "Lair.lock"), FileMode.Create);
-            }
-            catch (IOException)
-            {
-                this.Shutdown();
+                try
+                {
+                    _lockStream = new FileStream(Path.Combine(App.DirectoryPaths["Configuration"], "Lair.lock"), FileMode.Create);
+                }
+                catch (IOException)
+                {
+                    this.Shutdown();
 
-                return;
+                    return;
+                }
+
+                int count = 0;
+
+                foreach (var p in Process.GetProcessesByName("Lair"))
+                {
+                    try
+                    {
+                        if (p.MainModule.FileName == Path.GetFullPath(Assembly.GetEntryAssembly().Location))
+                        {
+                            count++;
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                }
+
+                if (count == 2)
+                {
+                    this.Shutdown();
+
+                    return;
+                }
             }
 
             try
@@ -513,12 +539,6 @@ namespace Lair
 
         private void Application_Exit(object sender, ExitEventArgs e)
         {
-            if (_lockStream != null)
-            {
-                _lockStream.Close();
-                _lockStream = null;
-            }
-
             Parallel.ForEach(_processList, new ParallelOptions() { MaxDegreeOfParallelism = 8 }, p =>
             {
                 try
@@ -531,6 +551,12 @@ namespace Lair
 
                 }
             });
+
+            if (_lockStream != null)
+            {
+                _lockStream.Close();
+                _lockStream = null;
+            }
         }
     }
 }
