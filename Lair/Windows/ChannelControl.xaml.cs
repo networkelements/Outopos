@@ -191,6 +191,11 @@ namespace Lair.Windows
 
                     _lairManager.GetChannelInfomation(selectTreeViewItem.Value.Channel, out messages, out filters);
 
+                    foreach (var message in selectTreeViewItem.Value.LockMessages)
+                    {
+                        messages.Add(message);
+                    }
+
                     this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
                     {
                         _isEditing = true;
@@ -233,8 +238,6 @@ namespace Lair.Windows
                         }
                     }
 
-                    newList.UnionWith(selectTreeViewItem.Value.LockMessages);
-                    
                     List<CategoryTreeViewItem> categoryTreeViewItems = new List<CategoryTreeViewItem>();
 
                     this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
@@ -383,6 +386,10 @@ namespace Lair.Windows
                             {
                                 _listView.UpdateLayout();
                                 _listView.GoBottom();
+
+                                var topItem = _listViewItemCollection.FirstOrDefault(n => n.State.HasFlag(MessageState.IsNew));
+                                if (topItem == null) topItem = _listViewItemCollection.LastOrDefault();
+                                if (topItem != null) _listView.ScrollIntoView(topItem);
                             }
                         }
 
@@ -441,6 +448,11 @@ namespace Lair.Windows
 
                             _lairManager.GetChannelInfomation(selectTreeViewItem.Value.Channel, out messages, out filters);
 
+                            foreach (var message in selectTreeViewItem.Value.LockMessages)
+                            {
+                                messages.Add(message);
+                            }
+
                             Filter filter = filters.FirstOrDefault(n => selectTreeViewItem.Value.Signature == MessageConverter.ToSignatureString(n.Certificate));
 
                             if (filter != null)
@@ -460,8 +472,6 @@ namespace Lair.Windows
                                     newList.Add(message);
                                 }
                             }
-
-                            newList.UnionWith(selectTreeViewItem.Value.LockMessages);
 
                             List<CategoryTreeViewItem> categoryTreeViewItems = new List<CategoryTreeViewItem>();
 
@@ -717,130 +727,149 @@ namespace Lair.Windows
                     unlockMessages.Add(item);
                 }
             }
+            else if (items.Count == 1)
+            {
+                foreach (var m in this.GetUnlockMessages(items[0]))
+                {
+                    unlockMessages.Add(m);
+                }
+            }
             else
             {
-                HashSet<Message> lockMessages = new HashSet<Message>();
+                HashSet<Message> messages = new HashSet<Message>();
 
-                foreach (var item in items)
+                messages.UnionWith(this.GetUnlockMessages(items[0]));
+
+                foreach (var item in items.Skip(1))
                 {
-                    var tempList = item.Value.LockMessages.ToList();
-
-                    tempList.Sort(new Comparison<Message>((Message x, Message y) =>
-                    {
-                        int c = x.CreationTime.CompareTo(y.CreationTime);
-                        if (c != 0) return c;
-                        c = x.Content.CompareTo(y.Content);
-                        if (c != 0) return c;
-                        c = Collection.Compare(x.GetHash(HashAlgorithm.Sha512), y.GetHash(HashAlgorithm.Sha512));
-                        if (c != 0) return c;
-
-                        return x.GetHashCode().CompareTo(y.GetHashCode());
-                    }));
-                    tempList.Reverse();
-
-                    lockMessages.UnionWith(tempList.Take(1024 - 128));
+                    messages.IntersectWith(this.GetUnlockMessages(item));
                 }
+            }
+        }
 
-                IList<Message> messages;
-                IList<Filter> filters;
+        private IEnumerable<Message> GetUnlockMessages(BoardTreeViewItem item)
+        {
+            HashSet<Message> lockMessages = new HashSet<Message>();
 
-                _lairManager.GetChannelInfomation(channel, out messages, out filters);
+            {
+                var tempList = item.Value.LockMessages.ToList();
 
-                HashSet<Message> newList = new HashSet<Message>();
-
+                tempList.Sort(new Comparison<Message>((Message x, Message y) =>
                 {
-                    var targetFilters = filters.Where(n => items.Any(m => m.Value.Signature == MessageConverter.ToSignatureString(n.Certificate))).ToList();
+                    int c = x.CreationTime.CompareTo(y.CreationTime);
+                    if (c != 0) return c;
+                    c = x.Content.CompareTo(y.Content);
+                    if (c != 0) return c;
+                    c = Collection.Compare(x.GetHash(HashAlgorithm.Sha512), y.GetHash(HashAlgorithm.Sha512));
+                    if (c != 0) return c;
 
-                    if (targetFilters.Count == 0)
-                    {
-                        foreach (var message in messages)
-                        {
-                            if (lockMessages.Contains(message)) continue;
+                    return x.GetHashCode().CompareTo(y.GetHashCode());
+                }));
 
-                            newList.Add(message);
-                        }
-                    }
-                    else
-                    {
-                        foreach (var message in messages)
-                        {
-                            if (lockMessages.Contains(message)) continue;
+                lockMessages.UnionWith(tempList.Skip(tempList.Count - (1024 - 128)));
+            }
 
-                            if (targetFilters.Any(m => m.Keys.Any(n => message.VerifyHash(n.Hash, n.HashAlgorithm))))
-                            {
-                                newList.Add(message);
-                            }
-                        }
-                    }
-                }
+            HashSet<Message> newList = new HashSet<Message>();
 
-                HashSet<Message> previewList = new HashSet<Message>();
+            IList<Message> messages;
+            IList<Filter> filters;
 
-                foreach (var item in items)
+            _lairManager.GetChannelInfomation(item.Value.Channel, out messages, out filters);
+
+            foreach (var message in item.Value.LockMessages)
+            {
+                messages.Add(message);
+            }
+
+            Filter filter = filters.FirstOrDefault(n => item.Value.Signature == MessageConverter.ToSignatureString(n.Certificate));
+
+            if (filter != null)
+            {
+                foreach (var message in messages)
                 {
-                    HashSet<Message> tempNewList = new HashSet<Message>(newList);
-
-                    List<CategoryTreeViewItem> categoryTreeViewItems = new List<CategoryTreeViewItem>();
-
-                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                    if (filter.Keys.Any(n => message.VerifyHash(n.Hash, n.HashAlgorithm)))
                     {
-                        categoryTreeViewItems.AddRange(_treeViewItem.GetLineage(item).OfType<CategoryTreeViewItem>());
-                    }), null);
-
-                    foreach (var categoryTreeViewItem in categoryTreeViewItems)
-                    {
-                        ChannelControl.Filter(ref tempNewList, categoryTreeViewItem.Value);
-                    }
-
-                    ChannelControl.Filter(ref tempNewList, item.Value);
-
-                    previewList.UnionWith(tempNewList);
-                }
-
-                {
-                    List<Message> list1 = new List<Message>();
-
-                    foreach (var item in messages)
-                    {
-                        if (lockMessages.Contains(item)) continue;
-                        if (previewList.Contains(item)) continue;
-
-                        list1.Add(item);
-                    }
-
-                    list1 = list1
-                        .OrderBy(n => _random.Next())
-                        .ToList();
-
-                    List<Message> list2 = new List<Message>();
-
-                    foreach (var item in previewList)
-                    {
-                        list2.Add(item);
-                    }
-
-                    list2.Sort(new Comparison<Message>((Message x, Message y) =>
-                    {
-                        int c = x.CreationTime.CompareTo(y.CreationTime);
-                        if (c != 0) return c;
-                        c = x.Content.CompareTo(y.Content);
-                        if (c != 0) return c;
-                        c = Collection.Compare(x.GetHash(HashAlgorithm.Sha512), y.GetHash(HashAlgorithm.Sha512));
-                        if (c != 0) return c;
-
-                        return x.GetHashCode().CompareTo(y.GetHashCode());
-                    }));
-
-                    foreach (var item in list1)
-                    {
-                        unlockMessages.Add(item);
-                    }
-
-                    foreach (var item in list2)
-                    {
-                        unlockMessages.Add(item);
+                        newList.Add(message);
                     }
                 }
+            }
+            else
+            {
+                foreach (var message in messages)
+                {
+                    newList.Add(message);
+                }
+            }
+
+            HashSet<Message> previewList = new HashSet<Message>();
+
+            {
+                HashSet<Message> tempNewList = new HashSet<Message>(newList);
+
+                List<CategoryTreeViewItem> categoryTreeViewItems = new List<CategoryTreeViewItem>();
+
+                this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                {
+                    categoryTreeViewItems.AddRange(_treeViewItem.GetLineage(item).OfType<CategoryTreeViewItem>());
+                }), null);
+
+                foreach (var categoryTreeViewItem in categoryTreeViewItems)
+                {
+                    ChannelControl.Filter(ref tempNewList, categoryTreeViewItem.Value);
+                }
+
+                ChannelControl.Filter(ref tempNewList, item.Value);
+
+                previewList.UnionWith(tempNewList);
+            }
+
+            {
+                List<Message> list1 = new List<Message>();
+
+                foreach (var m in messages)
+                {
+                    if (lockMessages.Contains(m)) continue;
+                    if (previewList.Contains(m)) continue;
+
+                    list1.Add(m);
+                }
+
+                list1 = list1
+                    .OrderBy(n => _random.Next())
+                    .ToList();
+
+                List<Message> list2 = new List<Message>();
+
+                foreach (var m in previewList)
+                {
+                    list2.Add(m);
+                }
+
+                list2.Sort(new Comparison<Message>((Message x, Message y) =>
+                {
+                    int c = x.CreationTime.CompareTo(y.CreationTime);
+                    if (c != 0) return c;
+                    c = x.Content.CompareTo(y.Content);
+                    if (c != 0) return c;
+                    c = Collection.Compare(x.GetHash(HashAlgorithm.Sha512), y.GetHash(HashAlgorithm.Sha512));
+                    if (c != 0) return c;
+
+                    return x.GetHashCode().CompareTo(y.GetHashCode());
+                }));
+
+                List<Message> unlockMessages = new List<Message>();
+
+                foreach (var m in list1)
+                {
+                    unlockMessages.Add(m);
+                }
+
+                foreach (var m in list2)
+                {
+                    unlockMessages.Add(m);
+                }
+
+                return unlockMessages.Take(unlockMessages.Count - 1024);
             }
         }
 

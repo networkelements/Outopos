@@ -61,6 +61,12 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsSettingsWindow_Client_Filters_GridViewColumn_UriCondition_Width", Value = 150 },
                 new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsSettingsWindow_Server_ListenUris_GridViewColumn_Uri_Width", Value = 400 },
                 new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsSettingsWindow_Grid_ColumnDefinitions_Width", Value = 160 },
+          
+                new Library.Configuration.SettingsContext<double>() { Name = "ChannelListWindow_Top", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "ChannelListWindow_Left", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "ChannelListWindow_Height", Value = 500 },
+                new Library.Configuration.SettingsContext<double>() { Name = "ChannelListWindow_Width", Value = 700 },
+                new Library.Configuration.SettingsContext<WindowState>() { Name = "ChannelListWindow_WindowState", Value = WindowState.Normal },
 
                 new Library.Configuration.SettingsContext<double>() { Name = "ViewSettingsWindow_Top", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "ViewSettingsWindow_Left", Value = 120 },
@@ -881,6 +887,102 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     this["ConnectionsSettingsWindow_Grid_ColumnDefinitions_Width"] = value;
+                }
+            }
+        }
+
+
+        public double ChannelListWindow_Top
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChannelListWindow_Top"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChannelListWindow_Top"] = value;
+                }
+            }
+        }
+
+        public double ChannelListWindow_Left
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChannelListWindow_Left"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChannelListWindow_Left"] = value;
+                }
+            }
+        }
+
+        public double ChannelListWindow_Height
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChannelListWindow_Height"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChannelListWindow_Height"] = value;
+                }
+            }
+        }
+
+        public double ChannelListWindow_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChannelListWindow_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChannelListWindow_Width"] = value;
+                }
+            }
+        }
+
+        public WindowState ChannelListWindow_WindowState
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (WindowState)this["ChannelListWindow_WindowState"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChannelListWindow_WindowState"] = value;
                 }
             }
         }
