@@ -266,8 +266,13 @@ namespace Lair.Windows
 
                         tempList = tempList.Skip(tempList.Count - 1024).ToList();
 
+                        newList.Clear();
+                        newList.UnionWith(tempList);
+
                         foreach (var message in selectTreeViewItem.Value.LockMessages)
                         {
+                            if (newList.Contains(message)) continue;
+
                             tempList.Add(message);
                         }
 
@@ -516,8 +521,13 @@ namespace Lair.Windows
 
                                 tempList = tempList.Skip(tempList.Count - 1024).ToList();
 
+                                newList.Clear();
+                                newList.UnionWith(tempList);
+
                                 foreach (var message in selectTreeViewItem.Value.LockMessages)
                                 {
+                                    if (newList.Contains(message)) continue;
+
                                     tempList.Add(message);
                                 }
 
