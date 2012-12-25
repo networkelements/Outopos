@@ -191,11 +191,6 @@ namespace Lair.Windows
 
                     _lairManager.GetChannelInfomation(selectTreeViewItem.Value.Channel, out messages, out filters);
 
-                    foreach (var message in selectTreeViewItem.Value.LockMessages)
-                    {
-                        messages.Add(message);
-                    }
-
                     this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
                     {
                         _isEditing = true;
@@ -269,7 +264,26 @@ namespace Lair.Windows
                             return x.GetHashCode().CompareTo(y.GetHashCode());
                         }));
 
-                        sortList = tempList.Skip(tempList.Count - 1024).ToList();
+                        tempList = tempList.Skip(tempList.Count - 1024).ToList();
+
+                        foreach (var message in selectTreeViewItem.Value.LockMessages)
+                        {
+                            tempList.Add(message);
+                        }
+
+                        tempList.Sort(new Comparison<Message>((Message x, Message y) =>
+                        {
+                            int c = x.CreationTime.CompareTo(y.CreationTime);
+                            if (c != 0) return c;
+                            c = x.Content.CompareTo(y.Content);
+                            if (c != 0) return c;
+                            c = Collection.Compare(x.GetHash(HashAlgorithm.Sha512), y.GetHash(HashAlgorithm.Sha512));
+                            if (c != 0) return c;
+
+                            return x.GetHashCode().CompareTo(y.GetHashCode());
+                        }));
+
+                        sortList = tempList.ToList();
 
                         newList.Clear();
                         newList.UnionWith(sortList);
@@ -385,11 +399,12 @@ namespace Lair.Windows
                             if (_listViewItemCollection.Count > 0)
                             {
                                 _listView.GoBottom();
-
                                 _listView.UpdateLayout();
+
                                 var topItem = _listViewItemCollection.FirstOrDefault(n => n.State.HasFlag(MessageState.IsNew));
                                 if (topItem == null) topItem = _listViewItemCollection.LastOrDefault();
                                 if (topItem != null) _listView.ScrollIntoView(topItem);
+                                _listView.UpdateLayout();
                             }
                         }
 
@@ -448,11 +463,6 @@ namespace Lair.Windows
 
                             _lairManager.GetChannelInfomation(selectTreeViewItem.Value.Channel, out messages, out filters);
 
-                            foreach (var message in selectTreeViewItem.Value.LockMessages)
-                            {
-                                messages.Add(message);
-                            }
-
                             Filter filter = filters.FirstOrDefault(n => selectTreeViewItem.Value.Signature == MessageConverter.ToSignatureString(n.Certificate));
 
                             if (filter != null)
@@ -504,7 +514,26 @@ namespace Lair.Windows
                                     return x.GetHashCode().CompareTo(y.GetHashCode());
                                 }));
 
-                                sortList = tempList.Skip(tempList.Count - 1024).ToList();
+                                tempList = tempList.Skip(tempList.Count - 1024).ToList();
+
+                                foreach (var message in selectTreeViewItem.Value.LockMessages)
+                                {
+                                    tempList.Add(message);
+                                }
+
+                                tempList.Sort(new Comparison<Message>((Message x, Message y) =>
+                                {
+                                    int c = x.CreationTime.CompareTo(y.CreationTime);
+                                    if (c != 0) return c;
+                                    c = x.Content.CompareTo(y.Content);
+                                    if (c != 0) return c;
+                                    c = Collection.Compare(x.GetHash(HashAlgorithm.Sha512), y.GetHash(HashAlgorithm.Sha512));
+                                    if (c != 0) return c;
+
+                                    return x.GetHashCode().CompareTo(y.GetHashCode());
+                                }));
+
+                                sortList = tempList.ToList();
 
                                 newList.Clear();
                                 newList.UnionWith(sortList);
@@ -612,6 +641,9 @@ namespace Lair.Windows
                         }
                     }), null);
 
+                    var now = DateTime.UtcNow;
+                    var limit = new TimeSpan(64, 0, 0, 0);
+
                     foreach (BoardTreeViewItem item in items)
                     {
                         if (item.Value.FilterUploadDigitalSignature != null)
@@ -624,6 +656,8 @@ namespace Lair.Windows
 
                                     foreach (var m in _messages[item.Value])
                                     {
+                                        if ((now - m.CreationTime) > limit) continue;
+
                                         keys.Add(new Library.Net.Lair.Key(m.GetHash(HashAlgorithm.Sha512), HashAlgorithm.Sha512));
                                     }
 
