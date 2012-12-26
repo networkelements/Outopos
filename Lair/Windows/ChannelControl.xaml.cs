@@ -1060,19 +1060,6 @@ namespace Lair.Windows
             {
                 messages.IntersectWith(messages.ToArray().Where(item =>
                 {
-                    string signatureText = null;
-
-                    if (item.Certificate == null)
-                    {
-                        signatureText = "Anonymous";
-                    }
-                    else
-                    {
-                        signatureText = MessageConverter.ToSignatureString(item.Certificate);
-                    }
-
-                    var messageText = RichTextBoxHelper.GetMessageToShowString(item);
-
                     bool flag = true;
 
                     lock (category.SearchCreationTimeRangeCollection.ThisLock)
@@ -1093,6 +1080,8 @@ namespace Lair.Windows
                     {
                         if (category.SearchWordCollection.Any(n => n.Contains == true))
                         {
+                            var messageText = RichTextBoxHelper.GetMessageToShowString(item);
+
                             flag = category.SearchWordCollection.Any(searchContains =>
                             {
                                 if (searchContains.Contains) return messageText.Contains(searchContains.Value);
@@ -1107,6 +1096,17 @@ namespace Lair.Windows
                     {
                         if (category.SearchSignatureCollection.Any(n => n.Contains == true))
                         {
+                            string signatureText = null;
+
+                            if (item.Certificate == null)
+                            {
+                                signatureText = "Anonymous";
+                            }
+                            else
+                            {
+                                signatureText = MessageConverter.ToSignatureString(item.Certificate);
+                            }
+
                             flag = category.SearchSignatureCollection.Any(searchContains =>
                             {
                                 if (searchContains.Contains) return signatureText == searchContains.Value;
@@ -1121,6 +1121,8 @@ namespace Lair.Windows
                     {
                         if (category.SearchRegexCollection.Any(n => n.Contains == true))
                         {
+                            var messageText = RichTextBoxHelper.GetMessageToShowString(item);
+
                             flag = category.SearchRegexCollection.Any(searchContains =>
                             {
                                 if (searchContains.Contains) return searchContains.Value.IsMatch(messageText);
@@ -1138,19 +1140,6 @@ namespace Lair.Windows
                 {
                     if (item.Content.Contains('\uFFFD')) return true;
 
-                    string signatureText = null;
-
-                    if (item.Certificate == null)
-                    {
-                        signatureText = "Anonymous";
-                    }
-                    else
-                    {
-                        signatureText = MessageConverter.ToSignatureString(item.Certificate);
-                    }
-
-                    var messageText = RichTextBoxHelper.GetMessageToShowString(item); 
-                    
                     bool flag = false;
 
                     lock (category.SearchCreationTimeRangeCollection.ThisLock)
@@ -1171,6 +1160,8 @@ namespace Lair.Windows
                     {
                         if (category.SearchWordCollection.Any(n => n.Contains == false))
                         {
+                            var messageText = RichTextBoxHelper.GetMessageToShowString(item);
+
                             flag = category.SearchWordCollection.Any(searchContains =>
                             {
                                 if (!searchContains.Contains) return messageText.Contains(searchContains.Value);
@@ -1185,6 +1176,17 @@ namespace Lair.Windows
                     {
                         if (category.SearchSignatureCollection.Any(n => n.Contains == false))
                         {
+                            string signatureText = null;
+
+                            if (item.Certificate == null)
+                            {
+                                signatureText = "Anonymous";
+                            }
+                            else
+                            {
+                                signatureText = MessageConverter.ToSignatureString(item.Certificate);
+                            }
+
                             flag = category.SearchSignatureCollection.Any(searchContains =>
                             {
                                 if (!searchContains.Contains) return searchContains.Value == signatureText;
@@ -1199,6 +1201,8 @@ namespace Lair.Windows
                     {
                         if (category.SearchRegexCollection.Any(n => n.Contains == false))
                         {
+                            var messageText = RichTextBoxHelper.GetMessageToShowString(item);
+
                             flag = category.SearchRegexCollection.Any(searchContains =>
                             {
                                 if (!searchContains.Contains) return searchContains.Value.IsMatch(messageText);
@@ -1231,19 +1235,6 @@ namespace Lair.Windows
 
                 messages.IntersectWith(messages.ToArray().Where(item =>
                 {
-                    string signatureText = null;
-
-                    if (item.Certificate == null)
-                    {
-                        signatureText = "Anonymous";
-                    }
-                    else
-                    {
-                        signatureText = MessageConverter.ToSignatureString(item.Certificate);
-                    }
-
-                    var messageText = RichTextBoxHelper.GetMessageToShowString(item);
-
                     bool flag = true;
 
                     lock (board.SearchCreationTimeRangeCollection.ThisLock)
@@ -1264,6 +1255,8 @@ namespace Lair.Windows
                     {
                         if (board.SearchWordCollection.Any(n => n.Contains == true))
                         {
+                            var messageText = RichTextBoxHelper.GetMessageToShowString(item);
+
                             flag = board.SearchWordCollection.Any(searchContains =>
                             {
                                 if (searchContains.Contains) return messageText.Contains(searchContains.Value);
@@ -1278,6 +1271,17 @@ namespace Lair.Windows
                     {
                         if (board.SearchSignatureCollection.Any(n => n.Contains == true))
                         {
+                            string signatureText = null;
+
+                            if (item.Certificate == null)
+                            {
+                                signatureText = "Anonymous";
+                            }
+                            else
+                            {
+                                signatureText = MessageConverter.ToSignatureString(item.Certificate);
+                            }
+
                             flag = board.SearchSignatureCollection.Any(searchContains =>
                             {
                                 if (searchContains.Contains) return signatureText == searchContains.Value;
@@ -1306,6 +1310,8 @@ namespace Lair.Windows
                     {
                         if (board.SearchRegexCollection.Any(n => n.Contains == true))
                         {
+                            var messageText = RichTextBoxHelper.GetMessageToShowString(item);
+
                             flag = board.SearchRegexCollection.Any(searchContains =>
                             {
                                 if (searchContains.Contains) return searchContains.Value.IsMatch(messageText);
@@ -1322,19 +1328,6 @@ namespace Lair.Windows
                 messages.ExceptWith(messages.ToArray().Where(item =>
                 {
                     if (item.Content.Contains('\uFFFD')) return true;
-
-                    string signatureText = null;
-
-                    if (item.Certificate == null)
-                    {
-                        signatureText = "Anonymous";
-                    }
-                    else
-                    {
-                        signatureText = MessageConverter.ToSignatureString(item.Certificate);
-                    }
-
-                    var messageText = RichTextBoxHelper.GetMessageToShowString(item);
 
                     bool flag = false;
 
@@ -1356,6 +1349,8 @@ namespace Lair.Windows
                     {
                         if (board.SearchWordCollection.Any(n => n.Contains == false))
                         {
+                            var messageText = RichTextBoxHelper.GetMessageToShowString(item);
+
                             flag = board.SearchWordCollection.Any(searchContains =>
                             {
                                 if (!searchContains.Contains) return messageText.Contains(searchContains.Value);
@@ -1370,6 +1365,17 @@ namespace Lair.Windows
                     {
                         if (board.SearchSignatureCollection.Any(n => n.Contains == false))
                         {
+                            string signatureText = null;
+
+                            if (item.Certificate == null)
+                            {
+                                signatureText = "Anonymous";
+                            }
+                            else
+                            {
+                                signatureText = MessageConverter.ToSignatureString(item.Certificate);
+                            }
+
                             flag = board.SearchSignatureCollection.Any(searchContains =>
                             {
                                 if (!searchContains.Contains) return searchContains.Value == signatureText;
@@ -1398,6 +1404,8 @@ namespace Lair.Windows
                     {
                         if (board.SearchRegexCollection.Any(n => n.Contains == false))
                         {
+                            var messageText = RichTextBoxHelper.GetMessageToShowString(item);
+
                             flag = board.SearchRegexCollection.Any(searchContains =>
                             {
                                 if (!searchContains.Contains) return searchContains.Value.IsMatch(messageText);
