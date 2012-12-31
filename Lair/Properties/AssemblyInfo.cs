@@ -9,9 +9,9 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Lair")]
-[assembly: AssemblyCopyright("Copyright © Lyrise 2012")]
+[assembly: AssemblyCopyright("Copyright © Lyrise 2012-2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: ThemeInfo(ResourceDictionaryLocation.None, ResourceDictionaryLocation.SourceAssembly)]
-[assembly: AssemblyVersion("0.0.0.1939")] // hbFZMmfF2qjZLWE4IfpL6lXji+BmcVgEP7zGKdpyleP6wIy/9jKTT1QIikRRsdg2O/tpYhGIzFBLpGcc+koQEQ==
+[assembly: AssemblyVersion("0.0.0.1940")] // U72+RorF0Uc0CyDzRbTVbhuhz6i0R73jn5hlPiKjJpVfVNZ91GtdLuTFqK6Ju+ahtHxHiC3EJFa2CPjlMlUrQA==
