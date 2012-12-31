@@ -321,6 +321,8 @@ namespace Lair.Windows
                         if (!oldList.Contains(item)) addList.Add(item);
                     }
 
+                    int layoutUpdated = 0;
+
                     this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
                     {
                         if (selectTreeViewItem != _treeView.SelectedItem) return;
@@ -404,17 +406,28 @@ namespace Lair.Windows
                             if (_listViewItemCollection.Count > 0)
                             {
                                 _listView.GoBottom();
-                                _listView.UpdateLayout();
 
+                                _listView.UpdateLayout();
                                 var topItem = _listViewItemCollection.FirstOrDefault(n => n.State.HasFlag(MessageState.IsNew));
                                 if (topItem == null) topItem = _listViewItemCollection.LastOrDefault();
                                 if (topItem != null) _listView.ScrollIntoView(topItem);
-                                _listView.UpdateLayout();
                             }
                         }
 
+                        layoutUpdated = _layoutUpdated;
+
                         if (App.SelectTab == "Channel")
                             _mainWindow.Title = string.Format("Lair {0} - {1}", App.LairVersion, MessageConverter.ToChannelString(selectTreeViewItem.Value.Channel));
+                    }), null);
+
+                    while (_layoutUpdated == layoutUpdated) Thread.Sleep(100);
+
+                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                    {
+                        _listView.UpdateLayout();
+                        var topItem = _listViewItemCollection.FirstOrDefault(n => n.State.HasFlag(MessageState.IsNew));
+                        if (topItem == null) topItem = _listViewItemCollection.LastOrDefault();
+                        if (topItem != null) _listView.ScrollIntoView(topItem);
                     }), null);
                 }
             }
@@ -1080,11 +1093,11 @@ namespace Lair.Windows
                     {
                         if (category.SearchWordCollection.Any(n => n.Contains == true))
                         {
-                            var messageText = RichTextBoxHelper.GetMessageToShowString(item);
+                            //var messageText = RichTextBoxHelper.GetMessageToShowString(item);
 
                             flag = category.SearchWordCollection.Any(searchContains =>
                             {
-                                if (searchContains.Contains) return messageText.Contains(searchContains.Value);
+                                if (searchContains.Contains) return item.Content.Contains(searchContains.Value);
 
                                 return false;
                             });
@@ -1121,11 +1134,11 @@ namespace Lair.Windows
                     {
                         if (category.SearchRegexCollection.Any(n => n.Contains == true))
                         {
-                            var messageText = RichTextBoxHelper.GetMessageToShowString(item);
+                            //var messageText = RichTextBoxHelper.GetMessageToShowString(item);
 
                             flag = category.SearchRegexCollection.Any(searchContains =>
                             {
-                                if (searchContains.Contains) return searchContains.Value.IsMatch(messageText);
+                                if (searchContains.Contains) return searchContains.Value.IsMatch(item.Content);
 
                                 return false;
                             });
@@ -1160,11 +1173,11 @@ namespace Lair.Windows
                     {
                         if (category.SearchWordCollection.Any(n => n.Contains == false))
                         {
-                            var messageText = RichTextBoxHelper.GetMessageToShowString(item);
+                            //var messageText = RichTextBoxHelper.GetMessageToShowString(item);
 
                             flag = category.SearchWordCollection.Any(searchContains =>
                             {
-                                if (!searchContains.Contains) return messageText.Contains(searchContains.Value);
+                                if (!searchContains.Contains) return item.Content.Contains(searchContains.Value);
 
                                 return false;
                             });
@@ -1201,11 +1214,11 @@ namespace Lair.Windows
                     {
                         if (category.SearchRegexCollection.Any(n => n.Contains == false))
                         {
-                            var messageText = RichTextBoxHelper.GetMessageToShowString(item);
+                            //var messageText = RichTextBoxHelper.GetMessageToShowString(item);
 
                             flag = category.SearchRegexCollection.Any(searchContains =>
                             {
-                                if (!searchContains.Contains) return searchContains.Value.IsMatch(messageText);
+                                if (!searchContains.Contains) return searchContains.Value.IsMatch(item.Content);
 
                                 return false;
                             });
@@ -1255,11 +1268,11 @@ namespace Lair.Windows
                     {
                         if (board.SearchWordCollection.Any(n => n.Contains == true))
                         {
-                            var messageText = RichTextBoxHelper.GetMessageToShowString(item);
+                            //var messageText = RichTextBoxHelper.GetMessageToShowString(item);
 
                             flag = board.SearchWordCollection.Any(searchContains =>
                             {
-                                if (searchContains.Contains) return messageText.Contains(searchContains.Value);
+                                if (searchContains.Contains) return item.Content.Contains(searchContains.Value);
 
                                 return false;
                             });
@@ -1310,11 +1323,11 @@ namespace Lair.Windows
                     {
                         if (board.SearchRegexCollection.Any(n => n.Contains == true))
                         {
-                            var messageText = RichTextBoxHelper.GetMessageToShowString(item);
+                            //var messageText = RichTextBoxHelper.GetMessageToShowString(item);
 
                             flag = board.SearchRegexCollection.Any(searchContains =>
                             {
-                                if (searchContains.Contains) return searchContains.Value.IsMatch(messageText);
+                                if (searchContains.Contains) return searchContains.Value.IsMatch(item.Content);
 
                                 return false;
                             });
@@ -1349,11 +1362,11 @@ namespace Lair.Windows
                     {
                         if (board.SearchWordCollection.Any(n => n.Contains == false))
                         {
-                            var messageText = RichTextBoxHelper.GetMessageToShowString(item);
+                            //var messageText = RichTextBoxHelper.GetMessageToShowString(item);
 
                             flag = board.SearchWordCollection.Any(searchContains =>
                             {
-                                if (!searchContains.Contains) return messageText.Contains(searchContains.Value);
+                                if (!searchContains.Contains) return item.Content.Contains(searchContains.Value);
 
                                 return false;
                             });
@@ -1404,11 +1417,11 @@ namespace Lair.Windows
                     {
                         if (board.SearchRegexCollection.Any(n => n.Contains == false))
                         {
-                            var messageText = RichTextBoxHelper.GetMessageToShowString(item);
+                            //var messageText = RichTextBoxHelper.GetMessageToShowString(item);
 
                             flag = board.SearchRegexCollection.Any(searchContains =>
                             {
-                                if (!searchContains.Contains) return searchContains.Value.IsMatch(messageText);
+                                if (!searchContains.Contains) return searchContains.Value.IsMatch(item.Content);
 
                                 return false;
                             });
@@ -1986,6 +1999,13 @@ namespace Lair.Windows
 
         #region _listView
 
+        private volatile int _layoutUpdated = 0;
+
+        private void _listView_LayoutUpdated(object sender, EventArgs e)
+        {
+            _layoutUpdated++;
+        }
+        
         private void _listView_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == System.Windows.Input.Key.Home)

@@ -273,7 +273,7 @@
             </local:CategoryTreeViewItem>
         </TreeView>
         
-        <local:ListViewEx Grid.Column="2" Grid.Row="1" x:Name="_listView" Padding="0,1,0,0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SizeChanged="_listView_SizeChanged" PreviewKeyDown="_listView_PreviewKeyDown" SelectionMode="Single" 
+        <local:ListViewEx Grid.Column="2" Grid.Row="1" x:Name="_listView" Padding="0,1,0,0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SizeChanged="_listView_SizeChanged" PreviewKeyDown="_listView_PreviewKeyDown" SelectionMode="Single" LayoutUpdated="_listView_LayoutUpdated"
                 VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Standard" Grid.ColumnSpan="3" PreviewMouseDown="_listView_PreviewMouseDown">
             <ListView.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}">

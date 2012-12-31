@@ -1045,7 +1045,7 @@ namespace Lair.Windows
 
                     if (version <= new Version(0, 0, 54))
                     {
-                        _lairManager.ConnectionCountLimit = Math.Max(Math.Min(_lairManager.ConnectionCountLimit, 50), 6);
+                        _lairManager.ConnectionCountLimit = Math.Max(Math.Min(_lairManager.ConnectionCountLimit, 50), 12);
                     }
                 }
 
