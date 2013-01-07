@@ -2512,7 +2512,7 @@ namespace Lair.Windows
 
                 header.FontWeight = FontWeights.UltraBlack;
 
-                header.Foreground = new SolidColorBrush(Color.FromRgb(0xDF, 0xc0, 0xDF));
+                header.Foreground = new SolidColorBrush(Color.FromRgb(0x87, 0xCE, 0xEB));
 
                 if (this.IsSelected)
                 {
@@ -2723,7 +2723,7 @@ namespace Lair.Windows
                     var header = this.Header as TextBlock;
                     if (header == null) return;
 
-                    header.Foreground = new SolidColorBrush(Color.FromRgb(0xDF, 0xc0, 0xDF));
+                    header.Foreground = new SolidColorBrush(Color.FromRgb(0x87, 0xCE, 0xEB));
                 }
             };
         }
@@ -2764,7 +2764,7 @@ namespace Lair.Windows
 
                 if (!base.IsSelected)
                 {
-                    header.Foreground = new SolidColorBrush(Color.FromRgb(0xDF, 0xc0, 0xDF));
+                    header.Foreground = new SolidColorBrush(Color.FromRgb(0x87, 0xCE, 0xEB));
                 }
                 else
                 {

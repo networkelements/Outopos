@@ -32,7 +32,7 @@ namespace Lair.Windows
 
         private static Regex _urlRegex = new Regex(@"^(?<start>.*?)(?<url>http(s)?://(\S)+)(?<end>.*?)$", RegexOptions.Compiled | RegexOptions.Singleline);
         private static Regex _titleRegex = new Regex(@"^ - (.*) - (\S*) (\S*) UTC$", RegexOptions.Compiled | RegexOptions.Singleline);
-        private static Color _d = Color.FromRgb(0xDF, 0xc0, 0xDF);
+        private static Color _d = Color.FromRgb(0x87, 0xCE, 0xEB);
         private static Color _h = Color.FromRgb(0xDF, 0xDF, 0xDF);
 
         public static string GetMessageToString(Message message)
