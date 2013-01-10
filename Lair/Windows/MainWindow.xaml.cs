@@ -1047,6 +1047,14 @@ namespace Lair.Windows
                     {
                         _lairManager.ConnectionCountLimit = Math.Max(Math.Min(_lairManager.ConnectionCountLimit, 50), 12);
                     }
+
+                    if (version <= new Version(0, 0, 60))
+                    {
+                        if (Settings.Instance.Global_Update_Signature == "Lyrise@iMK5aPkz6n_VLfaQWyXisi6C2yo53VbhMGTwJ4N2yGDTMXZwIdcZb8ayuGIOg-1V")
+                        {
+                            Settings.Instance.Global_Update_Signature = "Lyrise@7seiSbhOCkls6gPxjJYjptxskzlSulgIe3dSfj1KxnJJ6eejKjuJ3R1Ec8yFuKpr";
+                        }
+                    }
                 }
 
                 using (StreamWriter writer = new StreamWriter(Path.Combine(App.DirectoryPaths["Configuration"], "Lair.version"), false, new UTF8Encoding(false)))
@@ -1223,10 +1231,6 @@ namespace Lair.Windows
 
                             break;
                         }
-                        catch (ThreadAbortException e)
-                        {
-                            throw e;
-                        }
                         catch (Exception e)
                         {
                             if (i < 10)
@@ -1397,10 +1401,6 @@ namespace Lair.Windows
 
                     break;
                 }
-                catch (ThreadAbortException e)
-                {
-                    throw e;
-                }
                 catch (Exception e)
                 {
                     if (i < 10)
@@ -1482,11 +1482,10 @@ namespace Lair.Windows
 
             var thread = new Thread(new ThreadStart(() =>
             {
-                Thread.CurrentThread.IsBackground = false;
-                Thread.CurrentThread.Priority = ThreadPriority.Highest;
-
                 try
                 {
+                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
+
                     _timerThread.Join();
                     _timerThread = null;
 
