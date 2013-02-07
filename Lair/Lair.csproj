@@ -119,28 +119,33 @@
     <Compile Include="Windows\BoardEditWindow.xaml.cs">
       <DependentUpon>BoardEditWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\BoxEditWindow.xaml.cs">
-      <DependentUpon>BoxEditWindow.xaml</DependentUpon>
+    <Compile Include="Windows\ChartControl.xaml.cs">
+      <DependentUpon>ChartControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\SearchControl.xaml.cs">
-      <DependentUpon>SearchControl.xaml</DependentUpon>
+    <Compile Include="Windows\ControlControl.xaml.cs">
+      <DependentUpon>ControlControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\ChannelControl.xaml.cs">
-      <DependentUpon>ChannelControl.xaml</DependentUpon>
+    <Compile Include="Windows\SectionControl.xaml.cs">
+      <DependentUpon>SectionControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\SearchItemEditWindow.xaml.cs">
-      <DependentUpon>SearchItemEditWindow.xaml</DependentUpon>
+    <Compile Include="Windows\CreatorControl.xaml.cs">
+      <DependentUpon>CreatorControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\FilterControl.xaml.cs">
+      <DependentUpon>FilterControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\LeaderControl.xaml.cs">
+      <DependentUpon>LeaderControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ManagerControl.xaml.cs">
+      <DependentUpon>ManagerControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\VirtualizingStackPanelEx.cs" />
-    <Page Include="Windows\BoxEditWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="Windows\ChartControl.xaml">
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\SearchControl.xaml">
       <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\ChannelControl.xaml">
+    <Page Include="Windows\ControlControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -164,9 +169,25 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\SearchItemEditWindow.xaml">
+    <Page Include="Windows\SectionControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\CreatorControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\FilterControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\LeaderControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ManagerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\SignWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

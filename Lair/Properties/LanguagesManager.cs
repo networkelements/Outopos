@@ -827,6 +827,17 @@ namespace Lair.Properties
             }
         }
 
+        public string ConnectionsSettingsWindow_Option
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_Option");
+                }
+            }
+        }
+
         public string ConnectionsSettingsWindow_Type
         {
             get

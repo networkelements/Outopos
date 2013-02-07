@@ -68,6 +68,7 @@
   <Translate Key="ConnectionsSettingsWindow_ConnectionType" Value="Connection type" />
   <Translate Key="ConnectionsSettingsWindow_ProxyUri" Value="Proxy uri" />
   <Translate Key="ConnectionsSettingsWindow_UriCondition" Value="Uri condition" />
+  <Translate Key="ConnectionsSettingsWindow_Option" Value="Option" />
   <Translate Key="ConnectionsSettingsWindow_Type" Value="Type" />
   <Translate Key="ConnectionsSettingsWindow_Host" Value="Host" />
   <Translate Key="ConnectionsSettingsWindow_Server" Value="Server" />
@@ -264,73 +265,38 @@
   <Translate Key="NewChannelWindow_Ok" Value="Ok" />
   <Translate Key="NewChannelWindow_Cancel" Value="Cancel" />
 
-  <Translate Key="SearchControl_Name" Value="Name" />
-  <Translate Key="SearchControl_Signature" Value="Signature" />
-  <Translate Key="SearchControl_Length" Value="Length" />
-  <Translate Key="SearchControl_Keywords" Value="Keywords" />
-  <Translate Key="SearchControl_CreationTime" Value="Creation time" />
-  <Translate Key="SearchControl_Comment" Value="Comment" />
-  <Translate Key="SearchControl_State" Value="State" />
-  <Translate Key="SearchControl_Hash" Value="Hash" />
-  <Translate Key="SearchControl_New" Value="New" />
-  <Translate Key="SearchControl_Edit" Value="Edit" />
-  <Translate Key="SearchControl_Delete" Value="Delete" />
-  <Translate Key="SearchControl_Cut" Value="Cut" />
-  <Translate Key="SearchControl_Copy" Value="Copy" />
-  <Translate Key="SearchControl_CopyInfo" Value="Copy info" />
-  <Translate Key="SearchControl_Paste" Value="Paste" />
-  <Translate Key="SearchControl_Export" Value="Export" />
-  <Translate Key="SearchControl_DeleteCache" Value="Delete cache" />
-  <Translate Key="SearchControl_DeleteShare" Value="Delete share " />
-  <Translate Key="SearchControl_DeleteDownload" Value="Delete download " />
-  <Translate Key="SearchControl_DeleteUpload" Value="Delete upload " />
-  <Translate Key="SearchControl_DeleteDownloadHistory" Value="Delete download history" />
-  <Translate Key="SearchControl_DeleteUploadHistory" Value="Delete upload history" />
-  <Translate Key="SearchControl_Download" Value="Download" />
-  <Translate Key="SearchControl_Search" Value="Search" />
-  <Translate Key="SearchControl_SearchSignature" Value="Search signature" />
-  <Translate Key="SearchControl_SearchKeyword" Value="Search keyword" />
-  <Translate Key="SearchControl_SearchCreationTimeRange" Value="Search creation time range" />
-  <Translate Key="SearchControl_Filter" Value="Filter" />
-  <Translate Key="SearchControl_FilterName" Value="Filter name" />
-  <Translate Key="SearchControl_FilterSignature" Value="Filter signature" />
-  <Translate Key="SearchControl_FilterKeyword" Value="Filter keyword" />
-  <Translate Key="SearchControl_FilterCreationTimeRange" Value="Filter creation time range" />
-  <Translate Key="SearchControl_FilterSeed" Value="Filter seed" />
-
-  <Translate Key="SearchState_Clicked" Value="C" />
-
-  <Translate Key="SearchItemEditWindow_Title" Value="Search item edit" />
-  <Translate Key="SearchItemEditWindow_Name" Value="Name" />
-  <Translate Key="SearchItemEditWindow_NameRegex" Value="Name regex" />
-  <Translate Key="SearchItemEditWindow_Signature" Value="Signature" />
-  <Translate Key="SearchItemEditWindow_Keyword" Value="Keyword" />
-  <Translate Key="SearchItemEditWindow_CreationTimeRange" Value="Creation time range" />
-  <Translate Key="SearchItemEditWindow_LengthRange" Value="Length range" />
-  <Translate Key="SearchItemEditWindow_Seed" Value="Seed" />
-  <Translate Key="SearchItemEditWindow_SearchState" Value="State" />
-  <Translate Key="SearchItemEditWindow_Contains" Value="Contains" />
-  <Translate Key="SearchItemEditWindow_IsIgnoreCase" Value="Ignore case" />
-  <Translate Key="SearchItemEditWindow_Value" Value="Value" />
-  <Translate Key="SearchItemEditWindow_Min" Value="Min" />
-  <Translate Key="SearchItemEditWindow_Max" Value="Max" />
-  <Translate Key="SearchItemEditWindow_Up" Value="Up" />
-  <Translate Key="SearchItemEditWindow_Down" Value="Down" />
-  <Translate Key="SearchItemEditWindow_Add" Value="Add" />
-  <Translate Key="SearchItemEditWindow_Edit" Value="Edit" />
-  <Translate Key="SearchItemEditWindow_Delete" Value="Delete" />
-  <Translate Key="SearchItemEditWindow_Ok" Value="Ok" />
-  <Translate Key="SearchItemEditWindow_Cancel" Value="Cancel" />
-  <Translate Key="SearchItemEditWindow_Cut" Value="Cut" />
-  <Translate Key="SearchItemEditWindow_Copy" Value="Copy" />
-  <Translate Key="SearchItemEditWindow_Paste" Value="Paste" />
-  <Translate Key="SearchItemEditWindow_SearchState_Clicked" Value="Clicked" />
-
-  <Translate Key="BoxEditWindow_Title" Value="Box edit" />
-  <Translate Key="BoxEditWindow_Name" Value="Name" />
-  <Translate Key="BoxEditWindow_Signature" Value="Signature" />
-  <Translate Key="BoxEditWindow_Comment" Value="Comment" />
-  <Translate Key="BoxEditWindow_Ok" Value="Ok" />
-  <Translate Key="BoxEditWindow_Cancel" Value="Cancel" />
+  <Translate Key="ChartControl_Name" Value="Name" />
+  <Translate Key="ChartControl_Signature" Value="Signature" />
+  <Translate Key="ChartControl_Length" Value="Length" />
+  <Translate Key="ChartControl_Keywords" Value="Keywords" />
+  <Translate Key="ChartControl_CreationTime" Value="Creation time" />
+  <Translate Key="ChartControl_Comment" Value="Comment" />
+  <Translate Key="ChartControl_State" Value="State" />
+  <Translate Key="ChartControl_Hash" Value="Hash" />
+  <Translate Key="ChartControl_New" Value="New" />
+  <Translate Key="ChartControl_Edit" Value="Edit" />
+  <Translate Key="ChartControl_Delete" Value="Delete" />
+  <Translate Key="ChartControl_Cut" Value="Cut" />
+  <Translate Key="ChartControl_Copy" Value="Copy" />
+  <Translate Key="ChartControl_CopyInfo" Value="Copy info" />
+  <Translate Key="ChartControl_Paste" Value="Paste" />
+  <Translate Key="ChartControl_Export" Value="Export" />
+  <Translate Key="ChartControl_DeleteChart" Value="Delete cache" />
+  <Translate Key="ChartControl_DeleteShare" Value="Delete share " />
+  <Translate Key="ChartControl_DeleteDownload" Value="Delete download " />
+  <Translate Key="ChartControl_DeleteUpload" Value="Delete upload " />
+  <Translate Key="ChartControl_DeleteDownloadHistory" Value="Delete download history" />
+  <Translate Key="ChartControl_DeleteUploadHistory" Value="Delete upload history" />
+  <Translate Key="ChartControl_Download" Value="Download" />
+  <Translate Key="ChartControl_Search" Value="Search" />
+  <Translate Key="ChartControl_SearchSignature" Value="Search signature" />
+  <Translate Key="ChartControl_SearchKeyword" Value="Search keyword" />
+  <Translate Key="ChartControl_SearchCreationTimeRange" Value="Search creation time range" />
+  <Translate Key="ChartControl_Filter" Value="Filter" />
+  <Translate Key="ChartControl_FilterName" Value="Filter name" />
+  <Translate Key="ChartControl_FilterSignature" Value="Filter signature" />
+  <Translate Key="ChartControl_FilterKeyword" Value="Filter keyword" />
+  <Translate Key="ChartControl_FilterCreationTimeRange" Value="Filter creation time range" />
+  <Translate Key="ChartControl_FilterSeed" Value="Filter seed" />
 
 </Configuration>

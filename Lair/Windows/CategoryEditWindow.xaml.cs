@@ -26,7 +26,7 @@ namespace Lair.Windows
         private Category _category;
         private List<SearchContains<string>> _searchWordCollection;
         private List<SearchContains<SearchRegex>> _searchRegexCollection;
-        private List<SearchContains<string>> _searchSignatureCollection;
+        private List<SearchContains<SearchRegex>> _searchSignatureCollection;
         private List<SearchContains<SearchRange<DateTime>>> _searchCreationTimeRangeCollection;
 
         public CategoryEditWindow(ref Category category)
@@ -70,8 +70,10 @@ namespace Lair.Windows
             _signatureListView.ItemsSource = _searchSignatureCollection;
             _creationTimeRangeListView.ItemsSource = _searchCreationTimeRangeCollection;
 
-            _creationTimeRangeMinTextBox.Text = new DateTime(DateTime.UtcNow.Year, 1, 1, 0, 0, 0, DateTimeKind.Utc).ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
-            _creationTimeRangeMaxTextBox.Text = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 0, 0, 0, DateTimeKind.Utc).ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
+            var maxDateTime = DateTime.Now.AddDays(1);
+
+            _creationTimeRangeMinTextBox.Text = new DateTime(DateTime.Now.Year, 1, 1, 0, 0, 0, DateTimeKind.Local).ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
+            _creationTimeRangeMaxTextBox.Text = new DateTime(maxDateTime.Year, maxDateTime.Month, maxDateTime.Day, 0, 0, 0, DateTimeKind.Local).ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
         }
 
         #region _wordListView
@@ -656,15 +658,17 @@ namespace Lair.Windows
             if (selectIndex == -1)
             {
                 _signatureContainsCheckBox.IsChecked = true;
+                _signatureIsIgnoreCaseCheckBox.IsChecked = false;
                 _signatureTextBox.Text = "";
                 return;
             }
 
-            var item = _signatureListView.SelectedItem as SearchContains<string>;
+            var item = _signatureListView.SelectedItem as SearchContains<SearchRegex>;
             if (item == null) return;
 
             _signatureContainsCheckBox.IsChecked = item.Contains;
-            _signatureTextBox.Text = item.Value;
+            _signatureIsIgnoreCaseCheckBox.IsChecked = item.Value.IsIgnoreCase;
+            _signatureTextBox.Text = item.Value.Value;
         }
 
         private void _signatureListView_ContextMenuOpening(object sender, ContextMenuEventArgs e)
@@ -680,7 +684,7 @@ namespace Lair.Windows
 
                 if (line.Length != 0)
                 {
-                    Regex regex = new Regex(@"^([\+-]) (.*)$");
+                    Regex regex = new Regex("^([\\+-]) ([\\+-]) \"(.*)\"$");
 
                     _signatureListViewPasteMenuItem.IsEnabled = regex.IsMatch(line[0]);
                 }
@@ -696,9 +700,9 @@ namespace Lair.Windows
         {
             var sb = new StringBuilder();
 
-            foreach (var item in _signatureListView.SelectedItems.OfType<SearchContains<string>>())
+            foreach (var item in _signatureListView.SelectedItems.OfType<SearchContains<SearchRegex>>())
             {
-                sb.AppendLine(string.Format("{0} {1}", (item.Contains == true) ? "+" : "-", item.Value));
+                sb.AppendLine(string.Format("{0} {1} \"{2}\"", (item.Contains == true) ? "+" : "-", (item.Value.IsIgnoreCase == true) ? "+" : "-", item.Value.Value));
             }
 
             Clipboard.SetText(sb.ToString());
@@ -712,7 +716,7 @@ namespace Lair.Windows
 
         private void _signatureListViewPasteMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            Regex regex = new Regex(@"^([\+-]) (.*)$");
+            Regex regex = new Regex("^([\\+-]) ([\\+-]) \"(.*)\"$");
 
             foreach (var line in Clipboard.GetText().Split('\r', '\n'))
             {
@@ -721,10 +725,23 @@ namespace Lair.Windows
                     var match = regex.Match(line);
                     if (!match.Success) continue;
 
-                    var item = new SearchContains<string>()
+                    try
+                    {
+                        new Regex(match.Groups[3].Value);
+                    }
+                    catch (Exception)
+                    {
+                        return;
+                    }
+
+                    var item = new SearchContains<SearchRegex>()
                     {
                         Contains = (match.Groups[1].Value == "+") ? true : false,
-                        Value = match.Groups[2].Value,
+                        Value = new SearchRegex()
+                        {
+                            IsIgnoreCase = (match.Groups[2].Value == "+") ? true : false,
+                            Value = match.Groups[3].Value
+                        },
                     };
 
                     if (_searchSignatureCollection.Contains(item)) continue;
@@ -745,7 +762,7 @@ namespace Lair.Windows
 
         private void _signatureUpButton_Click(object sender, RoutedEventArgs e)
         {
-            var item = _signatureListView.SelectedItem as SearchContains<string>;
+            var item = _signatureListView.SelectedItem as SearchContains<SearchRegex>;
             if (item == null) return;
 
             var selectIndex = _signatureListView.SelectedIndex;
@@ -760,7 +777,7 @@ namespace Lair.Windows
 
         private void _signatureDownButton_Click(object sender, RoutedEventArgs e)
         {
-            var item = _signatureListView.SelectedItem as SearchContains<string>;
+            var item = _signatureListView.SelectedItem as SearchContains<SearchRegex>;
             if (item == null) return;
 
             var selectIndex = _signatureListView.SelectedIndex;
@@ -777,14 +794,25 @@ namespace Lair.Windows
         {
             if (_signatureTextBox.Text == "") return;
 
-            var item = new SearchContains<string>()
+            try
             {
-                Contains = _signatureContainsCheckBox.IsChecked.Value,
-                Value = _signatureTextBox.Text,
-            };
+                var item = new SearchContains<SearchRegex>()
+                {
+                    Contains = _signatureContainsCheckBox.IsChecked.Value,
+                    Value = new SearchRegex()
+                    {
+                        IsIgnoreCase = _signatureIsIgnoreCaseCheckBox.IsChecked.Value,
+                        Value = _signatureTextBox.Text
+                    },
+                };
 
-            if (_searchSignatureCollection.Contains(item)) return;
-            _searchSignatureCollection.Add(item);
+                if (_searchSignatureCollection.Contains(item)) return;
+                _searchSignatureCollection.Add(item);
+            }
+            catch (Exception)
+            {
+                return;
+            }
 
             _signatureTextBox.Text = "";
             _signatureListView.SelectedIndex = _searchSignatureCollection.Count - 1;
@@ -797,19 +825,31 @@ namespace Lair.Windows
         {
             if (_signatureTextBox.Text == "") return;
 
-            var uitem = new SearchContains<string>()
+            try
             {
-                Contains = _signatureContainsCheckBox.IsChecked.Value,
-                Value = _signatureTextBox.Text,
-            };
 
-            if (_searchSignatureCollection.Contains(uitem)) return;
+                var uitem = new SearchContains<SearchRegex>()
+                {
+                    Contains = _signatureContainsCheckBox.IsChecked.Value,
+                    Value = new SearchRegex()
+                    {
+                        IsIgnoreCase = _signatureIsIgnoreCaseCheckBox.IsChecked.Value,
+                        Value = _signatureTextBox.Text
+                    },
+                };
 
-            var item = _signatureListView.SelectedItem as SearchContains<string>;
-            if (item == null) return;
+                if (_searchSignatureCollection.Contains(uitem)) return;
 
-            item.Contains = _signatureContainsCheckBox.IsChecked.Value;
-            item.Value = _signatureTextBox.Text;
+                var item = _signatureListView.SelectedItem as SearchContains<SearchRegex>;
+                if (item == null) return;
+
+                item.Contains = _signatureContainsCheckBox.IsChecked.Value;
+                item.Value = new SearchRegex() { IsIgnoreCase = _signatureIsIgnoreCaseCheckBox.IsChecked.Value, Value = _signatureTextBox.Text };
+            }
+            catch (Exception)
+            {
+                return;
+            }
 
             _signatureListView.Items.Refresh();
             _signatureListViewUpdate();
@@ -822,7 +862,7 @@ namespace Lair.Windows
 
             _signatureTextBox.Text = "";
 
-            foreach (var item in _signatureListView.SelectedItems.OfType<SearchContains<string>>().ToArray())
+            foreach (var item in _signatureListView.SelectedItems.OfType<SearchContains<SearchRegex>>().ToArray())
             {
                 _searchSignatureCollection.Remove(item);
             }
@@ -907,9 +947,12 @@ namespace Lair.Windows
             var selectIndex = _creationTimeRangeListView.SelectedIndex;
             if (selectIndex == -1)
             {
-                _creationTimeRangeContainsCheckBox.IsChecked = true; ;
-                _creationTimeRangeMinTextBox.Text = new DateTime(DateTime.UtcNow.Year, 1, 1, 0, 0, 0, DateTimeKind.Utc).ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
-                _creationTimeRangeMaxTextBox.Text = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 0, 0, 0, DateTimeKind.Utc).ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
+                _creationTimeRangeContainsCheckBox.IsChecked = true;
+
+                var maxDateTime = DateTime.Now.AddDays(1);
+
+                _creationTimeRangeMinTextBox.Text = new DateTime(DateTime.Now.Year, 1, 1, 0, 0, 0, DateTimeKind.Local).ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
+                _creationTimeRangeMaxTextBox.Text = new DateTime(maxDateTime.Year, maxDateTime.Month, maxDateTime.Day, 0, 0, 0, DateTimeKind.Local).ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
                 return;
             }
 
@@ -917,8 +960,8 @@ namespace Lair.Windows
             if (item == null) return;
 
             _creationTimeRangeContainsCheckBox.IsChecked = item.Contains;
-            _creationTimeRangeMinTextBox.Text = item.Value.Min.ToUniversalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
-            _creationTimeRangeMaxTextBox.Text = item.Value.Max.ToUniversalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
+            _creationTimeRangeMinTextBox.Text = item.Value.Min.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
+            _creationTimeRangeMaxTextBox.Text = item.Value.Max.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
         }
 
         private void _creationTimeRangeListView_ContextMenuOpening(object sender, ContextMenuEventArgs e)
@@ -982,8 +1025,8 @@ namespace Lair.Windows
                         Contains = (match.Groups[1].Value == "+") ? true : false,
                         Value = new SearchRange<DateTime>()
                         {
-                            Max = DateTime.ParseExact(match.Groups[3].Value, LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime(),
-                            Min = DateTime.ParseExact(match.Groups[2].Value, LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime(),
+                            Max = DateTime.ParseExact(match.Groups[3].Value, LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeLocal).ToUniversalTime(),
+                            Min = DateTime.ParseExact(match.Groups[2].Value, LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeLocal).ToUniversalTime(),
                         },
                     };
 
@@ -996,8 +1039,10 @@ namespace Lair.Windows
                 }
             }
 
-            _creationTimeRangeMinTextBox.Text = new DateTime(DateTime.UtcNow.Year, 1, 1, 0, 0, 0, DateTimeKind.Utc).ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
-            _creationTimeRangeMaxTextBox.Text = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 0, 0, 0, DateTimeKind.Utc).ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
+            var maxDateTime = DateTime.Now.AddDays(1);
+
+            _creationTimeRangeMinTextBox.Text = new DateTime(DateTime.Now.Year, 1, 1, 0, 0, 0, DateTimeKind.Local).ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
+            _creationTimeRangeMaxTextBox.Text = new DateTime(maxDateTime.Year, maxDateTime.Month, maxDateTime.Day, 0, 0, 0, DateTimeKind.Local).ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
             _creationTimeRangeListView.SelectedIndex = _searchCreationTimeRangeCollection.Count - 1;
 
             _creationTimeRangeListView.Items.Refresh();
@@ -1046,8 +1091,8 @@ namespace Lair.Windows
                     Contains = _creationTimeRangeContainsCheckBox.IsChecked.Value,
                     Value = new SearchRange<DateTime>()
                     {
-                        Max = DateTime.ParseExact(_creationTimeRangeMaxTextBox.Text, LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime(),
-                        Min = DateTime.ParseExact(_creationTimeRangeMinTextBox.Text, LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime(),
+                        Max = DateTime.ParseExact(_creationTimeRangeMaxTextBox.Text, LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeLocal).ToUniversalTime(),
+                        Min = DateTime.ParseExact(_creationTimeRangeMinTextBox.Text, LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeLocal).ToUniversalTime(),
                     }
                 };
 
@@ -1059,8 +1104,10 @@ namespace Lair.Windows
                 return;
             }
 
-            _creationTimeRangeMinTextBox.Text = new DateTime(DateTime.UtcNow.Year, 1, 1, 0, 0, 0, DateTimeKind.Utc).ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
-            _creationTimeRangeMaxTextBox.Text = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 0, 0, 0, DateTimeKind.Utc).ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
+            var maxDateTime = DateTime.Now.AddDays(1);
+
+            _creationTimeRangeMinTextBox.Text = new DateTime(DateTime.Now.Year, 1, 1, 0, 0, 0, DateTimeKind.Local).ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
+            _creationTimeRangeMaxTextBox.Text = new DateTime(maxDateTime.Year, maxDateTime.Month, maxDateTime.Day, 0, 0, 0, DateTimeKind.Local).ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
             _creationTimeRangeListView.SelectedIndex = _searchCreationTimeRangeCollection.Count - 1;
 
             _creationTimeRangeListView.Items.Refresh();
@@ -1079,8 +1126,8 @@ namespace Lair.Windows
                     Contains = _creationTimeRangeContainsCheckBox.IsChecked.Value,
                     Value = new SearchRange<DateTime>()
                     {
-                        Max = DateTime.ParseExact(_creationTimeRangeMaxTextBox.Text, LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime(),
-                        Min = DateTime.ParseExact(_creationTimeRangeMinTextBox.Text, LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime(),
+                        Max = DateTime.ParseExact(_creationTimeRangeMaxTextBox.Text, LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeLocal).ToUniversalTime(),
+                        Min = DateTime.ParseExact(_creationTimeRangeMinTextBox.Text, LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeLocal).ToUniversalTime(),
                     }
                 };
 
@@ -1090,8 +1137,8 @@ namespace Lair.Windows
                 if (item == null) return;
 
                 item.Contains = _creationTimeRangeContainsCheckBox.IsChecked.Value;
-                item.Value.Max = DateTime.ParseExact(_creationTimeRangeMaxTextBox.Text, LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime();
-                item.Value.Min = DateTime.ParseExact(_creationTimeRangeMinTextBox.Text, LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeUniversal).ToUniversalTime();
+                item.Value.Max = DateTime.ParseExact(_creationTimeRangeMaxTextBox.Text, LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeLocal).ToUniversalTime();
+                item.Value.Min = DateTime.ParseExact(_creationTimeRangeMinTextBox.Text, LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeLocal).ToUniversalTime();
             }
             catch (Exception)
             {
@@ -1107,8 +1154,10 @@ namespace Lair.Windows
             int selectIndex = _creationTimeRangeListView.SelectedIndex;
             if (selectIndex == -1) return;
 
-            _creationTimeRangeMinTextBox.Text = new DateTime(DateTime.UtcNow.Year, 1, 1, 0, 0, 0, DateTimeKind.Utc).ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
-            _creationTimeRangeMaxTextBox.Text = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 0, 0, 0, DateTimeKind.Utc).ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
+            var maxDateTime = DateTime.Now.AddDays(1);
+
+            _creationTimeRangeMinTextBox.Text = new DateTime(DateTime.Now.Year, 1, 1, 0, 0, 0, DateTimeKind.Local).ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
+            _creationTimeRangeMaxTextBox.Text = new DateTime(maxDateTime.Year, maxDateTime.Month, maxDateTime.Day, 0, 0, 0, DateTimeKind.Local).ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
 
             foreach (var item in _creationTimeRangeListView.SelectedItems.OfType<SearchContains<SearchRange<DateTime>>>().ToArray())
             {

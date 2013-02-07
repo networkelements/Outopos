@@ -1,0 +1,155 @@
+﻿<UserControl x:Class="Lair.Windows.ChartControl"
+        x:ClassModifier="internal"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:prop="clr-namespace:Lair.Properties"     
+        xmlns:local="clr-namespace:Lair.Windows" 
+        Height="500" Width="800">
+
+    <UserControl.Resources>
+        <DataTemplate x:Key="_myTemplate_Name">
+            <Grid>
+                <Image Width="16" Height="16" Source="{Binding Path=Value, Mode=OneWay, Converter={StaticResource _objectToImageConverter}}" HorizontalAlignment="Left" />
+                <TextBlock Margin="22,0,0,0" Text="{Binding Path=Name, Mode=OneWay, Converter={StaticResource _stringRegularizationConverter}}" ToolTip="{Binding Path=Value, Mode=OneWay, Converter={StaticResource _objectToInfoStringConverter}}" />
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="_myTemplate_Signature">
+            <TextBlock Text="{Binding Path=Signature, Mode=OneWay, Converter={StaticResource _stringRegularizationConverter}}" />
+        </DataTemplate>
+        <DataTemplate x:Key="_myTemplate_Length">
+            <TextBlock Text="{Binding Path=Length, Mode=OneWay, Converter={StaticResource _longToSizeStringConverter}}" />
+        </DataTemplate>
+        <DataTemplate x:Key="_myTemplate_Keywords">
+            <TextBlock Text="{Binding Path=Keywords, Mode=OneWay, Converter={StaticResource _stringRegularizationConverter}}" />
+        </DataTemplate>
+        <DataTemplate x:Key="_myTemplate_CreationTime">
+            <TextBlock Text="{Binding Path=CreationTime, Mode=OneWay, Converter={StaticResource _dateTimeToStringConverter}}" />
+        </DataTemplate>
+        <DataTemplate x:Key="_myTemplate_Comment">
+            <TextBlock Text="{Binding Path=Comment, Mode=OneWay, Converter={StaticResource _stringRegularizationConverter}}" />
+        </DataTemplate>
+        <DataTemplate x:Key="_myTemplate_State">
+            <TextBlock Text="{Binding Path=State, Mode=OneWay, Converter={StaticResource _searchStateToStringConverter}}" />
+        </DataTemplate>
+        <DataTemplate x:Key="_myTemplate_Hash">
+            <TextBlock Text="{Binding Path=Hash, Mode=OneWay}" />
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <UserControl.CommandBindings>
+        <CommandBinding Command="New" Executed="Execute_New" />
+        <CommandBinding Command="Delete" Executed="Execute_Delete" />
+        <CommandBinding Command="Cut" Executed="Execute_Cut" />
+        <CommandBinding Command="Copy" Executed="Execute_Copy" />
+        <CommandBinding Command="Paste" Executed="Execute_Paste" />
+        <CommandBinding Command="Search"  Executed="Execute_Search" />
+    </UserControl.CommandBindings>
+
+    <UserControl.InputBindings>
+        <KeyBinding Gesture="CTRL+N" Command="New" />
+        <KeyBinding Gesture="Delete" Command="Delete" />
+        <KeyBinding Gesture="CTRL+X" Command="Cut" />
+        <KeyBinding Gesture="CTRL+C" Command="Copy" />
+        <KeyBinding Gesture="CTRL+V" Command="Paste" />
+        <KeyBinding Gesture="CTRL+F" Command="Search" />
+    </UserControl.InputBindings>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="24" />
+            <RowDefinition Height="442*" />
+            <RowDefinition Name="_searchRowDefinition" Height="24" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="{Binding Path=ChartControl_Grid_ColumnDefinitions_Width, Mode=TwoWay, Converter={StaticResource _doubleToGridLengthConverter}, Source={x:Static prop:Settings.Instance}}" />
+            <ColumnDefinition Width="4" />
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
+
+        <GridSplitter Grid.Column="1" Grid.RowSpan="3" HorizontalAlignment="Stretch" />
+
+        <TextBox Name="_textBox" KeyDown="_textBox_KeyDown" VerticalContentAlignment="Center" />
+
+        <TreeView Grid.Row="1" Name="_treeView" ContextMenuOpening="_treeView_ContextMenuOpening" SelectedItemChanged="_treeView_SelectedItemChanged" PreviewMouseMove="_treeView_PreviewMouseMove" AllowDrop="True" PreviewDrop="_treeView_PreviewDrop" PreviewMouseLeftButtonDown="_treeView_PreviewMouseLeftButtonDown" PreviewMouseRightButtonDown="_treeView_PreviewMouseRightButtonDown" PreviewDragOver="_treeView_PreviewDragOver"
+                    VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" Grid.RowSpan="2">
+            <local:SearchTreeViewItem x:Name="_treeViewItem" IsExpanded="True">
+                <local:SearchTreeViewItem.ContextMenu>
+                    <ContextMenu Name="_treeViewContextMenu">
+                        <MenuItem Name="_treeViewNewMenuItem" Header="{Binding Path=ChartControl_New, Source={StaticResource ResourcesInstance}}" Click="_treeViewNewMenuItem_Click"/>
+                        <MenuItem Name="_treeViewEditMenuItem" Header="{Binding Path=ChartControl_Edit, Source={StaticResource ResourcesInstance}}" Click="_treeViewEditMenuItem_Click"/>
+                        <MenuItem Name="_treeViewDeleteMenuItem" Header="{Binding Path=ChartControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_treeViewDeleteMenuItem_Click"/>
+                        <Separator />
+                        <MenuItem Name="_treeViewCutMenuItem" Header="{Binding Path=ChartControl_Cut, Source={StaticResource ResourcesInstance}}" Click="_treeViewCutMenuItem_Click" />
+                        <MenuItem Name="_treeViewCopyMenuItem" Header="{Binding Path=ChartControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_treeViewCopyMenuItem_Click" />
+                        <MenuItem Name="_treeViewPasteMenuItem" Header="{Binding Path=ChartControl_Paste, Source={StaticResource ResourcesInstance}}" Click="_treeViewPasteMenuItem_Click" />
+                        <Separator />
+                        <MenuItem Name="_treeViewExportMenuItem" Header="{Binding Path=ChartControl_Export, Source={StaticResource ResourcesInstance}}" Click="_treeViewExportMenuItem_Click" />
+                    </ContextMenu>
+                </local:SearchTreeViewItem.ContextMenu>
+            </local:SearchTreeViewItem>
+        </TreeView>
+
+        <local:ListViewEx Grid.Column="2" x:Name="_listView" Grid.RowSpan="2" ContextMenuOpening="_listView_ContextMenuOpening" PreviewMouseDoubleClick="_listView_PreviewMouseDoubleClick" GridViewColumnHeader.Click="GridViewColumnHeaderClickedHandler"
+                    VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" >
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel CanHorizontallyScroll="False" Orientation="Vertical" IsItemsHost="True"/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+            <ListView.ContextMenu>
+                <ContextMenu Name="_listViewContextMenu" >
+                    <MenuItem Name="_listViewEditMenuItem" Header="{Binding Path=ChartControl_Edit, Source={StaticResource ResourcesInstance}}" Click="_listViewEditMenuItem_Click" />
+                    <MenuItem Name="_listViewDeleteMenuItem" Header="{Binding Path=ChartControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_listViewDeleteMenuItem_Click" />
+                    <Separator />
+                    <MenuItem Name="_listViewDeleteChartMenuItem" Header="{Binding Path=ChartControl_DeleteChart, Source={StaticResource ResourcesInstance}}" Click="_listViewDeleteChartMenuItem_Click" />
+                    <MenuItem Name="_listViewDeleteShareMenuItem" Header="{Binding Path=ChartControl_DeleteShare, Source={StaticResource ResourcesInstance}}" Click="_listViewDeleteShareMenuItem_Click" />
+                    <MenuItem Name="_listViewDeleteDownloadMenuItem" Header="{Binding Path=ChartControl_DeleteDownload, Source={StaticResource ResourcesInstance}}" Click="_listViewDeleteDownloadMenuItem_Click" />
+                    <MenuItem Name="_listViewDeleteUploadMenuItem" Header="{Binding Path=ChartControl_DeleteUpload, Source={StaticResource ResourcesInstance}}" Click="_listViewDeleteUploadMenuItem_Click" />
+                    <MenuItem Name="_listViewDeleteDownloadHistoryMenuItem" Header="{Binding Path=ChartControl_DeleteDownloadHistory, Source={StaticResource ResourcesInstance}}" Click="_listViewDeleteDownloadHistoryMenuItem_Click" />
+                    <MenuItem Name="_listViewDeleteUploadHistoryMenuItem" Header="{Binding Path=ChartControl_DeleteUploadHistory, Source={StaticResource ResourcesInstance}}" Click="_listViewDeleteUploadHistoryMenuItem_Click" />
+                    <Separator />
+                    <MenuItem Name="_listViewCopyMenuItem" Header="{Binding Path=ChartControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_listViewCopyMenuItem_Click" />
+                    <MenuItem Name="_listViewCopyInfoMenuItem" Header="{Binding Path=ChartControl_CopyInfo, Source={StaticResource ResourcesInstance}}" Click="_listViewCopyInfoMenuItem_Click" />
+                    <Separator />
+                    <MenuItem Name="_listViewSearchMenuItem" Header="{Binding Path=ChartControl_Search, Source={StaticResource ResourcesInstance}}" >
+                        <MenuItem Name="_listViewSearchSignatureMenuItem" Header="{Binding Path=ChartControl_SearchSignature, Source={StaticResource ResourcesInstance}}" Click="_listViewSearchSignatureMenuItem_Click" />
+                        <MenuItem Name="_listViewSearchKeywordMenuItem" Header="{Binding Path=ChartControl_SearchKeyword, Source={StaticResource ResourcesInstance}}" Click="_listViewSearchKeywordMenuItem_Click" />
+                        <MenuItem Name="_listViewSearchCreationTimeRangeMenuItem" Header="{Binding Path=ChartControl_SearchCreationTimeRange, Source={StaticResource ResourcesInstance}}" Click="_listViewSearchCreationTimeRangeMenuItem_Click" />
+                    </MenuItem>
+                    <MenuItem Name="_listViewFilterMenuItem" Header="{Binding Path=ChartControl_Filter, Source={StaticResource ResourcesInstance}}" >
+                        <MenuItem Name="_listViewFilterNameMenuItem" Header="{Binding Path=ChartControl_FilterName, Source={StaticResource ResourcesInstance}}" Click="_listViewFilterNameMenuItem_Click" />
+                        <MenuItem Name="_listViewFilterSignatureMenuItem" Header="{Binding Path=ChartControl_FilterSignature, Source={StaticResource ResourcesInstance}}" Click="_listViewFilterSignatureMenuItem_Click" />
+                        <MenuItem Name="_listViewFilterKeywordMenuItem" Header="{Binding Path=ChartControl_FilterKeyword, Source={StaticResource ResourcesInstance}}" Click="_listViewFilterKeywordMenuItem_Click" />
+                        <MenuItem Name="_listViewFilterCreationTimeRangeMenuItem" Header="{Binding Path=ChartControl_FilterCreationTimeRange, Source={StaticResource ResourcesInstance}}" Click="_listViewFilterCreationTimeRangeMenuItem_Click" />
+                        <MenuItem Name="_listViewFilterSeedMenuItem" Header="{Binding Path=ChartControl_FilterSeed, Source={StaticResource ResourcesInstance}}" Click="_listViewFilterSeedMenuItem_Click" />
+                    </MenuItem>
+                    <Separator />
+                    <MenuItem Name="_listViewDownloadMenuItem" Header="{Binding Path=ChartControl_Download, Source={StaticResource ResourcesInstance}}" Click="_listViewDownloadMenuItem_Click" />
+                </ContextMenu>
+            </ListView.ContextMenu>
+            <ListView.View>
+                <GridView x:Name="_gridView" AllowsColumnReorder="False" >
+                    <GridViewColumn Header="{Binding Path=ChartControl_Name, Source={StaticResource ResourcesInstance}}" CellTemplate="{StaticResource _myTemplate_Name}" 
+                            Width="{Binding Path=ChartControl_GridViewColumn_Name_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
+                    <GridViewColumn Header="{Binding Path=ChartControl_Signature, Source={StaticResource ResourcesInstance}}" CellTemplate="{StaticResource _myTemplate_Signature}" 
+                            Width="{Binding Path=ChartControl_GridViewColumn_Signature_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
+                    <GridViewColumn Header="{Binding Path=ChartControl_Length, Source={StaticResource ResourcesInstance}}" CellTemplate="{StaticResource _myTemplate_Length}" 
+                            Width="{Binding Path=ChartControl_GridViewColumn_Length_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
+                    <GridViewColumn Header="{Binding Path=ChartControl_Keywords, Source={StaticResource ResourcesInstance}}" CellTemplate="{StaticResource _myTemplate_Keywords}" 
+                            Width="{Binding Path=ChartControl_GridViewColumn_Keywords_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
+                    <GridViewColumn Header="{Binding Path=ChartControl_CreationTime, Source={StaticResource ResourcesInstance}}" CellTemplate="{StaticResource _myTemplate_CreationTime}" 
+                            Width="{Binding Path=ChartControl_GridViewColumn_CreationTime_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
+                    <GridViewColumn Header="{Binding Path=ChartControl_Comment, Source={StaticResource ResourcesInstance}}" CellTemplate="{StaticResource _myTemplate_Comment}" 
+                            Width="{Binding Path=ChartControl_GridViewColumn_Comment_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
+                    <GridViewColumn Header="{Binding Path=ChartControl_State, Source={StaticResource ResourcesInstance}}" CellTemplate="{StaticResource _myTemplate_State}" 
+                            Width="{Binding Path=ChartControl_GridViewColumn_State_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
+                    <GridViewColumn Header="{Binding Path=ChartControl_Hash, Source={StaticResource ResourcesInstance}}" CellTemplate="{StaticResource _myTemplate_Hash}" 
+                            Width="{Binding Path=ChartControl_GridViewColumn_Hash_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
+                </GridView>
+            </ListView.View>
+        </local:ListViewEx>
+
+        <TextBox Grid.Column="2" Grid.Row="2" Margin="24,0,0,0" Name="_searchTextBox" KeyDown="_searchTextBox_KeyDown" />
+        <Button Content="×" Grid.Column="2" Grid.Row="2" Height="16" HorizontalAlignment="Left" Margin="4,4,0,0" Name="_serachCloseButton" VerticalAlignment="Top" Width="16" Padding="0,-2,0,0" Click="_serachCloseButton_Click" />
+    </Grid>
+</UserControl>

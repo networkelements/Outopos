@@ -34,9 +34,9 @@ using a = Library.Net.Amoeba;
 namespace Lair.Windows
 {
     /// <summary>
-    /// Interaction logic for ChannelControl.xaml
+    /// Interaction logic for ControlControl.xaml
     /// </summary>
-    partial class ChannelControl : UserControl
+    partial class ControlControl : UserControl
     {
         private MainWindow _mainWindow;
         private BufferManager _bufferManager;
@@ -54,7 +54,7 @@ namespace Lair.Windows
 
         private static Random _random = new Random();
 
-        public ChannelControl(MainWindow mainWindow, LairManager lairManager, BufferManager bufferManager)
+        public ControlControl(MainWindow mainWindow, LairManager lairManager, BufferManager bufferManager)
         {
             _mainWindow = mainWindow;
             _bufferManager = bufferManager;
@@ -62,7 +62,7 @@ namespace Lair.Windows
 
             InitializeComponent();
 
-            _treeViewItem.Value = Settings.Instance.ChannelControl_Category;
+            _treeViewItem.Value = Settings.Instance.ControlControl_Category;
             _treeViewItem.PreviewMouseLeftButtonDown += new MouseButtonEventHandler(_treeViewItem_PreviewMouseLeftButtonDown);
 
             _listView.ItemsSource = _listViewItemCollection;
@@ -88,19 +88,19 @@ namespace Lair.Windows
             _searchThread = new Thread(new ThreadStart(this.Search));
             _searchThread.Priority = ThreadPriority.Highest;
             _searchThread.IsBackground = true;
-            _searchThread.Name = "ChannelControl_SearchThread";
+            _searchThread.Name = "ControlControl_SearchThread";
             _searchThread.Start();
 
             _cacheThread = new Thread(new ThreadStart(this.Cache));
             _cacheThread.Priority = ThreadPriority.Highest;
             _cacheThread.IsBackground = true;
-            _cacheThread.Name = "ChannelControl_CacheThread";
+            _cacheThread.Name = "ControlControl_CacheThread";
             _cacheThread.Start();
 
             _filterThread = new Thread(new ThreadStart(this.Filter));
             _filterThread.Priority = ThreadPriority.Highest;
             _filterThread.IsBackground = true;
-            _filterThread.Name = "ChannelControl_FilterThread";
+            _filterThread.Name = "ControlControl_FilterThread";
             _filterThread.Start();
 
             _lairManager.UnlockChannelsEvent += new UnlockChannelsEventHandler(_lairManager_UnlockChannelsEvent);
@@ -242,10 +242,10 @@ namespace Lair.Windows
 
                     foreach (var item in categoryTreeViewItems)
                     {
-                        ChannelControl.Filter(ref newList, item.Value);
+                        ControlControl.Filter(ref newList, item.Value);
                     }
 
-                    ChannelControl.Filter(ref newList, selectTreeViewItem.Value);
+                    ControlControl.Filter(ref newList, selectTreeViewItem.Value);
 
                     List<Message> sortList = new List<Message>();
 
@@ -510,10 +510,10 @@ namespace Lair.Windows
 
                             foreach (var item in categoryTreeViewItems)
                             {
-                                ChannelControl.Filter(ref newList, item.Value);
+                                ControlControl.Filter(ref newList, item.Value);
                             }
 
-                            ChannelControl.Filter(ref newList, selectTreeViewItem.Value);
+                            ControlControl.Filter(ref newList, selectTreeViewItem.Value);
 
                             List<Message> sortList = new List<Message>();
 
@@ -872,10 +872,10 @@ namespace Lair.Windows
 
                 foreach (var categoryTreeViewItem in categoryTreeViewItems)
                 {
-                    ChannelControl.Filter(ref tempNewList, categoryTreeViewItem.Value);
+                    ControlControl.Filter(ref tempNewList, categoryTreeViewItem.Value);
                 }
 
-                ChannelControl.Filter(ref tempNewList, item.Value);
+                ControlControl.Filter(ref tempNewList, item.Value);
 
                 previewList.UnionWith(tempNewList);
             }
@@ -1040,7 +1040,7 @@ namespace Lair.Windows
             }
             else
             {
-                MessageBox.Show(LanguagesManager.Instance.ChannelControl_AmoebaNotFound_Message);
+                MessageBox.Show(LanguagesManager.Instance.ControlControl_AmoebaNotFound_Message);
 
                 ViewSettingsWindow window = new ViewSettingsWindow(_bufferManager);
                 window.Owner = _mainWindow;
@@ -1122,7 +1122,7 @@ namespace Lair.Windows
 
                             flag = category.SearchSignatureCollection.Any(searchContains =>
                             {
-                                if (searchContains.Contains) return signatureText == searchContains.Value;
+                                if (searchContains.Contains) return searchContains.Value.IsMatch(signatureText);
 
                                 return false;
                             });
@@ -1202,7 +1202,7 @@ namespace Lair.Windows
 
                             flag = category.SearchSignatureCollection.Any(searchContains =>
                             {
-                                if (!searchContains.Contains) return searchContains.Value == signatureText;
+                                if (!searchContains.Contains) return searchContains.Value.IsMatch(signatureText);
 
                                 return false;
                             });
@@ -1297,7 +1297,7 @@ namespace Lair.Windows
 
                             flag = board.SearchSignatureCollection.Any(searchContains =>
                             {
-                                if (searchContains.Contains) return signatureText == searchContains.Value;
+                                if (searchContains.Contains) return searchContains.Value.IsMatch(signatureText);
 
                                 return false;
                             });
@@ -1391,7 +1391,7 @@ namespace Lair.Windows
 
                             flag = board.SearchSignatureCollection.Any(searchContains =>
                             {
-                                if (!searchContains.Contains) return searchContains.Value == signatureText;
+                                if (!searchContains.Contains) return searchContains.Value.IsMatch(signatureText);
 
                                 return false;
                             });
@@ -1436,7 +1436,7 @@ namespace Lair.Windows
 
         private void Update(bool scroll = false)
         {
-            Settings.Instance.ChannelControl_Category = _treeViewItem.Value;
+            Settings.Instance.ControlControl_Category = _treeViewItem.Value;
 
             if (scroll) _treeView_SelectedItemChanged(this, null);
             else _treeView_SelectedItemChanged(null, null);
@@ -1869,7 +1869,7 @@ namespace Lair.Windows
 
         private void _treeViewMarkAllMessagesReadMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show(_mainWindow, LanguagesManager.Instance.ChannelControl_MarkAllMessagesRead_Message, "Channel", MessageBoxButton.OKCancel, MessageBoxImage.Information) != MessageBoxResult.OK) return;
+            if (MessageBox.Show(_mainWindow, LanguagesManager.Instance.ControlControl_MarkAllMessagesRead_Message, "Channel", MessageBoxButton.OKCancel, MessageBoxImage.Information) != MessageBoxResult.OK) return;
 
             if (_treeView.SelectedItem is CategoryTreeViewItem)
             {
@@ -1994,7 +1994,7 @@ namespace Lair.Windows
                 }
             }
         }
-        
+
         #endregion
 
         #region _listView
@@ -2005,7 +2005,7 @@ namespace Lair.Windows
         {
             _layoutUpdated++;
         }
-        
+
         private void _listView_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == System.Windows.Input.Key.Home)
@@ -2264,10 +2264,14 @@ namespace Lair.Windows
             var signature = MessageConverter.ToSignatureString(message.Value.Certificate);
             if (signature == null) signature = "Anonymous";
 
-            var item = new SearchContains<string>()
+            var item = new SearchContains<SearchRegex>()
             {
                 Contains = false,
-                Value = signature,
+                Value = new SearchRegex()
+                {
+                    IsIgnoreCase = false,
+                    Value = Regex.Escape(signature),
+                },
             };
 
             if (selectTreeViewItem.Value.SearchSignatureCollection.Contains(item)) return;
@@ -2465,60 +2469,42 @@ namespace Lair.Windows
         }
     }
 
-    class CategoryTreeViewItem : TreeViewItem
+    class ChartTreeViewItem : TreeViewItem
     {
-        private ObservableCollection<object> _listViewItemCollection = new ObservableCollection<object>();
-        private Category _value;
+        private int _hit;
+        private SearchTreeItem _value;
+        private ObservableCollection<SearchTreeViewItem> _listViewItemCollection = new ObservableCollection<SearchTreeViewItem>();
 
-        public CategoryTreeViewItem()
+        public SearchTreeViewItem()
             : base()
         {
-            this.Value = new Category() { Name = "" };
-
-            base.ItemsSource = _listViewItemCollection;
-
-            base.RequestBringIntoView += (object sender, RequestBringIntoViewEventArgs e) =>
+            this.Value = new SearchTreeItem()
             {
-                e.Handled = true;
-            };
-        }
-
-        public CategoryTreeViewItem(Category category)
-            : base()
-        {
-            this.Value = category;
-
-            base.ItemsSource = _listViewItemCollection;
-
-            base.RequestBringIntoView += (object sender, RequestBringIntoViewEventArgs e) =>
-            {
-                e.Handled = true;
-            };
-        }
-
-        public void UpdateColor()
-        {
-            foreach (var item in _listViewItemCollection.OfType<CategoryTreeViewItem>())
-            {
-                item.UpdateColor();
-            }
-
-            this.Header = new TextBlock() { Text = string.Format("{0}", _value.Name) };
-
-            if (this.Hit)
-            {
-                var header = this.Header as TextBlock;
-                if (header == null) return;
-
-                header.FontWeight = FontWeights.UltraBlack;
-
-                header.Foreground = new SolidColorBrush(Color.FromRgb(0x87, 0xCE, 0xEB));
-
-                if (this.IsSelected)
+                SearchItem = new SearchItem()
                 {
-                    header.Foreground = new SolidColorBrush(Color.FromRgb(0x00, 0x00, 0x00));
-                }
-            }
+                    Name = "",
+                },
+            };
+
+            base.ItemsSource = _listViewItemCollection;
+
+            base.RequestBringIntoView += (object sender, RequestBringIntoViewEventArgs e) =>
+            {
+                e.Handled = true;
+            };
+        }
+
+        public SearchTreeViewItem(SearchTreeItem searchTreeItem)
+            : base()
+        {
+            this.Value = searchTreeItem;
+
+            base.ItemsSource = _listViewItemCollection;
+
+            base.RequestBringIntoView += (object sender, RequestBringIntoViewEventArgs e) =>
+            {
+                e.Handled = true;
+            };
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e)
@@ -2544,25 +2530,20 @@ namespace Lair.Windows
 
         public void Update()
         {
-            this.UpdateColor();
-
-            List<dynamic> list = new List<dynamic>();
+            base.Header = string.Format("{0} ({1})", _value.SearchItem.Name, _hit);
 
             base.IsExpanded = this.Value.IsExpanded;
-            
-            foreach (var item in this.Value.Categories)
+
+            List<SearchTreeViewItem> list = new List<SearchTreeViewItem>();
+
+            foreach (var item in this.Value.Items)
             {
-                list.Add(new CategoryTreeViewItem(item));
+                list.Add(new SearchTreeViewItem(item));
             }
 
-            foreach (var item in this.Value.Boards)
+            foreach (var item in _listViewItemCollection.OfType<SearchTreeViewItem>().ToArray())
             {
-                list.Add(new BoardTreeViewItem(item));
-            }
-
-            foreach (var item in _listViewItemCollection.Cast<dynamic>().ToArray())
-            {
-                if (!list.Any(n => object.ReferenceEquals(n.Value, item.Value)))
+                if (!list.Any(n => object.ReferenceEquals(n.Value.SearchItem, item.Value.SearchItem)))
                 {
                     _listViewItemCollection.Remove(item);
                 }
@@ -2570,7 +2551,7 @@ namespace Lair.Windows
 
             foreach (var item in list)
             {
-                if (!_listViewItemCollection.Cast<dynamic>().Any(n => object.ReferenceEquals(n.Value, item.Value)))
+                if (!_listViewItemCollection.OfType<SearchTreeViewItem>().Any(n => object.ReferenceEquals(n.Value.SearchItem, item.Value.SearchItem)))
                 {
                     _listViewItemCollection.Add(item);
                 }
@@ -2581,53 +2562,16 @@ namespace Lair.Windows
 
         public void Sort()
         {
-            var list = _listViewItemCollection.OfType<object>().ToList();
+            var list = _listViewItemCollection.OfType<SearchTreeViewItem>().ToList();
 
-            list.Sort(delegate(object x, object y)
+            list.Sort(delegate(SearchTreeViewItem x, SearchTreeViewItem y)
             {
-                if (x is BoardTreeViewItem)
-                {
-                    if (y is BoardTreeViewItem)
-                    {
-                        var bx = ((BoardTreeViewItem)x).Value;
-                        var by = ((BoardTreeViewItem)y).Value;
+                int c = x.Value.SearchItem.Name.CompareTo(y.Value.SearchItem.Name);
+                if (c != 0) return c;
+                c = x.Hit.CompareTo(y.Hit);
+                if (c != 0) return c;
 
-                        var xsignature = (bx.Signature == null) ? "" : bx.Signature;
-                        var ysignature = (by.Signature == null) ? "" : by.Signature;
-
-                        int c = bx.Channel.Name.CompareTo(by.Channel.Name);
-                        if (c != 0) return c;
-                        c = Collection.Compare(bx.Channel.Id, by.Channel.Id);
-                        if (c != 0) return c;
-                        c = xsignature.CompareTo(ysignature);
-                        if (c != 0) return c;
-
-                        return bx.GetHashCode().CompareTo(by.GetHashCode());
-                    }
-                    else if (y is CategoryTreeViewItem)
-                    {
-                        return 1;
-                    }
-                }
-                else if (x is CategoryTreeViewItem)
-                {
-                    if (y is CategoryTreeViewItem)
-                    {
-                        var cx = ((CategoryTreeViewItem)x).Value;
-                        var cy = ((CategoryTreeViewItem)y).Value;
-
-                        int c = cx.Name.CompareTo(cy.Name);
-                        if (c != 0) return c;
-
-                        return cx.GetHashCode().CompareTo(cy.GetHashCode());
-                    }
-                    else if (y is BoardTreeViewItem)
-                    {
-                        return -1;
-                    }
-                }
-
-                return 0;
+                return x.GetHashCode().CompareTo(y.GetHashCode());
             });
 
             for (int i = 0; i < list.Count; i++)
@@ -2637,143 +2581,13 @@ namespace Lair.Windows
                 if (i != o) _listViewItemCollection.Move(o, i);
             }
 
-            foreach (var item in this.Items.OfType<CategoryTreeViewItem>())
+            foreach (var item in this.Items.OfType<SearchTreeViewItem>())
             {
                 item.Sort();
             }
         }
 
-        public bool Hit
-        {
-            get
-            {
-                var list = new List<TreeViewItem>();
-                list.Add(this);
-
-                for (int i = 0; i < list.Count; i++)
-                {
-                    foreach (TreeViewItem item in list[i].Items)
-                    {
-                        list.Add(item);
-                    }
-                }
-
-                bool hit = false;
-
-                foreach (var item in list.OfType<BoardTreeViewItem>())
-                {
-                    if (item.Hit)
-                    {
-                        hit = true;
-
-                        break;
-                    }
-                }
-
-                return hit;
-            }
-        }
-
-        public Category Value
-        {
-            get
-            {
-                return _value;
-            }
-            set
-            {
-                _value = value;
-
-                this.Update();
-            }
-        }
-    }
-
-    class BoardTreeViewItem : TreeViewItem
-    {
-        private Board _value;
-        private bool _hit;
-        private int _count;
-
-        public BoardTreeViewItem(Board board)
-            : base()
-        {
-            this.Value = board;
-
-            base.RequestBringIntoView += (object sender, RequestBringIntoViewEventArgs e) =>
-            {
-                e.Handled = true;
-            };
-
-            base.Selected += (object sender, RoutedEventArgs e) =>
-            {
-                if (_hit)
-                {
-                    var header = this.Header as TextBlock;
-                    if (header == null) return;
-
-                    header.Foreground = new SolidColorBrush(Color.FromRgb(0x00, 0x00, 0x00));
-                }
-            };
-
-            base.Unselected += (object sender, RoutedEventArgs e) =>
-            {
-                if (_hit)
-                {
-                    var header = this.Header as TextBlock;
-                    if (header == null) return;
-
-                    header.Foreground = new SolidColorBrush(Color.FromRgb(0x87, 0xCE, 0xEB));
-                }
-            };
-        }
-
-        protected override void OnMouseDown(MouseButtonEventArgs e)
-        {
-            this.IsSelected = true;
-
-            e.Handled = true;
-        }
-
-        public void Update()
-        {
-            string text = "";
-
-            if (_value.FilterUploadDigitalSignature == null)
-            {
-                text = string.Format("{0} ({1})", _value.Channel.Name, _count);
-            }
-            else
-            {
-                text = string.Format("{0} ({1}) - {2}", _value.Channel.Name, _count, MessageConverter.ToSignatureString(_value.FilterUploadDigitalSignature));
-            }
-
-            if (_hit)
-            {
-                this.Header = new TextBlock() { Text = text, FontWeight = FontWeights.UltraBlack };
-            }
-            else
-            {
-                this.Header = new TextBlock() { Text = text };
-            }
-
-            if (_hit)
-            {
-                var header = this.Header as TextBlock;
-                if (header == null) return;
-
-                if (!base.IsSelected)
-                {
-                    header.Foreground = new SolidColorBrush(Color.FromRgb(0x87, 0xCE, 0xEB));
-                }
-                else
-                {
-                    header.Foreground = new SolidColorBrush(Color.FromRgb(0x00, 0x00, 0x00));
-                }
-            }
-        }
-
-        public Board Value
+        public SearchTreeItem Value
         {
             get
             {
@@ -2787,7 +2601,7 @@ namespace Lair.Windows
             }
         }
 
-        public bool Hit
+        public int Hit
         {
             get
             {
@@ -2800,606 +2614,5 @@ namespace Lair.Windows
                 this.Update();
             }
         }
-
-        public int Count
-        {
-            get
-            {
-                return _count;
-            }
-            set
-            {
-                _count = value;
-
-                this.Update();
-            }
-        }
-    }
-
-    [Flags]
-    enum MessageState
-    {
-        IsNew = 0x1,
-        IsLock = 0x2,
-    }
-
-    class MessageEx : INotifyPropertyChanged, IEquatable<MessageEx>
-    {
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void NotifyPropertyChanged(string info)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(info));
-            }
-        }
-
-        private Board _board;
-        private Message _value;
-        private MessageState _messageState;
-
-        public MessageEx(Board board, Message value)
-        {
-            _board = board;
-            _value = value;
-        }
-
-        public override int GetHashCode()
-        {
-            if (_value == null) return 0;
-            else return _value.GetHashCode();
-        }
-
-        public override bool Equals(object obj)
-        {
-            if ((object)obj == null || !(obj is MessageEx)) return false;
-
-            return this.Equals((MessageEx)obj);
-        }
-
-        public bool Equals(MessageEx other)
-        {
-            if ((object)other == null) return false;
-            if (object.ReferenceEquals(this, other)) return true;
-            if (this.GetHashCode() != other.GetHashCode()) return false;
-
-            if (this.State != other.State
-                || this.Value != other.Value)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        public MessageState State
-        {
-            get
-            {
-                MessageState state = 0;
-
-                if (_board.LockMessages.Contains(_value)) state |= MessageState.IsLock;
-                if (_messageState.HasFlag(MessageState.IsNew)) state |= MessageState.IsNew;
-
-                return state;
-            }
-            set
-            {
-                if (value.HasFlag(MessageState.IsLock))
-                {
-                    _board.LockMessages.Add(_value);
-                }
-                else
-                {
-                    _board.LockMessages.Remove(_value);
-                }
-
-                _messageState = value;
-
-                this.NotifyPropertyChanged("State");
-            }
-        }
-
-        public Message Value
-        {
-            get
-            {
-                return _value;
-            }
-            set
-            {
-                if (value != _value)
-                {
-                    _value = value;
-
-                    this.NotifyPropertyChanged("Value");
-                }
-            }
-        }
-    }
-
-    [DataContract(Name = "Category", Namespace = "http://Lair/Windows")]
-    class Category : IDeepCloneable<Category>, IThisLock
-    {
-        private string _name;
-        private bool _isExpanded = true;
-
-        private LockedList<Board> _boards;
-        private LockedList<Category> _categories;
-        private LockedList<SearchContains<string>> _searchWordCollection;
-        private LockedList<SearchContains<SearchRegex>> _searchRegexCollection;
-        private LockedList<SearchContains<string>> _searchSignatureCollection;
-        private LockedList<SearchContains<SearchRange<DateTime>>> _searchCreationTimeRangeCollection;
-
-        private object _thisLock = new object();
-        private static object _thisStaticLock = new object();
-
-        [DataMember(Name = "Name")]
-        public string Name
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return _name;
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    _name = value;
-                }
-            }
-        }
-
-        [DataMember(Name = "IsExpanded")]
-        public bool IsExpanded
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return _isExpanded;
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    _isExpanded = value;
-                }
-            }
-        }
-
-        [DataMember(Name = "Boards")]
-        public LockedList<Board> Boards
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    if (_boards == null)
-                        _boards = new LockedList<Board>();
-
-                    return _boards;
-                }
-            }
-        }
-
-        [DataMember(Name = "Categories")]
-        public LockedList<Category> Categories
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    if (_categories == null)
-                        _categories = new LockedList<Category>();
-
-                    return _categories;
-                }
-            }
-        }
-
-        [DataMember(Name = "SearchWordCollection")]
-        public LockedList<SearchContains<string>> SearchWordCollection
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    if (_searchWordCollection == null)
-                        _searchWordCollection = new LockedList<SearchContains<string>>();
-
-                    return _searchWordCollection;
-                }
-            }
-        }
-
-        [DataMember(Name = "SearchNameRegexCollection")]
-        public LockedList<SearchContains<SearchRegex>> SearchRegexCollection
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    if (_searchRegexCollection == null)
-                        _searchRegexCollection = new LockedList<SearchContains<SearchRegex>>();
-
-                    return _searchRegexCollection;
-                }
-            }
-        }
-
-        [DataMember(Name = "SearchSignatureCollection")]
-        public LockedList<SearchContains<string>> SearchSignatureCollection
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    if (_searchSignatureCollection == null)
-                        _searchSignatureCollection = new LockedList<SearchContains<string>>();
-
-                    return _searchSignatureCollection;
-                }
-            }
-        }
-
-        [DataMember(Name = "SearchCreationTimeRangeCollection")]
-        public LockedList<SearchContains<SearchRange<DateTime>>> SearchCreationTimeRangeCollection
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    if (_searchCreationTimeRangeCollection == null)
-                        _searchCreationTimeRangeCollection = new LockedList<SearchContains<SearchRange<DateTime>>>();
-
-                    return _searchCreationTimeRangeCollection;
-                }
-            }
-        }
-
-        #region IDeepClone<Category>
-
-        public Category DeepClone()
-        {
-            lock (this.ThisLock)
-            {
-                var ds = new DataContractSerializer(typeof(Category));
-
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    using (XmlDictionaryWriter textDictionaryWriter = XmlDictionaryWriter.CreateTextWriter(ms, new UTF8Encoding(false), false))
-                    {
-                        ds.WriteObject(textDictionaryWriter, this);
-                    }
-
-                    ms.Position = 0;
-
-                    using (XmlDictionaryReader textDictionaryReader = XmlDictionaryReader.CreateTextReader(ms, XmlDictionaryReaderQuotas.Max))
-                    {
-                        return (Category)ds.ReadObject(textDictionaryReader);
-                    }
-                }
-            }
-        }
-
-        #endregion
-
-        #region IThisLock
-
-        public object ThisLock
-        {
-            get
-            {
-                lock (_thisStaticLock)
-                {
-                    if (_thisLock == null)
-                        _thisLock = new object();
-
-                    return _thisLock;
-                }
-            }
-        }
-
-        #endregion
-    }
-
-    [DataContract(Name = "Board", Namespace = "http://Lair/Windows")]
-    class Board : IDeepCloneable<Board>, IEquatable<Board>, IThisLock
-    {
-        private Channel _channel;
-        private string _signature;
-        private DigitalSignature _filterUploadDigitalSignature;
-        private LockedHashSet<Message> _lockMessages;
-        private LockedHashSet<Message> _oldMessages;
-
-        private LockedList<SearchContains<string>> _searchWordCollection;
-        private LockedList<SearchContains<SearchRegex>> _searchRegexCollection;
-        private LockedList<SearchContains<string>> _searchSignatureCollection;
-        private LockedList<SearchContains<SearchRange<DateTime>>> _searchCreationTimeRangeCollection;
-        private LockedList<SearchContains<Message>> _searchMessageCollection;
-
-        private object _thisLock = new object();
-        private static object _thisStaticLock = new object();
-
-        public static bool operator ==(Board x, Board y)
-        {
-            if ((object)x == null)
-            {
-                if ((object)y == null) return true;
-
-                return ((Board)y).Equals((Board)x);
-            }
-            else
-            {
-                return ((Board)x).Equals((Board)y);
-            }
-        }
-
-        public static bool operator !=(Board x, Board y)
-        {
-            return !(x == y);
-        }
-
-        public override int GetHashCode()
-        {
-            lock (this.ThisLock)
-            {
-                if (_channel == null) return 0;
-                else return _channel.GetHashCode();
-            }
-        }
-
-        public override bool Equals(object obj)
-        {
-            if ((object)obj == null || !(obj is Board)) return false;
-
-            return this.Equals((Board)obj);
-        }
-
-        public bool Equals(Board other)
-        {
-            if ((object)other == null) return false;
-            if (object.ReferenceEquals(this, other)) return true;
-            if (this.GetHashCode() != other.GetHashCode()) return false;
-
-            if (this.Channel != other.Channel
-                || this.Signature != other.Signature
-                || this.FilterUploadDigitalSignature != other.FilterUploadDigitalSignature
-                || (this.LockMessages == null) != (other.LockMessages == null)
-                || (this.OldMessages == null) != (other.OldMessages == null)
-
-                || (this.SearchWordCollection == null) != (other.SearchWordCollection == null)
-                || (this.SearchRegexCollection == null) != (other.SearchRegexCollection == null)
-                || (this.SearchSignatureCollection == null) != (other.SearchSignatureCollection == null)
-                || (this.SearchCreationTimeRangeCollection == null) != (other.SearchCreationTimeRangeCollection == null)
-                || (this.SearchMessageCollection == null) != (other.SearchMessageCollection == null))
-            {
-                return false;
-            }
-
-            if (!Collection.Equals(this.LockMessages, other.LockMessages)) return false;
-            if (!Collection.Equals(this.OldMessages, other.OldMessages)) return false;
-
-            if (!Collection.Equals(this.SearchWordCollection, other.SearchWordCollection)) return false;
-            if (!Collection.Equals(this.SearchRegexCollection, other.SearchRegexCollection)) return false;
-            if (!Collection.Equals(this.SearchSignatureCollection, other.SearchSignatureCollection)) return false;
-            if (!Collection.Equals(this.SearchCreationTimeRangeCollection, other.SearchCreationTimeRangeCollection)) return false;
-            if (!Collection.Equals(this.SearchMessageCollection, other.SearchMessageCollection)) return false;
-
-            return true;
-        }
-
-        [DataMember(Name = "Channel")]
-        public Channel Channel
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return _channel;
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    _channel = value;
-                }
-            }
-        }
-
-        [DataMember(Name = "Signature")]
-        public string Signature
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return _signature;
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    _signature = value;
-                }
-            }
-        }
-
-        [DataMember(Name = "FilterUploadDigitalSignature")]
-        public DigitalSignature FilterUploadDigitalSignature
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return _filterUploadDigitalSignature;
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    _filterUploadDigitalSignature = value;
-                }
-            }
-        }
-
-        [DataMember(Name = "LockMessages")]
-        public LockedHashSet<Message> LockMessages
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    if (_lockMessages == null)
-                        _lockMessages = new LockedHashSet<Message>();
-
-                    return _lockMessages;
-                }
-            }
-        }
-
-        [DataMember(Name = "OldMessages")]
-        public LockedHashSet<Message> OldMessages
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    if (_oldMessages == null)
-                        _oldMessages = new LockedHashSet<Message>();
-
-                    return _oldMessages;
-                }
-            }
-        }
-
-        [DataMember(Name = "SearchWordCollection")]
-        public LockedList<SearchContains<string>> SearchWordCollection
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    if (_searchWordCollection == null)
-                        _searchWordCollection = new LockedList<SearchContains<string>>();
-
-                    return _searchWordCollection;
-                }
-            }
-        }
-
-        [DataMember(Name = "SearchNameRegexCollection")]
-        public LockedList<SearchContains<SearchRegex>> SearchRegexCollection
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    if (_searchRegexCollection == null)
-                        _searchRegexCollection = new LockedList<SearchContains<SearchRegex>>();
-
-                    return _searchRegexCollection;
-                }
-            }
-        }
-
-        [DataMember(Name = "SearchSignatureCollection")]
-        public LockedList<SearchContains<string>> SearchSignatureCollection
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    if (_searchSignatureCollection == null)
-                        _searchSignatureCollection = new LockedList<SearchContains<string>>();
-
-                    return _searchSignatureCollection;
-                }
-            }
-        }
-
-        [DataMember(Name = "SearchCreationTimeRangeCollection")]
-        public LockedList<SearchContains<SearchRange<DateTime>>> SearchCreationTimeRangeCollection
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    if (_searchCreationTimeRangeCollection == null)
-                        _searchCreationTimeRangeCollection = new LockedList<SearchContains<SearchRange<DateTime>>>();
-
-                    return _searchCreationTimeRangeCollection;
-                }
-            }
-        }
-
-        [DataMember(Name = "SearchMessageCollection")]
-        public LockedList<SearchContains<Message>> SearchMessageCollection
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    if (_searchMessageCollection == null)
-                        _searchMessageCollection = new LockedList<SearchContains<Message>>();
-
-                    return _searchMessageCollection;
-                }
-            }
-        }
-
-        #region IDeepClone<Board>
-
-        public Board DeepClone()
-        {
-            lock (this.ThisLock)
-            {
-                var ds = new DataContractSerializer(typeof(Board));
-
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    using (XmlDictionaryWriter textDictionaryWriter = XmlDictionaryWriter.CreateTextWriter(ms, new UTF8Encoding(false), false))
-                    {
-                        ds.WriteObject(textDictionaryWriter, this);
-                    }
-
-                    ms.Position = 0;
-
-                    using (XmlDictionaryReader textDictionaryReader = XmlDictionaryReader.CreateTextReader(ms, XmlDictionaryReaderQuotas.Max))
-                    {
-                        return (Board)ds.ReadObject(textDictionaryReader);
-                    }
-                }
-            }
-        }
-
-        #endregion
-
-        #region IThisLock
-
-        public object ThisLock
-        {
-            get
-            {
-                lock (_thisStaticLock)
-                {
-                    if (_thisLock == null)
-                        _thisLock = new object();
-
-                    return _thisLock;
-                }
-            }
-        }
-
-        #endregion
     }
 }

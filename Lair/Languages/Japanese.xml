@@ -68,6 +68,7 @@
   <Translate Key="ConnectionsSettingsWindow_ConnectionType" Value="接続タイプ" />
   <Translate Key="ConnectionsSettingsWindow_ProxyUri" Value="プロキシ Uri" />
   <Translate Key="ConnectionsSettingsWindow_UriCondition" Value="正規表現" />
+  <Translate Key="ConnectionsSettingsWindow_Option" Value="オプション" />
   <Translate Key="ConnectionsSettingsWindow_Type" Value="Uri タイプ" />
   <Translate Key="ConnectionsSettingsWindow_Host" Value="ホスト" />
   <Translate Key="ConnectionsSettingsWindow_Server" Value="サーバー" />

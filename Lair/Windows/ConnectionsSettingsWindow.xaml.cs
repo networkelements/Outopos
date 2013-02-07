@@ -669,6 +669,8 @@ namespace Lair.Windows
                 _clientFiltersConditionTextBox.Text = "tcp:.*";
                 _clientFiltersConnectionTypeComboBox.SelectedItem = ConnectionType.Tcp;
                 _clientFiltersConditionSchemeComboBox.SelectedIndex = 0;
+                _clientFiltersOptionTextBox.Text = "";
+
                 return;
             }
 
@@ -705,6 +707,15 @@ namespace Lair.Windows
             else
             {
                 _clientFiltersConditionTextBox.Text = "";
+            }
+
+            if (item.Option != null)
+            {
+                _clientFiltersOptionTextBox.Text = item.Option;
+            }
+            else
+            {
+                _clientFiltersOptionTextBox.Text = "";
             }
 
             _clientFiltersConnectionTypeComboBox.SelectedItem = item.ConnectionType;
@@ -820,6 +831,7 @@ namespace Lair.Windows
 
                 var uriCondition = new UriCondition() { Value = _clientFiltersConditionTextBox.Text };
                 string proxyUri = null;
+                string option = null;
 
                 if (!string.IsNullOrWhiteSpace(_clientFiltersProxyUriTextBox.Text))
                 {
@@ -835,11 +847,17 @@ namespace Lair.Windows
                     if (proxyUri == null) return;
                 }
 
+                if (!string.IsNullOrWhiteSpace(_clientFiltersOptionTextBox.Text))
+                {
+                    option = _clientFiltersOptionTextBox.Text;
+                }
+
                 var connectionFilter = new ConnectionFilter()
                 {
                     ConnectionType = connectionType,
                     ProxyUri = proxyUri,
                     UriCondition = uriCondition,
+                    Option = option,
                 };
 
                 if (_clientFilters.Any(n => n == connectionFilter)) return;
@@ -872,6 +890,7 @@ namespace Lair.Windows
 
                 string proxyUri = null;
                 var uriCondition = new UriCondition() { Value = _clientFiltersConditionTextBox.Text };
+                string option = null;
 
                 if (!string.IsNullOrWhiteSpace(_clientFiltersProxyUriTextBox.Text))
                 {
@@ -886,11 +905,17 @@ namespace Lair.Windows
                     if (proxyUri == null) return;
                 }
 
+                if (!string.IsNullOrWhiteSpace(_clientFiltersOptionTextBox.Text))
+                {
+                    option = _clientFiltersOptionTextBox.Text;
+                }
+
                 var connectionFilter = new ConnectionFilter()
                 {
                     ConnectionType = connectionType,
                     ProxyUri = proxyUri,
                     UriCondition = uriCondition,
+                    Option = option,
                 };
 
                 if (_clientFilters.Any(n => n == connectionFilter)) return;
@@ -898,6 +923,7 @@ namespace Lair.Windows
                 item.ConnectionType = connectionType;
                 item.ProxyUri = proxyUri;
                 item.UriCondition = uriCondition;
+                item.Option = option;
 
                 _clientFiltersListView.SelectedIndex = selectIndex;
             }

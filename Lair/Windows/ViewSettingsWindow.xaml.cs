@@ -113,7 +113,7 @@ namespace Lair.Windows
                     {
                         using (FileStream stream = new FileStream(filePath, FileMode.Open))
                         {
-                            var signature = DigitalSignatureConverter.FromSignatureStream(stream);
+                            var signature = DigitalSignatureConverter.FromDigitalSignatureStream(stream);
                             if (_signatureListViewItemCollection.Any(n => n.Value == signature)) continue;
 
                             _signatureListViewItemCollection.Add(new SignatureListViewItem(signature));
@@ -208,7 +208,7 @@ namespace Lair.Windows
                         {
                             using (FileStream stream = new FileStream(filePath, FileMode.Open))
                             {
-                                var signature = DigitalSignatureConverter.FromSignatureStream(stream);
+                                var signature = DigitalSignatureConverter.FromDigitalSignatureStream(stream);
                                 if (_signatureListViewItemCollection.Any(n => n.Value == signature)) continue;
 
                                 _signatureListViewItemCollection.Add(new SignatureListViewItem(signature));
@@ -246,7 +246,7 @@ namespace Lair.Windows
                     try
                     {
                         using (FileStream stream = new FileStream(fileName, FileMode.Create))
-                        using (Stream signatureStream = DigitalSignatureConverter.ToSignatureStream(signature))
+                        using (Stream signatureStream = DigitalSignatureConverter.ToDigitalSignatureStream(signature))
                         {
                             int i = -1;
                             byte[] buffer = _bufferManager.TakeBuffer(1024);

@@ -58,7 +58,8 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsSettingsWindow_OtherNodes_Node_Width", Value = 400 },
                 new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsSettingsWindow_Client_Filters_GridViewColumn_ConnectionType_Width", Value = -1 },
                 new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsSettingsWindow_Client_Filters_GridViewColumn_ProxyUri_Width", Value = 200 },
-                new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsSettingsWindow_Client_Filters_GridViewColumn_UriCondition_Width", Value = 150 },
+                new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsSettingsWindow_Client_Filters_GridViewColumn_UriCondition_Width", Value = 200 },
+                new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsSettingsWindow_Client_Filters_GridViewColumn_Option_Width", Value = 200 },
                 new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsSettingsWindow_Server_ListenUris_GridViewColumn_Uri_Width", Value = 400 },
                 new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsSettingsWindow_Grid_ColumnDefinitions_Width", Value = 160 },
           
@@ -119,12 +120,13 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_GridViewColumn_Word_Value_Width", Value = 600 },
                 new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_GridViewColumn_Regex_Contains_Width", Value = -1 },
                 new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_GridViewColumn_Regex_Value_IsIgnoreCase_Width", Value = -1 },
-                new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_GridViewColumn_Regex_Value_Value_Width", Value = 600 },
+                new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_GridViewColumn_Regex_Value_Value_Width", Value = 400 },
                 new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_GridViewColumn_CreationTimeRange_Contains_Width", Value = -1 },
                 new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_GridViewColumn_CreationTimeRange_Value_Max_Width", Value = 300 },
                 new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_GridViewColumn_CreationTimeRange_Value_Min_Width", Value = 300 },
                 new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_GridViewColumn_Signature_Contains_Width", Value = -1 },
-                new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_GridViewColumn_Signature_Value_Width", Value = 600 },
+                new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_GridViewColumn_Signature_Value_IsIgnoreCase_Width", Value = -1 },
+                new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_GridViewColumn_Signature_Value_Value_Width", Value = 400 },
                 new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_GridViewColumn_Message_Contains_Width", Value = -1 },
                 new Library.Configuration.SettingsContext<double>() { Name = "BoardEditWindow_GridViewColumn_Message_Value_Width", Value = 600 },
               
@@ -137,12 +139,13 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<double>() { Name = "CategoryEditWindow_GridViewColumn_Word_Value_Width", Value = 600 },
                 new Library.Configuration.SettingsContext<double>() { Name = "CategoryEditWindow_GridViewColumn_Regex_Contains_Width", Value = -1 },
                 new Library.Configuration.SettingsContext<double>() { Name = "CategoryEditWindow_GridViewColumn_Regex_Value_IsIgnoreCase_Width", Value = -1 },
-                new Library.Configuration.SettingsContext<double>() { Name = "CategoryEditWindow_GridViewColumn_Regex_Value_Value_Width", Value = 600 },
+                new Library.Configuration.SettingsContext<double>() { Name = "CategoryEditWindow_GridViewColumn_Regex_Value_Value_Width", Value = 400 },
                 new Library.Configuration.SettingsContext<double>() { Name = "CategoryEditWindow_GridViewColumn_CreationTimeRange_Contains_Width", Value = -1 },
                 new Library.Configuration.SettingsContext<double>() { Name = "CategoryEditWindow_GridViewColumn_CreationTimeRange_Value_Max_Width", Value = 300 },
                 new Library.Configuration.SettingsContext<double>() { Name = "CategoryEditWindow_GridViewColumn_CreationTimeRange_Value_Min_Width", Value = 300 },
                 new Library.Configuration.SettingsContext<double>() { Name = "CategoryEditWindow_GridViewColumn_Signature_Contains_Width", Value = -1 },
-                new Library.Configuration.SettingsContext<double>() { Name = "CategoryEditWindow_GridViewColumn_Signature_Value_Width", Value = 600 },
+                new Library.Configuration.SettingsContext<double>() { Name = "CategoryEditWindow_GridViewColumn_Signature_Value_IsIgnoreCase_Width", Value = -1 },
+                new Library.Configuration.SettingsContext<double>() { Name = "CategoryEditWindow_GridViewColumn_Signature_Value_Value_Width", Value = 400 },
               
                 new Library.Configuration.SettingsContext<double>() { Name = "NewChannelWindow_Top", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "NewChannelWindow_Left", Value = 120 },
@@ -171,9 +174,10 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_Name_Value_Width", Value = 600 },
                 new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_NameRegex_Contains_Width", Value = -1 },
                 new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_NameRegex_Value_IsIgnoreCase_Width", Value = -1 },
-                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_NameRegex_Value_Value_Width", Value = 600 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_NameRegex_Value_Value_Width", Value = 400 },
                 new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_Signature_Contains_Width", Value = -1 },
-                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_Signature_Value_Width", Value = 600 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_Signature_Value_IsIgnoreCase_Width", Value = -1 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_Signature_Value_Value_Width", Value = 400 },
                 new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_Keyword_Contains_Width", Value = -1 },
                 new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_Keyword_Value_Width", Value = 600 },
                 new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_CreationTimeRange_Contains_Width", Value = -1 },
@@ -855,6 +859,25 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     this["ConnectionsSettingsWindow_Client_Filters_GridViewColumn_UriCondition_Width"] = value;
+                }
+            }
+        }
+
+        public double ConnectionsSettingsWindow_Client_Filters_GridViewColumn_Option_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ConnectionsSettingsWindow_Client_Filters_GridViewColumn_Option_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ConnectionsSettingsWindow_Client_Filters_GridViewColumn_Option_Width"] = value;
                 }
             }
         }
@@ -1950,13 +1973,13 @@ namespace Lair.Properties
             }
         }
 
-        public double BoardEditWindow_GridViewColumn_Signature_Value_Width
+        public double BoardEditWindow_GridViewColumn_Signature_Value_IsIgnoreCase_Width
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["BoardEditWindow_GridViewColumn_Signature_Value_Width"];
+                   return (double)this["BoardEditWindow_GridViewColumn_Signature_Value_IsIgnoreCase_Width"];
                 }
             }
 
@@ -1964,7 +1987,26 @@ namespace Lair.Properties
             {
                 lock (this.ThisLock)
                 {
-                    this["BoardEditWindow_GridViewColumn_Signature_Value_Width"] = value;
+                    this["BoardEditWindow_GridViewColumn_Signature_Value_IsIgnoreCase_Width"] = value;
+                }
+            }
+        }
+
+        public double BoardEditWindow_GridViewColumn_Signature_Value_Value_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["BoardEditWindow_GridViewColumn_Signature_Value_Value_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["BoardEditWindow_GridViewColumn_Signature_Value_Value_Width"] = value;
                 }
             }
         }
@@ -2274,13 +2316,13 @@ namespace Lair.Properties
             }
         }
 
-        public double CategoryEditWindow_GridViewColumn_Signature_Value_Width
+        public double CategoryEditWindow_GridViewColumn_Signature_Value_IsIgnoreCase_Width
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["CategoryEditWindow_GridViewColumn_Signature_Value_Width"];
+                   return (double)this["CategoryEditWindow_GridViewColumn_Signature_Value_IsIgnoreCase_Width"];
                 }
             }
 
@@ -2288,7 +2330,26 @@ namespace Lair.Properties
             {
                 lock (this.ThisLock)
                 {
-                    this["CategoryEditWindow_GridViewColumn_Signature_Value_Width"] = value;
+                    this["CategoryEditWindow_GridViewColumn_Signature_Value_IsIgnoreCase_Width"] = value;
+                }
+            }
+        }
+
+        public double CategoryEditWindow_GridViewColumn_Signature_Value_Value_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["CategoryEditWindow_GridViewColumn_Signature_Value_Value_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["CategoryEditWindow_GridViewColumn_Signature_Value_Value_Width"] = value;
                 }
             }
         }
@@ -2809,13 +2870,13 @@ namespace Lair.Properties
             }
         }
 
-        public double SearchItemEditWindow_GridViewColumn_Signature_Value_Width
+        public double SearchItemEditWindow_GridViewColumn_Signature_Value_IsIgnoreCase_Width
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["SearchItemEditWindow_GridViewColumn_Signature_Value_Width"];
+                   return (double)this["SearchItemEditWindow_GridViewColumn_Signature_Value_IsIgnoreCase_Width"];
                 }
             }
 
@@ -2823,7 +2884,26 @@ namespace Lair.Properties
             {
                 lock (this.ThisLock)
                 {
-                    this["SearchItemEditWindow_GridViewColumn_Signature_Value_Width"] = value;
+                    this["SearchItemEditWindow_GridViewColumn_Signature_Value_IsIgnoreCase_Width"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_GridViewColumn_Signature_Value_Value_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_GridViewColumn_Signature_Value_Value_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_GridViewColumn_Signature_Value_Value_Width"] = value;
                 }
             }
         }
