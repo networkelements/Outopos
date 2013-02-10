@@ -47,7 +47,7 @@ namespace Lair.Windows
             else
             {
                 stringBuilder.AppendLine(string.Format(" - {0} - {1} UTC",
-                    MessageConverter.ToSignatureString(message.Certificate),
+                    message.Certificate.ToString(),
                     message.CreationTime.ToUniversalTime().ToString("yyyy/MM/dd HH:mm:ss", System.Globalization.DateTimeFormatInfo.InvariantInfo)));
             }
 
@@ -70,7 +70,7 @@ namespace Lair.Windows
             else
             {
                 stringBuilder.AppendLine(string.Format(" - {0} - {1}",
-                    MessageConverter.ToSignatureString(message.Certificate),
+                    message.Certificate.ToString(),
                     message.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
             }
 
@@ -204,7 +204,7 @@ namespace Lair.Windows
             else
             {
                 p.Inlines.Add(string.Format(" - {0} - {1}",
-                    MessageConverter.ToSignatureString(message.Certificate),
+                    message.Certificate.ToString(),
                     message.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
             }
 

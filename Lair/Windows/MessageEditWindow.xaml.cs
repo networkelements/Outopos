@@ -22,12 +22,12 @@ namespace Lair.Windows
     /// </summary>
     partial class MessageEditWindow : Window
     {
-        private Board _board;
+        private Channel _channel;
         private LairManager _lairManager;
 
-        public MessageEditWindow(Board board, string content, LairManager lairManager)
+        public MessageEditWindow(Channel channel, string content, LairManager lairManager)
         {
-            _board = board;
+            _channel = channel;
             _lairManager = lairManager;
 
             var digitalSignatureCollection = new List<object>();
@@ -89,7 +89,7 @@ namespace Lair.Windows
 
                 Settings.Instance.Global_UploadDigitalSignature = digitalSignature;
 
-                var m = new Message(_board.Channel, comment, digitalSignature);
+                var m = new Message(_channel, comment, null, digitalSignature);
 
                 RichTextBoxHelper.SetRichTextBox(_richTextBox, m);
             }
@@ -122,9 +122,8 @@ namespace Lair.Windows
 
             Settings.Instance.Global_UploadDigitalSignature = digitalSignature;
 
-            var m = new Message(_board.Channel, comment, digitalSignature);
+            var m = new Message(_channel, comment, null, digitalSignature);
 
-            _board.LockMessages.Add(m);
             _lairManager.Upload(m);
         }
 
@@ -150,7 +149,7 @@ namespace Lair.Windows
 
         public void Update()
         {
-            this.Content = MessageConverter.ToSignatureString(this.Value);
+            this.Content = this.Value.ToString();
         }
 
         public DigitalSignature Value

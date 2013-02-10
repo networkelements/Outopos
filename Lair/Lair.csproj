@@ -116,39 +116,7 @@
     <Compile Include="Hash\Sha512.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="TransfarLimitManager.cs" />
-    <Compile Include="Windows\BoardEditWindow.xaml.cs">
-      <DependentUpon>BoardEditWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\ChartControl.xaml.cs">
-      <DependentUpon>ChartControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\ControlControl.xaml.cs">
-      <DependentUpon>ControlControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\SectionControl.xaml.cs">
-      <DependentUpon>SectionControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\CreatorControl.xaml.cs">
-      <DependentUpon>CreatorControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\FilterControl.xaml.cs">
-      <DependentUpon>FilterControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\LeaderControl.xaml.cs">
-      <DependentUpon>LeaderControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\ManagerControl.xaml.cs">
-      <DependentUpon>ManagerControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Windows\VirtualizingStackPanelEx.cs" />
-    <Page Include="Windows\ChartControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\ControlControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Windows\ConnectionControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -158,38 +126,6 @@
     <Page Include="Windows\ConnectionsSettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\CategoryEditWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\BoardEditWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\SectionControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\CreatorControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\FilterControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\LeaderControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\ManagerControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\SignWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -224,12 +160,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Windows\CategoryEditWindow.xaml.cs">
-      <DependentUpon>CategoryEditWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\SignWindow.xaml.cs">
-      <DependentUpon>SignWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\NewChannelWindow.xaml.cs">
       <DependentUpon>NewChannelWindow.xaml</DependentUpon>

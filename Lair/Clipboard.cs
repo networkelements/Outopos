@@ -14,9 +14,7 @@ namespace Lair
 {
     static class Clipboard
     {
-        private static List<Category> _categoryList = new List<Category>();
         private static List<Board> _boardList = new List<Board>();
-        private static LockedList<Windows.SearchTreeItem> _searchTreeItemList = new LockedList<Windows.SearchTreeItem>();
 
         private static ClipboardWatcher _clipboardWatcher;
 
@@ -27,9 +25,7 @@ namespace Lair
             _clipboardWatcher = new ClipboardWatcher();
             _clipboardWatcher.DrawClipboard += (sender2, e2) =>
             {
-                _categoryList.Clear();
                 _boardList.Clear();
-                _searchTreeItemList.Clear();
             };
         }
 
@@ -142,8 +138,6 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                if (_categoryList.Count != 0) return new Channel[0];
-
                 var list = new List<Channel>();
 
                 foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
@@ -176,88 +170,6 @@ namespace Lair
                 }
 
                 Clipboard.SetText(sb.ToString());
-            }
-        }
-
-        public static IEnumerable<Board> GetBoards()
-        {
-            lock (_thisLock)
-            {
-                return _boardList.Select(n => n.DeepClone()).ToArray();
-            }
-        }
-
-        public static void SetBoards(IEnumerable<Board> boards)
-        {
-            lock (_thisLock)
-            {
-                {
-                    var sb = new StringBuilder();
-
-                    foreach (var item in boards)
-                    {
-                        sb.AppendLine(LairConverter.ToChannelString(item.Channel));
-                    }
-
-                    Clipboard.SetText(sb.ToString());
-                }
-
-                {
-                    _boardList.Clear();
-                    _boardList.AddRange(boards.Select(n => n.DeepClone()));
-                }
-            }
-        }
-
-        public static IEnumerable<Category> GetCategories()
-        {
-            lock (_thisLock)
-            {
-                return _categoryList.Select(n => n.DeepClone()).ToArray();
-            }
-        }
-
-        public static void SetCategories(IEnumerable<Category> categories)
-        {
-            lock (_thisLock)
-            {
-                {
-                    List<Channel> channels = new List<Channel>();
-                    List<Category> categoryList = new List<Category>();
-
-                    categoryList.AddRange(categories);
-
-                    for (int i = 0; i < categoryList.Count; i++)
-                    {
-                        categoryList.AddRange(categoryList[i].Categories);
-
-                        var tempList = categoryList[i].Boards.Select(n => n.Channel).ToList();
-
-                        tempList.Sort(delegate(Channel x, Channel y)
-                        {
-                            int c = x.Name.CompareTo(y.Name);
-                            if (c != 0) return c;
-
-                            return Collection.Compare(x.Id, y.Id);
-                        });
-
-                        channels.AddRange(tempList);
-                    }
-
-                    var sb = new StringBuilder();
-
-                    foreach (var item in channels)
-                    {
-                        sb.AppendLine(LairConverter.ToChannelString(item));
-                    }
-
-                    Clipboard.SetText(sb.ToString());
-                }
-
-                {
-                    _categoryList.Clear();
-                    _categoryList.AddRange(categories.Select(n => n.DeepClone()));
-                }
             }
         }
 
@@ -300,25 +212,6 @@ namespace Lair
                 }
 
                 Clipboard.SetText(sb.ToString());
-            }
-        }
-
-        public static IEnumerable<Windows.SearchTreeItem> GetSearchTreeItems()
-        {
-            lock (_thisLock)
-            {
-                return _searchTreeItemList.Select(n => n.DeepClone()).ToArray();
-            }
-        }
-
-        public static void SetSearchTreeItems(IEnumerable<Windows.SearchTreeItem> searchTreeItems)
-        {
-            lock (_thisLock)
-            {
-                System.Windows.Clipboard.Clear();
-
-                _searchTreeItemList.Clear();
-                _searchTreeItemList.AddRange(searchTreeItems.Select(n => n.DeepClone()));
             }
         }
 

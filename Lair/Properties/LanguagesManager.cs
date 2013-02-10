@@ -2864,720 +2864,365 @@ namespace Lair.Properties
         }
 
 
-        public string SearchControl_Name
+        public string ChartControl_Name
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SearchControl_Name");
+                    return this.Translate("ChartControl_Name");
                 }
             }
         }
 
-        public string SearchControl_Signature
+        public string ChartControl_Signature
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SearchControl_Signature");
+                    return this.Translate("ChartControl_Signature");
                 }
             }
         }
 
-        public string SearchControl_Length
+        public string ChartControl_Length
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SearchControl_Length");
+                    return this.Translate("ChartControl_Length");
                 }
             }
         }
 
-        public string SearchControl_Keywords
+        public string ChartControl_Keywords
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SearchControl_Keywords");
+                    return this.Translate("ChartControl_Keywords");
                 }
             }
         }
 
-        public string SearchControl_CreationTime
+        public string ChartControl_CreationTime
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SearchControl_CreationTime");
+                    return this.Translate("ChartControl_CreationTime");
                 }
             }
         }
 
-        public string SearchControl_Comment
+        public string ChartControl_Comment
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SearchControl_Comment");
+                    return this.Translate("ChartControl_Comment");
                 }
             }
         }
 
-        public string SearchControl_State
+        public string ChartControl_State
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SearchControl_State");
+                    return this.Translate("ChartControl_State");
                 }
             }
         }
 
-        public string SearchControl_Hash
+        public string ChartControl_Hash
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SearchControl_Hash");
+                    return this.Translate("ChartControl_Hash");
                 }
             }
         }
 
-        public string SearchControl_New
+        public string ChartControl_New
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SearchControl_New");
+                    return this.Translate("ChartControl_New");
                 }
             }
         }
 
-        public string SearchControl_Edit
+        public string ChartControl_Edit
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SearchControl_Edit");
+                    return this.Translate("ChartControl_Edit");
                 }
             }
         }
 
-        public string SearchControl_Delete
+        public string ChartControl_Delete
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SearchControl_Delete");
+                    return this.Translate("ChartControl_Delete");
                 }
             }
         }
 
-        public string SearchControl_Cut
+        public string ChartControl_Cut
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SearchControl_Cut");
+                    return this.Translate("ChartControl_Cut");
                 }
             }
         }
 
-        public string SearchControl_Copy
+        public string ChartControl_Copy
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SearchControl_Copy");
+                    return this.Translate("ChartControl_Copy");
                 }
             }
         }
 
-        public string SearchControl_CopyInfo
+        public string ChartControl_CopyInfo
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SearchControl_CopyInfo");
+                    return this.Translate("ChartControl_CopyInfo");
                 }
             }
         }
 
-        public string SearchControl_Paste
+        public string ChartControl_Paste
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SearchControl_Paste");
+                    return this.Translate("ChartControl_Paste");
                 }
             }
         }
 
-        public string SearchControl_Export
+        public string ChartControl_Export
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SearchControl_Export");
+                    return this.Translate("ChartControl_Export");
                 }
             }
         }
 
-        public string SearchControl_DeleteCache
+        public string ChartControl_DeleteChart
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SearchControl_DeleteCache");
+                    return this.Translate("ChartControl_DeleteChart");
                 }
             }
         }
 
-        public string SearchControl_DeleteShare
+        public string ChartControl_DeleteShare
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SearchControl_DeleteShare");
+                    return this.Translate("ChartControl_DeleteShare");
                 }
             }
         }
 
-        public string SearchControl_DeleteDownload
+        public string ChartControl_DeleteDownload
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SearchControl_DeleteDownload");
+                    return this.Translate("ChartControl_DeleteDownload");
                 }
             }
         }
 
-        public string SearchControl_DeleteUpload
+        public string ChartControl_DeleteUpload
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SearchControl_DeleteUpload");
+                    return this.Translate("ChartControl_DeleteUpload");
                 }
             }
         }
 
-        public string SearchControl_DeleteDownloadHistory
+        public string ChartControl_DeleteDownloadHistory
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SearchControl_DeleteDownloadHistory");
+                    return this.Translate("ChartControl_DeleteDownloadHistory");
                 }
             }
         }
 
-        public string SearchControl_DeleteUploadHistory
+        public string ChartControl_DeleteUploadHistory
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SearchControl_DeleteUploadHistory");
+                    return this.Translate("ChartControl_DeleteUploadHistory");
                 }
             }
         }
 
-        public string SearchControl_Download
+        public string ChartControl_Download
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SearchControl_Download");
+                    return this.Translate("ChartControl_Download");
                 }
             }
         }
 
-        public string SearchControl_Search
+        public string ChartControl_Search
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SearchControl_Search");
+                    return this.Translate("ChartControl_Search");
                 }
             }
         }
 
-        public string SearchControl_SearchSignature
+        public string ChartControl_SearchSignature
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SearchControl_SearchSignature");
+                    return this.Translate("ChartControl_SearchSignature");
                 }
             }
         }
 
-        public string SearchControl_SearchKeyword
+        public string ChartControl_SearchKeyword
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SearchControl_SearchKeyword");
+                    return this.Translate("ChartControl_SearchKeyword");
                 }
             }
         }
 
-        public string SearchControl_SearchCreationTimeRange
+        public string ChartControl_SearchCreationTimeRange
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SearchControl_SearchCreationTimeRange");
+                    return this.Translate("ChartControl_SearchCreationTimeRange");
                 }
             }
         }
 
-        public string SearchControl_Filter
+        public string ChartControl_Filter
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SearchControl_Filter");
+                    return this.Translate("ChartControl_Filter");
                 }
             }
         }
 
-        public string SearchControl_FilterName
+        public string ChartControl_FilterName
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SearchControl_FilterName");
+                    return this.Translate("ChartControl_FilterName");
                 }
             }
         }
 
-        public string SearchControl_FilterSignature
+        public string ChartControl_FilterSignature
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SearchControl_FilterSignature");
+                    return this.Translate("ChartControl_FilterSignature");
                 }
             }
         }
 
-        public string SearchControl_FilterKeyword
+        public string ChartControl_FilterKeyword
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SearchControl_FilterKeyword");
+                    return this.Translate("ChartControl_FilterKeyword");
                 }
             }
         }
 
-        public string SearchControl_FilterCreationTimeRange
+        public string ChartControl_FilterCreationTimeRange
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SearchControl_FilterCreationTimeRange");
+                    return this.Translate("ChartControl_FilterCreationTimeRange");
                 }
             }
         }
 
-        public string SearchControl_FilterSeed
+        public string ChartControl_FilterSeed
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SearchControl_FilterSeed");
-                }
-            }
-        }
-
-
-        public string SearchState_Clicked
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SearchState_Clicked");
-                }
-            }
-        }
-
-
-        public string SearchItemEditWindow_Title
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SearchItemEditWindow_Title");
-                }
-            }
-        }
-
-        public string SearchItemEditWindow_Name
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SearchItemEditWindow_Name");
-                }
-            }
-        }
-
-        public string SearchItemEditWindow_NameRegex
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SearchItemEditWindow_NameRegex");
-                }
-            }
-        }
-
-        public string SearchItemEditWindow_Signature
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SearchItemEditWindow_Signature");
-                }
-            }
-        }
-
-        public string SearchItemEditWindow_Keyword
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SearchItemEditWindow_Keyword");
-                }
-            }
-        }
-
-        public string SearchItemEditWindow_CreationTimeRange
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SearchItemEditWindow_CreationTimeRange");
-                }
-            }
-        }
-
-        public string SearchItemEditWindow_LengthRange
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SearchItemEditWindow_LengthRange");
-                }
-            }
-        }
-
-        public string SearchItemEditWindow_Seed
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SearchItemEditWindow_Seed");
-                }
-            }
-        }
-
-        public string SearchItemEditWindow_SearchState
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SearchItemEditWindow_SearchState");
-                }
-            }
-        }
-
-        public string SearchItemEditWindow_Contains
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SearchItemEditWindow_Contains");
-                }
-            }
-        }
-
-        public string SearchItemEditWindow_IsIgnoreCase
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SearchItemEditWindow_IsIgnoreCase");
-                }
-            }
-        }
-
-        public string SearchItemEditWindow_Value
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SearchItemEditWindow_Value");
-                }
-            }
-        }
-
-        public string SearchItemEditWindow_Min
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SearchItemEditWindow_Min");
-                }
-            }
-        }
-
-        public string SearchItemEditWindow_Max
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SearchItemEditWindow_Max");
-                }
-            }
-        }
-
-        public string SearchItemEditWindow_Up
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SearchItemEditWindow_Up");
-                }
-            }
-        }
-
-        public string SearchItemEditWindow_Down
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SearchItemEditWindow_Down");
-                }
-            }
-        }
-
-        public string SearchItemEditWindow_Add
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SearchItemEditWindow_Add");
-                }
-            }
-        }
-
-        public string SearchItemEditWindow_Edit
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SearchItemEditWindow_Edit");
-                }
-            }
-        }
-
-        public string SearchItemEditWindow_Delete
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SearchItemEditWindow_Delete");
-                }
-            }
-        }
-
-        public string SearchItemEditWindow_Ok
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SearchItemEditWindow_Ok");
-                }
-            }
-        }
-
-        public string SearchItemEditWindow_Cancel
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SearchItemEditWindow_Cancel");
-                }
-            }
-        }
-
-        public string SearchItemEditWindow_Cut
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SearchItemEditWindow_Cut");
-                }
-            }
-        }
-
-        public string SearchItemEditWindow_Copy
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SearchItemEditWindow_Copy");
-                }
-            }
-        }
-
-        public string SearchItemEditWindow_Paste
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SearchItemEditWindow_Paste");
-                }
-            }
-        }
-
-        public string SearchItemEditWindow_SearchState_Clicked
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SearchItemEditWindow_SearchState_Clicked");
-                }
-            }
-        }
-
-
-        public string BoxEditWindow_Title
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("BoxEditWindow_Title");
-                }
-            }
-        }
-
-        public string BoxEditWindow_Name
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("BoxEditWindow_Name");
-                }
-            }
-        }
-
-        public string BoxEditWindow_Signature
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("BoxEditWindow_Signature");
-                }
-            }
-        }
-
-        public string BoxEditWindow_Comment
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("BoxEditWindow_Comment");
-                }
-            }
-        }
-
-        public string BoxEditWindow_Ok
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("BoxEditWindow_Ok");
-                }
-            }
-        }
-
-        public string BoxEditWindow_Cancel
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("BoxEditWindow_Cancel");
+                    return this.Translate("ChartControl_FilterSeed");
                 }
             }
         }

@@ -67,7 +67,6 @@ namespace Lair.Windows
             }
 
             _amoebaPathTextBox.Text = Settings.Instance.Global_Amoeba_Path;
-            _seedDeleteExpiresTextBox.Text = Settings.Instance.Global_SeedDelete_Expires.ToString();
 
             _fontMessageFontFamilyComboBox.ItemsSource = _fontMessageFontFamilyComboBoxItemCollection;
             _fontMessageFontFamilyComboBox.SelectedItem = Settings.Instance.Global_Fonts_MessageFontFamily;
@@ -235,7 +234,7 @@ namespace Lair.Windows
             using (System.Windows.Forms.SaveFileDialog dialog = new System.Windows.Forms.SaveFileDialog())
             {
                 dialog.RestoreDirectory = true;
-                dialog.FileName = MessageConverter.ToSignatureString(signature);
+                dialog.FileName = signature.ToString();
                 dialog.DefaultExt = ".signature";
                 dialog.Filter = "Signature (*.signature)|*.signature";
 
@@ -486,7 +485,6 @@ namespace Lair.Windows
             Settings.Instance.Global_UrlClearHistory_IsEnabled = _eventClearUrlHistoryCheckBox.IsChecked.Value;
 
             int expires = ViewSettingsWindow.GetStringToInt(_seedDeleteExpiresTextBox.Text);
-            Settings.Instance.Global_SeedDelete_Expires = Math.Max(expires, 0);
         }
 
         private void _cancelButton_Click(object sender, RoutedEventArgs e)
@@ -506,7 +504,7 @@ namespace Lair.Windows
 
             public void Update()
             {
-                _text = MessageConverter.ToSignatureString(_value);
+                _text = _value.ToString();
             }
 
             public DigitalSignature Value

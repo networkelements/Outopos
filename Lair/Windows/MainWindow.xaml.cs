@@ -347,28 +347,6 @@ namespace Lair.Windows
                             Log.Warning(e);
                         }
                     }
-
-                    if (!seedDeleteStopwatch.IsRunning || seedDeleteStopwatch.Elapsed > new TimeSpan(12, 0, 0))
-                    {
-                        seedDeleteStopwatch.Restart();
-
-                        try
-                        {
-                            var now = DateTime.UtcNow;
-
-                            foreach (var seed in Settings.Instance.Global_Seeds.ToArray())
-                            {
-                                if ((now - seed.CreationTime).TotalDays > Settings.Instance.Global_SeedDelete_Expires)
-                                {
-                                    Settings.Instance.Global_Seeds.Remove(seed);
-                                }
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            Log.Warning(e);
-                        }
-                    }
                 }
             }
             catch (Exception)
@@ -729,99 +707,7 @@ namespace Lair.Windows
                 {
                     initFlag = true;
 
-                    Settings.Instance.ChannelControl_Category.Boards.Add(new Board() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAAnsVLtnbRdm22in0qQhQ8Smdqc9Yro90PXOiF3lkIF2RREEbGiQmRmpukx0tPytNON6UiN35jYs3xCSNoxmmnhwAAAAYBQW1vZWJhhggnHQ") });
-                    Settings.Instance.ChannelControl_Category.Boards.Add(new Board() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAACeKcl3zp_ff2hFIhIHWjxxEt1tBcqZvmt4X9a1t3ilY7rUXHbWLPJ6rwu1sLvbHB0KhP81b1J7XvVUV_wi991gAAAAQBTGFpcl1EKAI") });
-                    Settings.Instance.ChannelControl_Category.Boards.Add(new Board() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAAtsMEuKHe-iQje0OeLoHfbSLvKXFo4zv7xP7j2IW1ZK_st0yVK4kO7Hcl9SDnqNTSxAvShddBiOg_2q6tSLsMTwAAAAYBUHVibGljMXNfWw") });
-                    Settings.Instance.ChannelControl_Category.Boards.Add(new Board() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAASaqqritqZRVYlzfkcVhMAT0tm8PTp3Vu_KWBUEloBtnZ_WnRQO5pcEq60gQOktBz5qFxg_Saiqo6lwtDP-bIdgAAAAQBVGVzdITgoiw") });
-                    Settings.Instance.ChannelControl_Category.Boards.Add(new Board() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAA_omn14n4bPDbXAO-aohxIR_AEr0h5d9Xav9AhnZKKExdgOzoE-esnOVtILx6H1fJFvQHhJAZEIKY_0qIZplWCwAAAAQBUm9zYaCh9AE") });
-
                     _lairManager.ConnectionCountLimit = 12;
-
-                    SearchItem pictureSearchItem = new SearchItem()
-                    {
-                        Name = "Keyword - \"Picture\""
-                    };
-                    pictureSearchItem.SearchKeywordCollection.Add(new SearchContains<string>()
-                    {
-                        Contains = true,
-                        Value = "Picture",
-                    });
-
-                    SearchItem movieSearchItem = new SearchItem()
-                    {
-                        Name = "Keyword - \"Movie\""
-                    };
-                    movieSearchItem.SearchKeywordCollection.Add(new SearchContains<string>()
-                    {
-                        Contains = true,
-                        Value = "Movie",
-                    });
-
-                    SearchItem musicSearchItem = new SearchItem()
-                    {
-                        Name = "Keyword - \"Music\""
-                    };
-                    musicSearchItem.SearchKeywordCollection.Add(new SearchContains<string>()
-                    {
-                        Contains = true,
-                        Value = "Music",
-                    });
-
-                    SearchItem archiveSearchItem = new SearchItem()
-                    {
-                        Name = "Keyword - \"Archive\""
-                    };
-                    archiveSearchItem.SearchKeywordCollection.Add(new SearchContains<string>()
-                    {
-                        Contains = true,
-                        Value = "Archive",
-                    });
-
-                    SearchItem documentSearchItem = new SearchItem()
-                    {
-                        Name = "Keyword - \"Document\""
-                    };
-                    documentSearchItem.SearchKeywordCollection.Add(new SearchContains<string>()
-                    {
-                        Contains = true,
-                        Value = "Document",
-                    });
-
-                    SearchItem ExecutableSearchItem = new SearchItem()
-                    {
-                        Name = "Keyword - \"Executable\""
-                    };
-                    ExecutableSearchItem.SearchKeywordCollection.Add(new SearchContains<string>()
-                    {
-                        Contains = true,
-                        Value = "Executable",
-                    });
-
-                    Settings.Instance.SearchControl_SearchTreeItem.Items.Clear();
-                    Settings.Instance.SearchControl_SearchTreeItem.Items.Add(new SearchTreeItem()
-                    {
-                        SearchItem = pictureSearchItem
-                    });
-                    Settings.Instance.SearchControl_SearchTreeItem.Items.Add(new SearchTreeItem()
-                    {
-                        SearchItem = movieSearchItem
-                    });
-                    Settings.Instance.SearchControl_SearchTreeItem.Items.Add(new SearchTreeItem()
-                    {
-                        SearchItem = musicSearchItem
-                    });
-                    Settings.Instance.SearchControl_SearchTreeItem.Items.Add(new SearchTreeItem()
-                    {
-                        SearchItem = archiveSearchItem
-                    });
-                    Settings.Instance.SearchControl_SearchTreeItem.Items.Add(new SearchTreeItem()
-                    {
-                        SearchItem = documentSearchItem
-                    });
-                    Settings.Instance.SearchControl_SearchTreeItem.Items.Add(new SearchTreeItem()
-                    {
-                        SearchItem = ExecutableSearchItem
-                    });
 
                     Random random = new Random();
                     _lairManager.ListenUris.Clear();
@@ -899,130 +785,9 @@ namespace Lair.Windows
                         version = new Version(reader.ReadLine());
                     }
 
-                    if (version <= new Version(0, 0, 16))
-                    {
-                        Settings.Instance.ChannelControl_Category.Name = "Channel";
-                    }
-
                     if (version <= new Version(0, 0, 28))
                     {
                         Settings.Instance.Global_Update_Signature = "Lyrise@iMK5aPkz6n_VLfaQWyXisi6C2yo53VbhMGTwJ4N2yGDTMXZwIdcZb8ayuGIOg-1V";
-                    }
-
-                    if (version <= new Version(0, 0, 44))
-                    {
-                        SearchItem pictureSearchItem = new SearchItem()
-                        {
-                            Name = "Keyword - \"Picture\""
-                        };
-                        pictureSearchItem.SearchKeywordCollection.Add(new SearchContains<string>()
-                        {
-                            Contains = true,
-                            Value = "Picture",
-                        });
-
-                        SearchItem movieSearchItem = new SearchItem()
-                        {
-                            Name = "Keyword - \"Movie\""
-                        };
-                        movieSearchItem.SearchKeywordCollection.Add(new SearchContains<string>()
-                        {
-                            Contains = true,
-                            Value = "Movie",
-                        });
-
-                        SearchItem musicSearchItem = new SearchItem()
-                        {
-                            Name = "Keyword - \"Music\""
-                        };
-                        musicSearchItem.SearchKeywordCollection.Add(new SearchContains<string>()
-                        {
-                            Contains = true,
-                            Value = "Music",
-                        });
-
-                        SearchItem archiveSearchItem = new SearchItem()
-                        {
-                            Name = "Keyword - \"Archive\""
-                        };
-                        archiveSearchItem.SearchKeywordCollection.Add(new SearchContains<string>()
-                        {
-                            Contains = true,
-                            Value = "Archive",
-                        });
-
-                        SearchItem documentSearchItem = new SearchItem()
-                        {
-                            Name = "Keyword - \"Document\""
-                        };
-                        documentSearchItem.SearchKeywordCollection.Add(new SearchContains<string>()
-                        {
-                            Contains = true,
-                            Value = "Document",
-                        });
-
-                        SearchItem ExecutableSearchItem = new SearchItem()
-                        {
-                            Name = "Keyword - \"Executable\""
-                        };
-                        ExecutableSearchItem.SearchKeywordCollection.Add(new SearchContains<string>()
-                        {
-                            Contains = true,
-                            Value = "Executable",
-                        });
-
-                        Settings.Instance.SearchControl_SearchTreeItem.Items.Clear();
-                        Settings.Instance.SearchControl_SearchTreeItem.Items.Add(new SearchTreeItem()
-                        {
-                            SearchItem = pictureSearchItem
-                        });
-                        Settings.Instance.SearchControl_SearchTreeItem.Items.Add(new SearchTreeItem()
-                        {
-                            SearchItem = movieSearchItem
-                        });
-                        Settings.Instance.SearchControl_SearchTreeItem.Items.Add(new SearchTreeItem()
-                        {
-                            SearchItem = musicSearchItem
-                        });
-                        Settings.Instance.SearchControl_SearchTreeItem.Items.Add(new SearchTreeItem()
-                        {
-                            SearchItem = archiveSearchItem
-                        });
-                        Settings.Instance.SearchControl_SearchTreeItem.Items.Add(new SearchTreeItem()
-                        {
-                            SearchItem = documentSearchItem
-                        });
-                        Settings.Instance.SearchControl_SearchTreeItem.Items.Add(new SearchTreeItem()
-                        {
-                            SearchItem = ExecutableSearchItem
-                        });
-
-                        foreach (var item in Settings.Instance.Global_UrlHistorys.ToArray())
-                        {
-                            try
-                            {
-                                if (item.StartsWith("Channel@"))
-                                {
-                                    var channel = LairConverter.FromChannelString(item);
-                                    if (channel == null) continue;
-
-                                    Settings.Instance.Global_ChannelHistorys.Add(channel);
-                                    Settings.Instance.Global_UrlHistorys.Remove(item);
-                                }
-                                else if (item.StartsWith("Seed@"))
-                                {
-                                    var seed = a.AmoebaConverter.FromSeedString(item);
-                                    if (seed == null) continue;
-
-                                    Settings.Instance.Global_SeedHistorys.Add(seed);
-                                    Settings.Instance.Global_UrlHistorys.Remove(item);
-                                }
-                            }
-                            catch (Exception)
-                            {
-
-                            }
-                        }
                     }
 
                     if (version <= new Version(0, 0, 46))
@@ -1316,7 +1081,7 @@ namespace Lair.Windows
                                 {
                                     Certificate certificate = DigitalSignatureConverter.FromCertificateStream(signStream);
 
-                                    if (Settings.Instance.Global_Update_Signature != MessageConverter.ToSignatureString(certificate)) throw new Exception("Update DigitalSignature #1");
+                                    if (Settings.Instance.Global_Update_Signature != certificate.ToString()) throw new Exception("Update DigitalSignature #1");
                                     if (!DigitalSignature.VerifyFileCertificate(certificate, stream, new BufferManager())) throw new Exception("Update DigitalSignature #2");
                                 }
 
@@ -1436,16 +1201,6 @@ namespace Lair.Windows
             _connectionControl.Height = Double.NaN;
             _connectionControl.Width = Double.NaN;
             _connectionTabItem.Content = _connectionControl;
-
-            ChannelControl _channelControl = new ChannelControl(this, _lairManager, _bufferManager);
-            _channelControl.Height = Double.NaN;
-            _channelControl.Width = Double.NaN;
-            _channelTabItem.Content = _channelControl;
-
-            SearchControl _searchControl = new SearchControl(this, _lairManager, _bufferManager);
-            _searchControl.Height = Double.NaN;
-            _searchControl.Width = Double.NaN;
-            _searchTabItem.Content = _searchControl;
 
             if (Settings.Instance.Global_IsStart)
             {
@@ -1640,8 +1395,6 @@ namespace Lair.Windows
             Settings.Instance.Global_UrlHistorys.Clear();
             Settings.Instance.Global_SeedHistorys.Clear();
             Settings.Instance.Global_ChannelHistorys.Clear();
-
-            ((ChannelControl)_channelTabItem.Content).Refresh();
         }
         
         private void _viewSettingsMenuItem_Click(object sender, RoutedEventArgs e)
@@ -1649,8 +1402,6 @@ namespace Lair.Windows
             ViewSettingsWindow window = new ViewSettingsWindow(_bufferManager);
             window.Owner = this;
             window.ShowDialog();
-
-            ((ChannelControl)_channelTabItem.Content).Refresh();
         }
 
         private void _helpMenuItem_SubmenuOpened(object sender, RoutedEventArgs e)

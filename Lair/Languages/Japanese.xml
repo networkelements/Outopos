@@ -265,73 +265,38 @@
   <Translate Key="NewChannelWindow_Ok" Value="Ok" />
   <Translate Key="NewChannelWindow_Cancel" Value="キャンセル" />
 
-  <Translate Key="SearchControl_Name" Value="名前" />
-  <Translate Key="SearchControl_Signature" Value="サイン" />
-  <Translate Key="SearchControl_Length" Value="サイズ" />
-  <Translate Key="SearchControl_Keywords" Value="キーワード" />
-  <Translate Key="SearchControl_CreationTime" Value="作成日" />
-  <Translate Key="SearchControl_Comment" Value="コメント" />
-  <Translate Key="SearchControl_State" Value="状態" />
-  <Translate Key="SearchControl_Hash" Value="ハッシュ" />
-  <Translate Key="SearchControl_New" Value="新規" />
-  <Translate Key="SearchControl_Edit" Value="編集" />
-  <Translate Key="SearchControl_Delete" Value="削除" />
-  <Translate Key="SearchControl_Cut" Value="切り取り" />
-  <Translate Key="SearchControl_Copy" Value="コピー" />
-  <Translate Key="SearchControl_CopyInfo" Value="コピー  (詳細情報)" />
-  <Translate Key="SearchControl_Paste" Value="貼り付け" />
-  <Translate Key="SearchControl_Export" Value="エクスポート" />
-  <Translate Key="SearchControl_DeleteCache" Value="キャッシュ削除" />
-  <Translate Key="SearchControl_DeleteShare" Value="シェア削除" />
-  <Translate Key="SearchControl_DeleteDownload" Value="ダウンロード削除" />
-  <Translate Key="SearchControl_DeleteUpload" Value="アップロード削除" />
-  <Translate Key="SearchControl_DeleteDownloadHistory" Value="ダウンロード履歴削除" />
-  <Translate Key="SearchControl_DeleteUploadHistory" Value="アップロード履歴削除" />
-  <Translate Key="SearchControl_Download" Value="ダウンロード" />
-  <Translate Key="SearchControl_Search" Value="検索" />
-  <Translate Key="SearchControl_SearchSignature" Value="このサインで検索" />
-  <Translate Key="SearchControl_SearchKeyword" Value="このキーワードで検索" />
-  <Translate Key="SearchControl_SearchCreationTimeRange" Value="この作成日で検索" />
-  <Translate Key="SearchControl_Filter" Value="フィルタ" />
-  <Translate Key="SearchControl_FilterName" Value="この名前でフィルタ" />
-  <Translate Key="SearchControl_FilterSignature" Value="このサインでフィルタ" />
-  <Translate Key="SearchControl_FilterKeyword" Value="このキーワードでフィルタ" />
-  <Translate Key="SearchControl_FilterCreationTimeRange" Value="この作成日でフィルタ" />
-  <Translate Key="SearchControl_FilterSeed" Value="このシードでフィルタ" />
-
-  <Translate Key="SearchState_Clicked" Value="C" />
-
-  <Translate Key="SearchItemEditWindow_Title" Value="検索アイテム編集" />
-  <Translate Key="SearchItemEditWindow_Name" Value="名前" />
-  <Translate Key="SearchItemEditWindow_NameRegex" Value="正規表現" />
-  <Translate Key="SearchItemEditWindow_Signature" Value="サイン" />
-  <Translate Key="SearchItemEditWindow_Keyword" Value="キーワード" />
-  <Translate Key="SearchItemEditWindow_CreationTimeRange" Value="作成日 範囲" />
-  <Translate Key="SearchItemEditWindow_LengthRange" Value="サイズ 範囲" />
-  <Translate Key="SearchItemEditWindow_Seed" Value="シード" />
-  <Translate Key="SearchItemEditWindow_SearchState" Value="状態" />
-  <Translate Key="SearchItemEditWindow_Contains" Value="有効" />
-  <Translate Key="SearchItemEditWindow_IsIgnoreCase" Value="大文字小文字の違いを無視" />
-  <Translate Key="SearchItemEditWindow_Value" Value="値" />
-  <Translate Key="SearchItemEditWindow_Min" Value="最小" />
-  <Translate Key="SearchItemEditWindow_Max" Value="最大" />
-  <Translate Key="SearchItemEditWindow_Up" Value="上へ" />
-  <Translate Key="SearchItemEditWindow_Down" Value="下へ" />
-  <Translate Key="SearchItemEditWindow_Add" Value="追加" />
-  <Translate Key="SearchItemEditWindow_Edit" Value="編集" />
-  <Translate Key="SearchItemEditWindow_Delete" Value="削除" />
-  <Translate Key="SearchItemEditWindow_Ok" Value="Ok" />
-  <Translate Key="SearchItemEditWindow_Cancel" Value="キャンセル" />
-  <Translate Key="SearchItemEditWindow_Cut" Value="切り取り" />
-  <Translate Key="SearchItemEditWindow_Copy" Value="コピー" />
-  <Translate Key="SearchItemEditWindow_Paste" Value="貼り付け" />
-  <Translate Key="SearchItemEditWindow_SearchState_Clicked" Value="Clicked" />
-
-  <Translate Key="BoxEditWindow_Title" Value="ボックス編集" />
-  <Translate Key="BoxEditWindow_Name" Value="名前" />
-  <Translate Key="BoxEditWindow_Signature" Value="署名" />
-  <Translate Key="BoxEditWindow_Comment" Value="コメント" />
-  <Translate Key="BoxEditWindow_Ok" Value="Ok" />
-  <Translate Key="BoxEditWindow_Cancel" Value="キャンセル" />
+  <Translate Key="ChartControl_Name" Value="Name" />
+  <Translate Key="ChartControl_Signature" Value="Signature" />
+  <Translate Key="ChartControl_Length" Value="Length" />
+  <Translate Key="ChartControl_Keywords" Value="Keywords" />
+  <Translate Key="ChartControl_CreationTime" Value="Creation time" />
+  <Translate Key="ChartControl_Comment" Value="Comment" />
+  <Translate Key="ChartControl_State" Value="State" />
+  <Translate Key="ChartControl_Hash" Value="Hash" />
+  <Translate Key="ChartControl_New" Value="New" />
+  <Translate Key="ChartControl_Edit" Value="Edit" />
+  <Translate Key="ChartControl_Delete" Value="Delete" />
+  <Translate Key="ChartControl_Cut" Value="Cut" />
+  <Translate Key="ChartControl_Copy" Value="Copy" />
+  <Translate Key="ChartControl_CopyInfo" Value="Copy info" />
+  <Translate Key="ChartControl_Paste" Value="Paste" />
+  <Translate Key="ChartControl_Export" Value="Export" />
+  <Translate Key="ChartControl_DeleteChart" Value="Delete cache" />
+  <Translate Key="ChartControl_DeleteShare" Value="Delete share " />
+  <Translate Key="ChartControl_DeleteDownload" Value="Delete download " />
+  <Translate Key="ChartControl_DeleteUpload" Value="Delete upload " />
+  <Translate Key="ChartControl_DeleteDownloadHistory" Value="Delete download history" />
+  <Translate Key="ChartControl_DeleteUploadHistory" Value="Delete upload history" />
+  <Translate Key="ChartControl_Download" Value="Download" />
+  <Translate Key="ChartControl_Search" Value="Search" />
+  <Translate Key="ChartControl_SearchSignature" Value="Search signature" />
+  <Translate Key="ChartControl_SearchKeyword" Value="Search keyword" />
+  <Translate Key="ChartControl_SearchCreationTimeRange" Value="Search creation time range" />
+  <Translate Key="ChartControl_Filter" Value="Filter" />
+  <Translate Key="ChartControl_FilterName" Value="Filter name" />
+  <Translate Key="ChartControl_FilterSignature" Value="Filter signature" />
+  <Translate Key="ChartControl_FilterKeyword" Value="Filter keyword" />
+  <Translate Key="ChartControl_FilterCreationTimeRange" Value="Filter creation time range" />
+  <Translate Key="ChartControl_FilterSeed" Value="Filter seed" />
 
 </Configuration>

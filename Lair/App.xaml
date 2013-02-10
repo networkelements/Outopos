@@ -15,9 +15,6 @@
       
             <ObjectDataProvider x:Key="ResourcesInstance" ObjectType="{x:Type prop:LanguagesManager}" MethodName="GetInstance"/>
 
-            <Style TargetType="{x:Type local:SearchTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" />
-            <Style TargetType="{x:Type local:CategoryTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" />
-            <Style TargetType="{x:Type local:BoardTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" />
             <Style TargetType="{x:Type local:ListViewEx}" BasedOn="{StaticResource {x:Type ListView}}" />
             <Style TargetType="{x:Type local:DigitalSignatureComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}" />
             <Style TargetType="{x:Type local:EnabledFlowDocument}" BasedOn="{StaticResource {x:Type FlowDocument}}" />
@@ -26,9 +23,6 @@
             <local:ObjectToImageConverter x:Key="_objectToImageConverter"/>
             <local:SeedToStringConverter x:Key="_seedToStringConverter"/>
             <local:BoolToVisibilityConverter x:Key="_boolToVisibilityConverter"/>
-            <local:SearchStateToStringConverter x:Key="_searchStateToStringConverter"/>
-            <local:SearchStateFlagToStringConverter x:Key="_searchStateFlagToStringConverter"/>
-            <local:MessageExToBorderBrushConverter x:Key="_messageExToBorderBrushConverter"/>
             <local:ListViewWidthConverter x:Key="_listViewWidthConverter"/>
             <local:StringRegularizationConverter x:Key="_stringRegularizationConverter"/>
             <local:StringRegularization2Converter x:Key="_stringRegularization2Converter"/>
