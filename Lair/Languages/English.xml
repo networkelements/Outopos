@@ -202,6 +202,16 @@
   <Translate Key="ChannelControl_ImportLockedMessages" Value="Import locked messages" />
   <Translate Key="ChannelControl_ExportLockedMessages" Value="Export locked messages" />
 
+  <Translate Key="ControlControl_Chart" Value="Chart" />
+  <Translate Key="ControlControl_Section" Value="Section" />
+  <Translate Key="ControlControl_Channel" Value="Channel" />
+
+  <Translate Key="ControlSectionControl_Leader" Value="Leader" />
+  <Translate Key="ControlSectionControl_Manager" Value="Manager" />
+  <Translate Key="ControlSectionControl_Creator" Value="Creator" />
+  
+  <Translate Key="ControlChannelControl_AmoebaNotFound_Message" Value="Amoeba Not Found" />
+
   <Translate Key="SignWindow_Title" Value="Filter" />
   <Translate Key="SignWindow_Signature" Value="Signature" />
   <Translate Key="SignWindow_Ok" Value="Ok" />
@@ -264,39 +274,5 @@
   <Translate Key="NewChannelWindow_Name" Value="Name" />
   <Translate Key="NewChannelWindow_Ok" Value="Ok" />
   <Translate Key="NewChannelWindow_Cancel" Value="Cancel" />
-
-  <Translate Key="ChartControl_Name" Value="Name" />
-  <Translate Key="ChartControl_Signature" Value="Signature" />
-  <Translate Key="ChartControl_Length" Value="Length" />
-  <Translate Key="ChartControl_Keywords" Value="Keywords" />
-  <Translate Key="ChartControl_CreationTime" Value="Creation time" />
-  <Translate Key="ChartControl_Comment" Value="Comment" />
-  <Translate Key="ChartControl_State" Value="State" />
-  <Translate Key="ChartControl_Hash" Value="Hash" />
-  <Translate Key="ChartControl_New" Value="New" />
-  <Translate Key="ChartControl_Edit" Value="Edit" />
-  <Translate Key="ChartControl_Delete" Value="Delete" />
-  <Translate Key="ChartControl_Cut" Value="Cut" />
-  <Translate Key="ChartControl_Copy" Value="Copy" />
-  <Translate Key="ChartControl_CopyInfo" Value="Copy info" />
-  <Translate Key="ChartControl_Paste" Value="Paste" />
-  <Translate Key="ChartControl_Export" Value="Export" />
-  <Translate Key="ChartControl_DeleteChart" Value="Delete cache" />
-  <Translate Key="ChartControl_DeleteShare" Value="Delete share " />
-  <Translate Key="ChartControl_DeleteDownload" Value="Delete download " />
-  <Translate Key="ChartControl_DeleteUpload" Value="Delete upload " />
-  <Translate Key="ChartControl_DeleteDownloadHistory" Value="Delete download history" />
-  <Translate Key="ChartControl_DeleteUploadHistory" Value="Delete upload history" />
-  <Translate Key="ChartControl_Download" Value="Download" />
-  <Translate Key="ChartControl_Search" Value="Search" />
-  <Translate Key="ChartControl_SearchSignature" Value="Search signature" />
-  <Translate Key="ChartControl_SearchKeyword" Value="Search keyword" />
-  <Translate Key="ChartControl_SearchCreationTimeRange" Value="Search creation time range" />
-  <Translate Key="ChartControl_Filter" Value="Filter" />
-  <Translate Key="ChartControl_FilterName" Value="Filter name" />
-  <Translate Key="ChartControl_FilterSignature" Value="Filter signature" />
-  <Translate Key="ChartControl_FilterKeyword" Value="Filter keyword" />
-  <Translate Key="ChartControl_FilterCreationTimeRange" Value="Filter creation time range" />
-  <Translate Key="ChartControl_FilterSeed" Value="Filter seed" />
 
 </Configuration>

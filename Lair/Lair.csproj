@@ -116,7 +116,23 @@
     <Compile Include="Hash\Sha512.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="TransfarLimitManager.cs" />
+    <Compile Include="Windows\ControlChannelControl.xaml.cs">
+      <DependentUpon>ControlChannelControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ControlChartControl.xaml.cs">
+      <DependentUpon>ControlChartControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ControlControl.xaml.cs">
+      <DependentUpon>ControlControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ControlSectionControl.xaml.cs">
+      <DependentUpon>ControlSectionControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\VirtualizingStackPanelEx.cs" />
+    <Page Include="Windows\ControlChannelControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Windows\ConnectionControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -128,6 +144,18 @@
       <Generator>MSBuild:Compile</Generator>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\ControlChartControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ControlControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ControlSectionControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\NewChannelWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

@@ -24,11 +24,13 @@ namespace Lair.Windows
     {
         private Channel _channel;
         private LairManager _lairManager;
+        private List<Message> _responsMessages = new List<Message>();
 
-        public MessageEditWindow(Channel channel, string content, LairManager lairManager)
+        public MessageEditWindow(Channel channel, string content, IEnumerable<Message> responsMessages, LairManager lairManager)
         {
             _channel = channel;
             _lairManager = lairManager;
+            if (responsMessages != null) _responsMessages.AddRange(responsMessages);
 
             var digitalSignatureCollection = new List<object>();
             digitalSignatureCollection.Add(new ComboBoxItem() { Content = "" });

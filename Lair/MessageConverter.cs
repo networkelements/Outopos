@@ -16,6 +16,21 @@ namespace Lair
 {
     static class MessageConverter
     {
+        public static string ToSectionString(Section section)
+        {
+            if (section.Name == null || section.Id == null) return null;
+
+            try
+            {
+                return section.Name + " - " + Convert.ToBase64String(section.Id)
+                    .Replace('+', '-').Replace('/', '_');
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException("ArgumentException", e);
+            }
+        }
+
         public static string ToChannelString(Channel channel)
         {
             if (channel.Name == null || channel.Id == null) return null;
@@ -23,7 +38,7 @@ namespace Lair
             try
             {
                 return channel.Name + " - " + Convert.ToBase64String(channel.Id)
-                    .Replace('+', '-').Replace('/', '_').Substring(0, 64);
+                    .Replace('+', '-').Replace('/', '_');
             }
             catch (Exception e)
             {

@@ -160,6 +160,8 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<double>() { Name = "NewChannelWindow_Width", Value = 700 },
                 new Library.Configuration.SettingsContext<WindowState>() { Name = "NewChannelWindow_WindowState", Value = WindowState.Normal },
           
+                new Library.Configuration.SettingsContext<LockedList<FilterRoot>>() { Name = "ControlChannelControl_FilterRoots", Value = new LockedList<FilterRoot>() },
+                
                 new Library.Configuration.SettingsContext<string>() { Name = "SearchControl_LastHeaderClicked", Value = "Name" },
                 new Library.Configuration.SettingsContext<ListSortDirection>() { Name = "SearchControl_ListSortDirection", Value = ListSortDirection.Ascending },
                 new Library.Configuration.SettingsContext<double>() { Name = "SearchControl_Grid_ColumnDefinitions_Width", Value = 200 },
@@ -2568,6 +2570,26 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     this["NewChannelWindow_WindowState"] = value;
+                }
+            }
+        }
+
+
+        public LockedList<FilterRoot> ControlChannelControl_FilterRoots
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (LockedList<FilterRoot>)this["ControlChannelControl_FilterRoots"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ControlChannelControl_FilterRoots"] = value;
                 }
             }
         }

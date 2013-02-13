@@ -2221,6 +2221,85 @@ namespace Lair.Properties
         }
 
 
+        public string ControlControl_Chart
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlControl_Chart");
+                }
+            }
+        }
+
+        public string ControlControl_Section
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlControl_Section");
+                }
+            }
+        }
+
+        public string ControlControl_Channel
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlControl_Channel");
+                }
+            }
+        }
+
+
+        public string ControlSectionControl_Leader
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlSectionControl_Leader");
+                }
+            }
+        }
+
+        public string ControlSectionControl_Manager
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlSectionControl_Manager");
+                }
+            }
+        }
+
+        public string ControlSectionControl_Creator
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlSectionControl_Creator");
+                }
+            }
+        }
+
+        public string ControlChannelControl_AmoebaNotFound_Message
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlChannelControl_AmoebaNotFound_Message");
+                }
+            }
+        }
+
+
         public string SignWindow_Title
         {
             get
@@ -2859,370 +2938,6 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("NewChannelWindow_Cancel");
-                }
-            }
-        }
-
-
-        public string ChartControl_Name
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChartControl_Name");
-                }
-            }
-        }
-
-        public string ChartControl_Signature
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChartControl_Signature");
-                }
-            }
-        }
-
-        public string ChartControl_Length
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChartControl_Length");
-                }
-            }
-        }
-
-        public string ChartControl_Keywords
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChartControl_Keywords");
-                }
-            }
-        }
-
-        public string ChartControl_CreationTime
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChartControl_CreationTime");
-                }
-            }
-        }
-
-        public string ChartControl_Comment
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChartControl_Comment");
-                }
-            }
-        }
-
-        public string ChartControl_State
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChartControl_State");
-                }
-            }
-        }
-
-        public string ChartControl_Hash
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChartControl_Hash");
-                }
-            }
-        }
-
-        public string ChartControl_New
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChartControl_New");
-                }
-            }
-        }
-
-        public string ChartControl_Edit
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChartControl_Edit");
-                }
-            }
-        }
-
-        public string ChartControl_Delete
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChartControl_Delete");
-                }
-            }
-        }
-
-        public string ChartControl_Cut
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChartControl_Cut");
-                }
-            }
-        }
-
-        public string ChartControl_Copy
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChartControl_Copy");
-                }
-            }
-        }
-
-        public string ChartControl_CopyInfo
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChartControl_CopyInfo");
-                }
-            }
-        }
-
-        public string ChartControl_Paste
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChartControl_Paste");
-                }
-            }
-        }
-
-        public string ChartControl_Export
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChartControl_Export");
-                }
-            }
-        }
-
-        public string ChartControl_DeleteChart
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChartControl_DeleteChart");
-                }
-            }
-        }
-
-        public string ChartControl_DeleteShare
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChartControl_DeleteShare");
-                }
-            }
-        }
-
-        public string ChartControl_DeleteDownload
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChartControl_DeleteDownload");
-                }
-            }
-        }
-
-        public string ChartControl_DeleteUpload
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChartControl_DeleteUpload");
-                }
-            }
-        }
-
-        public string ChartControl_DeleteDownloadHistory
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChartControl_DeleteDownloadHistory");
-                }
-            }
-        }
-
-        public string ChartControl_DeleteUploadHistory
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChartControl_DeleteUploadHistory");
-                }
-            }
-        }
-
-        public string ChartControl_Download
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChartControl_Download");
-                }
-            }
-        }
-
-        public string ChartControl_Search
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChartControl_Search");
-                }
-            }
-        }
-
-        public string ChartControl_SearchSignature
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChartControl_SearchSignature");
-                }
-            }
-        }
-
-        public string ChartControl_SearchKeyword
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChartControl_SearchKeyword");
-                }
-            }
-        }
-
-        public string ChartControl_SearchCreationTimeRange
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChartControl_SearchCreationTimeRange");
-                }
-            }
-        }
-
-        public string ChartControl_Filter
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChartControl_Filter");
-                }
-            }
-        }
-
-        public string ChartControl_FilterName
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChartControl_FilterName");
-                }
-            }
-        }
-
-        public string ChartControl_FilterSignature
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChartControl_FilterSignature");
-                }
-            }
-        }
-
-        public string ChartControl_FilterKeyword
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChartControl_FilterKeyword");
-                }
-            }
-        }
-
-        public string ChartControl_FilterCreationTimeRange
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChartControl_FilterCreationTimeRange");
-                }
-            }
-        }
-
-        public string ChartControl_FilterSeed
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChartControl_FilterSeed");
                 }
             }
         }
