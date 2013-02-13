@@ -159,7 +159,14 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<double>() { Name = "NewChannelWindow_Left", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "NewChannelWindow_Width", Value = 700 },
                 new Library.Configuration.SettingsContext<WindowState>() { Name = "NewChannelWindow_WindowState", Value = WindowState.Normal },
+
+                new Library.Configuration.SettingsContext<double>() { Name = "NewSectionWindow_Top", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "NewSectionWindow_Left", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "NewSectionWindow_Width", Value = 700 },
+                new Library.Configuration.SettingsContext<WindowState>() { Name = "NewSectionWindow_WindowState", Value = WindowState.Normal },
           
+                new Library.Configuration.SettingsContext<LockedList<SectionCategory>>() { Name = "ControlChannelControl_SectionCategories", Value = new LockedList<SectionCategory>() },
+
                 new Library.Configuration.SettingsContext<LockedList<FilterRoot>>() { Name = "ControlChannelControl_FilterRoots", Value = new LockedList<FilterRoot>() },
                 
                 new Library.Configuration.SettingsContext<string>() { Name = "SearchControl_LastHeaderClicked", Value = "Name" },
@@ -199,12 +206,6 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_Seed_Value_Width", Value = 600 },
                 new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_SearchState_Contains_Width", Value = -1 },
                 new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_SearchState_Value_Width", Value = 600 },
-
-                new Library.Configuration.SettingsContext<double>() { Name = "BoxEditWindow_Top", Value = 120 },
-                new Library.Configuration.SettingsContext<double>() { Name = "BoxEditWindow_Left", Value = 120 },
-                new Library.Configuration.SettingsContext<double>() { Name = "BoxEditWindow_Height", Value = 500 },
-                new Library.Configuration.SettingsContext<double>() { Name = "BoxEditWindow_Width", Value = 700 },
-                new Library.Configuration.SettingsContext<WindowState>() { Name = "BoxEditWindow_WindowState", Value = WindowState.Normal },
             })
         {
 
@@ -2575,6 +2576,103 @@ namespace Lair.Properties
         }
 
 
+        public double NewSectionWindow_Top
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["NewSectionWindow_Top"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["NewSectionWindow_Top"] = value;
+                }
+            }
+        }
+
+        public double NewSectionWindow_Left
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["NewSectionWindow_Left"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["NewSectionWindow_Left"] = value;
+                }
+            }
+        }
+
+        public double NewSectionWindow_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["NewSectionWindow_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["NewSectionWindow_Width"] = value;
+                }
+            }
+        }
+
+        public WindowState NewSectionWindow_WindowState
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (WindowState)this["NewSectionWindow_WindowState"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["NewSectionWindow_WindowState"] = value;
+                }
+            }
+        }
+
+
+        public LockedList<SectionCategory> ControlChannelControl_SectionCategories
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (LockedList<SectionCategory>)this["ControlChannelControl_SectionCategories"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ControlChannelControl_SectionCategories"] = value;
+                }
+            }
+        }
+
+
         public LockedList<FilterRoot> ControlChannelControl_FilterRoots
         {
             get
@@ -3276,102 +3374,6 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     this["SearchItemEditWindow_GridViewColumn_SearchState_Value_Width"] = value;
-                }
-            }
-        }
-
-
-        public double BoxEditWindow_Top
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["BoxEditWindow_Top"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["BoxEditWindow_Top"] = value;
-                }
-            }
-        }
-
-        public double BoxEditWindow_Left
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["BoxEditWindow_Left"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["BoxEditWindow_Left"] = value;
-                }
-            }
-        }
-
-        public double BoxEditWindow_Height
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["BoxEditWindow_Height"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["BoxEditWindow_Height"] = value;
-                }
-            }
-        }
-
-        public double BoxEditWindow_Width
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["BoxEditWindow_Width"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["BoxEditWindow_Width"] = value;
-                }
-            }
-        }
-
-        public WindowState BoxEditWindow_WindowState
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (WindowState)this["BoxEditWindow_WindowState"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["BoxEditWindow_WindowState"] = value;
                 }
             }
         }

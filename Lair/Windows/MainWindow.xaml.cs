@@ -1202,6 +1202,11 @@ namespace Lair.Windows
             _connectionControl.Width = Double.NaN;
             _connectionTabItem.Content = _connectionControl;
 
+            ControlControl _controlControl = new ControlControl(this, _lairManager, _bufferManager);
+            _controlControl.Height = Double.NaN;
+            _controlControl.Width = Double.NaN;
+            _controlTabItem.Content = _controlControl;
+
             if (Settings.Instance.Global_IsStart)
             {
                 _startMenuItem_Click(null, null);

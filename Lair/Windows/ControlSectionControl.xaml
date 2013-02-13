@@ -1,4 +1,5 @@
 ﻿<UserControl x:Class="Lair.Windows.ControlSectionControl"
+        x:ClassModifier="internal"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -7,32 +8,30 @@
         xmlns:local="clr-namespace:Lair.Windows" 
         mc:Ignorable="d" 
         d:DesignHeight="423" d:DesignWidth="522">
+    <UserControl.Resources>
+        <ContextMenu x:Key="_sectionTreeViewItemContextMenu" Name="_sectionTreeViewItemContextMenu">
+            <MenuItem Name="_sectionTreeViewItemNewMenuItem" Header="{Binding Path=ControlSectionControl_New, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemNewMenuItem_Click"/>
+            <MenuItem Name="_sectionTreeViewItemEditMenuItem" Header="{Binding Path=ControlSectionControl_Edit, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemEditMenuItem_Click"/>
+            <MenuItem Name="_sectionTreeViewItemDeleteMenuItem" Header="{Binding Path=ControlSectionControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemDeleteMenuItem_Click"/>
+            <Separator />
+            <MenuItem Name="_sectionTreeViewItemCopyMenuItem" Header="{Binding Path=ControlSectionControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemCopyMenuItem_Click"/>
+            <MenuItem Name="_sectionTreeViewItemCopyInfoMenuItem" Header="{Binding Path=ControlSectionControl_CopyInfo, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemCopyInfoMenuItem_Click"/>
+        </ContextMenu>
+        <ContextMenu x:Key="_treeViewItemContextMenu" Name="_treeViewItemContextMenu">
+            <MenuItem Name="_treeViewItemEditMenuItem" Header="{Binding Path=ControlSectionControl_Edit, Source={StaticResource ResourcesInstance}}" Click="_treeViewItemEditMenuItem_Click"/>
+            <MenuItem Name="_treeViewItemDeleteMenuItem" Header="{Binding Path=ControlSectionControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_treeViewItemDeleteMenuItem_Click"/>
+        </ContextMenu>
+    </UserControl.Resources>
     
     <Grid>
-        <TreeView Grid.Row="1" Name="_treeView" 
+        <TreeView Name="_treeView" 
                     VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" Grid.RowSpan="2">
             <TreeView.Resources>
-                <Style TargetType="{x:Type local:SectionTreeViewItem}">
-                    <Setter Property="ContextMenu">
-                        <Setter.Value>
-                            <ContextMenu Name="_sectionTreeViewItemContextMenu">
-                                <MenuItem Name="_sectionTreeViewItemDeleteMenuItem" Header="{Binding Path=ControlSectionControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemDeleteMenuItem_Click"/>
-                                <Separator />
-                                <MenuItem Name="_sectionTreeViewItemCopyMenuItem" Header="{Binding Path=ControlSectionControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemCopyMenuItem_Click"/>
-                                <MenuItem Name="_sectionTreeViewItemCopyInfoMenuItem" Header="{Binding Path=ControlSectionControl_CopyInfo, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemCopyInfoMenuItem_Click"/>
-                            </ContextMenu>
-                        </Setter.Value>
-                    </Setter>
+                <Style TargetType="{x:Type local:SectionTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
+                    <Setter Property="ContextMenu" Value="{StaticResource _sectionTreeViewItemContextMenu}"/>
                 </Style>
-                <Style TargetType="{x:Type TreeViewItem}">
-                    <Setter Property="ContextMenu">
-                        <Setter.Value>
-                            <ContextMenu Name="_treeViewItemContextMenu">
-                                <MenuItem Name="_treeViewItemEditMenuItem" Header="{Binding Path=ControlSectionControl_Edit, Source={StaticResource ResourcesInstance}}" Click="_treeViewItemEditMenuItem_Click"/>
-                                <MenuItem Name="_treeViewItemDeleteMenuItem" Header="{Binding Path=ControlSectionControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_treeViewItemDeleteMenuItem_Click"/>
-                            </ContextMenu>
-                        </Setter.Value>
-                    </Setter>
+                <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
+                    <Setter Property="ContextMenu" Value="{StaticResource _treeViewItemContextMenu}"/>
                 </Style>
             </TreeView.Resources>
             

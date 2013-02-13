@@ -350,6 +350,6 @@
             </ListView.View>
         </local:ListViewEx>
         <TextBox Grid.Column="2" Grid.Row="2" Margin="24,0,0,0" Name="_searchTextBox" Grid.ColumnSpan="3" KeyDown="_searchTextBox_KeyDown" />
-        <Button Content="×" Grid.Column="2" Grid.Row="2" Height="16" HorizontalAlignment="Left" Margin="4,4,0,0" Name="_serachCloseButton" VerticalAlignment="Top" Width="16" Padding="0,-2,0,0" Click="_serachCloseButton_Click" />
+        <Button Content="×" Grid.Column="2" Grid.Row="2" Height="16" HorizontalAlignment="Left" Margin="4,4,0,0" Name="_searchCloseButton" VerticalAlignment="Top" Width="16" Padding="0,-2,0,0" Click="_searchCloseButton_Click" />
     </Grid>
 </UserControl>

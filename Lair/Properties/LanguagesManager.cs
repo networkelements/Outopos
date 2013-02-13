@@ -419,6 +419,17 @@ namespace Lair.Properties
             }
         }
 
+        public string MainWindow_Control
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("MainWindow_Control");
+                }
+            }
+        }
+
         public string MainWindow_Search
         {
             get
@@ -2288,6 +2299,513 @@ namespace Lair.Properties
             }
         }
 
+        public string ControlSectionControl_New
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlSectionControl_New");
+                }
+            }
+        }
+
+        public string ControlSectionControl_Edit
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlSectionControl_Edit");
+                }
+            }
+        }
+
+        public string ControlSectionControl_Delete
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlSectionControl_Delete");
+                }
+            }
+        }
+
+        public string ControlSectionControl_Cut
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlSectionControl_Cut");
+                }
+            }
+        }
+
+        public string ControlSectionControl_Copy
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlSectionControl_Copy");
+                }
+            }
+        }
+
+        public string ControlSectionControl_CopyInfo
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlSectionControl_CopyInfo");
+                }
+            }
+        }
+
+        public string ControlSectionControl_Paste
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlSectionControl_Paste");
+                }
+            }
+        }
+
+        public string ControlSectionControl_Respons
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlSectionControl_Respons");
+                }
+            }
+        }
+
+        public string ControlSectionControl_Lock
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlSectionControl_Lock");
+                }
+            }
+        }
+
+        public string ControlSectionControl_LockThis
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlSectionControl_LockThis");
+                }
+            }
+        }
+
+        public string ControlSectionControl_UnlockThis
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlSectionControl_UnlockThis");
+                }
+            }
+        }
+
+        public string ControlSectionControl_LockAll
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlSectionControl_LockAll");
+                }
+            }
+        }
+
+        public string ControlSectionControl_UnlockAll
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlSectionControl_UnlockAll");
+                }
+            }
+        }
+
+        public string ControlSectionControl_Filter
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlSectionControl_Filter");
+                }
+            }
+        }
+
+        public string ControlSectionControl_FilterWord
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlSectionControl_FilterWord");
+                }
+            }
+        }
+
+        public string ControlSectionControl_FilterSignature
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlSectionControl_FilterSignature");
+                }
+            }
+        }
+
+        public string ControlSectionControl_FilterMessage
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlSectionControl_FilterMessage");
+                }
+            }
+        }
+
+        public string ControlSectionControl_SignatureFilter
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlSectionControl_SignatureFilter");
+                }
+            }
+        }
+
+        public string ControlSectionControl_NewMessage
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlSectionControl_NewMessage");
+                }
+            }
+        }
+
+        public string ControlSectionControl_OnlyUnread
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlSectionControl_OnlyUnread");
+                }
+            }
+        }
+
+        public string ControlSectionControl_AmoebaNotFound_Message
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlSectionControl_AmoebaNotFound_Message");
+                }
+            }
+        }
+
+        public string ControlSectionControl_MarkAllMessagesRead
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlSectionControl_MarkAllMessagesRead");
+                }
+            }
+        }
+
+        public string ControlSectionControl_MarkAllMessagesRead_Message
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlSectionControl_MarkAllMessagesRead_Message");
+                }
+            }
+        }
+
+        public string ControlSectionControl_ImportLockedMessages
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlSectionControl_ImportLockedMessages");
+                }
+            }
+        }
+
+        public string ControlSectionControl_ExportLockedMessages
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlSectionControl_ExportLockedMessages");
+                }
+            }
+        }
+
+
+        public string ControlChannelControl_NewChannel
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlChannelControl_NewChannel");
+                }
+            }
+        }
+
+        public string ControlChannelControl_NewCategory
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlChannelControl_NewCategory");
+                }
+            }
+        }
+
+        public string ControlChannelControl_Edit
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlChannelControl_Edit");
+                }
+            }
+        }
+
+        public string ControlChannelControl_Delete
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlChannelControl_Delete");
+                }
+            }
+        }
+
+        public string ControlChannelControl_Cut
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlChannelControl_Cut");
+                }
+            }
+        }
+
+        public string ControlChannelControl_Copy
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlChannelControl_Copy");
+                }
+            }
+        }
+
+        public string ControlChannelControl_CopyInfo
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlChannelControl_CopyInfo");
+                }
+            }
+        }
+
+        public string ControlChannelControl_Paste
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlChannelControl_Paste");
+                }
+            }
+        }
+
+        public string ControlChannelControl_Respons
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlChannelControl_Respons");
+                }
+            }
+        }
+
+        public string ControlChannelControl_Lock
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlChannelControl_Lock");
+                }
+            }
+        }
+
+        public string ControlChannelControl_LockThis
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlChannelControl_LockThis");
+                }
+            }
+        }
+
+        public string ControlChannelControl_UnlockThis
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlChannelControl_UnlockThis");
+                }
+            }
+        }
+
+        public string ControlChannelControl_LockAll
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlChannelControl_LockAll");
+                }
+            }
+        }
+
+        public string ControlChannelControl_UnlockAll
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlChannelControl_UnlockAll");
+                }
+            }
+        }
+
+        public string ControlChannelControl_Filter
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlChannelControl_Filter");
+                }
+            }
+        }
+
+        public string ControlChannelControl_FilterWord
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlChannelControl_FilterWord");
+                }
+            }
+        }
+
+        public string ControlChannelControl_FilterSignature
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlChannelControl_FilterSignature");
+                }
+            }
+        }
+
+        public string ControlChannelControl_FilterMessage
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlChannelControl_FilterMessage");
+                }
+            }
+        }
+
+        public string ControlChannelControl_SignatureFilter
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlChannelControl_SignatureFilter");
+                }
+            }
+        }
+
+        public string ControlChannelControl_NewMessage
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlChannelControl_NewMessage");
+                }
+            }
+        }
+
+        public string ControlChannelControl_OnlyUnread
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlChannelControl_OnlyUnread");
+                }
+            }
+        }
+
         public string ControlChannelControl_AmoebaNotFound_Message
         {
             get
@@ -2295,6 +2813,50 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("ControlChannelControl_AmoebaNotFound_Message");
+                }
+            }
+        }
+
+        public string ControlChannelControl_MarkAllMessagesRead
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlChannelControl_MarkAllMessagesRead");
+                }
+            }
+        }
+
+        public string ControlChannelControl_MarkAllMessagesRead_Message
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlChannelControl_MarkAllMessagesRead_Message");
+                }
+            }
+        }
+
+        public string ControlChannelControl_ImportLockedMessages
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlChannelControl_ImportLockedMessages");
+                }
+            }
+        }
+
+        public string ControlChannelControl_ExportLockedMessages
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlChannelControl_ExportLockedMessages");
                 }
             }
         }
@@ -2938,6 +3500,51 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("NewChannelWindow_Cancel");
+                }
+            }
+        }
+
+
+        public string NewSectionWindow_Title
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("NewSectionWindow_Title");
+                }
+            }
+        }
+
+        public string NewSectionWindow_Name
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("NewSectionWindow_Name");
+                }
+            }
+        }
+
+        public string NewSectionWindow_Ok
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("NewSectionWindow_Ok");
+                }
+            }
+        }
+
+        public string NewSectionWindow_Cancel
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("NewSectionWindow_Cancel");
                 }
             }
         }

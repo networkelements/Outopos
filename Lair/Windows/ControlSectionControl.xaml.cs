@@ -25,19 +25,83 @@ namespace Lair.Windows
     /// <summary>
     /// Interaction logic for ControlSectionControl.xaml
     /// </summary>
-    public partial class ControlSectionControl : UserControl
+    partial class ControlSectionControl : UserControl
     {
-        public ControlSectionControl()
+        private MainWindow _mainWindow;
+        private BufferManager _bufferManager;
+        private LairManager _lairManager;
+
+        private ObservableCollection<SectionTreeViewItem> _treeViewItemCollection = new ObservableCollection<SectionTreeViewItem>();
+
+        public ControlSectionControl(MainWindow mainWindow, LairManager lairManager, BufferManager bufferManager)
         {
+            _mainWindow = mainWindow;
+            _bufferManager = bufferManager;
+            _lairManager = lairManager;
+
             InitializeComponent();
+
+            _treeView.ItemsSource = _treeViewItemCollection;
+
+            foreach (var item in Settings.Instance.ControlChannelControl_SectionCategories)
+            {
+                _treeViewItemCollection.Add(new SectionTreeViewItem(item));
+            }
+        }
+
+        private void Update()
+        {
+            Settings.Instance.ControlChannelControl_SectionCategories = _treeViewItemCollection.Cast<SectionTreeViewItem>().Select(n => n.Value).ToLockedList();
+
+            var list = _treeViewItemCollection.OfType<SectionTreeViewItem>().ToList();
+
+            list.Sort((SectionTreeViewItem x, SectionTreeViewItem y) =>
+            {
+                var cx = x.Value.Section;
+                var cy = y.Value.Section;
+
+                int c = cx.Name.CompareTo(cy.Name);
+                if (c != 0) return c;
+                c = Collection.Compare(cx.Id, cy.Id);
+                if (c != 0) return c;
+
+                return 0;
+            });
+            
+            for (int i = 0; i < list.Count; i++)
+            {
+                var o = _treeViewItemCollection.IndexOf(list[i]);
+
+                if (i != o) _treeViewItemCollection.Move(o, i);
+            }
+
+            foreach (var item in _treeViewItemCollection.OfType<SectionTreeViewItem>())
+            {
+                item.Sort();
+            }
         }
 
         private void _treeViewNewMenuItem_Click(object sender, RoutedEventArgs e)
         {
+            NewSectionWindow window = new NewSectionWindow();
+            window.Owner = _mainWindow;
+            window.ShowDialog();
 
+            _treeViewItemCollection.Add(new SectionTreeViewItem(new SectionCategory() { Section = window.Section, IsExpanded = true }));
+            this.Update();
         }
 
         private void _treeViewPasteMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void _sectionTreeViewItemNewMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void _sectionTreeViewItemEditMenuItem_Click(object sender, RoutedEventArgs e)
         {
 
         }
@@ -71,9 +135,9 @@ namespace Lair.Windows
     class SectionTreeViewItem : TreeViewItem
     {
         private ObservableCollection<object> _listViewItemCollection = new ObservableCollection<object>();
-        private SectionTreeItem _value;
+        private SectionCategory _value;
 
-        public SectionTreeViewItem(SectionTreeItem sectionTreeItem)
+        public SectionTreeViewItem(SectionCategory sectionTreeItem)
             : base()
         {
             this.Value = sectionTreeItem;
@@ -109,6 +173,8 @@ namespace Lair.Windows
 
         public void Update()
         {
+            base.Header = MessageConverter.ToSectionString(this.Value.Section);
+
             List<dynamic> list = new List<dynamic>();
 
             base.IsExpanded = this.Value.IsExpanded;
@@ -177,7 +243,7 @@ namespace Lair.Windows
             }
         }
 
-        public SectionTreeItem Value
+        public SectionCategory Value
         {
             get
             {
@@ -273,8 +339,8 @@ namespace Lair.Windows
         }
     }
 
-    [DataContract(Name = "SectionTreeItem", Namespace = "http://Lair/Windows")]
-    class SectionTreeItem : IDeepCloneable<SectionTreeItem>, IThisLock
+    [DataContract(Name = "SectionCategory", Namespace = "http://Lair/Windows")]
+    class SectionCategory : IDeepCloneable<SectionCategory>, IThisLock
     {
         private Section _section;
         private bool _isExpanded = true;
@@ -371,11 +437,11 @@ namespace Lair.Windows
 
         #region IDeepClone<SectionTreeItem>
 
-        public SectionTreeItem DeepClone()
+        public SectionCategory DeepClone()
         {
             lock (this.ThisLock)
             {
-                var ds = new DataContractSerializer(typeof(SectionTreeItem));
+                var ds = new DataContractSerializer(typeof(SectionCategory));
 
                 using (MemoryStream ms = new MemoryStream())
                 {
@@ -388,7 +454,7 @@ namespace Lair.Windows
 
                     using (XmlDictionaryReader textDictionaryReader = XmlDictionaryReader.CreateTextReader(ms, XmlDictionaryReaderQuotas.Max))
                     {
-                        return (SectionTreeItem)ds.ReadObject(textDictionaryReader);
+                        return (SectionCategory)ds.ReadObject(textDictionaryReader);
                     }
                 }
             }

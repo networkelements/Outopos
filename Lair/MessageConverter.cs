@@ -23,7 +23,7 @@ namespace Lair
             try
             {
                 return section.Name + " - " + Convert.ToBase64String(section.Id)
-                    .Replace('+', '-').Replace('/', '_');
+                    .Replace('+', '-').Replace('/', '_').TrimEnd('=');
             }
             catch (Exception e)
             {
@@ -38,7 +38,7 @@ namespace Lair
             try
             {
                 return channel.Name + " - " + Convert.ToBase64String(channel.Id)
-                    .Replace('+', '-').Replace('/', '_');
+                    .Replace('+', '-').Replace('/', '_').TrimEnd('=');
             }
             catch (Exception e)
             {

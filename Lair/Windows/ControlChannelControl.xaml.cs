@@ -181,11 +181,11 @@ namespace Lair.Windows
 
                     newList.Union(messages);
 
-                    List<IFilterSearchItem> searchItems = new List<IFilterSearchItem>();
+                    List<ISearchItem> searchItems = new List<ISearchItem>();
 
                     this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
                     {
-                        searchItems.AddRange(_treeView.GetLineage(selectTreeViewItem).OfType<IFilterSearchItem>());
+                        searchItems.AddRange(_treeView.GetLineage(selectTreeViewItem).OfType<ISearchItem>());
                     }), null);
 
                     foreach (var item in searchItems)
@@ -380,11 +380,11 @@ namespace Lair.Windows
 
                             HashSet<Message> newList = new HashSet<Message>(messages);
 
-                            List<IFilterSearchItem> searchItems = new List<IFilterSearchItem>();
+                            List<ISearchItem> searchItems = new List<ISearchItem>();
 
                             this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
                             {
-                                searchItems.AddRange(_treeView.GetLineage(selectTreeViewItem).OfType<IFilterSearchItem>());
+                                searchItems.AddRange(_treeView.GetLineage(selectTreeViewItem).OfType<ISearchItem>());
                             }), null);
 
                             foreach (var item in searchItems)
@@ -562,7 +562,7 @@ namespace Lair.Windows
             return _listView.ActualHeight - 18;
         }
 
-        private static void Filter(ref HashSet<Message> messages, FilterSearchItem filterItem)
+        private static void Filter(ref HashSet<Message> messages, SearchItem filterItem)
         {
             lock (filterItem.ThisLock)
             {
@@ -1203,7 +1203,9 @@ namespace Lair.Windows
 
         #endregion
 
-        private void _serachCloseButton_Click(object sender, RoutedEventArgs e)
+        #region Search
+
+        private void _searchCloseButton_Click(object sender, RoutedEventArgs e)
         {
             _searchRowDefinition.Height = new GridLength(0);
             _searchTextBox.Text = "";
@@ -1219,23 +1221,7 @@ namespace Lair.Windows
             }
         }
 
-        private void _onlyUnreadButton_Checked(object sender, RoutedEventArgs e)
-        {
-            var view = CollectionViewSource.GetDefaultView(_listView.ItemsSource);
-            view.Refresh();
-
-            _listView.UpdateLayout();
-            _listView.GoBottom();
-        }
-
-        private void _onlyUnreadButton_Unchecked(object sender, RoutedEventArgs e)
-        {
-            var view = CollectionViewSource.GetDefaultView(_listView.ItemsSource);
-            view.Refresh();
-
-            _listView.UpdateLayout();
-            _listView.GoBottom();
-        }
+        #endregion
 
         #region Sort
 
@@ -1622,11 +1608,11 @@ namespace Lair.Windows
     }
 
     [DataContract(Name = "FilterRoot", Namespace = "http://Lair/Windows")]
-    class FilterRoot : IDeepCloneable<FilterRoot>, IFilterSearchItem, IThisLock
+    class FilterRoot : IDeepCloneable<FilterRoot>, ISearchItem, IThisLock
     {
         private string _name;
         private DigitalSignature _filterDigitalSignature;
-        private FilterSearchItem _searchItem;
+        private SearchItem _searchItem;
         private LockedList<string> _trustSignatures;
         private LockedList<FilterCategory> _filterCategorys;
         private bool _isExpanded = true;
@@ -1673,7 +1659,7 @@ namespace Lair.Windows
         }
 
         [DataMember(Name = "SearchItem")]
-        public FilterSearchItem SearchItem
+        public SearchItem SearchItem
         {
             get
             {
@@ -1787,10 +1773,10 @@ namespace Lair.Windows
     }
 
     [DataContract(Name = "FilterCategory", Namespace = "http://Lair/Windows")]
-    class FilterCategory : IDeepCloneable<FilterCategory>, IFilterSearchItem, IThisLock
+    class FilterCategory : IDeepCloneable<FilterCategory>, ISearchItem, IThisLock
     {
         private string _name;
-        private FilterSearchItem _searchItem;
+        private SearchItem _searchItem;
         private LockedList<string> _trustSignatures;
         private LockedList<FilterChannel> _filterChannels;
         private LockedList<FilterCategory> _filterCategorys;
@@ -1819,7 +1805,7 @@ namespace Lair.Windows
         }
 
         [DataMember(Name = "SearchItem")]
-        public FilterSearchItem SearchItem
+        public SearchItem SearchItem
         {
             get
             {
@@ -1948,10 +1934,10 @@ namespace Lair.Windows
     }
 
     [DataContract(Name = "FilterChannel", Namespace = "http://Lair/Windows")]
-    class FilterChannel : IDeepCloneable<FilterChannel>, IFilterSearchItem, IThisLock
+    class FilterChannel : IDeepCloneable<FilterChannel>, ISearchItem, IThisLock
     {
         private Channel _channel;
-        private FilterSearchItem _searchItem;
+        private SearchItem _searchItem;
         private LockedList<string> _trustSignatures;
         private LockedList<Message> _trustMessages;
 
@@ -1978,7 +1964,7 @@ namespace Lair.Windows
         }
 
         [DataMember(Name = "SearchItem")]
-        public FilterSearchItem SearchItem
+        public SearchItem SearchItem
         {
             get
             {
@@ -2076,13 +2062,13 @@ namespace Lair.Windows
         #endregion
     }
 
-    interface IFilterSearchItem
+    interface ISearchItem
     {
-        FilterSearchItem SearchItem { get; }
+        SearchItem SearchItem { get; }
     }
 
-    [DataContract(Name = "FilterSearchItem", Namespace = "http://Lair/Windows")]
-    class FilterSearchItem : IDeepCloneable<FilterSearchItem>, IThisLock
+    [DataContract(Name = "SearchItem", Namespace = "http://Lair/Windows")]
+    class SearchItem : IDeepCloneable<SearchItem>, IThisLock
     {
         private LockedList<SearchContains<string>> _searchWordCollection;
         private LockedList<SearchContains<SearchRegex>> _searchRegexCollection;
@@ -2170,11 +2156,11 @@ namespace Lair.Windows
 
         #region IDeepClone<SearchItem>
 
-        public FilterSearchItem DeepClone()
+        public SearchItem DeepClone()
         {
             lock (this.ThisLock)
             {
-                var ds = new DataContractSerializer(typeof(FilterSearchItem));
+                var ds = new DataContractSerializer(typeof(SearchItem));
 
                 using (MemoryStream ms = new MemoryStream())
                 {
@@ -2187,7 +2173,7 @@ namespace Lair.Windows
 
                     using (XmlDictionaryReader textDictionaryReader = XmlDictionaryReader.CreateTextReader(ms, XmlDictionaryReaderQuotas.Max))
                     {
-                        return (FilterSearchItem)ds.ReadObject(textDictionaryReader);
+                        return (SearchItem)ds.ReadObject(textDictionaryReader);
                     }
                 }
             }

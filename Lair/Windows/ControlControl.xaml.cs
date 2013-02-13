@@ -11,17 +11,45 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Library;
+using Library.Net.Lair;
 
 namespace Lair.Windows
 {
     /// <summary>
     /// Interaction logic for ControlControl.xaml
     /// </summary>
-    public partial class ControlControl : UserControl
+    partial class ControlControl : UserControl
     {
-        public ControlControl()
+        private MainWindow _mainWindow;
+        private BufferManager _bufferManager;
+        private LairManager _lairManager;
+
+        public ControlControl(MainWindow mainWindow, LairManager lairManager, BufferManager bufferManager)
         {
+            _mainWindow = mainWindow;
+            _bufferManager = bufferManager;
+            _lairManager = lairManager;
+
             InitializeComponent();
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            ControlChartControl _controlChartControl = new ControlChartControl();
+            _controlChartControl.Height = Double.NaN;
+            _controlChartControl.Width = Double.NaN;
+            _chartTabItem.Content = _controlChartControl;
+
+            ControlSectionControl _controlSectionControl = new ControlSectionControl(_mainWindow, _lairManager, _bufferManager);
+            _controlSectionControl.Height = Double.NaN;
+            _controlSectionControl.Width = Double.NaN;
+            _sectionTabItem.Content = _controlSectionControl;
+
+            ControlChannelControl _controlChannelControl = new ControlChannelControl(_mainWindow, _lairManager, _bufferManager);
+            _controlChannelControl.Height = Double.NaN;
+            _controlChannelControl.Width = Double.NaN;
+            _channelTabItem.Content = _controlChannelControl;
         }
     }
 }

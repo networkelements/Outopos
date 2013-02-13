@@ -30,6 +30,7 @@
 
   <Translate Key="MainWindow_Connection" Value="Connection" />
   <Translate Key="MainWindow_Channel" Value="Channel" />
+  <Translate Key="MainWindow_Control" Value="Control" />
   <Translate Key="MainWindow_Search" Value="Search" />
   <Translate Key="MainWindow_Log" Value="Log" />
   <Translate Key="MainWindow_Connections" Value="Connections" />
@@ -209,8 +210,58 @@
   <Translate Key="ControlSectionControl_Leader" Value="Leader" />
   <Translate Key="ControlSectionControl_Manager" Value="Manager" />
   <Translate Key="ControlSectionControl_Creator" Value="Creator" />
-  
+  <Translate Key="ControlSectionControl_New" Value="New" />
+  <Translate Key="ControlSectionControl_Edit" Value="Edit" />
+  <Translate Key="ControlSectionControl_Delete" Value="Delete" />
+  <Translate Key="ControlSectionControl_Cut" Value="Cut" />
+  <Translate Key="ControlSectionControl_Copy" Value="Copy" />
+  <Translate Key="ControlSectionControl_CopyInfo" Value="Copy info" />
+  <Translate Key="ControlSectionControl_Paste" Value="Paste" />
+  <Translate Key="ControlSectionControl_Respons" Value="Respons" />
+  <Translate Key="ControlSectionControl_Lock" Value="Lock" />
+  <Translate Key="ControlSectionControl_LockThis" Value="Lock this" />
+  <Translate Key="ControlSectionControl_UnlockThis" Value="Unlock this" />
+  <Translate Key="ControlSectionControl_LockAll" Value="Lock all" />
+  <Translate Key="ControlSectionControl_UnlockAll" Value="Unlock all" />
+  <Translate Key="ControlSectionControl_Filter" Value="Filter" />
+  <Translate Key="ControlSectionControl_FilterWord" Value="Filter word" />
+  <Translate Key="ControlSectionControl_FilterSignature" Value="Filter signature" />
+  <Translate Key="ControlSectionControl_FilterMessage" Value="Filter message" />
+  <Translate Key="ControlSectionControl_SignatureFilter" Value="Sign" />
+  <Translate Key="ControlSectionControl_NewMessage" Value="New" />
+  <Translate Key="ControlSectionControl_OnlyUnread" Value="Only" />
+  <Translate Key="ControlSectionControl_AmoebaNotFound_Message" Value="Amoeba Not Found" />
+  <Translate Key="ControlSectionControl_MarkAllMessagesRead" Value="Mark all messages read" />
+  <Translate Key="ControlSectionControl_MarkAllMessagesRead_Message" Value="Do you want to mark all messages read?" />
+  <Translate Key="ControlSectionControl_ImportLockedMessages" Value="Import locked messages" />
+  <Translate Key="ControlSectionControl_ExportLockedMessages" Value="Export locked messages" />
+
+  <Translate Key="ControlChannelControl_NewChannel" Value="New channel" />
+  <Translate Key="ControlChannelControl_NewCategory" Value="New category" />
+  <Translate Key="ControlChannelControl_Edit" Value="Edit" />
+  <Translate Key="ControlChannelControl_Delete" Value="Delete" />
+  <Translate Key="ControlChannelControl_Cut" Value="Cut" />
+  <Translate Key="ControlChannelControl_Copy" Value="Copy" />
+  <Translate Key="ControlChannelControl_CopyInfo" Value="Copy info" />
+  <Translate Key="ControlChannelControl_Paste" Value="Paste" />
+  <Translate Key="ControlChannelControl_Respons" Value="Respons" />
+  <Translate Key="ControlChannelControl_Lock" Value="Lock" />
+  <Translate Key="ControlChannelControl_LockThis" Value="Lock this" />
+  <Translate Key="ControlChannelControl_UnlockThis" Value="Unlock this" />
+  <Translate Key="ControlChannelControl_LockAll" Value="Lock all" />
+  <Translate Key="ControlChannelControl_UnlockAll" Value="Unlock all" />
+  <Translate Key="ControlChannelControl_Filter" Value="Filter" />
+  <Translate Key="ControlChannelControl_FilterWord" Value="Filter word" />
+  <Translate Key="ControlChannelControl_FilterSignature" Value="Filter signature" />
+  <Translate Key="ControlChannelControl_FilterMessage" Value="Filter message" />
+  <Translate Key="ControlChannelControl_SignatureFilter" Value="Sign" />
+  <Translate Key="ControlChannelControl_NewMessage" Value="New" />
+  <Translate Key="ControlChannelControl_OnlyUnread" Value="Only" />
   <Translate Key="ControlChannelControl_AmoebaNotFound_Message" Value="Amoeba Not Found" />
+  <Translate Key="ControlChannelControl_MarkAllMessagesRead" Value="Mark all messages read" />
+  <Translate Key="ControlChannelControl_MarkAllMessagesRead_Message" Value="Do you want to mark all messages read?" />
+  <Translate Key="ControlChannelControl_ImportLockedMessages" Value="Import locked messages" />
+  <Translate Key="ControlChannelControl_ExportLockedMessages" Value="Export locked messages" />
 
   <Translate Key="SignWindow_Title" Value="Filter" />
   <Translate Key="SignWindow_Signature" Value="Signature" />
@@ -274,5 +325,10 @@
   <Translate Key="NewChannelWindow_Name" Value="Name" />
   <Translate Key="NewChannelWindow_Ok" Value="Ok" />
   <Translate Key="NewChannelWindow_Cancel" Value="Cancel" />
+
+  <Translate Key="NewSectionWindow_Title" Value="New channel" />
+  <Translate Key="NewSectionWindow_Name" Value="Name" />
+  <Translate Key="NewSectionWindow_Ok" Value="Ok" />
+  <Translate Key="NewSectionWindow_Cancel" Value="Cancel" />
 
 </Configuration>
