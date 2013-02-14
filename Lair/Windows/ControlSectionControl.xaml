@@ -10,8 +10,11 @@
         d:DesignHeight="423" d:DesignWidth="522">
     <UserControl.Resources>
         <ContextMenu x:Key="_sectionTreeViewItemContextMenu" Name="_sectionTreeViewItemContextMenu">
-            <MenuItem Name="_sectionTreeViewItemNewMenuItem" Header="{Binding Path=ControlSectionControl_New, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemNewMenuItem_Click"/>
-            <MenuItem Name="_sectionTreeViewItemEditMenuItem" Header="{Binding Path=ControlSectionControl_Edit, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemEditMenuItem_Click"/>
+            <MenuItem Name="_sectionTreeViewItemNewRoleMenuItem" Header="{Binding Path=ControlSectionControl_NewRole, Source={StaticResource ResourcesInstance}}">
+                <MenuItem Name="_sectionTreeViewItemLeaderMenuItem" Header="{Binding Path=ControlSectionControl_Leader, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemLeaderMenuItem_Click"/>
+                <MenuItem Name="_sectionTreeViewItemManagerMenuItem" Header="{Binding Path=ControlSectionControl_Manager, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemManagerMenuItem_Click"/>
+                <MenuItem Name="_sectionTreeViewItemCreatorMenuItem" Header="{Binding Path=ControlSectionControl_Creator, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemCreatorMenuItem_Click"/>
+            </MenuItem>
             <MenuItem Name="_sectionTreeViewItemDeleteMenuItem" Header="{Binding Path=ControlSectionControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemDeleteMenuItem_Click"/>
             <Separator />
             <MenuItem Name="_sectionTreeViewItemCopyMenuItem" Header="{Binding Path=ControlSectionControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemCopyMenuItem_Click"/>
@@ -30,14 +33,20 @@
                 <Style TargetType="{x:Type local:SectionTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
                     <Setter Property="ContextMenu" Value="{StaticResource _sectionTreeViewItemContextMenu}"/>
                 </Style>
-                <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
+                <Style TargetType="{x:Type local:LeaderTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
+                    <Setter Property="ContextMenu" Value="{StaticResource _treeViewItemContextMenu}"/>
+                </Style>
+                <Style TargetType="{x:Type local:ManagerTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
+                    <Setter Property="ContextMenu" Value="{StaticResource _treeViewItemContextMenu}"/>
+                </Style>
+                <Style TargetType="{x:Type local:CreatorTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
                     <Setter Property="ContextMenu" Value="{StaticResource _treeViewItemContextMenu}"/>
                 </Style>
             </TreeView.Resources>
             
             <TreeView.ContextMenu>
                 <ContextMenu Name="_treeViewContextMenu">
-                    <MenuItem Name="_treeViewNewMenuItem" Header="{Binding Path=ControlSectionControl_New, Source={StaticResource ResourcesInstance}}" Click="_treeViewNewMenuItem_Click"/>
+                    <MenuItem Name="_treeViewNewSectionMenuItem" Header="{Binding Path=ControlSectionControl_NewSection, Source={StaticResource ResourcesInstance}}" Click="_treeViewNewSectionMenuItem_Click"/>
                     <Separator />
                     <MenuItem Name="_treeViewPasteMenuItem" Header="{Binding Path=ControlSectionControl_Paste, Source={StaticResource ResourcesInstance}}" Click="_treeViewPasteMenuItem_Click"/>
                 </ContextMenu>

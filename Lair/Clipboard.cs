@@ -134,6 +134,45 @@ namespace Lair
             }
         }
 
+        public static IEnumerable<Section> GetSections()
+        {
+            lock (_thisLock)
+            {
+                var list = new List<Section>();
+
+                foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    if (!item.StartsWith("Section@")) continue;
+
+                    try
+                    {
+                        list.Add(LairConverter.FromSectionString(item));
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                }
+
+                return list;
+            }
+        }
+
+        public static void SetSections(IEnumerable<Section> channels)
+        {
+            lock (_thisLock)
+            {
+                var sb = new StringBuilder();
+
+                foreach (var item in channels)
+                {
+                    sb.AppendLine(LairConverter.ToSectionString(item));
+                }
+
+                Clipboard.SetText(sb.ToString());
+            }
+        }
+
         public static IEnumerable<Channel> GetChannels()
         {
             lock (_thisLock)

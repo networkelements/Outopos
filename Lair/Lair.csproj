@@ -128,6 +128,9 @@
     <Compile Include="Windows\ControlSectionControl.xaml.cs">
       <DependentUpon>ControlSectionControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\LeaderEditWindow.xaml.cs">
+      <DependentUpon>LeaderEditWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\NewSectionWindow.xaml.cs">
       <DependentUpon>NewSectionWindow.xaml</DependentUpon>
     </Compile>
@@ -159,6 +162,10 @@
     <Page Include="Windows\ControlSectionControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\LeaderEditWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\NewSectionWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

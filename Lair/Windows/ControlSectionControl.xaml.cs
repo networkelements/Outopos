@@ -43,7 +43,7 @@ namespace Lair.Windows
 
             _treeView.ItemsSource = _treeViewItemCollection;
 
-            foreach (var item in Settings.Instance.ControlChannelControl_SectionCategories)
+            foreach (var item in Settings.Instance.ControlSectionControl_SectionCategories)
             {
                 _treeViewItemCollection.Add(new SectionTreeViewItem(item));
             }
@@ -51,7 +51,7 @@ namespace Lair.Windows
 
         private void Update()
         {
-            Settings.Instance.ControlChannelControl_SectionCategories = _treeViewItemCollection.Cast<SectionTreeViewItem>().Select(n => n.Value).ToLockedList();
+            Settings.Instance.ControlSectionControl_SectionCategories = _treeViewItemCollection.Cast<SectionTreeViewItem>().Select(n => n.Value).ToLockedList();
 
             var list = _treeViewItemCollection.OfType<SectionTreeViewItem>().ToList();
 
@@ -67,7 +67,7 @@ namespace Lair.Windows
 
                 return 0;
             });
-            
+
             for (int i = 0; i < list.Count; i++)
             {
                 var o = _treeViewItemCollection.IndexOf(list[i]);
@@ -81,34 +81,89 @@ namespace Lair.Windows
             }
         }
 
-        private void _treeViewNewMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _treeViewNewSectionMenuItem_Click(object sender, RoutedEventArgs e)
         {
             NewSectionWindow window = new NewSectionWindow();
             window.Owner = _mainWindow;
             window.ShowDialog();
 
-            _treeViewItemCollection.Add(new SectionTreeViewItem(new SectionCategory() { Section = window.Section, IsExpanded = true }));
-            this.Update();
+            if (window.DialogResult == true)
+            {
+                _treeViewItemCollection.Add(new SectionTreeViewItem(new SectionCategory() { Section = window.Section, IsExpanded = true }));
+                this.Update();
+            }
         }
 
         private void _treeViewPasteMenuItem_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                var sections = new HashSet<Section>(Clipboard.GetSections());
+                sections.ExceptWith(_treeViewItemCollection.Select(n => n.Value.Section));
 
+                if (sections.Count == 0) return;
+
+                foreach (var section in sections)
+                {
+                    _treeViewItemCollection.Add(new SectionTreeViewItem(new SectionCategory() { Section = section, IsExpanded = true }));
+                }
+
+                this.Update();
+            }
+            catch (Exception)
+            {
+
+            }
         }
 
-        private void _sectionTreeViewItemNewMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _sectionTreeViewItemLeaderMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var selectTreeViewItem = _treeView.SelectedItem as SectionTreeViewItem;
+            if (selectTreeViewItem == null) return;
+
+            List<DigitalSignature> digitalSignatures = new List<DigitalSignature>();
+
+            foreach (var digitalSignature in Settings.Instance.Global_DigitalSignatureCollection)
+            {
+                if (!selectTreeViewItem.Value.Leaders.Any(n => n.Certificate.ToString() == digitalSignature.ToString()))
+                {
+                    digitalSignatures.Add(digitalSignature);
+                }
+            }
+
+            LeaderEditWindow window = new LeaderEditWindow(selectTreeViewItem.Value.Section, null, null, null, digitalSignatures, _bufferManager);
+            window.Owner = _mainWindow;
+            window.ShowDialog();
+
+            if (window.DialogResult == true)
+            {
+                selectTreeViewItem.Value.Leaders.Add(window.Leader);
+
+                selectTreeViewItem.Update();
+                this.Update();
+            }
+        }
+
+        private void _sectionTreeViewItemManagerMenuItem_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void _sectionTreeViewItemEditMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _sectionTreeViewItemCreatorMenuItem_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
         private void _sectionTreeViewItemDeleteMenuItem_Click(object sender, RoutedEventArgs e)
         {
+            var selectTreeViewItem = _treeView.SelectedItem as SectionTreeViewItem;
+            if (selectTreeViewItem == null) return;
 
+            if (MessageBox.Show(_mainWindow, LanguagesManager.Instance.MainWindow_Delete_Message, "Library", MessageBoxButton.OKCancel, MessageBoxImage.Information) != MessageBoxResult.OK) return;
+
+            _treeViewItemCollection.Remove(selectTreeViewItem);
+
+            this.Update();
         }
 
         private void _sectionTreeViewItemCopyMenuItem_Click(object sender, RoutedEventArgs e)
@@ -123,12 +178,52 @@ namespace Lair.Windows
 
         private void _treeViewItemEditMenuItem_Click(object sender, RoutedEventArgs e)
         {
+            if (_treeView.SelectedItem is LeaderTreeViewItem)
+            {
+                var selectTreeViewItem = (LeaderTreeViewItem)_treeView.SelectedItem;
+                var sectionTreeViewItem = _treeView.GetLineage(selectTreeViewItem).OfType<SectionTreeViewItem>().First();
 
+                List<DigitalSignature> digitalSignatures = new List<DigitalSignature>();
+
+                foreach (var digitalSignature in Settings.Instance.Global_DigitalSignatureCollection)
+                {
+                    if (!sectionTreeViewItem.Value.Leaders.Any(n => n.Certificate.ToString() == digitalSignature.ToString())
+                        || selectTreeViewItem.Value.Certificate.ToString() == digitalSignature.ToString())
+                    {
+                        digitalSignatures.Add(digitalSignature);
+                    }
+                }
+
+                LeaderEditWindow window = new LeaderEditWindow(selectTreeViewItem.Value.Section, selectTreeViewItem.Value.ManagerSignatures, selectTreeViewItem.Value.Comment, selectTreeViewItem.Value.Certificate, digitalSignatures, _bufferManager);
+                window.Owner = _mainWindow;
+                window.ShowDialog();
+
+                if (window.DialogResult == true)
+                {
+                    sectionTreeViewItem.Value.Leaders.Remove(selectTreeViewItem.Value);
+                    sectionTreeViewItem.Value.Leaders.Add(window.Leader);
+
+                    selectTreeViewItem.Update();
+                }
+            }
+
+            this.Update();
         }
 
         private void _treeViewItemDeleteMenuItem_Click(object sender, RoutedEventArgs e)
         {
+            if (MessageBox.Show(_mainWindow, LanguagesManager.Instance.MainWindow_Delete_Message, "Library", MessageBoxButton.OKCancel, MessageBoxImage.Information) != MessageBoxResult.OK) return;
+            
+            if (_treeView.SelectedItem is LeaderTreeViewItem)
+            {
+                var selectTreeViewItem = (LeaderTreeViewItem)_treeView.SelectedItem;
+                var sectionTreeViewItem = _treeView.GetLineage(selectTreeViewItem).OfType<SectionTreeViewItem>().First();
 
+                sectionTreeViewItem.Value.Leaders.Remove(selectTreeViewItem.Value);
+                sectionTreeViewItem.Update();
+            }
+
+            this.Update();
         }
     }
 
@@ -215,21 +310,21 @@ namespace Lair.Windows
 
         public void Sort()
         {
-            var list = _listViewItemCollection.OfType<object>().ToList();
+            var list = _listViewItemCollection.OfType<dynamic>().ToList();
 
             Dictionary<Type, int> typeSortItems = new Dictionary<Type, int>();
-            typeSortItems[typeof(Leader)] = 0;
-            typeSortItems[typeof(Manager)] = 1;
-            typeSortItems[typeof(Creator)] = 2;
+            typeSortItems[typeof(LeaderTreeViewItem)] = 0;
+            typeSortItems[typeof(ManagerTreeViewItem)] = 1;
+            typeSortItems[typeof(CreatorTreeViewItem)] = 2;
 
-            list.Sort(delegate(object x, object y)
+            list.Sort(delegate(dynamic x, dynamic y)
             {
                 int tx = typeSortItems[x.GetType()];
                 int ty = typeSortItems[y.GetType()];
 
                 int c = tx.CompareTo(ty);
                 if (c != 0) return c;
-                c = ((ICertificate)x).Certificate.ToString().CompareTo(((ICertificate)y).Certificate.ToString());
+                c = ((ICertificate)x.Value).Certificate.ToString().CompareTo(((ICertificate)y.Value).Certificate.ToString());
                 if (c != 0) return c;
 
                 return 0;

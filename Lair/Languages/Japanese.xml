@@ -203,6 +203,11 @@
   <Translate Key="ChannelControl_ImportLockedMessages" Value="ロックされたメッセージのインポート" />
   <Translate Key="ChannelControl_ExportLockedMessages" Value="ロックされたメッセージのエクスポート" />
 
+  <Translate Key="NewChannelWindow_Title" Value="新しいチャンネル" />
+  <Translate Key="NewChannelWindow_Name" Value="チャンネル名" />
+  <Translate Key="NewChannelWindow_Ok" Value="Ok" />
+  <Translate Key="NewChannelWindow_Cancel" Value="キャンセル" />
+
   <Translate Key="ControlControl_Chart" Value="Chart" />
   <Translate Key="ControlControl_Section" Value="Section" />
   <Translate Key="ControlControl_Channel" Value="Channel" />
@@ -210,7 +215,8 @@
   <Translate Key="ControlSectionControl_Leader" Value="Leader" />
   <Translate Key="ControlSectionControl_Manager" Value="Manager" />
   <Translate Key="ControlSectionControl_Creator" Value="Creator" />
-  <Translate Key="ControlSectionControl_New" Value="New" />
+  <Translate Key="ControlSectionControl_NewSection" Value="New section" />
+  <Translate Key="ControlSectionControl_NewRole" Value="New role" />
   <Translate Key="ControlSectionControl_Edit" Value="Edit" />
   <Translate Key="ControlSectionControl_Delete" Value="Delete" />
   <Translate Key="ControlSectionControl_Cut" Value="Cut" />
@@ -235,6 +241,26 @@
   <Translate Key="ControlSectionControl_MarkAllMessagesRead_Message" Value="Do you want to mark all messages read?" />
   <Translate Key="ControlSectionControl_ImportLockedMessages" Value="Import locked messages" />
   <Translate Key="ControlSectionControl_ExportLockedMessages" Value="Export locked messages" />
+
+  <Translate Key="NewSectionWindow_Title" Value="New channel" />
+  <Translate Key="NewSectionWindow_Name" Value="Name" />
+  <Translate Key="NewSectionWindow_Ok" Value="Ok" />
+  <Translate Key="NewSectionWindow_Cancel" Value="Cancel" />
+
+  <Translate Key="LeaderEditWindow_Title" Value="Leader edit" />
+  <Translate Key="LeaderEditWindow_Managers" Value="Managers" />
+  <Translate Key="LeaderEditWindow_Comment" Value="Comment" />
+  <Translate Key="LeaderEditWindow_Signature" Value="Signature" />
+  <Translate Key="LeaderEditWindow_Up" Value="Up" />
+  <Translate Key="LeaderEditWindow_Down" Value="Down" />
+  <Translate Key="LeaderEditWindow_Add" Value="Add" />
+  <Translate Key="LeaderEditWindow_Edit" Value="Edit" />
+  <Translate Key="LeaderEditWindow_Delete" Value="Delete" />
+  <Translate Key="LeaderEditWindow_Ok" Value="Ok" />
+  <Translate Key="LeaderEditWindow_Cancel" Value="Cancel" />
+  <Translate Key="LeaderEditWindow_Cut" Value="Cut" />
+  <Translate Key="LeaderEditWindow_Copy" Value="Copy" />
+  <Translate Key="LeaderEditWindow_Paste" Value="Paste" />
 
   <Translate Key="ControlChannelControl_NewChannel" Value="New channel" />
   <Translate Key="ControlChannelControl_NewCategory" Value="New category" />
@@ -262,73 +288,5 @@
   <Translate Key="ControlChannelControl_MarkAllMessagesRead_Message" Value="Do you want to mark all messages read?" />
   <Translate Key="ControlChannelControl_ImportLockedMessages" Value="Import locked messages" />
   <Translate Key="ControlChannelControl_ExportLockedMessages" Value="Export locked messages" />
-
-  <Translate Key="SignWindow_Title" Value="フィルタ" />
-  <Translate Key="SignWindow_Signature" Value="サイン" />
-  <Translate Key="SignWindow_Ok" Value="Ok" />
-  <Translate Key="SignWindow_Cancel" Value="キャンセル" />
-
-  <Translate Key="MessageEditWindow_Title" Value="新しいメッセージ" />
-  <Translate Key="MessageEditWindow_Edit" Value="編集" />
-  <Translate Key="MessageEditWindow_Preview" Value="プレビュー" />
-  <Translate Key="MessageEditWindow_Signature" Value="サイン" />
-  <Translate Key="MessageEditWindow_Comment" Value="コメント" />
-  <Translate Key="MessageEditWindow_Ok" Value="Ok" />
-  <Translate Key="MessageEditWindow_Cancel" Value="キャンセル" />
-
-  <Translate Key="BoardEditWindow_Title" Value="チャンネルフィルタ編集" />
-  <Translate Key="BoardEditWindow_Name" Value="チャンネル名" />
-  <Translate Key="BoardEditWindow_Word" Value="単語" />
-  <Translate Key="BoardEditWindow_Regex" Value="正規表現" />
-  <Translate Key="BoardEditWindow_Signature" Value="サイン" />
-  <Translate Key="BoardEditWindow_CreationTimeRange" Value="作成日 範囲" />
-  <Translate Key="BoardEditWindow_Message" Value="メッセージ" />
-  <Translate Key="BoardEditWindow_Contains" Value="有効" />
-  <Translate Key="BoardEditWindow_IsIgnoreCase" Value="大文字小文字の違いを無視" />
-  <Translate Key="BoardEditWindow_Value" Value="値" />
-  <Translate Key="BoardEditWindow_Min" Value="最小" />
-  <Translate Key="BoardEditWindow_Max" Value="最大" />
-  <Translate Key="BoardEditWindow_Up" Value="上へ" />
-  <Translate Key="BoardEditWindow_Down" Value="下へ" />
-  <Translate Key="BoardEditWindow_Add" Value="追加" />
-  <Translate Key="BoardEditWindow_Edit" Value="編集" />
-  <Translate Key="BoardEditWindow_Delete" Value="削除" />
-  <Translate Key="BoardEditWindow_Ok" Value="Ok" />
-  <Translate Key="BoardEditWindow_Cancel" Value="キャンセル" />
-  <Translate Key="BoardEditWindow_Cut" Value="切り取り" />
-  <Translate Key="BoardEditWindow_Copy" Value="コピー" />
-  <Translate Key="BoardEditWindow_Paste" Value="貼り付け" />
-
-  <Translate Key="CategoryEditWindow_Title" Value="カテゴリフィルタ編集" />
-  <Translate Key="CategoryEditWindow_Name" Value="カテゴリ名" />
-  <Translate Key="CategoryEditWindow_Word" Value="単語" />
-  <Translate Key="CategoryEditWindow_Regex" Value="正規表現" />
-  <Translate Key="CategoryEditWindow_Signature" Value="サイン" />
-  <Translate Key="CategoryEditWindow_CreationTimeRange" Value="作成日 範囲" />
-  <Translate Key="CategoryEditWindow_Contains" Value="有効" />
-  <Translate Key="CategoryEditWindow_IsIgnoreCase" Value="大文字小文字の違いを無視" />
-  <Translate Key="CategoryEditWindow_Value" Value="値" />
-  <Translate Key="CategoryEditWindow_Min" Value="最小" />
-  <Translate Key="CategoryEditWindow_Max" Value="最大" />
-  <Translate Key="CategoryEditWindow_Up" Value="上へ" />
-  <Translate Key="CategoryEditWindow_Down" Value="下へ" />
-  <Translate Key="CategoryEditWindow_Add" Value="追加" />
-  <Translate Key="CategoryEditWindow_Edit" Value="編集" />
-  <Translate Key="CategoryEditWindow_Delete" Value="削除" />
-  <Translate Key="CategoryEditWindow_Ok" Value="Ok" />
-  <Translate Key="CategoryEditWindow_Cancel" Value="キャンセル" />
-  <Translate Key="CategoryEditWindow_Cut" Value="切り取り" />
-  <Translate Key="CategoryEditWindow_Copy" Value="コピー" />
-  <Translate Key="CategoryEditWindow_Paste" Value="貼り付け" />
-
-  <Translate Key="NewChannelWindow_Title" Value="新しいチャンネル" />
-  <Translate Key="NewChannelWindow_Name" Value="チャンネル名" />
-  <Translate Key="NewChannelWindow_Ok" Value="Ok" />
-  <Translate Key="NewChannelWindow_Cancel" Value="キャンセル" />
-
-  <Translate Key="NewSectionWindow_Title" Value="New channel" />
-  <Translate Key="NewSectionWindow_Name" Value="Name" />
-  <Translate Key="NewSectionWindow_Ok" Value="Ok" />
-  <Translate Key="NewSectionWindow_Cancel" Value="Cancel" />
 
 </Configuration>
