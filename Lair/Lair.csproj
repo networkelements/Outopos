@@ -128,11 +128,20 @@
     <Compile Include="Windows\ControlSectionControl.xaml.cs">
       <DependentUpon>ControlSectionControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\ManagerEditWindow.xaml.cs">
+      <DependentUpon>ManagerEditWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\CreatorEditWindow.xaml.cs">
+      <DependentUpon>CreatorEditWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\LeaderEditWindow.xaml.cs">
       <DependentUpon>LeaderEditWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\NewSectionWindow.xaml.cs">
       <DependentUpon>NewSectionWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\SignWindow.xaml.cs">
+      <DependentUpon>SignWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\VirtualizingStackPanelEx.cs" />
     <Page Include="Windows\ControlChannelControl.xaml">
@@ -163,6 +172,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\ManagerEditWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\CreatorEditWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Windows\LeaderEditWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -176,6 +193,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\MessageEditWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\SignWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

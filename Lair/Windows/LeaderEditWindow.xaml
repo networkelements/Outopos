@@ -36,7 +36,13 @@
 
     <Grid FocusManager.FocusedElement="{Binding ElementName=_commentTextBox}">
         <Label Content="{Binding Path=LeaderEditWindow_Signature, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="12,12,0,0" VerticalAlignment="Top" Width="120" VerticalContentAlignment="Center" />
-        <ComboBox Height="24" Margin="138,12,12,0" Name="_signatureComboBox" VerticalAlignment="Top" VerticalContentAlignment="Center" SelectionChanged="_signatureComboBox_SelectionChanged" />
+        <ComboBox Height="24" Margin="138,12,12,0" Name="_signatureComboBox" VerticalAlignment="Top" VerticalContentAlignment="Center" SelectionChanged="_signatureComboBox_SelectionChanged" >
+            <ComboBox.ContextMenu>
+                <ContextMenu Name="_signatureComboBoxContextMenu">
+                    <MenuItem Name="_signatureComboBoxCopyMenuItem" Header="{Binding Path=LeaderEditWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_signatureComboBoxCopyMenuItem_Click"/>
+                </ContextMenu>
+            </ComboBox.ContextMenu>
+        </ComboBox>
         <TabControl Name="_tabControl" Margin="0,42,0,41">
             <TabItem Header="{Binding Path=LeaderEditWindow_Managers, Source={StaticResource ResourcesInstance}}" Name="_managersTabItem">
                 <Grid Grid.Column="2" FocusManager.FocusedElement="{Binding ElementName=_signatureTextBox}" Visibility="{Binding ElementName=_signaturesTreeViewItem, Path=IsSelected, Converter={StaticResource _boolToVisibilityConverter}}">
@@ -45,9 +51,9 @@
                             <ContextMenu Name="_signatureListViewContextMenu">
                                 <MenuItem Name="_signatureListViewDeleteMenuItem" Header="{Binding Path=LeaderEditWindow_Delete, Source={StaticResource ResourcesInstance}}" Click="_signatureListViewDeleteMenuItem_Click" />
                                 <Separator />
-                                <MenuItem Name="_signatureListViewCutMenuItem" Header="{Binding Path=SearchItemEditWindow_Cut, Source={StaticResource ResourcesInstance}}" Click="_signatureListViewCutMenuItem_Click"/>
-                                <MenuItem Name="_signatureListViewCopyMenuItem" Header="{Binding Path=SearchItemEditWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_signatureListViewCopyMenuItem_Click"/>
-                                <MenuItem Name="_signatureListViewPasteMenuItem" Header="{Binding Path=SearchItemEditWindow_Paste, Source={StaticResource ResourcesInstance}}" Click="_signatureListViewPasteMenuItem_Click"/>
+                                <MenuItem Name="_signatureListViewCutMenuItem" Header="{Binding Path=LeaderEditWindow_Cut, Source={StaticResource ResourcesInstance}}" Click="_signatureListViewCutMenuItem_Click"/>
+                                <MenuItem Name="_signatureListViewCopyMenuItem" Header="{Binding Path=LeaderEditWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_signatureListViewCopyMenuItem_Click"/>
+                                <MenuItem Name="_signatureListViewPasteMenuItem" Header="{Binding Path=LeaderEditWindow_Paste, Source={StaticResource ResourcesInstance}}" Click="_signatureListViewPasteMenuItem_Click"/>
                             </ContextMenu>
                         </ListView.ContextMenu>
                         <ListView.View>
@@ -63,7 +69,7 @@
                     <TextBox Height="23" Margin="6,0,6,35" Name="_signatureTextBox" VerticalAlignment="Bottom" VerticalContentAlignment="Center" KeyDown="_signatureTextBox_KeyDown" />
                 </Grid>
             </TabItem>
-            <TabItem Header="{Binding Path=LeaderEditWindow_Comment, Source={StaticResource ResourcesInstance}}" Name="_previewTabItem">
+            <TabItem Header="{Binding Path=LeaderEditWindow_Comment, Source={StaticResource ResourcesInstance}}" Name="_commentTabItem">
                 <Grid>
                     <TextBox AcceptsReturn="True" HorizontalScrollBarVisibility="Disabled" Margin="6" Name="_commentTextBox" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" />
                 </Grid>

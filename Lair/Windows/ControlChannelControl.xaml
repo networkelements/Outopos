@@ -10,6 +10,31 @@
         d:DesignHeight="600" d:DesignWidth="800">
     
     <UserControl.Resources>
+        <ContextMenu x:Key="_filterRootTreeViewItemContextMenu" Name="_filterRootTreeViewItemContextMenu">
+            <MenuItem Name="_filterRootTreeViewItemNewCategoryMenuItem" Header="{Binding Path=ControlChannelControl_NewCategory, Source={StaticResource ResourcesInstance}}" Click="_filterRootTreeViewItemNewCategoryMenuItem_Click"/>
+            <MenuItem Name="_filterRootTreeViewItemEditMenuItem" Header="{Binding Path=ControlChannelControl_Edit, Source={StaticResource ResourcesInstance}}" Click="_filterRootTreeViewItemEditMenuItem_Click"/>
+            <MenuItem Name="_filterRootTreeViewItemDeleteMenuItem" Header="{Binding Path=ControlChannelControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_filterRootTreeViewItemDeleteMenuItem_Click"/>
+        </ContextMenu>
+        <ContextMenu x:Key="_filterCategoryTreeViewItemContextMenu" Name="_filterCategoryTreeViewItemContextMenu">
+            <MenuItem Name="_filterCategoryTreeViewItemNewChannelMenuItem" Header="{Binding Path=ControlChannelControl_NewChannel, Source={StaticResource ResourcesInstance}}" Click="_filterCategoryTreeViewItemNewChannelMenuItem_Click"/>
+            <Separator />
+            <MenuItem Name="_filterCategoryTreeViewItemNewCategoryMenuItem" Header="{Binding Path=ControlChannelControl_NewCategory, Source={StaticResource ResourcesInstance}}" Click="_filterCategoryTreeViewItemNewCategoryMenuItem_Click"/>
+            <MenuItem Name="_filterCategoryTreeViewItemEditMenuItem" Header="{Binding Path=ControlChannelControl_Edit, Source={StaticResource ResourcesInstance}}" Click="_filterCategoryTreeViewItemEditMenuItem_Click"/>
+            <MenuItem Name="_filterCategoryTreeViewItemDeleteMenuItem" Header="{Binding Path=ControlChannelControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_filterCategoryTreeViewItemDeleteMenuItem_Click"/>
+            <Separator />
+            <MenuItem Name="_filterCategoryTreeViewItemCutMenuItem" Header="{Binding Path=ControlChannelControl_Cut, Source={StaticResource ResourcesInstance}}" Click="_filterCategoryTreeViewItemCutMenuItem_Click" />
+            <MenuItem Name="_filterCategoryTreeViewItemCopyMenuItem" Header="{Binding Path=ControlChannelControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_filterCategoryTreeViewItemCopyMenuItem_Click" />
+            <MenuItem Name="_filterCategoryTreeViewItemPasteMenuItem" Header="{Binding Path=ControlChannelControl_Paste, Source={StaticResource ResourcesInstance}}" Click="_filterCategoryTreeViewItemPasteMenuItem_Click" />
+        </ContextMenu>
+        <ContextMenu x:Key="_filterChannelTreeViewItemContextMenu" Name="_filterChannelTreeViewItemContextMenu">
+            <MenuItem Name="_filterChannelTreeViewItemEditMenuItem" Header="{Binding Path=ControlChannelControl_Edit, Source={StaticResource ResourcesInstance}}" Click="_filterChannelTreeViewItemEditMenuItem_Click"/>
+            <MenuItem Name="_filterChannelTreeViewItemDeleteMenuItem" Header="{Binding Path=ControlChannelControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_filterChannelTreeViewItemDeleteMenuItem_Click"/>
+            <Separator />
+            <MenuItem Name="_filterChannelTreeViewItemCutMenuItem" Header="{Binding Path=ControlChannelControl_Cut, Source={StaticResource ResourcesInstance}}" Click="_filterChannelTreeViewItemCutMenuItem_Click" />
+            <MenuItem Name="_filterChannelTreeViewItemCopyMenuItem" Header="{Binding Path=ControlChannelControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_filterChannelTreeViewItemCopyMenuItem_Click" />
+            <MenuItem Name="_filterChannelTreeViewItemPasteMenuItem" Header="{Binding Path=ControlChannelControl_Paste, Source={StaticResource ResourcesInstance}}" Click="_filterChannelTreeViewItemPasteMenuItem_Click" />
+        </ContextMenu>
+        
         <Style x:Key="_headerStyle" TargetType="{x:Type GridViewColumnHeader}">
             <Setter Property="Visibility" Value="Collapsed"/>
         </Style>
@@ -181,7 +206,7 @@
 
         <DataTemplate x:Key="_myTemplate_ListView">
             <Grid>
-                <RichTextBox x:Name="_richTextBox" BorderBrush="{Binding Path=State, Mode=OneWay, Converter={StaticResource _messageExToBorderBrushConverter}}" local:RichTextBoxHelper.DocumentMessage="{Binding Path=Value, Mode=OneWay}" Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType=Grid}}" ContextMenuOpening="_richTextBox_ContextMenuOpening">
+                <RichTextBox x:Name="_richTextBox" local:RichTextBoxHelper.DocumentMessage="{Binding Path=Value, Mode=OneWay}" Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType=Grid}}" ContextMenuOpening="_richTextBox_ContextMenuOpening">
                     <RichTextBox.Style>
                         <Style TargetType="{x:Type RichTextBox}">
                             <Setter Property="FocusVisualStyle" Value="{x:Null}" />
@@ -250,51 +275,20 @@
         <TreeView Name="_treeView" ContextMenuOpening="_treeView_ContextMenuOpening" SelectedItemChanged="_treeView_SelectedItemChanged" PreviewMouseMove="_treeView_PreviewMouseMove" AllowDrop="True" PreviewDrop="_treeView_PreviewDrop" PreviewMouseLeftButtonDown="_treeView_PreviewMouseLeftButtonDown" PreviewDragOver="_treeView_PreviewDragOver"
                 VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" Grid.RowSpan="3">
             <TreeView.Resources>
-                <Style TargetType="{x:Type local:FilterRootTreeViewItem}">
-                    <Setter Property="ContextMenu">
-                        <Setter.Value>
-                            <ContextMenu Name="_filterRootTreeViewItemContextMenu">
-                                <MenuItem Name="_filterRootTreeViewItemNewMenuItem" Header="{Binding Path=CacheControl_New, Source={StaticResource ResourcesInstance}}" Click="_filterRootTreeViewItemNewMenuItem_Click"/>
-                                <MenuItem Name="_filterRootTreeViewItemEditMenuItem" Header="{Binding Path=CacheControl_Edit, Source={StaticResource ResourcesInstance}}" Click="_filterRootTreeViewItemEditMenuItem_Click"/>
-                                <MenuItem Name="_filterRootTreeViewItemDeleteMenuItem" Header="{Binding Path=CacheControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_filterRootTreeViewItemDeleteMenuItem_Click"/>
-                            </ContextMenu>
-                        </Setter.Value>
-                    </Setter>
+                <Style TargetType="{x:Type local:FilterRootTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
+                    <Setter Property="ContextMenu" Value="{StaticResource _filterRootTreeViewItemContextMenu}"/>
                 </Style>
-                <Style TargetType="{x:Type local:FilterCategoryTreeViewItem}">
-                    <Setter Property="ContextMenu">
-                        <Setter.Value>
-                            <ContextMenu Name="_filterCategoryTreeViewItemContextMenu">
-                                <MenuItem Name="_filterCategoryTreeViewItemNewMenuItem" Header="{Binding Path=CacheControl_New, Source={StaticResource ResourcesInstance}}" Click="_filterCategoryTreeViewItemNewMenuItem_Click"/>
-                                <MenuItem Name="_filterCategoryTreeViewItemEditMenuItem" Header="{Binding Path=CacheControl_Edit, Source={StaticResource ResourcesInstance}}" Click="_filterCategoryTreeViewItemEditMenuItem_Click"/>
-                                <MenuItem Name="_filterCategoryTreeViewItemDeleteMenuItem" Header="{Binding Path=CacheControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_filterCategoryTreeViewItemDeleteMenuItem_Click"/>
-                                <Separator />
-                                <MenuItem Name="_filterCategoryTreeViewItemCutMenuItem" Header="{Binding Path=CacheControl_Cut, Source={StaticResource ResourcesInstance}}" Click="_filterCategoryTreeViewItemCutMenuItem_Click" />
-                                <MenuItem Name="_filterCategoryTreeViewItemCopyMenuItem" Header="{Binding Path=CacheControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_filterCategoryTreeViewItemCopyMenuItem_Click" />
-                                <MenuItem Name="_filterCategoryTreeViewItemPasteMenuItem" Header="{Binding Path=CacheControl_Paste, Source={StaticResource ResourcesInstance}}" Click="_filterCategoryTreeViewItemPasteMenuItem_Click" />
-                            </ContextMenu>
-                        </Setter.Value>
-                    </Setter>
+                <Style TargetType="{x:Type local:FilterCategoryTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
+                    <Setter Property="ContextMenu" Value="{StaticResource _filterCategoryTreeViewItemContextMenu}"/>
                 </Style>
-                <Style TargetType="{x:Type local:FilterChannelTreeViewItem}">
-                    <Setter Property="ContextMenu">
-                        <Setter.Value>
-                            <ContextMenu Name="_filterChannelTreeViewItemContextMenu">
-                                <MenuItem Name="_filterChannelTreeViewItemEditMenuItem" Header="{Binding Path=CacheControl_Edit, Source={StaticResource ResourcesInstance}}" Click="_filterChannelTreeViewItemEditMenuItem_Click"/>
-                                <MenuItem Name="_filterChannelTreeViewItemDeleteMenuItem" Header="{Binding Path=CacheControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_filterChannelTreeViewItemDeleteMenuItem_Click"/>
-                                <Separator />
-                                <MenuItem Name="_filterChannelTreeViewItemCutMenuItem" Header="{Binding Path=CacheControl_Cut, Source={StaticResource ResourcesInstance}}" Click="_filterChannelTreeViewItemCutMenuItem_Click" />
-                                <MenuItem Name="_filterChannelTreeViewItemCopyMenuItem" Header="{Binding Path=CacheControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_filterChannelTreeViewItemCopyMenuItem_Click" />
-                                <MenuItem Name="_filterChannelTreeViewItemPasteMenuItem" Header="{Binding Path=CacheControl_Paste, Source={StaticResource ResourcesInstance}}" Click="_filterChannelTreeViewItemPasteMenuItem_Click" />
-                            </ContextMenu>
-                        </Setter.Value>
-                    </Setter>
+                <Style TargetType="{x:Type local:FilterChannelTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
+                    <Setter Property="ContextMenu" Value="{StaticResource _filterChannelTreeViewItemContextMenu}"/>
                 </Style>
             </TreeView.Resources>
 
             <TreeView.ContextMenu>
                 <ContextMenu Name="_treeViewContextMenu">
-                    <MenuItem Name="_treeViewNewMenuItem" Header="{Binding Path=ControlSectionControl_New, Source={StaticResource ResourcesInstance}}" Click="_treeViewNewMenuItem_Click"/>
+                    <MenuItem Name="_treeViewNewMenuItem" Header="{Binding Path=ControlChannelControl_New, Source={StaticResource ResourcesInstance}}" Click="_treeViewNewMenuItem_Click"/>
                 </ContextMenu>
             </TreeView.ContextMenu>
         </TreeView>

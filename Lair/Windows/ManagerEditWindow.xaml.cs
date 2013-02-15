@@ -20,32 +20,32 @@ using System.Collections.ObjectModel;
 namespace Lair.Windows
 {
     /// <summary>
-    /// LeaderEditWindow.xaml の相互作用ロジック
+    /// ManagerEditWindow.xaml の相互作用ロジック
     /// </summary>
-    partial class LeaderEditWindow : Window
+    partial class ManagerEditWindow : Window
     {
         private BufferManager _bufferManager;
 
-        private ObservableCollection<string> _signatureListViewItemCollection;
+        private ObservableCollection<string> _signatureListViewItemCollection = new ObservableCollection<string>();
 
-        private Leader _leader;
+        private Manager _leader;
 
         private Section _section;
-        private List<string> _managers = new List<string>();
+        private List<string> _creators = new List<string>();
         private string _comment;
         private Certificate _certificate;
         private List<DigitalSignature> _digitalSignatures = new List<DigitalSignature>();
 
-        public LeaderEditWindow(Section section, IEnumerable<string> managers, string comment, Certificate certificate, IEnumerable<DigitalSignature> digitalSignatures, BufferManager bufferManager)
+        public ManagerEditWindow(Section section, IEnumerable<string> creators, string comment, Certificate certificate, IEnumerable<DigitalSignature> digitalSignatures, BufferManager bufferManager)
         {
             _bufferManager = bufferManager;
             _section = section;
-            if (managers != null) _managers.AddRange(managers);
+            if (creators != null) _creators.AddRange(creators);
             _comment = comment;
             _certificate = certificate;
             _digitalSignatures.AddRange(digitalSignatures);
 
-            _signatureListViewItemCollection = new ObservableCollection<string>(_managers);
+            _signatureListViewItemCollection = new ObservableCollection<string>(_creators);
 
             var digitalSignatureCollection = new List<object>();
             digitalSignatureCollection.Add(new ComboBoxItem() { Content = "" });
@@ -78,11 +78,11 @@ namespace Lair.Windows
             _signatureComboBox_SelectionChanged(null, null);
 
             _signatureListView.ItemsSource = _signatureListViewItemCollection;
-          
+         
             _commentTextBox.Text = _comment;
         }
 
-        public Leader Leader
+        public Manager Manager
         {
             get
             {
@@ -101,7 +101,7 @@ namespace Lair.Windows
 
             Clipboard.SetText(selectComboBoxItem.Value.ToString());
         }
-        
+
         #region Signature
 
         private void _signatureTextBox_KeyDown(object sender, KeyEventArgs e)
@@ -298,7 +298,7 @@ namespace Lair.Windows
             var digitalSignatureComboBoxItem = _signatureComboBox.SelectedItem as DigitalSignatureComboBoxItem;
             DigitalSignature digitalSignature = digitalSignatureComboBoxItem == null ? null : digitalSignatureComboBoxItem.Value;
 
-            _leader = new Leader(_section, comment, new SignatureCollection(_signatureListViewItemCollection), digitalSignature);
+            _leader = new Manager(_section, comment, new SignatureCollection(_signatureListViewItemCollection), digitalSignature);
         }
 
         private void _cancelButton_Click(object sender, RoutedEventArgs e)

@@ -53,7 +53,7 @@ namespace Lair.Windows
         {
             Settings.Instance.ControlSectionControl_SectionCategories = _treeViewItemCollection.Cast<SectionTreeViewItem>().Select(n => n.Value).ToLockedList();
 
-            var list = _treeViewItemCollection.OfType<SectionTreeViewItem>().ToList();
+            var list = _treeViewItemCollection.ToList();
 
             list.Sort((SectionTreeViewItem x, SectionTreeViewItem y) =>
             {
@@ -75,7 +75,7 @@ namespace Lair.Windows
                 if (i != o) _treeViewItemCollection.Move(o, i);
             }
 
-            foreach (var item in _treeViewItemCollection.OfType<SectionTreeViewItem>())
+            foreach (var item in _treeViewItemCollection)
             {
                 item.Sort();
             }
@@ -92,6 +92,25 @@ namespace Lair.Windows
                 _treeViewItemCollection.Add(new SectionTreeViewItem(new SectionCategory() { Section = window.Section, IsExpanded = true }));
                 this.Update();
             }
+        }
+
+        private void _treeViewCopyMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetSections(_treeViewItemCollection.Select(n => n.Value.Section));
+        }
+
+        private void _treeViewCopyInfoMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var sb = new StringBuilder();
+
+            foreach (var section in _treeViewItemCollection.Select(n => n.Value.Section))
+            {
+                sb.AppendLine(LairConverter.ToSectionString(section));
+                sb.AppendLine(MessageConverter.ToInfoMessage(section));
+                sb.AppendLine();
+            }
+
+            Clipboard.SetText(sb.ToString().TrimEnd('\r', '\n'));
         }
 
         private void _treeViewPasteMenuItem_Click(object sender, RoutedEventArgs e)
@@ -146,12 +165,58 @@ namespace Lair.Windows
 
         private void _sectionTreeViewItemManagerMenuItem_Click(object sender, RoutedEventArgs e)
         {
+            var selectTreeViewItem = _treeView.SelectedItem as SectionTreeViewItem;
+            if (selectTreeViewItem == null) return;
 
+            List<DigitalSignature> digitalSignatures = new List<DigitalSignature>();
+
+            foreach (var digitalSignature in Settings.Instance.Global_DigitalSignatureCollection)
+            {
+                if (!selectTreeViewItem.Value.Managers.Any(n => n.Certificate.ToString() == digitalSignature.ToString()))
+                {
+                    digitalSignatures.Add(digitalSignature);
+                }
+            }
+
+            ManagerEditWindow window = new ManagerEditWindow(selectTreeViewItem.Value.Section, null, null, null, digitalSignatures, _bufferManager);
+            window.Owner = _mainWindow;
+            window.ShowDialog();
+
+            if (window.DialogResult == true)
+            {
+                selectTreeViewItem.Value.Managers.Add(window.Manager);
+
+                selectTreeViewItem.Update();
+                this.Update();
+            }
         }
 
         private void _sectionTreeViewItemCreatorMenuItem_Click(object sender, RoutedEventArgs e)
         {
+            var selectTreeViewItem = _treeView.SelectedItem as SectionTreeViewItem;
+            if (selectTreeViewItem == null) return;
 
+            List<DigitalSignature> digitalSignatures = new List<DigitalSignature>();
+
+            foreach (var digitalSignature in Settings.Instance.Global_DigitalSignatureCollection)
+            {
+                if (!selectTreeViewItem.Value.Creators.Any(n => n.Certificate.ToString() == digitalSignature.ToString()))
+                {
+                    digitalSignatures.Add(digitalSignature);
+                }
+            }
+
+            CreatorEditWindow window = new CreatorEditWindow(selectTreeViewItem.Value.Section, null, null, null, null, digitalSignatures, _bufferManager);
+            window.Owner = _mainWindow;
+            window.ShowDialog();
+
+            if (window.DialogResult == true)
+            {
+                selectTreeViewItem.Value.Creators.Add(window.Creator);
+
+                selectTreeViewItem.Update();
+                this.Update();
+            }
         }
 
         private void _sectionTreeViewItemDeleteMenuItem_Click(object sender, RoutedEventArgs e)
@@ -168,12 +233,23 @@ namespace Lair.Windows
 
         private void _sectionTreeViewItemCopyMenuItem_Click(object sender, RoutedEventArgs e)
         {
+            var selectTreeViewItem = _treeView.SelectedItem as SectionTreeViewItem;
+            if (selectTreeViewItem == null) return;
 
+            Clipboard.SetSections(new Section[] { selectTreeViewItem.Value.Section });
         }
 
         private void _sectionTreeViewItemCopyInfoMenuItem_Click(object sender, RoutedEventArgs e)
         {
+            var selectTreeViewItem = _treeView.SelectedItem as SectionTreeViewItem;
+            if (selectTreeViewItem == null) return;
 
+            var sb = new StringBuilder();
+            sb.AppendLine(LairConverter.ToSectionString(selectTreeViewItem.Value.Section));
+            sb.AppendLine(MessageConverter.ToInfoMessage(selectTreeViewItem.Value.Section));
+            sb.AppendLine();
+
+            Clipboard.SetText(sb.ToString().TrimEnd('\r', '\n'));
         }
 
         private void _treeViewItemEditMenuItem_Click(object sender, RoutedEventArgs e)
@@ -203,7 +279,63 @@ namespace Lair.Windows
                     sectionTreeViewItem.Value.Leaders.Remove(selectTreeViewItem.Value);
                     sectionTreeViewItem.Value.Leaders.Add(window.Leader);
 
-                    selectTreeViewItem.Update();
+                    sectionTreeViewItem.Update();
+                }
+            }
+            else if (_treeView.SelectedItem is ManagerTreeViewItem)
+            {
+                var selectTreeViewItem = (ManagerTreeViewItem)_treeView.SelectedItem;
+                var sectionTreeViewItem = _treeView.GetLineage(selectTreeViewItem).OfType<SectionTreeViewItem>().First();
+
+                List<DigitalSignature> digitalSignatures = new List<DigitalSignature>();
+
+                foreach (var digitalSignature in Settings.Instance.Global_DigitalSignatureCollection)
+                {
+                    if (!sectionTreeViewItem.Value.Managers.Any(n => n.Certificate.ToString() == digitalSignature.ToString())
+                        || selectTreeViewItem.Value.Certificate.ToString() == digitalSignature.ToString())
+                    {
+                        digitalSignatures.Add(digitalSignature);
+                    }
+                }
+
+                ManagerEditWindow window = new ManagerEditWindow(selectTreeViewItem.Value.Section, selectTreeViewItem.Value.CreatorSignatures, selectTreeViewItem.Value.Comment, selectTreeViewItem.Value.Certificate, digitalSignatures, _bufferManager);
+                window.Owner = _mainWindow;
+                window.ShowDialog();
+
+                if (window.DialogResult == true)
+                {
+                    sectionTreeViewItem.Value.Managers.Remove(selectTreeViewItem.Value);
+                    sectionTreeViewItem.Value.Managers.Add(window.Manager);
+
+                    sectionTreeViewItem.Update();
+                }
+            }
+            else if (_treeView.SelectedItem is CreatorTreeViewItem)
+            {
+                var selectTreeViewItem = (CreatorTreeViewItem)_treeView.SelectedItem;
+                var sectionTreeViewItem = _treeView.GetLineage(selectTreeViewItem).OfType<SectionTreeViewItem>().First();
+
+                List<DigitalSignature> digitalSignatures = new List<DigitalSignature>();
+
+                foreach (var digitalSignature in Settings.Instance.Global_DigitalSignatureCollection)
+                {
+                    if (!sectionTreeViewItem.Value.Creators.Any(n => n.Certificate.ToString() == digitalSignature.ToString())
+                        || selectTreeViewItem.Value.Certificate.ToString() == digitalSignature.ToString())
+                    {
+                        digitalSignatures.Add(digitalSignature);
+                    }
+                }
+
+                CreatorEditWindow window = new CreatorEditWindow(selectTreeViewItem.Value.Section, selectTreeViewItem.Value.Boards, selectTreeViewItem.Value.FilterSignatures, selectTreeViewItem.Value.Comment, selectTreeViewItem.Value.Certificate, digitalSignatures, _bufferManager);
+                window.Owner = _mainWindow;
+                window.ShowDialog();
+
+                if (window.DialogResult == true)
+                {
+                    sectionTreeViewItem.Value.Creators.Remove(selectTreeViewItem.Value);
+                    sectionTreeViewItem.Value.Creators.Add(window.Creator);
+
+                    sectionTreeViewItem.Update();
                 }
             }
 
@@ -213,7 +345,7 @@ namespace Lair.Windows
         private void _treeViewItemDeleteMenuItem_Click(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show(_mainWindow, LanguagesManager.Instance.MainWindow_Delete_Message, "Library", MessageBoxButton.OKCancel, MessageBoxImage.Information) != MessageBoxResult.OK) return;
-            
+
             if (_treeView.SelectedItem is LeaderTreeViewItem)
             {
                 var selectTreeViewItem = (LeaderTreeViewItem)_treeView.SelectedItem;

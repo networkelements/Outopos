@@ -887,11 +887,11 @@ namespace Lair.Windows
 
         }
 
-        private void _filterRootTreeViewItemNewMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _filterRootTreeViewItemNewCategoryMenuItem_Click(object sender, RoutedEventArgs e)
         {
 
         }
-
+        
         private void _filterRootTreeViewItemEditMenuItem_Click(object sender, RoutedEventArgs e)
         {
 
@@ -902,7 +902,12 @@ namespace Lair.Windows
 
         }
 
-        private void _filterCategoryTreeViewItemNewMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _filterCategoryTreeViewItemNewChannelMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void _filterCategoryTreeViewItemNewCategoryMenuItem_Click(object sender, RoutedEventArgs e)
         {
 
         }

@@ -1,0 +1,119 @@
+﻿<Window x:Class="Lair.Windows.CreatorEditWindow"
+        x:ClassModifier="internal"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:prop="clr-namespace:Lair.Properties"     
+        xmlns:local="clr-namespace:Lair.Windows" 
+        FontFamily="{Binding Path=FontFamily, Mode=OneWay, Source={StaticResource ResourcesInstance}, Converter={StaticResource _stringToFontFamilyConverter}}"
+        FontSize="{Binding Path=FontSize, Mode=OneWay, Source={StaticResource ResourcesInstance}, Converter={StaticResource _stringToDoubleConverter}}"
+        Background="{DynamicResource WindowBackgroundBrush}"
+        Title="{Binding Path=CreatorEditWindow_Title, Source={StaticResource ResourcesInstance}}"
+        Top="{Binding Path=CreatorEditWindow_Top, Mode=TwoWay, Source={x:Static prop:Settings.Instance}, Converter={StaticResource _topRelativeDoubleConverter}}"
+        Left="{Binding Path=CreatorEditWindow_Left, Mode=TwoWay, Source={x:Static prop:Settings.Instance}, Converter={StaticResource _leftRelativeDoubleConverter}}"
+        Height="447"
+        Width="716"
+        WindowState="{Binding Path=CreatorEditWindow_WindowState, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}">
+
+    <Window.Resources>
+        <DataTemplate x:Key="_myTemplate_Signature">
+            <TextBlock Text="{Binding Mode=OneWay}" />
+        </DataTemplate>
+    
+        <ContextMenu x:Key="_treeViewItemContextMenu" Name="_treeViewItemContextMenu">
+            <MenuItem Name="_treeViewItemDeleteMenuItem" Header="{Binding Path=CreatorEditWindow_Delete, Source={StaticResource ResourcesInstance}}" Click="_treeViewItemDeleteMenuItem_Click"/>
+            <Separator />
+            <MenuItem Name="_treeViewItemCopyMenuItem" Header="{Binding Path=CreatorEditWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_treeViewItemCopyMenuItem_Click"/>
+            <MenuItem Name="_treeViewItemCopyInfoMenuItem" Header="{Binding Path=CreatorEditWindow_CopyInfo, Source={StaticResource ResourcesInstance}}" Click="_treeViewItemCopyInfoMenuItem_Click"/>
+        </ContextMenu>
+    </Window.Resources>
+
+    <Window.CommandBindings>
+        <CommandBinding Command="Delete" Executed="Execute_Delete" />
+        <CommandBinding Command="Cut" Executed="Execute_Cut" />
+        <CommandBinding Command="Copy" Executed="Execute_Copy" />
+        <CommandBinding Command="Paste" Executed="Execute_Paste" />
+    </Window.CommandBindings>
+
+    <Window.InputBindings>
+        <KeyBinding Gesture="Delete" Command="Delete" />
+        <KeyBinding Gesture="CTRL+X" Command="Cut" />
+        <KeyBinding Gesture="CTRL+C" Command="Copy" />
+        <KeyBinding Gesture="CTRL+V" Command="Paste" />
+    </Window.InputBindings>
+
+    <Grid FocusManager.FocusedElement="{Binding ElementName=_commentTextBox}">
+        <Label Content="{Binding Path=CreatorEditWindow_Signature, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="12,12,0,0" VerticalAlignment="Top" Width="120" VerticalContentAlignment="Center" />
+        <ComboBox Height="24" Margin="138,12,12,0" Name="_signatureComboBox" VerticalAlignment="Top" VerticalContentAlignment="Center" SelectionChanged="_signatureComboBox_SelectionChanged" >
+            <ComboBox.ContextMenu>
+                <ContextMenu Name="_signatureComboBoxContextMenu">
+                    <MenuItem Name="_signatureComboBoxCopyMenuItem" Header="{Binding Path=LeaderEditWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_signatureComboBoxCopyMenuItem_Click"/>
+                </ContextMenu>
+            </ComboBox.ContextMenu>
+        </ComboBox>
+        <TabControl Name="_tabControl" Margin="0,42,0,41">
+            <TabItem Header="{Binding Path=CreatorEditWindow_Filters, Source={StaticResource ResourcesInstance}}" Name="_managersTabItem">
+                <Grid Grid.Column="2" FocusManager.FocusedElement="{Binding ElementName=_signatureTextBox}" Visibility="{Binding ElementName=_signaturesTreeViewItem, Path=IsSelected, Converter={StaticResource _boolToVisibilityConverter}}">
+                    <local:ListViewEx x:Name="_signatureListView" SelectionChanged="_signatureListView_SelectionChanged" PreviewMouseLeftButtonDown="_signatureListView_PreviewMouseLeftButtonDown" Margin="0,0,0,64" ContextMenuOpening="_signatureListView_ContextMenuOpening">
+                        <ListView.ContextMenu>
+                            <ContextMenu Name="_signatureListViewContextMenu">
+                                <MenuItem Name="_signatureListViewDeleteMenuItem" Header="{Binding Path=CreatorEditWindow_Delete, Source={StaticResource ResourcesInstance}}" Click="_signatureListViewDeleteMenuItem_Click" />
+                                <Separator />
+                                <MenuItem Name="_signatureListViewCutMenuItem" Header="{Binding Path=CreatorEditWindow_Cut, Source={StaticResource ResourcesInstance}}" Click="_signatureListViewCutMenuItem_Click"/>
+                                <MenuItem Name="_signatureListViewCopyMenuItem" Header="{Binding Path=CreatorEditWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_signatureListViewCopyMenuItem_Click"/>
+                                <MenuItem Name="_signatureListViewPasteMenuItem" Header="{Binding Path=CreatorEditWindow_Paste, Source={StaticResource ResourcesInstance}}" Click="_signatureListViewPasteMenuItem_Click"/>
+                            </ContextMenu>
+                        </ListView.ContextMenu>
+                        <ListView.View>
+                            <GridView AllowsColumnReorder="False">
+                                <GridViewColumn Header="{Binding Path=CreatorEditWindow_Value, Source={StaticResource ResourcesInstance}}" CellTemplate="{StaticResource _myTemplate_Signature}" Width="{Binding Path=CreatorEditWindow_Signature_GridViewColumn_Value_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
+                            </GridView>
+                        </ListView.View>
+                    </local:ListViewEx>
+                    <Button Name="_signatureUpButton" Height="23" Margin="0,0,249,6" VerticalAlignment="Bottom" Content="{Binding Path=CreatorEditWindow_Up, Source={StaticResource ResourcesInstance}}" Click="_signatureUpButton_Click" HorizontalAlignment="Right" Width="75" IsEnabled="False" />
+                    <Button Name="_signatureDownButton" Height="23" Margin="0,0,168,6" VerticalAlignment="Bottom" Content="{Binding Path=CreatorEditWindow_Down, Source={StaticResource ResourcesInstance}}" Click="_signatureDownButton_Click" HorizontalAlignment="Right" Width="75" IsEnabled="False" />
+                    <Button Name="_signatureAddButton" Height="23" Margin="0,0,87,6" VerticalAlignment="Bottom" Content="{Binding Path=CreatorEditWindow_Add, Source={StaticResource ResourcesInstance}}" Click="_signatureAddButton_Click" HorizontalAlignment="Right" Width="75" />
+                    <Button Name="_signatureDeleteButton" Height="23" Margin="0,0,6,6" VerticalAlignment="Bottom" Content="{Binding Path=CreatorEditWindow_Delete, Source={StaticResource ResourcesInstance}}" Click="_signatureDeleteButton_Click" HorizontalAlignment="Right" Width="75" />
+                    <TextBox Height="23" Margin="6,0,6,35" Name="_signatureTextBox" VerticalAlignment="Bottom" VerticalContentAlignment="Center" KeyDown="_signatureTextBox_KeyDown" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="{Binding Path=CreatorEditWindow_Channels, Source={StaticResource ResourcesInstance}}" Name="_channelsTabItem">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="{Binding Path=CreatorEditWindow_Grid_ColumnDefinitions_Width, Mode=TwoWay, Converter={StaticResource _doubleToGridLengthConverter}, Source={x:Static prop:Settings.Instance}}" />
+                        <ColumnDefinition Width="4" />
+                        <ColumnDefinition Width="3*" />
+                    </Grid.ColumnDefinitions>
+
+                    <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
+
+                    <TreeView Name="_treeView" ContextMenuOpening="_treeView_ContextMenuOpening" 
+                            VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
+                        <TreeView.Resources>
+                            <Style TargetType="{x:Type local:CreatorEditBoardTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
+                                <Setter Property="ContextMenu" Value="{StaticResource _treeViewItemContextMenu}"/>
+                            </Style>
+                        </TreeView.Resources>
+                        <TreeView.ContextMenu>
+                            <ContextMenu Name="_treeViewContextMenu">
+                                <MenuItem Name="_treeViewNewChannelMenuItem" Header="{Binding Path=CreatorEditWindow_NewChannel, Source={StaticResource ResourcesInstance}}" Click="_treeViewNewChannelMenuItem_Click"/>
+                                <Separator />
+                                <MenuItem Name="_treeViewCopyMenuItem" Header="{Binding Path=CreatorEditWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_treeViewCopyMenuItem_Click"/>
+                                <MenuItem Name="_treeViewCopyInfoMenuItem" Header="{Binding Path=CreatorEditWindow_CopyInfo, Source={StaticResource ResourcesInstance}}" Click="_treeViewCopyInfoMenuItem_Click"/>
+                                <MenuItem Name="_treeViewPasteMenuItem" Header="{Binding Path=CreatorEditWindow_Paste, Source={StaticResource ResourcesInstance}}" Click="_treeViewPasteMenuItem_Click"/>
+                            </ContextMenu>
+                        </TreeView.ContextMenu>
+                    </TreeView>
+
+                    <TextBox Name="_channelCommentTextBox" Grid.Column="2" Text="{Binding ElementName=_treeView, Path=SelectedItem.Comment, Mode=TwoWay}" AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="{Binding Path=CreatorEditWindow_Comment, Source={StaticResource ResourcesInstance}}" Name="_commentTabItem">
+                <Grid>
+                    <TextBox AcceptsTab="True" AcceptsReturn="True" HorizontalScrollBarVisibility="Disabled" Margin="6" Name="_commentTextBox" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" />
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <Button Content="{Binding Path=CreatorEditWindow_Ok, Source={StaticResource ResourcesInstance}}" Height="23" HorizontalAlignment="Right" Margin="0,0,93,12" Name="_okButton" VerticalAlignment="Bottom" Width="75" Click="_okButton_Click" IsDefault="True" />
+        <Button Content="{Binding Path=CreatorEditWindow_Cancel, Source={StaticResource ResourcesInstance}}" Height="23" HorizontalAlignment="Right" Margin="0,0,12,12" Name="_cancelButton" VerticalAlignment="Bottom" Width="75" Click="_cancelButton_Click" IsCancel="True" />
+    </Grid>
+</Window>

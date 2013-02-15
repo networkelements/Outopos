@@ -8,6 +8,11 @@
   <Translate Key="Languages_English" Value="英語" />
   <Translate Key="Languages_Japanese" Value="日本語" />
 
+  <Translate Key="SignWindow_Title" Value="フィルタ" />
+  <Translate Key="SignWindow_Signature" Value="サイン" />
+  <Translate Key="SignWindow_Ok" Value="Ok" />
+  <Translate Key="SignWindow_Cancel" Value="キャンセル" />
+
   <Translate Key="Seed_Name" Value="名前" />
   <Translate Key="Seed_Signature" Value="サイン" />
   <Translate Key="Seed_Length" Value="サイズ" />
@@ -15,13 +20,11 @@
   <Translate Key="Seed_CreationTime" Value="作成日" />
   <Translate Key="Seed_Comment" Value="コメント" />
 
-  <Translate Key="Box_Name" Value="名前" />
-  <Translate Key="Box_Signature" Value="サイン" />
-  <Translate Key="Box_CreationTime" Value="作成日" />
-  <Translate Key="Box_Comment" Value="コメント" />
-
   <Translate Key="Channel_Name" Value="名前" />
   <Translate Key="Channel_Id" Value="ID" />
+
+  <Translate Key="Section_Name" Value="Name" />
+  <Translate Key="Section_Id" Value="ID" />
 
   <Translate Key="Message_Channel" Value="チャンネル" />
   <Translate Key="Message_Signature" Value="サイン" />
@@ -216,7 +219,7 @@
   <Translate Key="ControlSectionControl_Manager" Value="Manager" />
   <Translate Key="ControlSectionControl_Creator" Value="Creator" />
   <Translate Key="ControlSectionControl_NewSection" Value="New section" />
-  <Translate Key="ControlSectionControl_NewRole" Value="New role" />
+  <Translate Key="ControlSectionControl_New" Value="New" />
   <Translate Key="ControlSectionControl_Edit" Value="Edit" />
   <Translate Key="ControlSectionControl_Delete" Value="Delete" />
   <Translate Key="ControlSectionControl_Cut" Value="Cut" />
@@ -251,6 +254,7 @@
   <Translate Key="LeaderEditWindow_Managers" Value="Managers" />
   <Translate Key="LeaderEditWindow_Comment" Value="Comment" />
   <Translate Key="LeaderEditWindow_Signature" Value="Signature" />
+  <Translate Key="LeaderEditWindow_Value" Value="Value" />
   <Translate Key="LeaderEditWindow_Up" Value="Up" />
   <Translate Key="LeaderEditWindow_Down" Value="Down" />
   <Translate Key="LeaderEditWindow_Add" Value="Add" />
@@ -262,6 +266,41 @@
   <Translate Key="LeaderEditWindow_Copy" Value="Copy" />
   <Translate Key="LeaderEditWindow_Paste" Value="Paste" />
 
+  <Translate Key="ManagerEditWindow_Title" Value="Manager edit" />
+  <Translate Key="ManagerEditWindow_Managers" Value="Managers" />
+  <Translate Key="ManagerEditWindow_Comment" Value="Comment" />
+  <Translate Key="ManagerEditWindow_Signature" Value="Signature" />
+  <Translate Key="ManagerEditWindow_Value" Value="Value" />
+  <Translate Key="ManagerEditWindow_Up" Value="Up" />
+  <Translate Key="ManagerEditWindow_Down" Value="Down" />
+  <Translate Key="ManagerEditWindow_Add" Value="Add" />
+  <Translate Key="ManagerEditWindow_Edit" Value="Edit" />
+  <Translate Key="ManagerEditWindow_Delete" Value="Delete" />
+  <Translate Key="ManagerEditWindow_Ok" Value="Ok" />
+  <Translate Key="ManagerEditWindow_Cancel" Value="Cancel" />
+  <Translate Key="ManagerEditWindow_Cut" Value="Cut" />
+  <Translate Key="ManagerEditWindow_Copy" Value="Copy" />
+  <Translate Key="ManagerEditWindow_Paste" Value="Paste" />
+
+  <Translate Key="CreatorEditWindow_Title" Value="Creator edit" />
+  <Translate Key="CreatorEditWindow_Filters" Value="Filters" />
+  <Translate Key="CreatorEditWindow_Channels" Value="Channels" />
+  <Translate Key="CreatorEditWindow_Comment" Value="Comment" />
+  <Translate Key="CreatorEditWindow_Signature" Value="Signature" />
+  <Translate Key="CreatorEditWindow_Value" Value="Value" />
+  <Translate Key="CreatorEditWindow_New" Value="New" />
+  <Translate Key="CreatorEditWindow_Up" Value="Up" />
+  <Translate Key="CreatorEditWindow_Down" Value="Down" />
+  <Translate Key="CreatorEditWindow_Add" Value="Add" />
+  <Translate Key="CreatorEditWindow_Edit" Value="Edit" />
+  <Translate Key="CreatorEditWindow_Delete" Value="Delete" />
+  <Translate Key="CreatorEditWindow_Ok" Value="Ok" />
+  <Translate Key="CreatorEditWindow_Cancel" Value="Cancel" />
+  <Translate Key="CreatorEditWindow_Cut" Value="Cut" />
+  <Translate Key="CreatorEditWindow_Copy" Value="Copy" />
+  <Translate Key="CreatorEditWindow_Paste" Value="Paste" />
+
+  <Translate Key="ControlChannelControl_New" Value="New" />
   <Translate Key="ControlChannelControl_NewChannel" Value="New channel" />
   <Translate Key="ControlChannelControl_NewCategory" Value="New category" />
   <Translate Key="ControlChannelControl_Edit" Value="Edit" />

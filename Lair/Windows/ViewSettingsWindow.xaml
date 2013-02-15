@@ -26,10 +26,12 @@
 
     <Window.CommandBindings>
         <CommandBinding Command="Delete" Executed="Execute_Delete" />
+        <CommandBinding Command="Copy" Executed="Execute_Copy" />
     </Window.CommandBindings>
 
     <Window.InputBindings>
         <KeyBinding Gesture="Delete" Command="Delete" />
+        <KeyBinding Gesture="CTRL+C" Command="Copy" />
     </Window.InputBindings>
 
     <Grid>
@@ -71,6 +73,8 @@
                     <ListView.ContextMenu>
                         <ContextMenu Name="_signatureListViewContextMenu">
                             <MenuItem Name="_signatureListViewDeleteMenuItem" Header="{Binding Path=ViewSettingsWindow_Delete, Source={StaticResource ResourcesInstance}}" Click="_signatureListViewDeleteMenuItem_Click" />
+                            <Separator />
+                            <MenuItem Name="_signatureListViewCopyMenuItem" Header="{Binding Path=ViewSettingsWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_signatureListViewCopyMenuItem_Click" />
                         </ContextMenu>
                     </ListView.ContextMenu>
                     <ListView.View>

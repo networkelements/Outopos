@@ -20,32 +20,35 @@ using System.Collections.ObjectModel;
 namespace Lair.Windows
 {
     /// <summary>
-    /// LeaderEditWindow.xaml の相互作用ロジック
+    /// CreatorEditWindow.xaml の相互作用ロジック
     /// </summary>
-    partial class LeaderEditWindow : Window
+    partial class CreatorEditWindow : Window
     {
         private BufferManager _bufferManager;
 
         private ObservableCollection<string> _signatureListViewItemCollection;
+        private ObservableCollection<CreatorEditBoardTreeViewItem> _treeViewItemCollection = new ObservableCollection<CreatorEditBoardTreeViewItem>();
 
-        private Leader _leader;
+        private Creator _creator;
 
         private Section _section;
-        private List<string> _managers = new List<string>();
+        private List<Board> _boards = new List<Board>();
+        private List<string> _filters = new List<string>();
         private string _comment;
         private Certificate _certificate;
         private List<DigitalSignature> _digitalSignatures = new List<DigitalSignature>();
 
-        public LeaderEditWindow(Section section, IEnumerable<string> managers, string comment, Certificate certificate, IEnumerable<DigitalSignature> digitalSignatures, BufferManager bufferManager)
+        public CreatorEditWindow(Section section, IEnumerable<Board> boards, IEnumerable<string> filters, string comment, Certificate certificate, IEnumerable<DigitalSignature> digitalSignatures, BufferManager bufferManager)
         {
             _bufferManager = bufferManager;
             _section = section;
-            if (managers != null) _managers.AddRange(managers);
+            if (boards != null) _boards.AddRange(boards);
+            if (filters != null) _filters.AddRange(filters);
             _comment = comment;
             _certificate = certificate;
             _digitalSignatures.AddRange(digitalSignatures);
 
-            _signatureListViewItemCollection = new ObservableCollection<string>(_managers);
+            _signatureListViewItemCollection = new ObservableCollection<string>(_filters);
 
             var digitalSignatureCollection = new List<object>();
             digitalSignatureCollection.Add(new ComboBoxItem() { Content = "" });
@@ -78,15 +81,41 @@ namespace Lair.Windows
             _signatureComboBox_SelectionChanged(null, null);
 
             _signatureListView.ItemsSource = _signatureListViewItemCollection;
-          
+            _treeView.ItemsSource = _treeViewItemCollection;
+
+            foreach (var item in _boards)
+            {
+                _treeViewItemCollection.Add(new CreatorEditBoardTreeViewItem(item.Channel, item.Content));
+            }
+
             _commentTextBox.Text = _comment;
         }
 
-        public Leader Leader
+        private void Update()
+        {
+            var list = _treeViewItemCollection.ToList();
+
+            list.Sort((CreatorEditBoardTreeViewItem x, CreatorEditBoardTreeViewItem y) =>
+            {
+                int c = MessageConverter.ToChannelString(x.Channel).CompareTo(MessageConverter.ToChannelString(y.Channel));
+                if (c != 0) return c;
+
+                return 0;
+            });
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                var o = _treeViewItemCollection.IndexOf(list[i]);
+
+                if (i != o) _treeViewItemCollection.Move(o, i);
+            }
+        }
+
+        public Creator Creator
         {
             get
             {
-                return _leader;
+                return _creator;
             }
         }
 
@@ -101,7 +130,7 @@ namespace Lair.Windows
 
             Clipboard.SetText(selectComboBoxItem.Value.ToString());
         }
-        
+
         #region Signature
 
         private void _signatureTextBox_KeyDown(object sender, KeyEventArgs e)
@@ -290,6 +319,104 @@ namespace Lair.Windows
 
         #endregion
 
+        #region Channel
+
+        private void _treeView_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            var channels = Clipboard.GetChannels();
+
+            _treeViewPasteMenuItem.IsEnabled = (channels.Count() > 0);
+        }
+
+        private void _treeViewNewChannelMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            NewChannelWindow window = new NewChannelWindow();
+            window.Owner = this;
+            window.ShowDialog();
+
+            if (window.DialogResult == true)
+            {
+                _treeViewItemCollection.Add(new CreatorEditBoardTreeViewItem(window.Channel, null));
+                this.Update();
+            }
+        }
+
+        private void _treeViewCopyMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetChannels(_treeViewItemCollection.Select(n => n.Channel));
+        }
+
+        private void _treeViewCopyInfoMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var sb = new StringBuilder();
+
+            foreach (var channel in _treeViewItemCollection.Select(n => n.Channel))
+            {
+                sb.AppendLine(LairConverter.ToChannelString(channel));
+                sb.AppendLine(MessageConverter.ToInfoMessage(channel));
+                sb.AppendLine();
+            }
+
+            Clipboard.SetText(sb.ToString().TrimEnd('\r', '\n'));
+        }
+
+        private void _treeViewPasteMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var channels = new HashSet<Channel>(Clipboard.GetChannels());
+                channels.ExceptWith(_treeViewItemCollection.Select(n => n.Channel));
+
+                if (channels.Count == 0) return;
+
+                foreach (var channel in channels)
+                {
+                    _treeViewItemCollection.Add(new CreatorEditBoardTreeViewItem(channel, null));
+                }
+
+                this.Update();
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private void _treeViewItemDeleteMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var selectTreeViewItem = _treeView.SelectedItem as CreatorEditBoardTreeViewItem;
+            if (selectTreeViewItem == null) return;
+
+            if (MessageBox.Show(this, LanguagesManager.Instance.MainWindow_Delete_Message, "Library", MessageBoxButton.OKCancel, MessageBoxImage.Information) != MessageBoxResult.OK) return;
+
+            _treeViewItemCollection.Remove(selectTreeViewItem);
+
+            this.Update();
+        }
+
+        private void _treeViewItemCopyMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var selectTreeViewItem = _treeView.SelectedItem as CreatorEditBoardTreeViewItem;
+            if (selectTreeViewItem == null) return;
+
+            Clipboard.SetChannels(new Channel[] { selectTreeViewItem.Channel });
+        }
+
+        private void _treeViewItemCopyInfoMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var selectTreeViewItem = _treeView.SelectedItem as CreatorEditBoardTreeViewItem;
+            if (selectTreeViewItem == null) return;
+
+            var sb = new StringBuilder();
+            sb.AppendLine(LairConverter.ToChannelString(selectTreeViewItem.Channel));
+            sb.AppendLine(MessageConverter.ToInfoMessage(selectTreeViewItem.Channel));
+            sb.AppendLine();
+
+            Clipboard.SetText(sb.ToString().TrimEnd('\r', '\n'));
+        }
+
+        #endregion
+
         private void _okButton_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = true;
@@ -298,7 +425,14 @@ namespace Lair.Windows
             var digitalSignatureComboBoxItem = _signatureComboBox.SelectedItem as DigitalSignatureComboBoxItem;
             DigitalSignature digitalSignature = digitalSignatureComboBoxItem == null ? null : digitalSignatureComboBoxItem.Value;
 
-            _leader = new Leader(_section, comment, new SignatureCollection(_signatureListViewItemCollection), digitalSignature);
+            var boards = new BoardCollection();
+
+            foreach (var item in _treeViewItemCollection)
+            {
+                boards.Add(new Board(item.Channel, item.Comment));
+            }
+
+            _creator = new Creator(_section, comment, boards, new SignatureCollection(_signatureListViewItemCollection), digitalSignature);
         }
 
         private void _cancelButton_Click(object sender, RoutedEventArgs e)
@@ -312,6 +446,10 @@ namespace Lair.Windows
             {
                 _signatureListViewDeleteMenuItem_Click(null, null);
             }
+            else if (_channelsTabItem.IsSelected)
+            {
+                _treeViewItemDeleteMenuItem_Click(null, null);
+            }
         }
 
         private void Execute_Copy(object sender, ExecutedRoutedEventArgs e)
@@ -319,6 +457,10 @@ namespace Lair.Windows
             if (_managersTabItem.IsSelected)
             {
                 _signatureListViewCopyMenuItem_Click(null, null);
+            }
+            else if (_channelsTabItem.IsSelected)
+            {
+                _treeViewItemCopyMenuItem_Click(null, null);
             }
         }
 
@@ -335,6 +477,66 @@ namespace Lair.Windows
             if (_managersTabItem.IsSelected)
             {
                 _signatureListViewPasteMenuItem_Click(null, null);
+            }
+            else if (_channelsTabItem.IsSelected)
+            {
+                _treeViewPasteMenuItem_Click(null, null);
+            }
+        }
+    }
+
+    class CreatorEditBoardTreeViewItem : TreeViewItem
+    {
+        private Channel _channel;
+        private string _comment;
+
+        public CreatorEditBoardTreeViewItem(Channel channel, string comment)
+            : base()
+        {
+            this.Channel = channel;
+            this.Comment = comment;
+
+            base.RequestBringIntoView += (object sender, RequestBringIntoViewEventArgs e) =>
+            {
+                e.Handled = true;
+            };
+        }
+
+        protected override void OnMouseDown(MouseButtonEventArgs e)
+        {
+            this.IsSelected = true;
+
+            e.Handled = true;
+        }
+
+        public void Update()
+        {
+            base.Header = MessageConverter.ToChannelString(this.Channel);
+        }
+
+        public Channel Channel
+        {
+            get
+            {
+                return _channel;
+            }
+            set
+            {
+                _channel = value;
+
+                this.Update();
+            }
+        }
+
+        public string Comment
+        {
+            get
+            {
+                return _comment;
+            }
+            set
+            {
+                _comment = value;
             }
         }
     }

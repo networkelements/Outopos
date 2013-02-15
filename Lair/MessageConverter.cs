@@ -70,6 +70,25 @@ namespace Lair
             }
         }
 
+        public static string ToInfoMessage(Section section)
+        {
+            try
+            {
+                StringBuilder builder = new StringBuilder();
+
+                if (!string.IsNullOrWhiteSpace(section.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Section_Name, section.Name));
+                if (section.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Section_Id, Convert.ToBase64String(section.Id)
+                    .Replace('+', '-').Replace('/', '_').TrimEnd('=')));
+
+                if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
+                else return null;
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException("ArgumentException", e);
+            }
+        }
+
         public static string ToInfoMessage(Channel channel)
         {
             try
@@ -78,7 +97,7 @@ namespace Lair
 
                 if (!string.IsNullOrWhiteSpace(channel.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Channel_Name, channel.Name));
                 if (channel.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Channel_Id, Convert.ToBase64String(channel.Id)
-                    .Replace('+', '-').Replace('/', '_').Substring(0, 64)));
+                    .Replace('+', '-').Replace('/', '_').TrimEnd('=')));
 
                 if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
                 else return null;

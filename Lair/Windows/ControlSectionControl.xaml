@@ -10,7 +10,7 @@
         d:DesignHeight="423" d:DesignWidth="522">
     <UserControl.Resources>
         <ContextMenu x:Key="_sectionTreeViewItemContextMenu" Name="_sectionTreeViewItemContextMenu">
-            <MenuItem Name="_sectionTreeViewItemNewRoleMenuItem" Header="{Binding Path=ControlSectionControl_NewRole, Source={StaticResource ResourcesInstance}}">
+            <MenuItem Name="_sectionTreeViewItemNewRoleMenuItem" Header="{Binding Path=ControlSectionControl_New, Source={StaticResource ResourcesInstance}}">
                 <MenuItem Name="_sectionTreeViewItemLeaderMenuItem" Header="{Binding Path=ControlSectionControl_Leader, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemLeaderMenuItem_Click"/>
                 <MenuItem Name="_sectionTreeViewItemManagerMenuItem" Header="{Binding Path=ControlSectionControl_Manager, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemManagerMenuItem_Click"/>
                 <MenuItem Name="_sectionTreeViewItemCreatorMenuItem" Header="{Binding Path=ControlSectionControl_Creator, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemCreatorMenuItem_Click"/>
@@ -48,6 +48,8 @@
                 <ContextMenu Name="_treeViewContextMenu">
                     <MenuItem Name="_treeViewNewSectionMenuItem" Header="{Binding Path=ControlSectionControl_NewSection, Source={StaticResource ResourcesInstance}}" Click="_treeViewNewSectionMenuItem_Click"/>
                     <Separator />
+                    <MenuItem Name="_treeViewCopyMenuItem" Header="{Binding Path=ControlSectionControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_treeViewCopyMenuItem_Click"/>
+                    <MenuItem Name="_treeViewCopyInfoMenuItem" Header="{Binding Path=ControlSectionControl_CopyInfo, Source={StaticResource ResourcesInstance}}" Click="_treeViewCopyInfoMenuItem_Click"/>
                     <MenuItem Name="_treeViewPasteMenuItem" Header="{Binding Path=ControlSectionControl_Paste, Source={StaticResource ResourcesInstance}}" Click="_treeViewPasteMenuItem_Click"/>
                 </ContextMenu>
             </TreeView.ContextMenu>

@@ -16,6 +16,7 @@ using Lair.Properties;
 using Library;
 using Library.Net.Lair;
 using Library.Security;
+using System.Collections.ObjectModel;
 
 namespace Lair.Windows
 {
@@ -25,13 +26,13 @@ namespace Lair.Windows
     partial class ViewSettingsWindow : Window
     {
         private BufferManager _bufferManager = new BufferManager();
-        private List<SignatureListViewItem> _signatureListViewItemCollection = new List<SignatureListViewItem>();
+        private ObservableCollection<SignatureListViewItem> _signatureListViewItemCollection;
         private List<string> _fontMessageFontFamilyComboBoxItemCollection = new List<string>();
 
         public ViewSettingsWindow(BufferManager bufferManager)
         {
             _bufferManager = bufferManager;
-            _signatureListViewItemCollection.AddRange(Settings.Instance.Global_DigitalSignatureCollection.Select(n => new SignatureListViewItem(n.DeepClone())));
+            _signatureListViewItemCollection = new ObservableCollection<SignatureListViewItem>(Settings.Instance.Global_DigitalSignatureCollection.Select(n => new SignatureListViewItem(n.DeepClone())));
             _fontMessageFontFamilyComboBoxItemCollection.AddRange(Fonts.SystemFontFamilies.Select(n => n.ToString()));
 
             InitializeComponent();
@@ -123,8 +124,6 @@ namespace Lair.Windows
 
                     }
                 }
-
-                _signatureListView.Items.Refresh();
             }
         }
 
@@ -140,6 +139,18 @@ namespace Lair.Windows
             _signatureDeleteButton_Click(null, null);
         }
 
+        private void _signatureListViewCopyMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var sb = new StringBuilder();
+
+            foreach (var item in _signatureListView.SelectedItems.OfType<SignatureListViewItem>())
+            {
+                sb.AppendLine(item.Value.ToString());
+            }
+
+            Clipboard.SetText(sb.ToString());
+        }
+        
         private void _signatureListViewUpdate()
         {
             _signatureListView_SelectionChanged(this, null);
@@ -218,8 +229,6 @@ namespace Lair.Windows
 
                         }
                     }
-
-                    _signatureListView.Items.Refresh();
                 }
             }
         }
@@ -274,9 +283,7 @@ namespace Lair.Windows
             var selectIndex = _signatureListView.SelectedIndex;
             if (selectIndex == -1) return;
 
-            _signatureListViewItemCollection.Remove(item);
-            _signatureListViewItemCollection.Insert(selectIndex - 1, item);
-            _signatureListView.Items.Refresh();
+            _signatureListViewItemCollection.Move(selectIndex, selectIndex - 1);
 
             _signatureListViewUpdate();
         }
@@ -288,10 +295,8 @@ namespace Lair.Windows
 
             var selectIndex = _signatureListView.SelectedIndex;
             if (selectIndex == -1) return;
-
-            _signatureListViewItemCollection.Remove(item);
-            _signatureListViewItemCollection.Insert(selectIndex + 1, item);
-            _signatureListView.Items.Refresh();
+            
+            _signatureListViewItemCollection.Move(selectIndex, selectIndex + 1);
 
             _signatureListViewUpdate();
         }
@@ -304,8 +309,10 @@ namespace Lair.Windows
             {
                 _signatureListViewItemCollection.Add(new SignatureListViewItem(new DigitalSignature(_signatureTextBox.Text, DigitalSignatureAlgorithm.Rsa2048_Sha512)));
 
+                _signatureTextBox.Text = "";
                 _signatureListView.SelectedIndex = _signatureListViewItemCollection.Count - 1;
-                _signatureListView.Items.Refresh();
+
+                _signatureListViewUpdate();
             }
             catch (Exception)
             {
@@ -315,13 +322,18 @@ namespace Lair.Windows
 
         private void _signatureDeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            var item = _signatureListView.SelectedItem as SignatureListViewItem;
-            if (item == null) return;
-
             int selectIndex = _signatureListView.SelectedIndex;
-            _signatureListViewItemCollection.Remove(item);
-            _signatureListView.Items.Refresh();
+            if (selectIndex == -1) return;
+
+            _signatureTextBox.Text = "";
+
+            foreach (var item in _signatureListView.SelectedItems.OfType<SignatureListViewItem>().ToArray())
+            {
+                _signatureListViewItemCollection.Remove(item);
+            }
+
             _signatureListView.SelectedIndex = selectIndex;
+            _signatureListViewUpdate();
         }
 
         #endregion
@@ -536,6 +548,11 @@ namespace Lair.Windows
             {
                 _signatureListViewDeleteMenuItem_Click(null, null);
             }
+        }
+
+        private void Execute_Copy(object sender, ExecutedRoutedEventArgs e)
+        {
+
         }
     }
 

@@ -284,51 +284,6 @@ namespace Lair.Properties
         }
 
 
-        public string Box_Name
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("Box_Name");
-                }
-            }
-        }
-
-        public string Box_Signature
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("Box_Signature");
-                }
-            }
-        }
-
-        public string Box_CreationTime
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("Box_CreationTime");
-                }
-            }
-        }
-
-        public string Box_Comment
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("Box_Comment");
-                }
-            }
-        }
-
-
         public string Channel_Name
         {
             get
@@ -347,6 +302,29 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("Channel_Id");
+                }
+            }
+        }
+
+
+        public string Section_Name
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("Section_Name");
+                }
+            }
+        }
+
+        public string Section_Id
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("Section_Id");
                 }
             }
         }
@@ -2355,13 +2333,13 @@ namespace Lair.Properties
             }
         }
 
-        public string ControlSectionControl_NewRole
+        public string ControlSectionControl_New
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ControlSectionControl_NewRole");
+                    return this.Translate("ControlSectionControl_New");
                 }
             }
         }
@@ -2720,6 +2698,17 @@ namespace Lair.Properties
             }
         }
 
+        public string LeaderEditWindow_Value
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("LeaderEditWindow_Value");
+                }
+            }
+        }
+
         public string LeaderEditWindow_Up
         {
             get
@@ -2830,6 +2819,371 @@ namespace Lair.Properties
             }
         }
 
+
+        public string ManagerEditWindow_Title
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ManagerEditWindow_Title");
+                }
+            }
+        }
+
+        public string ManagerEditWindow_Managers
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ManagerEditWindow_Managers");
+                }
+            }
+        }
+
+        public string ManagerEditWindow_Comment
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ManagerEditWindow_Comment");
+                }
+            }
+        }
+
+        public string ManagerEditWindow_Signature
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ManagerEditWindow_Signature");
+                }
+            }
+        }
+
+        public string ManagerEditWindow_Value
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ManagerEditWindow_Value");
+                }
+            }
+        }
+
+        public string ManagerEditWindow_Up
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ManagerEditWindow_Up");
+                }
+            }
+        }
+
+        public string ManagerEditWindow_Down
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ManagerEditWindow_Down");
+                }
+            }
+        }
+
+        public string ManagerEditWindow_Add
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ManagerEditWindow_Add");
+                }
+            }
+        }
+
+        public string ManagerEditWindow_Edit
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ManagerEditWindow_Edit");
+                }
+            }
+        }
+
+        public string ManagerEditWindow_Delete
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ManagerEditWindow_Delete");
+                }
+            }
+        }
+
+        public string ManagerEditWindow_Ok
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ManagerEditWindow_Ok");
+                }
+            }
+        }
+
+        public string ManagerEditWindow_Cancel
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ManagerEditWindow_Cancel");
+                }
+            }
+        }
+
+        public string ManagerEditWindow_Cut
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ManagerEditWindow_Cut");
+                }
+            }
+        }
+
+        public string ManagerEditWindow_Copy
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ManagerEditWindow_Copy");
+                }
+            }
+        }
+
+        public string ManagerEditWindow_Paste
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ManagerEditWindow_Paste");
+                }
+            }
+        }
+
+
+        public string CreatorEditWindow_Title
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("CreatorEditWindow_Title");
+                }
+            }
+        }
+
+        public string CreatorEditWindow_Filters
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("CreatorEditWindow_Filters");
+                }
+            }
+        }
+
+        public string CreatorEditWindow_Channels
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("CreatorEditWindow_Channels");
+                }
+            }
+        }
+
+        public string CreatorEditWindow_Comment
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("CreatorEditWindow_Comment");
+                }
+            }
+        }
+
+        public string CreatorEditWindow_Signature
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("CreatorEditWindow_Signature");
+                }
+            }
+        }
+
+        public string CreatorEditWindow_Value
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("CreatorEditWindow_Value");
+                }
+            }
+        }
+
+        public string CreatorEditWindow_New
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("CreatorEditWindow_New");
+                }
+            }
+        }
+
+        public string CreatorEditWindow_Up
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("CreatorEditWindow_Up");
+                }
+            }
+        }
+
+        public string CreatorEditWindow_Down
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("CreatorEditWindow_Down");
+                }
+            }
+        }
+
+        public string CreatorEditWindow_Add
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("CreatorEditWindow_Add");
+                }
+            }
+        }
+
+        public string CreatorEditWindow_Edit
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("CreatorEditWindow_Edit");
+                }
+            }
+        }
+
+        public string CreatorEditWindow_Delete
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("CreatorEditWindow_Delete");
+                }
+            }
+        }
+
+        public string CreatorEditWindow_Ok
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("CreatorEditWindow_Ok");
+                }
+            }
+        }
+
+        public string CreatorEditWindow_Cancel
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("CreatorEditWindow_Cancel");
+                }
+            }
+        }
+
+        public string CreatorEditWindow_Cut
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("CreatorEditWindow_Cut");
+                }
+            }
+        }
+
+        public string CreatorEditWindow_Copy
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("CreatorEditWindow_Copy");
+                }
+            }
+        }
+
+        public string CreatorEditWindow_Paste
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("CreatorEditWindow_Paste");
+                }
+            }
+        }
+
+
+        public string ControlChannelControl_New
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ControlChannelControl_New");
+                }
+            }
+        }
 
         public string ControlChannelControl_NewChannel
         {

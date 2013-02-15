@@ -123,7 +123,23 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<WindowState>() { Name = "LeaderEditWindow_WindowState", Value = WindowState.Normal },
                 new Library.Configuration.SettingsContext<double>() { Name = "LeaderEditWindow_Signature_GridViewColumn_Value_Width", Value = 400 },
 
+                new Library.Configuration.SettingsContext<double>() { Name = "ManagerEditWindow_Top", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "ManagerEditWindow_Left", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "ManagerEditWindow_Height", Value = 500 },
+                new Library.Configuration.SettingsContext<double>() { Name = "ManagerEditWindow_Width", Value = 700 },
+                new Library.Configuration.SettingsContext<WindowState>() { Name = "ManagerEditWindow_WindowState", Value = WindowState.Normal },
+                new Library.Configuration.SettingsContext<double>() { Name = "ManagerEditWindow_Signature_GridViewColumn_Value_Width", Value = 400 },
+
+                new Library.Configuration.SettingsContext<double>() { Name = "CreatorEditWindow_Top", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "CreatorEditWindow_Left", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "CreatorEditWindow_Height", Value = 500 },
+                new Library.Configuration.SettingsContext<double>() { Name = "CreatorEditWindow_Width", Value = 700 },
+                new Library.Configuration.SettingsContext<WindowState>() { Name = "CreatorEditWindow_WindowState", Value = WindowState.Normal },
+                new Library.Configuration.SettingsContext<double>() { Name = "CreatorEditWindow_Signature_GridViewColumn_Value_Width", Value = 400 },
+                new Library.Configuration.SettingsContext<double>() { Name = "CreatorEditWindow_Grid_ColumnDefinitions_Width", Value = 200 },
+
                 new Library.Configuration.SettingsContext<LockedList<FilterRoot>>() { Name = "ControlChannelControl_FilterRoots", Value = new LockedList<FilterRoot>() },
+                new Library.Configuration.SettingsContext<double>() { Name = "ControlChannelControl_Grid_ColumnDefinitions_Width", Value = 200 },
             })
         {
 
@@ -1809,6 +1825,255 @@ namespace Lair.Properties
         }
 
 
+        public double ManagerEditWindow_Top
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ManagerEditWindow_Top"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ManagerEditWindow_Top"] = value;
+                }
+            }
+        }
+
+        public double ManagerEditWindow_Left
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ManagerEditWindow_Left"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ManagerEditWindow_Left"] = value;
+                }
+            }
+        }
+
+        public double ManagerEditWindow_Height
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ManagerEditWindow_Height"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ManagerEditWindow_Height"] = value;
+                }
+            }
+        }
+
+        public double ManagerEditWindow_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ManagerEditWindow_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ManagerEditWindow_Width"] = value;
+                }
+            }
+        }
+
+        public WindowState ManagerEditWindow_WindowState
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (WindowState)this["ManagerEditWindow_WindowState"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ManagerEditWindow_WindowState"] = value;
+                }
+            }
+        }
+
+        public double ManagerEditWindow_Signature_GridViewColumn_Value_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ManagerEditWindow_Signature_GridViewColumn_Value_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ManagerEditWindow_Signature_GridViewColumn_Value_Width"] = value;
+                }
+            }
+        }
+
+
+        public double CreatorEditWindow_Top
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["CreatorEditWindow_Top"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["CreatorEditWindow_Top"] = value;
+                }
+            }
+        }
+
+        public double CreatorEditWindow_Left
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["CreatorEditWindow_Left"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["CreatorEditWindow_Left"] = value;
+                }
+            }
+        }
+
+        public double CreatorEditWindow_Height
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["CreatorEditWindow_Height"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["CreatorEditWindow_Height"] = value;
+                }
+            }
+        }
+
+        public double CreatorEditWindow_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["CreatorEditWindow_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["CreatorEditWindow_Width"] = value;
+                }
+            }
+        }
+
+        public WindowState CreatorEditWindow_WindowState
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (WindowState)this["CreatorEditWindow_WindowState"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["CreatorEditWindow_WindowState"] = value;
+                }
+            }
+        }
+
+        public double CreatorEditWindow_Signature_GridViewColumn_Value_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["CreatorEditWindow_Signature_GridViewColumn_Value_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["CreatorEditWindow_Signature_GridViewColumn_Value_Width"] = value;
+                }
+            }
+        }
+
+        public double CreatorEditWindow_Grid_ColumnDefinitions_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["CreatorEditWindow_Grid_ColumnDefinitions_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["CreatorEditWindow_Grid_ColumnDefinitions_Width"] = value;
+                }
+            }
+        }
+
+
         public LockedList<FilterRoot> ControlChannelControl_FilterRoots
         {
             get
@@ -1824,6 +2089,25 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     this["ControlChannelControl_FilterRoots"] = value;
+                }
+            }
+        }
+
+        public double ControlChannelControl_Grid_ColumnDefinitions_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ControlChannelControl_Grid_ColumnDefinitions_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ControlChannelControl_Grid_ColumnDefinitions_Width"] = value;
                 }
             }
         }
