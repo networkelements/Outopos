@@ -1,0 +1,67 @@
+﻿<UserControl x:Class="Lair.Windows.CreatorControl"
+        x:ClassModifier="internal"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:prop="clr-namespace:Lair.Properties"     
+        xmlns:local="clr-namespace:Lair.Windows" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        mc:Ignorable="d" 
+        d:DesignHeight="500" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <DataTemplate x:Key="_myTemplate_Signature">
+            <TextBlock Text="{Binding Mode=OneWay}" />
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <UserControl.CommandBindings>
+        <CommandBinding Command="Delete" Executed="Execute_Delete" />
+        <CommandBinding Command="Cut" Executed="Execute_Cut" />
+        <CommandBinding Command="Copy" Executed="Execute_Copy" />
+        <CommandBinding Command="Paste" Executed="Execute_Paste" />
+    </UserControl.CommandBindings>
+
+    <UserControl.InputBindings>
+        <KeyBinding Gesture="Delete" Command="Delete" />
+        <KeyBinding Gesture="CTRL+X" Command="Cut" />
+        <KeyBinding Gesture="CTRL+C" Command="Copy" />
+        <KeyBinding Gesture="CTRL+V" Command="Paste" />
+    </UserControl.InputBindings>
+
+    <Grid>
+        <TabControl Margin="0,0,0,41">
+            <TabItem Header="{Binding Path=CreatorControl_Channels, Source={StaticResource ResourcesInstance}}" Name="_channelsTabItem">
+                <Grid Grid.Column="2" FocusManager.FocusedElement="{Binding ElementName=_channelTextBox}">
+                    <local:ListViewEx x:Name="_channelListView" SelectionChanged="_channelListView_SelectionChanged" PreviewMouseLeftButtonDown="_channelListView_PreviewMouseLeftButtonDown" Margin="0,0,0,64" ContextMenuOpening="_channelListView_ContextMenuOpening">
+                        <ListView.ContextMenu>
+                            <ContextMenu Name="_channelListViewContextMenu">
+                                <MenuItem Name="_channelListViewDeleteMenuItem" Header="{Binding Path=CreatorControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_channelListViewDeleteMenuItem_Click" />
+                                <Separator />
+                                <MenuItem Name="_channelListViewCutMenuItem" Header="{Binding Path=CreatorControl_Cut, Source={StaticResource ResourcesInstance}}" Click="_channelListViewCutMenuItem_Click"/>
+                                <MenuItem Name="_channelListViewCopyMenuItem" Header="{Binding Path=CreatorControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_channelListViewCopyMenuItem_Click"/>
+                                <MenuItem Name="_channelListViewPasteMenuItem" Header="{Binding Path=CreatorControl_Paste, Source={StaticResource ResourcesInstance}}" Click="_channelListViewPasteMenuItem_Click"/>
+                            </ContextMenu>
+                        </ListView.ContextMenu>
+                        <ListView.View>
+                            <GridView AllowsColumnReorder="False">
+                                <GridViewColumn Header="{Binding Path=CreatorControl_Value, Source={StaticResource ResourcesInstance}}" CellTemplate="{StaticResource _myTemplate_Signature}" Width="{Binding Path=CreatorControl_Signature_GridViewColumn_Value_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
+                            </GridView>
+                        </ListView.View>
+                    </local:ListViewEx>
+                    <Button Name="_channelUpButton" Height="23" Margin="0,0,249,6" VerticalAlignment="Bottom" Content="{Binding Path=CreatorControl_Up, Source={StaticResource ResourcesInstance}}" Click="_channelUpButton_Click" HorizontalAlignment="Right" Width="75" IsEnabled="False" />
+                    <Button Name="_channelDownButton" Height="23" Margin="0,0,168,6" VerticalAlignment="Bottom" Content="{Binding Path=CreatorControl_Down, Source={StaticResource ResourcesInstance}}" Click="_channelDownButton_Click" HorizontalAlignment="Right" Width="75" IsEnabled="False" />
+                    <Button Name="_channelAddButton" Height="23" Margin="0,0,87,6" VerticalAlignment="Bottom" Content="{Binding Path=CreatorControl_Add, Source={StaticResource ResourcesInstance}}" Click="_channelAddButton_Click" HorizontalAlignment="Right" Width="75" />
+                    <Button Name="_channelDeleteButton" Height="23" Margin="0,0,6,6" VerticalAlignment="Bottom" Content="{Binding Path=CreatorControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_channelDeleteButton_Click" HorizontalAlignment="Right" Width="75" />
+                    <TextBox Height="23" Margin="6,0,6,35" Name="_channelTextBox" VerticalAlignment="Bottom" VerticalContentAlignment="Center" KeyDown="_channelTextBox_KeyDown" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="{Binding Path=CreatorControl_Comment, Source={StaticResource ResourcesInstance}}" Name="_commentTabItem">
+                <Grid>
+                    <TextBox AcceptsReturn="True" HorizontalScrollBarVisibility="Disabled" Margin="6" Name="_commentTextBox" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" />
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <Button Content="{Binding Path=CreatorControl_Upload, Source={StaticResource ResourcesInstance}}" Height="23" HorizontalAlignment="Right" Margin="0,0,12,12" Name="_uploadButton" VerticalAlignment="Bottom" Width="75" Click="_uploadButton_Click" />
+    </Grid>
+</UserControl>

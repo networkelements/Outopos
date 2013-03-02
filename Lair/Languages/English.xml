@@ -174,154 +174,87 @@
   <Translate Key="ConnectionControl_Copy" Value="Copy" />
   <Translate Key="ConnectionControl_Paste" Value="Paste" />
 
-  <Translate Key="ChannelControl_NewChannel" Value="New channel" />
-  <Translate Key="ChannelControl_NewCategory" Value="New category" />
-  <Translate Key="ChannelControl_Edit" Value="Edit" />
-  <Translate Key="ChannelControl_Delete" Value="Delete" />
-  <Translate Key="ChannelControl_Cut" Value="Cut" />
-  <Translate Key="ChannelControl_Copy" Value="Copy" />
-  <Translate Key="ChannelControl_CopyInfo" Value="Copy info" />
-  <Translate Key="ChannelControl_Paste" Value="Paste" />
-  <Translate Key="ChannelControl_Respons" Value="Respons" />
-  <Translate Key="ChannelControl_Lock" Value="Lock" />
-  <Translate Key="ChannelControl_LockThis" Value="Lock this" />
-  <Translate Key="ChannelControl_UnlockThis" Value="Unlock this" />
-  <Translate Key="ChannelControl_LockAll" Value="Lock all" />
-  <Translate Key="ChannelControl_UnlockAll" Value="Unlock all" />
-  <Translate Key="ChannelControl_Filter" Value="Filter" />
-  <Translate Key="ChannelControl_FilterWord" Value="Filter word" />
-  <Translate Key="ChannelControl_FilterSignature" Value="Filter signature" />
-  <Translate Key="ChannelControl_FilterMessage" Value="Filter message" />
-  <Translate Key="ChannelControl_SignatureFilter" Value="Sign" />
-  <Translate Key="ChannelControl_NewMessage" Value="New" />
-  <Translate Key="ChannelControl_OnlyUnread" Value="Only" />
-  <Translate Key="ChannelControl_AmoebaNotFound_Message" Value="Amoeba Not Found" />
-  <Translate Key="ChannelControl_MarkAllMessagesRead" Value="Mark all messages read" />
-  <Translate Key="ChannelControl_MarkAllMessagesRead_Message" Value="Do you want to mark all messages read?" />
-  <Translate Key="ChannelControl_ImportLockedMessages" Value="Import locked messages" />
-  <Translate Key="ChannelControl_ExportLockedMessages" Value="Export locked messages" />
-
-  <Translate Key="NewChannelWindow_Title" Value="New channel" />
-  <Translate Key="NewChannelWindow_Name" Value="Name" />
-  <Translate Key="NewChannelWindow_Ok" Value="Ok" />
-  <Translate Key="NewChannelWindow_Cancel" Value="Cancel" />
-
-  <Translate Key="ControlControl_Chart" Value="Chart" />
-  <Translate Key="ControlControl_Section" Value="Section" />
-  <Translate Key="ControlControl_Channel" Value="Channel" />
-
-  <Translate Key="ControlSectionControl_Leader" Value="Leader" />
-  <Translate Key="ControlSectionControl_Manager" Value="Manager" />
-  <Translate Key="ControlSectionControl_Creator" Value="Creator" />
-  <Translate Key="ControlSectionControl_NewSection" Value="New section" />
-  <Translate Key="ControlSectionControl_New" Value="New" />
-  <Translate Key="ControlSectionControl_Edit" Value="Edit" />
-  <Translate Key="ControlSectionControl_Delete" Value="Delete" />
-  <Translate Key="ControlSectionControl_Cut" Value="Cut" />
-  <Translate Key="ControlSectionControl_Copy" Value="Copy" />
-  <Translate Key="ControlSectionControl_CopyInfo" Value="Copy info" />
-  <Translate Key="ControlSectionControl_Paste" Value="Paste" />
-  <Translate Key="ControlSectionControl_Respons" Value="Respons" />
-  <Translate Key="ControlSectionControl_Lock" Value="Lock" />
-  <Translate Key="ControlSectionControl_LockThis" Value="Lock this" />
-  <Translate Key="ControlSectionControl_UnlockThis" Value="Unlock this" />
-  <Translate Key="ControlSectionControl_LockAll" Value="Lock all" />
-  <Translate Key="ControlSectionControl_UnlockAll" Value="Unlock all" />
-  <Translate Key="ControlSectionControl_Filter" Value="Filter" />
-  <Translate Key="ControlSectionControl_FilterWord" Value="Filter word" />
-  <Translate Key="ControlSectionControl_FilterSignature" Value="Filter signature" />
-  <Translate Key="ControlSectionControl_FilterMessage" Value="Filter message" />
-  <Translate Key="ControlSectionControl_SignatureFilter" Value="Sign" />
-  <Translate Key="ControlSectionControl_NewMessage" Value="New" />
-  <Translate Key="ControlSectionControl_OnlyUnread" Value="Only" />
-  <Translate Key="ControlSectionControl_AmoebaNotFound_Message" Value="Amoeba Not Found" />
-  <Translate Key="ControlSectionControl_MarkAllMessagesRead" Value="Mark all messages read" />
-  <Translate Key="ControlSectionControl_MarkAllMessagesRead_Message" Value="Do you want to mark all messages read?" />
-  <Translate Key="ControlSectionControl_ImportLockedMessages" Value="Import locked messages" />
-  <Translate Key="ControlSectionControl_ExportLockedMessages" Value="Export locked messages" />
+  <Translate Key="SectionControl_NewChannel" Value="New channel" />
+  <Translate Key="SectionControl_NewCategory" Value="New category" />
+  <Translate Key="SectionControl_Edit" Value="Edit" />
+  <Translate Key="SectionControl_Delete" Value="Delete" />
+  <Translate Key="SectionControl_Cut" Value="Cut" />
+  <Translate Key="SectionControl_Copy" Value="Copy" />
+  <Translate Key="SectionControl_CopyInfo" Value="Copy info" />
+  <Translate Key="SectionControl_Paste" Value="Paste" />
+  <Translate Key="SectionControl_Respons" Value="Respons" />
+  <Translate Key="SectionControl_Lock" Value="Lock" />
+  <Translate Key="SectionControl_LockThis" Value="Lock this" />
+  <Translate Key="SectionControl_UnlockThis" Value="Unlock this" />
+  <Translate Key="SectionControl_LockAll" Value="Lock all" />
+  <Translate Key="SectionControl_UnlockAll" Value="Unlock all" />
+  <Translate Key="SectionControl_Filter" Value="Filter" />
+  <Translate Key="SectionControl_FilterWord" Value="Filter word" />
+  <Translate Key="SectionControl_FilterSignature" Value="Filter signature" />
+  <Translate Key="SectionControl_FilterMessage" Value="Filter message" />
+  <Translate Key="SectionControl_SignatureFilter" Value="Sign" />
+  <Translate Key="SectionControl_NewMessage" Value="New" />
+  <Translate Key="SectionControl_OnlyUnread" Value="Only" />
+  <Translate Key="SectionControl_AmoebaNotFound_Message" Value="Amoeba Not Found" />
+  <Translate Key="SectionControl_MarkAllMessagesRead" Value="Mark all messages read" />
+  <Translate Key="SectionControl_MarkAllMessagesRead_Message" Value="Do you want to mark all messages read?" />
+  <Translate Key="SectionControl_ImportLockedMessages" Value="Import locked messages" />
+  <Translate Key="SectionControl_ExportLockedMessages" Value="Export locked messages" />
 
   <Translate Key="NewSectionWindow_Title" Value="New channel" />
   <Translate Key="NewSectionWindow_Name" Value="Name" />
   <Translate Key="NewSectionWindow_Ok" Value="Ok" />
   <Translate Key="NewSectionWindow_Cancel" Value="Cancel" />
 
-  <Translate Key="LeaderEditWindow_Title" Value="Leader edit" />
-  <Translate Key="LeaderEditWindow_Managers" Value="Managers" />
-  <Translate Key="LeaderEditWindow_Comment" Value="Comment" />
-  <Translate Key="LeaderEditWindow_Signature" Value="Signature" />
-  <Translate Key="LeaderEditWindow_Value" Value="Value" />
-  <Translate Key="LeaderEditWindow_Up" Value="Up" />
-  <Translate Key="LeaderEditWindow_Down" Value="Down" />
-  <Translate Key="LeaderEditWindow_Add" Value="Add" />
-  <Translate Key="LeaderEditWindow_Edit" Value="Edit" />
-  <Translate Key="LeaderEditWindow_Delete" Value="Delete" />
-  <Translate Key="LeaderEditWindow_Ok" Value="Ok" />
-  <Translate Key="LeaderEditWindow_Cancel" Value="Cancel" />
-  <Translate Key="LeaderEditWindow_Cut" Value="Cut" />
-  <Translate Key="LeaderEditWindow_Copy" Value="Copy" />
-  <Translate Key="LeaderEditWindow_Paste" Value="Paste" />
+  <Translate Key="NewChannelWindow_Title" Value="New channel" />
+  <Translate Key="NewChannelWindow_Name" Value="Name" />
+  <Translate Key="NewChannelWindow_Ok" Value="Ok" />
+  <Translate Key="NewChannelWindow_Cancel" Value="Cancel" />
 
-  <Translate Key="ManagerEditWindow_Title" Value="Manager edit" />
-  <Translate Key="ManagerEditWindow_Managers" Value="Managers" />
-  <Translate Key="ManagerEditWindow_Comment" Value="Comment" />
-  <Translate Key="ManagerEditWindow_Signature" Value="Signature" />
-  <Translate Key="ManagerEditWindow_Value" Value="Value" />
-  <Translate Key="ManagerEditWindow_Up" Value="Up" />
-  <Translate Key="ManagerEditWindow_Down" Value="Down" />
-  <Translate Key="ManagerEditWindow_Add" Value="Add" />
-  <Translate Key="ManagerEditWindow_Edit" Value="Edit" />
-  <Translate Key="ManagerEditWindow_Delete" Value="Delete" />
-  <Translate Key="ManagerEditWindow_Ok" Value="Ok" />
-  <Translate Key="ManagerEditWindow_Cancel" Value="Cancel" />
-  <Translate Key="ManagerEditWindow_Cut" Value="Cut" />
-  <Translate Key="ManagerEditWindow_Copy" Value="Copy" />
-  <Translate Key="ManagerEditWindow_Paste" Value="Paste" />
+  <Translate Key="SectionTreeItemEditWindow_Leader" Value="Leader" />
+  <Translate Key="SectionTreeItemEditWindow_Manager" Value="Manager" />
+  <Translate Key="SectionTreeItemEditWindow_Creator" Value="Creator" />
 
-  <Translate Key="CreatorEditWindow_Title" Value="Creator edit" />
-  <Translate Key="CreatorEditWindow_Filters" Value="Filters" />
-  <Translate Key="CreatorEditWindow_Channels" Value="Channels" />
-  <Translate Key="CreatorEditWindow_Comment" Value="Comment" />
-  <Translate Key="CreatorEditWindow_Signature" Value="Signature" />
-  <Translate Key="CreatorEditWindow_Value" Value="Value" />
-  <Translate Key="CreatorEditWindow_New" Value="New" />
-  <Translate Key="CreatorEditWindow_Up" Value="Up" />
-  <Translate Key="CreatorEditWindow_Down" Value="Down" />
-  <Translate Key="CreatorEditWindow_Add" Value="Add" />
-  <Translate Key="CreatorEditWindow_Edit" Value="Edit" />
-  <Translate Key="CreatorEditWindow_Delete" Value="Delete" />
-  <Translate Key="CreatorEditWindow_Ok" Value="Ok" />
-  <Translate Key="CreatorEditWindow_Cancel" Value="Cancel" />
-  <Translate Key="CreatorEditWindow_Cut" Value="Cut" />
-  <Translate Key="CreatorEditWindow_Copy" Value="Copy" />
-  <Translate Key="CreatorEditWindow_Paste" Value="Paste" />
+  <Translate Key="LeaderControl_Creators" Value="Creators" />
+  <Translate Key="LeaderControl_Managers" Value="Managers" />
+  <Translate Key="LeaderControl_Comment" Value="Comment" />
+  <Translate Key="LeaderControl_Value" Value="Value" />
+  <Translate Key="LeaderControl_Up" Value="Up" />
+  <Translate Key="LeaderControl_Down" Value="Down" />
+  <Translate Key="LeaderControl_Add" Value="Add" />
+  <Translate Key="LeaderControl_Edit" Value="Edit" />
+  <Translate Key="LeaderControl_Delete" Value="Delete" />
+  <Translate Key="LeaderControl_Upload" Value="Upload" />
+  <Translate Key="LeaderControl_Cut" Value="Cut" />
+  <Translate Key="LeaderControl_Copy" Value="Copy" />
+  <Translate Key="LeaderControl_Paste" Value="Paste" />
 
-  <Translate Key="ControlChannelControl_New" Value="New" />
-  <Translate Key="ControlChannelControl_NewChannel" Value="New channel" />
-  <Translate Key="ControlChannelControl_NewCategory" Value="New category" />
-  <Translate Key="ControlChannelControl_Edit" Value="Edit" />
-  <Translate Key="ControlChannelControl_Delete" Value="Delete" />
-  <Translate Key="ControlChannelControl_Cut" Value="Cut" />
-  <Translate Key="ControlChannelControl_Copy" Value="Copy" />
-  <Translate Key="ControlChannelControl_CopyInfo" Value="Copy info" />
-  <Translate Key="ControlChannelControl_Paste" Value="Paste" />
-  <Translate Key="ControlChannelControl_Respons" Value="Respons" />
-  <Translate Key="ControlChannelControl_Lock" Value="Lock" />
-  <Translate Key="ControlChannelControl_LockThis" Value="Lock this" />
-  <Translate Key="ControlChannelControl_UnlockThis" Value="Unlock this" />
-  <Translate Key="ControlChannelControl_LockAll" Value="Lock all" />
-  <Translate Key="ControlChannelControl_UnlockAll" Value="Unlock all" />
-  <Translate Key="ControlChannelControl_Filter" Value="Filter" />
-  <Translate Key="ControlChannelControl_FilterWord" Value="Filter word" />
-  <Translate Key="ControlChannelControl_FilterSignature" Value="Filter signature" />
-  <Translate Key="ControlChannelControl_FilterMessage" Value="Filter message" />
-  <Translate Key="ControlChannelControl_SignatureFilter" Value="Sign" />
-  <Translate Key="ControlChannelControl_NewMessage" Value="New" />
-  <Translate Key="ControlChannelControl_OnlyUnread" Value="Only" />
-  <Translate Key="ControlChannelControl_AmoebaNotFound_Message" Value="Amoeba Not Found" />
-  <Translate Key="ControlChannelControl_MarkAllMessagesRead" Value="Mark all messages read" />
-  <Translate Key="ControlChannelControl_MarkAllMessagesRead_Message" Value="Do you want to mark all messages read?" />
-  <Translate Key="ControlChannelControl_ImportLockedMessages" Value="Import locked messages" />
-  <Translate Key="ControlChannelControl_ExportLockedMessages" Value="Export locked messages" />
+  <Translate Key="CreatorControl_Channels" Value="Channels" />
+  <Translate Key="CreatorControl_Comment" Value="Comment" />
+  <Translate Key="CreatorControl_Value" Value="Value" />
+  <Translate Key="CreatorControl_New" Value="New" />
+  <Translate Key="CreatorControl_Up" Value="Up" />
+  <Translate Key="CreatorControl_Down" Value="Down" />
+  <Translate Key="CreatorControl_Add" Value="Add" />
+  <Translate Key="CreatorControl_Edit" Value="Edit" />
+  <Translate Key="CreatorControl_Delete" Value="Delete" />
+  <Translate Key="CreatorControl_Upload" Value="Upload" />
+  <Translate Key="CreatorControl_Cut" Value="Cut" />
+  <Translate Key="CreatorControl_Copy" Value="Copy" />
+  <Translate Key="CreatorControl_Paste" Value="Paste" />
+
+  <Translate Key="ManagerControl_Trusts" Value="Trusts" />
+  <Translate Key="ManagerControl_Comment" Value="Comment" />
+  <Translate Key="ManagerControl_Value" Value="Value" />
+  <Translate Key="ManagerControl_Up" Value="Up" />
+  <Translate Key="ManagerControl_Down" Value="Down" />
+  <Translate Key="ManagerControl_Add" Value="Add" />
+  <Translate Key="ManagerControl_Edit" Value="Edit" />
+  <Translate Key="ManagerControl_Delete" Value="Delete" />
+  <Translate Key="ManagerControl_Upload" Value="Upload" />
+  <Translate Key="ManagerControl_Cut" Value="Cut" />
+  <Translate Key="ManagerControl_Copy" Value="Copy" />
+  <Translate Key="ManagerControl_Paste" Value="Paste" />
 
   <Translate Key="SignWindow_Title" Value="Filter" />
   <Translate Key="SignWindow_Signature" Value="Signature" />

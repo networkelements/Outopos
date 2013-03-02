@@ -40,9 +40,7 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<string>() { Name = "Global_Amoeba_Path", Value = "" },
                 new Library.Configuration.SettingsContext<string>() { Name = "Global_Fonts_MessageFontFamily", Value = "MS PGothic" },
                 new Library.Configuration.SettingsContext<double>() { Name = "Global_Fonts_MessageFontSize", Value = 12 },
-                new Library.Configuration.SettingsContext<LockedHashSet<Leader>>() { Name = "Global_Leaders", Value = new LockedHashSet<Leader>() },
-                new Library.Configuration.SettingsContext<LockedHashSet<Manager>>() { Name = "Global_Managers", Value = new LockedHashSet<Manager>() },
-                new Library.Configuration.SettingsContext<LockedHashSet<Creator>>() { Name = "Global_Creators", Value = new LockedHashSet<Creator>() },
+                new Library.Configuration.SettingsContext<LockedDictionary<Channel, LockedHashSet<Message>>>() { Name = "Global_LockMessages", Value = new LockedDictionary<Channel,LockedHashSet<Message>>() },
 
                 new Library.Configuration.SettingsContext<double>() { Name = "MainWindow_Top", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "MainWindow_Left", Value = 120 },
@@ -64,12 +62,6 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsSettingsWindow_Server_ListenUris_GridViewColumn_Uri_Width", Value = 400 },
                 new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsSettingsWindow_Grid_ColumnDefinitions_Width", Value = 160 },
           
-                new Library.Configuration.SettingsContext<double>() { Name = "ChannelListWindow_Top", Value = 120 },
-                new Library.Configuration.SettingsContext<double>() { Name = "ChannelListWindow_Left", Value = 120 },
-                new Library.Configuration.SettingsContext<double>() { Name = "ChannelListWindow_Height", Value = 500 },
-                new Library.Configuration.SettingsContext<double>() { Name = "ChannelListWindow_Width", Value = 700 },
-                new Library.Configuration.SettingsContext<WindowState>() { Name = "ChannelListWindow_WindowState", Value = WindowState.Normal },
-
                 new Library.Configuration.SettingsContext<double>() { Name = "ViewSettingsWindow_Top", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "ViewSettingsWindow_Left", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "ViewSettingsWindow_Height", Value = 500 },
@@ -96,8 +88,20 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<double>() { Name = "ConnectionControl_GridViewColumn_Name_Width", Value = -1 },
                 new Library.Configuration.SettingsContext<double>() { Name = "ConnectionControl_GridViewColumn_Value_Width", Value = 100 },
 
-                new Library.Configuration.SettingsContext<double>() { Name = "ChannelControl_Grid_ColumnDefinitions_Width", Value = 200 },
+                new Library.Configuration.SettingsContext<LockedList<SectionTreeItem>>() { Name = "SectionControl_SectionTreeItems", Value = new LockedList<SectionTreeItem>() },
+                new Library.Configuration.SettingsContext<double>() { Name = "SectionControl_Grid_ColumnDefinitions_Width", Value = 200 },
               
+                new Library.Configuration.SettingsContext<double>() { Name = "ChannelListWindow_Top", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "ChannelListWindow_Left", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "ChannelListWindow_Height", Value = 500 },
+                new Library.Configuration.SettingsContext<double>() { Name = "ChannelListWindow_Width", Value = 700 },
+                new Library.Configuration.SettingsContext<WindowState>() { Name = "ChannelListWindow_WindowState", Value = WindowState.Normal },
+
+                new Library.Configuration.SettingsContext<double>() { Name = "NewSectionWindow_Top", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "NewSectionWindow_Left", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "NewSectionWindow_Width", Value = 700 },
+                new Library.Configuration.SettingsContext<WindowState>() { Name = "NewSectionWindow_WindowState", Value = WindowState.Normal },
+          
                 new Library.Configuration.SettingsContext<double>() { Name = "NewChannelWindow_Top", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "NewChannelWindow_Left", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "NewChannelWindow_Width", Value = 700 },
@@ -109,19 +113,12 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<double>() { Name = "MessageEditWindow_Width", Value = 700 },
                 new Library.Configuration.SettingsContext<WindowState>() { Name = "MessageEditWindow_WindowState", Value = WindowState.Normal },
                             
-                new Library.Configuration.SettingsContext<LockedList<SectionCategory>>() { Name = "ControlSectionControl_SectionCategories", Value = new LockedList<SectionCategory>() },
-                
-                new Library.Configuration.SettingsContext<double>() { Name = "NewSectionWindow_Top", Value = 120 },
-                new Library.Configuration.SettingsContext<double>() { Name = "NewSectionWindow_Left", Value = 120 },
-                new Library.Configuration.SettingsContext<double>() { Name = "NewSectionWindow_Width", Value = 700 },
-                new Library.Configuration.SettingsContext<WindowState>() { Name = "NewSectionWindow_WindowState", Value = WindowState.Normal },
-          
-                new Library.Configuration.SettingsContext<double>() { Name = "LeaderEditWindow_Top", Value = 120 },
-                new Library.Configuration.SettingsContext<double>() { Name = "LeaderEditWindow_Left", Value = 120 },
-                new Library.Configuration.SettingsContext<double>() { Name = "LeaderEditWindow_Height", Value = 500 },
-                new Library.Configuration.SettingsContext<double>() { Name = "LeaderEditWindow_Width", Value = 700 },
-                new Library.Configuration.SettingsContext<WindowState>() { Name = "LeaderEditWindow_WindowState", Value = WindowState.Normal },
-                new Library.Configuration.SettingsContext<double>() { Name = "LeaderEditWindow_Signature_GridViewColumn_Value_Width", Value = 400 },
+                new Library.Configuration.SettingsContext<double>() { Name = "LeaderControl_Top", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "LeaderControl_Left", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "LeaderControl_Height", Value = 500 },
+                new Library.Configuration.SettingsContext<double>() { Name = "LeaderControl_Width", Value = 700 },
+                new Library.Configuration.SettingsContext<WindowState>() { Name = "LeaderControl_WindowState", Value = WindowState.Normal },
+                new Library.Configuration.SettingsContext<double>() { Name = "LeaderControl_Signature_GridViewColumn_Value_Width", Value = 400 },
 
                 new Library.Configuration.SettingsContext<double>() { Name = "ManagerEditWindow_Top", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "ManagerEditWindow_Left", Value = 120 },
@@ -137,9 +134,6 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<WindowState>() { Name = "CreatorEditWindow_WindowState", Value = WindowState.Normal },
                 new Library.Configuration.SettingsContext<double>() { Name = "CreatorEditWindow_Signature_GridViewColumn_Value_Width", Value = 400 },
                 new Library.Configuration.SettingsContext<double>() { Name = "CreatorEditWindow_Grid_ColumnDefinitions_Width", Value = 200 },
-
-                new Library.Configuration.SettingsContext<LockedList<FilterRoot>>() { Name = "ControlChannelControl_FilterRoots", Value = new LockedList<FilterRoot>() },
-                new Library.Configuration.SettingsContext<double>() { Name = "ControlChannelControl_Grid_ColumnDefinitions_Width", Value = 200 },
             })
         {
 
@@ -482,13 +476,13 @@ namespace Lair.Properties
             }
         }
 
-        public LockedHashSet<Leader> Global_Leaders
+        public LockedDictionary<Channel, LockedHashSet<Message>> Global_LockMessages
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (LockedHashSet<Leader>)this["Global_Leaders"];
+                   return (LockedDictionary<Channel, LockedHashSet<Message>>)this["Global_LockMessages"];
                 }
             }
 
@@ -496,45 +490,7 @@ namespace Lair.Properties
             {
                 lock (this.ThisLock)
                 {
-                    this["Global_Leaders"] = value;
-                }
-            }
-        }
-
-        public LockedHashSet<Manager> Global_Managers
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (LockedHashSet<Manager>)this["Global_Managers"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["Global_Managers"] = value;
-                }
-            }
-        }
-
-        public LockedHashSet<Creator> Global_Creators
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (LockedHashSet<Creator>)this["Global_Creators"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["Global_Creators"] = value;
+                    this["Global_LockMessages"] = value;
                 }
             }
         }
@@ -879,102 +835,6 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     this["ConnectionsSettingsWindow_Grid_ColumnDefinitions_Width"] = value;
-                }
-            }
-        }
-
-
-        public double ChannelListWindow_Top
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["ChannelListWindow_Top"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["ChannelListWindow_Top"] = value;
-                }
-            }
-        }
-
-        public double ChannelListWindow_Left
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["ChannelListWindow_Left"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["ChannelListWindow_Left"] = value;
-                }
-            }
-        }
-
-        public double ChannelListWindow_Height
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["ChannelListWindow_Height"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["ChannelListWindow_Height"] = value;
-                }
-            }
-        }
-
-        public double ChannelListWindow_Width
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["ChannelListWindow_Width"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["ChannelListWindow_Width"] = value;
-                }
-            }
-        }
-
-        public WindowState ChannelListWindow_WindowState
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (WindowState)this["ChannelListWindow_WindowState"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["ChannelListWindow_WindowState"] = value;
                 }
             }
         }
@@ -1420,13 +1280,13 @@ namespace Lair.Properties
         }
 
 
-        public double ChannelControl_Grid_ColumnDefinitions_Width
+        public LockedList<SectionTreeItem> SectionControl_SectionTreeItems
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ChannelControl_Grid_ColumnDefinitions_Width"];
+                   return (LockedList<SectionTreeItem>)this["SectionControl_SectionTreeItems"];
                 }
             }
 
@@ -1434,7 +1294,199 @@ namespace Lair.Properties
             {
                 lock (this.ThisLock)
                 {
-                    this["ChannelControl_Grid_ColumnDefinitions_Width"] = value;
+                    this["SectionControl_SectionTreeItems"] = value;
+                }
+            }
+        }
+
+        public double SectionControl_Grid_ColumnDefinitions_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SectionControl_Grid_ColumnDefinitions_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SectionControl_Grid_ColumnDefinitions_Width"] = value;
+                }
+            }
+        }
+
+
+        public double ChannelListWindow_Top
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChannelListWindow_Top"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChannelListWindow_Top"] = value;
+                }
+            }
+        }
+
+        public double ChannelListWindow_Left
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChannelListWindow_Left"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChannelListWindow_Left"] = value;
+                }
+            }
+        }
+
+        public double ChannelListWindow_Height
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChannelListWindow_Height"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChannelListWindow_Height"] = value;
+                }
+            }
+        }
+
+        public double ChannelListWindow_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChannelListWindow_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChannelListWindow_Width"] = value;
+                }
+            }
+        }
+
+        public WindowState ChannelListWindow_WindowState
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (WindowState)this["ChannelListWindow_WindowState"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChannelListWindow_WindowState"] = value;
+                }
+            }
+        }
+
+
+        public double NewSectionWindow_Top
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["NewSectionWindow_Top"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["NewSectionWindow_Top"] = value;
+                }
+            }
+        }
+
+        public double NewSectionWindow_Left
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["NewSectionWindow_Left"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["NewSectionWindow_Left"] = value;
+                }
+            }
+        }
+
+        public double NewSectionWindow_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["NewSectionWindow_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["NewSectionWindow_Width"] = value;
+                }
+            }
+        }
+
+        public WindowState NewSectionWindow_WindowState
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (WindowState)this["NewSectionWindow_WindowState"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["NewSectionWindow_WindowState"] = value;
                 }
             }
         }
@@ -1613,13 +1665,13 @@ namespace Lair.Properties
         }
 
 
-        public LockedList<SectionCategory> ControlSectionControl_SectionCategories
+        public double LeaderControl_Top
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (LockedList<SectionCategory>)this["ControlSectionControl_SectionCategories"];
+                   return (double)this["LeaderControl_Top"];
                 }
             }
 
@@ -1627,19 +1679,18 @@ namespace Lair.Properties
             {
                 lock (this.ThisLock)
                 {
-                    this["ControlSectionControl_SectionCategories"] = value;
+                    this["LeaderControl_Top"] = value;
                 }
             }
         }
 
-
-        public double NewSectionWindow_Top
+        public double LeaderControl_Left
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["NewSectionWindow_Top"];
+                   return (double)this["LeaderControl_Left"];
                 }
             }
 
@@ -1647,18 +1698,18 @@ namespace Lair.Properties
             {
                 lock (this.ThisLock)
                 {
-                    this["NewSectionWindow_Top"] = value;
+                    this["LeaderControl_Left"] = value;
                 }
             }
         }
 
-        public double NewSectionWindow_Left
+        public double LeaderControl_Height
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["NewSectionWindow_Left"];
+                   return (double)this["LeaderControl_Height"];
                 }
             }
 
@@ -1666,18 +1717,18 @@ namespace Lair.Properties
             {
                 lock (this.ThisLock)
                 {
-                    this["NewSectionWindow_Left"] = value;
+                    this["LeaderControl_Height"] = value;
                 }
             }
         }
 
-        public double NewSectionWindow_Width
+        public double LeaderControl_Width
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["NewSectionWindow_Width"];
+                   return (double)this["LeaderControl_Width"];
                 }
             }
 
@@ -1685,18 +1736,18 @@ namespace Lair.Properties
             {
                 lock (this.ThisLock)
                 {
-                    this["NewSectionWindow_Width"] = value;
+                    this["LeaderControl_Width"] = value;
                 }
             }
         }
 
-        public WindowState NewSectionWindow_WindowState
+        public WindowState LeaderControl_WindowState
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (WindowState)this["NewSectionWindow_WindowState"];
+                   return (WindowState)this["LeaderControl_WindowState"];
                 }
             }
 
@@ -1704,19 +1755,18 @@ namespace Lair.Properties
             {
                 lock (this.ThisLock)
                 {
-                    this["NewSectionWindow_WindowState"] = value;
+                    this["LeaderControl_WindowState"] = value;
                 }
             }
         }
 
-
-        public double LeaderEditWindow_Top
+        public double LeaderControl_Signature_GridViewColumn_Value_Width
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["LeaderEditWindow_Top"];
+                   return (double)this["LeaderControl_Signature_GridViewColumn_Value_Width"];
                 }
             }
 
@@ -1724,102 +1774,7 @@ namespace Lair.Properties
             {
                 lock (this.ThisLock)
                 {
-                    this["LeaderEditWindow_Top"] = value;
-                }
-            }
-        }
-
-        public double LeaderEditWindow_Left
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["LeaderEditWindow_Left"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["LeaderEditWindow_Left"] = value;
-                }
-            }
-        }
-
-        public double LeaderEditWindow_Height
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["LeaderEditWindow_Height"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["LeaderEditWindow_Height"] = value;
-                }
-            }
-        }
-
-        public double LeaderEditWindow_Width
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["LeaderEditWindow_Width"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["LeaderEditWindow_Width"] = value;
-                }
-            }
-        }
-
-        public WindowState LeaderEditWindow_WindowState
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (WindowState)this["LeaderEditWindow_WindowState"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["LeaderEditWindow_WindowState"] = value;
-                }
-            }
-        }
-
-        public double LeaderEditWindow_Signature_GridViewColumn_Value_Width
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["LeaderEditWindow_Signature_GridViewColumn_Value_Width"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["LeaderEditWindow_Signature_GridViewColumn_Value_Width"] = value;
+                    this["LeaderControl_Signature_GridViewColumn_Value_Width"] = value;
                 }
             }
         }
@@ -2069,45 +2024,6 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     this["CreatorEditWindow_Grid_ColumnDefinitions_Width"] = value;
-                }
-            }
-        }
-
-
-        public LockedList<FilterRoot> ControlChannelControl_FilterRoots
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (LockedList<FilterRoot>)this["ControlChannelControl_FilterRoots"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["ControlChannelControl_FilterRoots"] = value;
-                }
-            }
-        }
-
-        public double ControlChannelControl_Grid_ColumnDefinitions_Width
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["ControlChannelControl_Grid_ColumnDefinitions_Width"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["ControlChannelControl_Grid_ColumnDefinitions_Width"] = value;
                 }
             }
         }

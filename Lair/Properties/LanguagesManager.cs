@@ -1923,687 +1923,288 @@ namespace Lair.Properties
         }
 
 
-        public string ChannelControl_NewChannel
+        public string SectionControl_NewChannel
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_NewChannel");
+                    return this.Translate("SectionControl_NewChannel");
                 }
             }
         }
 
-        public string ChannelControl_NewCategory
+        public string SectionControl_NewCategory
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_NewCategory");
+                    return this.Translate("SectionControl_NewCategory");
                 }
             }
         }
 
-        public string ChannelControl_Edit
+        public string SectionControl_Edit
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_Edit");
+                    return this.Translate("SectionControl_Edit");
                 }
             }
         }
 
-        public string ChannelControl_Delete
+        public string SectionControl_Delete
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_Delete");
+                    return this.Translate("SectionControl_Delete");
                 }
             }
         }
 
-        public string ChannelControl_Cut
+        public string SectionControl_Cut
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_Cut");
+                    return this.Translate("SectionControl_Cut");
                 }
             }
         }
 
-        public string ChannelControl_Copy
+        public string SectionControl_Copy
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_Copy");
+                    return this.Translate("SectionControl_Copy");
                 }
             }
         }
 
-        public string ChannelControl_CopyInfo
+        public string SectionControl_CopyInfo
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_CopyInfo");
+                    return this.Translate("SectionControl_CopyInfo");
                 }
             }
         }
 
-        public string ChannelControl_Paste
+        public string SectionControl_Paste
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_Paste");
+                    return this.Translate("SectionControl_Paste");
                 }
             }
         }
 
-        public string ChannelControl_Respons
+        public string SectionControl_Respons
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_Respons");
+                    return this.Translate("SectionControl_Respons");
                 }
             }
         }
 
-        public string ChannelControl_Lock
+        public string SectionControl_Lock
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_Lock");
+                    return this.Translate("SectionControl_Lock");
                 }
             }
         }
 
-        public string ChannelControl_LockThis
+        public string SectionControl_LockThis
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_LockThis");
+                    return this.Translate("SectionControl_LockThis");
                 }
             }
         }
 
-        public string ChannelControl_UnlockThis
+        public string SectionControl_UnlockThis
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_UnlockThis");
+                    return this.Translate("SectionControl_UnlockThis");
                 }
             }
         }
 
-        public string ChannelControl_LockAll
+        public string SectionControl_LockAll
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_LockAll");
+                    return this.Translate("SectionControl_LockAll");
                 }
             }
         }
 
-        public string ChannelControl_UnlockAll
+        public string SectionControl_UnlockAll
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_UnlockAll");
+                    return this.Translate("SectionControl_UnlockAll");
                 }
             }
         }
 
-        public string ChannelControl_Filter
+        public string SectionControl_Filter
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_Filter");
+                    return this.Translate("SectionControl_Filter");
                 }
             }
         }
 
-        public string ChannelControl_FilterWord
+        public string SectionControl_FilterWord
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_FilterWord");
+                    return this.Translate("SectionControl_FilterWord");
                 }
             }
         }
 
-        public string ChannelControl_FilterSignature
+        public string SectionControl_FilterSignature
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_FilterSignature");
+                    return this.Translate("SectionControl_FilterSignature");
                 }
             }
         }
 
-        public string ChannelControl_FilterMessage
+        public string SectionControl_FilterMessage
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_FilterMessage");
+                    return this.Translate("SectionControl_FilterMessage");
                 }
             }
         }
 
-        public string ChannelControl_SignatureFilter
+        public string SectionControl_SignatureFilter
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_SignatureFilter");
+                    return this.Translate("SectionControl_SignatureFilter");
                 }
             }
         }
 
-        public string ChannelControl_NewMessage
+        public string SectionControl_NewMessage
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_NewMessage");
+                    return this.Translate("SectionControl_NewMessage");
                 }
             }
         }
 
-        public string ChannelControl_OnlyUnread
+        public string SectionControl_OnlyUnread
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_OnlyUnread");
+                    return this.Translate("SectionControl_OnlyUnread");
                 }
             }
         }
 
-        public string ChannelControl_AmoebaNotFound_Message
+        public string SectionControl_AmoebaNotFound_Message
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_AmoebaNotFound_Message");
+                    return this.Translate("SectionControl_AmoebaNotFound_Message");
                 }
             }
         }
 
-        public string ChannelControl_MarkAllMessagesRead
+        public string SectionControl_MarkAllMessagesRead
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_MarkAllMessagesRead");
+                    return this.Translate("SectionControl_MarkAllMessagesRead");
                 }
             }
         }
 
-        public string ChannelControl_MarkAllMessagesRead_Message
+        public string SectionControl_MarkAllMessagesRead_Message
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_MarkAllMessagesRead_Message");
+                    return this.Translate("SectionControl_MarkAllMessagesRead_Message");
                 }
             }
         }
 
-        public string ChannelControl_ImportLockedMessages
+        public string SectionControl_ImportLockedMessages
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_ImportLockedMessages");
+                    return this.Translate("SectionControl_ImportLockedMessages");
                 }
             }
         }
 
-        public string ChannelControl_ExportLockedMessages
+        public string SectionControl_ExportLockedMessages
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_ExportLockedMessages");
-                }
-            }
-        }
-
-
-        public string NewChannelWindow_Title
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("NewChannelWindow_Title");
-                }
-            }
-        }
-
-        public string NewChannelWindow_Name
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("NewChannelWindow_Name");
-                }
-            }
-        }
-
-        public string NewChannelWindow_Ok
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("NewChannelWindow_Ok");
-                }
-            }
-        }
-
-        public string NewChannelWindow_Cancel
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("NewChannelWindow_Cancel");
-                }
-            }
-        }
-
-
-        public string ControlControl_Chart
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ControlControl_Chart");
-                }
-            }
-        }
-
-        public string ControlControl_Section
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ControlControl_Section");
-                }
-            }
-        }
-
-        public string ControlControl_Channel
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ControlControl_Channel");
-                }
-            }
-        }
-
-
-        public string ControlSectionControl_Leader
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ControlSectionControl_Leader");
-                }
-            }
-        }
-
-        public string ControlSectionControl_Manager
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ControlSectionControl_Manager");
-                }
-            }
-        }
-
-        public string ControlSectionControl_Creator
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ControlSectionControl_Creator");
-                }
-            }
-        }
-
-        public string ControlSectionControl_NewSection
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ControlSectionControl_NewSection");
-                }
-            }
-        }
-
-        public string ControlSectionControl_New
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ControlSectionControl_New");
-                }
-            }
-        }
-
-        public string ControlSectionControl_Edit
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ControlSectionControl_Edit");
-                }
-            }
-        }
-
-        public string ControlSectionControl_Delete
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ControlSectionControl_Delete");
-                }
-            }
-        }
-
-        public string ControlSectionControl_Cut
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ControlSectionControl_Cut");
-                }
-            }
-        }
-
-        public string ControlSectionControl_Copy
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ControlSectionControl_Copy");
-                }
-            }
-        }
-
-        public string ControlSectionControl_CopyInfo
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ControlSectionControl_CopyInfo");
-                }
-            }
-        }
-
-        public string ControlSectionControl_Paste
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ControlSectionControl_Paste");
-                }
-            }
-        }
-
-        public string ControlSectionControl_Respons
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ControlSectionControl_Respons");
-                }
-            }
-        }
-
-        public string ControlSectionControl_Lock
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ControlSectionControl_Lock");
-                }
-            }
-        }
-
-        public string ControlSectionControl_LockThis
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ControlSectionControl_LockThis");
-                }
-            }
-        }
-
-        public string ControlSectionControl_UnlockThis
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ControlSectionControl_UnlockThis");
-                }
-            }
-        }
-
-        public string ControlSectionControl_LockAll
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ControlSectionControl_LockAll");
-                }
-            }
-        }
-
-        public string ControlSectionControl_UnlockAll
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ControlSectionControl_UnlockAll");
-                }
-            }
-        }
-
-        public string ControlSectionControl_Filter
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ControlSectionControl_Filter");
-                }
-            }
-        }
-
-        public string ControlSectionControl_FilterWord
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ControlSectionControl_FilterWord");
-                }
-            }
-        }
-
-        public string ControlSectionControl_FilterSignature
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ControlSectionControl_FilterSignature");
-                }
-            }
-        }
-
-        public string ControlSectionControl_FilterMessage
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ControlSectionControl_FilterMessage");
-                }
-            }
-        }
-
-        public string ControlSectionControl_SignatureFilter
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ControlSectionControl_SignatureFilter");
-                }
-            }
-        }
-
-        public string ControlSectionControl_NewMessage
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ControlSectionControl_NewMessage");
-                }
-            }
-        }
-
-        public string ControlSectionControl_OnlyUnread
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ControlSectionControl_OnlyUnread");
-                }
-            }
-        }
-
-        public string ControlSectionControl_AmoebaNotFound_Message
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ControlSectionControl_AmoebaNotFound_Message");
-                }
-            }
-        }
-
-        public string ControlSectionControl_MarkAllMessagesRead
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ControlSectionControl_MarkAllMessagesRead");
-                }
-            }
-        }
-
-        public string ControlSectionControl_MarkAllMessagesRead_Message
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ControlSectionControl_MarkAllMessagesRead_Message");
-                }
-            }
-        }
-
-        public string ControlSectionControl_ImportLockedMessages
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ControlSectionControl_ImportLockedMessages");
-                }
-            }
-        }
-
-        public string ControlSectionControl_ExportLockedMessages
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ControlSectionControl_ExportLockedMessages");
+                    return this.Translate("SectionControl_ExportLockedMessages");
                 }
             }
         }
@@ -2654,819 +2255,546 @@ namespace Lair.Properties
         }
 
 
-        public string LeaderEditWindow_Title
+        public string NewChannelWindow_Title
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("LeaderEditWindow_Title");
+                    return this.Translate("NewChannelWindow_Title");
                 }
             }
         }
 
-        public string LeaderEditWindow_Managers
+        public string NewChannelWindow_Name
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("LeaderEditWindow_Managers");
+                    return this.Translate("NewChannelWindow_Name");
                 }
             }
         }
 
-        public string LeaderEditWindow_Comment
+        public string NewChannelWindow_Ok
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("LeaderEditWindow_Comment");
+                    return this.Translate("NewChannelWindow_Ok");
                 }
             }
         }
 
-        public string LeaderEditWindow_Signature
+        public string NewChannelWindow_Cancel
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("LeaderEditWindow_Signature");
+                    return this.Translate("NewChannelWindow_Cancel");
                 }
             }
         }
 
-        public string LeaderEditWindow_Value
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("LeaderEditWindow_Value");
-                }
-            }
-        }
-
-        public string LeaderEditWindow_Up
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("LeaderEditWindow_Up");
-                }
-            }
-        }
-
-        public string LeaderEditWindow_Down
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("LeaderEditWindow_Down");
-                }
-            }
-        }
-
-        public string LeaderEditWindow_Add
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("LeaderEditWindow_Add");
-                }
-            }
-        }
-
-        public string LeaderEditWindow_Edit
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("LeaderEditWindow_Edit");
-                }
-            }
-        }
-
-        public string LeaderEditWindow_Delete
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("LeaderEditWindow_Delete");
-                }
-            }
-        }
-
-        public string LeaderEditWindow_Ok
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("LeaderEditWindow_Ok");
-                }
-            }
-        }
-
-        public string LeaderEditWindow_Cancel
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("LeaderEditWindow_Cancel");
-                }
-            }
-        }
-
-        public string LeaderEditWindow_Cut
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("LeaderEditWindow_Cut");
-                }
-            }
-        }
-
-        public string LeaderEditWindow_Copy
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("LeaderEditWindow_Copy");
-                }
-            }
-        }
-
-        public string LeaderEditWindow_Paste
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("LeaderEditWindow_Paste");
-                }
-            }
-        }
-
-
-        public string ManagerEditWindow_Title
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ManagerEditWindow_Title");
-                }
-            }
-        }
-
-        public string ManagerEditWindow_Managers
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ManagerEditWindow_Managers");
-                }
-            }
-        }
-
-        public string ManagerEditWindow_Comment
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ManagerEditWindow_Comment");
-                }
-            }
-        }
-
-        public string ManagerEditWindow_Signature
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ManagerEditWindow_Signature");
-                }
-            }
-        }
-
-        public string ManagerEditWindow_Value
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ManagerEditWindow_Value");
-                }
-            }
-        }
-
-        public string ManagerEditWindow_Up
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ManagerEditWindow_Up");
-                }
-            }
-        }
-
-        public string ManagerEditWindow_Down
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ManagerEditWindow_Down");
-                }
-            }
-        }
-
-        public string ManagerEditWindow_Add
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ManagerEditWindow_Add");
-                }
-            }
-        }
-
-        public string ManagerEditWindow_Edit
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ManagerEditWindow_Edit");
-                }
-            }
-        }
-
-        public string ManagerEditWindow_Delete
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ManagerEditWindow_Delete");
-                }
-            }
-        }
 
-        public string ManagerEditWindow_Ok
+        public string SectionTreeItemEditWindow_Leader
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ManagerEditWindow_Ok");
+                    return this.Translate("SectionTreeItemEditWindow_Leader");
                 }
             }
         }
 
-        public string ManagerEditWindow_Cancel
+        public string SectionTreeItemEditWindow_Manager
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ManagerEditWindow_Cancel");
+                    return this.Translate("SectionTreeItemEditWindow_Manager");
                 }
             }
         }
 
-        public string ManagerEditWindow_Cut
+        public string SectionTreeItemEditWindow_Creator
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ManagerEditWindow_Cut");
+                    return this.Translate("SectionTreeItemEditWindow_Creator");
                 }
             }
         }
 
-        public string ManagerEditWindow_Copy
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ManagerEditWindow_Copy");
-                }
-            }
-        }
 
-        public string ManagerEditWindow_Paste
+        public string LeaderControl_Creators
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ManagerEditWindow_Paste");
+                    return this.Translate("LeaderControl_Creators");
                 }
             }
         }
-
 
-        public string CreatorEditWindow_Title
+        public string LeaderControl_Managers
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("CreatorEditWindow_Title");
+                    return this.Translate("LeaderControl_Managers");
                 }
             }
         }
 
-        public string CreatorEditWindow_Filters
+        public string LeaderControl_Comment
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("CreatorEditWindow_Filters");
+                    return this.Translate("LeaderControl_Comment");
                 }
             }
         }
 
-        public string CreatorEditWindow_Channels
+        public string LeaderControl_Value
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("CreatorEditWindow_Channels");
+                    return this.Translate("LeaderControl_Value");
                 }
             }
         }
 
-        public string CreatorEditWindow_Comment
+        public string LeaderControl_Up
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("CreatorEditWindow_Comment");
+                    return this.Translate("LeaderControl_Up");
                 }
             }
         }
 
-        public string CreatorEditWindow_Signature
+        public string LeaderControl_Down
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("CreatorEditWindow_Signature");
+                    return this.Translate("LeaderControl_Down");
                 }
             }
         }
 
-        public string CreatorEditWindow_Value
+        public string LeaderControl_Add
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("CreatorEditWindow_Value");
+                    return this.Translate("LeaderControl_Add");
                 }
             }
         }
 
-        public string CreatorEditWindow_New
+        public string LeaderControl_Edit
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("CreatorEditWindow_New");
+                    return this.Translate("LeaderControl_Edit");
                 }
             }
         }
 
-        public string CreatorEditWindow_Up
+        public string LeaderControl_Delete
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("CreatorEditWindow_Up");
+                    return this.Translate("LeaderControl_Delete");
                 }
             }
         }
 
-        public string CreatorEditWindow_Down
+        public string LeaderControl_Upload
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("CreatorEditWindow_Down");
+                    return this.Translate("LeaderControl_Upload");
                 }
             }
         }
 
-        public string CreatorEditWindow_Add
+        public string LeaderControl_Cut
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("CreatorEditWindow_Add");
+                    return this.Translate("LeaderControl_Cut");
                 }
             }
         }
 
-        public string CreatorEditWindow_Edit
+        public string LeaderControl_Copy
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("CreatorEditWindow_Edit");
+                    return this.Translate("LeaderControl_Copy");
                 }
             }
         }
 
-        public string CreatorEditWindow_Delete
+        public string LeaderControl_Paste
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("CreatorEditWindow_Delete");
+                    return this.Translate("LeaderControl_Paste");
                 }
             }
         }
 
-        public string CreatorEditWindow_Ok
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("CreatorEditWindow_Ok");
-                }
-            }
-        }
 
-        public string CreatorEditWindow_Cancel
+        public string CreatorControl_Channels
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("CreatorEditWindow_Cancel");
+                    return this.Translate("CreatorControl_Channels");
                 }
             }
         }
 
-        public string CreatorEditWindow_Cut
+        public string CreatorControl_Comment
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("CreatorEditWindow_Cut");
+                    return this.Translate("CreatorControl_Comment");
                 }
             }
         }
 
-        public string CreatorEditWindow_Copy
+        public string CreatorControl_Value
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("CreatorEditWindow_Copy");
+                    return this.Translate("CreatorControl_Value");
                 }
             }
         }
 
-        public string CreatorEditWindow_Paste
+        public string CreatorControl_New
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("CreatorEditWindow_Paste");
+                    return this.Translate("CreatorControl_New");
                 }
             }
         }
-
 
-        public string ControlChannelControl_New
+        public string CreatorControl_Up
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ControlChannelControl_New");
+                    return this.Translate("CreatorControl_Up");
                 }
             }
         }
 
-        public string ControlChannelControl_NewChannel
+        public string CreatorControl_Down
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ControlChannelControl_NewChannel");
+                    return this.Translate("CreatorControl_Down");
                 }
             }
         }
 
-        public string ControlChannelControl_NewCategory
+        public string CreatorControl_Add
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ControlChannelControl_NewCategory");
+                    return this.Translate("CreatorControl_Add");
                 }
             }
         }
 
-        public string ControlChannelControl_Edit
+        public string CreatorControl_Edit
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ControlChannelControl_Edit");
+                    return this.Translate("CreatorControl_Edit");
                 }
             }
         }
 
-        public string ControlChannelControl_Delete
+        public string CreatorControl_Delete
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ControlChannelControl_Delete");
+                    return this.Translate("CreatorControl_Delete");
                 }
             }
         }
 
-        public string ControlChannelControl_Cut
+        public string CreatorControl_Upload
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ControlChannelControl_Cut");
+                    return this.Translate("CreatorControl_Upload");
                 }
             }
         }
 
-        public string ControlChannelControl_Copy
+        public string CreatorControl_Cut
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ControlChannelControl_Copy");
+                    return this.Translate("CreatorControl_Cut");
                 }
             }
         }
 
-        public string ControlChannelControl_CopyInfo
+        public string CreatorControl_Copy
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ControlChannelControl_CopyInfo");
+                    return this.Translate("CreatorControl_Copy");
                 }
             }
         }
 
-        public string ControlChannelControl_Paste
+        public string CreatorControl_Paste
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ControlChannelControl_Paste");
+                    return this.Translate("CreatorControl_Paste");
                 }
             }
         }
 
-        public string ControlChannelControl_Respons
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ControlChannelControl_Respons");
-                }
-            }
-        }
 
-        public string ControlChannelControl_Lock
+        public string ManagerControl_Trusts
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ControlChannelControl_Lock");
+                    return this.Translate("ManagerControl_Trusts");
                 }
             }
         }
 
-        public string ControlChannelControl_LockThis
+        public string ManagerControl_Comment
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ControlChannelControl_LockThis");
+                    return this.Translate("ManagerControl_Comment");
                 }
             }
         }
 
-        public string ControlChannelControl_UnlockThis
+        public string ManagerControl_Value
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ControlChannelControl_UnlockThis");
+                    return this.Translate("ManagerControl_Value");
                 }
             }
         }
 
-        public string ControlChannelControl_LockAll
+        public string ManagerControl_Up
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ControlChannelControl_LockAll");
+                    return this.Translate("ManagerControl_Up");
                 }
             }
         }
 
-        public string ControlChannelControl_UnlockAll
+        public string ManagerControl_Down
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ControlChannelControl_UnlockAll");
+                    return this.Translate("ManagerControl_Down");
                 }
             }
         }
 
-        public string ControlChannelControl_Filter
+        public string ManagerControl_Add
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ControlChannelControl_Filter");
+                    return this.Translate("ManagerControl_Add");
                 }
             }
         }
 
-        public string ControlChannelControl_FilterWord
+        public string ManagerControl_Edit
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ControlChannelControl_FilterWord");
+                    return this.Translate("ManagerControl_Edit");
                 }
             }
         }
 
-        public string ControlChannelControl_FilterSignature
+        public string ManagerControl_Delete
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ControlChannelControl_FilterSignature");
+                    return this.Translate("ManagerControl_Delete");
                 }
             }
         }
 
-        public string ControlChannelControl_FilterMessage
+        public string ManagerControl_Upload
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ControlChannelControl_FilterMessage");
+                    return this.Translate("ManagerControl_Upload");
                 }
             }
         }
 
-        public string ControlChannelControl_SignatureFilter
+        public string ManagerControl_Cut
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ControlChannelControl_SignatureFilter");
+                    return this.Translate("ManagerControl_Cut");
                 }
             }
         }
 
-        public string ControlChannelControl_NewMessage
+        public string ManagerControl_Copy
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ControlChannelControl_NewMessage");
+                    return this.Translate("ManagerControl_Copy");
                 }
             }
         }
 
-        public string ControlChannelControl_OnlyUnread
+        public string ManagerControl_Paste
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ControlChannelControl_OnlyUnread");
+                    return this.Translate("ManagerControl_Paste");
                 }
             }
         }
 
-        public string ControlChannelControl_AmoebaNotFound_Message
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ControlChannelControl_AmoebaNotFound_Message");
-                }
-            }
-        }
 
-        public string ControlChannelControl_MarkAllMessagesRead
+        public string SignWindow_Title
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ControlChannelControl_MarkAllMessagesRead");
+                    return this.Translate("SignWindow_Title");
                 }
             }
         }
 
-        public string ControlChannelControl_MarkAllMessagesRead_Message
+        public string SignWindow_Signature
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ControlChannelControl_MarkAllMessagesRead_Message");
+                    return this.Translate("SignWindow_Signature");
                 }
             }
         }
 
-        public string ControlChannelControl_ImportLockedMessages
+        public string SignWindow_Ok
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ControlChannelControl_ImportLockedMessages");
+                    return this.Translate("SignWindow_Ok");
                 }
             }
         }
 
-        public string ControlChannelControl_ExportLockedMessages
+        public string SignWindow_Cancel
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ControlChannelControl_ExportLockedMessages");
+                    return this.Translate("SignWindow_Cancel");
                 }
             }
         }

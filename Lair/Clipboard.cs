@@ -14,7 +14,8 @@ namespace Lair
 {
     static class Clipboard
     {
-        private static List<Board> _boardList = new List<Board>();
+        private static List<SearchTreeItem> _searchTreeItemList = new List<SearchTreeItem>();
+        private static List<ChannelTreeItem> _channelTreeItemList = new List<ChannelTreeItem>();
 
         private static ClipboardWatcher _clipboardWatcher;
 
@@ -25,7 +26,8 @@ namespace Lair
             _clipboardWatcher = new ClipboardWatcher();
             _clipboardWatcher.DrawClipboard += (sender2, e2) =>
             {
-                _boardList.Clear();
+                _searchTreeItemList.Clear();
+                _channelTreeItemList.Clear();
             };
         }
 
@@ -177,6 +179,9 @@ namespace Lair
         {
             lock (_thisLock)
             {
+                if (_searchTreeItemList.Count != 0) return new Channel[0];
+                if (_channelTreeItemList.Count != 0) return new Channel[0];
+
                 var list = new List<Channel>();
 
                 foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
@@ -209,6 +214,88 @@ namespace Lair
                 }
 
                 Clipboard.SetText(sb.ToString());
+            }
+        }
+
+        public static IEnumerable<SearchTreeItem> GetSearchTreeItems()
+        {
+            lock (_thisLock)
+            {
+                return _searchTreeItemList.Select(n => n.DeepClone()).ToArray();
+            }
+        }
+
+        public static void SetSearchTreeItems(IEnumerable<SearchTreeItem> searchTreeItems)
+        {
+            lock (_thisLock)
+            {
+                {
+                    List<Channel> channels = new List<Channel>();
+                    List<SearchTreeItem> searchTreeItemList = new List<SearchTreeItem>();
+
+                    searchTreeItemList.AddRange(searchTreeItems);
+
+                    for (int i = 0; i < searchTreeItemList.Count; i++)
+                    {
+                        searchTreeItemList.AddRange(searchTreeItemList[i].SearchTreeItems);
+
+                        var tempList = searchTreeItemList[i].ChannelTreeItems.Select(n => n.Channel).ToList();
+
+                        tempList.Sort(delegate(Channel x, Channel y)
+                        {
+                            int c = x.Name.CompareTo(y.Name);
+                            if (c != 0) return c;
+
+                            return Collection.Compare(x.Id, y.Id);
+                        });
+
+                        channels.AddRange(tempList);
+                    }
+
+                    var sb = new StringBuilder();
+
+                    foreach (var item in channels)
+                    {
+                        sb.AppendLine(LairConverter.ToChannelString(item));
+                    }
+
+                    Clipboard.SetText(sb.ToString());
+                }
+
+                {
+                    _searchTreeItemList.Clear();
+                    _searchTreeItemList.AddRange(searchTreeItems.Select(n => n.DeepClone()));
+                }
+            }
+        }
+
+        public static IEnumerable<ChannelTreeItem> GetChannelTreeItems()
+        {
+            lock (_thisLock)
+            {
+                return _channelTreeItemList.Select(n => n.DeepClone()).ToArray();
+            }
+        }
+
+        public static void SetChannelTreeItems(IEnumerable<ChannelTreeItem> channelTreeItems)
+        {
+            lock (_thisLock)
+            {
+                {
+                    var sb = new StringBuilder();
+
+                    foreach (var item in channelTreeItems)
+                    {
+                        sb.AppendLine(LairConverter.ToChannelString(item.Channel));
+                    }
+
+                    Clipboard.SetText(sb.ToString());
+                }
+
+                {
+                    _channelTreeItemList.Clear();
+                    _channelTreeItemList.AddRange(channelTreeItems.Select(n => n.DeepClone()));
+                }
             }
         }
 
