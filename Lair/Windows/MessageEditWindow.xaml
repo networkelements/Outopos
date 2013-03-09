@@ -21,10 +21,7 @@
         <TabControl Name="_tabControl" Margin="0,0,0,71" SelectionChanged="_tabControl_SelectionChanged">
             <TabItem Header="{Binding Path=MessageEditWindow_Edit, Source={StaticResource ResourcesInstance}}" Name="_editTabItem">
                 <Grid>
-                    <Label Content="{Binding Path=MessageEditWindow_Signature, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" Width="120" VerticalContentAlignment="Center" />
-                    <ComboBox Height="24" Margin="132,6,6,0" Name="_signatureComboBox" VerticalAlignment="Top" VerticalContentAlignment="Center" />
-                    <Label Content="{Binding Path=MessageEditWindow_Comment, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,36,0,0" VerticalAlignment="Top" Width="120" VerticalContentAlignment="Center" />
-                    <TextBox AcceptsReturn="True" HorizontalScrollBarVisibility="Disabled" Margin="132,36,6,6" Name="_commentTextBox" VerticalScrollBarVisibility="Auto" TextChanged="_commentTextBox_TextChanged" TextWrapping="Wrap" AcceptsTab="True" />
+                    <TextBox AcceptsReturn="True" HorizontalScrollBarVisibility="Disabled" Margin="6" Name="_commentTextBox" VerticalScrollBarVisibility="Auto" TextChanged="_commentTextBox_TextChanged" TextWrapping="Wrap" AcceptsTab="True" Height="319" />
                 </Grid>
             </TabItem>
             <TabItem Header="{Binding Path=MessageEditWindow_Preview, Source={StaticResource ResourcesInstance}}" Name="_previewTabItem">
@@ -157,14 +154,14 @@
                             </Setter>
                         </Style>
 
-                        <Style TargetType="{x:Type RichTextBox}">
+                        <Style TargetType="{x:Type local:RichTextBoxEx}">
                             <Setter Property="KeyboardNavigation.TabNavigation" Value="None" />
                             <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                             <Setter Property="AllowDrop" Value="true" />
                             <Setter Property="SnapsToDevicePixels" Value="True" />
                             <Setter Property="Template">
                                 <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type RichTextBox}">
+                                    <ControlTemplate TargetType="{x:Type local:RichTextBoxEx}">
                                         <Grid Background="{TemplateBinding Background}">
                                             <ScrollViewer Margin="0" x:Name="PART_ContentHost" Style="{DynamicResource NuclearScrollViewer}" />
                                         </Grid>
@@ -176,7 +173,7 @@
                             <Setter Property="BorderBrush" Value="#FF000000"/>
                         </Style>
                     </Grid.Resources>
-                    <RichTextBox HorizontalAlignment="Stretch" Margin="6" Name="_richTextBox" VerticalAlignment="Stretch" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" />
+                    <local:RichTextBoxEx HorizontalAlignment="Stretch" Margin="6" x:Name="_richTextBox" VerticalAlignment="Stretch" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" />
                 </Grid>
             </TabItem>
         </TabControl>

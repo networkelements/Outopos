@@ -10,8 +10,11 @@
         d:DesignHeight="500" d:DesignWidth="800">
 
     <UserControl.Resources>
-        <DataTemplate x:Key="_myTemplate_Signature">
-            <TextBlock Text="{Binding Mode=OneWay}" />
+        <DataTemplate x:Key="_myTemplate_Name">
+            <TextBlock Text="{Binding Path=Name, Mode=OneWay, Converter={StaticResource _stringRegularizationConverter}}" />
+        </DataTemplate>
+        <DataTemplate x:Key="_myTemplate_Id">
+            <TextBlock Text="{Binding Path=Id, Mode=OneWay, Converter={StaticResource _bytesToHexStringConverter}}" />
         </DataTemplate>
     </UserControl.Resources>
 
@@ -30,7 +33,11 @@
     </UserControl.InputBindings>
 
     <Grid>
-        <TabControl Margin="0,0,0,41">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="23" />
+            <RowDefinition Height="475*" />
+        </Grid.RowDefinitions>
+        <TabControl Grid.Row="1">
             <TabItem Header="{Binding Path=CreatorControl_Channels, Source={StaticResource ResourcesInstance}}" Name="_channelsTabItem">
                 <Grid Grid.Column="2" FocusManager.FocusedElement="{Binding ElementName=_channelTextBox}">
                     <local:ListViewEx x:Name="_channelListView" SelectionChanged="_channelListView_SelectionChanged" PreviewMouseLeftButtonDown="_channelListView_PreviewMouseLeftButtonDown" Margin="0,0,0,64" ContextMenuOpening="_channelListView_ContextMenuOpening">
@@ -45,7 +52,10 @@
                         </ListView.ContextMenu>
                         <ListView.View>
                             <GridView AllowsColumnReorder="False">
-                                <GridViewColumn Header="{Binding Path=CreatorControl_Value, Source={StaticResource ResourcesInstance}}" CellTemplate="{StaticResource _myTemplate_Signature}" Width="{Binding Path=CreatorControl_Signature_GridViewColumn_Value_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
+                                <GridViewColumn Header="{Binding Path=CreatorControl_Name, Source={StaticResource ResourcesInstance}}" CellTemplate="{StaticResource _myTemplate_Name}" 
+                                        Width="{Binding Path=CreatorControl_GridViewColumn_Name_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
+                                <GridViewColumn Header="{Binding Path=CreatorControl_Id, Source={StaticResource ResourcesInstance}}" CellTemplate="{StaticResource _myTemplate_Id}" 
+                                        Width="{Binding Path=CreatorControl_GridViewColumn_Id_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
                             </GridView>
                         </ListView.View>
                     </local:ListViewEx>
@@ -62,6 +72,6 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <Button Content="{Binding Path=CreatorControl_Upload, Source={StaticResource ResourcesInstance}}" Height="23" HorizontalAlignment="Right" Margin="0,0,12,12" Name="_uploadButton" VerticalAlignment="Bottom" Width="75" Click="_uploadButton_Click" />
+        <Button Content="{Binding Path=CreatorControl_Upload, Source={StaticResource ResourcesInstance}}" Height="23" HorizontalAlignment="Right" Margin="0,0,6,0" Name="_uploadButton" VerticalAlignment="Top" Width="75" Click="_uploadButton_Click" />
     </Grid>
 </UserControl>

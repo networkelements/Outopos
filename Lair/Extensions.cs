@@ -288,6 +288,54 @@ namespace Lair
             panel.SetHorizontalOffset(0);
         }
 
+        public static void PageDown(this ItemsControl itemsControl)
+        {
+            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
+            panel.PageDown();
+        }
+
+        public static void PageUp(this ItemsControl itemsControl)
+        {
+            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
+            panel.PageUp();
+        }
+
+        public static void PageRight(this ItemsControl itemsControl)
+        {
+            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
+            panel.PageRight();
+        }
+
+        public static void PageLeft(this ItemsControl itemsControl)
+        {
+            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
+            panel.PageLeft();
+        }
+
+        public static void LineDown(this ItemsControl itemsControl)
+        {
+            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
+            panel.LineDown();
+        }
+
+        public static void LineUp(this ItemsControl itemsControl)
+        {
+            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
+            panel.LineUp();
+        }
+
+        public static void LineRight(this ItemsControl itemsControl)
+        {
+            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
+            panel.LineRight();
+        }
+
+        public static void LineLeft(this ItemsControl itemsControl)
+        {
+            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
+            panel.LineLeft();
+        }
+
         public static Panel FindItemsHostPanel(this ItemsControl itemsControl)
         {
             return Find(itemsControl.ItemContainerGenerator, itemsControl);

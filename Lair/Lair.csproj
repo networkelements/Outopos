@@ -119,6 +119,18 @@
     <Compile Include="Hash\Sha512.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="TransfarLimitManager.cs" />
+    <Compile Include="Windows\ChannelListWindow.xaml.cs">
+      <DependentUpon>ChannelListWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\TopicPreviewWindow.xaml.cs">
+      <DependentUpon>TopicPreviewWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\TopicEditWindow.xaml.cs">
+      <DependentUpon>TopicEditWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\SearchItemEditWindow.xaml.cs">
+      <DependentUpon>SearchItemEditWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\SectionControl.xaml.cs">
       <DependentUpon>SectionControl.xaml</DependentUpon>
     </Compile>
@@ -137,10 +149,23 @@
     <Compile Include="Windows\SectionTreeItem\SectionTreeItemEditWindow.xaml.cs">
       <DependentUpon>SectionTreeItemEditWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\SignWindow.xaml.cs">
-      <DependentUpon>SignWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Windows\VirtualizingStackPanelEx.cs" />
+    <Page Include="Windows\ChannelListWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\TopicPreviewWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\TopicEditWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\SearchItemEditWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Windows\SectionControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -184,10 +209,6 @@
     <Page Include="Windows\SectionTreeItem\SectionTreeItemEditWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\SignWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\ViewSettingsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

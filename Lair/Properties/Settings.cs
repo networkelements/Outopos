@@ -25,7 +25,7 @@ namespace Lair.Properties
             : base(new List<Library.Configuration.ISettingsContext>()
             {
                 new Library.Configuration.SettingsContext<LockedList<DigitalSignature>>() { Name = "Global_DigitalSignatureCollection", Value = new LockedList<DigitalSignature>() },
-                new Library.Configuration.SettingsContext<DigitalSignature>() { Name = "Global_UploadDigitalSignature", Value = null },
+                new Library.Configuration.SettingsContext<string>() { Name = "Global_UploadDigitalSignature", Value = null },
                 new Library.Configuration.SettingsContext<string>() { Name = "Global_UseLanguage", Value = "English" },
                 new Library.Configuration.SettingsContext<bool>() { Name = "Global_IsStart", Value = true },
                 new Library.Configuration.SettingsContext<LockedHashSet<string>>() { Name = "Global_UrlHistorys", Value = new LockedHashSet<string>() },
@@ -40,7 +40,15 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<string>() { Name = "Global_Amoeba_Path", Value = "" },
                 new Library.Configuration.SettingsContext<string>() { Name = "Global_Fonts_MessageFontFamily", Value = "MS PGothic" },
                 new Library.Configuration.SettingsContext<double>() { Name = "Global_Fonts_MessageFontSize", Value = 12 },
-                new Library.Configuration.SettingsContext<LockedDictionary<Channel, LockedHashSet<Message>>>() { Name = "Global_LockMessages", Value = new LockedDictionary<Channel,LockedHashSet<Message>>() },
+                new Library.Configuration.SettingsContext<LockedDictionary<Channel, LockedHashSet<Message>>>() { Name = "Global_LockedMessages", Value = new LockedDictionary<Channel,LockedHashSet<Message>>() },
+
+                new Library.Configuration.SettingsContext<Color>() { Name = "Color_Tree_Hit", Value = Colors.LightPink },
+                new Library.Configuration.SettingsContext<Color>() { Name = "Color_Message", Value = Colors.Black },
+                new Library.Configuration.SettingsContext<Color>() { Name = "Color_Message_Select", Value = Colors.White },
+                new Library.Configuration.SettingsContext<Color>() { Name = "Color_Message_Lock", Value = Colors.LightBlue },
+                new Library.Configuration.SettingsContext<Color>() { Name = "Color_Message_New", Value = Colors.LightPink },
+                new Library.Configuration.SettingsContext<Color>() { Name = "Color_Link", Value = Colors.LightGray },
+                new Library.Configuration.SettingsContext<Color>() { Name = "Color_Link_New", Value = Colors.LightPink },
 
                 new Library.Configuration.SettingsContext<double>() { Name = "MainWindow_Top", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "MainWindow_Left", Value = 120 },
@@ -90,13 +98,20 @@ namespace Lair.Properties
 
                 new Library.Configuration.SettingsContext<LockedList<SectionTreeItem>>() { Name = "SectionControl_SectionTreeItems", Value = new LockedList<SectionTreeItem>() },
                 new Library.Configuration.SettingsContext<double>() { Name = "SectionControl_Grid_ColumnDefinitions_Width", Value = 200 },
-              
-                new Library.Configuration.SettingsContext<double>() { Name = "ChannelListWindow_Top", Value = 120 },
-                new Library.Configuration.SettingsContext<double>() { Name = "ChannelListWindow_Left", Value = 120 },
-                new Library.Configuration.SettingsContext<double>() { Name = "ChannelListWindow_Height", Value = 500 },
-                new Library.Configuration.SettingsContext<double>() { Name = "ChannelListWindow_Width", Value = 700 },
-                new Library.Configuration.SettingsContext<WindowState>() { Name = "ChannelListWindow_WindowState", Value = WindowState.Normal },
+                                
+                new Library.Configuration.SettingsContext<double>() { Name = "SectionTreeItemEditWindow_Top", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SectionTreeItemEditWindow_Left", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SectionTreeItemEditWindow_Height", Value = 500 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SectionTreeItemEditWindow_Width", Value = 700 },
+                new Library.Configuration.SettingsContext<WindowState>() { Name = "SectionTreeItemEditWindow_WindowState", Value = WindowState.Normal },
+                
+                new Library.Configuration.SettingsContext<double>() { Name = "LeaderControl_Signature_GridViewColumn_Value_Width", Value = 400 },
 
+                new Library.Configuration.SettingsContext<double>() { Name = "ManagerControl_Signature_GridViewColumn_Value_Width", Value = 400 },
+
+                new Library.Configuration.SettingsContext<double>() { Name = "CreatorControl_GridViewColumn_Name_Width", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "CreatorControl_GridViewColumn_Id_Width", Value = 120 },
+          
                 new Library.Configuration.SettingsContext<double>() { Name = "NewSectionWindow_Top", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "NewSectionWindow_Left", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "NewSectionWindow_Width", Value = 700 },
@@ -107,33 +122,38 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<double>() { Name = "NewChannelWindow_Width", Value = 700 },
                 new Library.Configuration.SettingsContext<WindowState>() { Name = "NewChannelWindow_WindowState", Value = WindowState.Normal },
 
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_Top", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_Left", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_Height", Value = 500 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_Width", Value = 700 },
+                new Library.Configuration.SettingsContext<WindowState>() { Name = "SearchItemEditWindow_WindowState", Value = WindowState.Normal },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_Word_Contains_Width", Value = -1 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_Word_Value_Width", Value = 600 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_Regex_Contains_Width", Value = -1 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_Regex_Value_IsIgnoreCase_Width", Value = -1 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_Regex_Value_Value_Width", Value = 400 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_Signature_Contains_Width", Value = -1 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_Signature_Value_IsIgnoreCase_Width", Value = -1 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_Signature_Value_Value_Width", Value = 400 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_CreationTimeRange_Contains_Width", Value = -1 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_CreationTimeRange_Value_Max_Width", Value = 300 },
+                new Library.Configuration.SettingsContext<double>() { Name = "SearchItemEditWindow_GridViewColumn_CreationTimeRange_Value_Min_Width", Value = 300 },
+
+                new Library.Configuration.SettingsContext<double>() { Name = "ChannelListWindow_Top", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "ChannelListWindow_Left", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "ChannelListWindow_Height", Value = 500 },
+                new Library.Configuration.SettingsContext<double>() { Name = "ChannelListWindow_Width", Value = 700 },
+                new Library.Configuration.SettingsContext<WindowState>() { Name = "ChannelListWindow_WindowState", Value = WindowState.Normal },
+                new Library.Configuration.SettingsContext<string>() { Name = "ChannelListWindow_LastHeaderClicked", Value = "Name" },
+                new Library.Configuration.SettingsContext<ListSortDirection>() { Name = "ChannelListWindow_ListSortDirection", Value = ListSortDirection.Descending },
+                new Library.Configuration.SettingsContext<double>() { Name = "ChannelListWindow_GridViewColumn_Name_Width", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "ChannelListWindow_GridViewColumn_Id_Width", Value = 120 },
+
                 new Library.Configuration.SettingsContext<double>() { Name = "MessageEditWindow_Top", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "MessageEditWindow_Left", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "MessageEditWindow_Height", Value = 500 },
                 new Library.Configuration.SettingsContext<double>() { Name = "MessageEditWindow_Width", Value = 700 },
                 new Library.Configuration.SettingsContext<WindowState>() { Name = "MessageEditWindow_WindowState", Value = WindowState.Normal },
-                            
-                new Library.Configuration.SettingsContext<double>() { Name = "LeaderControl_Top", Value = 120 },
-                new Library.Configuration.SettingsContext<double>() { Name = "LeaderControl_Left", Value = 120 },
-                new Library.Configuration.SettingsContext<double>() { Name = "LeaderControl_Height", Value = 500 },
-                new Library.Configuration.SettingsContext<double>() { Name = "LeaderControl_Width", Value = 700 },
-                new Library.Configuration.SettingsContext<WindowState>() { Name = "LeaderControl_WindowState", Value = WindowState.Normal },
-                new Library.Configuration.SettingsContext<double>() { Name = "LeaderControl_Signature_GridViewColumn_Value_Width", Value = 400 },
-
-                new Library.Configuration.SettingsContext<double>() { Name = "ManagerEditWindow_Top", Value = 120 },
-                new Library.Configuration.SettingsContext<double>() { Name = "ManagerEditWindow_Left", Value = 120 },
-                new Library.Configuration.SettingsContext<double>() { Name = "ManagerEditWindow_Height", Value = 500 },
-                new Library.Configuration.SettingsContext<double>() { Name = "ManagerEditWindow_Width", Value = 700 },
-                new Library.Configuration.SettingsContext<WindowState>() { Name = "ManagerEditWindow_WindowState", Value = WindowState.Normal },
-                new Library.Configuration.SettingsContext<double>() { Name = "ManagerEditWindow_Signature_GridViewColumn_Value_Width", Value = 400 },
-
-                new Library.Configuration.SettingsContext<double>() { Name = "CreatorEditWindow_Top", Value = 120 },
-                new Library.Configuration.SettingsContext<double>() { Name = "CreatorEditWindow_Left", Value = 120 },
-                new Library.Configuration.SettingsContext<double>() { Name = "CreatorEditWindow_Height", Value = 500 },
-                new Library.Configuration.SettingsContext<double>() { Name = "CreatorEditWindow_Width", Value = 700 },
-                new Library.Configuration.SettingsContext<WindowState>() { Name = "CreatorEditWindow_WindowState", Value = WindowState.Normal },
-                new Library.Configuration.SettingsContext<double>() { Name = "CreatorEditWindow_Signature_GridViewColumn_Value_Width", Value = 400 },
-                new Library.Configuration.SettingsContext<double>() { Name = "CreatorEditWindow_Grid_ColumnDefinitions_Width", Value = 200 },
             })
         {
 
@@ -191,13 +211,13 @@ namespace Lair.Properties
             }
         }
 
-        public DigitalSignature Global_UploadDigitalSignature
+        public string Global_UploadDigitalSignature
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (DigitalSignature)this["Global_UploadDigitalSignature"];
+                   return (string)this["Global_UploadDigitalSignature"];
                 }
             }
 
@@ -476,13 +496,13 @@ namespace Lair.Properties
             }
         }
 
-        public LockedDictionary<Channel, LockedHashSet<Message>> Global_LockMessages
+        public LockedDictionary<Channel, LockedHashSet<Message>> Global_LockedMessages
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (LockedDictionary<Channel, LockedHashSet<Message>>)this["Global_LockMessages"];
+                   return (LockedDictionary<Channel, LockedHashSet<Message>>)this["Global_LockedMessages"];
                 }
             }
 
@@ -490,7 +510,141 @@ namespace Lair.Properties
             {
                 lock (this.ThisLock)
                 {
-                    this["Global_LockMessages"] = value;
+                    this["Global_LockedMessages"] = value;
+                }
+            }
+        }
+
+
+        public Color Color_Tree_Hit
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (Color)this["Color_Tree_Hit"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["Color_Tree_Hit"] = value;
+                }
+            }
+        }
+
+        public Color Color_Message
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (Color)this["Color_Message"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["Color_Message"] = value;
+                }
+            }
+        }
+
+        public Color Color_Message_Select
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (Color)this["Color_Message_Select"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["Color_Message_Select"] = value;
+                }
+            }
+        }
+
+        public Color Color_Message_Lock
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (Color)this["Color_Message_Lock"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["Color_Message_Lock"] = value;
+                }
+            }
+        }
+
+        public Color Color_Message_New
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (Color)this["Color_Message_New"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["Color_Message_New"] = value;
+                }
+            }
+        }
+
+        public Color Color_Link
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (Color)this["Color_Link"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["Color_Link"] = value;
+                }
+            }
+        }
+
+        public Color Color_Link_New
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (Color)this["Color_Link_New"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["Color_Link_New"] = value;
                 }
             }
         }
@@ -1319,13 +1473,13 @@ namespace Lair.Properties
         }
 
 
-        public double ChannelListWindow_Top
+        public double SectionTreeItemEditWindow_Top
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ChannelListWindow_Top"];
+                   return (double)this["SectionTreeItemEditWindow_Top"];
                 }
             }
 
@@ -1333,18 +1487,18 @@ namespace Lair.Properties
             {
                 lock (this.ThisLock)
                 {
-                    this["ChannelListWindow_Top"] = value;
+                    this["SectionTreeItemEditWindow_Top"] = value;
                 }
             }
         }
 
-        public double ChannelListWindow_Left
+        public double SectionTreeItemEditWindow_Left
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ChannelListWindow_Left"];
+                   return (double)this["SectionTreeItemEditWindow_Left"];
                 }
             }
 
@@ -1352,18 +1506,18 @@ namespace Lair.Properties
             {
                 lock (this.ThisLock)
                 {
-                    this["ChannelListWindow_Left"] = value;
+                    this["SectionTreeItemEditWindow_Left"] = value;
                 }
             }
         }
 
-        public double ChannelListWindow_Height
+        public double SectionTreeItemEditWindow_Height
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ChannelListWindow_Height"];
+                   return (double)this["SectionTreeItemEditWindow_Height"];
                 }
             }
 
@@ -1371,18 +1525,18 @@ namespace Lair.Properties
             {
                 lock (this.ThisLock)
                 {
-                    this["ChannelListWindow_Height"] = value;
+                    this["SectionTreeItemEditWindow_Height"] = value;
                 }
             }
         }
 
-        public double ChannelListWindow_Width
+        public double SectionTreeItemEditWindow_Width
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ChannelListWindow_Width"];
+                   return (double)this["SectionTreeItemEditWindow_Width"];
                 }
             }
 
@@ -1390,18 +1544,18 @@ namespace Lair.Properties
             {
                 lock (this.ThisLock)
                 {
-                    this["ChannelListWindow_Width"] = value;
+                    this["SectionTreeItemEditWindow_Width"] = value;
                 }
             }
         }
 
-        public WindowState ChannelListWindow_WindowState
+        public WindowState SectionTreeItemEditWindow_WindowState
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (WindowState)this["ChannelListWindow_WindowState"];
+                   return (WindowState)this["SectionTreeItemEditWindow_WindowState"];
                 }
             }
 
@@ -1409,7 +1563,86 @@ namespace Lair.Properties
             {
                 lock (this.ThisLock)
                 {
-                    this["ChannelListWindow_WindowState"] = value;
+                    this["SectionTreeItemEditWindow_WindowState"] = value;
+                }
+            }
+        }
+
+
+        public double LeaderControl_Signature_GridViewColumn_Value_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["LeaderControl_Signature_GridViewColumn_Value_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["LeaderControl_Signature_GridViewColumn_Value_Width"] = value;
+                }
+            }
+        }
+
+
+        public double ManagerControl_Signature_GridViewColumn_Value_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ManagerControl_Signature_GridViewColumn_Value_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ManagerControl_Signature_GridViewColumn_Value_Width"] = value;
+                }
+            }
+        }
+
+
+        public double CreatorControl_GridViewColumn_Name_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["CreatorControl_GridViewColumn_Name_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["CreatorControl_GridViewColumn_Name_Width"] = value;
+                }
+            }
+        }
+
+        public double CreatorControl_GridViewColumn_Id_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["CreatorControl_GridViewColumn_Id_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["CreatorControl_GridViewColumn_Id_Width"] = value;
                 }
             }
         }
@@ -1569,6 +1802,483 @@ namespace Lair.Properties
         }
 
 
+        public double SearchItemEditWindow_Top
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_Top"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_Top"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_Left
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_Left"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_Left"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_Height
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_Height"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_Height"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_Width"] = value;
+                }
+            }
+        }
+
+        public WindowState SearchItemEditWindow_WindowState
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (WindowState)this["SearchItemEditWindow_WindowState"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_WindowState"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_GridViewColumn_Word_Contains_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_GridViewColumn_Word_Contains_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_GridViewColumn_Word_Contains_Width"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_GridViewColumn_Word_Value_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_GridViewColumn_Word_Value_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_GridViewColumn_Word_Value_Width"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_GridViewColumn_Regex_Contains_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_GridViewColumn_Regex_Contains_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_GridViewColumn_Regex_Contains_Width"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_GridViewColumn_Regex_Value_IsIgnoreCase_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_GridViewColumn_Regex_Value_IsIgnoreCase_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_GridViewColumn_Regex_Value_IsIgnoreCase_Width"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_GridViewColumn_Regex_Value_Value_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_GridViewColumn_Regex_Value_Value_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_GridViewColumn_Regex_Value_Value_Width"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_GridViewColumn_Signature_Contains_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_GridViewColumn_Signature_Contains_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_GridViewColumn_Signature_Contains_Width"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_GridViewColumn_Signature_Value_IsIgnoreCase_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_GridViewColumn_Signature_Value_IsIgnoreCase_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_GridViewColumn_Signature_Value_IsIgnoreCase_Width"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_GridViewColumn_Signature_Value_Value_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_GridViewColumn_Signature_Value_Value_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_GridViewColumn_Signature_Value_Value_Width"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_GridViewColumn_CreationTimeRange_Contains_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_GridViewColumn_CreationTimeRange_Contains_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_GridViewColumn_CreationTimeRange_Contains_Width"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_GridViewColumn_CreationTimeRange_Value_Max_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_GridViewColumn_CreationTimeRange_Value_Max_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_GridViewColumn_CreationTimeRange_Value_Max_Width"] = value;
+                }
+            }
+        }
+
+        public double SearchItemEditWindow_GridViewColumn_CreationTimeRange_Value_Min_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SearchItemEditWindow_GridViewColumn_CreationTimeRange_Value_Min_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SearchItemEditWindow_GridViewColumn_CreationTimeRange_Value_Min_Width"] = value;
+                }
+            }
+        }
+
+
+        public double ChannelListWindow_Top
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChannelListWindow_Top"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChannelListWindow_Top"] = value;
+                }
+            }
+        }
+
+        public double ChannelListWindow_Left
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChannelListWindow_Left"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChannelListWindow_Left"] = value;
+                }
+            }
+        }
+
+        public double ChannelListWindow_Height
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChannelListWindow_Height"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChannelListWindow_Height"] = value;
+                }
+            }
+        }
+
+        public double ChannelListWindow_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChannelListWindow_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChannelListWindow_Width"] = value;
+                }
+            }
+        }
+
+        public WindowState ChannelListWindow_WindowState
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (WindowState)this["ChannelListWindow_WindowState"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChannelListWindow_WindowState"] = value;
+                }
+            }
+        }
+
+        public string ChannelListWindow_LastHeaderClicked
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (string)this["ChannelListWindow_LastHeaderClicked"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChannelListWindow_LastHeaderClicked"] = value;
+                }
+            }
+        }
+
+        public ListSortDirection ChannelListWindow_ListSortDirection
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (ListSortDirection)this["ChannelListWindow_ListSortDirection"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChannelListWindow_ListSortDirection"] = value;
+                }
+            }
+        }
+
+        public double ChannelListWindow_GridViewColumn_Name_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChannelListWindow_GridViewColumn_Name_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChannelListWindow_GridViewColumn_Name_Width"] = value;
+                }
+            }
+        }
+
+        public double ChannelListWindow_GridViewColumn_Id_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChannelListWindow_GridViewColumn_Id_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChannelListWindow_GridViewColumn_Id_Width"] = value;
+                }
+            }
+        }
+
+
         public double MessageEditWindow_Top
         {
             get
@@ -1660,370 +2370,6 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     this["MessageEditWindow_WindowState"] = value;
-                }
-            }
-        }
-
-
-        public double LeaderControl_Top
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["LeaderControl_Top"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["LeaderControl_Top"] = value;
-                }
-            }
-        }
-
-        public double LeaderControl_Left
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["LeaderControl_Left"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["LeaderControl_Left"] = value;
-                }
-            }
-        }
-
-        public double LeaderControl_Height
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["LeaderControl_Height"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["LeaderControl_Height"] = value;
-                }
-            }
-        }
-
-        public double LeaderControl_Width
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["LeaderControl_Width"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["LeaderControl_Width"] = value;
-                }
-            }
-        }
-
-        public WindowState LeaderControl_WindowState
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (WindowState)this["LeaderControl_WindowState"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["LeaderControl_WindowState"] = value;
-                }
-            }
-        }
-
-        public double LeaderControl_Signature_GridViewColumn_Value_Width
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["LeaderControl_Signature_GridViewColumn_Value_Width"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["LeaderControl_Signature_GridViewColumn_Value_Width"] = value;
-                }
-            }
-        }
-
-
-        public double ManagerEditWindow_Top
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["ManagerEditWindow_Top"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["ManagerEditWindow_Top"] = value;
-                }
-            }
-        }
-
-        public double ManagerEditWindow_Left
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["ManagerEditWindow_Left"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["ManagerEditWindow_Left"] = value;
-                }
-            }
-        }
-
-        public double ManagerEditWindow_Height
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["ManagerEditWindow_Height"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["ManagerEditWindow_Height"] = value;
-                }
-            }
-        }
-
-        public double ManagerEditWindow_Width
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["ManagerEditWindow_Width"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["ManagerEditWindow_Width"] = value;
-                }
-            }
-        }
-
-        public WindowState ManagerEditWindow_WindowState
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (WindowState)this["ManagerEditWindow_WindowState"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["ManagerEditWindow_WindowState"] = value;
-                }
-            }
-        }
-
-        public double ManagerEditWindow_Signature_GridViewColumn_Value_Width
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["ManagerEditWindow_Signature_GridViewColumn_Value_Width"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["ManagerEditWindow_Signature_GridViewColumn_Value_Width"] = value;
-                }
-            }
-        }
-
-
-        public double CreatorEditWindow_Top
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["CreatorEditWindow_Top"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["CreatorEditWindow_Top"] = value;
-                }
-            }
-        }
-
-        public double CreatorEditWindow_Left
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["CreatorEditWindow_Left"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["CreatorEditWindow_Left"] = value;
-                }
-            }
-        }
-
-        public double CreatorEditWindow_Height
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["CreatorEditWindow_Height"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["CreatorEditWindow_Height"] = value;
-                }
-            }
-        }
-
-        public double CreatorEditWindow_Width
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["CreatorEditWindow_Width"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["CreatorEditWindow_Width"] = value;
-                }
-            }
-        }
-
-        public WindowState CreatorEditWindow_WindowState
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (WindowState)this["CreatorEditWindow_WindowState"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["CreatorEditWindow_WindowState"] = value;
-                }
-            }
-        }
-
-        public double CreatorEditWindow_Signature_GridViewColumn_Value_Width
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["CreatorEditWindow_Signature_GridViewColumn_Value_Width"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["CreatorEditWindow_Signature_GridViewColumn_Value_Width"] = value;
-                }
-            }
-        }
-
-        public double CreatorEditWindow_Grid_ColumnDefinitions_Width
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["CreatorEditWindow_Grid_ColumnDefinitions_Width"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["CreatorEditWindow_Grid_ColumnDefinitions_Width"] = value;
                 }
             }
         }

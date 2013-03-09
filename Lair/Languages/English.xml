@@ -27,9 +27,7 @@
   <Translate Key="Message_Content" Value="Content" />
 
   <Translate Key="MainWindow_Connection" Value="Connection" />
-  <Translate Key="MainWindow_Channel" Value="Channel" />
-  <Translate Key="MainWindow_Control" Value="Control" />
-  <Translate Key="MainWindow_Search" Value="Search" />
+  <Translate Key="MainWindow_Section" Value="Section" />
   <Translate Key="MainWindow_Log" Value="Log" />
   <Translate Key="MainWindow_Connections" Value="Connections" />
   <Translate Key="MainWindow_Start" Value="Start" />
@@ -174,32 +172,45 @@
   <Translate Key="ConnectionControl_Copy" Value="Copy" />
   <Translate Key="ConnectionControl_Paste" Value="Paste" />
 
-  <Translate Key="SectionControl_NewChannel" Value="New channel" />
-  <Translate Key="SectionControl_NewCategory" Value="New category" />
+  <Translate Key="SectionControl_New" Value="New" />
   <Translate Key="SectionControl_Edit" Value="Edit" />
   <Translate Key="SectionControl_Delete" Value="Delete" />
   <Translate Key="SectionControl_Cut" Value="Cut" />
   <Translate Key="SectionControl_Copy" Value="Copy" />
   <Translate Key="SectionControl_CopyInfo" Value="Copy info" />
   <Translate Key="SectionControl_Paste" Value="Paste" />
+  <Translate Key="SectionControl_ChannelList" Value="Channel List" />
   <Translate Key="SectionControl_Respons" Value="Respons" />
-  <Translate Key="SectionControl_Lock" Value="Lock" />
-  <Translate Key="SectionControl_LockThis" Value="Lock this" />
-  <Translate Key="SectionControl_UnlockThis" Value="Unlock this" />
-  <Translate Key="SectionControl_LockAll" Value="Lock all" />
-  <Translate Key="SectionControl_UnlockAll" Value="Unlock all" />
+  <Translate Key="SectionControl_Trust" Value="Trust" />
+  <Translate Key="SectionControl_ThisLock" Value="Lock" />
+  <Translate Key="SectionControl_ThisUnlock" Value="Unlock" />
   <Translate Key="SectionControl_Filter" Value="Filter" />
   <Translate Key="SectionControl_FilterWord" Value="Filter word" />
   <Translate Key="SectionControl_FilterSignature" Value="Filter signature" />
-  <Translate Key="SectionControl_FilterMessage" Value="Filter message" />
-  <Translate Key="SectionControl_SignatureFilter" Value="Sign" />
-  <Translate Key="SectionControl_NewMessage" Value="New" />
-  <Translate Key="SectionControl_OnlyUnread" Value="Only" />
+  <Translate Key="SectionControl_Message" Value="Message" />
+  <Translate Key="SectionControl_Topic" Value="Topic" />
   <Translate Key="SectionControl_AmoebaNotFound_Message" Value="Amoeba Not Found" />
   <Translate Key="SectionControl_MarkAllMessagesRead" Value="Mark all messages read" />
   <Translate Key="SectionControl_MarkAllMessagesRead_Message" Value="Do you want to mark all messages read?" />
   <Translate Key="SectionControl_ImportLockedMessages" Value="Import locked messages" />
   <Translate Key="SectionControl_ExportLockedMessages" Value="Export locked messages" />
+
+  <Translate Key="MessageEditWindow_Title" Value="New message" />
+  <Translate Key="MessageEditWindow_Edit" Value="Edit" />
+  <Translate Key="MessageEditWindow_Preview" Value="Preview" />
+  <Translate Key="MessageEditWindow_Comment" Value="Comment" />
+  <Translate Key="MessageEditWindow_Ok" Value="Ok" />
+  <Translate Key="MessageEditWindow_Cancel" Value="Cancel" />
+
+  <Translate Key="TopicEditWindow_Title" Value="New topic" />
+  <Translate Key="TopicEditWindow_Edit" Value="Edit" />
+  <Translate Key="TopicEditWindow_Preview" Value="Preview" />
+  <Translate Key="TopicEditWindow_Comment" Value="Comment" />
+  <Translate Key="TopicEditWindow_Ok" Value="Ok" />
+  <Translate Key="TopicEditWindow_Cancel" Value="Cancel" />
+
+  <Translate Key="TopicPreviewWindow_Title" Value="topic" />
+  <Translate Key="TopicPreviewWindow_Close" Value="Close" />
 
   <Translate Key="NewSectionWindow_Title" Value="New channel" />
   <Translate Key="NewSectionWindow_Name" Value="Name" />
@@ -211,9 +222,13 @@
   <Translate Key="NewChannelWindow_Ok" Value="Ok" />
   <Translate Key="NewChannelWindow_Cancel" Value="Cancel" />
 
+  <Translate Key="SectionTreeItemEditWindow_Section" Value="Section" />
+  <Translate Key="SectionTreeItemEditWindow_SectionLeaderSignature" Value="Section leader signature" />
   <Translate Key="SectionTreeItemEditWindow_Leader" Value="Leader" />
   <Translate Key="SectionTreeItemEditWindow_Manager" Value="Manager" />
   <Translate Key="SectionTreeItemEditWindow_Creator" Value="Creator" />
+  <Translate Key="SectionTreeItemEditWindow_Ok" Value="Ok" />
+  <Translate Key="SectionTreeItemEditWindow_Cancel" Value="Cancel" />
 
   <Translate Key="LeaderControl_Creators" Value="Creators" />
   <Translate Key="LeaderControl_Managers" Value="Managers" />
@@ -256,9 +271,31 @@
   <Translate Key="ManagerControl_Copy" Value="Copy" />
   <Translate Key="ManagerControl_Paste" Value="Paste" />
 
-  <Translate Key="SignWindow_Title" Value="Filter" />
-  <Translate Key="SignWindow_Signature" Value="Signature" />
-  <Translate Key="SignWindow_Ok" Value="Ok" />
-  <Translate Key="SignWindow_Cancel" Value="Cancel" />
+  <Translate Key="SearchItemEditWindow_Title" Value="Search item edit" />
+  <Translate Key="SearchItemEditWindow_Word" Value="Word" />
+  <Translate Key="SearchItemEditWindow_Regex" Value="Regex" />
+  <Translate Key="SearchItemEditWindow_Signature" Value="Signature" />
+  <Translate Key="SearchItemEditWindow_CreationTimeRange" Value="Creation time range" />
+  <Translate Key="SearchItemEditWindow_Contains" Value="Contains" />
+  <Translate Key="SearchItemEditWindow_IsIgnoreCase" Value="Ignore case" />
+  <Translate Key="SearchItemEditWindow_Value" Value="Value" />
+  <Translate Key="SearchItemEditWindow_Min" Value="Min" />
+  <Translate Key="SearchItemEditWindow_Max" Value="Max" />
+  <Translate Key="SearchItemEditWindow_Up" Value="Up" />
+  <Translate Key="SearchItemEditWindow_Down" Value="Down" />
+  <Translate Key="SearchItemEditWindow_Add" Value="Add" />
+  <Translate Key="SearchItemEditWindow_Edit" Value="Edit" />
+  <Translate Key="SearchItemEditWindow_Delete" Value="Delete" />
+  <Translate Key="SearchItemEditWindow_Ok" Value="Ok" />
+  <Translate Key="SearchItemEditWindow_Cancel" Value="Cancel" />
+  <Translate Key="SearchItemEditWindow_Cut" Value="Cut" />
+  <Translate Key="SearchItemEditWindow_Copy" Value="Copy" />
+  <Translate Key="SearchItemEditWindow_Paste" Value="Paste" />
+
+  <Translate Key="ChannelListWindow_Title" Value="Channel list" />
+  <Translate Key="ChannelListWindow_Name" Value="Name" />
+  <Translate Key="ChannelListWindow_Id" Value="Id" />
+  <Translate Key="ChannelListWindow_Join" Value="Join" />
+  <Translate Key="ChannelListWindow_Close" Value="Close" />
 
 </Configuration>

@@ -29,6 +29,11 @@ namespace Lair.Windows
 {
     class ListViewEx : ListView
     {
+        public ListViewEx()
+        {
+
+        }
+
         public new void SetSelectedItems(IEnumerable selectedItems)
         {
             base.SetSelectedItems(selectedItems);
@@ -89,6 +94,16 @@ namespace Lair.Windows
                 }
 
                 base.Focus();
+            }
+        }
+
+        private void RefreshBindings()
+        {
+            BindingExpression be = (BindingExpression)GetBindingExpression(SelectedItemsProperty);
+            
+            if (be != null)
+            {
+                be.UpdateTarget();
             }
         }
     }

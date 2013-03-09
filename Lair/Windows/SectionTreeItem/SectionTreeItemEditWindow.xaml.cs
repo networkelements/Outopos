@@ -17,9 +17,7 @@ using Library.Security;
 
 namespace Lair.Windows
 {
-    delegate void LeaderUploadEventHandler(object sender, LeaderInfo info);
-    delegate void CreatorUploadEventHandler(object sender, CreatorInfo info);
-    delegate void ManagerUploadEventHandler(object sender, ManagerInfo info);
+    delegate void UploadEventHandler(object sender);
 
     /// <summary>
     /// Interaction logic for SectionTreeItemEditWindow.xaml
@@ -48,15 +46,8 @@ namespace Lair.Windows
 
             _signatureComboBox.ItemsSource = digitalSignatureCollection;
 
-            for (int index = 0; index < Settings.Instance.Global_DigitalSignatureCollection.Count; index++)
-            {
-                if (Settings.Instance.Global_DigitalSignatureCollection[index].ToString() == _sectionTreeItem.UploadSignature)
-                {
-                    _signatureComboBox.SelectedIndex = index + 1;
-
-                    break;
-                }
-            }
+            _sectionTextBox.Text = MessageConverter.ToSectionString(_sectionTreeItem.Section);
+            _sectionLeaderSignatureTextBox.Text = _sectionTreeItem.SectionLeaderSignature;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -76,31 +67,47 @@ namespace Lair.Windows
             _managerControl.Width = Double.NaN;
             _managerTabItem.Content = _managerControl;
 
-            _leaderControl.LeaderUploadEvent += new LeaderUploadEventHandler(_leaderControl_LeaderUploadEvent);
-            _creatorControl.CreatorUploadEvent += new CreatorUploadEventHandler(_creatorControl_CreatorUploadEvent);
-            _managerControl.ManagerUploadEvent += new ManagerUploadEventHandler(_managerControl_ManagerUploadEvent);
+            _leaderControl.UploadEvent += new UploadEventHandler(_leaderControl_UploadEvent);
+            _creatorControl.UploadEvent += new UploadEventHandler(_creatorControl_UploadEvent);
+            _managerControl.UploadEvent += new UploadEventHandler(_managerControl_UploadEvent);
+
+            for (int index = 0; index < Settings.Instance.Global_DigitalSignatureCollection.Count; index++)
+            {
+                if (Settings.Instance.Global_DigitalSignatureCollection[index].ToString() == _sectionTreeItem.UploadSignature)
+                {
+                    _signatureComboBox.SelectedIndex = index + 1;
+
+                    break;
+                }
+            }
         }
 
-        void _leaderControl_LeaderUploadEvent(object sender, LeaderInfo info)
+        void _leaderControl_UploadEvent(object sender)
         {
             var digitalSignatureComboBoxItem = _signatureComboBox.SelectedItem as DigitalSignatureComboBoxItem;
             DigitalSignature digitalSignature = digitalSignatureComboBoxItem == null ? null : digitalSignatureComboBoxItem.Value;
+
+            var info = _leaderControl.LeaderInfo;
 
             _lairManager.Upload(new Leader(_sectionTreeItem.Section, info.Comment, info.CreatorSignatures, info.ManagerSignatures, digitalSignature));
         }
 
-        void _creatorControl_CreatorUploadEvent(object sender, CreatorInfo info)
+        void _creatorControl_UploadEvent(object sender)
         {
             var digitalSignatureComboBoxItem = _signatureComboBox.SelectedItem as DigitalSignatureComboBoxItem;
             DigitalSignature digitalSignature = digitalSignatureComboBoxItem == null ? null : digitalSignatureComboBoxItem.Value;
+
+            var info = _creatorControl.CreatorInfo;
 
             _lairManager.Upload(new Creator(_sectionTreeItem.Section, info.Comment, info.Channels, digitalSignature));
         }
 
-        void _managerControl_ManagerUploadEvent(object sender, ManagerInfo info)
+        void _managerControl_UploadEvent(object sender)
         {
             var digitalSignatureComboBoxItem = _signatureComboBox.SelectedItem as DigitalSignatureComboBoxItem;
             DigitalSignature digitalSignature = digitalSignatureComboBoxItem == null ? null : digitalSignatureComboBoxItem.Value;
+
+            var info = _managerControl.ManagerInfo;
 
             _lairManager.Upload(new Manager(_sectionTreeItem.Section, info.Comment, info.TrustSignatures, digitalSignature));
         }
@@ -112,6 +119,63 @@ namespace Lair.Windows
             _leaderControl.IsUploadEnabled = isUploadEnabled;
             _creatorControl.IsUploadEnabled = isUploadEnabled;
             _managerControl.IsUploadEnabled = isUploadEnabled;
+        }
+
+        private void _okButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = true;
+
+            var digitalSignatureComboBoxItem = _signatureComboBox.SelectedItem as DigitalSignatureComboBoxItem;
+            DigitalSignature digitalSignature = digitalSignatureComboBoxItem == null ? null : digitalSignatureComboBoxItem.Value;
+
+            lock (_sectionTreeItem.ThisLock)
+            {
+                _sectionTreeItem.SectionLeaderSignature = _sectionLeaderSignatureTextBox.Text;
+                _sectionTreeItem.UploadSignature = digitalSignature.ToString();
+
+                _sectionTreeItem.LeaderInfo = _leaderControl.LeaderInfo;
+                _sectionTreeItem.CreatorInfo = _creatorControl.CreatorInfo;
+                _sectionTreeItem.ManagerInfo = _managerControl.ManagerInfo;
+            }
+        }
+
+        private void _cancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = false;
+        }
+    }
+
+    class DigitalSignatureComboBoxItem : ComboBoxItem
+    {
+        private DigitalSignature _value;
+
+        public DigitalSignatureComboBoxItem()
+        {
+
+        }
+
+        public DigitalSignatureComboBoxItem(DigitalSignature digitalSignature)
+        {
+            this.Value = digitalSignature;
+        }
+
+        public void Update()
+        {
+            this.Content = this.Value.ToString();
+        }
+
+        public DigitalSignature Value
+        {
+            get
+            {
+                return _value;
+            }
+            set
+            {
+                _value = value;
+
+                this.Update();
+            }
         }
     }
 }

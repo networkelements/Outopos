@@ -20,6 +20,9 @@ using Lair.Properties;
 using Library;
 using Library.Net.Lair;
 using a = Library.Net.Amoeba;
+using Library.Collections;
+using System.Collections;
+using System.Collections.ObjectModel;
 
 namespace Lair.Windows
 {
@@ -590,6 +593,43 @@ namespace Lair.Windows
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    class MessageWrapperOfBorderBrushConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            var item = values[0] as MessageWrapper;
+            if (item == null) return null;
+
+            bool isSelected = (bool)values[1];
+
+            if (isSelected)
+            {
+                return new SolidColorBrush(Settings.Instance.Color_Message_Select);
+            }
+            else if (item.State.HasFlag(MessageState.New))
+            {
+                return new SolidColorBrush(Settings.Instance.Color_Message_New);
+            }
+            else
+            {
+                LockedHashSet<Message> hashSet = null;
+
+                if (Settings.Instance.Global_LockedMessages.TryGetValue(item.Value.Channel, out hashSet)
+                    && hashSet.Contains(item.Value))
+                {
+                    return new SolidColorBrush(Settings.Instance.Color_Message_Lock);
+                }
+            }
+
+            return new SolidColorBrush(Settings.Instance.Color_Message);
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }

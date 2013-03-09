@@ -7,7 +7,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Lair.Properties;
@@ -23,14 +22,16 @@ namespace Lair.Windows
     partial class MessageEditWindow : Window
     {
         private Channel _channel;
-        private LairManager _lairManager;
         private List<Message> _responsMessages = new List<Message>();
+        private DigitalSignature _digitalSignature;
+        private LairManager _lairManager;
 
-        public MessageEditWindow(Channel channel, string content, IEnumerable<Message> responsMessages, LairManager lairManager)
+        public MessageEditWindow(Channel channel, string content, IEnumerable<Message> responsMessages, DigitalSignature digitalSignature, LairManager lairManager)
         {
             _channel = channel;
-            _lairManager = lairManager;
             if (responsMessages != null) _responsMessages.AddRange(responsMessages);
+            _digitalSignature = digitalSignature;
+            _lairManager = lairManager;
 
             var digitalSignatureCollection = new List<object>();
             digitalSignatureCollection.Add(new ComboBoxItem() { Content = "" });
@@ -53,11 +54,6 @@ namespace Lair.Windows
             }
 
             _commentTextBox.Text = content;
-
-            _signatureComboBox.ItemsSource = digitalSignatureCollection;
-
-            var index = Settings.Instance.Global_DigitalSignatureCollection.IndexOf(Settings.Instance.Global_UploadDigitalSignature);
-            _signatureComboBox.SelectedIndex = index + 1;
 
             _commentTextBox.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
             _commentTextBox.FontSize = Settings.Instance.Global_Fonts_MessageFontSize;
@@ -86,12 +82,7 @@ namespace Lair.Windows
                     comment = comment.Substring(0, Message.MaxContentLength);
                 }
 
-                var digitalSignatureComboBoxItem = _signatureComboBox.SelectedItem as DigitalSignatureComboBoxItem;
-                DigitalSignature digitalSignature = digitalSignatureComboBoxItem == null ? null : digitalSignatureComboBoxItem.Value;
-
-                Settings.Instance.Global_UploadDigitalSignature = digitalSignature;
-
-                var m = new Message(_channel, comment, null, digitalSignature);
+                var m = new Message(_channel, comment, _responsMessages.Select(n => new Key(n.GetHash(HashAlgorithm.Sha512), HashAlgorithm.Sha512)), _digitalSignature);
 
                 RichTextBoxHelper.SetRichTextBox(_richTextBox, m);
             }
@@ -99,7 +90,7 @@ namespace Lair.Windows
 
         private void _commentTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(_commentTextBox.Text) || _commentTextBox.Text.Length > 2048)
+            if (string.IsNullOrWhiteSpace(_commentTextBox.Text) || _commentTextBox.Text.Length > Message.MaxContentLength)
             {
                 _okButton.IsEnabled = false;
             }
@@ -110,7 +101,7 @@ namespace Lair.Windows
 
             if (_commentTextBox.Text != null)
             {
-                _countLabel.Content = string.Format("{0} / 2048", _commentTextBox.Text.Length);
+                _countLabel.Content = string.Format("{0} / {1}", _commentTextBox.Text.Length, Message.MaxContentLength);
             }
         }
 
@@ -118,54 +109,12 @@ namespace Lair.Windows
         {
             this.DialogResult = true;
 
-            string comment = _commentTextBox.Text;
-            var digitalSignatureComboBoxItem = _signatureComboBox.SelectedItem as DigitalSignatureComboBoxItem;
-            DigitalSignature digitalSignature = digitalSignatureComboBoxItem == null ? null : digitalSignatureComboBoxItem.Value;
-
-            Settings.Instance.Global_UploadDigitalSignature = digitalSignature;
-
-            var m = new Message(_channel, comment, null, digitalSignature);
-
-            _lairManager.Upload(m);
+            _lairManager.Upload(new Message(_channel, _commentTextBox.Text, _responsMessages.Select(n => new Key(n.GetHash(HashAlgorithm.Sha512), HashAlgorithm.Sha512)), _digitalSignature));
         }
 
         private void _cancelButton_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = false;
-        }
-    }
-
-    class DigitalSignatureComboBoxItem : ComboBoxItem
-    {
-        private DigitalSignature _value;
-
-        public DigitalSignatureComboBoxItem()
-        {
-
-        }
-
-        public DigitalSignatureComboBoxItem(DigitalSignature digitalSignature)
-        {
-            this.Value = digitalSignature;
-        }
-
-        public void Update()
-        {
-            this.Content = this.Value.ToString();
-        }
-
-        public DigitalSignature Value
-        {
-            get
-            {
-                return _value;
-            }
-            set
-            {
-                _value = value;
-
-                this.Update();
-            }
         }
     }
 }

@@ -2,8 +2,21 @@
         x:ClassModifier="internal"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="SectionTreeItemEditWindow" Height="416" Width="591"
-        Loaded="Window_Loaded">
+        xmlns:prop="clr-namespace:Lair.Properties"     
+        xmlns:local="clr-namespace:Lair.Windows" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        mc:Ignorable="d" 
+        FontFamily="{Binding Path=FontFamily, Mode=OneWay, Source={StaticResource ResourcesInstance}, Converter={StaticResource _stringToFontFamilyConverter}}"
+        FontSize="{Binding Path=FontSize, Mode=OneWay, Source={StaticResource ResourcesInstance}, Converter={StaticResource _stringToDoubleConverter}}"
+        Background="{DynamicResource WindowBackgroundBrush}"
+        Top="{Binding Path=SectionTreeItemEditWindow_Top, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}"
+        Left="{Binding Path=SectionTreeItemEditWindow_Left, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}"
+        Height="{Binding Path=SectionTreeItemEditWindow_Height, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}"
+        Width="{Binding Path=SectionTreeItemEditWindow_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}"
+        WindowState="{Binding Path=SectionTreeItemEditWindow_WindowState, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}"
+        Loaded="Window_Loaded" d:DesignHeight="423" d:DesignWidth="699">
+    
     <Grid>
         <Label Content="{Binding Path=SectionTreeItemEditWindow_Signature, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="12,12,0,0" VerticalAlignment="Top" Width="120" VerticalContentAlignment="Center" />
         <ComboBox Height="24" Margin="138,12,12,0" Name="_signatureComboBox" VerticalAlignment="Top" VerticalContentAlignment="Center" SelectionChanged="_signatureComboBox_SelectionChanged" />
@@ -13,14 +26,14 @@
                     <Label Content="{Binding Path=SectionTreeItemEditWindow_Section, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" Width="120" VerticalContentAlignment="Center" />
                     <TextBox Height="24" Margin="132,6,6,0" Name="_sectionTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="431" IsReadOnly="True" />
                     <Label Content="{Binding Path=SectionTreeItemEditWindow_SectionLeaderSignature, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,36,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="120" />
-                    <TextBox Height="24" Margin="132,36,6,0" Name="_sectionLeaderSignatureTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="431" IsReadOnly="True" />
+                    <TextBox Height="24" Margin="132,36,6,0" Name="_sectionLeaderSignatureTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="431" />
                 </Grid>
             </TabItem>
             <TabItem Name="_leaderTabItem" Header="{Binding Path=SectionTreeItemEditWindow_Leader, Source={StaticResource ResourcesInstance}}"/>
             <TabItem Name="_creatorTabItem" Header="{Binding Path=SectionTreeItemEditWindow_Creator, Source={StaticResource ResourcesInstance}}"/>
             <TabItem Name="_managerTabItem" Header="{Binding Path=SectionTreeItemEditWindow_Manager, Source={StaticResource ResourcesInstance}}"/>
         </TabControl>
-        <Button Content="{Binding Path=MessageEditWindow_Ok, Source={StaticResource ResourcesInstance}}" Height="23" HorizontalAlignment="Right" Margin="0,0,93,12" Name="_okButton" IsEnabled="False" VerticalAlignment="Bottom" Width="75" Click="_okButton_Click" IsDefault="True" />
-        <Button Content="{Binding Path=MessageEditWindow_Cancel, Source={StaticResource ResourcesInstance}}" Height="23" HorizontalAlignment="Right" Margin="0,0,12,12" Name="_cancelButton" VerticalAlignment="Bottom" Width="75" Click="_cancelButton_Click" IsCancel="True" />
+        <Button Content="{Binding Path=SectionTreeItemEditWindow_Ok, Source={StaticResource ResourcesInstance}}" Height="23" HorizontalAlignment="Right" Margin="0,0,93,12" Name="_okButton" VerticalAlignment="Bottom" Width="75" Click="_okButton_Click" IsDefault="True" />
+        <Button Content="{Binding Path=SectionTreeItemEditWindow_Cancel, Source={StaticResource ResourcesInstance}}" Height="23" HorizontalAlignment="Right" Margin="0,0,12,12" Name="_cancelButton" VerticalAlignment="Bottom" Width="75" Click="_cancelButton_Click" IsCancel="True" />
     </Grid>
 </Window>

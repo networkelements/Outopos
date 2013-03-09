@@ -19,10 +19,6 @@
             <Style TargetType="{x:Type local:DigitalSignatureComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}" />
             <Style TargetType="{x:Type local:EnabledFlowDocument}" BasedOn="{StaticResource {x:Type FlowDocument}}" />
             <Style TargetType="{x:Type local:LanguageMenuItem}" BasedOn="{StaticResource {x:Type MenuItem}}" />
-            <Style TargetType="{x:Type local:SectionTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" />
-            <Style TargetType="{x:Type local:LeaderTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" />
-            <Style TargetType="{x:Type local:ManagerTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" />
-            <Style TargetType="{x:Type local:CreatorTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" />
 
             <local:ObjectToImageConverter x:Key="_objectToImageConverter"/>
             <local:SeedToStringConverter x:Key="_seedToStringConverter"/>
@@ -44,6 +40,7 @@
             <local:StringToDoubleConverter x:Key="_stringToDoubleConverter"/>
             <local:ConnectionTypeToStringConverter x:Key="_connectionTypeToStringConverter"/>
             <local:TransferLimitTypeToStringConverter x:Key="_transferLimitTypeToStringConverter"/>
+            <local:MessageWrapperOfBorderBrushConverter x:Key="_messageWrapperOfBorderBrushConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

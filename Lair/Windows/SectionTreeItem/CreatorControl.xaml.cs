@@ -31,7 +31,7 @@ namespace Lair.Windows
 
         private ObservableCollection<Channel> _channelListViewItemCollection;
 
-        public event CreatorUploadEventHandler CreatorUploadEvent;
+        public event UploadEventHandler UploadEvent;
 
         public CreatorControl(CreatorInfo creatorInfo, BufferManager bufferManager)
         {
@@ -46,6 +46,19 @@ namespace Lair.Windows
             _commentTextBox.Text = _creatorInfo.Comment;
         }
 
+        public CreatorInfo CreatorInfo
+        {
+            get
+            {
+                var creatorInfo = new CreatorInfo();
+
+                creatorInfo.Channels.AddRange(_channelListViewItemCollection);
+                creatorInfo.Comment = _commentTextBox.Text;
+
+                return creatorInfo;
+            }
+        }
+
         public bool IsUploadEnabled
         {
             get
@@ -57,12 +70,12 @@ namespace Lair.Windows
                 _uploadButton.IsEnabled = value;
             }
         }
-        
-        protected virtual void OnCreatorUploadEvent(CreatorInfo info)
+
+        protected virtual void OnUploadEvent()
         {
-            if (this.CreatorUploadEvent != null)
+            if (this.UploadEvent != null)
             {
-                this.CreatorUploadEvent(this, info);
+                this.UploadEvent(this);
             }
         }
 
@@ -204,7 +217,7 @@ namespace Lair.Windows
 
         private void _channelAddButton_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(_channelTextBox.Text) || !Signature.HasSignature(_channelTextBox.Text)) return;
+            if (string.IsNullOrWhiteSpace(_channelTextBox.Text)) return;
 
             byte[] buffer = new byte[64];
             (new RNGCryptoServiceProvider()).GetBytes(buffer);
@@ -272,12 +285,7 @@ namespace Lair.Windows
 
         private void _uploadButton_Click(object sender, RoutedEventArgs e)
         {
-            var creatorInfo = new CreatorInfo();
-
-            creatorInfo.Channels.AddRange(_channelListViewItemCollection);
-            creatorInfo.Comment = _commentTextBox.Text;
-
-            this.OnCreatorUploadEvent(creatorInfo);
+            this.OnUploadEvent();
         }
     }
 }

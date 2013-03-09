@@ -31,7 +31,7 @@ namespace Lair.Windows
         private ObservableCollection<string> _creatorSignatureListViewItemCollection;
         private ObservableCollection<string> _managerSignatureListViewItemCollection;
 
-        public event LeaderUploadEventHandler LeaderUploadEvent;
+        public event UploadEventHandler UploadEvent;
 
         public LeaderControl(LeaderInfo leaderInfo, BufferManager bufferManager)
         {
@@ -48,6 +48,20 @@ namespace Lair.Windows
             _commentTextBox.Text = _leaderInfo.Comment;
         }
 
+        public LeaderInfo LeaderInfo
+        {
+            get
+            {
+                var leaderInfo = new LeaderInfo();
+
+                leaderInfo.CreatorSignatures.AddRange(_creatorSignatureListViewItemCollection);
+                leaderInfo.ManagerSignatures.AddRange(_managerSignatureListViewItemCollection);
+                leaderInfo.Comment = _commentTextBox.Text;
+
+                return leaderInfo;
+            }
+        }
+
         public bool IsUploadEnabled
         {
             get
@@ -59,12 +73,12 @@ namespace Lair.Windows
                 _uploadButton.IsEnabled = value;
             }
         }
-        
-        protected virtual void OnLeaderUploadEvent(LeaderInfo info)
+
+        protected virtual void OnUploadEvent()
         {
-            if (this.LeaderUploadEvent != null)
+            if (this.UploadEvent != null)
             {
-                this.LeaderUploadEvent(this, info);
+                this.UploadEvent(this);
             }
         }
 
@@ -107,7 +121,7 @@ namespace Lair.Windows
                         _creatorSignatureUpButton.IsEnabled = true;
                     }
 
-                    if (selectIndex == _managerSignatureListViewItemCollection.Count - 1)
+                    if (selectIndex == _creatorSignatureListViewItemCollection.Count - 1)
                     {
                         _creatorSignatureDownButton.IsEnabled = false;
                     }
@@ -182,8 +196,8 @@ namespace Lair.Windows
                 {
                     if (!Signature.HasSignature(item)) continue;
 
-                    if (_managerSignatureListViewItemCollection.Contains(item)) continue;
-                    _managerSignatureListViewItemCollection.Add(item);
+                    if (_creatorSignatureListViewItemCollection.Contains(item)) continue;
+                    _creatorSignatureListViewItemCollection.Add(item);
                 }
                 catch (Exception)
                 {
@@ -192,7 +206,7 @@ namespace Lair.Windows
             }
 
             _creatorSignatureTextBox.Text = "";
-            _creatorSignatureListView.SelectedIndex = _managerSignatureListViewItemCollection.Count - 1;
+            _creatorSignatureListView.SelectedIndex = _creatorSignatureListViewItemCollection.Count - 1;
 
             _creatorSignatureListViewUpdate();
         }
@@ -205,7 +219,7 @@ namespace Lair.Windows
             var selectIndex = _creatorSignatureListView.SelectedIndex;
             if (selectIndex == -1) return;
 
-            _managerSignatureListViewItemCollection.Move(selectIndex, selectIndex - 1);
+            _creatorSignatureListViewItemCollection.Move(selectIndex, selectIndex - 1);
 
             _creatorSignatureListViewUpdate();
         }
@@ -218,7 +232,7 @@ namespace Lair.Windows
             var selectIndex = _creatorSignatureListView.SelectedIndex;
             if (selectIndex == -1) return;
 
-            _managerSignatureListViewItemCollection.Move(selectIndex, selectIndex + 1);
+            _creatorSignatureListViewItemCollection.Move(selectIndex, selectIndex + 1);
 
             _creatorSignatureListViewUpdate();
         }
@@ -229,11 +243,11 @@ namespace Lair.Windows
 
             var item = _creatorSignatureTextBox.Text;
 
-            if (_managerSignatureListViewItemCollection.Contains(item)) return;
-            _managerSignatureListViewItemCollection.Add(item);
+            if (_creatorSignatureListViewItemCollection.Contains(item)) return;
+            _creatorSignatureListViewItemCollection.Add(item);
 
             _creatorSignatureTextBox.Text = "";
-            _creatorSignatureListView.SelectedIndex = _managerSignatureListViewItemCollection.Count - 1;
+            _creatorSignatureListView.SelectedIndex = _creatorSignatureListViewItemCollection.Count - 1;
 
             _creatorSignatureListViewUpdate();
         }
@@ -247,7 +261,7 @@ namespace Lair.Windows
 
             foreach (var item in _creatorSignatureListView.SelectedItems.OfType<string>().ToArray())
             {
-                _managerSignatureListViewItemCollection.Remove(item);
+                _creatorSignatureListViewItemCollection.Remove(item);
             }
 
             _creatorSignatureListView.SelectedIndex = selectIndex;
@@ -494,13 +508,7 @@ namespace Lair.Windows
 
         private void _uploadButton_Click(object sender, RoutedEventArgs e)
         {
-            var leaderInfo = new LeaderInfo();
-
-            leaderInfo.CreatorSignatures.AddRange(_creatorSignatureListViewItemCollection);
-            leaderInfo.ManagerSignatures.AddRange(_managerSignatureListViewItemCollection);
-            leaderInfo.Comment = _commentTextBox.Text;
-
-            this.OnLeaderUploadEvent(leaderInfo);
+            this.OnUploadEvent();
         }
     }
 }

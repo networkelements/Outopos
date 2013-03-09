@@ -30,7 +30,7 @@ namespace Lair.Windows
 
         private ObservableCollection<string> _trustSignatureListViewItemCollection;
 
-        public event ManagerUploadEventHandler ManagerUploadEvent;
+        public event UploadEventHandler UploadEvent;
 
         public ManagerControl(ManagerInfo managerInfo, BufferManager bufferManager)
         {
@@ -45,6 +45,19 @@ namespace Lair.Windows
             _commentTextBox.Text = _managerInfo.Comment;
         }
 
+        public ManagerInfo ManagerInfo
+        {
+            get
+            {
+                var managerInfo = new ManagerInfo();
+
+                managerInfo.TrustSignatures.AddRange(_trustSignatureListViewItemCollection);
+                managerInfo.Comment = _commentTextBox.Text;
+
+                return managerInfo;
+            }
+        }
+
         public bool IsUploadEnabled
         {
             get
@@ -57,11 +70,11 @@ namespace Lair.Windows
             }
         }
 
-        protected virtual void OnManagerUploadEvent(ManagerInfo info)
+        protected virtual void OnUploadEvent()
         {
-            if (this.ManagerUploadEvent != null)
+            if (this.UploadEvent != null)
             {
-                this.ManagerUploadEvent(this, info);
+                this.UploadEvent(this);
             }
         }
 
@@ -287,12 +300,7 @@ namespace Lair.Windows
 
         private void _uploadButton_Click(object sender, RoutedEventArgs e)
         {
-            var managerInfo = new ManagerInfo();
-
-            managerInfo.TrustSignatures.AddRange(_trustSignatureListViewItemCollection);
-            managerInfo.Comment = _commentTextBox.Text;
-
-            this.OnManagerUploadEvent(managerInfo);
+            this.OnUploadEvent();
         }
     }
 }

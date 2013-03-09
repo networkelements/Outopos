@@ -14,20 +14,48 @@
             <Setter Property="Visibility" Value="Collapsed"/>
         </Style>
 
-        <ContextMenu x:Key="_richTextBoxContextMenu" Name="_richTextBoxContextMenu" FontFamily="{Binding Path=FontFamily, Mode=OneWay, Source={StaticResource ResourcesInstance}, Converter={StaticResource _stringToFontFamilyConverter}}" FontSize="{Binding Path=FontSize, Mode=OneWay, Source={StaticResource ResourcesInstance}, Converter={StaticResource _stringToDoubleConverter}}">
+        <ContextMenu x:Key="_sectionTreeViewItemContextMenu" ContextMenuOpening="_sectionTreeViewItemContextMenu_ContextMenuOpening">
+            <MenuItem Name="_sectionTreeViewItemNewMenuItem" Header="{Binding Path=SectionControl_New, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemNewMenuItem_Click"/>
+            <MenuItem Name="_sectionTreeViewItemEditMenuItem" Header="{Binding Path=SectionControl_Edit, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemEditMenuItem_Click"/>
+            <MenuItem Name="_sectionTreeViewItemDeleteMenuItem" Header="{Binding Path=SectionControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemDeleteMenuItem_Click"/>
+            <Separator />
+            <MenuItem Name="_sectionTreeViewItemPasteMenuItem" Header="{Binding Path=SectionControl_Paste, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemPasteMenuItem_Click" />
+        </ContextMenu>
+
+        <ContextMenu x:Key="_searchTreeViewItemContextMenu" ContextMenuOpening="_searchTreeViewItemContextMenu_ContextMenuOpening">
+            <MenuItem Name="_searchTreeViewItemNewMenuItem" Header="{Binding Path=SectionControl_New, Source={StaticResource ResourcesInstance}}" Click="_searchTreeViewItemNewMenuItem_Click"/>
+            <MenuItem Name="_searchTreeViewItemEditMenuItem" Header="{Binding Path=SectionControl_Edit, Source={StaticResource ResourcesInstance}}" Click="_searchTreeViewItemEditMenuItem_Click"/>
+            <MenuItem Name="_searchTreeViewItemDeleteMenuItem" Header="{Binding Path=SectionControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_searchTreeViewItemDeleteMenuItem_Click"/>
+            <Separator />
+            <MenuItem Name="_searchTreeViewItemCutMenuItem" Header="{Binding Path=SectionControl_Cut, Source={StaticResource ResourcesInstance}}" Click="_searchTreeViewItemCutMenuItem_Click" />
+            <MenuItem Name="_searchTreeViewItemCopyMenuItem" Header="{Binding Path=SectionControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_searchTreeViewItemCopyMenuItem_Click" />
+            <MenuItem Name="_searchTreeViewItemPasteMenuItem" Header="{Binding Path=SectionControl_Paste, Source={StaticResource ResourcesInstance}}" Click="_searchTreeViewItemPasteMenuItem_Click" />
+            <Separator />
+            <MenuItem Name="_searchTreeViewItemChannelListMenuItem" Header="{Binding Path=SectionControl_ChannelList, Source={StaticResource ResourcesInstance}}" Click="_searchTreeViewItemChannelListMenuItem_Click"/>
+        </ContextMenu>
+       
+        <ContextMenu x:Key="_channelTreeItemTreeViewItemContextMenu" ContextMenuOpening="_channelTreeItemTreeViewItemContextMenu_ContextMenuOpening">
+            <MenuItem Name="_channelTreeItemTreeViewItemDeleteMenuItem" Header="{Binding Path=SectionControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_channelTreeItemTreeViewItemDeleteMenuItem_Click"/>
+            <Separator />
+            <MenuItem Name="_channelTreeItemTreeViewItemCutMenuItem" Header="{Binding Path=SectionControl_Cut, Source={StaticResource ResourcesInstance}}" Click="_channelTreeItemTreeViewItemCutMenuItem_Click" />
+            <MenuItem Name="_channelTreeItemTreeViewItemCopyMenuItem" Header="{Binding Path=SectionControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_channelTreeItemTreeViewItemCopyMenuItem_Click" />
+            <Separator />
+            <MenuItem Name="_channelTreeItemTreeViewItemExportLockedMessagesMenuItem" Header="{Binding Path=SectionControl_ExportLockedMessages, Source={StaticResource ResourcesInstance}}" Click="_channelTreeItemTreeViewItemExportLockedMessagesMenuItem_Click" />
+        </ContextMenu>
+        
+        <ContextMenu x:Key="_richTextBoxContextMenu" FontFamily="{Binding Path=FontFamily, Mode=OneWay, Source={StaticResource ResourcesInstance}, Converter={StaticResource _stringToFontFamilyConverter}}" FontSize="{Binding Path=FontSize, Mode=OneWay, Source={StaticResource ResourcesInstance}, Converter={StaticResource _stringToDoubleConverter}}">
             <MenuItem Name="_richTextBoxCopyMenuItem" Header="{Binding Path=SectionControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxCopyMenuItem_Click" />
             <Separator />
             <MenuItem Name="_richTextBoxResponsMenuItem" Header="{Binding Path=SectionControl_Respons, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxResponsMenuItem_Click" />
             <Separator />
-            <MenuItem Name="_richTextBoxTrustMenuItem" Header="{Binding Path=SectionControl_Trust, Source={StaticResource ResourcesInstance}}">
-                <MenuItem Name="_richTextBoxTrustSignatureMenuItem" Header="{Binding Path=SectionControl_TrustSignature, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxTrustSignatureMenuItem_Click"/>
-                <MenuItem Name="_richTextBoxTrustMessageMenuItem" Header="{Binding Path=SectionControl_TrustMessage, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxTrustMessageMenuItem_Click"/>
+            <MenuItem Name="_richTextBoxTrustMenuItem" Header="{Binding Path=SectionControl_Trust, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxTrustMenuItem_Click"/>
+            <MenuItem Name="_richTextBoxLockMenuItem" Header="{Binding Path=SectionControl_Lock, Source={StaticResource ResourcesInstance}}" >
+                <MenuItem Name="_richTextBoxThisLockMenuItem" Header="{Binding Path=SectionControl_ThisLock, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxThisLockMenuItem_Click"/>
+                <MenuItem Name="_richTextBoxThisUnlockMenuItem" Header="{Binding Path=SectionControl_ThisUnlock, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxThisUnlockMenuItem_Click"/>
             </MenuItem>
-            <Separator />
             <MenuItem Name="_richTextBoxFilterMenuItem" Header="{Binding Path=SectionControl_Filter, Source={StaticResource ResourcesInstance}}" >
                 <MenuItem Name="_richTextBoxFilterWordMenuItem" Header="{Binding Path=SectionControl_FilterWord, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxFilterWordMenuItem_Click"/>
                 <MenuItem Name="_richTextBoxFilterSignatureMenuItem" Header="{Binding Path=SectionControl_FilterSignature, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxFilterSignatureMenuItem_Click"/>
-                <MenuItem Name="_richTextBoxFilterMessageMenuItem" Header="{Binding Path=SectionControl_FilterMessage, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxFilterMessageMenuItem_Click"/>
             </MenuItem>
         </ContextMenu>
         
@@ -157,8 +185,8 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
-        <Style TargetType="{x:Type RichTextBox}">
+
+        <Style TargetType="{x:Type local:RichTextBoxEx}">
             <Setter Property="FocusVisualStyle" Value="{x:Null}" />
             <Setter Property="SnapsToDevicePixels" Value="True" />
             <Setter Property="UseLayoutRounding" Value="True" />
@@ -166,7 +194,7 @@
             <Setter Property="IsReadOnly" Value="True" />
             <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type RichTextBox}">
+                    <ControlTemplate TargetType="{x:Type local:RichTextBoxEx}">
                         <Grid Background="{TemplateBinding Background}">
                             <ScrollViewer Margin="0" x:Name="PART_ContentHost" Style="{DynamicResource NuclearScrollViewer}" />
                         </Grid>
@@ -181,9 +209,9 @@
 
         <DataTemplate x:Key="_myTemplate_ListView">
             <Grid>
-                <RichTextBox x:Name="_richTextBox" BorderBrush="{Binding Path=State, Mode=OneWay, Converter={StaticResource _messageExToBorderBrushConverter}}" local:RichTextBoxHelper.DocumentMessage="{Binding Path=Value, Mode=OneWay}" Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType=Grid}}" ContextMenuOpening="_richTextBox_ContextMenuOpening">
+                <local:RichTextBoxEx x:Name="_richTextBox" local:RichTextBoxHelper.DocumentMessage="{Binding Path=Value, Mode=OneWay}" Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType=Grid}}" ContextMenuOpening="_richTextBox_ContextMenuOpening">
                     <RichTextBox.Style>
-                        <Style TargetType="{x:Type RichTextBox}">
+                        <Style TargetType="{x:Type local:RichTextBoxEx}">
                             <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                             <Setter Property="SnapsToDevicePixels" Value="True" />
                             <Setter Property="UseLayoutRounding" Value="True" />
@@ -210,7 +238,13 @@
                             <Setter Property="ContextMenu" Value="{StaticResource _richTextBoxContextMenu}" />
                         </Style>
                     </RichTextBox.Style>
-                </RichTextBox>
+                    <RichTextBox.BorderBrush>
+                        <MultiBinding Converter="{StaticResource _messageWrapperOfBorderBrushConverter}">
+                            <Binding Mode="OneWay"/>
+                            <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}" Path="IsSelected" />
+                        </MultiBinding>
+                    </RichTextBox.BorderBrush>
+                </local:RichTextBoxEx>
             </Grid>
         </DataTemplate>
     </UserControl.Resources>
@@ -250,68 +284,36 @@
         <TreeView Name="_treeView" ContextMenuOpening="_treeView_ContextMenuOpening" SelectedItemChanged="_treeView_SelectedItemChanged" PreviewMouseMove="_treeView_PreviewMouseMove" AllowDrop="True" PreviewDrop="_treeView_PreviewDrop" PreviewMouseLeftButtonDown="_treeView_PreviewMouseLeftButtonDown" PreviewDragOver="_treeView_PreviewDragOver"
                 VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" Grid.RowSpan="3">
             <TreeView.Resources>
-                <Style TargetType="{x:Type local:SectionTreeViewItem}">
-                    <Setter Property="ContextMenu">
-                        <Setter.Value>
-                            <ContextMenu Name="_sectionTreeViewItemContextMenu">
-                                <MenuItem Name="_sectionTreeViewItemNewMenuItem" Header="{Binding Path=CacheControl_New, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemNewMenuItem_Click"/>
-                                <MenuItem Name="_sectionTreeViewItemEditMenuItem" Header="{Binding Path=CacheControl_Edit, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemEditMenuItem_Click"/>
-                                <MenuItem Name="_sectionTreeViewItemDeleteMenuItem" Header="{Binding Path=CacheControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemDeleteMenuItem_Click"/>
-                            </ContextMenu>
-                        </Setter.Value>
-                    </Setter>
+                <Style TargetType="{x:Type local:SectionTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" >
+                    <Setter Property="ContextMenu" Value="{StaticResource _sectionTreeViewItemContextMenu}" />
                 </Style>
-                <Style TargetType="{x:Type local:SearchTreeViewItem}">
-                    <Setter Property="ContextMenu">
-                        <Setter.Value>
-                            <ContextMenu Name="_searchTreeViewItemContextMenu">
-                                <MenuItem Name="_searchTreeViewItemNewMenuItem" Header="{Binding Path=CacheControl_New, Source={StaticResource ResourcesInstance}}" Click="_searchTreeViewItemNewMenuItem_Click"/>
-                                <MenuItem Name="_searchTreeViewItemEditMenuItem" Header="{Binding Path=CacheControl_Edit, Source={StaticResource ResourcesInstance}}" Click="_searchTreeViewItemEditMenuItem_Click"/>
-                                <MenuItem Name="_searchTreeViewItemDeleteMenuItem" Header="{Binding Path=CacheControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_searchTreeViewItemDeleteMenuItem_Click"/>
-                                <Separator />
-                                <MenuItem Name="_searchTreeViewItemCutMenuItem" Header="{Binding Path=CacheControl_Cut, Source={StaticResource ResourcesInstance}}" Click="_searchTreeViewItemCutMenuItem_Click" />
-                                <MenuItem Name="_searchTreeViewItemCopyMenuItem" Header="{Binding Path=CacheControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_searchTreeViewItemCopyMenuItem_Click" />
-                                <MenuItem Name="_searchTreeViewItemPasteMenuItem" Header="{Binding Path=CacheControl_Paste, Source={StaticResource ResourcesInstance}}" Click="_searchTreeViewItemPasteMenuItem_Click" />
-                            </ContextMenu>
-                        </Setter.Value>
-                    </Setter>
+                <Style TargetType="{x:Type local:SearchTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" >
+                    <Setter Property="ContextMenu" Value="{StaticResource _searchTreeViewItemContextMenu}" />
                 </Style>
-                <Style TargetType="{x:Type local:ChannelTreeViewItem}">
-                    <Setter Property="ContextMenu">
-                        <Setter.Value>
-                            <ContextMenu Name="_channelTreeItemTreeViewItemContextMenu">
-                                <MenuItem Name="_channelTreeItemTreeViewItemEditMenuItem" Header="{Binding Path=CacheControl_Edit, Source={StaticResource ResourcesInstance}}" Click="_channelTreeItemTreeViewItemEditMenuItem_Click"/>
-                                <MenuItem Name="_channelTreeItemTreeViewItemDeleteMenuItem" Header="{Binding Path=CacheControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_channelTreeItemTreeViewItemDeleteMenuItem_Click"/>
-                                <Separator />
-                                <MenuItem Name="_channelTreeItemTreeViewItemCutMenuItem" Header="{Binding Path=CacheControl_Cut, Source={StaticResource ResourcesInstance}}" Click="_channelTreeItemTreeViewItemCutMenuItem_Click" />
-                                <MenuItem Name="_channelTreeItemTreeViewItemCopyMenuItem" Header="{Binding Path=CacheControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_channelTreeItemTreeViewItemCopyMenuItem_Click" />
-                                <MenuItem Name="_channelTreeItemTreeViewItemPasteMenuItem" Header="{Binding Path=CacheControl_Paste, Source={StaticResource ResourcesInstance}}" Click="_channelTreeItemTreeViewItemPasteMenuItem_Click" />
-                            </ContextMenu>
-                        </Setter.Value>
-                    </Setter>
+                <Style TargetType="{x:Type local:ChannelTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" >
+                    <Setter Property="ContextMenu" Value="{StaticResource _channelTreeItemTreeViewItemContextMenu}" />
                 </Style>
             </TreeView.Resources>
 
             <TreeView.ContextMenu>
                 <ContextMenu Name="_treeViewContextMenu">
-                    <MenuItem Name="_treeViewNewMenuItem" Header="{Binding Path=ControlSectionControl_New, Source={StaticResource ResourcesInstance}}" Click="_treeViewNewMenuItem_Click"/>
+                    <MenuItem Name="_treeViewNewMenuItem" Header="{Binding Path=SectionControl_New, Source={StaticResource ResourcesInstance}}" Click="_treeViewNewMenuItem_Click"/>
+                    <Separator />
+                    <MenuItem Name="_treeViewPasteMenuItem" Header="{Binding Path=SectionControl_Paste, Source={StaticResource ResourcesInstance}}" Click="_treeViewPasteMenuItem_Click"/>
+                    <Separator />
+                    <MenuItem Name="_treeViewImportLockedMessagesMenuItem" Header="{Binding Path=SectionControl_ImportLockedMessages, Source={StaticResource ResourcesInstance}}" Click="_treeViewImportLockedMessagesMenuItem_Click" />
                 </ContextMenu>
             </TreeView.ContextMenu>
         </TreeView>
+
+        <ToggleButton Content="{Binding Path=SectionControl_Trust, Source={StaticResource ResourcesInstance}}" Grid.Column="2" Height="23" HorizontalAlignment="Left" Margin="6,0,0,0" Name="_trustToggleButton" VerticalAlignment="Top" Width="90" />
+        <Button Content="{Binding Path=SectionControl_Topic, Source={StaticResource ResourcesInstance}}" Height="23" HorizontalAlignment="Right" Margin="0,0,87,0" Name="_topicUploadButton" VerticalAlignment="Top" Width="75" Grid.Column="2" Click="_topicUploadButton_Click" />
+        <Button Content="{Binding Path=SectionControl_Message, Source={StaticResource ResourcesInstance}}" Grid.Column="2" Height="23" HorizontalAlignment="Right" Name="_messageUploadButton" VerticalAlignment="Top" Width="75" Margin="0,0,6,0" Click="_messageUploadButton_Click" />
         
-        <local:ListViewEx Grid.Column="2" Grid.Row="1" x:Name="_listView" Padding="0,1,0,0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SizeChanged="_listView_SizeChanged" PreviewKeyDown="_listView_PreviewKeyDown" SelectionMode="Single" LayoutUpdated="_listView_LayoutUpdated"
+        <local:ListViewEx Grid.Column="2" Grid.Row="1" x:Name="_listView" Padding="0,1,0,0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SizeChanged="_listView_SizeChanged" PreviewKeyDown="_listView_PreviewKeyDown"
                 VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Standard" Grid.ColumnSpan="3" PreviewMouseDown="_listView_PreviewMouseDown">
             <ListView.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}">
-                    <Style.Triggers>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <SolidColorBrush Color="{DynamicResource GrayColor}"/>
-                                </Setter.Value>
-                            </Setter>
-                        </Trigger>
-                    </Style.Triggers>
                     <Setter Property="OverridesDefaultStyle" Value="True" />
                     <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="BorderThickness" Value="1" />
@@ -328,11 +330,11 @@
                                         <GridViewRowPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Margin="0,2,0,2" VerticalAlignment="Stretch" />
                                     </Grid>
                                 </Border>
-                                <ControlTemplate.Triggers>
+                                <!--<ControlTemplate.Triggers>
                                     <Trigger Property="IsKeyboardFocusWithin" Value="true">
                                         <Setter Property="IsSelected" Value="true" />
                                     </Trigger>
-                                </ControlTemplate.Triggers>
+                                </ControlTemplate.Triggers>-->
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
@@ -349,6 +351,7 @@
                 </GridView>
             </ListView.View>
         </local:ListViewEx>
+       
         <TextBox Grid.Column="2" Grid.Row="2" Margin="24,0,0,0" Name="_searchTextBox" Grid.ColumnSpan="3" KeyDown="_searchTextBox_KeyDown" />
         <Button Content="×" Grid.Column="2" Grid.Row="2" Height="16" HorizontalAlignment="Left" Margin="4,4,0,0" Name="_searchCloseButton" VerticalAlignment="Top" Width="16" Padding="0,-2,0,0" Click="_searchCloseButton_Click" />
     </Grid>

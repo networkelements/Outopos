@@ -1202,10 +1202,10 @@ namespace Lair.Windows
             _connectionControl.Width = Double.NaN;
             _connectionTabItem.Content = _connectionControl;
 
-            ControlControl _controlControl = new ControlControl(this, _lairManager, _bufferManager);
-            _controlControl.Height = Double.NaN;
-            _controlControl.Width = Double.NaN;
-            _controlTabItem.Content = _controlControl;
+            SectionControl _sectionControl = new SectionControl(this, _lairManager, _bufferManager);
+            _sectionControl.Height = Double.NaN;
+            _sectionControl.Width = Double.NaN;
+            _sectionTabItem.Content = _sectionControl;
 
             if (Settings.Instance.Global_IsStart)
             {
@@ -1306,13 +1306,9 @@ namespace Lair.Windows
             {
                 App.SelectTab = "Connection";
             }
-            else if ((string)tabItem.Header == LanguagesManager.Instance.MainWindow_Channel)
+            else if ((string)tabItem.Header == LanguagesManager.Instance.MainWindow_Section)
             {
-                App.SelectTab = "Channel";
-            }
-            else if ((string)tabItem.Header == LanguagesManager.Instance.MainWindow_Search)
-            {
-                App.SelectTab = "Search";
+                App.SelectTab = "Section";
             }
             else if ((string)tabItem.Header == LanguagesManager.Instance.MainWindow_Log)
             {

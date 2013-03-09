@@ -30,7 +30,11 @@
     </UserControl.InputBindings>
 
     <Grid>
-        <TabControl Margin="0,0,0,41">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="23" />
+            <RowDefinition Height="472*" />
+        </Grid.RowDefinitions>
+        <TabControl Grid.Row="1">
             <TabItem Header="{Binding Path=LeaderControl_Creators, Source={StaticResource ResourcesInstance}}" Name="_creatorsTabItem">
                 <Grid Grid.Column="2" FocusManager.FocusedElement="{Binding ElementName=_creatorSignatureTextBox}">
                     <local:ListViewEx x:Name="_creatorSignatureListView" SelectionChanged="_creatorSignatureListView_SelectionChanged" PreviewMouseLeftButtonDown="_creatorSignatureListView_PreviewMouseLeftButtonDown" Margin="0,0,0,64" ContextMenuOpening="_creatorSignatureListView_ContextMenuOpening">
@@ -87,6 +91,6 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <Button Content="{Binding Path=LeaderControl_Upload, Source={StaticResource ResourcesInstance}}" Height="23" HorizontalAlignment="Right" Margin="0,0,12,12" Name="_uploadButton" VerticalAlignment="Bottom" Width="75" Click="_uploadButton_Click" />
+        <Button Content="{Binding Path=LeaderControl_Upload, Source={StaticResource ResourcesInstance}}" Height="23" HorizontalAlignment="Right" Margin="0,0,6,0" Name="_uploadButton" VerticalAlignment="Bottom" Width="75" Click="_uploadButton_Click" />
     </Grid>
 </UserControl>

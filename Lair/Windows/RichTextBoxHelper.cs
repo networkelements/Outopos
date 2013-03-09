@@ -9,7 +9,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
 using Lair.Properties;
@@ -21,6 +20,9 @@ namespace Lair.Windows
     delegate void LinkClickEventHandler(object sender, string link);
     delegate void SeedClickEventHandler(object sender, Library.Net.Amoeba.Seed seed);
     delegate void ChannelClickEventHandler(object sender, Channel channel);
+
+    delegate Message GetAnchorMessageEventHandler(object sender, Channel channel, Key key);
+
     delegate double GetMaxHeightEventHandler(object sender);
 
     class RichTextBoxHelper : DependencyObject
@@ -28,103 +30,41 @@ namespace Lair.Windows
         public static event LinkClickEventHandler LinkClickEvent;
         public static event SeedClickEventHandler SeedClickEvent;
         public static event ChannelClickEventHandler ChannelClickEvent;
+
+        public static GetAnchorMessageEventHandler GetAnchorMessageEvent;
+
         public static GetMaxHeightEventHandler GetMaxHeightEvent;
 
         private static Regex _urlRegex = new Regex(@"^(?<start>.*?)(?<url>http(s)?://(\S)+)(?<end>.*?)$", RegexOptions.Compiled | RegexOptions.Singleline);
-        private static Regex _titleRegex = new Regex(@"^ - (.*) - (\S*) (\S*) UTC$", RegexOptions.Compiled | RegexOptions.Singleline);
-        private static Color _d = Color.FromRgb(0x87, 0xCE, 0xEB);
-        private static Color _h = Color.FromRgb(0xDF, 0xDF, 0xDF);
 
         public static string GetMessageToString(Message message)
         {
             StringBuilder stringBuilder = new StringBuilder();
 
-            if (message.Certificate == null)
-            {
-                stringBuilder.AppendLine(string.Format(" - Anonymous - {0} UTC",
-                    message.CreationTime.ToUniversalTime().ToString("yyyy/MM/dd HH:mm:ss", System.Globalization.DateTimeFormatInfo.InvariantInfo)));
-            }
-            else
-            {
-                stringBuilder.AppendLine(string.Format(" - {0} - {1} UTC",
-                    message.Certificate.ToString(),
-                    message.CreationTime.ToUniversalTime().ToString("yyyy/MM/dd HH:mm:ss", System.Globalization.DateTimeFormatInfo.InvariantInfo)));
-            }
-
-            stringBuilder.AppendLine();
-
-            stringBuilder.Append(message.Content);
-
-            return stringBuilder.ToString().TrimEnd('\r', '\n');
-        }
-
-        public static string GetMessageToShowString(Message message)
-        {
-            StringBuilder stringBuilder = new StringBuilder();
-
-            if (message.Certificate == null)
-            {
-                stringBuilder.AppendLine(string.Format(" - Anonymous - {0}",
-                message.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
-            }
-            else
-            {
-                stringBuilder.AppendLine(string.Format(" - {0} - {1}",
-                    message.Certificate.ToString(),
-                    message.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
-            }
+            stringBuilder.AppendLine(string.Format("{0} UTC - {1}",
+                message.CreationTime.ToUniversalTime().ToString("yyyy/MM/dd HH:mm:ss", System.Globalization.DateTimeFormatInfo.InvariantInfo),
+                message.Certificate.ToString()));
 
             stringBuilder.AppendLine();
 
             foreach (var line in message.Content.Trim('\r', '\n').Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None))
             {
-                var text = line;
-
-                while (text.StartsWith("> "))
-                {
-                    text = text.Substring(2, text.Length - 2);
-                }
-
                 try
                 {
-                    var match = _titleRegex.Match(text);
+                    stringBuilder.AppendLine(line);
 
-                    if (match.Success)
+                    if (line.StartsWith("Seed@"))
                     {
-                        try
-                        {
-                            var dateText = match.Groups[2] + " " + match.Groups[3];
-                            var creationTime = DateTime.ParseExact(dateText, "yyyy/MM/dd HH:mm:ss", System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeUniversal).ToLocalTime();
-
-                            var item = string.Format(" - {0} - {1}",
-                                 match.Groups[1].Value,
-                                 creationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo));
-
-                            stringBuilder.AppendLine(item);
-                        }
-                        catch (Exception)
-                        {
-                            stringBuilder.AppendLine(text);
-                        }
-                    }
-                    else
-                    {
-                        stringBuilder.AppendLine(text);
-                    }
-
-                    if (text.StartsWith("Seed@"))
-                    {
-                        var seed = Library.Net.Amoeba.AmoebaConverter.FromSeedString(text);
-                        if (seed == null) throw new Exception();
-                        if (!seed.VerifyCertificate()) throw new Exception();
+                        var seed = Library.Net.Amoeba.AmoebaConverter.FromSeedString(line);
+                        if (seed == null || !seed.VerifyCertificate()) continue;
 
                         stringBuilder.AppendLine(MessageConverter.ToInfoMessage(seed));
                         stringBuilder.AppendLine();
                     }
-                    else if (text.StartsWith("Channel@"))
+                    else if (line.StartsWith("Channel@"))
                     {
-                        var channel = Library.Net.Lair.LairConverter.FromChannelString(text);
-                        if (channel == null) throw new Exception();
+                        var channel = Library.Net.Lair.LairConverter.FromChannelString(line);
+                        if (channel == null) continue;
 
                         stringBuilder.AppendLine(MessageConverter.ToInfoMessage(channel));
                         stringBuilder.AppendLine();
@@ -132,8 +72,7 @@ namespace Lair.Windows
                 }
                 catch (Exception)
                 {
-                    stringBuilder.AppendLine(text);
-                    stringBuilder.AppendLine();
+
                 }
             }
 
@@ -165,7 +104,7 @@ namespace Lair.Windows
 
                     try
                     {
-                        var richTextBox = (RichTextBox)obj;
+                        var richTextBox = (RichTextBoxEx)obj;
 
                         var message = e.NewValue as Message;
                         if (message == null) return;
@@ -179,7 +118,7 @@ namespace Lair.Windows
                 }
             });
 
-        public static void SetRichTextBox(RichTextBox richTextBox, Message message)
+        public static void SetRichTextBox(RichTextBoxEx richTextBox, Topic topic)
         {
             richTextBox.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
             richTextBox.FontSize = (double)new FontSizeConverter().ConvertFromString(Settings.Instance.Global_Fonts_MessageFontSize + "pt");
@@ -196,64 +135,17 @@ namespace Lair.Windows
             var p = new Paragraph();
             p.LineHeight = richTextBox.FontSize + 2;
 
-            if (message.Certificate == null)
+            p.Inlines.Add(new InlineUIContainer(new TextBlock()
             {
-                p.Inlines.Add(string.Format(" - Anonymous - {0}",
-                    message.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
-            }
-            else
-            {
-                p.Inlines.Add(string.Format(" - {0} - {1}",
-                    message.Certificate.ToString(),
-                    message.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
-            }
+                Text = string.Format("{0} - {1}",
+                topic.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat,
+                System.Globalization.DateTimeFormatInfo.InvariantInfo), topic.Certificate.ToString())
+            }));
 
             p.Inlines.Add(new LineBreak());
             p.Inlines.Add(new LineBreak());
 
-            p.Inlines.Add(RichTextBoxHelper.GetParagraph(richTextBox, message.Content, 0));
-
-            fd.Blocks.Add(p);
-
-            richTextBox.Document = fd;
-        }
-
-        private static Span GetParagraph(RichTextBox richTextBox, string text, int nest)
-        {
-            StringBuilder stringBuilder = new StringBuilder();
-            Span p = new Span();
-
-            List<string> list = new List<string>();
-
-            foreach (var line in text.Trim('\r', '\n').Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None))
-            {
-                var match = _titleRegex.Match(line);
-
-                if (match.Success)
-                {
-                    try
-                    {
-                        var dateText = match.Groups[2] + " " + match.Groups[3];
-                        var creationTime = DateTime.ParseExact(dateText, "yyyy/MM/dd HH:mm:ss", System.Globalization.DateTimeFormatInfo.InvariantInfo, System.Globalization.DateTimeStyles.AssumeUniversal).ToLocalTime();
-
-                        var item = string.Format(" - {0} - {1}",
-                             match.Groups[1].Value,
-                             creationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo));
-
-                        list.Add(item);
-                    }
-                    catch (Exception)
-                    {
-                        list.Add(line);
-                    }
-                }
-                else
-                {
-                    list.Add(line);
-                }
-            }
-
-            foreach (var line in list)
+            foreach (var line in topic.Content.Trim('\r', '\n').Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None))
             {
                 try
                 {
@@ -262,8 +154,7 @@ namespace Lair.Windows
                     if (rl.StartsWith("Seed@"))
                     {
                         var seed = Library.Net.Amoeba.AmoebaConverter.FromSeedString(rl);
-                        if (seed == null) throw new Exception();
-                        if (!seed.VerifyCertificate()) throw new Exception();
+                        if (seed == null || !seed.VerifyCertificate()) throw new Exception();
 
                         {
                             var span = new Span();
@@ -273,25 +164,24 @@ namespace Lair.Windows
                             var rl3 = (80 < rl.Length) ? rl.Substring(80) : "";
 
                             Hyperlink l = new Hyperlink();
-                            l.Foreground = new SolidColorBrush(_d);
-                            l.Cursor = Cursors.Hand;
-                            l.PreviewMouseLeftButtonDown += (object sender, MouseButtonEventArgs ex) =>
+                            l.Cursor = System.Windows.Input.Cursors.Hand;
+
+                            if (Settings.Instance.Global_SeedHistorys.Contains(seed)) l.Foreground = new SolidColorBrush(Settings.Instance.Color_Link);
+                            else l.Foreground = new SolidColorBrush(Settings.Instance.Color_Link_New);
+
+                            l.PreviewMouseLeftButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
                             {
                                 if (RichTextBoxHelper.SeedClickEvent != null)
                                 {
                                     RichTextBoxHelper.SeedClickEvent(sender, seed);
                                 }
 
-                                if (Settings.Instance.Global_SeedHistorys.Contains(seed))
-                                {
-                                    l.Foreground = new SolidColorBrush(_h);
-                                }
+                                if (Settings.Instance.Global_SeedHistorys.Contains(seed)) l.Foreground = new SolidColorBrush(Settings.Instance.Color_Link);
                             };
-
-                            if (Settings.Instance.Global_SeedHistorys.Contains(seed))
+                            l.PreviewMouseRightButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
                             {
-                                l.Foreground = new SolidColorBrush(_h);
-                            }
+                                richTextBox.Selection.Select(span.ContentStart, span.ContentEnd);
+                            };
 
                             {
                                 Run r = new Run();
@@ -321,11 +211,6 @@ namespace Lair.Windows
 
                                 span.Inlines.Add(r);
                             }
-
-                            l.PreviewMouseRightButtonDown += (object sender, MouseButtonEventArgs ex) =>
-                            {
-                                richTextBox.Selection.Select(span.ContentStart, span.ContentEnd);
-                            };
 
                             p.Inlines.Add(span);
                         }
@@ -355,25 +240,24 @@ namespace Lair.Windows
                             var rl3 = (80 < rl.Length) ? rl.Substring(80) : "";
 
                             Hyperlink l = new Hyperlink();
-                            l.Foreground = new SolidColorBrush(_d);
-                            l.Cursor = Cursors.Hand;
-                            l.PreviewMouseLeftButtonDown += (object sender, MouseButtonEventArgs ex) =>
+                            l.Cursor = System.Windows.Input.Cursors.Hand;
+
+                            if (Settings.Instance.Global_ChannelHistorys.Contains(channel)) l.Foreground = new SolidColorBrush(Settings.Instance.Color_Link);
+                            else l.Foreground = new SolidColorBrush(Settings.Instance.Color_Link_New);
+
+                            l.PreviewMouseLeftButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
                             {
                                 if (RichTextBoxHelper.ChannelClickEvent != null)
                                 {
                                     RichTextBoxHelper.ChannelClickEvent(sender, channel);
                                 }
 
-                                if (Settings.Instance.Global_ChannelHistorys.Contains(channel))
-                                {
-                                    l.Foreground = new SolidColorBrush(_h);
-                                }
+                                if (Settings.Instance.Global_ChannelHistorys.Contains(channel)) l.Foreground = new SolidColorBrush(Settings.Instance.Color_Link);
                             };
-
-                            if (Settings.Instance.Global_ChannelHistorys.Contains(channel))
+                            l.PreviewMouseRightButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
                             {
-                                l.Foreground = new SolidColorBrush(_h);
-                            }
+                                richTextBox.Selection.Select(span.ContentStart, span.ContentEnd);
+                            };
 
                             {
                                 Run r = new Run();
@@ -404,10 +288,259 @@ namespace Lair.Windows
                                 span.Inlines.Add(r);
                             }
 
-                            l.PreviewMouseRightButtonDown += (object sender, MouseButtonEventArgs ex) =>
+                            p.Inlines.Add(span);
+                        }
+
+                        p.Inlines.Add(new LineBreak());
+
+                        {
+                            Run r = new Run();
+                            r.Foreground = new SolidColorBrush(Color.FromRgb(0xCF, 0xCF, 0xCF));
+                            r.Text = MessageConverter.ToInfoMessage(channel);
+
+                            p.Inlines.Add(r);
+                        }
+
+                        p.Inlines.Add(new LineBreak());
+                    }
+                    else
+                    {
+                        var tempLine = line;
+
+                        for (; ; )
+                        {
+                            Match match = _urlRegex.Match(tempLine);
+
+                            if (match.Success)
+                            {
+                                p.Inlines.Add(match.Groups["start"].Value);
+
+                                var url = match.Groups["url"].Value;
+
+                                Hyperlink l = new Hyperlink();
+                                l.Cursor = System.Windows.Input.Cursors.Hand;
+
+                                if (Settings.Instance.Global_UrlHistorys.Contains(url)) l.Foreground = new SolidColorBrush(Settings.Instance.Color_Link);
+                                else l.Foreground = new SolidColorBrush(Settings.Instance.Color_Link_New);
+
+                                l.PreviewMouseLeftButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
+                                {
+                                    if (RichTextBoxHelper.LinkClickEvent != null)
+                                    {
+                                        RichTextBoxHelper.LinkClickEvent(sender, url);
+                                    }
+
+                                    if (Settings.Instance.Global_UrlHistorys.Contains(url)) l.Foreground = new SolidColorBrush(Settings.Instance.Color_Link);
+                                };
+                                l.PreviewMouseRightButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
+                                {
+                                    richTextBox.Selection.Select(l.ContentStart, l.ContentEnd);
+                                };
+
+                                l.Inlines.Add(url);
+                                p.Inlines.Add(l);
+
+                                tempLine = match.Groups["end"].Value;
+                            }
+                            else
+                            {
+                                p.Inlines.Add(tempLine);
+                                p.Inlines.Add(new LineBreak());
+
+                                break;
+                            }
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    p.Inlines.Add(line);
+                    p.Inlines.Add(new LineBreak());
+                }
+            }
+
+            while (p.Inlines.LastInline is LineBreak)
+            {
+                p.Inlines.Remove(p.Inlines.LastInline);
+            }
+
+            fd.Blocks.Add(p);
+
+            richTextBox.Document = fd;
+        }
+
+        public static void SetRichTextBox(RichTextBoxEx richTextBox, Message message)
+        {
+            richTextBox.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
+            richTextBox.FontSize = (double)new FontSizeConverter().ConvertFromString(Settings.Instance.Global_Fonts_MessageFontSize + "pt");
+
+            var maxHeight = Math.Max(0, RichTextBoxHelper.GetMaxHeightEvent(richTextBox));
+
+            richTextBox.MaxHeight = maxHeight / 3 * 2;
+
+            var fd = new EnabledFlowDocument();
+
+            fd.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
+            fd.FontSize = (double)new FontSizeConverter().ConvertFromString(Settings.Instance.Global_Fonts_MessageFontSize + "pt");
+
+            var p = new Paragraph();
+            p.LineHeight = richTextBox.FontSize + 2;
+
+            richTextBox.SetToString(RichTextBoxHelper.GetMessageToString(message));
+
+            {
+                var text = string.Format("{0} - {1}",
+                        message.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat,
+                        System.Globalization.DateTimeFormatInfo.InvariantInfo), message.Certificate.ToString());
+
+                p.Inlines.Add(new InlineUIContainer(new TextBlock() { Text = text }));
+            }
+
+            p.Inlines.Add(new LineBreak());
+            p.Inlines.Add(new LineBreak());
+
+            foreach (var line in message.Content.Trim('\r', '\n').Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None))
+            {
+                try
+                {
+                    var rl = line.Trim();
+
+                    if (rl.StartsWith("Seed@"))
+                    {
+                        var seed = Library.Net.Amoeba.AmoebaConverter.FromSeedString(rl);
+                        if (seed == null || !seed.VerifyCertificate()) throw new Exception();
+
+                        {
+                            var span = new Span();
+
+                            var rl1 = rl.Substring(0, 64);
+                            var rl2 = (64 < rl.Length) ? rl.Substring(64, Math.Min(rl.Length - 64, 16)) : "";
+                            var rl3 = (80 < rl.Length) ? rl.Substring(80) : "";
+
+                            Hyperlink l = new Hyperlink();
+                            l.Cursor = System.Windows.Input.Cursors.Hand;
+
+                            if (Settings.Instance.Global_SeedHistorys.Contains(seed)) l.Foreground = new SolidColorBrush(Settings.Instance.Color_Link);
+                            else l.Foreground = new SolidColorBrush(Settings.Instance.Color_Link_New);
+
+                            l.PreviewMouseLeftButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
+                            {
+                                if (RichTextBoxHelper.SeedClickEvent != null)
+                                {
+                                    RichTextBoxHelper.SeedClickEvent(sender, seed);
+                                }
+
+                                if (Settings.Instance.Global_SeedHistorys.Contains(seed)) l.Foreground = new SolidColorBrush(Settings.Instance.Color_Link);
+                            };
+                            l.PreviewMouseRightButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
                             {
                                 richTextBox.Selection.Select(span.ContentStart, span.ContentEnd);
                             };
+
+                            {
+                                Run r = new Run();
+                                r.Text = rl1;
+
+                                l.Inlines.Add(r);
+                            }
+
+                            if (!string.IsNullOrWhiteSpace(rl2))
+                            {
+                                Run r = new Run();
+                                r.Text = rl2;
+                                r.FontSize = 1;
+
+                                l.Inlines.Add(r);
+                            }
+
+                            span.Inlines.Add(l);
+
+                            if (!string.IsNullOrWhiteSpace(rl3))
+                            {
+                                Run r = new Run();
+                                r.Foreground = new SolidColorBrush(Color.FromRgb(0x33, 0x33, 0x33));
+                                r.Text = rl3;
+                                r.FontSize = 0.1;
+                                r.FontStretch = FontStretches.UltraCondensed;
+
+                                span.Inlines.Add(r);
+                            }
+
+                            p.Inlines.Add(span);
+                        }
+
+                        p.Inlines.Add(new LineBreak());
+
+                        {
+                            Run r = new Run();
+                            r.Foreground = new SolidColorBrush(Color.FromRgb(0xCF, 0xCF, 0xCF));
+                            r.Text = MessageConverter.ToInfoMessage(seed);
+
+                            p.Inlines.Add(r);
+                        }
+
+                        p.Inlines.Add(new LineBreak());
+                    }
+                    else if (rl.StartsWith("Channel@"))
+                    {
+                        var channel = Library.Net.Lair.LairConverter.FromChannelString(rl);
+                        if (channel == null) throw new Exception();
+
+                        {
+                            var span = new Span();
+
+                            var rl1 = rl.Substring(0, 64);
+                            var rl2 = (64 < rl.Length) ? rl.Substring(64, Math.Min(rl.Length - 64, 16)) : "";
+                            var rl3 = (80 < rl.Length) ? rl.Substring(80) : "";
+
+                            Hyperlink l = new Hyperlink();
+                            l.Cursor = System.Windows.Input.Cursors.Hand;
+
+                            if (Settings.Instance.Global_ChannelHistorys.Contains(channel)) l.Foreground = new SolidColorBrush(Settings.Instance.Color_Link);
+                            else l.Foreground = new SolidColorBrush(Settings.Instance.Color_Link_New);
+
+                            l.PreviewMouseLeftButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
+                            {
+                                if (RichTextBoxHelper.ChannelClickEvent != null)
+                                {
+                                    RichTextBoxHelper.ChannelClickEvent(sender, channel);
+                                }
+
+                                if (Settings.Instance.Global_ChannelHistorys.Contains(channel)) l.Foreground = new SolidColorBrush(Settings.Instance.Color_Link);
+                            };
+                            l.PreviewMouseRightButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
+                            {
+                                richTextBox.Selection.Select(span.ContentStart, span.ContentEnd);
+                            };
+
+                            {
+                                Run r = new Run();
+                                r.Text = rl1;
+
+                                l.Inlines.Add(r);
+                            }
+
+                            if (!string.IsNullOrWhiteSpace(rl2))
+                            {
+                                Run r = new Run();
+                                r.Text = rl2;
+                                r.FontSize = 1;
+
+                                l.Inlines.Add(r);
+                            }
+
+                            span.Inlines.Add(l);
+
+                            if (!string.IsNullOrWhiteSpace(rl3))
+                            {
+                                Run r = new Run();
+                                r.Foreground = new SolidColorBrush(Color.FromRgb(0x33, 0x33, 0x33));
+                                r.Text = rl3;
+                                r.FontSize = 0.1;
+                                r.FontStretch = FontStretches.UltraCondensed;
+
+                                span.Inlines.Add(r);
+                            }
 
                             p.Inlines.Add(span);
                         }
@@ -426,134 +559,49 @@ namespace Lair.Windows
                     }
                     else
                     {
-                        var line2 = line;
+                        var tempLine = line;
 
-                        if (line2.StartsWith("> "))
+                        for (; ; )
                         {
-                            stringBuilder.AppendLine(line2.Remove(0, 2));
-                        }
-                        else
-                        {
-                            if (stringBuilder.Length != 0)
+                            Match match = _urlRegex.Match(tempLine);
+
+                            if (match.Success)
                             {
-                                var list2 = stringBuilder.ToString().TrimEnd('\r', '\n').Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+                                p.Inlines.Add(match.Groups["start"].Value);
 
-                                if (list2.Length == 1)
+                                var url = match.Groups["url"].Value;
+
+                                Hyperlink l = new Hyperlink();
+                                l.Cursor = System.Windows.Input.Cursors.Hand;
+
+                                if (Settings.Instance.Global_UrlHistorys.Contains(url)) l.Foreground = new SolidColorBrush(Settings.Instance.Color_Link);
+                                else l.Foreground = new SolidColorBrush(Settings.Instance.Color_Link_New);
+
+                                l.PreviewMouseLeftButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
                                 {
-                                    p.Inlines.Add("> " + list2[0]);
-                                    p.Inlines.Add(new LineBreak());
-                                }
-                                else if (nest < 6)
-                                {
-                                    var richTextBox2 = new RichTextBox();
-
-                                    richTextBox2.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
-                                    richTextBox2.FontSize = (double)new FontSizeConverter().ConvertFromString(Settings.Instance.Global_Fonts_MessageFontSize + "pt");
-                                    richTextBox2.MaxHeight = Math.Max(0, RichTextBoxHelper.GetMaxHeightEvent(richTextBox));
-
-                                    var fd = new EnabledFlowDocument();
-                                    fd.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
-                                    fd.FontSize = (double)new FontSizeConverter().ConvertFromString(Settings.Instance.Global_Fonts_MessageFontSize + "pt");
-
-                                    var p2 = new Paragraph();
-                                    p2.LineHeight = richTextBox.FontSize + 2;
-
-                                    p2.Inlines.Add(RichTextBoxHelper.GetParagraph(richTextBox2, stringBuilder.ToString(), nest + 1));
-
-                                    fd.Blocks.Add(p2);
-                                    richTextBox2.Document = fd;
-
-                                    var grid = new Grid();
-                                    grid.Children.Add(richTextBox2);
-
-                                    richTextBox2.SelectAll();
-                                    var header = richTextBox2.Selection.Text.Replace("\r\n", " ").Replace('\r', ' ').Replace('\n', ' ');
-                                    richTextBox2.Selection.Select(richTextBox2.Document.ContentStart, richTextBox2.Document.ContentStart);
-
-                                    var label = new Label() { Content = header };
-
-                                    var binding = new Binding("ActualWidth")
+                                    if (RichTextBoxHelper.LinkClickEvent != null)
                                     {
-                                        Source = richTextBox
-                                    };
-
-                                    label.SetBinding(Label.WidthProperty, binding);
-
-                                    var expander = new Expander()
-                                    {
-                                        IsEnabled = true,
-                                        IsExpanded = false,
-                                        Header = label,
-                                        Content = grid,
-                                        Margin = new Thickness(2, 6, 2, 6),
-                                    };
-
-                                    expander.Expanded += (object sender, RoutedEventArgs e) =>
-                                    {
-                                        expander.Header = " ";
-
-                                        e.Handled = true;
-                                    };
-
-                                    expander.Collapsed += (object sender, RoutedEventArgs e) =>
-                                    {
-                                        expander.Header = label;
-
-                                        e.Handled = true;
-                                    };
-
-                                    p.Inlines.Add(new InlineUIContainer(expander));
-                                }
-                            }
-
-                            stringBuilder.Clear();
-
-                            for (; ; )
-                            {
-                                Match match = _urlRegex.Match(line2);
-
-                                if (match.Success)
-                                {
-                                    p.Inlines.Add(match.Groups["start"].Value);
-
-                                    var url = match.Groups["url"].Value;
-                                    Hyperlink l = new Hyperlink();
-                                    l.Foreground = new SolidColorBrush(_d);
-                                    l.Inlines.Add(url);
-                                    l.Cursor = Cursors.Hand;
-                                    l.PreviewMouseLeftButtonDown += (object sender, MouseButtonEventArgs ex) =>
-                                    {
-                                        if (RichTextBoxHelper.LinkClickEvent != null)
-                                        {
-                                            RichTextBoxHelper.LinkClickEvent(sender, url);
-                                        }
-
-                                        if (Settings.Instance.Global_UrlHistorys.Contains(url))
-                                        {
-                                            l.Foreground = new SolidColorBrush(_h);
-                                        }
-                                    };
-                                    l.PreviewMouseRightButtonDown += (object sender, MouseButtonEventArgs ex) =>
-                                    {
-                                        richTextBox.Selection.Select(l.ContentStart, l.ContentEnd);
-                                    };
-
-                                    if (Settings.Instance.Global_UrlHistorys.Contains(url))
-                                    {
-                                        l.Foreground = new SolidColorBrush(_h);
+                                        RichTextBoxHelper.LinkClickEvent(sender, url);
                                     }
 
-                                    p.Inlines.Add(l);
-
-                                    line2 = match.Groups["end"].Value;
-                                }
-                                else
+                                    if (Settings.Instance.Global_UrlHistorys.Contains(url)) l.Foreground = new SolidColorBrush(Settings.Instance.Color_Link);
+                                };
+                                l.PreviewMouseRightButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
                                 {
-                                    p.Inlines.Add(line2);
-                                    p.Inlines.Add(new LineBreak());
+                                    richTextBox.Selection.Select(l.ContentStart, l.ContentEnd);
+                                };
 
-                                    break;
-                                }
+                                l.Inlines.Add(url);
+                                p.Inlines.Add(l);
+
+                                tempLine = match.Groups["end"].Value;
+                            }
+                            else
+                            {
+                                p.Inlines.Add(tempLine);
+                                p.Inlines.Add(new LineBreak());
+
+                                break;
                             }
                         }
                     }
@@ -565,86 +613,89 @@ namespace Lair.Windows
                 }
             }
 
-            if (stringBuilder.Length != 0)
+            while (p.Inlines.LastInline is LineBreak)
             {
-                var list3 = stringBuilder.ToString().TrimEnd('\r', '\n').Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+                p.Inlines.Remove(p.Inlines.LastInline);
+            }
 
-                if (list3.Length == 1)
+            foreach (var anchor in message.Anchors)
+            {
+                Message anchorMessage = null;
+
+                if (RichTextBoxHelper.LinkClickEvent != null)
                 {
-                    p.Inlines.Add("> " + list3[0]);
-                    p.Inlines.Add(new LineBreak());
+                    anchorMessage = RichTextBoxHelper.GetAnchorMessageEvent(null, message.Channel, anchor);
                 }
-                else if (nest < 6)
+
+                if (anchorMessage != null)
                 {
-                    var richTextBox2 = new RichTextBox();
-
-                    richTextBox2.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
-                    richTextBox2.FontSize = (double)new FontSizeConverter().ConvertFromString(Settings.Instance.Global_Fonts_MessageFontSize + "pt");
-                    richTextBox2.MaxHeight = Math.Max(0, RichTextBoxHelper.GetMaxHeightEvent(richTextBox));
-
-                    var fd = new EnabledFlowDocument();
-                    fd.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
-                    fd.FontSize = (double)new FontSizeConverter().ConvertFromString(Settings.Instance.Global_Fonts_MessageFontSize + "pt");
-
-                    var p2 = new Paragraph();
-                    p2.LineHeight = richTextBox.FontSize + 2;
-
-                    p2.Inlines.Add(RichTextBoxHelper.GetParagraph(richTextBox2, stringBuilder.ToString(), nest + 1));
-
-                    fd.Blocks.Add(p2);
-                    richTextBox2.Document = fd;
+                    var targetRichTextBox = new RichTextBoxEx();
+                    RichTextBoxHelper.SetRichTextBox(targetRichTextBox, anchorMessage);
 
                     var grid = new Grid();
-                    grid.Children.Add(richTextBox2);
+                    grid.Children.Add(targetRichTextBox);
 
-                    richTextBox2.SelectAll();
-                    var header = richTextBox2.Selection.Text.Replace("\r\n", " ").Replace('\r', ' ').Replace('\n', ' ');
-                    richTextBox2.Selection.Select(richTextBox2.Document.ContentStart, richTextBox2.Document.ContentStart);
+                    var text = string.Format("{0} - {1}",
+                            message.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat,
+                            System.Globalization.DateTimeFormatInfo.InvariantInfo), message.Certificate.ToString());
 
-                    var label = new Label() { Content = header };
+                    var textBlock = new TextBlock() { Text = text };
 
                     var binding = new Binding("ActualWidth")
                     {
                         Source = richTextBox
                     };
 
-                    label.SetBinding(Label.WidthProperty, binding);
+                    textBlock.SetBinding(TextBlock.WidthProperty, binding);
 
                     var expander = new Expander()
                     {
                         IsEnabled = true,
                         IsExpanded = false,
-                        Header = label,
-                        Content = grid,
+                        Header = textBlock,
+
                         Margin = new Thickness(2, 6, 2, 6),
                     };
 
                     expander.Expanded += (object sender, RoutedEventArgs e) =>
                     {
                         expander.Header = " ";
+                        expander.Content = grid;
 
                         e.Handled = true;
                     };
 
                     expander.Collapsed += (object sender, RoutedEventArgs e) =>
                     {
-                        expander.Header = label;
+                        expander.Header = textBlock;
+                        expander.Content = null;
 
                         e.Handled = true;
                     };
 
                     p.Inlines.Add(new InlineUIContainer(expander));
                 }
+                else
+                {
+                    var binding = new Binding("ActualWidth")
+                    {
+                        Source = richTextBox
+                    };
+
+                    var expander = new Expander()
+                    {
+                        IsEnabled = false,
+                        IsExpanded = false,
+                        Margin = new Thickness(2, 6, 2, 6),
+                    };
+
+                    p.Inlines.Add(new InlineUIContainer(expander));
+                }
             }
 
-            while (p.Inlines.LastInline is LineBreak)
-            {
-                p.Inlines.Remove(p.Inlines.LastInline);
-            }
+            fd.Blocks.Add(p);
 
-            stringBuilder.Clear();
-
-            return p;
+            richTextBox.Document = fd;
         }
     }
 
@@ -656,6 +707,21 @@ namespace Lair.Windows
             {
                 return true;
             }
+        }
+    }
+
+    class RichTextBoxEx : RichTextBox
+    {
+        private string _toString = null;
+
+        public void SetToString(string value)
+        {
+            _toString = value;
+        }
+
+        public override string ToString()
+        {
+            return _toString;
         }
     }
 }
