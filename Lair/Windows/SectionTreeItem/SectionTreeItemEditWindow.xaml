@@ -24,9 +24,9 @@
             <TabItem Name="_sectionTabItem" Header="{Binding Path=SectionTreeItemEditWindow_Section, Source={StaticResource ResourcesInstance}}">
                 <Grid>
                     <Label Content="{Binding Path=SectionTreeItemEditWindow_Section, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" Width="120" VerticalContentAlignment="Center" />
-                    <TextBox Height="24" Margin="132,6,6,0" Name="_sectionTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="431" IsReadOnly="True" />
+                    <TextBox Height="24" Margin="132,6,6,0" Name="_sectionTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" IsReadOnly="True" />
                     <Label Content="{Binding Path=SectionTreeItemEditWindow_SectionLeaderSignature, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,36,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="120" />
-                    <TextBox Height="24" Margin="132,36,6,0" Name="_sectionLeaderSignatureTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="431" />
+                    <TextBox Height="24" Margin="132,36,6,0" Name="_sectionLeaderSignatureTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" />
                 </Grid>
             </TabItem>
             <TabItem Name="_leaderTabItem" Header="{Binding Path=SectionTreeItemEditWindow_Leader, Source={StaticResource ResourcesInstance}}"/>

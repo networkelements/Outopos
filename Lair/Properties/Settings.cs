@@ -45,7 +45,7 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<Color>() { Name = "Color_Tree_Hit", Value = Colors.LightPink },
                 new Library.Configuration.SettingsContext<Color>() { Name = "Color_Message", Value = Colors.Black },
                 new Library.Configuration.SettingsContext<Color>() { Name = "Color_Message_Select", Value = Colors.White },
-                new Library.Configuration.SettingsContext<Color>() { Name = "Color_Message_Lock", Value = Colors.LightBlue },
+                new Library.Configuration.SettingsContext<Color>() { Name = "Color_Message_Lock", Value = Colors.LightSkyBlue },
                 new Library.Configuration.SettingsContext<Color>() { Name = "Color_Message_New", Value = Colors.LightPink },
                 new Library.Configuration.SettingsContext<Color>() { Name = "Color_Link", Value = Colors.LightGray },
                 new Library.Configuration.SettingsContext<Color>() { Name = "Color_Link_New", Value = Colors.LightPink },
@@ -148,6 +148,18 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<ListSortDirection>() { Name = "ChannelListWindow_ListSortDirection", Value = ListSortDirection.Descending },
                 new Library.Configuration.SettingsContext<double>() { Name = "ChannelListWindow_GridViewColumn_Name_Width", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "ChannelListWindow_GridViewColumn_Id_Width", Value = 120 },
+
+                new Library.Configuration.SettingsContext<double>() { Name = "TopicEditWindow_Top", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "TopicEditWindow_Left", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "TopicEditWindow_Height", Value = 500 },
+                new Library.Configuration.SettingsContext<double>() { Name = "TopicEditWindow_Width", Value = 700 },
+                new Library.Configuration.SettingsContext<WindowState>() { Name = "TopicEditWindow_WindowState", Value = WindowState.Normal },
+
+                new Library.Configuration.SettingsContext<double>() { Name = "TopicPreviewWindow_Top", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "TopicPreviewWindow_Left", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "TopicPreviewWindow_Height", Value = 500 },
+                new Library.Configuration.SettingsContext<double>() { Name = "TopicPreviewWindow_Width", Value = 700 },
+                new Library.Configuration.SettingsContext<WindowState>() { Name = "TopicPreviewWindow_WindowState", Value = WindowState.Normal },
 
                 new Library.Configuration.SettingsContext<double>() { Name = "MessageEditWindow_Top", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "MessageEditWindow_Left", Value = 120 },
@@ -2274,6 +2286,198 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     this["ChannelListWindow_GridViewColumn_Id_Width"] = value;
+                }
+            }
+        }
+
+
+        public double TopicEditWindow_Top
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["TopicEditWindow_Top"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["TopicEditWindow_Top"] = value;
+                }
+            }
+        }
+
+        public double TopicEditWindow_Left
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["TopicEditWindow_Left"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["TopicEditWindow_Left"] = value;
+                }
+            }
+        }
+
+        public double TopicEditWindow_Height
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["TopicEditWindow_Height"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["TopicEditWindow_Height"] = value;
+                }
+            }
+        }
+
+        public double TopicEditWindow_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["TopicEditWindow_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["TopicEditWindow_Width"] = value;
+                }
+            }
+        }
+
+        public WindowState TopicEditWindow_WindowState
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (WindowState)this["TopicEditWindow_WindowState"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["TopicEditWindow_WindowState"] = value;
+                }
+            }
+        }
+
+
+        public double TopicPreviewWindow_Top
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["TopicPreviewWindow_Top"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["TopicPreviewWindow_Top"] = value;
+                }
+            }
+        }
+
+        public double TopicPreviewWindow_Left
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["TopicPreviewWindow_Left"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["TopicPreviewWindow_Left"] = value;
+                }
+            }
+        }
+
+        public double TopicPreviewWindow_Height
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["TopicPreviewWindow_Height"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["TopicPreviewWindow_Height"] = value;
+                }
+            }
+        }
+
+        public double TopicPreviewWindow_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["TopicPreviewWindow_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["TopicPreviewWindow_Width"] = value;
+                }
+            }
+        }
+
+        public WindowState TopicPreviewWindow_WindowState
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (WindowState)this["TopicPreviewWindow_WindowState"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["TopicPreviewWindow_WindowState"] = value;
                 }
             }
         }

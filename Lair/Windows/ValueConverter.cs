@@ -392,6 +392,23 @@ namespace Lair.Windows
         }
     }
 
+    [ValueConversion(typeof(byte[]), typeof(string))]
+    class BytesToBase64StringConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var item = value as byte[];
+            if (item == null) return null;
+
+            return NetworkConverter.ToBase64String(item);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotSupportedException();
+        }
+    }
+
     [ValueConversion(typeof(IEnumerable<string>), typeof(string))]
     class StringsToStringConverter : IValueConverter
     {

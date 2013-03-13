@@ -21,7 +21,7 @@
         <TabControl Name="_tabControl" Margin="0,0,0,71" SelectionChanged="_tabControl_SelectionChanged">
             <TabItem Header="{Binding Path=MessageEditWindow_Edit, Source={StaticResource ResourcesInstance}}" Name="_editTabItem">
                 <Grid>
-                    <TextBox AcceptsReturn="True" HorizontalScrollBarVisibility="Disabled" Margin="6" Name="_commentTextBox" VerticalScrollBarVisibility="Auto" TextChanged="_commentTextBox_TextChanged" TextWrapping="Wrap" AcceptsTab="True" Height="319" />
+                    <TextBox AcceptsReturn="True" HorizontalScrollBarVisibility="Disabled" Name="_commentTextBox" VerticalScrollBarVisibility="Auto" TextChanged="_commentTextBox_TextChanged" TextWrapping="Wrap" AcceptsTab="True" Margin="6" />
                 </Grid>
             </TabItem>
             <TabItem Header="{Binding Path=MessageEditWindow_Preview, Source={StaticResource ResourcesInstance}}" Name="_previewTabItem">
@@ -173,7 +173,7 @@
                             <Setter Property="BorderBrush" Value="#FF000000"/>
                         </Style>
                     </Grid.Resources>
-                    <local:RichTextBoxEx HorizontalAlignment="Stretch" Margin="6" x:Name="_richTextBox" VerticalAlignment="Stretch" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" />
+                    <local:RichTextBoxEx Margin="6" x:Name="_richTextBox" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" />
                 </Grid>
             </TabItem>
         </TabControl>

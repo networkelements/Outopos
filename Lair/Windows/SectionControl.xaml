@@ -4,6 +4,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:prop="clr-namespace:Lair.Properties"     
         xmlns:local="clr-namespace:Lair.Windows" 
+        Loaded="UserControl_Loaded"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         mc:Ignorable="d" 
@@ -19,6 +20,7 @@
             <MenuItem Name="_sectionTreeViewItemEditMenuItem" Header="{Binding Path=SectionControl_Edit, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemEditMenuItem_Click"/>
             <MenuItem Name="_sectionTreeViewItemDeleteMenuItem" Header="{Binding Path=SectionControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemDeleteMenuItem_Click"/>
             <Separator />
+            <MenuItem Name="_sectionTreeViewItemCopyMenuItem" Header="{Binding Path=SectionControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemCopyMenuItem_Click" />
             <MenuItem Name="_sectionTreeViewItemPasteMenuItem" Header="{Binding Path=SectionControl_Paste, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemPasteMenuItem_Click" />
         </ContextMenu>
 
@@ -50,8 +52,8 @@
             <Separator />
             <MenuItem Name="_richTextBoxTrustMenuItem" Header="{Binding Path=SectionControl_Trust, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxTrustMenuItem_Click"/>
             <MenuItem Name="_richTextBoxLockMenuItem" Header="{Binding Path=SectionControl_Lock, Source={StaticResource ResourcesInstance}}" >
-                <MenuItem Name="_richTextBoxThisLockMenuItem" Header="{Binding Path=SectionControl_ThisLock, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxThisLockMenuItem_Click"/>
-                <MenuItem Name="_richTextBoxThisUnlockMenuItem" Header="{Binding Path=SectionControl_ThisUnlock, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxThisUnlockMenuItem_Click"/>
+                <MenuItem Name="_richTextBoxLockThisMenuItem" Header="{Binding Path=SectionControl_LockThis, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxLockThisMenuItem_Click"/>
+                <MenuItem Name="_richTextBoxUnlockThisMenuItem" Header="{Binding Path=SectionControl_UnlockThis, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxUnlockThisMenuItem_Click"/>
             </MenuItem>
             <MenuItem Name="_richTextBoxFilterMenuItem" Header="{Binding Path=SectionControl_Filter, Source={StaticResource ResourcesInstance}}" >
                 <MenuItem Name="_richTextBoxFilterWordMenuItem" Header="{Binding Path=SectionControl_FilterWord, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxFilterWordMenuItem_Click"/>
@@ -306,7 +308,7 @@
             </TreeView.ContextMenu>
         </TreeView>
 
-        <ToggleButton Content="{Binding Path=SectionControl_Trust, Source={StaticResource ResourcesInstance}}" Grid.Column="2" Height="23" HorizontalAlignment="Left" Margin="6,0,0,0" Name="_trustToggleButton" VerticalAlignment="Top" Width="90" />
+        <ToggleButton Content="{Binding Path=SectionControl_Trust, Source={StaticResource ResourcesInstance}}" Grid.Column="2" Height="23" HorizontalAlignment="Left" Margin="6,0,0,0" Name="_trustToggleButton" VerticalAlignment="Top" Width="90" Click="_trustToggleButton_Click" />
         <Button Content="{Binding Path=SectionControl_Topic, Source={StaticResource ResourcesInstance}}" Height="23" HorizontalAlignment="Right" Margin="0,0,87,0" Name="_topicUploadButton" VerticalAlignment="Top" Width="75" Grid.Column="2" Click="_topicUploadButton_Click" />
         <Button Content="{Binding Path=SectionControl_Message, Source={StaticResource ResourcesInstance}}" Grid.Column="2" Height="23" HorizontalAlignment="Right" Name="_messageUploadButton" VerticalAlignment="Top" Width="75" Margin="0,0,6,0" Click="_messageUploadButton_Click" />
         

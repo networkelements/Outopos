@@ -165,6 +165,6 @@
             </Grid.Resources>
             <local:RichTextBoxEx Margin="0,0,0,41" x:Name="_richTextBox" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" />
         </Grid>
-        <Button Content="{Binding Path=TopicPreviewWindow_Cose, Source={StaticResource ResourcesInstance}}" Height="23" HorizontalAlignment="Right" Margin="0,0,12,12" Name="_closeButton" VerticalAlignment="Bottom" Width="75" Click="_closeButton_Click" IsCancel="True" IsDefault="True" />
+        <Button Content="{Binding Path=TopicPreviewWindow_Close, Source={StaticResource ResourcesInstance}}" Height="23" HorizontalAlignment="Right" Margin="0,0,12,12" Name="_closeButton" VerticalAlignment="Bottom" Width="75" Click="_closeButton_Click" IsCancel="True" IsDefault="True" />
     </Grid>
 </Window>

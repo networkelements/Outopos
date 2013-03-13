@@ -173,7 +173,7 @@
                             <Setter Property="BorderBrush" Value="#FF000000"/>
                         </Style>
                     </Grid.Resources>
-                    <local:RichTextBoxEx HorizontalAlignment="Stretch" Margin="6" x:Name="_richTextBox" VerticalAlignment="Stretch" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" />
+                    <local:RichTextBoxEx Margin="6" x:Name="_richTextBox" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" />
                 </Grid>
             </TabItem>
         </TabControl>

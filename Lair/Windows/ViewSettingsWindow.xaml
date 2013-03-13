@@ -108,8 +108,6 @@
             <Grid Grid.Column="2" FocusManager.FocusedElement="{Binding ElementName=_amoebaPathTextBox}" Visibility="{Binding ElementName=_amoebaTreeViewItem, Path=IsSelected, Converter={StaticResource _boolToVisibilityConverter}}">
                 <Label Content="{Binding Path=ViewSettingsWindow_AmoebaPath, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="360" />
                 <TextBox Height="24" Margin="372,6,6,0" Name="_amoebaPathTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" PreviewMouseDoubleClick="_amoebaPathTextBox_PreviewMouseDoubleClick" />
-                <Label Content="{Binding Path=ViewSettingsWindow_SeedDeleteExpires, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,36,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="360" />
-                <TextBox Height="24" Margin="372,36,6,0" Name="_seedDeleteExpiresTextBox" VerticalAlignment="Top" TextChanged="_seedDeleteExpiresTextBox_TextChanged"/>
             </Grid>
 
             <Grid Grid.Column="2" Visibility="{Binding ElementName=_eventsTreeViewItem, Path=IsSelected, Converter={StaticResource _boolToVisibilityConverter}}">

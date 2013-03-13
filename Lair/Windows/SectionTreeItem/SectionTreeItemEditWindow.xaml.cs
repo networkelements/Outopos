@@ -131,7 +131,7 @@ namespace Lair.Windows
             lock (_sectionTreeItem.ThisLock)
             {
                 _sectionTreeItem.SectionLeaderSignature = _sectionLeaderSignatureTextBox.Text;
-                _sectionTreeItem.UploadSignature = digitalSignature.ToString();
+                _sectionTreeItem.UploadSignature = (digitalSignature == null) ? null : digitalSignature.ToString();
 
                 _sectionTreeItem.LeaderInfo = _leaderControl.LeaderInfo;
                 _sectionTreeItem.CreatorInfo = _creatorControl.CreatorInfo;

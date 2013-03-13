@@ -25,7 +25,7 @@ namespace Lair.Windows
         {
             InitializeComponent();
 
-            RichTextBoxHelper.SetRichTextBox(_richTextBox, topic);
+            if (topic != null) RichTextBoxHelper.SetRichTextBox(_richTextBox, topic);
         }
 
         private void _closeButton_Click(object sender, RoutedEventArgs e)

@@ -518,17 +518,6 @@ namespace Lair.Properties
             }
         }
 
-        public string MainWindow_DeveloperSite
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("MainWindow_DeveloperSite");
-                }
-            }
-        }
-
         public string MainWindow_ManualSite
         {
             get
@@ -536,6 +525,17 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("MainWindow_ManualSite");
+                }
+            }
+        }
+
+        public string MainWindow_DeveloperSite
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("MainWindow_DeveloperSite");
                 }
             }
         }
@@ -1425,17 +1425,6 @@ namespace Lair.Properties
             }
         }
 
-        public string ViewSettingsWindow_SeedDeleteExpires
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ViewSettingsWindow_SeedDeleteExpires");
-                }
-            }
-        }
-
         public string ViewSettingsWindow_Fonts
         {
             get
@@ -1575,6 +1564,17 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("ViewSettingsWindow_Delete");
+                }
+            }
+        }
+
+        public string ViewSettingsWindow_Copy
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ViewSettingsWindow_Copy");
                 }
             }
         }
@@ -1768,6 +1768,72 @@ namespace Lair.Properties
             }
         }
 
+        public string ConnectionControl_SectionCount
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionControl_SectionCount");
+                }
+            }
+        }
+
+        public string ConnectionControl_LeaderCount
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionControl_LeaderCount");
+                }
+            }
+        }
+
+        public string ConnectionControl_CreatorCount
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionControl_CreatorCount");
+                }
+            }
+        }
+
+        public string ConnectionControl_ManagerCount
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionControl_ManagerCount");
+                }
+            }
+        }
+
+        public string ConnectionControl_ChannelCount
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionControl_ChannelCount");
+                }
+            }
+        }
+
+        public string ConnectionControl_TopicCount
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionControl_TopicCount");
+                }
+            }
+        }
+
         public string ConnectionControl_MessageCount
         {
             get
@@ -1775,17 +1841,6 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("ConnectionControl_MessageCount");
-                }
-            }
-        }
-
-        public string ConnectionControl_FilterCount
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionControl_FilterCount");
                 }
             }
         }
@@ -1801,6 +1856,50 @@ namespace Lair.Properties
             }
         }
 
+        public string ConnectionControl_PushSectionRequestCount
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionControl_PushSectionRequestCount");
+                }
+            }
+        }
+
+        public string ConnectionControl_PushLeaderCount
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionControl_PushLeaderCount");
+                }
+            }
+        }
+
+        public string ConnectionControl_PushCreatorCount
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionControl_PushCreatorCount");
+                }
+            }
+        }
+
+        public string ConnectionControl_PushManagerCount
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionControl_PushManagerCount");
+                }
+            }
+        }
+
         public string ConnectionControl_PushChannelRequestCount
         {
             get
@@ -1808,6 +1907,17 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("ConnectionControl_PushChannelRequestCount");
+                }
+            }
+        }
+
+        public string ConnectionControl_PushTopicCount
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionControl_PushTopicCount");
                 }
             }
         }
@@ -1823,17 +1933,6 @@ namespace Lair.Properties
             }
         }
 
-        public string ConnectionControl_PushFilterCount
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionControl_PushFilterCount");
-                }
-            }
-        }
-
         public string ConnectionControl_PullNodeCount
         {
             get
@@ -1841,6 +1940,50 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("ConnectionControl_PullNodeCount");
+                }
+            }
+        }
+
+        public string ConnectionControl_PullSectionRequestCount
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionControl_PullSectionRequestCount");
+                }
+            }
+        }
+
+        public string ConnectionControl_PullLeaderCount
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionControl_PullLeaderCount");
+                }
+            }
+        }
+
+        public string ConnectionControl_PullCreatorCount
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionControl_PullCreatorCount");
+                }
+            }
+        }
+
+        public string ConnectionControl_PullManagerCount
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionControl_PullManagerCount");
                 }
             }
         }
@@ -1856,6 +1999,17 @@ namespace Lair.Properties
             }
         }
 
+        public string ConnectionControl_PullTopicCount
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionControl_PullTopicCount");
+                }
+            }
+        }
+
         public string ConnectionControl_PullMessageCount
         {
             get
@@ -1863,17 +2017,6 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("ConnectionControl_PullMessageCount");
-                }
-            }
-        }
-
-        public string ConnectionControl_PullFilterCount
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ConnectionControl_PullFilterCount");
                 }
             }
         }
@@ -2011,24 +2154,35 @@ namespace Lair.Properties
             }
         }
 
-        public string SectionControl_ThisLock
+        public string SectionControl_Lock
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_ThisLock");
+                    return this.Translate("SectionControl_Lock");
                 }
             }
         }
 
-        public string SectionControl_ThisUnlock
+        public string SectionControl_LockThis
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_ThisUnlock");
+                    return this.Translate("SectionControl_LockThis");
+                }
+            }
+        }
+
+        public string SectionControl_UnlockThis
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionControl_UnlockThis");
                 }
             }
         }
@@ -2144,73 +2298,6 @@ namespace Lair.Properties
         }
 
 
-        public string MessageEditWindow_Title
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("MessageEditWindow_Title");
-                }
-            }
-        }
-
-        public string MessageEditWindow_Edit
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("MessageEditWindow_Edit");
-                }
-            }
-        }
-
-        public string MessageEditWindow_Preview
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("MessageEditWindow_Preview");
-                }
-            }
-        }
-
-        public string MessageEditWindow_Comment
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("MessageEditWindow_Comment");
-                }
-            }
-        }
-
-        public string MessageEditWindow_Ok
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("MessageEditWindow_Ok");
-                }
-            }
-        }
-
-        public string MessageEditWindow_Cancel
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("MessageEditWindow_Cancel");
-                }
-            }
-        }
-
-
         public string TopicEditWindow_Title
         {
             get
@@ -2296,6 +2383,73 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("TopicPreviewWindow_Close");
+                }
+            }
+        }
+
+
+        public string MessageEditWindow_Title
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("MessageEditWindow_Title");
+                }
+            }
+        }
+
+        public string MessageEditWindow_Edit
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("MessageEditWindow_Edit");
+                }
+            }
+        }
+
+        public string MessageEditWindow_Preview
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("MessageEditWindow_Preview");
+                }
+            }
+        }
+
+        public string MessageEditWindow_Comment
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("MessageEditWindow_Comment");
+                }
+            }
+        }
+
+        public string MessageEditWindow_Ok
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("MessageEditWindow_Ok");
+                }
+            }
+        }
+
+        public string MessageEditWindow_Cancel
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("MessageEditWindow_Cancel");
                 }
             }
         }
@@ -2391,6 +2545,17 @@ namespace Lair.Properties
         }
 
 
+        public string SectionTreeItemEditWindow_Signature
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionTreeItemEditWindow_Signature");
+                }
+            }
+        }
+
         public string SectionTreeItemEditWindow_Section
         {
             get
@@ -2424,17 +2589,6 @@ namespace Lair.Properties
             }
         }
 
-        public string SectionTreeItemEditWindow_Manager
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SectionTreeItemEditWindow_Manager");
-                }
-            }
-        }
-
         public string SectionTreeItemEditWindow_Creator
         {
             get
@@ -2442,6 +2596,17 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("SectionTreeItemEditWindow_Creator");
+                }
+            }
+        }
+
+        public string SectionTreeItemEditWindow_Manager
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionTreeItemEditWindow_Manager");
                 }
             }
         }
@@ -2635,13 +2800,24 @@ namespace Lair.Properties
             }
         }
 
-        public string CreatorControl_Value
+        public string CreatorControl_Name
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("CreatorControl_Value");
+                    return this.Translate("CreatorControl_Name");
+                }
+            }
+        }
+
+        public string CreatorControl_Id
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("CreatorControl_Id");
                 }
             }
         }
@@ -2901,6 +3077,17 @@ namespace Lair.Properties
             }
         }
 
+        public string SearchItemEditWindow_Name
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SearchItemEditWindow_Name");
+                }
+            }
+        }
+
         public string SearchItemEditWindow_Word
         {
             get
@@ -3140,6 +3327,28 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("ChannelListWindow_Id");
+                }
+            }
+        }
+
+        public string ChannelListWindow_Copy
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChannelListWindow_Copy");
+                }
+            }
+        }
+
+        public string ChannelListWindow_CopyInfo
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChannelListWindow_CopyInfo");
                 }
             }
         }

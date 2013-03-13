@@ -179,9 +179,6 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                if (_searchTreeItemList.Count != 0) return new Channel[0];
-                if (_channelTreeItemList.Count != 0) return new Channel[0];
-
                 var list = new List<Channel>();
 
                 foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))

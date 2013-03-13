@@ -11,6 +11,7 @@ using Lair.Properties;
 using Library.Io;
 using Library.Net.Lair;
 using Library.Security;
+using Library;
 
 namespace Lair
 {
@@ -22,8 +23,7 @@ namespace Lair
 
             try
             {
-                return section.Name + " - " + Convert.ToBase64String(section.Id)
-                    .Replace('+', '-').Replace('/', '_').TrimEnd('=');
+                return section.Name + " - " + NetworkConverter.ToBase64String(section.Id);
             }
             catch (Exception e)
             {
@@ -37,8 +37,7 @@ namespace Lair
 
             try
             {
-                return channel.Name + " - " + Convert.ToBase64String(channel.Id)
-                    .Replace('+', '-').Replace('/', '_').TrimEnd('=');
+                return channel.Name + " - " + NetworkConverter.ToBase64String(channel.Id);
             }
             catch (Exception e)
             {
@@ -77,8 +76,7 @@ namespace Lair
                 StringBuilder builder = new StringBuilder();
 
                 if (!string.IsNullOrWhiteSpace(section.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Section_Name, section.Name));
-                if (section.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Section_Id, Convert.ToBase64String(section.Id)
-                    .Replace('+', '-').Replace('/', '_').TrimEnd('=')));
+                if (section.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Section_Id, NetworkConverter.ToBase64String(section.Id)));
 
                 if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
                 else return null;
@@ -96,8 +94,7 @@ namespace Lair
                 StringBuilder builder = new StringBuilder();
 
                 if (!string.IsNullOrWhiteSpace(channel.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Channel_Name, channel.Name));
-                if (channel.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Channel_Id, Convert.ToBase64String(channel.Id)
-                    .Replace('+', '-').Replace('/', '_').TrimEnd('=')));
+                if (channel.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Channel_Id, NetworkConverter.ToBase64String(channel.Id)));
 
                 if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
                 else return null;

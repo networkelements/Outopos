@@ -7,7 +7,7 @@
         FontFamily="{Binding Path=FontFamily, Mode=OneWay, Source={StaticResource ResourcesInstance}, Converter={StaticResource _stringToFontFamilyConverter}}"
         FontSize="{Binding Path=FontSize, Mode=OneWay, Source={StaticResource ResourcesInstance}, Converter={StaticResource _stringToDoubleConverter}}"
         Background="{DynamicResource WindowBackgroundBrush}"
-        Title="{Binding Path=j_Title, Source={StaticResource ResourcesInstance}}"
+        Title="{Binding Path=ChannelListWindow_Title, Source={StaticResource ResourcesInstance}}"
         Top="{Binding Path=ChannelListWindow_Top, Mode=TwoWay, Source={x:Static prop:Settings.Instance}, Converter={StaticResource _topRelativeDoubleConverter}}"
         Left="{Binding Path=ChannelListWindow_Left, Mode=TwoWay, Source={x:Static prop:Settings.Instance}, Converter={StaticResource _leftRelativeDoubleConverter}}"
         Height="{Binding Path=ChannelListWindow_Height, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}"
@@ -19,7 +19,7 @@
             <TextBlock Text="{Binding Path=Name, Mode=OneWay, Converter={StaticResource _stringRegularizationConverter}}" />
         </DataTemplate>
         <DataTemplate x:Key="_myTemplate_Id">
-            <TextBlock Text="{Binding Path=Id, Mode=OneWay, Converter={StaticResource _bytesToHexStringConverter}}" />
+            <TextBlock Text="{Binding Path=Id, Mode=OneWay, Converter={StaticResource _bytesToBase64StringConverter}}" />
         </DataTemplate>
     </Window.Resources>
 

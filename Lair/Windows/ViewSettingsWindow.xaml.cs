@@ -443,24 +443,6 @@ namespace Lair.Windows
             return count;
         }
 
-        private void _seedDeleteExpiresTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(_seedDeleteExpiresTextBox.Text)) return;
-
-            StringBuilder builder = new StringBuilder("");
-
-            foreach (var item in _seedDeleteExpiresTextBox.Text)
-            {
-                if (Regex.IsMatch(item.ToString(), "[0-9\\.]"))
-                {
-                    builder.Append(item.ToString());
-                }
-            }
-
-            var value = builder.ToString();
-            if (_seedDeleteExpiresTextBox.Text != value) _seedDeleteExpiresTextBox.Text = value;
-        }
-
         #endregion
 
         private void _okButton_Click(object sender, RoutedEventArgs e)
@@ -495,8 +477,6 @@ namespace Lair.Windows
             Settings.Instance.Global_Fonts_MessageFontSize = Math.Max(Math.Min(messageFontSize, 100), 1);
 
             Settings.Instance.Global_UrlClearHistory_IsEnabled = _eventClearUrlHistoryCheckBox.IsChecked.Value;
-
-            int expires = ViewSettingsWindow.GetStringToInt(_seedDeleteExpiresTextBox.Text);
         }
 
         private void _cancelButton_Click(object sender, RoutedEventArgs e)

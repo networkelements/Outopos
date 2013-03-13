@@ -14,7 +14,7 @@
             <TextBlock Text="{Binding Path=Name, Mode=OneWay, Converter={StaticResource _stringRegularizationConverter}}" />
         </DataTemplate>
         <DataTemplate x:Key="_myTemplate_Id">
-            <TextBlock Text="{Binding Path=Id, Mode=OneWay, Converter={StaticResource _bytesToHexStringConverter}}" />
+            <TextBlock Text="{Binding Path=Id, Mode=OneWay, Converter={StaticResource _bytesToBase64StringConverter}}" />
         </DataTemplate>
     </UserControl.Resources>
 

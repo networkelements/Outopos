@@ -39,8 +39,8 @@
   <Translate Key="MainWindow_ViewSettings" Value="View settings" />
   <Translate Key="MainWindow_Languages" Value="Languages" />
   <Translate Key="MainWindow_Help" Value="Help" />
-  <Translate Key="MainWindow_DeveloperSite" Value="Developer site" />
-  <Translate Key="MainWindow_ManualSite" Value="Manual site" />
+  <Translate Key="MainWindow_ManualSite" Value="Documentation" />
+  <Translate Key="MainWindow_DeveloperSite" Value="Source code" />
   <Translate Key="MainWindow_CheckUpdate" Value="Check update" />
   <Translate Key="MainWindow_VersionInformation" Value="Version information" />
   <Translate Key="MainWindow_SendSpeed" Value="Send:" />
@@ -126,7 +126,6 @@
   <Translate Key="ViewSettingsWindow_AutoUpdate" Value="Auto update" />
   <Translate Key="ViewSettingsWindow_Amoeba" Value="Amoeba" />
   <Translate Key="ViewSettingsWindow_AmoebaPath" Value="Amoeba path" />
-  <Translate Key="ViewSettingsWindow_SeedDeleteExpires" Value="Seed expire date (need to restart)" />
   <Translate Key="ViewSettingsWindow_Fonts" Value="Fonts" />
   <Translate Key="ViewSettingsWindow_MessageFontFamily" Value="Message font family" />
   <Translate Key="ViewSettingsWindow_MessageFontSize" Value="Message font size (pt)" />
@@ -140,6 +139,7 @@
   <Translate Key="ViewSettingsWindow_Add" Value="Add" />
   <Translate Key="ViewSettingsWindow_Edit" Value="Edit" />
   <Translate Key="ViewSettingsWindow_Delete" Value="Delete" />
+  <Translate Key="ViewSettingsWindow_Copy" Value="Copy" />
   <Translate Key="ViewSettingsWindow_Ok" Value="Ok" />
   <Translate Key="ViewSettingsWindow_Cancel" Value="Cancel" />
 
@@ -159,16 +159,29 @@
   <Translate Key="ConnectionControl_AcceptConnectionCount" Value="Accept connection count" />
   <Translate Key="ConnectionControl_SurroundingNodeCount" Value="Surrounding node count" />
   <Translate Key="ConnectionControl_NodeCount" Value="Node count" />
+  <Translate Key="ConnectionControl_SectionCount" Value="Section count" />
+  <Translate Key="ConnectionControl_LeaderCount" Value="Leader count" />
+  <Translate Key="ConnectionControl_CreatorCount" Value="Creator count" />
+  <Translate Key="ConnectionControl_ManagerCount" Value="Manager count" />
+  <Translate Key="ConnectionControl_ChannelCount" Value="Channel count" />
+  <Translate Key="ConnectionControl_TopicCount" Value="Topic count" />
   <Translate Key="ConnectionControl_MessageCount" Value="Message count" />
-  <Translate Key="ConnectionControl_FilterCount" Value="Filter count" />
   <Translate Key="ConnectionControl_PushNodeCount" Value="PushNode count" />
+  <Translate Key="ConnectionControl_PushSectionRequestCount" Value="PushSectionRequest count" />
+  <Translate Key="ConnectionControl_PushLeaderCount" Value="PushLeader count" />
+  <Translate Key="ConnectionControl_PushCreatorCount" Value="PushCreator count" />
+  <Translate Key="ConnectionControl_PushManagerCount" Value="PushManager count" />
   <Translate Key="ConnectionControl_PushChannelRequestCount" Value="PushChannelRequest count" />
+  <Translate Key="ConnectionControl_PushTopicCount" Value="PushTopic count" />
   <Translate Key="ConnectionControl_PushMessageCount" Value="PushMessage count" />
-  <Translate Key="ConnectionControl_PushFilterCount" Value="PushFilter count" />
   <Translate Key="ConnectionControl_PullNodeCount" Value="PullNode count" />
+  <Translate Key="ConnectionControl_PullSectionRequestCount" Value="PullSectionRequest count" />
+  <Translate Key="ConnectionControl_PullLeaderCount" Value="PullLeader count" />
+  <Translate Key="ConnectionControl_PullCreatorCount" Value="PullCreator count" />
+  <Translate Key="ConnectionControl_PullManagerCount" Value="PullManager count" />
   <Translate Key="ConnectionControl_PullChannelRequestCount" Value="PullChannelRequest count" />
+  <Translate Key="ConnectionControl_PullTopicCount" Value="PullTopic count" />
   <Translate Key="ConnectionControl_PullMessageCount" Value="PullMessage count" />
-  <Translate Key="ConnectionControl_PullFilterCount" Value="PullFilter count" />
   <Translate Key="ConnectionControl_Copy" Value="Copy" />
   <Translate Key="ConnectionControl_Paste" Value="Paste" />
 
@@ -182,8 +195,9 @@
   <Translate Key="SectionControl_ChannelList" Value="Channel List" />
   <Translate Key="SectionControl_Respons" Value="Respons" />
   <Translate Key="SectionControl_Trust" Value="Trust" />
-  <Translate Key="SectionControl_ThisLock" Value="Lock" />
-  <Translate Key="SectionControl_ThisUnlock" Value="Unlock" />
+  <Translate Key="SectionControl_Lock" Value="Lock" />
+  <Translate Key="SectionControl_LockThis" Value="Lock this" />
+  <Translate Key="SectionControl_UnlockThis" Value="Unlock this" />
   <Translate Key="SectionControl_Filter" Value="Filter" />
   <Translate Key="SectionControl_FilterWord" Value="Filter word" />
   <Translate Key="SectionControl_FilterSignature" Value="Filter signature" />
@@ -195,13 +209,6 @@
   <Translate Key="SectionControl_ImportLockedMessages" Value="Import locked messages" />
   <Translate Key="SectionControl_ExportLockedMessages" Value="Export locked messages" />
 
-  <Translate Key="MessageEditWindow_Title" Value="New message" />
-  <Translate Key="MessageEditWindow_Edit" Value="Edit" />
-  <Translate Key="MessageEditWindow_Preview" Value="Preview" />
-  <Translate Key="MessageEditWindow_Comment" Value="Comment" />
-  <Translate Key="MessageEditWindow_Ok" Value="Ok" />
-  <Translate Key="MessageEditWindow_Cancel" Value="Cancel" />
-
   <Translate Key="TopicEditWindow_Title" Value="New topic" />
   <Translate Key="TopicEditWindow_Edit" Value="Edit" />
   <Translate Key="TopicEditWindow_Preview" Value="Preview" />
@@ -209,8 +216,15 @@
   <Translate Key="TopicEditWindow_Ok" Value="Ok" />
   <Translate Key="TopicEditWindow_Cancel" Value="Cancel" />
 
-  <Translate Key="TopicPreviewWindow_Title" Value="topic" />
+  <Translate Key="TopicPreviewWindow_Title" Value="Topic" />
   <Translate Key="TopicPreviewWindow_Close" Value="Close" />
+
+  <Translate Key="MessageEditWindow_Title" Value="New message" />
+  <Translate Key="MessageEditWindow_Edit" Value="Edit" />
+  <Translate Key="MessageEditWindow_Preview" Value="Preview" />
+  <Translate Key="MessageEditWindow_Comment" Value="Comment" />
+  <Translate Key="MessageEditWindow_Ok" Value="Ok" />
+  <Translate Key="MessageEditWindow_Cancel" Value="Cancel" />
 
   <Translate Key="NewSectionWindow_Title" Value="New channel" />
   <Translate Key="NewSectionWindow_Name" Value="Name" />
@@ -222,11 +236,12 @@
   <Translate Key="NewChannelWindow_Ok" Value="Ok" />
   <Translate Key="NewChannelWindow_Cancel" Value="Cancel" />
 
+  <Translate Key="SectionTreeItemEditWindow_Signature" Value="Signature" />
   <Translate Key="SectionTreeItemEditWindow_Section" Value="Section" />
-  <Translate Key="SectionTreeItemEditWindow_SectionLeaderSignature" Value="Section leader signature" />
+  <Translate Key="SectionTreeItemEditWindow_SectionLeaderSignature" Value="Leader signature" />
   <Translate Key="SectionTreeItemEditWindow_Leader" Value="Leader" />
-  <Translate Key="SectionTreeItemEditWindow_Manager" Value="Manager" />
   <Translate Key="SectionTreeItemEditWindow_Creator" Value="Creator" />
+  <Translate Key="SectionTreeItemEditWindow_Manager" Value="Manager" />
   <Translate Key="SectionTreeItemEditWindow_Ok" Value="Ok" />
   <Translate Key="SectionTreeItemEditWindow_Cancel" Value="Cancel" />
 
@@ -246,7 +261,8 @@
 
   <Translate Key="CreatorControl_Channels" Value="Channels" />
   <Translate Key="CreatorControl_Comment" Value="Comment" />
-  <Translate Key="CreatorControl_Value" Value="Value" />
+  <Translate Key="CreatorControl_Name" Value="Name" />
+  <Translate Key="CreatorControl_Id" Value="ID" />
   <Translate Key="CreatorControl_New" Value="New" />
   <Translate Key="CreatorControl_Up" Value="Up" />
   <Translate Key="CreatorControl_Down" Value="Down" />
@@ -272,6 +288,7 @@
   <Translate Key="ManagerControl_Paste" Value="Paste" />
 
   <Translate Key="SearchItemEditWindow_Title" Value="Search item edit" />
+  <Translate Key="SearchItemEditWindow_Name" Value="Name" />
   <Translate Key="SearchItemEditWindow_Word" Value="Word" />
   <Translate Key="SearchItemEditWindow_Regex" Value="Regex" />
   <Translate Key="SearchItemEditWindow_Signature" Value="Signature" />
@@ -294,7 +311,9 @@
 
   <Translate Key="ChannelListWindow_Title" Value="Channel list" />
   <Translate Key="ChannelListWindow_Name" Value="Name" />
-  <Translate Key="ChannelListWindow_Id" Value="Id" />
+  <Translate Key="ChannelListWindow_Id" Value="ID" />
+  <Translate Key="ChannelListWindow_Copy" Value="Copy" />
+  <Translate Key="ChannelListWindow_CopyInfo" Value="Copy info" />
   <Translate Key="ChannelListWindow_Join" Value="Join" />
   <Translate Key="ChannelListWindow_Close" Value="Close" />
 
