@@ -163,9 +163,9 @@ namespace Lair.Windows
                             var sectionTreeViewItem = _treeView.GetLineage((TreeViewItem)_treeView.SelectedItem).OfType<SectionTreeViewItem>().FirstOrDefault() as SectionTreeViewItem;
                             selectTreeViewItem = (ChannelTreeViewItem)_treeView.SelectedItem;
 
-                            _trustToggleButton.IsEnabled = true;
+                            _trustToggleButton.IsEnabled = (selectTreeViewItem.CreatorSignature != null);
                             _trustToggleButton.IsChecked = selectTreeViewItem.Value.IsFilterEnabled;
-                            _topicUploadButton.IsEnabled = true;
+                            _topicUploadButton.IsEnabled = (selectTreeViewItem.CreatorSignature != null);
                             _messageUploadButton.IsEnabled = (sectionTreeViewItem.Value.UploadSignature != null);
                         }
                     }), null);
@@ -335,24 +335,62 @@ namespace Lair.Windows
                 {
                     foreach (var sectionTreeViewItem in _treeView.Items.OfType<SectionTreeViewItem>())
                     {
+                        if (sectionTreeViewItem.Value.LeaderSignature == null) continue;
+
                         var trustSignatures = new HashSet<string>();
+                        var channels = new Dictionary<Channel, string>();
 
                         {
-                            List<Leader> leaders = new List<Leader>(_lairManager.GetLeaders(sectionTreeViewItem.Value.Section));
-                            List<Manager> managers = new List<Manager>(_lairManager.GetManagers(sectionTreeViewItem.Value.Section));
+                            Dictionary<string, Leader> leaderDictionary = new Dictionary<string, Leader>();
 
-                            var leader = leaders.FirstOrDefault(n => n.Certificate.ToString() == sectionTreeViewItem.Value.SectionLeaderSignature);
-                            if (leader == null) goto End;
-
-                            var managerSignatrues = new HashSet<string>(leader.ManagerSignatures);
-
-                            foreach (var manager in managers)
+                            foreach (var leader in _lairManager.GetLeaders(sectionTreeViewItem.Value.Section))
                             {
-                                if (!managerSignatrues.Contains(manager.Certificate.ToString())) continue;
-
-                                trustSignatures.UnionWith(manager.TrustSignatures);
+                                leaderDictionary[leader.Certificate.ToString()] = leader;
                             }
-                        End: ;
+
+                            {
+                                Leader leader;
+
+                                if (leaderDictionary.TryGetValue(sectionTreeViewItem.Value.LeaderSignature, out leader))
+                                {
+                                    Dictionary<string, Creator> creatorDictionary = new Dictionary<string, Creator>();
+
+                                    foreach (var creator in _lairManager.GetCreators(sectionTreeViewItem.Value.Section))
+                                    {
+                                        creatorDictionary[creator.Certificate.ToString()] = creator;
+                                    }
+
+                                    foreach (var creatorSignature in leader.CreatorSignatures.Reverse())
+                                    {
+                                        Creator creator;
+
+                                        if (creatorDictionary.TryGetValue(creatorSignature, out creator))
+                                        {
+                                            foreach (var channel in creator.Channels)
+                                            {
+                                                channels[channel] = creator.Certificate.ToString();
+                                            }
+                                        }
+                                    }
+
+                                    Dictionary<string, Manager> managerDictionary = new Dictionary<string, Manager>();
+
+                                    foreach (var manager in _lairManager.GetManagers(sectionTreeViewItem.Value.Section))
+                                    {
+                                        managerDictionary[manager.Certificate.ToString()] = manager;
+                                    }
+
+                                    foreach (var managerSignature in leader.ManagerSignatures)
+                                    {
+                                        Manager manager;
+
+                                        if (managerDictionary.TryGetValue(managerSignature, out manager))
+                                        {
+                                            trustSignatures.UnionWith(manager.TrustSignatures);
+                                        }
+                                    }
+                                }
+                            }
                         }
 
                         List<ChannelTreeViewItem> items = new List<ChannelTreeViewItem>();
@@ -393,7 +431,7 @@ namespace Lair.Windows
                             {
                                 var tempList = new List<Message>();
 
-                                if (selectTreeViewItem.Value.IsFilterEnabled)
+                                if (channels.ContainsKey(selectTreeViewItem.Value.Channel) && selectTreeViewItem.Value.IsFilterEnabled)
                                 {
                                     foreach (var message in newList)
                                     {
@@ -448,6 +486,15 @@ namespace Lair.Windows
                             {
                                 lock (selectTreeViewItem.Value.ThisLock)
                                 {
+                                    if (channels.ContainsKey(selectTreeViewItem.Value.Channel))
+                                    {
+                                        selectTreeViewItem.CreatorSignature = channels[selectTreeViewItem.Value.Channel];
+                                    }
+                                    else
+                                    {
+                                        selectTreeViewItem.CreatorSignature = null;
+                                    }
+
                                     lock (selectTreeViewItem.Value.Messages.ThisLock)
                                     {
                                         foreach (var item in addList)
@@ -777,6 +824,12 @@ namespace Lair.Windows
             _refresh = true;
         }
 
+        private void Update_Cache()
+        {
+            _update = true;
+            _autoResetEvent.Set();
+        }
+
         private void Update_TreeView_Color()
         {
             var selectTreeViewItem = _treeView.SelectedItem as TreeViewItem;
@@ -875,7 +928,9 @@ namespace Lair.Windows
 
             foreach (var item in Settings.Instance.SectionControl_SectionTreeItems.Where(n => n.Section == section))
             {
-                lockedLeaderSignatures.Add(item.SectionLeaderSignature);
+                if (item.LeaderSignature == null) continue;
+
+                lockedLeaderSignatures.Add(item.LeaderSignature);
             }
 
             HashSet<string> removeLeaderSignatures = new HashSet<string>(_lairManager.GetLeaders(section).Select(n => n.Certificate.ToString()));
@@ -899,9 +954,11 @@ namespace Lair.Windows
 
             foreach (var item in Settings.Instance.SectionControl_SectionTreeItems.Where(n => n.Section == section))
             {
+                if (item.LeaderSignature == null) continue;
+                
                 Leader leader;
 
-                if (leaderDictionary.TryGetValue(item.SectionLeaderSignature, out leader))
+                if (leaderDictionary.TryGetValue(item.LeaderSignature, out leader))
                 {
                     lockedCreatorSignatures.UnionWith(leader.CreatorSignatures);
                 }
@@ -928,9 +985,11 @@ namespace Lair.Windows
 
             foreach (var item in Settings.Instance.SectionControl_SectionTreeItems.Where(n => n.Section == section))
             {
+                if (item.LeaderSignature == null) continue;
+                
                 Leader leader;
 
-                if (leaderDictionary.TryGetValue(item.SectionLeaderSignature, out leader))
+                if (leaderDictionary.TryGetValue(item.LeaderSignature, out leader))
                 {
                     lockedManagerSignatures.UnionWith(leader.ManagerSignatures);
                 }
@@ -977,6 +1036,8 @@ namespace Lair.Windows
 
             foreach (var item in Settings.Instance.SectionControl_SectionTreeItems)
             {
+                if (item.LeaderSignature == null) continue;
+
                 Dictionary<string, Leader> leaderDictionary = new Dictionary<string, Leader>();
 
                 foreach (var leader in _lairManager.GetLeaders(item.Section))
@@ -987,7 +1048,7 @@ namespace Lair.Windows
                 {
                     Leader leader;
 
-                    if (leaderDictionary.TryGetValue(item.SectionLeaderSignature, out leader))
+                    if (leaderDictionary.TryGetValue(item.LeaderSignature, out leader))
                     {
                         Dictionary<string, Creator> creatorDictionary = new Dictionary<string, Creator>();
 
@@ -1028,6 +1089,8 @@ namespace Lair.Windows
 
             foreach (var item in Settings.Instance.SectionControl_SectionTreeItems)
             {
+                if (item.LeaderSignature == null) continue;
+                
                 Dictionary<string, Leader> leaderDictionary = new Dictionary<string, Leader>();
 
                 foreach (var leader in _lairManager.GetLeaders(item.Section))
@@ -1038,7 +1101,7 @@ namespace Lair.Windows
                 {
                     Leader leader;
 
-                    if (leaderDictionary.TryGetValue(item.SectionLeaderSignature, out leader))
+                    if (leaderDictionary.TryGetValue(item.LeaderSignature, out leader))
                     {
                         Dictionary<string, Creator> creatorDictionary = new Dictionary<string, Creator>();
 
@@ -1289,7 +1352,7 @@ namespace Lair.Windows
                 t.Update();
             }
 
-            this.Update();
+            this.Update_Cache();
         }
 
         private void _treeView_PreviewMouseRightButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -1411,16 +1474,26 @@ namespace Lair.Windows
 
         private void _sectionTreeViewItemContextMenu_ContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
-            var rootContextMenu = this.Resources.FindName("_sectionTreeViewItemContextMenu") as ContextMenu;
-            if (rootContextMenu == null) return;
+            var selectTreeViewItem = sender as SectionTreeViewItem;
+            if (selectTreeViewItem == null || _treeView.SelectedItem != selectTreeViewItem) return;
+
+            var contextMenu = selectTreeViewItem.ContextMenu as ContextMenu;
+            if (contextMenu == null) return;
 
             {
-                var sectionTreeViewItemPasteMenuItem = rootContextMenu.Items.Cast<ContextMenu>().FirstOrDefault(n => n.Name == "_sectionTreeViewItemPasteMenuItem");
+                var sectionTreeViewItemPasteMenuItem = contextMenu.Items.OfType<MenuItem>().FirstOrDefault(n => n.Name == "_sectionTreeViewItemPasteMenuItem");
                 if (sectionTreeViewItemPasteMenuItem == null) return;
 
                 var sectionTreeItems = Clipboard.GetSearchTreeItems();
 
                 sectionTreeViewItemPasteMenuItem.IsEnabled = sectionTreeItems.Count() > 0 ? true : false;
+            }
+
+            {
+                var sectionTreeViewItemChartMenuItem = contextMenu.Items.OfType<MenuItem>().FirstOrDefault(n => n.Name == "_sectionTreeViewItemChartMenuItem");
+                if (sectionTreeViewItemChartMenuItem == null) return;
+
+                sectionTreeViewItemChartMenuItem.IsEnabled = (selectTreeViewItem.Value.LeaderSignature != null);
             }
         }
 
@@ -1485,34 +1558,60 @@ namespace Lair.Windows
             var selectTreeViewItem = _treeView.SelectedItem as SectionTreeViewItem;
             if (selectTreeViewItem == null) return;
 
-            foreach (var searchTreeitem in Clipboard.GetSearchTreeItems())
+            foreach (var item in Clipboard.GetSearchTreeItems())
             {
-                selectTreeViewItem.Value.SearchTreeItems.Add(searchTreeitem);
+                selectTreeViewItem.Value.SearchTreeItems.Add(item);
             }
 
             selectTreeViewItem.Update();
+
+            this.Update_Cache();
+        }
+
+        private void _sectionTreeViewItemChartMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var selectTreeViewItem = _treeView.SelectedItem as SectionTreeViewItem;
+            if (selectTreeViewItem == null) return;
+
+            ChartWindow window = new ChartWindow(selectTreeViewItem.Value.Section, selectTreeViewItem.Value.LeaderSignature, _lairManager);
+            window.Owner = _mainWindow;
+            window.ShowDialog();
 
             this.Update();
         }
 
         private void _searchTreeViewItemContextMenu_ContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
-            var rootContextMenu = this.Resources.FindName("_searchTreeViewItemContextMenu") as ContextMenu;
-            if (rootContextMenu == null) return;
+            var sectionTreeViewItem = _treeView.GetLineage((TreeViewItem)_treeView.SelectedItem).OfType<SectionTreeViewItem>().FirstOrDefault() as SectionTreeViewItem;
+            if (sectionTreeViewItem == null) return;
+
+            var selectTreeViewItem = sender as SearchTreeViewItem;
+            if (selectTreeViewItem == null || _treeView.SelectedItem != selectTreeViewItem) return;
+
+            var contextMenu = selectTreeViewItem.ContextMenu as ContextMenu;
+            if (contextMenu == null) return;
 
             {
-                var searchTreeViewItemPasteMenuItem = rootContextMenu.Items.Cast<ContextMenu>().FirstOrDefault(n => n.Name == "_searchTreeViewItemPasteMenuItem");
+                var searchTreeViewItemPasteMenuItem = contextMenu.Items.OfType<MenuItem>().FirstOrDefault(n => n.Name == "_searchTreeViewItemPasteMenuItem");
                 if (searchTreeViewItemPasteMenuItem == null) return;
 
                 var searchTreeItems = Clipboard.GetSearchTreeItems();
+                var channels = Clipboard.GetChannels();
 
-                searchTreeViewItemPasteMenuItem.IsEnabled = searchTreeItems.Count() > 0 ? true : false;
+                searchTreeViewItemPasteMenuItem.IsEnabled = (searchTreeItems.Count() + channels.Count()) > 0 ? true : false;
+            }
+
+            {
+                var searchTreeViewItemChannelListMenuItem = contextMenu.Items.OfType<MenuItem>().FirstOrDefault(n => n.Name == "_searchTreeViewItemChannelListMenuItem");
+                if (searchTreeViewItemChannelListMenuItem == null) return;
+
+                searchTreeViewItemChannelListMenuItem.IsEnabled = (sectionTreeViewItem.Value.LeaderSignature != null);
             }
         }
 
         private void _searchTreeViewItemNewMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            var selectTreeViewItem = _treeView.SelectedItem as SectionTreeViewItem;
+            var selectTreeViewItem = _treeView.SelectedItem as SearchTreeViewItem;
             if (selectTreeViewItem == null) return;
 
             var searchTreeItem = new SearchTreeItem();
@@ -1622,14 +1721,29 @@ namespace Lair.Windows
             var selectTreeViewItem = _treeView.SelectedItem as SearchTreeViewItem;
             if (selectTreeViewItem == null) return;
 
-            foreach (var searchTreeitem in Clipboard.GetSearchTreeItems())
+            foreach (var item in Clipboard.GetSearchTreeItems())
             {
-                selectTreeViewItem.Value.SearchTreeItems.Add(searchTreeitem);
+                selectTreeViewItem.Value.SearchTreeItems.Add(item);
+            }
+
+            foreach (var item in Clipboard.GetChannelTreeItems())
+            {
+                selectTreeViewItem.Value.ChannelTreeItems.Add(item);
+            }
+
+            foreach (var channel in Clipboard.GetChannels())
+            {
+                if (selectTreeViewItem.Value.ChannelTreeItems.Any(n => n.Channel == channel)) continue;
+
+                var channelTreeItem = new ChannelTreeItem();
+                channelTreeItem.Channel = channel;
+
+                selectTreeViewItem.Value.ChannelTreeItems.Add(channelTreeItem);
             }
 
             selectTreeViewItem.Update();
 
-            this.Update();
+            this.Update_Cache();
         }
 
         private void _searchTreeViewItemChannelListMenuItem_Click(object sender, RoutedEventArgs e)
@@ -1642,20 +1756,37 @@ namespace Lair.Windows
 
             HashSet<Channel> channels = new HashSet<Channel>();
 
+            if(sectionTreeViewItem.Value.LeaderSignature != null)
             {
-                List<Leader> leaders = new List<Leader>(_lairManager.GetLeaders(sectionTreeViewItem.Value.Section));
-                List<Creator> creators = new List<Creator>(_lairManager.GetCreators(sectionTreeViewItem.Value.Section));
+                Dictionary<string, Leader> leaderDictionary = new Dictionary<string, Leader>();
 
-                var leader = leaders.FirstOrDefault(n => n.Certificate.ToString() == sectionTreeViewItem.Value.SectionLeaderSignature);
-                if (leader == null) return;
-
-                var creatorSignatrues = new HashSet<string>(leader.CreatorSignatures);
-
-                foreach (var creator in creators)
+                foreach (var leader in _lairManager.GetLeaders(sectionTreeViewItem.Value.Section))
                 {
-                    if (!creatorSignatrues.Contains(creator.Certificate.ToString())) continue;
+                    leaderDictionary[leader.Certificate.ToString()] = leader;
+                }
 
-                    channels.UnionWith(creator.Channels);
+                {
+                    Leader leader;
+
+                    if (leaderDictionary.TryGetValue(sectionTreeViewItem.Value.LeaderSignature, out leader))
+                    {
+                        Dictionary<string, Creator> creatorDictionary = new Dictionary<string, Creator>();
+
+                        foreach (var creator in _lairManager.GetCreators(sectionTreeViewItem.Value.Section))
+                        {
+                            creatorDictionary[creator.Certificate.ToString()] = creator;
+                        }
+
+                        foreach (var creatorSignature in leader.CreatorSignatures)
+                        {
+                            Creator creator;
+
+                            if (creatorDictionary.TryGetValue(creatorSignature, out creator))
+                            {
+                                channels.UnionWith(creator.Channels);
+                            }
+                        }
+                    }
                 }
             }
 
@@ -1685,23 +1816,22 @@ namespace Lair.Windows
                 selectTreeViewItem.Value.ChannelTreeItems.Add(channelTreeItem);
 
                 selectTreeViewItem.Update();
+                this.Update_Cache();
             };
 
             window.ShowDialog();
-
-            this.Update();
         }
 
         private void _channelTreeItemTreeViewItemContextMenu_ContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
-            var selectTreeViewItem = _treeView.SelectedItem as ChannelTreeViewItem;
-            if (selectTreeViewItem == null) return;
+            var selectTreeViewItem = sender as ChannelTreeViewItem;
+            if (selectTreeViewItem == null || _treeView.SelectedItem != selectTreeViewItem) return;
 
-            var rootContextMenu = this.Resources.FindName("_channelTreeViewItemContextMenu") as ContextMenu;
-            if (rootContextMenu == null) return;
+            var contextMenu = selectTreeViewItem.ContextMenu as ContextMenu;
+            if (contextMenu == null) return;
 
             {
-                var channelTreeItemTreeViewItemExportLockedMessagesMenuItem = rootContextMenu.Items.Cast<ContextMenu>().FirstOrDefault(n => n.Name == "_channelTreeItemTreeViewItemExportLockedMessagesMenuItem");
+                var channelTreeItemTreeViewItemExportLockedMessagesMenuItem = contextMenu.Items.OfType<MenuItem>().FirstOrDefault(n => n.Name == "_channelTreeItemTreeViewItemExportLockedMessagesMenuItem");
                 if (channelTreeItemTreeViewItemExportLockedMessagesMenuItem == null) return;
 
                 channelTreeItemTreeViewItemExportLockedMessagesMenuItem.IsEnabled = Settings.Instance.Global_LockedMessages.ContainsKey(selectTreeViewItem.Value.Channel);
@@ -1813,8 +1943,7 @@ namespace Lair.Windows
 
             selectTreeViewItem.Value.IsFilterEnabled = _trustToggleButton.IsChecked.Value;
 
-            _autoResetEvent.Set();
-            _update = true;
+            this.Update_Cache();
         }
 
         private void _topicUploadButton_Click(object sender, RoutedEventArgs e)
@@ -1825,29 +1954,53 @@ namespace Lair.Windows
             var selectTreeViewItem = _treeView.SelectedItem as ChannelTreeViewItem;
             if (selectTreeViewItem == null) return;
 
-            Topic topic = null;
+            Topic topTopic = null;
 
+            if (sectionTreeViewItem.Value.LeaderSignature != null)
             {
-                List<Leader> leaders = new List<Leader>(_lairManager.GetLeaders(sectionTreeViewItem.Value.Section));
-                List<Creator> creators = new List<Creator>(_lairManager.GetCreators(sectionTreeViewItem.Value.Section));
+                Dictionary<string, Leader> leaderDictionary = new Dictionary<string, Leader>();
 
-                var leader = leaders.FirstOrDefault(n => n.Certificate.ToString() == sectionTreeViewItem.Value.SectionLeaderSignature);
-                if (leader == null) goto End;
-
-                string topicSignature = null;
-
-                foreach (var creatorSignature in leader.CreatorSignatures)
+                foreach (var leader in _lairManager.GetLeaders(sectionTreeViewItem.Value.Section))
                 {
-                    var creator = creators.FirstOrDefault(n => n.Certificate.ToString() == creatorSignature);
-
-                    if (creator.Channels.Contains(selectTreeViewItem.Value.Channel))
-                    {
-                        topicSignature = creatorSignature;
-                    }
+                    leaderDictionary[leader.Certificate.ToString()] = leader;
                 }
 
-                topic = _lairManager.GetTopics(selectTreeViewItem.Value.Channel).FirstOrDefault(n => n.Certificate.ToString() == topicSignature);
-                if (topic == null) goto End;
+                {
+                    Leader leader;
+
+                    if (leaderDictionary.TryGetValue(sectionTreeViewItem.Value.LeaderSignature, out leader))
+                    {
+                        Dictionary<string, Creator> creatorDictionary = new Dictionary<string, Creator>();
+
+                        foreach (var creator in _lairManager.GetCreators(sectionTreeViewItem.Value.Section))
+                        {
+                            creatorDictionary[creator.Certificate.ToString()] = creator;
+                        }
+
+                        foreach (var creatorSignature in leader.CreatorSignatures)
+                        {
+                            Creator creator;
+
+                            if (creatorDictionary.TryGetValue(creatorSignature, out creator))
+                            {
+                                HashSet<Channel> channels = new HashSet<Channel>(creator.Channels);
+
+                                if (channels.Contains(selectTreeViewItem.Value.Channel))
+                                {
+                                    Dictionary<string, Topic> topicDictionary = new Dictionary<string, Topic>();
+
+                                    foreach (var topic in _lairManager.GetTopics(selectTreeViewItem.Value.Channel))
+                                    {
+                                        topicDictionary[topic.Certificate.ToString()] = topic;
+                                    }
+
+                                    topicDictionary.TryGetValue(creator.Certificate.ToString(), out topTopic);
+                                    goto End;
+                                }
+                            }
+                        }
+                    }
+                }
 
             End: ;
             }
@@ -1856,8 +2009,7 @@ namespace Lair.Windows
                 && sectionTreeViewItem.Value.UploadSignature != null)
             {
                 var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == sectionTreeViewItem.Value.UploadSignature);
-
-                var content = (topic != null) ? topic.Content : "";
+                var content = (topTopic != null) ? topTopic.Content : "";
 
                 TopicEditWindow window = new TopicEditWindow(selectTreeViewItem.Value.Channel, content, digitalSignature, _lairManager);
                 window.Owner = _mainWindow;
@@ -1866,7 +2018,7 @@ namespace Lair.Windows
             }
             else
             {
-                TopicPreviewWindow window = new TopicPreviewWindow(topic);
+                TopicPreviewWindow window = new TopicPreviewWindow(topTopic);
                 window.Owner = _mainWindow;
 
                 window.ShowDialog();
@@ -1888,8 +2040,7 @@ namespace Lair.Windows
 
             if (window.ShowDialog() == true)
             {
-                _autoResetEvent.Set();
-                _update = true;
+                this.Update_Cache();
             }
         }
 
@@ -2029,8 +2180,7 @@ namespace Lair.Windows
 
             if (window.ShowDialog() == true)
             {
-                _autoResetEvent.Set();
-                _update = true;
+                this.Update_Cache();
             }
         }
 
@@ -3056,6 +3206,7 @@ namespace Lair.Windows
     class ChannelTreeViewItem : TreeViewItem
     {
         private ChannelTreeItem _value;
+        private string _creatorSignature;
 
         public ChannelTreeViewItem(ChannelTreeItem channelTreeItem)
             : base()
@@ -3077,7 +3228,21 @@ namespace Lair.Windows
 
         public void Update()
         {
-            base.Header = new TextBlock() { Text = string.Format("{0} ({1})", _value.Channel.Name, _value.Messages.Count) };
+            base.Header = new TextBlock() { Text = string.Format("{0} ({1}) {2}", _value.Channel.Name, _value.Messages.Count, _creatorSignature) };
+        }
+
+        public string CreatorSignature
+        {
+            get
+            {
+                return _creatorSignature;
+            }
+            set
+            {
+                _creatorSignature = value;
+
+                this.Update();
+            }
         }
 
         public ChannelTreeItem Value
@@ -3099,7 +3264,7 @@ namespace Lair.Windows
     class SectionTreeItem : IDeepCloneable<SectionTreeItem>, IThisLock
     {
         private Section _section;
-        private string _sectionLeaderSignature;
+        private string _leaderSignature;
 
         private string _uploadSignature;
 
@@ -3132,21 +3297,21 @@ namespace Lair.Windows
             }
         }
 
-        [DataMember(Name = "SectionLeaderSignature")]
-        public string SectionLeaderSignature
+        [DataMember(Name = "LeaderSignature")]
+        public string LeaderSignature
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return _sectionLeaderSignature;
+                    return _leaderSignature;
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    _sectionLeaderSignature = value;
+                    _leaderSignature = value;
                 }
             }
         }

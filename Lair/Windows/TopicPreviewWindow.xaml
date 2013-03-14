@@ -4,14 +4,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:prop="clr-namespace:Lair.Properties"     
         xmlns:local="clr-namespace:Lair.Windows" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        mc:Ignorable="d" 
         FontFamily="{Binding Path=FontFamily, Mode=OneWay, Source={StaticResource ResourcesInstance}, Converter={StaticResource _stringToFontFamilyConverter}}"
         FontSize="{Binding Path=FontSize, Mode=OneWay, Source={StaticResource ResourcesInstance}, Converter={StaticResource _stringToDoubleConverter}}"
         Background="{DynamicResource WindowBackgroundBrush}"
         Title="{Binding Path=TopicPreviewWindow_Title, Source={StaticResource ResourcesInstance}}"
         Top="{Binding Path=TopicPreviewWindow_Top, Mode=TwoWay, Source={x:Static prop:Settings.Instance}, Converter={StaticResource _topRelativeDoubleConverter}}"
         Left="{Binding Path=TopicPreviewWindow_Left, Mode=TwoWay, Source={x:Static prop:Settings.Instance}, Converter={StaticResource _leftRelativeDoubleConverter}}"
-        Height="447"
-        Width="716"
+        Height="{Binding Path=TopicPreviewWindow_Height, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}"
+        Width="{Binding Path=TopicPreviewWindow_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}"
         WindowState="{Binding Path=TopicPreviewWindow_WindowState, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}">
 
     <Grid FocusManager.FocusedElement="{Binding ElementName=_closeTextBox}">

@@ -122,6 +122,9 @@
     <Compile Include="Windows\ChannelListWindow.xaml.cs">
       <DependentUpon>ChannelListWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\ChartWindow.xaml.cs">
+      <DependentUpon>ChartWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\TopicPreviewWindow.xaml.cs">
       <DependentUpon>TopicPreviewWindow.xaml</DependentUpon>
     </Compile>
@@ -151,6 +154,10 @@
     </Compile>
     <Compile Include="Windows\VirtualizingStackPanelEx.cs" />
     <Page Include="Windows\ChannelListWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\ChartWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

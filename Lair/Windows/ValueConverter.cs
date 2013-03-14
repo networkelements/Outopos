@@ -400,7 +400,7 @@ namespace Lair.Windows
             var item = value as byte[];
             if (item == null) return null;
 
-            return NetworkConverter.ToBase64String(item);
+            return NetworkConverter.ToBase64UrlString(item);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

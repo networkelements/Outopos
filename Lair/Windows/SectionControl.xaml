@@ -15,16 +15,18 @@
             <Setter Property="Visibility" Value="Collapsed"/>
         </Style>
 
-        <ContextMenu x:Key="_sectionTreeViewItemContextMenu" ContextMenuOpening="_sectionTreeViewItemContextMenu_ContextMenuOpening">
+        <ContextMenu x:Key="_sectionTreeViewItemContextMenu">
             <MenuItem Name="_sectionTreeViewItemNewMenuItem" Header="{Binding Path=SectionControl_New, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemNewMenuItem_Click"/>
             <MenuItem Name="_sectionTreeViewItemEditMenuItem" Header="{Binding Path=SectionControl_Edit, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemEditMenuItem_Click"/>
             <MenuItem Name="_sectionTreeViewItemDeleteMenuItem" Header="{Binding Path=SectionControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemDeleteMenuItem_Click"/>
             <Separator />
             <MenuItem Name="_sectionTreeViewItemCopyMenuItem" Header="{Binding Path=SectionControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemCopyMenuItem_Click" />
             <MenuItem Name="_sectionTreeViewItemPasteMenuItem" Header="{Binding Path=SectionControl_Paste, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemPasteMenuItem_Click" />
+            <Separator />
+            <MenuItem Name="_sectionTreeViewItemChartMenuItem" Header="{Binding Path=SectionControl_Chart, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemChartMenuItem_Click" />
         </ContextMenu>
 
-        <ContextMenu x:Key="_searchTreeViewItemContextMenu" ContextMenuOpening="_searchTreeViewItemContextMenu_ContextMenuOpening">
+        <ContextMenu x:Key="_searchTreeViewItemContextMenu">
             <MenuItem Name="_searchTreeViewItemNewMenuItem" Header="{Binding Path=SectionControl_New, Source={StaticResource ResourcesInstance}}" Click="_searchTreeViewItemNewMenuItem_Click"/>
             <MenuItem Name="_searchTreeViewItemEditMenuItem" Header="{Binding Path=SectionControl_Edit, Source={StaticResource ResourcesInstance}}" Click="_searchTreeViewItemEditMenuItem_Click"/>
             <MenuItem Name="_searchTreeViewItemDeleteMenuItem" Header="{Binding Path=SectionControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_searchTreeViewItemDeleteMenuItem_Click"/>
@@ -36,7 +38,7 @@
             <MenuItem Name="_searchTreeViewItemChannelListMenuItem" Header="{Binding Path=SectionControl_ChannelList, Source={StaticResource ResourcesInstance}}" Click="_searchTreeViewItemChannelListMenuItem_Click"/>
         </ContextMenu>
        
-        <ContextMenu x:Key="_channelTreeItemTreeViewItemContextMenu" ContextMenuOpening="_channelTreeItemTreeViewItemContextMenu_ContextMenuOpening">
+        <ContextMenu x:Key="_channelTreeItemTreeViewItemContextMenu">
             <MenuItem Name="_channelTreeItemTreeViewItemDeleteMenuItem" Header="{Binding Path=SectionControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_channelTreeItemTreeViewItemDeleteMenuItem_Click"/>
             <Separator />
             <MenuItem Name="_channelTreeItemTreeViewItemCutMenuItem" Header="{Binding Path=SectionControl_Cut, Source={StaticResource ResourcesInstance}}" Click="_channelTreeItemTreeViewItemCutMenuItem_Click" />
@@ -288,12 +290,15 @@
             <TreeView.Resources>
                 <Style TargetType="{x:Type local:SectionTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" >
                     <Setter Property="ContextMenu" Value="{StaticResource _sectionTreeViewItemContextMenu}" />
+                    <EventSetter Event="ContextMenuOpening" Handler="_sectionTreeViewItemContextMenu_ContextMenuOpening" />
                 </Style>
                 <Style TargetType="{x:Type local:SearchTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" >
                     <Setter Property="ContextMenu" Value="{StaticResource _searchTreeViewItemContextMenu}" />
+                    <EventSetter Event="ContextMenuOpening" Handler="_searchTreeViewItemContextMenu_ContextMenuOpening" />
                 </Style>
                 <Style TargetType="{x:Type local:ChannelTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" >
                     <Setter Property="ContextMenu" Value="{StaticResource _channelTreeItemTreeViewItemContextMenu}" />
+                    <EventSetter Event="ContextMenuOpening" Handler="_channelTreeItemTreeViewItemContextMenu_ContextMenuOpening" />
                 </Style>
             </TreeView.Resources>
 

@@ -99,6 +99,11 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<LockedList<SectionTreeItem>>() { Name = "SectionControl_SectionTreeItems", Value = new LockedList<SectionTreeItem>() },
                 new Library.Configuration.SettingsContext<double>() { Name = "SectionControl_Grid_ColumnDefinitions_Width", Value = 200 },
                                 
+                new Library.Configuration.SettingsContext<double>() { Name = "ChartWindow_Grid_ColumnDefinitions_Width", Value = 200 },
+                new Library.Configuration.SettingsContext<double>() { Name = "ChartWindow_GridViewColumn_Name_Width", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "ChartWindow_GridViewColumn_Id_Width", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "ChartWindow_GridViewColumn_Signature_Width", Value = 120 },
+
                 new Library.Configuration.SettingsContext<double>() { Name = "SectionTreeItemEditWindow_Top", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "SectionTreeItemEditWindow_Left", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "SectionTreeItemEditWindow_Height", Value = 500 },
@@ -112,6 +117,12 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<double>() { Name = "CreatorControl_GridViewColumn_Name_Width", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "CreatorControl_GridViewColumn_Id_Width", Value = 120 },
           
+                new Library.Configuration.SettingsContext<double>() { Name = "ChartWindow_Top", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "ChartWindow_Left", Value = 120 },
+                new Library.Configuration.SettingsContext<double>() { Name = "ChartWindow_Height", Value = 500 },
+                new Library.Configuration.SettingsContext<double>() { Name = "ChartWindow_Width", Value = 700 },
+                new Library.Configuration.SettingsContext<WindowState>() { Name = "ChartWindow_WindowState", Value = WindowState.Normal },
+                
                 new Library.Configuration.SettingsContext<double>() { Name = "NewSectionWindow_Top", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "NewSectionWindow_Left", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "NewSectionWindow_Width", Value = 700 },
@@ -1485,6 +1496,83 @@ namespace Lair.Properties
         }
 
 
+        public double ChartWindow_Grid_ColumnDefinitions_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChartWindow_Grid_ColumnDefinitions_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChartWindow_Grid_ColumnDefinitions_Width"] = value;
+                }
+            }
+        }
+
+        public double ChartWindow_GridViewColumn_Name_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChartWindow_GridViewColumn_Name_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChartWindow_GridViewColumn_Name_Width"] = value;
+                }
+            }
+        }
+
+        public double ChartWindow_GridViewColumn_Id_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChartWindow_GridViewColumn_Id_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChartWindow_GridViewColumn_Id_Width"] = value;
+                }
+            }
+        }
+
+        public double ChartWindow_GridViewColumn_Signature_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChartWindow_GridViewColumn_Signature_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChartWindow_GridViewColumn_Signature_Width"] = value;
+                }
+            }
+        }
+
+
         public double SectionTreeItemEditWindow_Top
         {
             get
@@ -1655,6 +1743,102 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     this["CreatorControl_GridViewColumn_Id_Width"] = value;
+                }
+            }
+        }
+
+
+        public double ChartWindow_Top
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChartWindow_Top"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChartWindow_Top"] = value;
+                }
+            }
+        }
+
+        public double ChartWindow_Left
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChartWindow_Left"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChartWindow_Left"] = value;
+                }
+            }
+        }
+
+        public double ChartWindow_Height
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChartWindow_Height"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChartWindow_Height"] = value;
+                }
+            }
+        }
+
+        public double ChartWindow_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChartWindow_Width"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChartWindow_Width"] = value;
+                }
+            }
+        }
+
+        public WindowState ChartWindow_WindowState
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (WindowState)this["ChartWindow_WindowState"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChartWindow_WindowState"] = value;
                 }
             }
         }

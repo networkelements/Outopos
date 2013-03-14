@@ -2121,6 +2121,17 @@ namespace Lair.Properties
             }
         }
 
+        public string SectionControl_Chart
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionControl_Chart");
+                }
+            }
+        }
+
         public string SectionControl_ChannelList
         {
             get
@@ -2293,6 +2304,84 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("SectionControl_ExportLockedMessages");
+                }
+            }
+        }
+
+
+        public string ChartWindow_Title
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChartWindow_Title");
+                }
+            }
+        }
+
+        public string ChartWindow_Name
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChartWindow_Name");
+                }
+            }
+        }
+
+        public string ChartWindow_Id
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChartWindow_Id");
+                }
+            }
+        }
+
+        public string ChartWindow_Signature
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChartWindow_Signature");
+                }
+            }
+        }
+
+        public string ChartWindow_Copy
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChartWindow_Copy");
+                }
+            }
+        }
+
+        public string ChartWindow_CopyInfo
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChartWindow_CopyInfo");
+                }
+            }
+        }
+
+        public string ChartWindow_Close
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChartWindow_Close");
                 }
             }
         }
@@ -2607,6 +2696,17 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("SectionTreeItemEditWindow_Manager");
+                }
+            }
+        }
+
+        public string SectionTreeItemEditWindow_Copy
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionTreeItemEditWindow_Copy");
                 }
             }
         }

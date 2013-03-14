@@ -27,7 +27,7 @@
   <Translate Key="Message_Content" Value="コンテンツ" />
 
   <Translate Key="MainWindow_Connection" Value="コネクション" />
-  <Translate Key="MainWindow_Section" Value="Section" />
+  <Translate Key="MainWindow_Section" Value="セクション" />
   <Translate Key="MainWindow_Log" Value="ログ" />
   <Translate Key="MainWindow_Connections" Value="接続" />
   <Translate Key="MainWindow_Start" Value="開始" />
@@ -192,6 +192,7 @@
   <Translate Key="SectionControl_Copy" Value="コピー" />
   <Translate Key="SectionControl_CopyInfo" Value="コピー (詳細情報)" />
   <Translate Key="SectionControl_Paste" Value="貼り付け" />
+  <Translate Key="SectionControl_Chart" Value="チャート" />
   <Translate Key="SectionControl_ChannelList" Value="チャンネルリスト" />
   <Translate Key="SectionControl_Respons" Value="返信" />
   <Translate Key="SectionControl_Trust" Value="トラスト" />
@@ -208,6 +209,14 @@
   <Translate Key="SectionControl_MarkAllMessagesRead_Message" Value="全てのメッセージを既読にしますか？" />
   <Translate Key="SectionControl_ImportLockedMessages" Value="ロックされたメッセージのインポート" />
   <Translate Key="SectionControl_ExportLockedMessages" Value="ロックされたメッセージのエクスポート" />
+
+  <Translate Key="ChartWindow_Title" Value="チャート" />
+  <Translate Key="ChartWindow_Name" Value="名前" />
+  <Translate Key="ChartWindow_Id" Value="ID" />
+  <Translate Key="ChartWindow_Signature" Value="サイン" />
+  <Translate Key="ChartWindow_Copy" Value="コピー" />
+  <Translate Key="ChartWindow_CopyInfo" Value="コピー (詳細情報)" />
+  <Translate Key="ChartWindow_Close" Value="閉じる" />
 
   <Translate Key="TopicEditWindow_Title" Value="新しいトピック" />
   <Translate Key="TopicEditWindow_Edit" Value="編集" />
@@ -242,6 +251,7 @@
   <Translate Key="SectionTreeItemEditWindow_Leader" Value="リーダー" />
   <Translate Key="SectionTreeItemEditWindow_Creator" Value="クリエイター" />
   <Translate Key="SectionTreeItemEditWindow_Manager" Value="マネージャー" />
+  <Translate Key="SectionTreeItemEditWindow_Copy" Value="コピー" />
   <Translate Key="SectionTreeItemEditWindow_Ok" Value="Ok" />
   <Translate Key="SectionTreeItemEditWindow_Cancel" Value="キャンセル" />
 

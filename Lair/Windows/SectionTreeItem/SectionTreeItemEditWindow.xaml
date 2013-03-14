@@ -19,7 +19,13 @@
     
     <Grid>
         <Label Content="{Binding Path=SectionTreeItemEditWindow_Signature, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="12,12,0,0" VerticalAlignment="Top" Width="120" VerticalContentAlignment="Center" />
-        <ComboBox Height="24" Margin="138,12,12,0" Name="_signatureComboBox" VerticalAlignment="Top" VerticalContentAlignment="Center" SelectionChanged="_signatureComboBox_SelectionChanged" />
+        <ComboBox Height="24" Margin="138,12,12,0" Name="_signatureComboBox" VerticalAlignment="Top" VerticalContentAlignment="Center" SelectionChanged="_signatureComboBox_SelectionChanged" >
+            <ComboBox.ContextMenu>
+                <ContextMenu Name="_signatureComboBoxContextMenu">
+                    <MenuItem Name="_signatureComboBoxCopyMenuItem" Header="{Binding Path=SectionTreeItemEditWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_signatureComboBoxCopyMenuItem_Click" />
+                </ContextMenu>
+            </ComboBox.ContextMenu>
+        </ComboBox>
         <TabControl Margin="0,42,0,41">
             <TabItem Name="_sectionTabItem" Header="{Binding Path=SectionTreeItemEditWindow_Section, Source={StaticResource ResourcesInstance}}">
                 <Grid>

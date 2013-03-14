@@ -192,6 +192,7 @@
   <Translate Key="SectionControl_Copy" Value="Copy" />
   <Translate Key="SectionControl_CopyInfo" Value="Copy info" />
   <Translate Key="SectionControl_Paste" Value="Paste" />
+  <Translate Key="SectionControl_Chart" Value="Chart" />
   <Translate Key="SectionControl_ChannelList" Value="Channel List" />
   <Translate Key="SectionControl_Respons" Value="Respons" />
   <Translate Key="SectionControl_Trust" Value="Trust" />
@@ -208,6 +209,14 @@
   <Translate Key="SectionControl_MarkAllMessagesRead_Message" Value="Do you want to mark all messages read?" />
   <Translate Key="SectionControl_ImportLockedMessages" Value="Import locked messages" />
   <Translate Key="SectionControl_ExportLockedMessages" Value="Export locked messages" />
+
+  <Translate Key="ChartWindow_Title" Value="Chart" />
+  <Translate Key="ChartWindow_Name" Value="Name" />
+  <Translate Key="ChartWindow_Id" Value="ID" />
+  <Translate Key="ChartWindow_Signature" Value="Signature" />
+  <Translate Key="ChartWindow_Copy" Value="Copy" />
+  <Translate Key="ChartWindow_CopyInfo" Value="Copy info" />
+  <Translate Key="ChartWindow_Close" Value="Close" />
 
   <Translate Key="TopicEditWindow_Title" Value="New topic" />
   <Translate Key="TopicEditWindow_Edit" Value="Edit" />
@@ -242,6 +251,7 @@
   <Translate Key="SectionTreeItemEditWindow_Leader" Value="Leader" />
   <Translate Key="SectionTreeItemEditWindow_Creator" Value="Creator" />
   <Translate Key="SectionTreeItemEditWindow_Manager" Value="Manager" />
+  <Translate Key="SectionTreeItemEditWindow_Copy" Value="Copy" />
   <Translate Key="SectionTreeItemEditWindow_Ok" Value="Ok" />
   <Translate Key="SectionTreeItemEditWindow_Cancel" Value="Cancel" />
 

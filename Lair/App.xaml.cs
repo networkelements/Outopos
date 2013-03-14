@@ -19,6 +19,8 @@ using Library;
 using Library.Collections;
 using Library.Io;
 using Library.Net.Lair;
+using System.Windows.Controls;
+using Lair.Windows;
 
 namespace Lair
 {

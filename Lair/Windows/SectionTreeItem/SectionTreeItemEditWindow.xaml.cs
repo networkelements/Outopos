@@ -47,7 +47,7 @@ namespace Lair.Windows
             _signatureComboBox.ItemsSource = digitalSignatureCollection;
 
             _sectionTextBox.Text = MessageConverter.ToSectionString(_sectionTreeItem.Section);
-            _sectionLeaderSignatureTextBox.Text = _sectionTreeItem.SectionLeaderSignature;
+            _sectionLeaderSignatureTextBox.Text = _sectionTreeItem.LeaderSignature;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -130,7 +130,7 @@ namespace Lair.Windows
 
             lock (_sectionTreeItem.ThisLock)
             {
-                _sectionTreeItem.SectionLeaderSignature = _sectionLeaderSignatureTextBox.Text;
+                _sectionTreeItem.LeaderSignature = _sectionLeaderSignatureTextBox.Text;
                 _sectionTreeItem.UploadSignature = (digitalSignature == null) ? null : digitalSignature.ToString();
 
                 _sectionTreeItem.LeaderInfo = _leaderControl.LeaderInfo;
@@ -142,6 +142,14 @@ namespace Lair.Windows
         private void _cancelButton_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = false;
+        }
+
+        private void _signatureComboBoxCopyMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var digitalSignatureComboBoxItem = _signatureComboBox.SelectedItem as DigitalSignatureComboBoxItem;
+            if (digitalSignatureComboBoxItem == null) return;
+
+            Clipboard.SetText(digitalSignatureComboBoxItem.Value.ToString());
         }
     }
 

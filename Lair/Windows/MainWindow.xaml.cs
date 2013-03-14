@@ -719,7 +719,7 @@ namespace Lair.Windows
 
                         var sectionTreeItem = new SectionTreeItem();
                         sectionTreeItem.Section = LairConverter.FromSectionString("Section@AAAAAEAALoinQGza0zKpj-3O_f8O-E3hZzM_1pY78oTC1wkLuIoFNBJXBTwGz695Kmz2aqBcYQq_isLhw3jRO1VRS4E0wgAAABABQWxsaWFuY2UgTmV0d29ya0tEqWU");
-                        sectionTreeItem.SectionLeaderSignature = "Lyrise@7seiSbhOCkls6gPxjJYjptxskzlSulgIe3dSfj1KxnJJ6eejKjuJ3R1Ec8yFuKpr4uNcwF7bFh5OrmxnY25y7A";
+                        sectionTreeItem.LeaderSignature = "Lyrise@7seiSbhOCkls6gPxjJYjptxskzlSulgIe3dSfj1KxnJJ6eejKjuJ3R1Ec8yFuKpr4uNcwF7bFh5OrmxnY25y7A";
                         sectionTreeItem.LeaderInfo = new LeaderInfo();
                         sectionTreeItem.CreatorInfo = new CreatorInfo();
                         sectionTreeItem.ManagerInfo = new ManagerInfo();
@@ -861,7 +861,7 @@ namespace Lair.Windows
 
                             var sectionTreeItem = new SectionTreeItem();
                             sectionTreeItem.Section = LairConverter.FromSectionString("Section@AAAAAEAALoinQGza0zKpj-3O_f8O-E3hZzM_1pY78oTC1wkLuIoFNBJXBTwGz695Kmz2aqBcYQq_isLhw3jRO1VRS4E0wgAAABABQWxsaWFuY2UgTmV0d29ya0tEqWU");
-                            sectionTreeItem.SectionLeaderSignature = "Lyrise@7seiSbhOCkls6gPxjJYjptxskzlSulgIe3dSfj1KxnJJ6eejKjuJ3R1Ec8yFuKpr4uNcwF7bFh5OrmxnY25y7A";
+                            sectionTreeItem.LeaderSignature = "Lyrise@7seiSbhOCkls6gPxjJYjptxskzlSulgIe3dSfj1KxnJJ6eejKjuJ3R1Ec8yFuKpr4uNcwF7bFh5OrmxnY25y7A";
                             sectionTreeItem.LeaderInfo = new LeaderInfo();
                             sectionTreeItem.CreatorInfo = new CreatorInfo();
                             sectionTreeItem.ManagerInfo = new ManagerInfo();
@@ -1460,14 +1460,14 @@ namespace Lair.Windows
             _checkUpdateMenuItem.IsEnabled = _checkUpdateMenuItem_IsEnabled;
         }
 
-        private void _developerSiteMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            Process.Start("https://github.com/Alliance-Network");
-        }
-
         private void _manualSiteMenuItem_Click(object sender, RoutedEventArgs e)
         {
             Process.Start("https://sites.google.com/site/alliancenetwork528491");
+        }
+
+        private void _developerSiteMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://github.com/Alliance-Network");
         }
 
         volatile bool _checkUpdateMenuItem_IsEnabled = true;

@@ -23,7 +23,7 @@ namespace Lair
 
             try
             {
-                return section.Name + " - " + NetworkConverter.ToBase64String(section.Id);
+                return section.Name + " - " + NetworkConverter.ToBase64UrlString(section.Id);
             }
             catch (Exception e)
             {
@@ -37,7 +37,7 @@ namespace Lair
 
             try
             {
-                return channel.Name + " - " + NetworkConverter.ToBase64String(channel.Id);
+                return channel.Name + " - " + NetworkConverter.ToBase64UrlString(channel.Id);
             }
             catch (Exception e)
             {
@@ -76,7 +76,7 @@ namespace Lair
                 StringBuilder builder = new StringBuilder();
 
                 if (!string.IsNullOrWhiteSpace(section.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Section_Name, section.Name));
-                if (section.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Section_Id, NetworkConverter.ToBase64String(section.Id)));
+                if (section.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Section_Id, NetworkConverter.ToBase64UrlString(section.Id)));
 
                 if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
                 else return null;
@@ -94,7 +94,7 @@ namespace Lair
                 StringBuilder builder = new StringBuilder();
 
                 if (!string.IsNullOrWhiteSpace(channel.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Channel_Name, channel.Name));
-                if (channel.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Channel_Id, NetworkConverter.ToBase64String(channel.Id)));
+                if (channel.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Channel_Id, NetworkConverter.ToBase64UrlString(channel.Id)));
 
                 if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
                 else return null;
