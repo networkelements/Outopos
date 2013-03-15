@@ -716,6 +716,7 @@ namespace Lair.Windows
                         searchTreeItem.ChannelTreeItems.Add(new ChannelTreeItem() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAAmJGDzJZZe2LYTKX_h2n34Hwnp4Ez19bD-9mjkRwps4jt28VDAEiw3LUlRtc1nwgDNuFbtto2o7wHYpokMSOKUwAAAAYBQW1vZWJhN9Bj5Q") });
                         searchTreeItem.ChannelTreeItems.Add(new ChannelTreeItem() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAAzCXi8JdCucrX16V-WAViFxWmALOLwEwN6YxrpzwttvOrBmkPb5dJOg1y20TrMovemnObJ8Iy3ivXm_wkBkErlAAAAAQBTGFpcr3Cip8") });
                         searchTreeItem.ChannelTreeItems.Add(new ChannelTreeItem() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAAfSj-05Hm0h_kpMmU78XWVkVepumSh2F2shZe7Fm-LEbORv0II6mAeVZO-3w3kZZIHqk9y2nFTNgOR_SfL9ofiQAAAAQBUm9zYbQuG6Y") });
+                        searchTreeItem.ChannelTreeItems.Add(new ChannelTreeItem() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAApd3NdDiaZpygYU5ySICsv8zk2_2P1bRViGigtWhwJtIpw5Xi6IkdUbp3hroB_cN-IJkyscS6c4_cUhtJ9N2zlQAAAAQBVGVzdGSZ__Y") });
 
                         var sectionTreeItem = new SectionTreeItem();
                         sectionTreeItem.Section = LairConverter.FromSectionString("Section@AAAAAEAALoinQGza0zKpj-3O_f8O-E3hZzM_1pY78oTC1wkLuIoFNBJXBTwGz695Kmz2aqBcYQq_isLhw3jRO1VRS4E0wgAAABABQWxsaWFuY2UgTmV0d29ya0tEqWU");
@@ -858,6 +859,7 @@ namespace Lair.Windows
                             searchTreeItem.ChannelTreeItems.Add(new ChannelTreeItem() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAAmJGDzJZZe2LYTKX_h2n34Hwnp4Ez19bD-9mjkRwps4jt28VDAEiw3LUlRtc1nwgDNuFbtto2o7wHYpokMSOKUwAAAAYBQW1vZWJhN9Bj5Q") });
                             searchTreeItem.ChannelTreeItems.Add(new ChannelTreeItem() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAAzCXi8JdCucrX16V-WAViFxWmALOLwEwN6YxrpzwttvOrBmkPb5dJOg1y20TrMovemnObJ8Iy3ivXm_wkBkErlAAAAAQBTGFpcr3Cip8") });
                             searchTreeItem.ChannelTreeItems.Add(new ChannelTreeItem() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAAfSj-05Hm0h_kpMmU78XWVkVepumSh2F2shZe7Fm-LEbORv0II6mAeVZO-3w3kZZIHqk9y2nFTNgOR_SfL9ofiQAAAAQBUm9zYbQuG6Y") });
+                            searchTreeItem.ChannelTreeItems.Add(new ChannelTreeItem() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAApd3NdDiaZpygYU5ySICsv8zk2_2P1bRViGigtWhwJtIpw5Xi6IkdUbp3hroB_cN-IJkyscS6c4_cUhtJ9N2zlQAAAAQBVGVzdGSZ__Y") });
 
                             var sectionTreeItem = new SectionTreeItem();
                             sectionTreeItem.Section = LairConverter.FromSectionString("Section@AAAAAEAALoinQGza0zKpj-3O_f8O-E3hZzM_1pY78oTC1wkLuIoFNBJXBTwGz695Kmz2aqBcYQq_isLhw3jRO1VRS4E0wgAAABABQWxsaWFuY2UgTmV0d29ya0tEqWU");

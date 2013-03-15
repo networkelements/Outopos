@@ -2656,13 +2656,13 @@ namespace Lair.Properties
             }
         }
 
-        public string SectionTreeItemEditWindow_SectionLeaderSignature
+        public string SectionTreeItemEditWindow_LeaderSignature
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionTreeItemEditWindow_SectionLeaderSignature");
+                    return this.Translate("SectionTreeItemEditWindow_LeaderSignature");
                 }
             }
         }
@@ -2767,13 +2767,13 @@ namespace Lair.Properties
             }
         }
 
-        public string LeaderControl_Value
+        public string LeaderControl_Signature
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("LeaderControl_Value");
+                    return this.Translate("LeaderControl_Signature");
                 }
             }
         }
@@ -3055,13 +3055,13 @@ namespace Lair.Properties
             }
         }
 
-        public string ManagerControl_Value
+        public string ManagerControl_Signature
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ManagerControl_Value");
+                    return this.Translate("ManagerControl_Signature");
                 }
             }
         }

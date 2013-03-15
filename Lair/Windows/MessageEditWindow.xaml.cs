@@ -64,6 +64,11 @@ namespace Lair.Windows
             _commentTextBox_TextChanged(null, null);
         }
 
+        private void RichTextBoxEx_PreviewMouseRightButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            e.Handled = true;
+        }
+
         private void _tabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (_tabControl.SelectedItem == _previewTabItem)

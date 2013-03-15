@@ -67,9 +67,6 @@
     <DelaySign>false</DelaySign>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Amoeba">
-      <HintPath>..\..\Amoeba\Amoeba\bin\Debug\Core\Amoeba.exe</HintPath>
-    </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>.\Ionic.Zip.dll</HintPath>
     </Reference>

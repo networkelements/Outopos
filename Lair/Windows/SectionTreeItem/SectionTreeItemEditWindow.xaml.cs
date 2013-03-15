@@ -32,6 +32,12 @@ namespace Lair.Windows
         private CreatorControl _creatorControl;
         private ManagerControl _managerControl;
 
+        private string _uploadSignature;
+
+        private LeaderInfo _leaderInfo;
+        private CreatorInfo _creatorInfo;
+        private ManagerInfo _managerInfo;
+
         public SectionTreeItemEditWindow(SectionTreeItem sectionTreeItem, LairManager lairManager, BufferManager bufferManager)
         {
             _sectionTreeItem = sectionTreeItem;
@@ -46,23 +52,31 @@ namespace Lair.Windows
 
             _signatureComboBox.ItemsSource = digitalSignatureCollection;
 
-            _sectionTextBox.Text = MessageConverter.ToSectionString(_sectionTreeItem.Section);
-            _sectionLeaderSignatureTextBox.Text = _sectionTreeItem.LeaderSignature;
+            lock (_sectionTreeItem.ThisLock)
+            {
+                _sectionTextBox.Text = MessageConverter.ToSectionString(_sectionTreeItem.Section);
+                _sectionLeaderSignatureTextBox.Text = _sectionTreeItem.LeaderSignature;
+                _uploadSignature = _sectionTreeItem.UploadSignature;
+
+                _leaderInfo = _sectionTreeItem.LeaderInfo.DeepClone();
+                _creatorInfo = _sectionTreeItem.CreatorInfo.DeepClone();
+                _managerInfo = _sectionTreeItem.ManagerInfo.DeepClone();
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            _leaderControl = new LeaderControl(_sectionTreeItem.LeaderInfo, _bufferManager);
+            _leaderControl = new LeaderControl(_leaderInfo, _bufferManager);
             _leaderControl.Height = Double.NaN;
             _leaderControl.Width = Double.NaN;
             _leaderTabItem.Content = _leaderControl;
 
-            _creatorControl = new CreatorControl(_sectionTreeItem.CreatorInfo, _bufferManager);
+            _creatorControl = new CreatorControl(_creatorInfo, _bufferManager);
             _creatorControl.Height = Double.NaN;
             _creatorControl.Width = Double.NaN;
             _creatorTabItem.Content = _creatorControl;
 
-            _managerControl = new ManagerControl(_sectionTreeItem.ManagerInfo, _bufferManager);
+            _managerControl = new ManagerControl(_managerInfo, _bufferManager);
             _managerControl.Height = Double.NaN;
             _managerControl.Width = Double.NaN;
             _managerTabItem.Content = _managerControl;
@@ -73,7 +87,7 @@ namespace Lair.Windows
 
             for (int index = 0; index < Settings.Instance.Global_DigitalSignatureCollection.Count; index++)
             {
-                if (Settings.Instance.Global_DigitalSignatureCollection[index].ToString() == _sectionTreeItem.UploadSignature)
+                if (Settings.Instance.Global_DigitalSignatureCollection[index].ToString() == _uploadSignature)
                 {
                     _signatureComboBox.SelectedIndex = index + 1;
 
@@ -90,6 +104,7 @@ namespace Lair.Windows
             var info = _leaderControl.LeaderInfo;
 
             _lairManager.Upload(new Leader(_sectionTreeItem.Section, info.Comment, info.CreatorSignatures, info.ManagerSignatures, digitalSignature));
+            _sectionTreeItem.LeaderInfo = info;
         }
 
         void _creatorControl_UploadEvent(object sender)
@@ -100,6 +115,7 @@ namespace Lair.Windows
             var info = _creatorControl.CreatorInfo;
 
             _lairManager.Upload(new Creator(_sectionTreeItem.Section, info.Comment, info.Channels, digitalSignature));
+            _sectionTreeItem.CreatorInfo = info;
         }
 
         void _managerControl_UploadEvent(object sender)
@@ -110,6 +126,7 @@ namespace Lair.Windows
             var info = _managerControl.ManagerInfo;
 
             _lairManager.Upload(new Manager(_sectionTreeItem.Section, info.Comment, info.TrustSignatures, digitalSignature));
+            _sectionTreeItem.ManagerInfo = info;
         }
 
         private void _signatureComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -130,7 +147,7 @@ namespace Lair.Windows
 
             lock (_sectionTreeItem.ThisLock)
             {
-                _sectionTreeItem.LeaderSignature = _sectionLeaderSignatureTextBox.Text;
+                _sectionTreeItem.LeaderSignature = Signature.HasSignature(_sectionLeaderSignatureTextBox.Text) ? _sectionLeaderSignatureTextBox.Text : null;
                 _sectionTreeItem.UploadSignature = (digitalSignature == null) ? null : digitalSignature.ToString();
 
                 _sectionTreeItem.LeaderInfo = _leaderControl.LeaderInfo;

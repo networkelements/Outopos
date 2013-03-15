@@ -35,7 +35,7 @@ namespace Lair.Windows
 
         public LeaderControl(LeaderInfo leaderInfo, BufferManager bufferManager)
         {
-            _leaderInfo = leaderInfo.DeepClone();
+            _leaderInfo = leaderInfo;
             _bufferManager = bufferManager;
 
             _creatorSignatureListViewItemCollection = new ObservableCollection<string>(_leaderInfo.CreatorSignatures);

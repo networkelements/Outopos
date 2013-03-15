@@ -192,7 +192,7 @@
   <Translate Key="SectionControl_Copy" Value="コピー" />
   <Translate Key="SectionControl_CopyInfo" Value="コピー (詳細情報)" />
   <Translate Key="SectionControl_Paste" Value="貼り付け" />
-  <Translate Key="SectionControl_Chart" Value="チャート" />
+  <Translate Key="SectionControl_Chart" Value="組織図" />
   <Translate Key="SectionControl_ChannelList" Value="チャンネルリスト" />
   <Translate Key="SectionControl_Respons" Value="返信" />
   <Translate Key="SectionControl_Trust" Value="トラスト" />
@@ -247,7 +247,7 @@
 
   <Translate Key="SectionTreeItemEditWindow_Signature" Value="サイン" />
   <Translate Key="SectionTreeItemEditWindow_Section" Value="セクション" />
-  <Translate Key="SectionTreeItemEditWindow_SectionLeaderSignature" Value="リーダーのサイン" />
+  <Translate Key="SectionTreeItemEditWindow_LeaderSignature" Value="リーダーサイン" />
   <Translate Key="SectionTreeItemEditWindow_Leader" Value="リーダー" />
   <Translate Key="SectionTreeItemEditWindow_Creator" Value="クリエイター" />
   <Translate Key="SectionTreeItemEditWindow_Manager" Value="マネージャー" />
@@ -258,7 +258,7 @@
   <Translate Key="LeaderControl_Creators" Value="クリエーター" />
   <Translate Key="LeaderControl_Managers" Value="マネージャー" />
   <Translate Key="LeaderControl_Comment" Value="コメント" />
-  <Translate Key="LeaderControl_Value" Value="値" />
+  <Translate Key="LeaderControl_Signature" Value="サイン" />
   <Translate Key="LeaderControl_Up" Value="上へ" />
   <Translate Key="LeaderControl_Down" Value="下へ" />
   <Translate Key="LeaderControl_Add" Value="追加" />
@@ -286,7 +286,7 @@
 
   <Translate Key="ManagerControl_Trusts" Value="トラスト" />
   <Translate Key="ManagerControl_Comment" Value="コメント" />
-  <Translate Key="ManagerControl_Value" Value="値" />
+  <Translate Key="ManagerControl_Signature" Value="サイン" />
   <Translate Key="ManagerControl_Up" Value="上へ" />
   <Translate Key="ManagerControl_Down" Value="下へ" />
   <Translate Key="ManagerControl_Add" Value="追加" />

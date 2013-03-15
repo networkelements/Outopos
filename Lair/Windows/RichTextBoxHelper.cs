@@ -636,8 +636,8 @@ namespace Lair.Windows
                     grid.Children.Add(targetRichTextBox);
 
                     var text = string.Format("{0} - {1}",
-                            message.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat,
-                            System.Globalization.DateTimeFormatInfo.InvariantInfo), message.Certificate.ToString());
+                            anchorMessage.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo),
+                            anchorMessage.Certificate.ToString());
 
                     var textBlock = new TextBlock() { Text = text };
 
@@ -677,15 +677,26 @@ namespace Lair.Windows
                 }
                 else
                 {
+                    var targetRichTextBox = new RichTextBoxEx();
+
+                    var grid = new Grid();
+                    grid.Children.Add(targetRichTextBox);
+
+                    var textBlock = new TextBlock() { Text = " " };
+
                     var binding = new Binding("ActualWidth")
                     {
                         Source = richTextBox
                     };
 
+                    textBlock.SetBinding(TextBlock.WidthProperty, binding);
+
                     var expander = new Expander()
                     {
                         IsEnabled = false,
                         IsExpanded = false,
+                        Header = textBlock,
+
                         Margin = new Thickness(2, 6, 2, 6),
                     };
 

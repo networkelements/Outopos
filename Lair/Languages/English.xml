@@ -247,7 +247,7 @@
 
   <Translate Key="SectionTreeItemEditWindow_Signature" Value="Signature" />
   <Translate Key="SectionTreeItemEditWindow_Section" Value="Section" />
-  <Translate Key="SectionTreeItemEditWindow_SectionLeaderSignature" Value="Leader signature" />
+  <Translate Key="SectionTreeItemEditWindow_LeaderSignature" Value="Leader signature" />
   <Translate Key="SectionTreeItemEditWindow_Leader" Value="Leader" />
   <Translate Key="SectionTreeItemEditWindow_Creator" Value="Creator" />
   <Translate Key="SectionTreeItemEditWindow_Manager" Value="Manager" />
@@ -258,7 +258,7 @@
   <Translate Key="LeaderControl_Creators" Value="Creators" />
   <Translate Key="LeaderControl_Managers" Value="Managers" />
   <Translate Key="LeaderControl_Comment" Value="Comment" />
-  <Translate Key="LeaderControl_Value" Value="Value" />
+  <Translate Key="LeaderControl_Signature" Value="Signature" />
   <Translate Key="LeaderControl_Up" Value="Up" />
   <Translate Key="LeaderControl_Down" Value="Down" />
   <Translate Key="LeaderControl_Add" Value="Add" />
@@ -286,7 +286,7 @@
 
   <Translate Key="ManagerControl_Trusts" Value="Trusts" />
   <Translate Key="ManagerControl_Comment" Value="Comment" />
-  <Translate Key="ManagerControl_Value" Value="Value" />
+  <Translate Key="ManagerControl_Signature" Value="Signature" />
   <Translate Key="ManagerControl_Up" Value="Up" />
   <Translate Key="ManagerControl_Down" Value="Down" />
   <Translate Key="ManagerControl_Add" Value="Add" />

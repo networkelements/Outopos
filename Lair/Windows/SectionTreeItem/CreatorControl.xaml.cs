@@ -35,7 +35,7 @@ namespace Lair.Windows
 
         public CreatorControl(CreatorInfo creatorInfo, BufferManager bufferManager)
         {
-            _creatorInfo = creatorInfo.DeepClone();
+            _creatorInfo = creatorInfo;
             _bufferManager = bufferManager;
 
             _channelListViewItemCollection = new ObservableCollection<Channel>(_creatorInfo.Channels);

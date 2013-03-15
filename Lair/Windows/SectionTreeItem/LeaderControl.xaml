@@ -49,7 +49,7 @@
                         </ListView.ContextMenu>
                         <ListView.View>
                             <GridView AllowsColumnReorder="False">
-                                <GridViewColumn Header="{Binding Path=LeaderControl_Value, Source={StaticResource ResourcesInstance}}" CellTemplate="{StaticResource _myTemplate_Signature}" 
+                                <GridViewColumn Header="{Binding Path=LeaderControl_Signature, Source={StaticResource ResourcesInstance}}" CellTemplate="{StaticResource _myTemplate_Signature}" 
                                         Width="{Binding Path=LeaderControl_Signature_GridViewColumn_Value_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
                             </GridView>
                         </ListView.View>
@@ -75,7 +75,7 @@
                         </ListView.ContextMenu>
                         <ListView.View>
                             <GridView AllowsColumnReorder="False">
-                                <GridViewColumn Header="{Binding Path=LeaderControl_Value, Source={StaticResource ResourcesInstance}}" CellTemplate="{StaticResource _myTemplate_Signature}" 
+                                <GridViewColumn Header="{Binding Path=LeaderControl_Signature, Source={StaticResource ResourcesInstance}}" CellTemplate="{StaticResource _myTemplate_Signature}" 
                                         Width="{Binding Path=LeaderControl_Signature_GridViewColumn_Value_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
                             </GridView>
                         </ListView.View>

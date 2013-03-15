@@ -15,6 +15,8 @@ using Lair.Properties;
 using Library.Net;
 using Library.Net.Lair;
 using Library.Security;
+using System.Collections;
+using Library;
 
 namespace Lair.Windows
 {
@@ -48,11 +50,9 @@ namespace Lair.Windows
             }
 
             _channelCollection = new ObservableCollection<Channel>(channels);
-
             _listView.ItemsSource = _channelCollection;
 
-            var view = CollectionViewSource.GetDefaultView(_listView.ItemsSource);
-            view.Filter = (object o) =>
+            CollectionViewSource.GetDefaultView(_listView.ItemsSource).Filter = (object o) =>
             {
                 string searchText = _searchTextBox.Text;
                 if (string.IsNullOrWhiteSpace(searchText)) return true;
@@ -61,10 +61,11 @@ namespace Lair.Windows
                 if (item == null) return false;
 
                 var words = searchText.ToLower().Split(new string[] { " ", "　" }, StringSplitOptions.RemoveEmptyEntries);
+                var text = (item.Name ?? "").ToLower();
 
                 foreach (var word in words)
                 {
-                    if (!item.Name.Contains(word))
+                    if (!text.Contains(word))
                     {
                         return false;
                     }
@@ -72,6 +73,8 @@ namespace Lair.Windows
 
                 return true;
             };
+
+            this.Sort();
         }
 
         protected virtual void OnChannelJoinEvent(Channel channel)
@@ -140,8 +143,7 @@ namespace Lair.Windows
         {
             if (e.Key == System.Windows.Input.Key.Enter)
             {
-                var view = CollectionViewSource.GetDefaultView(_listView.ItemsSource);
-                view.Refresh();
+                CollectionViewSource.GetDefaultView(_listView.ItemsSource).Refresh();
 
                 e.Handled = true;
             }
@@ -149,36 +151,51 @@ namespace Lair.Windows
 
         #region Sort
 
+        private void Sort()
+        {
+            this.GridViewColumnHeaderClickedHandler(null, null);
+        }
+
         private void GridViewColumnHeaderClickedHandler(object sender, RoutedEventArgs e)
         {
-            var item = e.OriginalSource as GridViewColumnHeader;
-            if (item == null || item.Role == GridViewColumnHeaderRole.Padding) return;
-
-            string headerClicked = item.Column.Header as string;
-            if (headerClicked == null) return;
-
-            ListSortDirection direction;
-
-            if (headerClicked != Settings.Instance.ChannelListWindow_LastHeaderClicked)
+            if (e != null)
             {
-                direction = ListSortDirection.Ascending;
-            }
-            else
-            {
-                if (Settings.Instance.ChannelListWindow_ListSortDirection == ListSortDirection.Ascending)
-                {
-                    direction = ListSortDirection.Descending;
-                }
-                else
+                var item = e.OriginalSource as GridViewColumnHeader;
+                if (item == null || item.Role == GridViewColumnHeaderRole.Padding) return;
+
+                string headerClicked = item.Column.Header as string;
+                if (headerClicked == null) return;
+
+                ListSortDirection direction;
+
+                if (headerClicked != Settings.Instance.ChannelListWindow_LastHeaderClicked)
                 {
                     direction = ListSortDirection.Ascending;
                 }
+                else
+                {
+                    if (Settings.Instance.ChannelListWindow_ListSortDirection == ListSortDirection.Ascending)
+                    {
+                        direction = ListSortDirection.Descending;
+                    }
+                    else
+                    {
+                        direction = ListSortDirection.Ascending;
+                    }
+                }
+
+                Sort(headerClicked, direction);
+
+                Settings.Instance.ChannelListWindow_LastHeaderClicked = headerClicked;
+                Settings.Instance.ChannelListWindow_ListSortDirection = direction;
             }
-
-            Sort(headerClicked, direction);
-
-            Settings.Instance.ChannelListWindow_LastHeaderClicked = headerClicked;
-            Settings.Instance.ChannelListWindow_ListSortDirection = direction;
+            else
+            {
+                if (Settings.Instance.ChannelListWindow_LastHeaderClicked != null)
+                {
+                    Sort(Settings.Instance.ChannelListWindow_LastHeaderClicked, Settings.Instance.ChannelListWindow_ListSortDirection);
+                }
+            }
         }
 
         private void Sort(string sortBy, ListSortDirection direction)
@@ -189,8 +206,32 @@ namespace Lair.Windows
             {
                 _listView.Items.SortDescriptions.Add(new SortDescription("Name", direction));
             }
+            else if (sortBy == LanguagesManager.Instance.ChannelListWindow_Id)
+            {
+                ListCollectionView listCollectionView = (ListCollectionView)CollectionViewSource.GetDefaultView(_listView.ItemsSource);
+                listCollectionView.CustomSort = new ChannelIdComparer(direction);
+            }
+        }
 
-            _listView.Items.SortDescriptions.Add(new SortDescription("Id", direction));
+        sealed class ChannelIdComparer : IComparer
+        {
+            private ListSortDirection _direction;
+
+            public ChannelIdComparer(ListSortDirection direction)
+            {
+                _direction = direction;
+            }
+
+            public int Compare(object x, object y)
+            {
+                var cx = x as Channel;
+                var cy = y as Channel;
+
+                if (_direction == ListSortDirection.Ascending) return Collection.Compare(cx.Id, cy.Id);
+                if (_direction == ListSortDirection.Descending) return Collection.Compare(cy.Id, cx.Id);
+
+                return 0;
+            }
         }
 
         #endregion

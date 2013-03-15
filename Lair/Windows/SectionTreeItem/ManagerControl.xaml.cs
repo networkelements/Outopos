@@ -34,7 +34,7 @@ namespace Lair.Windows
 
         public ManagerControl(ManagerInfo managerInfo, BufferManager bufferManager)
         {
-            _managerInfo = managerInfo.DeepClone();
+            _managerInfo = managerInfo;
             _bufferManager = bufferManager;
 
             _trustSignatureListViewItemCollection = new ObservableCollection<string>(_managerInfo.TrustSignatures);

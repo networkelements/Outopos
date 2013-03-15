@@ -628,10 +628,6 @@ namespace Lair.Windows
             {
                 return new SolidColorBrush(Settings.Instance.Color_Message_Select);
             }
-            else if (item.State.HasFlag(MessageState.New))
-            {
-                return new SolidColorBrush(Settings.Instance.Color_Message_New);
-            }
             else
             {
                 LockedHashSet<Message> hashSet = null;
@@ -640,6 +636,10 @@ namespace Lair.Windows
                     && hashSet.Contains(item.Value))
                 {
                     return new SolidColorBrush(Settings.Instance.Color_Message_Lock);
+                }
+                else if (item.State.HasFlag(MessageState.New))
+                {
+                    return new SolidColorBrush(Settings.Instance.Color_Message_New);
                 }
             }
 

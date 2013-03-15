@@ -163,10 +163,30 @@ namespace Lair.Windows
                             var sectionTreeViewItem = _treeView.GetLineage((TreeViewItem)_treeView.SelectedItem).OfType<SectionTreeViewItem>().FirstOrDefault() as SectionTreeViewItem;
                             selectTreeViewItem = (ChannelTreeViewItem)_treeView.SelectedItem;
 
+                            var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == sectionTreeViewItem.Value.UploadSignature);
+
                             _trustToggleButton.IsEnabled = (selectTreeViewItem.CreatorSignature != null);
                             _trustToggleButton.IsChecked = selectTreeViewItem.Value.IsFilterEnabled;
-                            _topicUploadButton.IsEnabled = (selectTreeViewItem.CreatorSignature != null);
-                            _messageUploadButton.IsEnabled = (sectionTreeViewItem.Value.UploadSignature != null);
+                            _messageUploadButton.IsEnabled = (digitalSignature != null);
+
+                            {
+                                HashSet<string> topicSignatures = new HashSet<string>();
+
+                                foreach (var topic in _lairManager.GetTopics(selectTreeViewItem.Value.Channel))
+                                {
+                                    topicSignatures.Add(topic.Certificate.ToString());
+                                }
+
+                                if ((digitalSignature != null && digitalSignature.ToString() == selectTreeViewItem.CreatorSignature && sectionTreeViewItem.Value.CreatorInfo.Channels.Contains(selectTreeViewItem.Value.Channel))
+                                    || topicSignatures.Contains(selectTreeViewItem.CreatorSignature))
+                                {
+                                    _topicUploadButton.IsEnabled = true;
+                                }
+                                else
+                                {
+                                    _topicUploadButton.IsEnabled = false;
+                                }
+                            }
                         }
                     }), null);
 
@@ -183,22 +203,34 @@ namespace Lair.Windows
                         oldList.UnionWith(_listViewItemCollection.OfType<MessageWrapper>().ToArray());
                     }), null);
 
-                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                    lock (selectTreeViewItem.Value.ThisLock)
                     {
-                        lock (selectTreeViewItem.Value.ThisLock)
+                        lock (selectTreeViewItem.Value.Messages.ThisLock)
                         {
                             foreach (var item in selectTreeViewItem.Value.Messages)
                             {
                                 newList.Add(new MessageWrapper(item.Key, item.Value));
                             }
-                        }
-                    }), null);
 
-                    lock (selectTreeViewItem.Value.ThisLock)
+                            foreach (var item in selectTreeViewItem.Value.Messages.ToArray())
+                            {
+                                selectTreeViewItem.Value.Messages[item.Key] = item.Value & ~MessageState.New;
+                            }
+                        }
+                    }
+
                     {
-                        foreach (var item in selectTreeViewItem.Value.Messages.ToArray())
+                        LockedHashSet<Message> lockedMessages;
+
+                        if (Settings.Instance.Global_LockedMessages.TryGetValue(selectTreeViewItem.Value.Channel, out lockedMessages))
                         {
-                            selectTreeViewItem.Value.Messages[item.Key] = item.Value & ~MessageState.New;
+                            var tempList = new HashSet<Message>(lockedMessages);
+                            tempList.ExceptWith(newList.Select(n => n.Value));
+
+                            foreach (var message in tempList)
+                            {
+                                newList.Add(new MessageWrapper(message, 0));
+                            }
                         }
                     }
 
@@ -338,7 +370,7 @@ namespace Lair.Windows
                         if (sectionTreeViewItem.Value.LeaderSignature == null) continue;
 
                         var trustSignatures = new HashSet<string>();
-                        var channels = new Dictionary<Channel, string>();
+                        var channelToCreatorSignatures = new Dictionary<Channel, string>();
 
                         {
                             Dictionary<string, Leader> leaderDictionary = new Dictionary<string, Leader>();
@@ -368,7 +400,7 @@ namespace Lair.Windows
                                         {
                                             foreach (var channel in creator.Channels)
                                             {
-                                                channels[channel] = creator.Certificate.ToString();
+                                                channelToCreatorSignatures[channel] = creator.Certificate.ToString();
                                             }
                                         }
                                     }
@@ -431,7 +463,7 @@ namespace Lair.Windows
                             {
                                 var tempList = new List<Message>();
 
-                                if (channels.ContainsKey(selectTreeViewItem.Value.Channel) && selectTreeViewItem.Value.IsFilterEnabled)
+                                if (channelToCreatorSignatures.ContainsKey(selectTreeViewItem.Value.Channel) && selectTreeViewItem.Value.IsFilterEnabled)
                                 {
                                     foreach (var message in newList)
                                     {
@@ -482,36 +514,36 @@ namespace Lair.Windows
                                 if (!oldList.Contains(item)) addList.Add(item);
                             }
 
+                            lock (selectTreeViewItem.Value.ThisLock)
+                            {
+                                lock (selectTreeViewItem.Value.Messages.ThisLock)
+                                {
+                                    foreach (var item in addList)
+                                    {
+                                        selectTreeViewItem.Value.Messages.Add(item, MessageState.New);
+                                    }
+
+                                    foreach (var item in removeList)
+                                    {
+                                        selectTreeViewItem.Value.Messages.Remove(item);
+                                    }
+                                }
+                            }
+
                             this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
                             {
-                                lock (selectTreeViewItem.Value.ThisLock)
+                                if (channelToCreatorSignatures.ContainsKey(selectTreeViewItem.Value.Channel))
                                 {
-                                    if (channels.ContainsKey(selectTreeViewItem.Value.Channel))
-                                    {
-                                        selectTreeViewItem.CreatorSignature = channels[selectTreeViewItem.Value.Channel];
-                                    }
-                                    else
-                                    {
-                                        selectTreeViewItem.CreatorSignature = null;
-                                    }
+                                    selectTreeViewItem.CreatorSignature = channelToCreatorSignatures[selectTreeViewItem.Value.Channel];
+                                }
+                                else
+                                {
+                                    selectTreeViewItem.CreatorSignature = null;
+                                }
 
-                                    lock (selectTreeViewItem.Value.Messages.ThisLock)
-                                    {
-                                        foreach (var item in addList)
-                                        {
-                                            selectTreeViewItem.Value.Messages.Add(item, MessageState.New);
-                                        }
-
-                                        foreach (var item in removeList)
-                                        {
-                                            selectTreeViewItem.Value.Messages.Remove(item);
-                                        }
-                                    }
-
-                                    if (addList.Count != 0 || removeList.Count != 0)
-                                    {
-                                        selectTreeViewItem.Update();
-                                    }
+                                if (addList.Count != 0 || removeList.Count != 0)
+                                {
+                                    selectTreeViewItem.Update();
                                 }
                             }), null);
                         }
@@ -656,6 +688,21 @@ namespace Lair.Windows
                 if (message.VerifyHash(key.Hash, key.HashAlgorithm))
                 {
                     return message;
+                }
+            }
+
+            {
+                LockedHashSet<Message> lockedMessages;
+
+                if (Settings.Instance.Global_LockedMessages.TryGetValue(selectTreeViewItem.Value.Channel, out lockedMessages))
+                {
+                    foreach (var message in lockedMessages)
+                    {
+                        if (message.VerifyHash(key.Hash, key.HashAlgorithm))
+                        {
+                            return message;
+                        }
+                    }
                 }
             }
 
@@ -955,7 +1002,7 @@ namespace Lair.Windows
             foreach (var item in Settings.Instance.SectionControl_SectionTreeItems.Where(n => n.Section == section))
             {
                 if (item.LeaderSignature == null) continue;
-                
+
                 Leader leader;
 
                 if (leaderDictionary.TryGetValue(item.LeaderSignature, out leader))
@@ -986,7 +1033,7 @@ namespace Lair.Windows
             foreach (var item in Settings.Instance.SectionControl_SectionTreeItems.Where(n => n.Section == section))
             {
                 if (item.LeaderSignature == null) continue;
-                
+
                 Leader leader;
 
                 if (leaderDictionary.TryGetValue(item.LeaderSignature, out leader))
@@ -1090,7 +1137,7 @@ namespace Lair.Windows
             foreach (var item in Settings.Instance.SectionControl_SectionTreeItems)
             {
                 if (item.LeaderSignature == null) continue;
-                
+
                 Dictionary<string, Leader> leaderDictionary = new Dictionary<string, Leader>();
 
                 foreach (var leader in _lairManager.GetLeaders(item.Section))
@@ -1756,7 +1803,7 @@ namespace Lair.Windows
 
             HashSet<Channel> channels = new HashSet<Channel>();
 
-            if(sectionTreeViewItem.Value.LeaderSignature != null)
+            if (sectionTreeViewItem.Value.LeaderSignature != null)
             {
                 Dictionary<string, Leader> leaderDictionary = new Dictionary<string, Leader>();
 
@@ -1943,6 +1990,8 @@ namespace Lair.Windows
 
             selectTreeViewItem.Value.IsFilterEnabled = _trustToggleButton.IsChecked.Value;
 
+            _listViewItemCollection.Clear();
+
             this.Update_Cache();
         }
 
@@ -1956,59 +2005,22 @@ namespace Lair.Windows
 
             Topic topTopic = null;
 
-            if (sectionTreeViewItem.Value.LeaderSignature != null)
+            if (selectTreeViewItem.CreatorSignature != null)
             {
-                Dictionary<string, Leader> leaderDictionary = new Dictionary<string, Leader>();
+                Dictionary<string, Topic> topicDictionary = new Dictionary<string, Topic>();
 
-                foreach (var leader in _lairManager.GetLeaders(sectionTreeViewItem.Value.Section))
+                foreach (var topic in _lairManager.GetTopics(selectTreeViewItem.Value.Channel))
                 {
-                    leaderDictionary[leader.Certificate.ToString()] = leader;
+                    topicDictionary[topic.Certificate.ToString()] = topic;
                 }
 
-                {
-                    Leader leader;
-
-                    if (leaderDictionary.TryGetValue(sectionTreeViewItem.Value.LeaderSignature, out leader))
-                    {
-                        Dictionary<string, Creator> creatorDictionary = new Dictionary<string, Creator>();
-
-                        foreach (var creator in _lairManager.GetCreators(sectionTreeViewItem.Value.Section))
-                        {
-                            creatorDictionary[creator.Certificate.ToString()] = creator;
-                        }
-
-                        foreach (var creatorSignature in leader.CreatorSignatures)
-                        {
-                            Creator creator;
-
-                            if (creatorDictionary.TryGetValue(creatorSignature, out creator))
-                            {
-                                HashSet<Channel> channels = new HashSet<Channel>(creator.Channels);
-
-                                if (channels.Contains(selectTreeViewItem.Value.Channel))
-                                {
-                                    Dictionary<string, Topic> topicDictionary = new Dictionary<string, Topic>();
-
-                                    foreach (var topic in _lairManager.GetTopics(selectTreeViewItem.Value.Channel))
-                                    {
-                                        topicDictionary[topic.Certificate.ToString()] = topic;
-                                    }
-
-                                    topicDictionary.TryGetValue(creator.Certificate.ToString(), out topTopic);
-                                    goto End;
-                                }
-                            }
-                        }
-                    }
-                }
-
-            End: ;
+                topicDictionary.TryGetValue(selectTreeViewItem.CreatorSignature, out topTopic);
             }
 
-            if (sectionTreeViewItem.Value.CreatorInfo.Channels.Contains(selectTreeViewItem.Value.Channel)
-                && sectionTreeViewItem.Value.UploadSignature != null)
+            var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == sectionTreeViewItem.Value.UploadSignature);
+
+            if ((digitalSignature != null && digitalSignature.ToString() == selectTreeViewItem.CreatorSignature && sectionTreeViewItem.Value.CreatorInfo.Channels.Contains(selectTreeViewItem.Value.Channel)))
             {
-                var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == sectionTreeViewItem.Value.UploadSignature);
                 var content = (topTopic != null) ? topTopic.Content : "";
 
                 TopicEditWindow window = new TopicEditWindow(selectTreeViewItem.Value.Channel, content, digitalSignature, _lairManager);
@@ -2034,6 +2046,7 @@ namespace Lair.Windows
             if (selectTreeViewItem == null) return;
 
             var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == sectionTreeViewItem.Value.UploadSignature);
+            if (digitalSignature == null) return;
 
             MessageEditWindow window = new MessageEditWindow(selectTreeViewItem.Value.Channel, "", null, digitalSignature, _lairManager);
             window.Owner = _mainWindow;
@@ -2080,6 +2093,9 @@ namespace Lair.Windows
 
         private void _richTextBox_ContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
+            var sectionTreeViewItem = _treeView.GetLineage((TreeViewItem)_treeView.SelectedItem).OfType<SectionTreeViewItem>().FirstOrDefault() as SectionTreeViewItem;
+            if (sectionTreeViewItem == null) return;
+
             var selectTreeViewItem = _treeView.SelectedItem as ChannelTreeViewItem;
             if (selectTreeViewItem == null) return;
 
@@ -2098,6 +2114,8 @@ namespace Lair.Windows
                 list.AddRange(list[i].Items.OfType<MenuItem>());
             }
 
+            var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == sectionTreeViewItem.Value.UploadSignature);
+
             foreach (var item in list)
             {
                 if (item.Name == "_richTextBoxFilterWordMenuItem")
@@ -2107,6 +2125,10 @@ namespace Lair.Windows
                 else if (item.Name == "_richTextBoxLockMenuItem")
                 {
                     item.IsEnabled = (_listView.SelectedItems.Count != 0);
+                }
+                else if (item.Name == "_richTextBoxResponsMenuItem")
+                {
+                    item.IsEnabled = (digitalSignature != null);
                 }
             }
         }
@@ -2172,8 +2194,10 @@ namespace Lair.Windows
             var selectTreeViewItem = _treeView.SelectedItem as ChannelTreeViewItem;
             if (selectTreeViewItem == null) return;
 
-            var responsMessages = _listView.SelectedItems.OfType<MessageWrapper>().Select(n => n.Value).ToList();
             var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == sectionTreeViewItem.Value.UploadSignature);
+            if (digitalSignature == null) return;
+
+            var responsMessages = _listView.SelectedItems.OfType<MessageWrapper>().Select(n => n.Value).ToList();
 
             MessageEditWindow window = new MessageEditWindow(selectTreeViewItem.Value.Channel, "", responsMessages, digitalSignature, _lairManager);
             window.Owner = _mainWindow;
@@ -3852,7 +3876,7 @@ namespace Lair.Windows
     }
 
     [DataContract(Name = "SearchContains", Namespace = "http://Lair/Windows")]
-    class SearchContains<T> : IEquatable<SearchContains<T>>, IDeepCloneable<SearchContains<T>>, IThisLock
+    class SearchContains<T> : IEquatable<SearchContains<T>>, IDeepCloneable<SearchContains<T>>
     {
         private bool _contains;
         private T _value;
@@ -3865,17 +3889,11 @@ namespace Lair.Windows
         {
             get
             {
-                lock (this.ThisLock)
-                {
-                    return _contains;
-                }
+                return _contains;
             }
             set
             {
-                lock (this.ThisLock)
-                {
-                    _contains = value;
-                }
+                _contains = value;
             }
         }
 
@@ -3884,26 +3902,17 @@ namespace Lair.Windows
         {
             get
             {
-                lock (this.ThisLock)
-                {
-                    return _value;
-                }
+                return _value;
             }
             set
             {
-                lock (this.ThisLock)
-                {
-                    _value = value;
-                }
+                _value = value;
             }
         }
 
         public override int GetHashCode()
         {
-            lock (this.ThisLock)
-            {
-                return this.Value.GetHashCode();
-            }
+            return this.Value.GetHashCode();
         }
 
         public override bool Equals(object obj)
@@ -3930,51 +3939,27 @@ namespace Lair.Windows
 
         public override string ToString()
         {
-            lock (this.ThisLock)
-            {
-                return string.Format("{0} {1}", this.Contains, this.Value);
-            }
+            return string.Format("{0} {1}", this.Contains, this.Value);
         }
 
         #region IDeepClone<SearchContains<T>>
 
         public SearchContains<T> DeepClone()
         {
-            lock (this.ThisLock)
+            var ds = new DataContractSerializer(typeof(SearchContains<T>));
+
+            using (MemoryStream ms = new MemoryStream())
             {
-                var ds = new DataContractSerializer(typeof(SearchContains<T>));
-
-                using (MemoryStream ms = new MemoryStream())
+                using (XmlDictionaryWriter textDictionaryWriter = XmlDictionaryWriter.CreateTextWriter(ms, new UTF8Encoding(false), false))
                 {
-                    using (XmlDictionaryWriter textDictionaryWriter = XmlDictionaryWriter.CreateTextWriter(ms, new UTF8Encoding(false), false))
-                    {
-                        ds.WriteObject(textDictionaryWriter, this);
-                    }
-
-                    ms.Position = 0;
-
-                    using (XmlDictionaryReader textDictionaryReader = XmlDictionaryReader.CreateTextReader(ms, XmlDictionaryReaderQuotas.Max))
-                    {
-                        return (SearchContains<T>)ds.ReadObject(textDictionaryReader);
-                    }
+                    ds.WriteObject(textDictionaryWriter, this);
                 }
-            }
-        }
 
-        #endregion
+                ms.Position = 0;
 
-        #region IThisLock
-
-        public object ThisLock
-        {
-            get
-            {
-                lock (_thisStaticLock)
+                using (XmlDictionaryReader textDictionaryReader = XmlDictionaryReader.CreateTextReader(ms, XmlDictionaryReaderQuotas.Max))
                 {
-                    if (_thisLock == null)
-                        _thisLock = new object();
-
-                    return _thisLock;
+                    return (SearchContains<T>)ds.ReadObject(textDictionaryReader);
                 }
             }
         }
@@ -3983,7 +3968,7 @@ namespace Lair.Windows
     }
 
     [DataContract(Name = "SearchRegex", Namespace = "http://Lair/Windows")]
-    class SearchRegex : IEquatable<SearchRegex>, IDeepCloneable<SearchRegex>, IThisLock
+    class SearchRegex : IEquatable<SearchRegex>, IDeepCloneable<SearchRegex>
     {
         private string _value;
         private bool _isIgnoreCase;
@@ -3998,19 +3983,13 @@ namespace Lair.Windows
         {
             get
             {
-                lock (this.ThisLock)
-                {
-                    return _value;
-                }
+                return _value;
             }
             set
             {
-                lock (this.ThisLock)
-                {
-                    _value = value;
+                _value = value;
 
-                    this.RegexUpdate();
-                }
+                this.RegexUpdate();
             }
         }
 
@@ -4019,50 +3998,35 @@ namespace Lair.Windows
         {
             get
             {
-                lock (this.ThisLock)
-                {
-                    return _isIgnoreCase;
-                }
+                return _isIgnoreCase;
             }
             set
             {
-                lock (this.ThisLock)
-                {
-                    _isIgnoreCase = value;
+                _isIgnoreCase = value;
 
-                    this.RegexUpdate();
-                }
+                this.RegexUpdate();
             }
         }
 
         private void RegexUpdate()
         {
-            lock (this.ThisLock)
-            {
-                var o = RegexOptions.Compiled | RegexOptions.Singleline;
-                if (_isIgnoreCase) o |= RegexOptions.IgnoreCase;
+            var o = RegexOptions.Compiled | RegexOptions.Singleline;
+            if (_isIgnoreCase) o |= RegexOptions.IgnoreCase;
 
-                if (_value != null) _regex = new Regex(_value, o);
-                else _regex = null;
-            }
+            if (_value != null) _regex = new Regex(_value, o);
+            else _regex = null;
         }
 
         public bool IsMatch(string value)
         {
-            lock (this.ThisLock)
-            {
-                if (_regex == null) return false;
+            if (_regex == null) return false;
 
-                return _regex.IsMatch(value);
-            }
+            return _regex.IsMatch(value);
         }
 
         public override int GetHashCode()
         {
-            lock (this.ThisLock)
-            {
-                return this.Value.GetHashCode();
-            }
+            return this.Value.GetHashCode();
         }
 
         public override bool Equals(object obj)
@@ -4089,51 +4053,27 @@ namespace Lair.Windows
 
         public override string ToString()
         {
-            lock (this.ThisLock)
-            {
-                return string.Format("{0} {1}", this.IsIgnoreCase, this.Value);
-            }
+            return string.Format("{0} {1}", this.IsIgnoreCase, this.Value);
         }
 
         #region IDeepClone<SearchRegex>
 
         public SearchRegex DeepClone()
         {
-            lock (this.ThisLock)
+            var ds = new DataContractSerializer(typeof(SearchRegex));
+
+            using (MemoryStream ms = new MemoryStream())
             {
-                var ds = new DataContractSerializer(typeof(SearchRegex));
-
-                using (MemoryStream ms = new MemoryStream())
+                using (XmlDictionaryWriter textDictionaryWriter = XmlDictionaryWriter.CreateTextWriter(ms, new UTF8Encoding(false), false))
                 {
-                    using (XmlDictionaryWriter textDictionaryWriter = XmlDictionaryWriter.CreateTextWriter(ms, new UTF8Encoding(false), false))
-                    {
-                        ds.WriteObject(textDictionaryWriter, this);
-                    }
-
-                    ms.Position = 0;
-
-                    using (XmlDictionaryReader textDictionaryReader = XmlDictionaryReader.CreateTextReader(ms, XmlDictionaryReaderQuotas.Max))
-                    {
-                        return (SearchRegex)ds.ReadObject(textDictionaryReader);
-                    }
+                    ds.WriteObject(textDictionaryWriter, this);
                 }
-            }
-        }
 
-        #endregion
+                ms.Position = 0;
 
-        #region IThisLock
-
-        public object ThisLock
-        {
-            get
-            {
-                lock (_thisStaticLock)
+                using (XmlDictionaryReader textDictionaryReader = XmlDictionaryReader.CreateTextReader(ms, XmlDictionaryReaderQuotas.Max))
                 {
-                    if (_thisLock == null)
-                        _thisLock = new object();
-
-                    return _thisLock;
+                    return (SearchRegex)ds.ReadObject(textDictionaryReader);
                 }
             }
         }
@@ -4142,7 +4082,7 @@ namespace Lair.Windows
     }
 
     [DataContract(Name = "SearchRange", Namespace = "http://Lair/Windows")]
-    class SearchRange<T> : IEquatable<SearchRange<T>>, IDeepCloneable<SearchRange<T>>, IThisLock
+    class SearchRange<T> : IEquatable<SearchRange<T>>, IDeepCloneable<SearchRange<T>>
         where T : IComparable
     {
         T _max;
@@ -4156,18 +4096,12 @@ namespace Lair.Windows
         {
             get
             {
-                lock (this.ThisLock)
-                {
-                    return _max;
-                }
+                return _max;
             }
             set
             {
-                lock (this.ThisLock)
-                {
-                    _max = value;
-                    _min = (_min.CompareTo(_max) > 0) ? _max : _min;
-                }
+                _max = value;
+                _min = (_min.CompareTo(_max) > 0) ? _max : _min;
             }
         }
 
@@ -4176,42 +4110,30 @@ namespace Lair.Windows
         {
             get
             {
-                lock (this.ThisLock)
-                {
-                    return _min;
-                }
+                return _min;
             }
             set
             {
-                lock (this.ThisLock)
-                {
-                    _min = value;
-                    _max = (_max.CompareTo(_min) < 0) ? _min : _max;
-                }
+                _min = value;
+                _max = (_max.CompareTo(_min) < 0) ? _min : _max;
             }
         }
 
         public bool Verify(T value)
         {
-            lock (this.ThisLock)
+            if (value.CompareTo(this.Min) < 0 || value.CompareTo(this.Max) > 0)
             {
-                if (value.CompareTo(this.Min) < 0 || value.CompareTo(this.Max) > 0)
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
+                return false;
+            }
+            else
+            {
+                return true;
             }
         }
 
         public override int GetHashCode()
         {
-            lock (this.ThisLock)
-            {
-                return this.Min.GetHashCode();
-            }
+            return this.Min.GetHashCode();
         }
 
         public override bool Equals(object obj)
@@ -4238,51 +4160,27 @@ namespace Lair.Windows
 
         public override string ToString()
         {
-            lock (this.ThisLock)
-            {
-                return string.Format("Max = {0}, Min = {1}", this.Max, this.Min);
-            }
+            return string.Format("Max = {0}, Min = {1}", this.Max, this.Min);
         }
 
         #region IDeepClone<SearchRange<T>>
 
         public SearchRange<T> DeepClone()
         {
-            lock (this.ThisLock)
+            var ds = new DataContractSerializer(typeof(SearchRange<T>));
+
+            using (MemoryStream ms = new MemoryStream())
             {
-                var ds = new DataContractSerializer(typeof(SearchRange<T>));
-
-                using (MemoryStream ms = new MemoryStream())
+                using (XmlDictionaryWriter textDictionaryWriter = XmlDictionaryWriter.CreateTextWriter(ms, new UTF8Encoding(false), false))
                 {
-                    using (XmlDictionaryWriter textDictionaryWriter = XmlDictionaryWriter.CreateTextWriter(ms, new UTF8Encoding(false), false))
-                    {
-                        ds.WriteObject(textDictionaryWriter, this);
-                    }
-
-                    ms.Position = 0;
-
-                    using (XmlDictionaryReader textDictionaryReader = XmlDictionaryReader.CreateTextReader(ms, XmlDictionaryReaderQuotas.Max))
-                    {
-                        return (SearchRange<T>)ds.ReadObject(textDictionaryReader);
-                    }
+                    ds.WriteObject(textDictionaryWriter, this);
                 }
-            }
-        }
 
-        #endregion
+                ms.Position = 0;
 
-        #region IThisLock
-
-        public object ThisLock
-        {
-            get
-            {
-                lock (_thisStaticLock)
+                using (XmlDictionaryReader textDictionaryReader = XmlDictionaryReader.CreateTextReader(ms, XmlDictionaryReaderQuotas.Max))
                 {
-                    if (_thisLock == null)
-                        _thisLock = new object();
-
-                    return _thisLock;
+                    return (SearchRange<T>)ds.ReadObject(textDictionaryReader);
                 }
             }
         }

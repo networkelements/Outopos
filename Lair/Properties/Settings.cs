@@ -122,7 +122,11 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<double>() { Name = "ChartWindow_Height", Value = 500 },
                 new Library.Configuration.SettingsContext<double>() { Name = "ChartWindow_Width", Value = 700 },
                 new Library.Configuration.SettingsContext<WindowState>() { Name = "ChartWindow_WindowState", Value = WindowState.Normal },
-                
+                new Library.Configuration.SettingsContext<string>() { Name = "ChartWindow_Channel_LastHeaderClicked", Value = "Name" },
+                new Library.Configuration.SettingsContext<ListSortDirection>() { Name = "ChartWindow_Channel_ListSortDirection", Value = ListSortDirection.Descending },
+                new Library.Configuration.SettingsContext<string>() { Name = "ChartWindow_Signature_LastHeaderClicked", Value = "Signature" },
+                new Library.Configuration.SettingsContext<ListSortDirection>() { Name = "ChartWindow_Signature_ListSortDirection", Value = ListSortDirection.Descending },
+
                 new Library.Configuration.SettingsContext<double>() { Name = "NewSectionWindow_Top", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "NewSectionWindow_Left", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "NewSectionWindow_Width", Value = 700 },
@@ -1839,6 +1843,82 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     this["ChartWindow_WindowState"] = value;
+                }
+            }
+        }
+
+        public string ChartWindow_Channel_LastHeaderClicked
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (string)this["ChartWindow_Channel_LastHeaderClicked"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChartWindow_Channel_LastHeaderClicked"] = value;
+                }
+            }
+        }
+
+        public ListSortDirection ChartWindow_Channel_ListSortDirection
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (ListSortDirection)this["ChartWindow_Channel_ListSortDirection"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChartWindow_Channel_ListSortDirection"] = value;
+                }
+            }
+        }
+
+        public string ChartWindow_Signature_LastHeaderClicked
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (string)this["ChartWindow_Signature_LastHeaderClicked"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChartWindow_Signature_LastHeaderClicked"] = value;
+                }
+            }
+        }
+
+        public ListSortDirection ChartWindow_Signature_ListSortDirection
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (ListSortDirection)this["ChartWindow_Signature_ListSortDirection"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChartWindow_Signature_ListSortDirection"] = value;
                 }
             }
         }

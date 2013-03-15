@@ -13,6 +13,9 @@ using Library.Net;
 using Library.Net.Lair;
 using Library.Security;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Collections;
+using Library;
 
 namespace Lair.Windows
 {
@@ -24,6 +27,8 @@ namespace Lair.Windows
         private Section _section;
         private string _leaderSignature;
         private LairManager _lairManager;
+        private ObservableCollection<Channel> _channelCollection;
+        private ObservableCollection<string> _signatureCollection;
 
         public ChartWindow(Section section, string leaderSignature, LairManager lairManager)
         {
@@ -44,6 +49,12 @@ namespace Lair.Windows
                 this.Icon = icon;
             }
 
+            _channelCollection = new ObservableCollection<Channel>();
+            _channelListView.ItemsSource = _channelCollection;
+
+            _signatureCollection = new ObservableCollection<string>();
+            _signatureListView.ItemsSource = _signatureCollection;
+
             {
                 Dictionary<string, Leader> leaderDictionary = new Dictionary<string, Leader>();
 
@@ -54,8 +65,6 @@ namespace Lair.Windows
 
                 {
                     Leader leader;
-                    HashSet<Creator> creators = new HashSet<Creator>();
-                    HashSet<Manager> managers = new HashSet<Manager>();
 
                     if (leaderDictionary.TryGetValue(_leaderSignature, out leader))
                     {
@@ -65,6 +74,8 @@ namespace Lair.Windows
                         {
                             creatorDictionary[creator.Certificate.ToString()] = creator;
                         }
+
+                        HashSet<Creator> creators = new HashSet<Creator>();
 
                         foreach (var creatorSignature in leader.CreatorSignatures)
                         {
@@ -83,6 +94,8 @@ namespace Lair.Windows
                             managerDictionary[manager.Certificate.ToString()] = manager;
                         }
 
+                        HashSet<Manager> managers = new HashSet<Manager>();
+
                         foreach (var managerSignature in leader.ManagerSignatures)
                         {
                             Manager manager;
@@ -92,27 +105,57 @@ namespace Lair.Windows
                                 managers.Add(manager);
                             }
                         }
+
+                        ChartLeaderTreeViewItem chartLeaderTreeViewItem = new ChartLeaderTreeViewItem(leader, creators, managers);
+                        chartLeaderTreeViewItem.IsExpanded = true;
+                        _treeView.Items.Add(chartLeaderTreeViewItem);
                     }
-
-                    List<ChartCreatorTreeViewItem> chartCreatorTreeViewItems = new List<ChartCreatorTreeViewItem>();
-
-                    foreach (var creator in creators)
-                    {
-                        chartCreatorTreeViewItems.Add(new ChartCreatorTreeViewItem(creator));
-                    }
-
-                    List<ChartManagerTreeViewItem> chartManagerTreeViewItems = new List<ChartManagerTreeViewItem>();
-
-                    foreach (var manager in managers)
-                    {
-                        chartManagerTreeViewItems.Add(new ChartManagerTreeViewItem(manager));
-                    }
-
-                    ChartLeaderTreeViewItem chartLeaderTreeViewItem = new ChartLeaderTreeViewItem(leader, chartCreatorTreeViewItems, chartManagerTreeViewItems);
-                    chartLeaderTreeViewItem.IsExpanded = true;
-                    _treeView.Items.Add(chartLeaderTreeViewItem);
                 }
             }
+
+            CollectionViewSource.GetDefaultView(_channelListView.ItemsSource).Filter = (object o) =>
+            {
+                string searchText = _channelSearchTextBox.Text;
+                if (string.IsNullOrWhiteSpace(searchText)) return true;
+
+                var item = o as Channel;
+                if (item == null) return false;
+
+                var words = searchText.ToLower().Split(new string[] { " ", "　" }, StringSplitOptions.RemoveEmptyEntries);
+                var text = (item.Name ?? "").ToLower();
+
+                foreach (var word in words)
+                {
+                    if (!text.Contains(word))
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            };
+
+            CollectionViewSource.GetDefaultView(_signatureListView.ItemsSource).Filter = (object o) =>
+            {
+                string searchText = _signatureSearchTextBox.Text;
+                if (string.IsNullOrWhiteSpace(searchText)) return true;
+
+                var item = o as string;
+                if (item == null) return false;
+
+                var words = searchText.ToLower().Split(new string[] { " ", "　" }, StringSplitOptions.RemoveEmptyEntries);
+                var text = (item ?? "").ToLower();
+
+                foreach (var word in words)
+                {
+                    if (!text.Contains(word))
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            };
         }
 
         private void _closeButton_Click(object sender, RoutedEventArgs e)
@@ -134,12 +177,14 @@ namespace Lair.Windows
 
                 var selectTreeViewItem = (ChartCreatorTreeViewItem)_treeView.SelectedItem;
 
-                _channelListView.Items.Clear();
+                _channelCollection.Clear();
 
                 foreach (var channel in selectTreeViewItem.Value.Channels)
                 {
-                    _channelListView.Items.Add(channel);
+                    _channelCollection.Add(channel);
                 }
+
+                this.Channel_Sort();
             }
             else if (_treeView.SelectedItem is ChartManagerTreeViewItem)
             {
@@ -148,12 +193,14 @@ namespace Lair.Windows
 
                 var selectTreeViewItem = (ChartManagerTreeViewItem)_treeView.SelectedItem;
 
-                _signatureListView.Items.Clear();
+                _signatureCollection.Clear();
 
                 foreach (var signature in selectTreeViewItem.Value.TrustSignatures)
                 {
-                    _signatureListView.Items.Add(signature);
+                    _signatureCollection.Add(signature);
                 }
+
+                this.Signature_Sort();
             }
         }
 
@@ -161,12 +208,10 @@ namespace Lair.Windows
 
         private void _channelListView_ContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
+            var selectItems = _channelListView.SelectedItems;
 
-        }
-
-        private void _channelGridViewColumnHeaderClickedHandler(object sender, RoutedEventArgs e)
-        {
-
+            _channelListViewCopyMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
+            _channelListViewCopyInfoMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
         }
 
         private void _channelListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -176,31 +221,129 @@ namespace Lair.Windows
 
         private void _channelListViewCopyMenuItem_Click(object sender, RoutedEventArgs e)
         {
-
+            Clipboard.SetChannels(_channelListView.SelectedItems.Cast<Channel>());
         }
 
         private void _channelListViewCopyInfoMenuItem_Click(object sender, RoutedEventArgs e)
         {
+            var sb = new StringBuilder();
 
+            foreach (var channel in _channelListView.SelectedItems.Cast<Channel>())
+            {
+                sb.AppendLine(LairConverter.ToChannelString(channel));
+                sb.AppendLine(MessageConverter.ToInfoMessage(channel));
+                sb.AppendLine();
+            }
+
+            Clipboard.SetText(sb.ToString().TrimEnd('\r', '\n'));
         }
 
         private void _channelSearchTextBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
+            if (e.Key == System.Windows.Input.Key.Enter)
+            {
+                CollectionViewSource.GetDefaultView(_channelListView.ItemsSource).Refresh();
 
+                e.Handled = true;
+            }
         }
 
+        #region Sort
+
+        private void Channel_Sort()
+        {
+            _channelGridViewColumnHeaderClickedHandler(null, null);
+        }
+
+        private void _channelGridViewColumnHeaderClickedHandler(object sender, RoutedEventArgs e)
+        {
+            if (e != null)
+            {
+                var item = e.OriginalSource as GridViewColumnHeader;
+                if (item == null || item.Role == GridViewColumnHeaderRole.Padding) return;
+
+                string headerClicked = item.Column.Header as string;
+                if (headerClicked == null) return;
+
+                ListSortDirection direction;
+
+                if (headerClicked != Settings.Instance.ChartWindow_Channel_LastHeaderClicked)
+                {
+                    direction = ListSortDirection.Ascending;
+                }
+                else
+                {
+                    if (Settings.Instance.ChartWindow_Channel_ListSortDirection == ListSortDirection.Ascending)
+                    {
+                        direction = ListSortDirection.Descending;
+                    }
+                    else
+                    {
+                        direction = ListSortDirection.Ascending;
+                    }
+                }
+
+                Channel_Sort(headerClicked, direction);
+
+                Settings.Instance.ChartWindow_Channel_LastHeaderClicked = headerClicked;
+                Settings.Instance.ChartWindow_Channel_ListSortDirection = direction;
+            }
+            else
+            {
+                if (Settings.Instance.ChartWindow_Channel_LastHeaderClicked != null)
+                {
+                    Channel_Sort(Settings.Instance.ChartWindow_Channel_LastHeaderClicked, Settings.Instance.ChartWindow_Channel_ListSortDirection);
+                }
+            }
+        }
+
+        private void Channel_Sort(string sortBy, ListSortDirection direction)
+        {
+            _channelListView.Items.SortDescriptions.Clear();
+
+            if (sortBy == LanguagesManager.Instance.ChartWindow_Name)
+            {
+                _channelListView.Items.SortDescriptions.Add(new SortDescription("Name", direction));
+            }
+            else if (sortBy == LanguagesManager.Instance.ChartWindow_Id)
+            {
+                ListCollectionView listCollectionView = (ListCollectionView)CollectionViewSource.GetDefaultView(_channelListView.ItemsSource);
+                listCollectionView.CustomSort = new ChannelIdComparer(direction);
+            }
+        }
+
+        sealed class ChannelIdComparer : IComparer
+        {
+            private ListSortDirection _direction;
+
+            public ChannelIdComparer(ListSortDirection direction)
+            {
+                _direction = direction;
+            }
+
+            public int Compare(object x, object y)
+            {
+                var cx = x as Channel;
+                var cy = y as Channel;
+
+                if (_direction == ListSortDirection.Ascending) return Collection.Compare(cx.Id, cy.Id);
+                if (_direction == ListSortDirection.Descending) return Collection.Compare(cy.Id, cx.Id);
+
+                return 0;
+            }
+        }
+
+        #endregion
+        
         #endregion
 
         #region Signature
 
         private void _signatureListView_ContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
+            var selectItems = _signatureListView.SelectedItems;
 
-        }
-
-        private void _signatureGridViewColumnHeaderClickedHandler(object sender, RoutedEventArgs e)
-        {
-
+            _signatureListViewCopyMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
         }
 
         private void _signatureListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -210,14 +353,88 @@ namespace Lair.Windows
 
         private void _signatureListViewCopyMenuItem_Click(object sender, RoutedEventArgs e)
         {
+            var sb = new StringBuilder();
 
+            foreach (var signature in _signatureListView.SelectedItems.Cast<string>())
+            {
+                sb.AppendLine(signature);
+                sb.AppendLine();
+            }
+
+            Clipboard.SetText(sb.ToString().TrimEnd('\r', '\n'));
         }
 
         private void _signatureSearchTextBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
+            if (e.Key == System.Windows.Input.Key.Enter)
+            {
+                CollectionViewSource.GetDefaultView(_signatureListView.ItemsSource).Refresh();
 
+                e.Handled = true;
+            }
         }
 
+        #region Sort
+
+        private void Signature_Sort()
+        {
+            _signatureGridViewColumnHeaderClickedHandler(null, null);
+        }
+
+        private void _signatureGridViewColumnHeaderClickedHandler(object sender, RoutedEventArgs e)
+        {
+            if (e != null)
+            {
+                var item = e.OriginalSource as GridViewColumnHeader;
+                if (item == null || item.Role == GridViewColumnHeaderRole.Padding) return;
+
+                string headerClicked = item.Column.Header as string;
+                if (headerClicked == null) return;
+
+                ListSortDirection direction;
+
+                if (headerClicked != Settings.Instance.ChartWindow_Signature_LastHeaderClicked)
+                {
+                    direction = ListSortDirection.Ascending;
+                }
+                else
+                {
+                    if (Settings.Instance.ChartWindow_Signature_ListSortDirection == ListSortDirection.Ascending)
+                    {
+                        direction = ListSortDirection.Descending;
+                    }
+                    else
+                    {
+                        direction = ListSortDirection.Ascending;
+                    }
+                }
+
+                Signature_Sort(headerClicked, direction);
+
+                Settings.Instance.ChartWindow_Signature_LastHeaderClicked = headerClicked;
+                Settings.Instance.ChartWindow_Signature_ListSortDirection = direction;
+            }
+            else
+            {
+                if (Settings.Instance.ChartWindow_Signature_LastHeaderClicked != null)
+                {
+                    Signature_Sort(Settings.Instance.ChartWindow_Signature_LastHeaderClicked, Settings.Instance.ChartWindow_Channel_ListSortDirection);
+                }
+            }
+        }
+
+        private void Signature_Sort(string sortBy, ListSortDirection direction)
+        {
+            _signatureListView.Items.SortDescriptions.Clear();
+
+            if (sortBy == LanguagesManager.Instance.ChartWindow_Signature)
+            {
+                _signatureListView.Items.SortDescriptions.Add(new SortDescription("Signature", direction));
+            }
+        }
+
+        #endregion
+        
         #endregion
     }
 
@@ -226,19 +443,19 @@ namespace Lair.Windows
         private Leader _value;
         private ObservableCollection<object> _listViewItemCollection = new ObservableCollection<object>();
 
-        public ChartLeaderTreeViewItem(Leader leader, IEnumerable<ChartCreatorTreeViewItem> creatorTreeViewItems, IEnumerable<ChartManagerTreeViewItem> managerTreeViewItems)
+        public ChartLeaderTreeViewItem(Leader leader, IEnumerable<Creator> creators, IEnumerable<Manager> managers)
             : base()
         {
             _value = leader;
 
-            foreach (var treeViewItem in creatorTreeViewItems)
+            foreach (var creator in creators)
             {
-                _listViewItemCollection.Add(treeViewItem);
+                _listViewItemCollection.Add(new ChartCreatorTreeViewItem(creator));
             }
 
-            foreach (var treeViewItem in managerTreeViewItems)
+            foreach (var manager in managers)
             {
-                _listViewItemCollection.Add(treeViewItem);
+                _listViewItemCollection.Add(new ChartManagerTreeViewItem(manager));
             }
 
             base.ItemsSource = _listViewItemCollection;
@@ -260,7 +477,12 @@ namespace Lair.Windows
 
         public void Update()
         {
-            base.Header = new TextBlock() { Text = string.Format("Leader {0}", _value.Certificate.ToString()) };
+            var textBlock = new TextBlock();
+         
+            textBlock.Text = string.Format("Leader: {0}", _value.Certificate.ToString());
+            if (!string.IsNullOrWhiteSpace(_value.Comment)) textBlock.ToolTip = _value.Comment;
+
+            base.Header = textBlock;
 
             this.Sort();
         }
@@ -348,7 +570,12 @@ namespace Lair.Windows
 
         public void Update()
         {
-            base.Header = new TextBlock() { Text = string.Format("Creator {0}", _value.Certificate.ToString()) };
+            var textBlock = new TextBlock();
+
+            textBlock.Text = string.Format("Creator: {0}", _value.Certificate.ToString());
+            if (!string.IsNullOrWhiteSpace(_value.Comment)) textBlock.ToolTip = _value.Comment;
+
+            base.Header = textBlock;
         }
 
         public Creator Value
@@ -386,7 +613,12 @@ namespace Lair.Windows
 
         public void Update()
         {
-            base.Header = new TextBlock() { Text = string.Format("Manager {0}", _value.Certificate.ToString()) };
+            var textBlock = new TextBlock();
+
+            textBlock.Text = string.Format("Manager: {0}", _value.Certificate.ToString());
+            if (!string.IsNullOrWhiteSpace(_value.Comment)) textBlock.ToolTip = _value.Comment;
+
+            base.Header = textBlock;
         }
 
         public Manager Value
