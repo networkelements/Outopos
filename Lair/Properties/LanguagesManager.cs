@@ -330,6 +330,18 @@ namespace Lair.Properties
         }
 
 
+        public string SectionTreeItem_LeaderSignature
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionTreeItem_LeaderSignature");
+                }
+            }
+        }
+
+
         public string Message_Channel
         {
             get
@@ -2320,6 +2332,39 @@ namespace Lair.Properties
             }
         }
 
+        public string ChartWindow_Leader
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChartWindow_Leader");
+                }
+            }
+        }
+
+        public string ChartWindow_Creator
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChartWindow_Creator");
+                }
+            }
+        }
+
+        public string ChartWindow_Manager
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChartWindow_Manager");
+                }
+            }
+        }
+
         public string ChartWindow_Name
         {
             get
@@ -2633,6 +2678,17 @@ namespace Lair.Properties
             }
         }
 
+
+        public string SectionTreeItemEditWindow_Title
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionTreeItemEditWindow_Title");
+                }
+            }
+        }
 
         public string SectionTreeItemEditWindow_Signature
         {

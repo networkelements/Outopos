@@ -75,7 +75,7 @@ namespace Lair.Windows
                             creatorDictionary[creator.Certificate.ToString()] = creator;
                         }
 
-                        HashSet<Creator> creators = new HashSet<Creator>();
+                        List<ChartCreatorTreeViewItem> chartCreatorTreeViewItems = new List<ChartCreatorTreeViewItem>();
 
                         foreach (var creatorSignature in leader.CreatorSignatures)
                         {
@@ -83,7 +83,11 @@ namespace Lair.Windows
 
                             if (creatorDictionary.TryGetValue(creatorSignature, out creator))
                             {
-                                creators.Add(creator);
+                                chartCreatorTreeViewItems.Add(new ChartCreatorTreeViewItem(creator));
+                            }
+                            else
+                            {
+                                chartCreatorTreeViewItems.Add(new ChartCreatorTreeViewItem(creatorSignature));
                             }
                         }
 
@@ -94,7 +98,7 @@ namespace Lair.Windows
                             managerDictionary[manager.Certificate.ToString()] = manager;
                         }
 
-                        HashSet<Manager> managers = new HashSet<Manager>();
+                        List<ChartManagerTreeViewItem> chartManagerTreeViewItems = new List<ChartManagerTreeViewItem>();
 
                         foreach (var managerSignature in leader.ManagerSignatures)
                         {
@@ -102,13 +106,40 @@ namespace Lair.Windows
 
                             if (managerDictionary.TryGetValue(managerSignature, out manager))
                             {
-                                managers.Add(manager);
+                                chartManagerTreeViewItems.Add(new ChartManagerTreeViewItem(manager));
+                            }
+                            else
+                            {
+                                chartManagerTreeViewItems.Add(new ChartManagerTreeViewItem(managerSignature));
                             }
                         }
 
-                        ChartLeaderTreeViewItem chartLeaderTreeViewItem = new ChartLeaderTreeViewItem(leader, creators, managers);
-                        chartLeaderTreeViewItem.IsExpanded = true;
-                        _treeView.Items.Add(chartLeaderTreeViewItem);
+                        TreeViewItem leaderTreeViewItem = new TreeViewItem();
+                        leaderTreeViewItem.IsExpanded = true;
+                        leaderTreeViewItem.Header = new TextBlock() { Text = LanguagesManager.Instance.ChartWindow_Leader };
+                        leaderTreeViewItem.Items.Add(new ChartLeaderTreeViewItem(leader));
+
+                        TreeViewItem creatorTreeViewItem = new TreeViewItem();
+                        creatorTreeViewItem.IsExpanded = true;
+                        creatorTreeViewItem.Header = new TextBlock() { Text = LanguagesManager.Instance.ChartWindow_Creator };
+
+                        foreach (var item in chartCreatorTreeViewItems)
+                        {
+                            creatorTreeViewItem.Items.Add(item);
+                        }
+
+                        TreeViewItem managerTreeViewItem = new TreeViewItem();
+                        managerTreeViewItem.IsExpanded = true;
+                        managerTreeViewItem.Header = new TextBlock() { Text = LanguagesManager.Instance.ChartWindow_Manager };
+
+                        foreach (var item in chartManagerTreeViewItems)
+                        {
+                            managerTreeViewItem.Items.Add(item);
+                        }
+
+                        _treeView.Items.Add(leaderTreeViewItem);
+                        _treeView.Items.Add(creatorTreeViewItem);
+                        _treeView.Items.Add(managerTreeViewItem);
                     }
                 }
             }
@@ -179,12 +210,15 @@ namespace Lair.Windows
 
                 _channelCollection.Clear();
 
-                foreach (var channel in selectTreeViewItem.Value.Channels)
+                if (selectTreeViewItem.Value != null)
                 {
-                    _channelCollection.Add(channel);
-                }
+                    foreach (var channel in selectTreeViewItem.Value.Channels)
+                    {
+                        _channelCollection.Add(channel);
+                    }
 
-                this.Channel_Sort();
+                    this.Channel_Sort();
+                }
             }
             else if (_treeView.SelectedItem is ChartManagerTreeViewItem)
             {
@@ -195,12 +229,15 @@ namespace Lair.Windows
 
                 _signatureCollection.Clear();
 
-                foreach (var signature in selectTreeViewItem.Value.TrustSignatures)
+                if (selectTreeViewItem.Value != null)
                 {
-                    _signatureCollection.Add(signature);
-                }
+                    foreach (var signature in selectTreeViewItem.Value.TrustSignatures)
+                    {
+                        _signatureCollection.Add(signature);
+                    }
 
-                this.Signature_Sort();
+                    this.Signature_Sort();
+                }
             }
         }
 
@@ -334,7 +371,7 @@ namespace Lair.Windows
         }
 
         #endregion
-        
+
         #endregion
 
         #region Signature
@@ -434,31 +471,18 @@ namespace Lair.Windows
         }
 
         #endregion
-        
+
         #endregion
     }
 
     class ChartLeaderTreeViewItem : TreeViewItem
     {
         private Leader _value;
-        private ObservableCollection<object> _listViewItemCollection = new ObservableCollection<object>();
 
-        public ChartLeaderTreeViewItem(Leader leader, IEnumerable<Creator> creators, IEnumerable<Manager> managers)
+        public ChartLeaderTreeViewItem(Leader leader)
             : base()
         {
             _value = leader;
-
-            foreach (var creator in creators)
-            {
-                _listViewItemCollection.Add(new ChartCreatorTreeViewItem(creator));
-            }
-
-            foreach (var manager in managers)
-            {
-                _listViewItemCollection.Add(new ChartManagerTreeViewItem(manager));
-            }
-
-            base.ItemsSource = _listViewItemCollection;
 
             base.RequestBringIntoView += (object sender, RequestBringIntoViewEventArgs e) =>
             {
@@ -478,61 +502,11 @@ namespace Lair.Windows
         public void Update()
         {
             var textBlock = new TextBlock();
-         
-            textBlock.Text = string.Format("Leader: {0}", _value.Certificate.ToString());
+
+            textBlock.Text = _value.Certificate.ToString();
             if (!string.IsNullOrWhiteSpace(_value.Comment)) textBlock.ToolTip = _value.Comment;
 
             base.Header = textBlock;
-
-            this.Sort();
-        }
-
-        public void Sort()
-        {
-            var list = _listViewItemCollection.Cast<object>().ToList();
-
-            list.Sort(delegate(object x, object y)
-            {
-                if (x is ChartCreatorTreeViewItem)
-                {
-                    if (y is ChartCreatorTreeViewItem)
-                    {
-                        var vx = ((ChartCreatorTreeViewItem)x).Value;
-                        var vy = ((ChartCreatorTreeViewItem)y).Value;
-
-                        int c = vx.Certificate.ToString().CompareTo(vy.Certificate.ToString());
-                        if (c != 0) return c;
-                    }
-                    else if (y is ChartManagerTreeViewItem)
-                    {
-                        return 1;
-                    }
-                }
-                else if (x is ChartManagerTreeViewItem)
-                {
-                    if (y is ChartManagerTreeViewItem)
-                    {
-                        var vx = ((ChartManagerTreeViewItem)x).Value;
-                        var vy = ((ChartManagerTreeViewItem)y).Value;
-
-                        int c = vx.Certificate.ToString().CompareTo(vy.Certificate.ToString());
-                        if (c != 0) return c;
-                    }
-                    else if (y is ChartCreatorTreeViewItem)
-                    {
-                        return -1;
-                    }
-                }
-
-                return 0;
-            });
-
-            for (int i = 0; i < list.Count; i++)
-            {
-                var o = _listViewItemCollection.IndexOf(list[i]);
-
-                if (i != o) _listViewItemCollection.Move(o, i);
-            }
         }
 
         public Leader Value
@@ -547,11 +521,25 @@ namespace Lair.Windows
     class ChartCreatorTreeViewItem : TreeViewItem
     {
         private Creator _value;
+        private string _creatorSignature;
 
         public ChartCreatorTreeViewItem(Creator creator)
             : base()
         {
             _value = creator;
+
+            base.RequestBringIntoView += (object sender, RequestBringIntoViewEventArgs e) =>
+            {
+                e.Handled = true;
+            };
+
+            this.Update();
+        }
+
+        public ChartCreatorTreeViewItem(string creatorSignature)
+            : base()
+        {
+            _creatorSignature = creatorSignature;
 
             base.RequestBringIntoView += (object sender, RequestBringIntoViewEventArgs e) =>
             {
@@ -572,8 +560,15 @@ namespace Lair.Windows
         {
             var textBlock = new TextBlock();
 
-            textBlock.Text = string.Format("Creator: {0}", _value.Certificate.ToString());
-            if (!string.IsNullOrWhiteSpace(_value.Comment)) textBlock.ToolTip = _value.Comment;
+            if (_value != null)
+            {
+                textBlock.Text = _value.Certificate.ToString();
+                if (!string.IsNullOrWhiteSpace(_value.Comment)) textBlock.ToolTip = _value.Comment;
+            }
+            else
+            {
+                textBlock.Text = _creatorSignature;
+            }
 
             base.Header = textBlock;
         }
@@ -590,11 +585,25 @@ namespace Lair.Windows
     class ChartManagerTreeViewItem : TreeViewItem
     {
         private Manager _value;
+        private string _managerSignature;
 
         public ChartManagerTreeViewItem(Manager manager)
             : base()
         {
             _value = manager;
+
+            base.RequestBringIntoView += (object sender, RequestBringIntoViewEventArgs e) =>
+            {
+                e.Handled = true;
+            };
+
+            this.Update();
+        }
+
+        public ChartManagerTreeViewItem(string managerSignature)
+            : base()
+        {
+            _managerSignature = managerSignature;
 
             base.RequestBringIntoView += (object sender, RequestBringIntoViewEventArgs e) =>
             {
@@ -615,8 +624,15 @@ namespace Lair.Windows
         {
             var textBlock = new TextBlock();
 
-            textBlock.Text = string.Format("Manager: {0}", _value.Certificate.ToString());
-            if (!string.IsNullOrWhiteSpace(_value.Comment)) textBlock.ToolTip = _value.Comment;
+            if (_value != null)
+            {
+                textBlock.Text = _value.Certificate.ToString();
+                if (!string.IsNullOrWhiteSpace(_value.Comment)) textBlock.ToolTip = _value.Comment;
+            }
+            else
+            {
+                textBlock.Text = _managerSignature;
+            }
 
             base.Header = textBlock;
         }

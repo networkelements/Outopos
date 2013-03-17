@@ -30,6 +30,7 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<bool>() { Name = "Global_IsStart", Value = true },
                 new Library.Configuration.SettingsContext<LockedHashSet<string>>() { Name = "Global_UrlHistorys", Value = new LockedHashSet<string>() },
                 new Library.Configuration.SettingsContext<LockedHashSet<Seed>>() { Name = "Global_SeedHistorys", Value = new LockedHashSet<Seed>() },
+                new Library.Configuration.SettingsContext<LockedHashSet<Section>>() { Name = "Global_SectionHistorys", Value = new LockedHashSet<Section>() },
                 new Library.Configuration.SettingsContext<LockedHashSet<Channel>>() { Name = "Global_ChannelHistorys", Value = new LockedHashSet<Channel>() },
                 new Library.Configuration.SettingsContext<bool>() { Name = "Global_UrlClearHistory_IsEnabled", Value = false },
                 new Library.Configuration.SettingsContext<bool>() { Name = "Global_AutoBaseNodeSetting_IsEnabled", Value = true },
@@ -329,6 +330,25 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     this["Global_SeedHistorys"] = value;
+                }
+            }
+        }
+
+        public LockedHashSet<Section> Global_SectionHistorys
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (LockedHashSet<Section>)this["Global_SectionHistorys"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["Global_SectionHistorys"] = value;
                 }
             }
         }

@@ -21,6 +21,8 @@
   <Translate Key="Section_Name" Value="Name" />
   <Translate Key="Section_Id" Value="ID" />
 
+  <Translate Key="SectionTreeItem_LeaderSignature" Value="リーダーのサイン" />
+
   <Translate Key="Message_Channel" Value="チャンネル" />
   <Translate Key="Message_Signature" Value="サイン" />
   <Translate Key="Message_CreationTime" Value="作成日" />
@@ -211,6 +213,9 @@
   <Translate Key="SectionControl_ExportLockedMessages" Value="ロックされたメッセージのエクスポート" />
 
   <Translate Key="ChartWindow_Title" Value="チャート" />
+  <Translate Key="ChartWindow_Leader" Value="リーダー" />
+  <Translate Key="ChartWindow_Creator" Value="クリエーター" />
+  <Translate Key="ChartWindow_Manager" Value="マネージャー" />
   <Translate Key="ChartWindow_Name" Value="名前" />
   <Translate Key="ChartWindow_Id" Value="ID" />
   <Translate Key="ChartWindow_Signature" Value="サイン" />
@@ -245,9 +250,10 @@
   <Translate Key="NewChannelWindow_Ok" Value="Ok" />
   <Translate Key="NewChannelWindow_Cancel" Value="キャンセル" />
 
+  <Translate Key="SectionTreeItemEditWindow_Title" Value="セクションの編集" />
   <Translate Key="SectionTreeItemEditWindow_Signature" Value="サイン" />
   <Translate Key="SectionTreeItemEditWindow_Section" Value="セクション" />
-  <Translate Key="SectionTreeItemEditWindow_LeaderSignature" Value="リーダーサイン" />
+  <Translate Key="SectionTreeItemEditWindow_LeaderSignature" Value="リーダーのサイン" />
   <Translate Key="SectionTreeItemEditWindow_Leader" Value="リーダー" />
   <Translate Key="SectionTreeItemEditWindow_Creator" Value="クリエイター" />
   <Translate Key="SectionTreeItemEditWindow_Manager" Value="マネージャー" />
@@ -297,7 +303,7 @@
   <Translate Key="ManagerControl_Copy" Value="コピー" />
   <Translate Key="ManagerControl_Paste" Value="貼り付け" />
 
-  <Translate Key="SearchItemEditWindow_Title" Value="検索アイテム編集" />
+  <Translate Key="SearchItemEditWindow_Title" Value="カテゴリの編集" />
   <Translate Key="SearchItemEditWindow_Name" Value="名前" />
   <Translate Key="SearchItemEditWindow_Word" Value="単語" />
   <Translate Key="SearchItemEditWindow_Regex" Value="正規表現" />

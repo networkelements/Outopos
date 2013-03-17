@@ -21,6 +21,8 @@
   <Translate Key="Section_Name" Value="Name" />
   <Translate Key="Section_Id" Value="ID" />
 
+  <Translate Key="SectionTreeItem_LeaderSignature" Value="Leader Signature" />
+
   <Translate Key="Message_Channel" Value="Channel" />
   <Translate Key="Message_Signature" Value="Signature" />
   <Translate Key="Message_CreationTime" Value="Creation time" />
@@ -211,6 +213,9 @@
   <Translate Key="SectionControl_ExportLockedMessages" Value="Export locked messages" />
 
   <Translate Key="ChartWindow_Title" Value="Chart" />
+  <Translate Key="ChartWindow_Leader" Value="Leader" />
+  <Translate Key="ChartWindow_Creator" Value="Creator" />
+  <Translate Key="ChartWindow_Manager" Value="Manager" />
   <Translate Key="ChartWindow_Name" Value="Name" />
   <Translate Key="ChartWindow_Id" Value="ID" />
   <Translate Key="ChartWindow_Signature" Value="Signature" />
@@ -245,6 +250,7 @@
   <Translate Key="NewChannelWindow_Ok" Value="Ok" />
   <Translate Key="NewChannelWindow_Cancel" Value="Cancel" />
 
+  <Translate Key="SectionTreeItemEditWindow_Title" Value="Section edit" />
   <Translate Key="SectionTreeItemEditWindow_Signature" Value="Signature" />
   <Translate Key="SectionTreeItemEditWindow_Section" Value="Section" />
   <Translate Key="SectionTreeItemEditWindow_LeaderSignature" Value="Leader signature" />
@@ -297,7 +303,7 @@
   <Translate Key="ManagerControl_Copy" Value="Copy" />
   <Translate Key="ManagerControl_Paste" Value="Paste" />
 
-  <Translate Key="SearchItemEditWindow_Title" Value="Search item edit" />
+  <Translate Key="SearchItemEditWindow_Title" Value="Category edit" />
   <Translate Key="SearchItemEditWindow_Name" Value="Name" />
   <Translate Key="SearchItemEditWindow_Word" Value="Word" />
   <Translate Key="SearchItemEditWindow_Regex" Value="Regex" />

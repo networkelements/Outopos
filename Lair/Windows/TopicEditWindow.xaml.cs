@@ -86,7 +86,7 @@ namespace Lair.Windows
 
         private void _commentTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(_commentTextBox.Text) || _commentTextBox.Text.Length > Topic.MaxContentLength)
+            if (_commentTextBox.Text.Length > Topic.MaxContentLength)
             {
                 _okButton.IsEnabled = false;
             }
@@ -105,7 +105,7 @@ namespace Lair.Windows
         {
             this.DialogResult = true;
 
-            _lairManager.Upload(new Topic(_channel, _commentTextBox.Text, _digitalSignature));
+            _lairManager.Upload(new Topic(_channel, string.IsNullOrWhiteSpace(_commentTextBox.Text) ? null : _commentTextBox.Text, _digitalSignature));
         }
 
         private void _cancelButton_Click(object sender, RoutedEventArgs e)

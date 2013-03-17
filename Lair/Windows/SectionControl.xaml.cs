@@ -102,6 +102,7 @@ namespace Lair.Windows
             _cacheThread.Name = "SectionControl_CacheThread";
             _cacheThread.Start();
 
+            RichTextBoxHelper.SectionClickEvent += new SectionClickEventHandler(RichTextBoxHelper_SectionClickEvent);
             RichTextBoxHelper.ChannelClickEvent += new ChannelClickEventHandler(RichTextBoxHelper_ChannelClickEvent);
             RichTextBoxHelper.SeedClickEvent += new SeedClickEventHandler(RichTextBoxHelper_SeedClickEvent);
             RichTextBoxHelper.LinkClickEvent += new LinkClickEventHandler(RichTextBoxHelper_LinkClickEvent);
@@ -113,7 +114,7 @@ namespace Lair.Windows
             _searchRowDefinition.Height = new GridLength(0);
 
             _trustToggleButton.IsEnabled = false;
-            _topicUploadButton.IsEnabled = false;
+            _topicUploadToggleButton.IsEnabled = false;
             _messageUploadButton.IsEnabled = false;
 
             this.Update();
@@ -154,8 +155,8 @@ namespace Lair.Windows
                             _listViewItemCollection.Clear();
 
                             _trustToggleButton.IsEnabled = false;
-                            _trustToggleButton.IsChecked = true;
-                            _topicUploadButton.IsEnabled = false;
+                            _trustToggleButton.IsChecked = false;
+                            _topicUploadToggleButton.IsEnabled = false;
                             _messageUploadButton.IsEnabled = false;
                         }
                         else if (_treeView.SelectedItem is ChannelTreeViewItem)
@@ -170,21 +171,42 @@ namespace Lair.Windows
                             _messageUploadButton.IsEnabled = (digitalSignature != null);
 
                             {
-                                HashSet<string> topicSignatures = new HashSet<string>();
+                                Topic topTopic = null;
 
-                                foreach (var topic in _lairManager.GetTopics(selectTreeViewItem.Value.Channel))
+                                if (selectTreeViewItem.CreatorSignature != null)
                                 {
-                                    topicSignatures.Add(topic.Certificate.ToString());
+                                    Dictionary<string, Topic> topicDictionary = new Dictionary<string, Topic>();
+
+                                    foreach (var topic in _lairManager.GetTopics(selectTreeViewItem.Value.Channel))
+                                    {
+                                        topicDictionary[topic.Certificate.ToString()] = topic;
+                                    }
+
+                                    topicDictionary.TryGetValue(selectTreeViewItem.CreatorSignature, out topTopic);
                                 }
 
-                                if ((digitalSignature != null && digitalSignature.ToString() == selectTreeViewItem.CreatorSignature && sectionTreeViewItem.Value.CreatorInfo.Channels.Contains(selectTreeViewItem.Value.Channel))
-                                    || topicSignatures.Contains(selectTreeViewItem.CreatorSignature))
+                                if ((digitalSignature != null && digitalSignature.ToString() == selectTreeViewItem.CreatorSignature && sectionTreeViewItem.Value.CreatorInfo.Channels.Contains(selectTreeViewItem.Value.Channel)))
                                 {
-                                    _topicUploadButton.IsEnabled = true;
+                                    _topicUploadToggleButton.IsEnabled = true;
+
+                                    if ((topTopic != null && topTopic.Content != null))
+                                    {
+                                        _topicUploadToggleButton.IsChecked = true;
+                                    }
+                                    else
+                                    {
+                                        _topicUploadToggleButton.IsChecked = false;
+                                    }
+                                }
+                                else if ((topTopic != null && topTopic.Content != null))
+                                {
+                                    _topicUploadToggleButton.IsEnabled = true;
+                                    _topicUploadToggleButton.IsChecked = false;
                                 }
                                 else
                                 {
-                                    _topicUploadButton.IsEnabled = false;
+                                    _topicUploadToggleButton.IsEnabled = false;
+                                    _topicUploadToggleButton.IsChecked = false;
                                 }
                             }
                         }
@@ -571,12 +593,48 @@ namespace Lair.Windows
             }
         }
 
+        void RichTextBoxHelper_SectionClickEvent(object sender, Section section)
+        {
+            if (section.Name == null || section.Id == null) return;
+
+            Settings.Instance.Global_SectionHistorys.Add(section);
+
+            HashSet<Section> sectionList = new HashSet<Section>();
+
+            {
+                List<TreeViewItem> itemList = new List<TreeViewItem>();
+                itemList.AddRange(_treeView.Items.Cast<TreeViewItem>());
+
+                for (int i = 0; i < itemList.Count; i++)
+                {
+                    itemList.AddRange(itemList[i].Items.Cast<TreeViewItem>());
+                }
+
+                foreach (var item in itemList.OfType<SectionTreeViewItem>())
+                {
+                    sectionList.Add(item.Value.Section);
+                }
+            }
+
+            if (sectionList.Contains(section)) return;
+
+            var sectionTreeItem = new SectionTreeItem();
+            sectionTreeItem.Section = section;
+            sectionTreeItem.LeaderInfo = new LeaderInfo();
+            sectionTreeItem.CreatorInfo = new CreatorInfo();
+            sectionTreeItem.ManagerInfo = new ManagerInfo();
+
+            _treeView.Items.Add(new SectionTreeViewItem(sectionTreeItem));
+        }
+
         void RichTextBoxHelper_ChannelClickEvent(object sender, Channel channel)
         {
             var selectChannelTreeViewItem = _treeView.SelectedItem as ChannelTreeViewItem;
             if (selectChannelTreeViewItem == null) return;
 
             if (channel.Name == null || channel.Id == null) return;
+
+            Settings.Instance.Global_ChannelHistorys.Add(channel);
 
             HashSet<Channel> channelList = new HashSet<Channel>();
 
@@ -602,8 +660,6 @@ namespace Lair.Windows
 
             selectCategoryTreeViewItem.Value.ChannelTreeItems.Add(new ChannelTreeItem() { Channel = channel });
             selectCategoryTreeViewItem.Update();
-
-            Settings.Instance.Global_ChannelHistorys.Add(channel);
         }
 
         void RichTextBoxHelper_SeedClickEvent(object sender, Library.Net.Amoeba.Seed seed)
@@ -1280,8 +1336,6 @@ namespace Lair.Windows
                 if (Math.Abs(position.X - _startPoint.X) > SystemParameters.MinimumHorizontalDragDistance
                     || Math.Abs(position.Y - _startPoint.Y) > SystemParameters.MinimumVerticalDragDistance)
                 {
-                    if (_treeView.SelectedItem is SectionTreeViewItem) return;
-
                     if (_treeView.SelectedItem is SearchTreeViewItem)
                     {
                         DataObject data = new DataObject("SearchTreeViewItem", _treeView.SelectedItem);
@@ -1411,6 +1465,16 @@ namespace Lair.Windows
         {
             var item = _treeView.GetCurrentItem(e.GetPosition) as TreeViewItem;
             if (item == null)
+            {
+                _startPoint = new Point(-1, -1);
+
+                return;
+            }
+
+            Point lposition = e.GetPosition(_treeView);
+
+            if ((_treeView.ActualWidth - lposition.X) < 15
+                || (_treeView.ActualHeight - lposition.Y) < 15)
             {
                 _startPoint = new Point(-1, -1);
 
@@ -1598,6 +1662,20 @@ namespace Lair.Windows
             if (selectTreeViewItem == null) return;
 
             Clipboard.SetSections(new Section[] { selectTreeViewItem.Value.Section });
+        }
+
+        private void _sectionTreeViewItemCopyInfoMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var selectTreeViewItem = _treeView.SelectedItem as SectionTreeViewItem;
+            if (selectTreeViewItem == null) return;
+
+            var sb = new StringBuilder();
+
+            sb.AppendLine(LairConverter.ToSectionString(selectTreeViewItem.Value.Section));
+            sb.AppendLine(MessageConverter.ToInfoMessage(selectTreeViewItem.Value));
+            sb.AppendLine();
+
+            Clipboard.SetText(sb.ToString().TrimEnd('\r', '\n'));
         }
 
         private void _sectionTreeViewItemPasteMenuItem_Click(object sender, RoutedEventArgs e)
@@ -1838,12 +1916,7 @@ namespace Lair.Windows
             }
 
             {
-                List<SearchTreeItem> searchTreeItems = new List<SearchTreeItem>();
-
-                foreach (var item in _treeView.Items.OfType<SectionTreeViewItem>())
-                {
-                    searchTreeItems.AddRange(item.Value.SearchTreeItems);
-                }
+                List<SearchTreeItem> searchTreeItems = new List<SearchTreeItem>(sectionTreeViewItem.Value.SearchTreeItems);
 
                 for (int i = 0; i < searchTreeItems.Count; i++)
                 {
@@ -1995,7 +2068,8 @@ namespace Lair.Windows
             this.Update_Cache();
         }
 
-        private void _topicUploadButton_Click(object sender, RoutedEventArgs e)
+
+        private void _topicUploadToggleButton_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             var sectionTreeViewItem = _treeView.GetLineage((TreeViewItem)_treeView.SelectedItem).OfType<SectionTreeViewItem>().FirstOrDefault() as SectionTreeViewItem;
             if (sectionTreeViewItem == null) return;
@@ -2021,7 +2095,7 @@ namespace Lair.Windows
 
             if ((digitalSignature != null && digitalSignature.ToString() == selectTreeViewItem.CreatorSignature && sectionTreeViewItem.Value.CreatorInfo.Channels.Contains(selectTreeViewItem.Value.Channel)))
             {
-                var content = (topTopic != null) ? topTopic.Content : "";
+                var content = (topTopic != null) ? (topTopic.Content ?? "") : "";
 
                 TopicEditWindow window = new TopicEditWindow(selectTreeViewItem.Value.Channel, content, digitalSignature, _lairManager);
                 window.Owner = _mainWindow;
@@ -2035,8 +2109,12 @@ namespace Lair.Windows
 
                 window.ShowDialog();
             }
-        }
 
+            this.Update();
+
+            e.Handled = true;
+        }
+        
         private void _messageUploadButton_Click(object sender, RoutedEventArgs e)
         {
             var sectionTreeViewItem = _treeView.GetLineage((TreeViewItem)_treeView.SelectedItem).OfType<SectionTreeViewItem>().FirstOrDefault() as SectionTreeViewItem;
@@ -2413,7 +2491,7 @@ namespace Lair.Windows
         {
             if (_treeView.SelectedItem is SectionTreeViewItem)
             {
-
+                _sectionTreeViewItemCopyMenuItem_Click(null, null);
             }
             else if (_treeView.SelectedItem is SearchTreeViewItem)
             {
@@ -2443,17 +2521,24 @@ namespace Lair.Windows
 
         private void Execute_Paste(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
         {
-            if (_treeView.SelectedItem is SectionTreeViewItem)
+            if (Clipboard.GetSections() != null)
             {
-
+                _treeViewPasteMenuItem_Click(null, null);
             }
-            else if (_treeView.SelectedItem is SearchTreeViewItem)
+            else
             {
-                _searchTreeViewItemPasteMenuItem_Click(null, null);
-            }
-            else if (_treeView.SelectedItem is ChannelTreeViewItem)
-            {
+                if (_treeView.SelectedItem is SectionTreeViewItem)
+                {
+                    _sectionTreeViewItemPasteMenuItem_Click(null, null);
+                }
+                else if (_treeView.SelectedItem is SearchTreeViewItem)
+                {
+                    _searchTreeViewItemPasteMenuItem_Click(null, null);
+                }
+                else if (_treeView.SelectedItem is ChannelTreeViewItem)
+                {
 
+                }
             }
         }
 

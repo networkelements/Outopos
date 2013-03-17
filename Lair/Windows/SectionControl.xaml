@@ -21,6 +21,7 @@
             <MenuItem Name="_sectionTreeViewItemDeleteMenuItem" Header="{Binding Path=SectionControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemDeleteMenuItem_Click"/>
             <Separator />
             <MenuItem Name="_sectionTreeViewItemCopyMenuItem" Header="{Binding Path=SectionControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemCopyMenuItem_Click" />
+            <MenuItem Name="_sectionTreeViewItemCopyInfoMenuItem" Header="{Binding Path=SectionControl_CopyInfo, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemCopyInfoMenuItem_Click" />
             <MenuItem Name="_sectionTreeViewItemPasteMenuItem" Header="{Binding Path=SectionControl_Paste, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemPasteMenuItem_Click" />
             <Separator />
             <MenuItem Name="_sectionTreeViewItemChartMenuItem" Header="{Binding Path=SectionControl_Chart, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemChartMenuItem_Click" />
@@ -314,7 +315,7 @@
         </TreeView>
 
         <ToggleButton Content="{Binding Path=SectionControl_Trust, Source={StaticResource ResourcesInstance}}" Grid.Column="2" Height="23" HorizontalAlignment="Left" Margin="6,0,0,0" Name="_trustToggleButton" VerticalAlignment="Top" Width="90" Click="_trustToggleButton_Click" />
-        <Button Content="{Binding Path=SectionControl_Topic, Source={StaticResource ResourcesInstance}}" Height="23" HorizontalAlignment="Right" Margin="0,0,87,0" Name="_topicUploadButton" VerticalAlignment="Top" Width="75" Grid.Column="2" Click="_topicUploadButton_Click" />
+        <ToggleButton Content="{Binding Path=SectionControl_Topic, Source={StaticResource ResourcesInstance}}" Height="23" HorizontalAlignment="Right" Margin="0,0,87,0" Name="_topicUploadToggleButton" VerticalAlignment="Top" Width="75" Grid.Column="2" PreviewMouseDown="_topicUploadToggleButton_PreviewMouseDown" />
         <Button Content="{Binding Path=SectionControl_Message, Source={StaticResource ResourcesInstance}}" Grid.Column="2" Height="23" HorizontalAlignment="Right" Name="_messageUploadButton" VerticalAlignment="Top" Width="75" Margin="0,0,6,0" Click="_messageUploadButton_Click" />
         
         <local:ListViewEx Grid.Column="2" Grid.Row="1" x:Name="_listView" Padding="0,1,0,0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SizeChanged="_listView_SizeChanged" PreviewKeyDown="_listView_PreviewKeyDown"
