@@ -3060,10 +3060,12 @@ namespace Lair.Windows
     {
         private ObservableCollection<SearchTreeViewItem> _listViewItemCollection = new ObservableCollection<SearchTreeViewItem>();
         private SectionTreeItem _value;
+        private TextBlock _header = new TextBlock();
 
         public SectionTreeViewItem(SectionTreeItem sectionTreeItem)
             : base()
         {
+            base.Header = _header;
             this.Value = sectionTreeItem;
 
             base.ItemsSource = _listViewItemCollection;
@@ -3097,7 +3099,7 @@ namespace Lair.Windows
 
         public void Update()
         {
-            base.Header = new TextBlock() { Text = MessageConverter.ToSectionString(this.Value.Section) };
+            _header.Text = MessageConverter.ToSectionString(this.Value.Section);
             base.IsExpanded = this.Value.IsExpanded;
 
             List<SearchTreeViewItem> list = new List<SearchTreeViewItem>();
@@ -3172,10 +3174,12 @@ namespace Lair.Windows
     {
         private ObservableCollection<dynamic> _listViewItemCollection = new ObservableCollection<dynamic>();
         private SearchTreeItem _value;
+        private TextBlock _header = new TextBlock();
 
         public SearchTreeViewItem(SearchTreeItem searchTreeItem)
             : base()
         {
+            base.Header = _header;
             this.Value = searchTreeItem;
 
             base.ItemsSource = _listViewItemCollection;
@@ -3209,7 +3213,7 @@ namespace Lair.Windows
 
         public void Update()
         {
-            base.Header = new TextBlock() { Text = this.Value.SearchItem.Name };
+            _header.Text = this.Value.SearchItem.Name;
             base.IsExpanded = this.Value.IsExpanded;
 
             List<dynamic> list = new List<dynamic>();
@@ -3316,10 +3320,12 @@ namespace Lair.Windows
     {
         private ChannelTreeItem _value;
         private string _creatorSignature;
+        private TextBlock _header = new TextBlock();
 
         public ChannelTreeViewItem(ChannelTreeItem channelTreeItem)
             : base()
         {
+            base.Header = _header;
             this.Value = channelTreeItem;
 
             base.RequestBringIntoView += (object sender, RequestBringIntoViewEventArgs e) =>
@@ -3337,7 +3343,7 @@ namespace Lair.Windows
 
         public void Update()
         {
-            base.Header = new TextBlock() { Text = string.Format("{0} ({1}) {2}", _value.Channel.Name, _value.Messages.Count, _creatorSignature) };
+            _header.Text = string.Format("{0} ({1}) {2}", _value.Channel.Name, _value.Messages.Count, _creatorSignature);
         }
 
         public string CreatorSignature

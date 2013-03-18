@@ -12,15 +12,15 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Threading;
 using System.Xml;
 using Ionic.Zip;
+using Lair.Windows;
 using Library;
 using Library.Collections;
 using Library.Io;
 using Library.Net.Lair;
-using System.Windows.Controls;
-using Lair.Windows;
 
 namespace Lair
 {
@@ -37,7 +37,7 @@ namespace Lair
 
         public App()
         {
-            App.LairVersion = new Version(1, 0, 3);
+            App.LairVersion = new Version(1, 0, 4);
 
             Directory.SetCurrentDirectory(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
 
