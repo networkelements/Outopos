@@ -96,15 +96,6 @@ namespace Lair.Windows
                 base.Focus();
             }
         }
-
-        private void RefreshBindings()
-        {
-            BindingExpression be = (BindingExpression)GetBindingExpression(SelectedItemsProperty);
-            
-            if (be != null)
-            {
-                be.UpdateTarget();
-            }
-        }
     }
 }
+

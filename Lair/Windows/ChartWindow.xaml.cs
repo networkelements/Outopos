@@ -194,6 +194,13 @@ namespace Lair.Windows
             this.DialogResult = true;
         }
 
+        private void _chartTreeViewItemCopyMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var treeViewItem = (IChartSignature)_treeView.SelectedItem;
+
+            Clipboard.SetText(treeViewItem.Signature);
+        }
+
         private void _treeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             if (_treeView.SelectedItem is ChartLeaderTreeViewItem)
@@ -475,7 +482,15 @@ namespace Lair.Windows
         #endregion
     }
 
-    class ChartLeaderTreeViewItem : TreeViewItem
+    interface IChartSignature
+    {
+        string Signature
+        {
+            get;
+        }
+    }
+
+    class ChartLeaderTreeViewItem : TreeViewItem, IChartSignature
     {
         private Leader _value;
 
@@ -516,9 +531,19 @@ namespace Lair.Windows
                 return _value;
             }
         }
+
+        public string Signature
+        {
+            get
+            {
+                if (_value != null) return _value.Certificate.ToString();
+
+                return null;
+            }
+        }
     }
 
-    class ChartCreatorTreeViewItem : TreeViewItem
+    class ChartCreatorTreeViewItem : TreeViewItem, IChartSignature
     {
         private Creator _value;
         private string _creatorSignature;
@@ -580,9 +605,20 @@ namespace Lair.Windows
                 return _value;
             }
         }
+
+        public string Signature
+        {
+            get
+            {
+                if (_value != null) return _value.Certificate.ToString();
+                else if (_creatorSignature != null) return _creatorSignature;
+
+                return null;
+            }
+        }
     }
 
-    class ChartManagerTreeViewItem : TreeViewItem
+    class ChartManagerTreeViewItem : TreeViewItem, IChartSignature
     {
         private Manager _value;
         private string _managerSignature;
@@ -642,6 +678,17 @@ namespace Lair.Windows
             get
             {
                 return _value;
+            }
+        }
+
+        public string Signature
+        {
+            get
+            {
+                if (_value != null) return _value.Certificate.ToString();
+                else if (_managerSignature != null) return _managerSignature;
+
+                return null;
             }
         }
     }

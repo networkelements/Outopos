@@ -28,6 +28,10 @@
         <DataTemplate x:Key="_myTemplate_Signature">
             <TextBlock Text="{Binding Mode=OneWay}" />
         </DataTemplate>
+
+        <ContextMenu x:Key="_chartTreeViewItemContextMenu">
+            <MenuItem Name="_chartTreeViewItemCopyMenuItem" Header="{Binding Path=ChartWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_chartTreeViewItemCopyMenuItem_Click" />
+        </ContextMenu>
     </Window.Resources>
 
     <Grid FocusManager.FocusedElement="{Binding ElementName=_commentTextBox}">
@@ -46,9 +50,15 @@
         <TreeView Name="_treeView" SelectedItemChanged="_treeView_SelectedItemChanged" 
                   VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
             <TreeView.Resources>
-                <Style TargetType="{x:Type local:ChartLeaderTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" />
-                <Style TargetType="{x:Type local:ChartCreatorTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" />
-                <Style TargetType="{x:Type local:ChartManagerTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" />
+                <Style TargetType="{x:Type local:ChartLeaderTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" >
+                    <Setter Property="ContextMenu" Value="{StaticResource _chartTreeViewItemContextMenu}" />
+                </Style>
+                <Style TargetType="{x:Type local:ChartCreatorTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" >
+                    <Setter Property="ContextMenu" Value="{StaticResource _chartTreeViewItemContextMenu}" />
+                </Style>
+                <Style TargetType="{x:Type local:ChartManagerTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" >
+                    <Setter Property="ContextMenu" Value="{StaticResource _chartTreeViewItemContextMenu}" />
+                </Style>
             </TreeView.Resources>
         </TreeView>
 

@@ -18,7 +18,7 @@
   <Translate Key="Channel_Name" Value="名前" />
   <Translate Key="Channel_Id" Value="ID" />
 
-  <Translate Key="Section_Name" Value="Name" />
+  <Translate Key="Section_Name" Value="名前" />
   <Translate Key="Section_Id" Value="ID" />
 
   <Translate Key="SectionTreeItem_LeaderSignature" Value="リーダーのサイン" />

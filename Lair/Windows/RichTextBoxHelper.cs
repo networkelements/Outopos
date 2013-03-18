@@ -853,6 +853,7 @@ namespace Lair.Windows
                         e.Handled = true;
                     };
 
+                    p.Inlines.Add(new LineBreak());
                     p.Inlines.Add(new InlineUIContainer(expander));
                 }
                 else
@@ -880,6 +881,7 @@ namespace Lair.Windows
                         Margin = new Thickness(2, 6, 2, 6),
                     };
 
+                    p.Inlines.Add(new LineBreak());
                     p.Inlines.Add(new InlineUIContainer(expander));
                 }
             }

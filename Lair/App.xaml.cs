@@ -37,7 +37,7 @@ namespace Lair
 
         public App()
         {
-            App.LairVersion = new Version(1, 0, 2);
+            App.LairVersion = new Version(1, 0, 3);
 
             Directory.SetCurrentDirectory(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
 
