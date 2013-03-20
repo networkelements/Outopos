@@ -810,11 +810,22 @@ namespace Lair.Windows
 
                     lock (filterItem.SearchSignatureCollection.ThisLock)
                     {
+                        string signatureText = null;
+
+                        if (item.Value.Certificate == null)
+                        {
+                            signatureText = "Anonymous";
+                        }
+                        else
+                        {
+                            signatureText = item.Value.ToString();
+                        }
+
                         if (filterItem.SearchSignatureCollection.Any(n => n.Contains == true))
                         {
                             flag = filterItem.SearchSignatureCollection.Any(searchContains =>
                             {
-                                if (searchContains.Contains) return searchContains.Value.IsMatch(item.Value.Certificate.ToString());
+                                if (searchContains.Contains) return searchContains.Value.IsMatch(signatureText);
 
                                 return false;
                             });
@@ -879,11 +890,22 @@ namespace Lair.Windows
 
                     lock (filterItem.SearchSignatureCollection.ThisLock)
                     {
+                        string signatureText = null;
+
+                        if (item.Value.Certificate == null)
+                        {
+                            signatureText = "Anonymous";
+                        }
+                        else
+                        {
+                            signatureText = item.Value.ToString();
+                        }
+
                         if (filterItem.SearchSignatureCollection.Any(n => n.Contains == false))
                         {
                             flag = filterItem.SearchSignatureCollection.Any(searchContains =>
                             {
-                                if (!searchContains.Contains) return searchContains.Value.IsMatch(item.Value.Certificate.ToString());
+                                if (!searchContains.Contains) return searchContains.Value.IsMatch(signatureText);
 
                                 return false;
                             });
@@ -1463,6 +1485,8 @@ namespace Lair.Windows
 
         private void _treeView_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            if (!(e.Source is TreeViewItem)) return;
+
             var item = _treeView.GetCurrentItem(e.GetPosition) as TreeViewItem;
             if (item == null)
             {
@@ -1485,6 +1509,10 @@ namespace Lair.Windows
             {
                 _startPoint = e.GetPosition(null);
                 _treeView_SelectedItemChanged(null, null);
+            }
+            else
+            {
+                _startPoint = new Point(-1, -1);
             }
         }
 
