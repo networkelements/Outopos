@@ -1511,8 +1511,6 @@ namespace Lair.Windows
 
         private void _treeView_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (!(e.Source is TreeViewItem)) return;
-
             var item = _treeView.GetCurrentItem(e.GetPosition) as TreeViewItem;
             if (item == null)
             {
