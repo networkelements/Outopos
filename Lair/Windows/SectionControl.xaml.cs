@@ -48,6 +48,7 @@ namespace Lair.Windows
         private AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
 
         private ObservableCollection<MessageWrapper> _listViewItemCollection = new ObservableCollection<MessageWrapper>();
+        private ObservableCollection<SectionTreeViewItem> _treeViewItemCollection = new ObservableCollection<SectionTreeViewItem>();
 
         private static Random _random = new Random();
 
@@ -61,9 +62,10 @@ namespace Lair.Windows
 
             foreach (var item in Settings.Instance.SectionControl_SectionTreeItems)
             {
-                _treeView.Items.Add(new SectionTreeViewItem(item));
+                _treeViewItemCollection.Add(new SectionTreeViewItem(item));
             }
 
+            _treeView.ItemsSource = _treeViewItemCollection;
             _listView.ItemsSource = _listViewItemCollection;
 
             _mainWindow._tabControl.SelectionChanged += (object sender, SelectionChangedEventArgs e) =>
@@ -387,7 +389,7 @@ namespace Lair.Windows
             {
                 for (; ; )
                 {
-                    foreach (var sectionTreeViewItem in _treeView.Items.OfType<SectionTreeViewItem>())
+                    foreach (var sectionTreeViewItem in _treeViewItemCollection)
                     {
                         if (sectionTreeViewItem.Value.LeaderSignature == null) continue;
 
@@ -603,7 +605,7 @@ namespace Lair.Windows
 
             {
                 List<TreeViewItem> itemList = new List<TreeViewItem>();
-                itemList.AddRange(_treeView.Items.Cast<TreeViewItem>());
+                itemList.AddRange(_treeViewItemCollection.Cast<TreeViewItem>());
 
                 for (int i = 0; i < itemList.Count; i++)
                 {
@@ -620,11 +622,8 @@ namespace Lair.Windows
 
             var sectionTreeItem = new SectionTreeItem();
             sectionTreeItem.Section = section;
-            sectionTreeItem.LeaderInfo = new LeaderInfo();
-            sectionTreeItem.CreatorInfo = new CreatorInfo();
-            sectionTreeItem.ManagerInfo = new ManagerInfo();
 
-            _treeView.Items.Add(new SectionTreeViewItem(sectionTreeItem));
+            _treeViewItemCollection.Add(new SectionTreeViewItem(sectionTreeItem));
         }
 
         void RichTextBoxHelper_ChannelClickEvent(object sender, Channel channel)
@@ -640,7 +639,7 @@ namespace Lair.Windows
 
             {
                 List<TreeViewItem> itemList = new List<TreeViewItem>();
-                itemList.AddRange(_treeView.Items.Cast<TreeViewItem>());
+                itemList.AddRange(_treeViewItemCollection.Cast<TreeViewItem>());
 
                 for (int i = 0; i < itemList.Count; i++)
                 {
@@ -818,7 +817,7 @@ namespace Lair.Windows
                         }
                         else
                         {
-                            signatureText = item.Value.ToString();
+                            signatureText = item.Value.Certificate.ToString();
                         }
 
                         if (filterItem.SearchSignatureCollection.Any(n => n.Contains == true))
@@ -898,7 +897,7 @@ namespace Lair.Windows
                         }
                         else
                         {
-                            signatureText = item.Value.ToString();
+                            signatureText = item.Value.Certificate.ToString();
                         }
 
                         if (filterItem.SearchSignatureCollection.Any(n => n.Contains == false))
@@ -936,14 +935,41 @@ namespace Lair.Windows
 
         private void Update()
         {
-            Settings.Instance.SectionControl_SectionTreeItems = _treeView.Items.OfType<SectionTreeViewItem>().Select(n => n.Value).ToLockedList();
+            {
+                var list = _treeViewItemCollection.ToList();
 
-            foreach (var item in _treeView.Items.OfType<SectionTreeViewItem>())
+                list.Sort(delegate(SectionTreeViewItem x, SectionTreeViewItem y)
+                {
+                    var vx = x.Value;
+                    var vy = y.Value;
+
+                    int c = vx.Section.Name.CompareTo(vy.Section.Name);
+                    if (c != 0) return c;
+                    c = Collection.Compare(vx.Section.Id, vy.Section.Id);
+                    if (c != 0) return c;
+                    c = vx.GetHashCode().CompareTo(vy.GetHashCode());
+                    if (c != 0) return c;
+
+                    return 0;
+                });
+
+                for (int i = 0; i < list.Count; i++)
+                {
+                    var o = _treeViewItemCollection.IndexOf(list[i]);
+
+                    if (i != o) _treeViewItemCollection.Move(o, i);
+                }
+
+            }
+
+            foreach (var item in _treeViewItemCollection)
             {
                 item.Sort();
             }
 
             this.Update_TreeView_Color();
+
+            Settings.Instance.SectionControl_SectionTreeItems = _treeViewItemCollection.Select(n => n.Value).ToLockedList();
 
             _mainWindow.Title = string.Format("Lair {0}", App.LairVersion);
             _refresh = true;
@@ -961,7 +987,7 @@ namespace Lair.Windows
 
             {
                 var items = new List<TreeViewItem>();
-                items.AddRange(_treeView.Items.OfType<TreeViewItem>());
+                items.AddRange(_treeViewItemCollection.OfType<TreeViewItem>());
 
                 for (int i = 0; i < items.Count; i++)
                 {
@@ -1541,11 +1567,8 @@ namespace Lair.Windows
             {
                 var sectionTreeItem = new SectionTreeItem();
                 sectionTreeItem.Section = window.Section;
-                sectionTreeItem.LeaderInfo = new LeaderInfo();
-                sectionTreeItem.CreatorInfo = new CreatorInfo();
-                sectionTreeItem.ManagerInfo = new ManagerInfo();
 
-                _treeView.Items.Add(new SectionTreeViewItem(sectionTreeItem));
+                _treeViewItemCollection.Add(new SectionTreeViewItem(sectionTreeItem));
             }
 
             this.Update();
@@ -1557,11 +1580,8 @@ namespace Lair.Windows
             {
                 var sectionTreeItem = new SectionTreeItem();
                 sectionTreeItem.Section = section;
-                sectionTreeItem.LeaderInfo = new LeaderInfo();
-                sectionTreeItem.CreatorInfo = new CreatorInfo();
-                sectionTreeItem.ManagerInfo = new ManagerInfo();
 
-                _treeView.Items.Add(new SectionTreeViewItem(sectionTreeItem));
+                _treeViewItemCollection.Add(new SectionTreeViewItem(sectionTreeItem));
             }
 
             this.Update();
@@ -1679,7 +1699,7 @@ namespace Lair.Windows
 
             if (MessageBox.Show(_mainWindow, LanguagesManager.Instance.MainWindow_Delete_Message, "Section", MessageBoxButton.OKCancel, MessageBoxImage.Information) != MessageBoxResult.OK) return;
 
-            _treeView.Items.Remove(selectTreeViewItem);
+            _treeViewItemCollection.Remove(selectTreeViewItem);
 
             this.Update();
         }
@@ -2324,6 +2344,29 @@ namespace Lair.Windows
             if (string.IsNullOrWhiteSpace(text))
             {
                 text = richTextBox.ToString();
+            }
+            else
+            {
+                if (richTextBox.Document.ContentStart.DocumentStart == richTextBox.Selection.Start.DocumentStart)
+                {
+                    var messageWrapper = _listView.SelectedItem as MessageWrapper;
+
+                    if (messageWrapper != null)
+                    {
+                        if (messageWrapper.Value.Certificate == null)
+                        {
+                            text = string.Format("{0} - Anonymous{1}",
+                                messageWrapper.Value.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo),
+                                text);
+                        }
+                        else
+                        {
+                            text = string.Format("{0} - {1}{2}",
+                                messageWrapper.Value.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo),
+                                messageWrapper.Value.Certificate.ToString(), text);
+                        }
+                    }
+                }
             }
 
             Clipboard.SetText(text);
@@ -3171,6 +3214,8 @@ namespace Lair.Windows
                 if (c != 0) return c;
                 c = vx.ChannelTreeItems.Count.CompareTo(vy.ChannelTreeItems.Count);
                 if (c != 0) return c;
+                c = vx.GetHashCode().CompareTo(vy.GetHashCode());
+                if (c != 0) return c;
 
                 return 0;
             });
@@ -3294,6 +3339,8 @@ namespace Lair.Windows
                         if (c != 0) return c;
                         c = vx.ChannelTreeItems.Count.CompareTo(vy.ChannelTreeItems.Count);
                         if (c != 0) return c;
+                        c = vx.GetHashCode().CompareTo(vy.GetHashCode());
+                        if (c != 0) return c;
                     }
                     else if (y is ChannelTreeViewItem)
                     {
@@ -3304,12 +3351,14 @@ namespace Lair.Windows
                 {
                     if (y is ChannelTreeViewItem)
                     {
-                        var cx = ((ChannelTreeViewItem)x).Value.Channel;
-                        var cy = ((ChannelTreeViewItem)y).Value.Channel;
+                        var vx = ((ChannelTreeViewItem)x).Value;
+                        var vy = ((ChannelTreeViewItem)y).Value;
 
-                        int c = cx.Name.CompareTo(cy.Name);
+                        int c = vx.Channel.Name.CompareTo(vy.Channel.Name);
                         if (c != 0) return c;
-                        c = Collection.Compare(cx.Id, cy.Id);
+                        c = Collection.Compare(vx.Channel.Id, vy.Channel.Id);
+                        if (c != 0) return c;
+                        c = vx.GetHashCode().CompareTo(vy.GetHashCode());
                         if (c != 0) return c;
                     }
                     else if (y is SearchTreeViewItem)
@@ -3420,6 +3469,18 @@ namespace Lair.Windows
 
         private object _thisLock = new object();
         private static object _thisStaticLock = new object();
+
+        public SectionTreeItem()
+        {
+            this.LeaderInfo = new LeaderInfo();
+            this.CreatorInfo = new CreatorInfo();
+            this.ManagerInfo = new ManagerInfo();
+
+            var searchTreeItem = new SearchTreeItem();
+            searchTreeItem.SearchItem = new SearchItem();
+
+            this.SearchTreeItems.Add(searchTreeItem);
+        }
 
         [DataMember(Name = "Section")]
         public Section Section
@@ -3852,7 +3913,7 @@ namespace Lair.Windows
     [DataContract(Name = "SearchItem", Namespace = "http://Lair/Windows")]
     class SearchItem : IDeepCloneable<SearchItem>, IThisLock
     {
-        private string _name;
+        private string _name = "default";
         private LockedList<SearchContains<string>> _searchWordCollection;
         private LockedList<SearchContains<SearchRegex>> _searchRegexCollection;
         private LockedList<SearchContains<SearchRegex>> _searchSignatureCollection;

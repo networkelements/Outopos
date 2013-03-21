@@ -709,7 +709,7 @@ namespace Lair.Windows
 
                     {
                         var searchItem = new SearchItem();
-                        searchItem.Name = "Core";
+                        searchItem.Name = "default";
 
                         var searchTreeItem = new SearchTreeItem();
                         searchTreeItem.SearchItem = searchItem;
@@ -721,9 +721,7 @@ namespace Lair.Windows
                         var sectionTreeItem = new SectionTreeItem();
                         sectionTreeItem.Section = LairConverter.FromSectionString("Section@AAAAAEAALoinQGza0zKpj-3O_f8O-E3hZzM_1pY78oTC1wkLuIoFNBJXBTwGz695Kmz2aqBcYQq_isLhw3jRO1VRS4E0wgAAABABQWxsaWFuY2UgTmV0d29ya0tEqWU");
                         sectionTreeItem.LeaderSignature = "Lyrise@7seiSbhOCkls6gPxjJYjptxskzlSulgIe3dSfj1KxnJJ6eejKjuJ3R1Ec8yFuKpr4uNcwF7bFh5OrmxnY25y7A";
-                        sectionTreeItem.LeaderInfo = new LeaderInfo();
-                        sectionTreeItem.CreatorInfo = new CreatorInfo();
-                        sectionTreeItem.ManagerInfo = new ManagerInfo();
+                        sectionTreeItem.SearchTreeItems.Clear();
                         sectionTreeItem.SearchTreeItems.Add(searchTreeItem);
 
                         Settings.Instance.SectionControl_SectionTreeItems.Add(sectionTreeItem);
@@ -852,7 +850,7 @@ namespace Lair.Windows
 
                         {
                             var searchItem = new SearchItem();
-                            searchItem.Name = "Core";
+                            searchItem.Name = "default";
 
                             var searchTreeItem = new SearchTreeItem();
                             searchTreeItem.SearchItem = searchItem;
@@ -864,9 +862,7 @@ namespace Lair.Windows
                             var sectionTreeItem = new SectionTreeItem();
                             sectionTreeItem.Section = LairConverter.FromSectionString("Section@AAAAAEAALoinQGza0zKpj-3O_f8O-E3hZzM_1pY78oTC1wkLuIoFNBJXBTwGz695Kmz2aqBcYQq_isLhw3jRO1VRS4E0wgAAABABQWxsaWFuY2UgTmV0d29ya0tEqWU");
                             sectionTreeItem.LeaderSignature = "Lyrise@7seiSbhOCkls6gPxjJYjptxskzlSulgIe3dSfj1KxnJJ6eejKjuJ3R1Ec8yFuKpr4uNcwF7bFh5OrmxnY25y7A";
-                            sectionTreeItem.LeaderInfo = new LeaderInfo();
-                            sectionTreeItem.CreatorInfo = new CreatorInfo();
-                            sectionTreeItem.ManagerInfo = new ManagerInfo();
+                            sectionTreeItem.SearchTreeItems.Clear();
                             sectionTreeItem.SearchTreeItems.Add(searchTreeItem);
 
                             Settings.Instance.SectionControl_SectionTreeItems.Add(sectionTreeItem);

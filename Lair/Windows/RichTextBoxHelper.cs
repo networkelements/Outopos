@@ -39,6 +39,23 @@ namespace Lair.Windows
 
         private static Regex _urlRegex = new Regex(@"^(?<start>.*?)(?<url>http(s)?://(\S)+)(?<end>.*?)$", RegexOptions.Compiled | RegexOptions.Singleline);
 
+        private static string Replace(string value)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            foreach (var line in value.Split(new string[] { "\r\n" }, StringSplitOptions.None))
+            {
+                int i = line.IndexOf(' ');
+                var v1 = line.Substring(0, i);
+                var v2 = "\u00A0";
+                var v3 = line.Substring(++i, line.Length - i);
+
+                sb.AppendLine(v1 + v2 + v3);
+            }
+
+            return sb.ToString();
+        }
+
         public static string GetMessageToString(Message message)
         {
             StringBuilder stringBuilder = new StringBuilder();
@@ -153,12 +170,16 @@ namespace Lair.Windows
             var p = new Paragraph();
             p.LineHeight = richTextBox.FontSize + 2;
 
-            p.Inlines.Add(new InlineUIContainer(new TextBlock()
-            {
-                Text = string.Format("{0} - {1}",
-                topic.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat,
-                System.Globalization.DateTimeFormatInfo.InvariantInfo), topic.Certificate.ToString())
-            }));
+            //p.Inlines.Add(new InlineUIContainer(new TextBlock()
+            //{
+            //    Text = string.Format("{0}\u00A0-\u00A0{1}",
+            //    topic.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo),
+            //    topic.Certificate.ToString())
+            //}));
+
+            p.Inlines.Add(string.Format("{0}\u00A0-\u00A0{1}",
+                topic.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo),
+                topic.Certificate.ToString()));
 
             p.Inlines.Add(new LineBreak());
             p.Inlines.Add(new LineBreak());
@@ -238,7 +259,7 @@ namespace Lair.Windows
                         {
                             Run r = new Run();
                             r.Foreground = new SolidColorBrush(Color.FromRgb(0xCF, 0xCF, 0xCF));
-                            r.Text = MessageConverter.ToInfoMessage(seed);
+                            r.Text = RichTextBoxHelper.Replace(MessageConverter.ToInfoMessage(seed));
 
                             p.Inlines.Add(r);
                         }
@@ -314,7 +335,7 @@ namespace Lair.Windows
                         {
                             Run r = new Run();
                             r.Foreground = new SolidColorBrush(Color.FromRgb(0xCF, 0xCF, 0xCF));
-                            r.Text = MessageConverter.ToInfoMessage(section);
+                            r.Text = RichTextBoxHelper.Replace(MessageConverter.ToInfoMessage(section));
 
                             p.Inlines.Add(r);
                         }
@@ -390,7 +411,7 @@ namespace Lair.Windows
                         {
                             Run r = new Run();
                             r.Foreground = new SolidColorBrush(Color.FromRgb(0xCF, 0xCF, 0xCF));
-                            r.Text = MessageConverter.ToInfoMessage(channel);
+                            r.Text = RichTextBoxHelper.Replace(MessageConverter.ToInfoMessage(channel));
 
                             p.Inlines.Add(r);
                         }
@@ -487,17 +508,18 @@ namespace Lair.Windows
 
                 if (message.Certificate == null)
                 {
-                    text = string.Format("{0} - Anonymous",
+                    text = string.Format("{0}\u00A0-\u00A0Anonymous",
                         message.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo));
                 }
                 else
                 {
-                    text = string.Format("{0} - {1}",
+                    text = string.Format("{0}\u00A0-\u00A0{1}",
                         message.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo),
                         message.Certificate.ToString());
                 }
 
-                p.Inlines.Add(new InlineUIContainer(new TextBlock() { Text = text }));
+                //p.Inlines.Add(new InlineUIContainer(new TextBlock() { Text = text }));
+                p.Inlines.Add(text);
             }
 
             p.Inlines.Add(new LineBreak());
@@ -578,7 +600,7 @@ namespace Lair.Windows
                         {
                             Run r = new Run();
                             r.Foreground = new SolidColorBrush(Color.FromRgb(0xCF, 0xCF, 0xCF));
-                            r.Text = MessageConverter.ToInfoMessage(seed);
+                            r.Text = RichTextBoxHelper.Replace(MessageConverter.ToInfoMessage(seed));
 
                             p.Inlines.Add(r);
                         }
@@ -654,7 +676,7 @@ namespace Lair.Windows
                         {
                             Run r = new Run();
                             r.Foreground = new SolidColorBrush(Color.FromRgb(0xCF, 0xCF, 0xCF));
-                            r.Text = MessageConverter.ToInfoMessage(section);
+                            r.Text = RichTextBoxHelper.Replace(MessageConverter.ToInfoMessage(section));
 
                             p.Inlines.Add(r);
                         }
@@ -730,7 +752,7 @@ namespace Lair.Windows
                         {
                             Run r = new Run();
                             r.Foreground = new SolidColorBrush(Color.FromRgb(0xCF, 0xCF, 0xCF));
-                            r.Text = MessageConverter.ToInfoMessage(channel);
+                            r.Text = RichTextBoxHelper.Replace(MessageConverter.ToInfoMessage(channel));
 
                             p.Inlines.Add(r);
                         }
@@ -894,6 +916,12 @@ namespace Lair.Windows
 
     class EnabledFlowDocument : FlowDocument
     {
+        public EnabledFlowDocument()
+        {
+            base.IsOptimalParagraphEnabled = false;
+            base.IsHyphenationEnabled = false;
+        }
+
         protected override bool IsEnabledCore
         {
             get
