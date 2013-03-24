@@ -198,9 +198,13 @@
   <Translate Key="SectionControl_ChannelList" Value="Channel List" />
   <Translate Key="SectionControl_Respons" Value="Respons" />
   <Translate Key="SectionControl_Trust" Value="Trust" />
+  <Translate Key="SectionControl_Trust_On" Value="Trust On" />
+  <Translate Key="SectionControl_Trust_Off" Value="Trust Off" />
   <Translate Key="SectionControl_Lock" Value="Lock" />
   <Translate Key="SectionControl_LockThis" Value="Lock this" />
   <Translate Key="SectionControl_UnlockThis" Value="Unlock this" />
+  <Translate Key="SectionControl_LockAll" Value="Lock all" />
+  <Translate Key="SectionControl_UnlockAll" Value="Unlock all" />
   <Translate Key="SectionControl_Filter" Value="Filter" />
   <Translate Key="SectionControl_FilterWord" Value="Filter word" />
   <Translate Key="SectionControl_FilterSignature" Value="Filter signature" />

@@ -2177,6 +2177,28 @@ namespace Lair.Properties
             }
         }
 
+        public string SectionControl_Trust_On
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionControl_Trust_On");
+                }
+            }
+        }
+
+        public string SectionControl_Trust_Off
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionControl_Trust_Off");
+                }
+            }
+        }
+
         public string SectionControl_Lock
         {
             get
@@ -2206,6 +2228,28 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("SectionControl_UnlockThis");
+                }
+            }
+        }
+
+        public string SectionControl_LockAll
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionControl_LockAll");
+                }
+            }
+        }
+
+        public string SectionControl_UnlockAll
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionControl_UnlockAll");
                 }
             }
         }

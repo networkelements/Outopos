@@ -55,7 +55,7 @@ namespace Lair
                 StringBuilder builder = new StringBuilder();
 
                 if (!string.IsNullOrWhiteSpace(seed.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Seed_Name, seed.Name));
-                if (seed.Certificate != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Seed_Signature, seed.Certificate.ToString()));
+                if (seed.Certificate != null) builder.AppendLine(string.Format("{0}:\u00A0{1}", LanguagesManager.Instance.Seed_Signature, seed.Certificate.ToString()));
                 builder.AppendLine(string.Format("{0}: {1:#,0}", LanguagesManager.Instance.Seed_Length, seed.Length));
                 if (keywords.Count != 0) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Seed_Keywords, String.Join(", ", keywords)));
                 builder.AppendLine(string.Format("{0}: {1} UTC", LanguagesManager.Instance.Seed_CreationTime, seed.CreationTime.ToUniversalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
@@ -96,7 +96,7 @@ namespace Lair
 
                 if (!string.IsNullOrWhiteSpace(sectionTreeItem.Section.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Section_Name, sectionTreeItem.Section.Name));
                 if (sectionTreeItem.Section.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Section_Id, NetworkConverter.ToBase64UrlString(sectionTreeItem.Section.Id)));
-                if (sectionTreeItem.LeaderSignature != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.SectionTreeItem_LeaderSignature, sectionTreeItem.LeaderSignature));
+                if (sectionTreeItem.LeaderSignature != null) builder.AppendLine(string.Format("{0}:\u00A0{1}", LanguagesManager.Instance.SectionTreeItem_LeaderSignature, sectionTreeItem.LeaderSignature));
 
                 if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
                 else return null;
@@ -132,7 +132,7 @@ namespace Lair
                 StringBuilder builder = new StringBuilder();
 
                 if (message.Channel != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Message_Channel, MessageConverter.ToChannelString(message.Channel)));
-                if (message.Certificate != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Message_Signature, message.Certificate.ToString()));
+                if (message.Certificate != null) builder.AppendLine(string.Format("{0}:\u00A0{1}", LanguagesManager.Instance.Message_Signature, message.Certificate.ToString()));
                 builder.AppendLine(string.Format("{0}: {1} UTC", LanguagesManager.Instance.Message_CreationTime, message.CreationTime.ToUniversalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
                 if (!string.IsNullOrWhiteSpace(message.Content)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Message_Content, message.Content));
 

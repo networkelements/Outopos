@@ -454,7 +454,7 @@ namespace Lair.Windows
 
             Settings.Instance.Global_Update_Url = _updateUrlTextBox.Text;
             Settings.Instance.Global_Update_ProxyUri = _updateProxyUriTextBox.Text;
-            Settings.Instance.Global_Update_Signature = _updateSignatureTextBox.Text;
+            if (Signature.HasSignature(_updateSignatureTextBox.Text)) Settings.Instance.Global_Update_Signature = _updateSignatureTextBox.Text;
 
             if (_updateOptionNoneRadioButton.IsChecked.Value)
             {

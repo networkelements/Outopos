@@ -198,9 +198,13 @@
   <Translate Key="SectionControl_ChannelList" Value="チャンネルリスト" />
   <Translate Key="SectionControl_Respons" Value="返信" />
   <Translate Key="SectionControl_Trust" Value="トラスト" />
+  <Translate Key="SectionControl_Trust_On" Value="トラスト有効" />
+  <Translate Key="SectionControl_Trust_Off" Value="トラスト無効" />
   <Translate Key="SectionControl_Lock" Value="ロック" />
   <Translate Key="SectionControl_LockThis" Value="このメッセージをロック" />
   <Translate Key="SectionControl_UnlockThis" Value="このメッセージのロックを解除" />
+  <Translate Key="SectionControl_LockAll" Value="すべてのメッセージをロック" />
+  <Translate Key="SectionControl_UnlockAll" Value="すべてのメッセージのロックを解除" />
   <Translate Key="SectionControl_Filter" Value="フィルタ" />
   <Translate Key="SectionControl_FilterWord" Value="この単語でフィルタ" />
   <Translate Key="SectionControl_FilterSignature" Value="このサインでフィルタ" />

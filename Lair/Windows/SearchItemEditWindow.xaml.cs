@@ -69,6 +69,13 @@ namespace Lair.Windows
 
             _creationTimeRangeMinTextBox.Text = new DateTime(DateTime.UtcNow.Year, 1, 1, 0, 0, 0, DateTimeKind.Utc).ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
             _creationTimeRangeMaxTextBox.Text = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 0, 0, 0, DateTimeKind.Utc).ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo);
+
+            _searchTreeViewItemNameTextBox_TextChanged(null, null);
+        }
+
+        private void _searchTreeViewItemNameTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            _okButton.IsEnabled = !string.IsNullOrWhiteSpace(_searchTreeViewItemNameTextBox.Text);
         }
 
         #region _wordListView

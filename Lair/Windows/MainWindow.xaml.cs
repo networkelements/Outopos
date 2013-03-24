@@ -805,11 +805,6 @@ namespace Lair.Windows
                         version = new Version(reader.ReadLine());
                     }
 
-                    if (version <= new Version(0, 0, 28))
-                    {
-                        Settings.Instance.Global_Update_Signature = "Lyrise@iMK5aPkz6n_VLfaQWyXisi6C2yo53VbhMGTwJ4N2yGDTMXZwIdcZb8ayuGIOg-1V";
-                    }
-
                     if (version <= new Version(0, 0, 46))
                     {
                         if (Settings.Instance.Global_Update_ProxyUri == "tcp:127.0.0.1:8118")
@@ -833,21 +828,8 @@ namespace Lair.Windows
                         _lairManager.ConnectionCountLimit = Math.Max(Math.Min(_lairManager.ConnectionCountLimit, 50), 12);
                     }
 
-                    if (version <= new Version(0, 0, 60))
-                    {
-                        if (Settings.Instance.Global_Update_Signature == "Lyrise@iMK5aPkz6n_VLfaQWyXisi6C2yo53VbhMGTwJ4N2yGDTMXZwIdcZb8ayuGIOg-1V")
-                        {
-                            Settings.Instance.Global_Update_Signature = "Lyrise@7seiSbhOCkls6gPxjJYjptxskzlSulgIe3dSfj1KxnJJ6eejKjuJ3R1Ec8yFuKpr";
-                        }
-                    }
-
                     if (version < new Version(1, 0, 0))
                     {
-                        if (Settings.Instance.Global_Update_Signature == "Lyrise@7seiSbhOCkls6gPxjJYjptxskzlSulgIe3dSfj1KxnJJ6eejKjuJ3R1Ec8yFuKpr")
-                        {
-                            Settings.Instance.Global_Update_Signature = "Lyrise@7seiSbhOCkls6gPxjJYjptxskzlSulgIe3dSfj1KxnJJ6eejKjuJ3R1Ec8yFuKpr4uNcwF7bFh5OrmxnY25y7A";
-                        }
-
                         {
                             var searchItem = new SearchItem();
                             searchItem.Name = "default";
@@ -867,6 +849,11 @@ namespace Lair.Windows
 
                             Settings.Instance.SectionControl_SectionTreeItems.Add(sectionTreeItem);
                         }
+                    }
+
+                    if (version <= new Version(1, 0, 6))
+                    {
+                        Settings.Instance.Global_Update_Signature = "Lyrise@7seiSbhOCkls6gPxjJYjptxskzlSulgIe3dSfj1KxnJJ6eejKjuJ3R1Ec8yFuKpr4uNcwF7bFh5OrmxnY25y7A";
                     }
                 }
 

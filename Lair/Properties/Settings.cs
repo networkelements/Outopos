@@ -36,7 +36,7 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<bool>() { Name = "Global_AutoBaseNodeSetting_IsEnabled", Value = true },
                 new Library.Configuration.SettingsContext<string>() { Name = "Global_Update_Url", Value = "http://lyrise.web.fc2.com/update/Lair" },
                 new Library.Configuration.SettingsContext<string>() { Name = "Global_Update_ProxyUri", Value = "tcp:127.0.0.1:28118" },
-                new Library.Configuration.SettingsContext<string>() { Name = "Global_Update_Signature", Value = "Lyrise@iMK5aPkz6n_VLfaQWyXisi6C2yo53VbhMGTwJ4N2yGDTMXZwIdcZb8ayuGIOg-1V" },
+                new Library.Configuration.SettingsContext<string>() { Name = "Global_Update_Signature", Value = "Lyrise@7seiSbhOCkls6gPxjJYjptxskzlSulgIe3dSfj1KxnJJ6eejKjuJ3R1Ec8yFuKpr4uNcwF7bFh5OrmxnY25y7A" },
                 new Library.Configuration.SettingsContext<UpdateOption>() { Name = "Global_Update_Option", Value = UpdateOption.AutoCheck },
                 new Library.Configuration.SettingsContext<string>() { Name = "Global_Amoeba_Path", Value = "" },
                 new Library.Configuration.SettingsContext<string>() { Name = "Global_Fonts_MessageFontFamily", Value = "MS PGothic" },
@@ -50,6 +50,9 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<Color>() { Name = "Color_Message_New", Value = Colors.LightPink },
                 new Library.Configuration.SettingsContext<Color>() { Name = "Color_Link", Value = Colors.LightGray },
                 new Library.Configuration.SettingsContext<Color>() { Name = "Color_Link_New", Value = Colors.LightPink },
+                new Library.Configuration.SettingsContext<Color>() { Name = "Color_Trust", Value = Colors.White },
+                new Library.Configuration.SettingsContext<Color>() { Name = "Color_Trust_On", Value = Colors.Cyan },
+                new Library.Configuration.SettingsContext<Color>() { Name = "Color_Trust_Off", Value = Colors.HotPink },
 
                 new Library.Configuration.SettingsContext<double>() { Name = "MainWindow_Top", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "MainWindow_Left", Value = 120 },
@@ -692,6 +695,63 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     this["Color_Link_New"] = value;
+                }
+            }
+        }
+
+        public Color Color_Trust
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (Color)this["Color_Trust"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["Color_Trust"] = value;
+                }
+            }
+        }
+
+        public Color Color_Trust_On
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (Color)this["Color_Trust_On"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["Color_Trust_On"] = value;
+                }
+            }
+        }
+
+        public Color Color_Trust_Off
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (Color)this["Color_Trust_Off"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["Color_Trust_Off"] = value;
                 }
             }
         }

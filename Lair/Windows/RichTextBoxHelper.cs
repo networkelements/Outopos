@@ -39,23 +39,6 @@ namespace Lair.Windows
 
         private static Regex _urlRegex = new Regex(@"^(?<start>.*?)(?<url>http(s)?://(\S)+)(?<end>.*?)$", RegexOptions.Compiled | RegexOptions.Singleline);
 
-        private static string Replace(string value)
-        {
-            StringBuilder sb = new StringBuilder();
-
-            foreach (var line in value.Split(new string[] { "\r\n" }, StringSplitOptions.None))
-            {
-                int i = line.IndexOf(' ');
-                var v1 = line.Substring(0, i);
-                var v2 = "\u00A0";
-                var v3 = line.Substring(++i, line.Length - i);
-
-                sb.AppendLine(v1 + v2 + v3);
-            }
-
-            return sb.ToString();
-        }
-
         public static string GetMessageToString(Message message)
         {
             StringBuilder stringBuilder = new StringBuilder();
@@ -259,7 +242,7 @@ namespace Lair.Windows
                         {
                             Run r = new Run();
                             r.Foreground = new SolidColorBrush(Color.FromRgb(0xCF, 0xCF, 0xCF));
-                            r.Text = RichTextBoxHelper.Replace(MessageConverter.ToInfoMessage(seed));
+                            r.Text = MessageConverter.ToInfoMessage(seed);
 
                             p.Inlines.Add(r);
                         }
@@ -335,7 +318,7 @@ namespace Lair.Windows
                         {
                             Run r = new Run();
                             r.Foreground = new SolidColorBrush(Color.FromRgb(0xCF, 0xCF, 0xCF));
-                            r.Text = RichTextBoxHelper.Replace(MessageConverter.ToInfoMessage(section));
+                            r.Text = MessageConverter.ToInfoMessage(section);
 
                             p.Inlines.Add(r);
                         }
@@ -411,7 +394,7 @@ namespace Lair.Windows
                         {
                             Run r = new Run();
                             r.Foreground = new SolidColorBrush(Color.FromRgb(0xCF, 0xCF, 0xCF));
-                            r.Text = RichTextBoxHelper.Replace(MessageConverter.ToInfoMessage(channel));
+                            r.Text = MessageConverter.ToInfoMessage(channel);
 
                             p.Inlines.Add(r);
                         }
@@ -467,8 +450,10 @@ namespace Lair.Windows
                         }
                     }
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    Log.Error(e);
+
                     p.Inlines.Add(line);
                     p.Inlines.Add(new LineBreak());
                 }
@@ -600,7 +585,7 @@ namespace Lair.Windows
                         {
                             Run r = new Run();
                             r.Foreground = new SolidColorBrush(Color.FromRgb(0xCF, 0xCF, 0xCF));
-                            r.Text = RichTextBoxHelper.Replace(MessageConverter.ToInfoMessage(seed));
+                            r.Text = MessageConverter.ToInfoMessage(seed);
 
                             p.Inlines.Add(r);
                         }
@@ -676,7 +661,7 @@ namespace Lair.Windows
                         {
                             Run r = new Run();
                             r.Foreground = new SolidColorBrush(Color.FromRgb(0xCF, 0xCF, 0xCF));
-                            r.Text = RichTextBoxHelper.Replace(MessageConverter.ToInfoMessage(section));
+                            r.Text = MessageConverter.ToInfoMessage(section);
 
                             p.Inlines.Add(r);
                         }
@@ -752,7 +737,7 @@ namespace Lair.Windows
                         {
                             Run r = new Run();
                             r.Foreground = new SolidColorBrush(Color.FromRgb(0xCF, 0xCF, 0xCF));
-                            r.Text = RichTextBoxHelper.Replace(MessageConverter.ToInfoMessage(channel));
+                            r.Text = MessageConverter.ToInfoMessage(channel);
 
                             p.Inlines.Add(r);
                         }
@@ -808,8 +793,10 @@ namespace Lair.Windows
                         }
                     }
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    Log.Error(e);
+
                     p.Inlines.Add(line);
                     p.Inlines.Add(new LineBreak());
                 }
