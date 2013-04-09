@@ -141,10 +141,6 @@ namespace Lair.Windows
             richTextBox.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
             richTextBox.FontSize = (double)new FontSizeConverter().ConvertFromString(Settings.Instance.Global_Fonts_MessageFontSize + "pt");
 
-            var maxHeight = Math.Max(0, RichTextBoxHelper.GetMaxHeightEvent(richTextBox));
-
-            richTextBox.MaxHeight = maxHeight / 3 * 2;
-
             var fd = new EnabledFlowDocument();
 
             fd.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
@@ -450,10 +446,8 @@ namespace Lair.Windows
                         }
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    Log.Error(e);
-
                     p.Inlines.Add(line);
                     p.Inlines.Add(new LineBreak());
                 }
@@ -793,10 +787,8 @@ namespace Lair.Windows
                         }
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    Log.Error(e);
-
                     p.Inlines.Add(line);
                     p.Inlines.Add(new LineBreak());
                 }

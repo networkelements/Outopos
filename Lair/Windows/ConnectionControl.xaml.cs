@@ -74,7 +74,7 @@ namespace Lair.Windows
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PushTopicCount" });
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PushMessageCount" });
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem());
-            
+
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullNodeCount" });
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullSectionRequestCount" });
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullLeaderCount" });
@@ -115,7 +115,7 @@ namespace Lair.Windows
                     dic["ConnectionControl_AcceptConnectionCount"] = ((int)information["AcceptConnectionCount"]).ToString();
 
                     dic["ConnectionControl_SurroundingNodeCount"] = ((int)information["SurroundingNodeCount"]).ToString();
-                    
+
                     dic["ConnectionControl_NodeCount"] = ((int)information["OtherNodeCount"]).ToString();
                     dic["ConnectionControl_SectionCount"] = ((int)information["SectionCount"]).ToString();
                     dic["ConnectionControl_LeaderCount"] = ((int)information["LeaderCount"]).ToString();
@@ -143,13 +143,13 @@ namespace Lair.Windows
                     dic["ConnectionControl_PullMessageCount"] = ((int)information["PullMessageCount"]).ToString();
                     dic["ConnectionControl_PullTopicCount"] = ((int)information["PullTopicCount"]).ToString();
 
-                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                     {
                         foreach (var item in dic)
                         {
                             _infomationListViewItemCollection.First(n => n.Id == item.Key).Value = item.Value;
                         }
-                    }), null);
+                    }));
 
                     Thread.Sleep(1000 * 10);
                 }
@@ -167,7 +167,7 @@ namespace Lair.Windows
                 for (; ; )
                 {
                     Thread.Sleep(100);
-                    if (App.SelectTab != "Connection") continue;
+                    if (App.SelectTab != TabItemType.Connection) continue;
 
                     var connectionInformation = _lairManager.ConnectionInformation.ToArray();
                     Dictionary<int, Information> dic = new Dictionary<int, Information>();
@@ -179,17 +179,17 @@ namespace Lair.Windows
 
                     Dictionary<int, ConnectionListViewItem> dic2 = new Dictionary<int, ConnectionListViewItem>();
 
-                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                     {
                         foreach (var item in _listViewItemCollection.ToArray())
                         {
                             dic2[(int)item.Information["Id"]] = item;
                         }
-                    }), null);
+                    }));
 
                     List<ConnectionListViewItem> removeList = new List<ConnectionListViewItem>();
 
-                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                     {
                         foreach (var item in _listViewItemCollection.ToArray())
                         {
@@ -198,7 +198,7 @@ namespace Lair.Windows
                                 removeList.Add(item);
                             }
                         }
-                    }), null);
+                    }));
 
                     List<ConnectionListViewItem> newList = new List<ConnectionListViewItem>();
                     Dictionary<ConnectionListViewItem, Information> updateDic = new Dictionary<ConnectionListViewItem, Information>();
@@ -218,10 +218,10 @@ namespace Lair.Windows
 
                         HashSet<int> hid = new HashSet<int>();
 
-                        this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                        this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                         {
                             hid.UnionWith(_listView.SelectedItems.OfType<ConnectionListViewItem>().Select(n => (int)n.Information["Id"]));
-                        }), null);
+                        }));
 
                         foreach (var item in newList)
                         {
@@ -254,7 +254,7 @@ namespace Lair.Windows
                         }
                     }
 
-                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                     {
                         bool sortFlag = false;
 
@@ -286,7 +286,7 @@ namespace Lair.Windows
                         }
 
                         if (sortFlag && _listViewItemCollection.Count < 3000) this.Sort();
-                    }), null);
+                    }));
 
                     Thread.Sleep(1000 * 3);
                 }
@@ -417,7 +417,7 @@ namespace Lair.Windows
 
             if (sortBy == LanguagesManager.Instance.ConnectionControl_Uri)
             {
-                list.Sort(delegate(ConnectionListViewItem x, ConnectionListViewItem y)
+                list.Sort((x, y) =>
                 {
                     int c = x.Uri.CompareTo(y.Uri);
                     if (c != 0) return c;
@@ -429,7 +429,7 @@ namespace Lair.Windows
             }
             else if (sortBy == LanguagesManager.Instance.ConnectionControl_Priority)
             {
-                list.Sort(delegate(ConnectionListViewItem x, ConnectionListViewItem y)
+                list.Sort((x, y) =>
                 {
                     int c = x.Priority.CompareTo(y.Priority);
                     if (c != 0) return c;
@@ -441,7 +441,7 @@ namespace Lair.Windows
             }
             else if (sortBy == LanguagesManager.Instance.ConnectionControl_ReceivedByteCount)
             {
-                list.Sort(delegate(ConnectionListViewItem x, ConnectionListViewItem y)
+                list.Sort((x, y) =>
                 {
                     int c = ((long)x.Information["ReceivedByteCount"]).CompareTo((long)y.Information["ReceivedByteCount"]);
                     if (c != 0) return c;
@@ -453,7 +453,7 @@ namespace Lair.Windows
             }
             else if (sortBy == LanguagesManager.Instance.ConnectionControl_SentByteCount)
             {
-                list.Sort(delegate(ConnectionListViewItem x, ConnectionListViewItem y)
+                list.Sort((x, y) =>
                 {
                     int c = ((long)x.Information["SentByteCount"]).CompareTo((long)y.Information["SentByteCount"]);
                     if (c != 0) return c;

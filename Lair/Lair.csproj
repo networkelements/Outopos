@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{7C83E92E-62BE-49E6-870A-DEB9D5340664}</ProjectGuid>
+    <ProjectGuid>{E504BA3E-4748-4EC8-8BCE-1F0F309016D8}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Lair</RootNamespace>
@@ -116,6 +116,7 @@
     <Compile Include="Hash\Sha512.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="TransfarLimitManager.cs" />
+    <Compile Include="WindowPosition.cs" />
     <Compile Include="Windows\ChannelListWindow.xaml.cs">
       <DependentUpon>ChannelListWindow.xaml</DependentUpon>
     </Compile>

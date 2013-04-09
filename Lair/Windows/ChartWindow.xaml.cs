@@ -155,15 +155,7 @@ namespace Lair.Windows
                 var words = searchText.ToLower().Split(new string[] { " ", "　" }, StringSplitOptions.RemoveEmptyEntries);
                 var text = (item.Name ?? "").ToLower();
 
-                foreach (var word in words)
-                {
-                    if (!text.Contains(word))
-                    {
-                        return false;
-                    }
-                }
-
-                return true;
+                return words.All(n => text.Contains(n));
             };
 
             CollectionViewSource.GetDefaultView(_signatureListView.ItemsSource).Filter = (object o) =>
@@ -177,16 +169,15 @@ namespace Lair.Windows
                 var words = searchText.ToLower().Split(new string[] { " ", "　" }, StringSplitOptions.RemoveEmptyEntries);
                 var text = (item ?? "").ToLower();
 
-                foreach (var word in words)
-                {
-                    if (!text.Contains(word))
-                    {
-                        return false;
-                    }
-                }
-
-                return true;
+                return words.All(n => text.Contains(n));
             };
+        }
+
+        protected override void OnInitialized(EventArgs e)
+        {
+            WindowPosition.Move(this);
+
+            base.OnInitialized(e);
         }
 
         private void _closeButton_Click(object sender, RoutedEventArgs e)

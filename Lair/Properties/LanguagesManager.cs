@@ -11,7 +11,7 @@ using Library;
 namespace Lair.Properties
 {
     public delegate void UsingLanguageChangedEventHandler(object sender);
-    
+
     class LanguagesManager : IThisLock
     {
         private static LanguagesManager _defaultInstance = new LanguagesManager();
@@ -124,7 +124,7 @@ namespace Lair.Properties
             {
                 var list = _dic.Keys.ToList();
 
-                list.Sort(delegate(string x, string y)
+                list.Sort((x, y) =>
                 {
                     return System.IO.Path.GetFileNameWithoutExtension(x).CompareTo(System.IO.Path.GetFileNameWithoutExtension(y));
                 });
@@ -669,6 +669,17 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("MainWindow_TransferLimit_Message");
+                }
+            }
+        }
+
+        public string MainWindow_Upload_Message
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("MainWindow_Upload_Message");
                 }
             }
         }
@@ -2360,6 +2371,17 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("SectionControl_ExportLockedMessages");
+                }
+            }
+        }
+
+        public string SectionControl_TopicUpload
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionControl_TopicUpload");
                 }
             }
         }

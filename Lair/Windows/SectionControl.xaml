@@ -48,6 +48,8 @@
             <MenuItem Name="_channelTreeItemTreeViewItemCutMenuItem" Header="{Binding Path=SectionControl_Cut, Source={StaticResource ResourcesInstance}}" Click="_channelTreeItemTreeViewItemCutMenuItem_Click" />
             <MenuItem Name="_channelTreeItemTreeViewItemCopyMenuItem" Header="{Binding Path=SectionControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_channelTreeItemTreeViewItemCopyMenuItem_Click" />
             <Separator />
+            <MenuItem Name="_channelTreeItemTreeViewItemTopicUploadMenuItem" Header="{Binding Path=SectionControl_TopicUpload, Source={StaticResource ResourcesInstance}}" Click="_channelTreeItemTreeViewItemTopicUploadMenuItem_Click" />
+            <Separator />
             <MenuItem Name="_channelTreeItemTreeViewItemExportLockedMessagesMenuItem" Header="{Binding Path=SectionControl_ExportLockedMessages, Source={StaticResource ResourcesInstance}}" Click="_channelTreeItemTreeViewItemExportLockedMessagesMenuItem_Click" />
         </ContextMenu>
         
@@ -319,9 +321,9 @@
             </TreeView.ContextMenu>
         </TreeView>
 
-        <Button Content="{Binding Path=SectionControl_Trust, Source={StaticResource ResourcesInstance}}" Grid.Column="2" Height="23" HorizontalAlignment="Left" Margin="6,0,0,0" Name="_trustButton" VerticalAlignment="Top" Width="90" Click="_trustButton_Click" />
-        <ToggleButton Content="{Binding Path=SectionControl_Topic, Source={StaticResource ResourcesInstance}}" Height="23" HorizontalAlignment="Right" Margin="0,0,87,0" Name="_topicUploadToggleButton" VerticalAlignment="Top" Width="75" Grid.Column="2" PreviewMouseDown="_topicUploadToggleButton_PreviewMouseDown" />
-        <Button Content="{Binding Path=SectionControl_Message, Source={StaticResource ResourcesInstance}}" Grid.Column="2" Height="23" HorizontalAlignment="Right" Name="_messageUploadButton" VerticalAlignment="Top" Width="75" Margin="0,0,6,0" Click="_messageUploadButton_Click" />
+        <ToggleButton Content="{Binding Path=SectionControl_Trust, Source={StaticResource ResourcesInstance}}" Grid.Column="2" Height="23" HorizontalAlignment="Left" Margin="6,0,0,0" Name="_trustToggleButton" VerticalAlignment="Top" Width="90" PreviewMouseDown="_trustToggleButton_PreviewMouseDown" IsEnabled="False" />
+        <ToggleButton Content="{Binding Path=SectionControl_Topic, Source={StaticResource ResourcesInstance}}" Height="23" HorizontalAlignment="Right" Margin="0,0,87,0" Name="_topicToggleButton" VerticalAlignment="Top" Width="75" Grid.Column="2" PreviewMouseDown="_topicToggleButton_PreviewMouseDown" IsEnabled="False" />
+        <Button Content="{Binding Path=SectionControl_Message, Source={StaticResource ResourcesInstance}}" Grid.Column="2" Height="23" HorizontalAlignment="Right" Name="_messageUploadButton" VerticalAlignment="Top" Width="75" Margin="0,0,6,0" Click="_messageUploadButton_Click" IsEnabled="False" />
         
         <local:ListViewEx Grid.Column="2" Grid.Row="1" x:Name="_listView" Padding="0,1,0,0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SizeChanged="_listView_SizeChanged" PreviewKeyDown="_listView_PreviewKeyDown" LayoutUpdated="_listView_LayoutUpdated"
                 VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Standard" Grid.ColumnSpan="3" PreviewMouseDown="_listView_PreviewMouseDown">

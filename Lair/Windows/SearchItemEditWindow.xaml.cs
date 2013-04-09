@@ -73,6 +73,13 @@ namespace Lair.Windows
             _searchTreeViewItemNameTextBox_TextChanged(null, null);
         }
 
+        protected override void OnInitialized(EventArgs e)
+        {
+            WindowPosition.Move(this);
+
+            base.OnInitialized(e);
+        }
+
         private void _searchTreeViewItemNameTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             _okButton.IsEnabled = !string.IsNullOrWhiteSpace(_searchTreeViewItemNameTextBox.Text);

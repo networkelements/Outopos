@@ -62,6 +62,13 @@ namespace Lair.Windows
             _commentTextBox_TextChanged(null, null);
         }
 
+        protected override void OnInitialized(EventArgs e)
+        {
+            WindowPosition.Move(this);
+
+            base.OnInitialized(e);
+        }
+
         private void _tabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (_tabControl.SelectedItem == _previewTabItem)

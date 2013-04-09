@@ -64,6 +64,13 @@ namespace Lair.Windows
             _commentTextBox_TextChanged(null, null);
         }
 
+        protected override void OnInitialized(EventArgs e)
+        {
+            WindowPosition.Move(this);
+
+            base.OnInitialized(e);
+        }
+
         private void RichTextBoxEx_PreviewMouseRightButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             e.Handled = true;

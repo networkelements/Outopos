@@ -25,7 +25,7 @@ namespace Lair.Windows
     /// </summary>
     partial class ViewSettingsWindow : Window
     {
-        private BufferManager _bufferManager = new BufferManager();
+        private BufferManager _bufferManager;
         private ObservableCollection<SignatureListViewItem> _signatureListViewItemCollection;
         private List<string> _fontMessageFontFamilyComboBoxItemCollection = new List<string>();
 
@@ -75,6 +75,13 @@ namespace Lair.Windows
             _fontMessageFontSizeTextBox.Text = Settings.Instance.Global_Fonts_MessageFontSize.ToString();
 
             _eventClearUrlHistoryCheckBox.IsChecked = Settings.Instance.Global_UrlClearHistory_IsEnabled;
+        }
+
+        protected override void OnInitialized(EventArgs e)
+        {
+            WindowPosition.Move(this);
+
+            base.OnInitialized(e);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -150,7 +157,7 @@ namespace Lair.Windows
 
             Clipboard.SetText(sb.ToString());
         }
-        
+
         private void _signatureListViewUpdate()
         {
             _signatureListView_SelectionChanged(this, null);
@@ -295,7 +302,7 @@ namespace Lair.Windows
 
             var selectIndex = _signatureListView.SelectedIndex;
             if (selectIndex == -1) return;
-            
+
             _signatureListViewItemCollection.Move(selectIndex, selectIndex + 1);
 
             _signatureListViewUpdate();
@@ -339,7 +346,7 @@ namespace Lair.Windows
         #endregion
 
         #region Font
-        
+
         private static double GetStringToDouble(string value)
         {
             StringBuilder builder = new StringBuilder("0");

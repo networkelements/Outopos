@@ -94,6 +94,13 @@ namespace Lair.Windows
             _transferInfoTotal.Content = NetworkConverter.ToSizeString(_transferLimitManager.TotalUploadSize + _transferLimitManager.TotalDownloadSize);
         }
 
+        protected override void OnInitialized(EventArgs e)
+        {
+            WindowPosition.Move(this);
+
+            base.OnInitialized(e);
+        }
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             _baseNodeTreeViewItem.IsSelected = true;

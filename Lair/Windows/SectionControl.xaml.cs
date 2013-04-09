@@ -70,9 +70,13 @@ namespace Lair.Windows
 
             _mainWindow._tabControl.SelectionChanged += (object sender, SelectionChangedEventArgs e) =>
             {
-                if (App.SelectTab != "Section" || _refresh) return;
+                if (App.SelectTab != TabItemType.Section || _refresh) return;
 
-                if (_treeView.SelectedItem is SectionTreeViewItem)
+                if (_treeView.SelectedItem == null)
+                {
+                    _mainWindow.Title = string.Format("Lair {0}", App.LairVersion);
+                }
+                else if (_treeView.SelectedItem is SectionTreeViewItem)
                 {
                     var selectItem = (SectionTreeViewItem)_treeView.SelectedItem;
 
@@ -115,11 +119,18 @@ namespace Lair.Windows
 
             _searchRowDefinition.Height = new GridLength(0);
 
-            _trustButton.IsEnabled = false;
-            _topicUploadToggleButton.IsEnabled = false;
+            _trustToggleButton.IsEnabled = false;
+            _topicToggleButton.IsEnabled = false;
             _messageUploadButton.IsEnabled = false;
 
             this.Update();
+
+            LanguagesManager.UsingLanguageChangedEvent += new UsingLanguageChangedEventHandler(this.LanguagesManager_UsingLanguageChangedEvent);
+        }
+
+        private void LanguagesManager_UsingLanguageChangedEvent(object sender)
+        {
+            _listView.Items.Refresh();
         }
 
         private void Search()
@@ -133,11 +144,15 @@ namespace Lair.Windows
 
                     ChannelTreeViewItem selectTreeViewItem = null;
 
-                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                     {
-                        if (App.SelectTab != "Section") return;
+                        if (App.SelectTab != TabItemType.Section) return;
 
-                        if (_treeView.SelectedItem is SectionTreeViewItem)
+                        if (_treeView.SelectedItem == null)
+                        {
+                            _mainWindow.Title = string.Format("Lair {0}", App.LairVersion);
+                        }
+                        else if (_treeView.SelectedItem is SectionTreeViewItem)
                         {
                             var selectItem = (SectionTreeViewItem)_treeView.SelectedItem;
 
@@ -156,10 +171,12 @@ namespace Lair.Windows
 
                             _listViewItemCollection.Clear();
 
-                            _trustButton.IsEnabled = false;
-                            _trustButton.Foreground = new SolidColorBrush(Settings.Instance.Color_Trust);
-                            _topicUploadToggleButton.IsEnabled = false;
-                            _topicUploadToggleButton.IsChecked = false;
+                            _trustToggleButton.IsEnabled = false;
+                            _trustToggleButton.ClearValue(ToggleButton.ForegroundProperty);
+
+                            _topicToggleButton.IsEnabled = false;
+                            _topicToggleButton.ClearValue(Button.ForegroundProperty);
+
                             _messageUploadButton.IsEnabled = false;
                         }
                         else if (_treeView.SelectedItem is ChannelTreeViewItem)
@@ -169,73 +186,64 @@ namespace Lair.Windows
 
                             var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == sectionTreeViewItem.Value.UploadSignature);
 
-                            _trustButton.IsEnabled = (selectTreeViewItem.CreatorSignature != null);
-
-                            if (_trustButton.IsEnabled)
+                            if (selectTreeViewItem.CreatorSignature != null)
                             {
-                                _trustButton.Foreground = (selectTreeViewItem.Value.IsFilterEnabled) ? new SolidColorBrush(Settings.Instance.Color_Trust_On) : new SolidColorBrush(Settings.Instance.Color_Trust_Off);
-                            }
-                            else
-                            {
-                                _trustButton.Foreground = new SolidColorBrush(Settings.Instance.Color_Trust);
-                            }
+                                _trustToggleButton.IsEnabled = true;
 
-                            _messageUploadButton.IsEnabled = (digitalSignature != null);
-
-                            {
-                                Topic topTopic = null;
-
-                                if (selectTreeViewItem.CreatorSignature != null)
+                                if (selectTreeViewItem.Value.IsFilterEnabled)
                                 {
-                                    Dictionary<string, Topic> topicDictionary = new Dictionary<string, Topic>();
-
-                                    foreach (var topic in _lairManager.GetTopics(selectTreeViewItem.Value.Channel))
-                                    {
-                                        topicDictionary[topic.Certificate.ToString()] = topic;
-                                    }
-
-                                    topicDictionary.TryGetValue(selectTreeViewItem.CreatorSignature, out topTopic);
-                                }
-
-                                if ((digitalSignature != null && digitalSignature.ToString() == selectTreeViewItem.CreatorSignature && sectionTreeViewItem.Value.CreatorInfo.Channels.Contains(selectTreeViewItem.Value.Channel)))
-                                {
-                                    _topicUploadToggleButton.IsEnabled = true;
-
-                                    if ((topTopic != null && topTopic.Content != null))
-                                    {
-                                        _topicUploadToggleButton.IsChecked = true;
-                                    }
-                                    else
-                                    {
-                                        _topicUploadToggleButton.IsChecked = false;
-                                    }
-                                }
-                                else if ((topTopic != null && topTopic.Content != null))
-                                {
-                                    _topicUploadToggleButton.IsEnabled = true;
-                                    _topicUploadToggleButton.IsChecked = false;
+                                    _trustToggleButton.Foreground = new SolidColorBrush(Settings.Instance.Color_Trust_On);
                                 }
                                 else
                                 {
-                                    _topicUploadToggleButton.IsEnabled = false;
-                                    _topicUploadToggleButton.IsChecked = false;
+                                    _trustToggleButton.Foreground = new SolidColorBrush(Settings.Instance.Color_Trust_Off);
                                 }
                             }
+                            else
+                            {
+                                _trustToggleButton.IsEnabled = false;
+                                _trustToggleButton.ClearValue(ToggleButton.ForegroundProperty);
+                            }
+
+                            if (selectTreeViewItem.Value.Topic != null)
+                            {
+                                _topicToggleButton.IsEnabled = true;
+
+                                if (selectTreeViewItem.Value.IsTopicUpdated)
+                                {
+                                    _topicToggleButton.Foreground = new SolidColorBrush(Settings.Instance.Color_Topic_Update);
+                                }
+                                else
+                                {
+                                    _topicToggleButton.ClearValue(Button.ForegroundProperty);
+                                }
+                            }
+                            else
+                            {
+                                _topicToggleButton.IsEnabled = false;
+                                _topicToggleButton.ClearValue(Button.ForegroundProperty);
+                            }
+
+                            _messageUploadButton.IsEnabled = (digitalSignature != null);
                         }
-                    }), null);
+                    }));
 
                     if (selectTreeViewItem == null)
                     {
+                        this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
+                        {
+                            _refresh = false;
+
+                            _listViewItemCollection.Clear();
+
+                            if (App.SelectTab == TabItemType.Section)
+                                _mainWindow.Title = string.Format("Lair {0}", App.LairVersion);
+                        }));
+
                         continue;
                     }
 
                     var newList = new HashSet<MessageWrapper>();
-                    var oldList = new HashSet<MessageWrapper>();
-
-                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
-                    {
-                        oldList.UnionWith(_listViewItemCollection.OfType<MessageWrapper>().ToArray());
-                    }), null);
 
                     lock (selectTreeViewItem.Value.ThisLock)
                     {
@@ -255,22 +263,22 @@ namespace Lair.Windows
 
                     List<SearchItem> searchItems = new List<SearchItem>();
 
-                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                     {
                         searchItems.AddRange(_treeView.GetLineage(selectTreeViewItem).OfType<SearchTreeViewItem>().Select(n => n.Value.SearchItem));
-                    }), null);
+                    }));
 
                     foreach (var item in searchItems)
                     {
                         SectionControl.Filter(ref newList, item);
                     }
 
-                    List<MessageWrapper> sortList = new List<MessageWrapper>();
+                    List<MessageWrapper> sortList;
 
                     {
                         var tempList = newList.ToList();
 
-                        tempList.Sort(new Comparison<MessageWrapper>((MessageWrapper x, MessageWrapper y) =>
+                        tempList.Sort((x, y) =>
                         {
                             int c = x.Value.CreationTime.CompareTo(y.Value.CreationTime);
                             if (c != 0) return c;
@@ -280,31 +288,62 @@ namespace Lair.Windows
                             if (c != 0) return c;
 
                             return x.GetHashCode().CompareTo(y.GetHashCode());
-                        }));
+                        });
 
                         tempList = tempList.Skip(tempList.Count - 1024).ToList();
                         tempList.Reverse();
 
-                        sortList = tempList.ToList();
+                        LockedHashSet<Message> lockedMessages;
+
+                        if (Settings.Instance.Global_LockedMessages.TryGetValue(selectTreeViewItem.Value.Channel, out lockedMessages))
+                        {
+                            var tempHashset = new HashSet<Message>(lockedMessages);
+                            tempHashset.ExceptWith(tempList.Select(n => n.Value));
+
+                            foreach (var message in tempHashset)
+                            {
+                                tempList.Add(new MessageWrapper(message, 0));
+                            }
+                        }
+
+                        sortList = tempList;
 
                         newList.Clear();
                         newList.UnionWith(sortList);
                     }
 
                     {
-                        LockedHashSet<Message> lockedMessages;
+                        string searchText = null;
 
-                        if (Settings.Instance.Global_LockedMessages.TryGetValue(selectTreeViewItem.Value.Channel, out lockedMessages))
+                        this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                         {
-                            var tempList = new HashSet<Message>(lockedMessages);
-                            tempList.ExceptWith(newList.Select(n => n.Value));
+                            searchText = _searchTextBox.Text;
+                        }));
 
-                            foreach (var message in tempList)
+                        if (!string.IsNullOrWhiteSpace(searchText))
+                        {
+                            var words = searchText.ToLower().Split(new string[] { " ", "　" }, StringSplitOptions.RemoveEmptyEntries);
+                            List<MessageWrapper> list = new List<MessageWrapper>();
+
+                            foreach (var item in newList)
                             {
-                                newList.Add(new MessageWrapper(message, 0));
+                                var text = RichTextBoxHelper.GetMessageToString(item.Value).ToLower();
+                                if (!words.All(n => text.Contains(n))) continue;
+
+                                list.Add(item);
                             }
+
+                            newList.Clear();
+                            newList.UnionWith(list);
                         }
                     }
+
+                    var oldList = new HashSet<MessageWrapper>();
+
+                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
+                    {
+                        oldList.UnionWith(_listViewItemCollection.OfType<MessageWrapper>().ToArray());
+                    }));
 
                     var removeList = new List<MessageWrapper>();
                     var addList = new List<MessageWrapper>();
@@ -320,8 +359,8 @@ namespace Lair.Windows
                     }
 
                     int layoutUpdated = 0;
-                    
-                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+
+                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                     {
                         if (selectTreeViewItem != _treeView.SelectedItem) return;
                         _refresh = false;
@@ -348,30 +387,6 @@ namespace Lair.Windows
                             }
                         }
 
-                        {
-                            string searchText = _searchTextBox.Text;
-
-                            if (!string.IsNullOrWhiteSpace(searchText))
-                            {
-                                var words = searchText.ToLower().Split(new string[] { " ", "　" }, StringSplitOptions.RemoveEmptyEntries);
-
-                                foreach (var item in _listViewItemCollection.ToArray())
-                                {
-                                    var text = RichTextBoxHelper.GetMessageToString(item.Value).ToLower();
-
-                                    foreach (var word in words)
-                                    {
-                                        if (!text.Contains(word))
-                                        {
-                                            _listViewItemCollection.Remove(item);
-
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
                         this.Sort();
 
                         if (_listViewItemCollection.Count > 0)
@@ -386,21 +401,21 @@ namespace Lair.Windows
 
                         layoutUpdated = _layoutUpdated;
 
-                        if (App.SelectTab == "Section")
+                        if (App.SelectTab == TabItemType.Section)
                             _mainWindow.Title = string.Format("Lair {0} - {1}", App.LairVersion, MessageConverter.ToChannelString(selectTreeViewItem.Value.Channel));
 
                         this.Update_TreeView_Color();
-                    }), null);
+                    }));
 
                     while (_layoutUpdated == layoutUpdated) Thread.Sleep(100);
 
-                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                     {
                         _listView.UpdateLayout();
                         var topItem = _listViewItemCollection.FirstOrDefault(n => n.State.HasFlag(MessageState.New));
                         if (topItem == null) topItem = _listViewItemCollection.LastOrDefault();
                         if (topItem != null) _listView.ScrollIntoView(topItem);
-                    }), null);
+                    }));
                 }
             }
             catch (Exception e)
@@ -417,15 +432,16 @@ namespace Lair.Windows
                 {
                     List<SectionTreeViewItem> temptreeViewItemList = new List<SectionTreeViewItem>();
 
-                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                     {
                         temptreeViewItemList.AddRange(_treeViewItemCollection);
-                    }), null);
+                    }));
 
                     foreach (var sectionTreeViewItem in temptreeViewItemList)
                     {
                         if (sectionTreeViewItem.Value.LeaderSignature == null) continue;
 
+                        var creatorSignatures = new HashSet<string>();
                         var trustSignatures = new HashSet<string>();
                         var channelToCreatorSignatures = new Dictionary<Channel, string>();
 
@@ -442,6 +458,8 @@ namespace Lair.Windows
 
                                 if (leaderDictionary.TryGetValue(sectionTreeViewItem.Value.LeaderSignature, out leader))
                                 {
+                                    creatorSignatures.UnionWith(leader.CreatorSignatures);
+
                                     Dictionary<string, Creator> creatorDictionary = new Dictionary<string, Creator>();
 
                                     foreach (var creator in _lairManager.GetCreators(sectionTreeViewItem.Value.Section))
@@ -484,7 +502,7 @@ namespace Lair.Windows
 
                         List<ChannelTreeViewItem> items = new List<ChannelTreeViewItem>();
 
-                        this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                        this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                         {
                             var list = new List<TreeViewItem>();
                             list.AddRange(sectionTreeViewItem.Items.Cast<TreeViewItem>());
@@ -501,10 +519,43 @@ namespace Lair.Windows
                             {
                                 items.Add(item);
                             }
-                        }), null);
+                        }));
 
                         foreach (var selectTreeViewItem in items)
                         {
+                            Topic topTopic = null;
+
+                            if (channelToCreatorSignatures.ContainsKey(selectTreeViewItem.Value.Channel))
+                            {
+                                Dictionary<string, Topic> topicDictionary = new Dictionary<string, Topic>();
+
+                                foreach (var topic in _lairManager.GetTopics(selectTreeViewItem.Value.Channel))
+                                {
+                                    topicDictionary[topic.Certificate.ToString()] = topic;
+                                }
+
+                                List<Topic> topics = new List<Topic>();
+
+                                foreach (var signature in creatorSignatures)
+                                {
+                                    Topic tempTopic;
+
+                                    if (topicDictionary.TryGetValue(signature, out tempTopic))
+                                    {
+                                        if (string.IsNullOrWhiteSpace(tempTopic.Content)) continue;
+
+                                        topics.Add(tempTopic);
+                                    }
+                                }
+
+                                topics.Sort((x, y) =>
+                                {
+                                    return y.CreationTime.CompareTo(x.CreationTime);
+                                });
+
+                                topTopic = topics.FirstOrDefault();
+                            }
+
                             var oldList = new HashSet<Message>();
 
                             lock (selectTreeViewItem.Value.ThisLock)
@@ -540,7 +591,19 @@ namespace Lair.Windows
                                     }
                                 }
 
-                                tempList.Sort(new Comparison<Message>((Message x, Message y) =>
+                                List<SearchItem> searchItems = new List<SearchItem>();
+
+                                this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
+                                {
+                                    searchItems.AddRange(_treeView.GetLineage(selectTreeViewItem).OfType<SearchTreeViewItem>().Select(n => n.Value.SearchItem));
+                                }));
+
+                                foreach (var item in searchItems)
+                                {
+                                    SectionControl.Filter(ref newList, item);
+                                }
+
+                                tempList.Sort((x, y) =>
                                 {
                                     int c = x.CreationTime.CompareTo(y.CreationTime);
                                     if (c != 0) return c;
@@ -550,7 +613,7 @@ namespace Lair.Windows
                                     if (c != 0) return c;
 
                                     return x.GetHashCode().CompareTo(y.GetHashCode());
-                                }));
+                                });
 
                                 tempList = tempList.Skip(tempList.Count - 1024).ToList();
                                 tempList.Reverse();
@@ -590,26 +653,34 @@ namespace Lair.Windows
                                 }
                             }
 
-                            this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                            this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                             {
                                 if (channelToCreatorSignatures.ContainsKey(selectTreeViewItem.Value.Channel))
                                 {
                                     selectTreeViewItem.CreatorSignature = channelToCreatorSignatures[selectTreeViewItem.Value.Channel];
+
+                                    if (selectTreeViewItem.Value.Topic != topTopic)
+                                    {
+                                        selectTreeViewItem.Value.Topic = topTopic;
+                                        selectTreeViewItem.Value.IsTopicUpdated = true;
+                                    }
                                 }
                                 else
                                 {
                                     selectTreeViewItem.CreatorSignature = null;
+                                    selectTreeViewItem.Value.Topic = null;
+                                    selectTreeViewItem.Value.IsTopicUpdated = false;
                                 }
 
                                 if (addList.Count != 0 || removeList.Count != 0)
                                 {
                                     selectTreeViewItem.Update();
                                 }
-                            }), null);
+                            }));
                         }
                     }
 
-                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                     {
                         if (_update)
                         {
@@ -620,7 +691,7 @@ namespace Lair.Windows
                         {
                             this.Update_TreeView_Color();
                         }
-                    }), null);
+                    }));
 
                     _autoResetEvent.WaitOne(1000 * 60);
                 }
@@ -805,7 +876,18 @@ namespace Lair.Windows
             return _listView.ActualHeight - 18;
         }
 
-        private static void Filter(ref HashSet<MessageWrapper> messages, SearchItem filterItem)
+        private static void Filter(ref HashSet<MessageWrapper> messageWrappers, SearchItem filterItem)
+        {
+            var hashset = new HashSet<Message>(messageWrappers.Select(n => n.Value));
+            SectionControl.Filter(ref hashset, filterItem);
+
+            messageWrappers.RemoveWhere(new Predicate<MessageWrapper>(n =>
+            {
+                return !hashset.Contains(n.Value);
+            }));
+        }
+
+        private static void Filter(ref HashSet<Message> messages, SearchItem filterItem)
         {
             lock (filterItem.ThisLock)
             {
@@ -819,7 +901,7 @@ namespace Lair.Windows
                         {
                             flag = filterItem.SearchCreationTimeRangeCollection.Any(searchContains =>
                             {
-                                if (searchContains.Contains) return searchContains.Value.Verify(item.Value.CreationTime);
+                                if (searchContains.Contains) return searchContains.Value.Verify(item.CreationTime);
 
                                 return false;
                             });
@@ -835,7 +917,7 @@ namespace Lair.Windows
 
                             flag = filterItem.SearchWordCollection.Any(searchContains =>
                             {
-                                if (searchContains.Contains) return item.Value.Content.Contains(searchContains.Value);
+                                if (searchContains.Contains) return item.Content.Contains(searchContains.Value);
 
                                 return false;
                             });
@@ -847,13 +929,13 @@ namespace Lair.Windows
                     {
                         string signatureText = null;
 
-                        if (item.Value.Certificate == null)
+                        if (item.Certificate == null)
                         {
                             signatureText = "Anonymous";
                         }
                         else
                         {
-                            signatureText = item.Value.Certificate.ToString();
+                            signatureText = item.Certificate.ToString();
                         }
 
                         if (filterItem.SearchSignatureCollection.Any(n => n.Contains == true))
@@ -876,7 +958,7 @@ namespace Lair.Windows
 
                             flag = filterItem.SearchRegexCollection.Any(searchContains =>
                             {
-                                if (searchContains.Contains) return searchContains.Value.IsMatch(item.Value.Content);
+                                if (searchContains.Contains) return searchContains.Value.IsMatch(item.Content);
 
                                 return false;
                             });
@@ -889,7 +971,7 @@ namespace Lair.Windows
 
                 messages.ExceptWith(messages.ToArray().Where(item =>
                 {
-                    if (item.Value.Content.Contains('\uFFFD')) return true;
+                    if (item.Content.Contains('\uFFFD')) return true;
 
                     bool flag = false;
 
@@ -899,7 +981,7 @@ namespace Lair.Windows
                         {
                             flag = filterItem.SearchCreationTimeRangeCollection.Any(searchContains =>
                             {
-                                if (!searchContains.Contains) return searchContains.Value.Verify(item.Value.CreationTime);
+                                if (!searchContains.Contains) return searchContains.Value.Verify(item.CreationTime);
 
                                 return false;
                             });
@@ -915,7 +997,7 @@ namespace Lair.Windows
 
                             flag = filterItem.SearchWordCollection.Any(searchContains =>
                             {
-                                if (!searchContains.Contains) return item.Value.Content.Contains(searchContains.Value);
+                                if (!searchContains.Contains) return item.Content.Contains(searchContains.Value);
 
                                 return false;
                             });
@@ -927,13 +1009,13 @@ namespace Lair.Windows
                     {
                         string signatureText = null;
 
-                        if (item.Value.Certificate == null)
+                        if (item.Certificate == null)
                         {
                             signatureText = "Anonymous";
                         }
                         else
                         {
-                            signatureText = item.Value.Certificate.ToString();
+                            signatureText = item.Certificate.ToString();
                         }
 
                         if (filterItem.SearchSignatureCollection.Any(n => n.Contains == false))
@@ -956,7 +1038,7 @@ namespace Lair.Windows
 
                             flag = filterItem.SearchRegexCollection.Any(searchContains =>
                             {
-                                if (!searchContains.Contains) return searchContains.Value.IsMatch(item.Value.Content);
+                                if (!searchContains.Contains) return searchContains.Value.IsMatch(item.Content);
 
                                 return false;
                             });
@@ -974,7 +1056,7 @@ namespace Lair.Windows
             {
                 var list = _treeViewItemCollection.ToList();
 
-                list.Sort(delegate(SectionTreeViewItem x, SectionTreeViewItem y)
+                list.Sort((x, y) =>
                 {
                     var vx = x.Value;
                     var vy = y.Value;
@@ -995,7 +1077,6 @@ namespace Lair.Windows
 
                     if (i != o) _treeViewItemCollection.Move(o, i);
                 }
-
             }
 
             foreach (var item in _treeViewItemCollection)
@@ -1035,7 +1116,7 @@ namespace Lair.Windows
 
                 var hitItems = new HashSet<TreeViewItem>();
 
-                foreach (var item in items.OfType<ChannelTreeViewItem>().Where(n => n.Value.Messages.Any(m => m.Value.HasFlag(MessageState.New))))
+                foreach (var item in items.OfType<ChannelTreeViewItem>().Where(n => n.Value.Messages.Any(m => m.Value.HasFlag(MessageState.New)) || n.Value.IsTopicUpdated))
                 {
                     hitItems.UnionWith(_treeView.GetLineage(item));
                 }
@@ -1072,11 +1153,6 @@ namespace Lair.Windows
                     }
                 }
             }
-        }
-
-        public void Refresh()
-        {
-            _listView.Items.Refresh();
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -1349,7 +1425,7 @@ namespace Lair.Windows
                 }
             }
 
-            trustMessages.Sort(new Comparison<Message>((Message x, Message y) =>
+            trustMessages.Sort((x, y) =>
             {
                 int c = x.CreationTime.CompareTo(y.CreationTime);
                 if (c != 0) return c;
@@ -1359,7 +1435,7 @@ namespace Lair.Windows
                 if (c != 0) return c;
 
                 return x.GetHashCode().CompareTo(y.GetHashCode());
-            }));
+            });
             trustMessages = trustMessages.Skip(trustMessages.Count - 128).ToList();
             trustMessages.Reverse();
 
@@ -1439,7 +1515,6 @@ namespace Lair.Windows
             if (e.Data.GetDataPresent("SearchTreeViewItem"))
             {
                 var s = (SearchTreeViewItem)e.Data.GetData("SearchTreeViewItem");
-
                 var currentItem = _treeView.GetCurrentItem(e.GetPosition);
 
                 if (currentItem is SectionTreeViewItem)
@@ -1516,7 +1591,7 @@ namespace Lair.Windows
                 var s = (ChannelTreeViewItem)e.Data.GetData("ChannelTreeViewItem");
                 var t = _treeView.GetCurrentItem(e.GetPosition) as SearchTreeViewItem;
 
-                if (t == null || t.Equals(s) || t.Value.ChannelTreeItems.Any(n => object.ReferenceEquals(n, s.Value))) return;
+                if (t == null || t.Value.ChannelTreeItems.Any(n => object.ReferenceEquals(n, s.Value))) return;
                 if (_treeView.GetLineage(t).Any(n => object.ReferenceEquals(n, s))) return;
 
                 var list = _treeView.GetLineage((TreeViewItem)s).OfType<TreeViewItem>().ToList();
@@ -1573,8 +1648,6 @@ namespace Lair.Windows
 
         private void _treeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            var selectTreeViewItem = _treeView.SelectedItem as TreeViewItem;
-
             this.Update();
         }
 
@@ -2092,6 +2165,47 @@ namespace Lair.Windows
             if (contextMenu == null) return;
 
             {
+                var channelTreeItemTreeViewItemTopicUploadMenuItem = contextMenu.Items.OfType<MenuItem>().FirstOrDefault(n => n.Name == "_channelTreeItemTreeViewItemTopicUploadMenuItem");
+                if (channelTreeItemTreeViewItemTopicUploadMenuItem == null) return;
+                channelTreeItemTreeViewItemTopicUploadMenuItem.IsEnabled = false;
+
+                if (!string.IsNullOrWhiteSpace(selectTreeViewItem.CreatorSignature))
+                {
+                    var sectionTreeViewItem = _treeView.GetLineage((TreeViewItem)_treeView.SelectedItem).OfType<SectionTreeViewItem>().FirstOrDefault() as SectionTreeViewItem;
+                    if (sectionTreeViewItem == null) return;
+
+                    var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == sectionTreeViewItem.Value.UploadSignature);
+                    if (digitalSignature != null)
+                    {
+                        var creatorSignatures = new HashSet<string>();
+
+                        {
+                            Dictionary<string, Leader> leaderDictionary = new Dictionary<string, Leader>();
+
+                            foreach (var leader in _lairManager.GetLeaders(sectionTreeViewItem.Value.Section))
+                            {
+                                leaderDictionary[leader.Certificate.ToString()] = leader;
+                            }
+
+                            {
+                                Leader leader;
+
+                                if (leaderDictionary.TryGetValue(sectionTreeViewItem.Value.LeaderSignature, out leader))
+                                {
+                                    creatorSignatures.UnionWith(leader.CreatorSignatures);
+                                }
+                            }
+                        }
+
+                        if (creatorSignatures.Contains(digitalSignature.ToString()))
+                        {
+                            channelTreeItemTreeViewItemTopicUploadMenuItem.IsEnabled = true;
+                        }
+                    }
+                }
+            }
+
+            {
                 var channelTreeItemTreeViewItemExportLockedMessagesMenuItem = contextMenu.Items.OfType<MenuItem>().FirstOrDefault(n => n.Name == "_channelTreeItemTreeViewItemExportLockedMessagesMenuItem");
                 if (channelTreeItemTreeViewItemExportLockedMessagesMenuItem == null) return;
 
@@ -2143,6 +2257,59 @@ namespace Lair.Windows
             Clipboard.SetChannelTreeItems(new ChannelTreeItem[] { selectTreeViewItem.Value });
         }
 
+        private void _channelTreeItemTreeViewItemTopicUploadMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var selectTreeViewItem = _treeView.SelectedItem as ChannelTreeViewItem;
+            if (selectTreeViewItem == null) return;
+
+            if (!string.IsNullOrWhiteSpace(selectTreeViewItem.CreatorSignature))
+            {
+                var sectionTreeViewItem = _treeView.GetLineage((TreeViewItem)_treeView.SelectedItem).OfType<SectionTreeViewItem>().FirstOrDefault() as SectionTreeViewItem;
+                if (sectionTreeViewItem == null) return;
+
+                var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == sectionTreeViewItem.Value.UploadSignature);
+
+                if (digitalSignature != null)
+                {
+                    var creatorSignatures = new HashSet<string>();
+
+                    {
+                        Dictionary<string, Leader> leaderDictionary = new Dictionary<string, Leader>();
+
+                        foreach (var leader in _lairManager.GetLeaders(sectionTreeViewItem.Value.Section))
+                        {
+                            leaderDictionary[leader.Certificate.ToString()] = leader;
+                        }
+
+                        {
+                            Leader leader;
+
+                            if (leaderDictionary.TryGetValue(sectionTreeViewItem.Value.LeaderSignature, out leader))
+                            {
+                                creatorSignatures.UnionWith(leader.CreatorSignatures);
+                            }
+                        }
+                    }
+
+                    if (creatorSignatures.Contains(digitalSignature.ToString()))
+                    {
+                        var content = (selectTreeViewItem.Value.Topic != null) ? (selectTreeViewItem.Value.Topic.Content ?? "") : "";
+
+                        TopicEditWindow window = new TopicEditWindow(selectTreeViewItem.Value.Channel, content, digitalSignature, _lairManager);
+                        window.Owner = _mainWindow;
+
+                        window.ShowDialog();
+
+                        selectTreeViewItem.Value.IsTopicUpdated = false;
+
+                        this.Update_Cache();
+                    }
+                }
+            }
+
+            e.Handled = true;
+        }
+
         private void _channelTreeItemTreeViewItemExportLockedMessagesMenuItem_Click(object sender, RoutedEventArgs e)
         {
             var selectTreeViewItem = _treeView.SelectedItem as ChannelTreeViewItem;
@@ -2153,7 +2320,7 @@ namespace Lair.Windows
 
             var tempList = hashSet.ToList();
 
-            tempList.Sort(new Comparison<Message>((Message x, Message y) =>
+            tempList.Sort((x, y) =>
             {
                 int c = x.CreationTime.CompareTo(y.CreationTime);
                 if (c != 0) return c;
@@ -2163,7 +2330,7 @@ namespace Lair.Windows
                 if (c != 0) return c;
 
                 return x.GetHashCode().CompareTo(y.GetHashCode());
-            }));
+            });
 
             using (System.Windows.Forms.SaveFileDialog dialog = new System.Windows.Forms.SaveFileDialog())
             {
@@ -2197,7 +2364,7 @@ namespace Lair.Windows
 
         #region Tool
 
-        private void _trustButton_Click(object sender, RoutedEventArgs e)
+        private void _trustToggleButton_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             var selectTreeViewItem = _treeView.SelectedItem as ChannelTreeViewItem;
             if (selectTreeViewItem == null) return;
@@ -2207,48 +2374,21 @@ namespace Lair.Windows
             _listViewItemCollection.Clear();
 
             this.Update_Cache();
+
+            e.Handled = true;
         }
 
-        private void _topicUploadToggleButton_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void _topicToggleButton_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            var sectionTreeViewItem = _treeView.GetLineage((TreeViewItem)_treeView.SelectedItem).OfType<SectionTreeViewItem>().FirstOrDefault() as SectionTreeViewItem;
-            if (sectionTreeViewItem == null) return;
-
             var selectTreeViewItem = _treeView.SelectedItem as ChannelTreeViewItem;
             if (selectTreeViewItem == null) return;
 
-            Topic topTopic = null;
+            TopicPreviewWindow window = new TopicPreviewWindow(selectTreeViewItem.Value.Topic);
+            window.Owner = _mainWindow;
 
-            if (selectTreeViewItem.CreatorSignature != null)
-            {
-                Dictionary<string, Topic> topicDictionary = new Dictionary<string, Topic>();
+            window.ShowDialog();
 
-                foreach (var topic in _lairManager.GetTopics(selectTreeViewItem.Value.Channel))
-                {
-                    topicDictionary[topic.Certificate.ToString()] = topic;
-                }
-
-                topicDictionary.TryGetValue(selectTreeViewItem.CreatorSignature, out topTopic);
-            }
-
-            var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == sectionTreeViewItem.Value.UploadSignature);
-
-            if ((digitalSignature != null && digitalSignature.ToString() == selectTreeViewItem.CreatorSignature && sectionTreeViewItem.Value.CreatorInfo.Channels.Contains(selectTreeViewItem.Value.Channel)))
-            {
-                var content = (topTopic != null) ? (topTopic.Content ?? "") : "";
-
-                TopicEditWindow window = new TopicEditWindow(selectTreeViewItem.Value.Channel, content, digitalSignature, _lairManager);
-                window.Owner = _mainWindow;
-
-                window.ShowDialog();
-            }
-            else
-            {
-                TopicPreviewWindow window = new TopicPreviewWindow(topTopic);
-                window.Owner = _mainWindow;
-
-                window.ShowDialog();
-            }
+            selectTreeViewItem.Value.IsTopicUpdated = false;
 
             this.Update();
 
@@ -2501,6 +2641,7 @@ namespace Lair.Windows
             }
 
             selectTreeViewItem.Update();
+            _listView.Items.Refresh();
         }
 
         private void _richTextBoxUnlockThisMenuItem_Click(object sender, RoutedEventArgs e)
@@ -2527,6 +2668,7 @@ namespace Lair.Windows
             }
 
             selectTreeViewItem.Update();
+            _listView.Items.Refresh();
         }
 
         private void _richTextBoxLockAllMenuItem_Click(object sender, RoutedEventArgs e)
@@ -2558,7 +2700,7 @@ namespace Lair.Windows
             selectTreeViewItem.Update();
             _listView.Items.Refresh();
         }
-        
+
         private void _richTextBoxFilterWordMenuItem_Click(object sender, RoutedEventArgs e)
         {
             var richTextBox = (((e.Source as MenuItem).Parent as MenuItem).Parent as ContextMenu).PlacementTarget as RichTextBox;
@@ -2655,7 +2797,7 @@ namespace Lair.Windows
         {
             List<MessageWrapper> list = new List<MessageWrapper>(_listViewItemCollection);
 
-            list.Sort(delegate(MessageWrapper x, MessageWrapper y)
+            list.Sort((x, y) =>
             {
                 int c = x.Value.CreationTime.CompareTo(y.Value.CreationTime);
                 if (c != 0) return c;
@@ -3341,7 +3483,7 @@ namespace Lair.Windows
         {
             var list = _listViewItemCollection.ToList();
 
-            list.Sort(delegate(SearchTreeViewItem x, SearchTreeViewItem y)
+            list.Sort((x, y) =>
             {
                 var vx = x.Value;
                 var vy = y.Value;
@@ -3462,7 +3604,7 @@ namespace Lair.Windows
         {
             var list = _listViewItemCollection.Cast<object>().ToList();
 
-            list.Sort(delegate(object x, object y)
+            list.Sort((x, y) =>
             {
                 if (x is SearchTreeViewItem)
                 {
@@ -3560,28 +3702,30 @@ namespace Lair.Windows
         {
             LockedHashSet<Message> lockedMessages;
 
-            if (Settings.Instance.Global_LockedMessages.TryGetValue(_value.Channel, out lockedMessages))
+            string suffix = "";
+
+            if (!string.IsNullOrWhiteSpace(_creatorSignature))
             {
                 if (_value.IsFilterEnabled)
                 {
-                    _header.Text = string.Format("{0} ({1}-{3}) {2}", _value.Channel.Name, _value.Messages.Count, _creatorSignature, lockedMessages.Count);
+                    suffix = " - " + _creatorSignature;
                 }
                 else
                 {
-                    _header.Text = string.Format("{0} ({1}-{3})! {2}", _value.Channel.Name, _value.Messages.Count, _creatorSignature, lockedMessages.Count);
+                    suffix = " ! " + _creatorSignature;
                 }
+            }
+
+            if (Settings.Instance.Global_LockedMessages.TryGetValue(_value.Channel, out lockedMessages))
+            {
+                _header.Text = string.Format("{0} ({1}-{2})", _value.Channel.Name, _value.Messages.Count, lockedMessages.Count);
             }
             else
             {
-                if (_value.IsFilterEnabled)
-                {
-                    _header.Text = string.Format("{0} ({1}) {2}", _value.Channel.Name, _value.Messages.Count, _creatorSignature);
-                }
-                else
-                {
-                    _header.Text = string.Format("{0} ({1})! {2}", _value.Channel.Name, _value.Messages.Count, _creatorSignature);
-                }
+                _header.Text = string.Format("{0} ({1})", _value.Channel.Name, _value.Messages.Count);
             }
+
+            _header.Text += suffix;
         }
 
         public string CreatorSignature
@@ -3967,6 +4111,8 @@ namespace Lair.Windows
     {
         private Channel _channel;
         private bool _isFilterEnabled = true;
+        private Topic _topic;
+        private bool _isTopicUpdated;
         private LockedDictionary<Message, MessageState> _messages;
 
         private object _thisLock = new object();
@@ -4006,6 +4152,44 @@ namespace Lair.Windows
                 lock (this.ThisLock)
                 {
                     _isFilterEnabled = value;
+                }
+            }
+        }
+
+        [DataMember(Name = "Topic")]
+        public Topic Topic
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return _topic;
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    _topic = value;
+                }
+            }
+        }
+
+        [DataMember(Name = "IsTopicUpdated")]
+        public bool IsTopicUpdated
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return _isTopicUpdated;
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    _isTopicUpdated = value;
                 }
             }
         }

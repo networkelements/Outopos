@@ -24,13 +24,13 @@ using System.Windows.Navigation;
 using System.Windows.Threading;
 using Lair.Properties;
 using Library;
+using Library.Collections;
 using Library.Io;
 using Library.Net.Connection;
 using Library.Net.Lair;
 using Library.Net.Proxy;
 using Library.Net.Upnp;
 using Library.Security;
-using Library.Collections;
 using a = Library.Net.Amoeba;
 
 namespace Lair.Windows
@@ -64,7 +64,7 @@ namespace Lair.Windows
         {
             try
             {
-                _bufferManager = new BufferManager();
+                _bufferManager = BufferManager.Instance;
 
                 this.Setting_Log();
 
@@ -74,30 +74,6 @@ namespace Lair.Windows
                 _configrationDirectoryPaths.Add("TransfarLimitManager", Path.Combine(App.DirectoryPaths["Configuration"], @"Lair/TransfarLimitManager"));
 
                 Settings.Instance.Load(_configrationDirectoryPaths["MainWindow"]);
-
-                {
-                    bool flag = false;
-
-                    double top = Settings.Instance.MainWindow_Top + (Settings.Instance.MainWindow_Height / 2);
-                    double left = Settings.Instance.MainWindow_Left + (Settings.Instance.MainWindow_Width / 2);
-
-                    foreach (var s in System.Windows.Forms.Screen.AllScreens)
-                    {
-                        if (top > s.WorkingArea.Top && top < s.WorkingArea.Bottom
-                            && left > s.WorkingArea.Left && left < s.WorkingArea.Right)
-                        {
-                            flag = true;
-
-                            break;
-                        }
-                    }
-
-                    if (!flag)
-                    {
-                        Settings.Instance.MainWindow_Top = 0;
-                        Settings.Instance.MainWindow_Left = 0;
-                    }
-                }
 
                 InitializeComponent();
 
@@ -167,14 +143,21 @@ namespace Lair.Windows
             }
         }
 
+        protected override void OnInitialized(EventArgs e)
+        {
+            WindowPosition.Move(this);
+
+            base.OnInitialized(e);
+        }
+
         void _transferLimitManager_StartEvent(object sender, EventArgs e)
         {
             if (_autoStop && !Settings.Instance.Global_IsStart)
             {
-                this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                 {
                     _startMenuItem_Click(sender, null);
-                }), null);
+                }));
             }
         }
 
@@ -182,10 +165,10 @@ namespace Lair.Windows
         {
             Log.Information(LanguagesManager.Instance.MainWindow_TransferLimit_Message);
 
-            this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+            this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
             {
                 _stopMenuItem_Click(sender, null);
-            }), null);
+            }));
         }
 
         public static void CopyDirectory(string sourceDirectoryPath, string destDirectoryPath)
@@ -229,10 +212,10 @@ namespace Lair.Windows
                     {
                         if (_diskSpaceNotFoundException)
                         {
-                            this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                            this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                             {
                                 _stopMenuItem_Click(null, null);
-                            }), null);
+                            }));
                         }
 
                         if (_autoBaseNodeSettingManager.State == ManagerState.Stop
@@ -265,7 +248,7 @@ namespace Lair.Windows
                         {
                             Log.Warning(LanguagesManager.Instance.MainWindow_DiskSpaceNotFound_Message);
 
-                            this.Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                            this.Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new Action(() =>
                             {
                                 MessageBox.Show(
                                     this,
@@ -273,7 +256,7 @@ namespace Lair.Windows
                                     "Warning",
                                     MessageBoxButton.OK,
                                     MessageBoxImage.Warning);
-                            }), null);
+                            }));
 
                             _diskSpaceNotFoundException = false;
                         }
@@ -316,7 +299,6 @@ namespace Lair.Windows
                     }
 
                     if (updateStopwatch.Elapsed > new TimeSpan(1, 0, 0, 0))
-                    //if (updateStopwatch.Elapsed > new TimeSpan(0, 0, 1))
                     {
                         updateStopwatch.Restart();
 
@@ -367,7 +349,7 @@ namespace Lair.Windows
 
                     var state = _lairManager.State;
 
-                    this.Dispatcher.Invoke(DispatcherPriority.Send, new TimeSpan(0, 0, 1), new Action<object>(delegate(object state2)
+                    this.Dispatcher.Invoke(DispatcherPriority.Send, new TimeSpan(0, 0, 1), new Action(() =>
                     {
                         try
                         {
@@ -394,7 +376,7 @@ namespace Lair.Windows
                         {
 
                         }
-                    }), null);
+                    }));
                 }
             }
             catch (Exception)
@@ -581,7 +563,7 @@ namespace Lair.Windows
             {
                 try
                 {
-                    this.Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                    this.Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new Action(() =>
                     {
                         try
                         {
@@ -598,7 +580,7 @@ namespace Lair.Windows
                         {
 
                         }
-                    }), null);
+                    }));
                 }
                 catch (Exception)
                 {
@@ -627,7 +609,7 @@ namespace Lair.Windows
             {
                 try
                 {
-                    _mainWindow.Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                    _mainWindow.Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new Action(() =>
                     {
                         try
                         {
@@ -644,7 +626,7 @@ namespace Lair.Windows
                         {
 
                         }
-                    }), null);
+                    }));
                 }
                 catch (Exception)
                 {
@@ -1089,7 +1071,7 @@ namespace Lair.Windows
 
                             if (Settings.Instance.Global_Update_Option != UpdateOption.AutoUpdate)
                             {
-                                this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                                this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                                 {
                                     if (MessageBox.Show(
                                         this,
@@ -1100,7 +1082,7 @@ namespace Lair.Windows
                                     {
                                         flag = false;
                                     }
-                                }), null);
+                                }));
                             }
 
                             if (flag)
@@ -1117,7 +1099,7 @@ namespace Lair.Windows
                                     Certificate certificate = DigitalSignatureConverter.FromCertificateStream(signStream);
 
                                     if (Settings.Instance.Global_Update_Signature != certificate.ToString()) throw new Exception("Update DigitalSignature #1");
-                                    if (!DigitalSignature.VerifyFileCertificate(certificate, stream, new BufferManager())) throw new Exception("Update DigitalSignature #2");
+                                    if (!DigitalSignature.VerifyFileCertificate(certificate, stream)) throw new Exception("Update DigitalSignature #2");
                                 }
 
                                 if (File.Exists(path))
@@ -1125,7 +1107,7 @@ namespace Lair.Windows
                                     File.Move(path, Path.Combine(App.DirectoryPaths["Update"], Path.GetFileName(path)));
                                 }
 
-                                this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action<object>(delegate(object state2)
+                                this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                                 {
                                     MessageBox.Show(
                                         this,
@@ -1133,7 +1115,7 @@ namespace Lair.Windows
                                         "Update",
                                         MessageBoxButton.OK,
                                         MessageBoxImage.Information);
-                                }), null);
+                                }));
                             }
                             else
                             {
@@ -1335,26 +1317,26 @@ namespace Lair.Windows
 
         private void _tabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var tabItem = _tabControl.SelectedItem as TabItem;
+            if (_tabControl.SelectedItem == _connectionTabItem)
+            {
+                App.SelectTab = TabItemType.Connection;
+            }
+            else if (_tabControl.SelectedItem == _sectionTabItem)
+            {
+                App.SelectTab = TabItemType.Section;
+            }
+            else if (_tabControl.SelectedItem == _logTabItem)
+            {
+                App.SelectTab = TabItemType.Log;
 
-            if ((string)tabItem.Header == LanguagesManager.Instance.MainWindow_Connection)
-            {
-                App.SelectTab = "Connection";
-            }
-            else if ((string)tabItem.Header == LanguagesManager.Instance.MainWindow_Section)
-            {
-                App.SelectTab = "Section";
-            }
-            else if ((string)tabItem.Header == LanguagesManager.Instance.MainWindow_Log)
-            {
-                App.SelectTab = "Log";
+                _logRichTextBox.UpdateLayout();
+                _logRichTextBox.ScrollToEnd();
             }
             else
             {
-                App.SelectTab = "";
+                App.SelectTab = 0;
             }
 
-            _logRichTextBox.ScrollToEnd();
             this.Title = string.Format("Lair {0}", App.LairVersion);
         }
 
@@ -1432,7 +1414,7 @@ namespace Lair.Windows
             Settings.Instance.Global_SeedHistorys.Clear();
             Settings.Instance.Global_ChannelHistorys.Clear();
         }
-        
+
         private void _viewSettingsMenuItem_Click(object sender, RoutedEventArgs e)
         {
             ViewSettingsWindow window = new ViewSettingsWindow(_bufferManager);
@@ -1447,7 +1429,7 @@ namespace Lair.Windows
 
         private void _manualSiteMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start("https://sites.google.com/site/alliancenetwork528491");
+            Process.Start("http://lyrise.web.fc2.com/index.html");
         }
 
         private void _developerSiteMenuItem_Click(object sender, RoutedEventArgs e)

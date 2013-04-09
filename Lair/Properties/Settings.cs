@@ -50,9 +50,9 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<Color>() { Name = "Color_Message_New", Value = Colors.LightPink },
                 new Library.Configuration.SettingsContext<Color>() { Name = "Color_Link", Value = Colors.LightGray },
                 new Library.Configuration.SettingsContext<Color>() { Name = "Color_Link_New", Value = Colors.LightPink },
-                new Library.Configuration.SettingsContext<Color>() { Name = "Color_Trust", Value = Colors.White },
-                new Library.Configuration.SettingsContext<Color>() { Name = "Color_Trust_On", Value = Colors.Cyan },
+                new Library.Configuration.SettingsContext<Color>() { Name = "Color_Trust_On", Value = Colors.DeepSkyBlue },
                 new Library.Configuration.SettingsContext<Color>() { Name = "Color_Trust_Off", Value = Colors.HotPink },
+                new Library.Configuration.SettingsContext<Color>() { Name = "Color_Topic_Update", Value = Colors.HotPink },
 
                 new Library.Configuration.SettingsContext<double>() { Name = "MainWindow_Top", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "MainWindow_Left", Value = 120 },
@@ -699,25 +699,6 @@ namespace Lair.Properties
             }
         }
 
-        public Color Color_Trust
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (Color)this["Color_Trust"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["Color_Trust"] = value;
-                }
-            }
-        }
-
         public Color Color_Trust_On
         {
             get
@@ -752,6 +733,25 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     this["Color_Trust_Off"] = value;
+                }
+            }
+        }
+
+        public Color Color_Topic_Update
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (Color)this["Color_Topic_Update"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["Color_Topic_Update"] = value;
                 }
             }
         }

@@ -24,6 +24,13 @@ using Library.Net.Lair;
 
 namespace Lair
 {
+    public enum TabItemType
+    {
+        Connection,
+        Section,
+        Log,
+    }
+
     /// <summary>
     /// App.xaml の相互作用ロジック
     /// </summary>
@@ -31,13 +38,13 @@ namespace Lair
     {
         public static Version LairVersion { get; private set; }
         public static Dictionary<string, string> DirectoryPaths { get; private set; }
-        public static string SelectTab { get; set; }
+        public static TabItemType SelectTab { get; set; }
         private FileStream _lockStream = null;
         private LockedList<Process> _processList = new LockedList<Process>();
 
         public App()
         {
-            App.LairVersion = new Version(1, 0, 7);
+            App.LairVersion = new Version(1, 0, 8);
 
             Directory.SetCurrentDirectory(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
 

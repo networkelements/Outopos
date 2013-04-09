@@ -513,14 +513,7 @@ namespace Lair
 
             if (disposing)
             {
-                try
-                {
-                    this.Stop();
-                }
-                catch (Exception)
-                {
 
-                }
             }
 
             _disposed = true;

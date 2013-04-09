@@ -77,6 +77,13 @@ namespace Lair.Windows
             this.Sort();
         }
 
+        protected override void OnInitialized(EventArgs e)
+        {
+            WindowPosition.Move(this);
+
+            base.OnInitialized(e);
+        }
+
         protected virtual void OnChannelJoinEvent(Channel channel)
         {
             if (this.ChannelJoinEvent != null)

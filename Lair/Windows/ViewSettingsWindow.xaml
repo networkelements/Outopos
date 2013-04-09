@@ -49,7 +49,7 @@
                 <TreeViewItem Name="_updateTreeViewItem" Header="{Binding Path=ViewSettingsWindow_Update, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
                 <TreeViewItem Name="_signaturesTreeViewItem" Header="{Binding Path=ViewSettingsWindow_Signatures, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
                 <TreeViewItem Name="_fontsTreeViewItem" Header="{Binding Path=ViewSettingsWindow_Fonts, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
-                <TreeViewItem Name="_amoebaTreeViewItem" Header="{Binding Path=ViewSettingsWindow_Amoeba, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
+                <TreeViewItem Name="_amoebaTreeViewItem" Header="{Binding Path=ViewSettingsWindow_Amoeba, Source={StaticResource ResourcesInstance}}" IsSelected="True" />
                 <TreeViewItem Name="_eventsTreeViewItem" Header="{Binding Path=ViewSettingsWindow_Events, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
             </TreeView>
             
@@ -109,8 +109,8 @@
             </Grid>
 
             <Grid Grid.Column="2" FocusManager.FocusedElement="{Binding ElementName=_amoebaPathTextBox}" Visibility="{Binding ElementName=_amoebaTreeViewItem, Path=IsSelected, Converter={StaticResource _boolToVisibilityConverter}}">
-                <Label Content="{Binding Path=ViewSettingsWindow_AmoebaPath, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="360" />
-                <TextBox Height="24" Margin="372,6,6,0" Name="_amoebaPathTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" PreviewMouseDoubleClick="_amoebaPathTextBox_PreviewMouseDoubleClick" />
+                <Label Content="{Binding Path=ViewSettingsWindow_AmoebaPath, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="240" />
+                <TextBox Height="24" Margin="252,6,6,0" Name="_amoebaPathTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" PreviewMouseDoubleClick="_amoebaPathTextBox_PreviewMouseDoubleClick" />
             </Grid>
 
             <Grid Grid.Column="2" Visibility="{Binding ElementName=_eventsTreeViewItem, Path=IsSelected, Converter={StaticResource _boolToVisibilityConverter}}">

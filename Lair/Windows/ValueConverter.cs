@@ -622,11 +622,13 @@ namespace Lair.Windows
             var item = values[0] as MessageWrapper;
             if (item == null) return null;
 
+            System.Windows.Media.Color color;
+
             bool isSelected = (bool)values[1];
 
             if (isSelected)
             {
-                return new SolidColorBrush(Settings.Instance.Color_Message_Select);
+                color = Settings.Instance.Color_Message_Select;
             }
             else
             {
@@ -635,15 +637,19 @@ namespace Lair.Windows
                 if (Settings.Instance.Global_LockedMessages.TryGetValue(item.Value.Channel, out hashSet)
                     && hashSet.Contains(item.Value))
                 {
-                    return new SolidColorBrush(Settings.Instance.Color_Message_Lock);
+                    color = Settings.Instance.Color_Message_Lock;
                 }
                 else if (item.State.HasFlag(MessageState.New))
                 {
-                    return new SolidColorBrush(Settings.Instance.Color_Message_New);
+                    color = Settings.Instance.Color_Message_New;
+                }
+                else
+                {
+                    color = Settings.Instance.Color_Message;
                 }
             }
 
-            return new SolidColorBrush(Settings.Instance.Color_Message);
+            return new SolidColorBrush(color);
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

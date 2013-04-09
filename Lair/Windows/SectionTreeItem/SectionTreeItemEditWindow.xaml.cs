@@ -24,9 +24,9 @@ namespace Lair.Windows
     /// </summary>
     partial class SectionTreeItemEditWindow : Window
     {
+        private SectionTreeItem _sectionTreeItem;
         private LairManager _lairManager;
         private BufferManager _bufferManager;
-        private SectionTreeItem _sectionTreeItem;
 
         private LeaderControl _leaderControl;
         private CreatorControl _creatorControl;
@@ -62,6 +62,13 @@ namespace Lair.Windows
                 _creatorInfo = _sectionTreeItem.CreatorInfo.DeepClone();
                 _managerInfo = _sectionTreeItem.ManagerInfo.DeepClone();
             }
+        }
+
+        protected override void OnInitialized(EventArgs e)
+        {
+            WindowPosition.Move(this);
+
+            base.OnInitialized(e);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -101,6 +108,8 @@ namespace Lair.Windows
             var digitalSignatureComboBoxItem = _signatureComboBox.SelectedItem as DigitalSignatureComboBoxItem;
             DigitalSignature digitalSignature = digitalSignatureComboBoxItem == null ? null : digitalSignatureComboBoxItem.Value;
 
+            if (MessageBox.Show(this, LanguagesManager.Instance.MainWindow_Upload_Message, "Leader", MessageBoxButton.OKCancel, MessageBoxImage.Information) != MessageBoxResult.OK) return;
+
             var info = _leaderControl.LeaderInfo;
 
             _lairManager.Upload(new Leader(_sectionTreeItem.Section, info.Comment, info.CreatorSignatures, info.ManagerSignatures, digitalSignature));
@@ -112,6 +121,8 @@ namespace Lair.Windows
             var digitalSignatureComboBoxItem = _signatureComboBox.SelectedItem as DigitalSignatureComboBoxItem;
             DigitalSignature digitalSignature = digitalSignatureComboBoxItem == null ? null : digitalSignatureComboBoxItem.Value;
 
+            if (MessageBox.Show(this, LanguagesManager.Instance.MainWindow_Upload_Message, "Creator", MessageBoxButton.OKCancel, MessageBoxImage.Information) != MessageBoxResult.OK) return;
+
             var info = _creatorControl.CreatorInfo;
 
             _lairManager.Upload(new Creator(_sectionTreeItem.Section, info.Comment, info.Channels, digitalSignature));
@@ -122,6 +133,8 @@ namespace Lair.Windows
         {
             var digitalSignatureComboBoxItem = _signatureComboBox.SelectedItem as DigitalSignatureComboBoxItem;
             DigitalSignature digitalSignature = digitalSignatureComboBoxItem == null ? null : digitalSignatureComboBoxItem.Value;
+
+            if (MessageBox.Show(this, LanguagesManager.Instance.MainWindow_Upload_Message, "Manager", MessageBoxButton.OKCancel, MessageBoxImage.Information) != MessageBoxResult.OK) return;
 
             var info = _managerControl.ManagerInfo;
 

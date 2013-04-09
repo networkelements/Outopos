@@ -117,7 +117,7 @@ namespace Lair
                     }
                 }
 
-                return list;
+                return list.Where(n => n != null);
             }
         }
 
@@ -156,7 +156,7 @@ namespace Lair
                     }
                 }
 
-                return list;
+                return list.Where(n => n != null);
             }
         }
 
@@ -195,7 +195,7 @@ namespace Lair
                     }
                 }
 
-                return list;
+                return list.Where(n => n != null);
             }
         }
 
@@ -238,7 +238,7 @@ namespace Lair
 
                         var tempList = searchTreeItemList[i].ChannelTreeItems.Select(n => n.Channel).ToList();
 
-                        tempList.Sort(delegate(Channel x, Channel y)
+                        tempList.Sort((x, y) =>
                         {
                             int c = x.Name.CompareTo(y.Name);
                             if (c != 0) return c;
@@ -309,6 +309,8 @@ namespace Lair
                     try
                     {
                         var seed = a.AmoebaConverter.FromSeedString(item);
+                        if (seed == null) continue;
+
                         if (!seed.VerifyCertificate()) seed.CreateCertificate(null);
 
                         list.Add(seed);
