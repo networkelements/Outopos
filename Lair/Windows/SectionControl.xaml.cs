@@ -1157,14 +1157,14 @@ namespace Lair.Windows
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            _lairManager.RemoveSectionsEvent = _lairManager_RemoveSectionsEvent;
-            _lairManager.RemoveLeadersEvent = _lairManager_RemoveLeadersEvent;
-            _lairManager.RemoveCreatorsEvent = _lairManager_RemoveCreatorsEvent;
-            _lairManager.RemoveManagersEvent = _lairManager_RemoveManagersEvent;
+            _lairManager.RemoveSectionsEvent = new RemoveSectionsEventHandler(_lairManager_RemoveSectionsEvent);
+            _lairManager.RemoveLeadersEvent = new RemoveLeadersEventHandler(_lairManager_RemoveLeadersEvent);
+            _lairManager.RemoveCreatorsEvent = new RemoveCreatorsEventHandler(_lairManager_RemoveCreatorsEvent);
+            _lairManager.RemoveManagersEvent = new RemoveManagersEventHandler(_lairManager_RemoveManagersEvent);
 
-            _lairManager.RemoveChannelsEvent = _lairManager_RemoveChannelsEvent;
-            _lairManager.RemoveTopicsEvent = _lairManager_RemoveTopicsEvent;
-            _lairManager.RemoveMessagesEvent = _lairManager_RemoveMessagesEvent;
+            _lairManager.RemoveChannelsEvent = new RemoveChannelsEventHandler(_lairManager_RemoveChannelsEvent);
+            _lairManager.RemoveTopicsEvent = new RemoveTopicsEventHandler(_lairManager_RemoveTopicsEvent);
+            _lairManager.RemoveMessagesEvent = new RemoveMessagesEventHandler(_lairManager_RemoveMessagesEvent);
         }
 
         // 閲覧中のSectionを除外
