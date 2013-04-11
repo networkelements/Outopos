@@ -1317,7 +1317,7 @@ namespace Lair.Windows
                 _lairManager.SetOtherNodes(_otherNodes.Where(n => n != null && n.Id != null && n.Uris.Count != 0));
 
                 int count = ConnectionsSettingsWindow.GetStringToInt(_bandwidthConnectionCountTextBox.Text);
-                _lairManager.ConnectionCountLimit = Math.Max(Math.Min(count, 50), 12);
+                _lairManager.ConnectionCountLimit = Math.Max(Math.Min(count, 100), 12);
 
                 long bandwidthLimit = (long)NetworkConverter.FromSizeString("0");
 
