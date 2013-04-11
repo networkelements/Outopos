@@ -1330,7 +1330,9 @@ namespace Lair.Windows
 
                                 if (channels.Contains(channel))
                                 {
-                                    lockedTopicSignatures.Add(creator.Certificate.ToString());
+                                    lockedTopicSignatures.UnionWith(leader.CreatorSignatures);
+
+                                    break;
                                 }
                             }
                         }
@@ -1338,11 +1340,50 @@ namespace Lair.Windows
                 }
             }
 
-            HashSet<string> removeTopicSignatures = new HashSet<string>(_lairManager.GetTopics(channel).Select(n => n.Certificate.ToString()));
-            removeTopicSignatures.ExceptWith(lockedTopicSignatures);
+            HashSet<Topic> removeTopics = new HashSet<Topic>(_lairManager.GetTopics(channel));
 
-            int capacity = Math.Max(lockedTopicSignatures.Count * 2, 256);
-            return new SignatureCollection(removeTopicSignatures.Randomize().Skip(capacity));
+            List<Topic> trustTopics;
+
+            {
+                trustTopics = new List<Topic>();
+
+                foreach (var message in removeTopics)
+                {
+                    if (lockedTopicSignatures.Contains(message.Certificate.ToString()))
+                    {
+                        trustTopics.Add(message);
+                    }
+                }
+
+                trustTopics.Sort((x, y) =>
+                {
+                    int c = x.CreationTime.CompareTo(y.CreationTime);
+                    if (c != 0) return c;
+                    c = x.Content.CompareTo(y.Content);
+                    if (c != 0) return c;
+                    c = Collection.Compare(x.GetHash(HashAlgorithm.Sha512), y.GetHash(HashAlgorithm.Sha512));
+                    if (c != 0) return c;
+
+                    return x.GetHashCode().CompareTo(y.GetHashCode());
+                });
+                trustTopics = trustTopics.Skip(trustTopics.Count - 8).ToList();
+            }
+
+            List<Topic> randomTopics;
+
+            {
+                HashSet<Topic> hashSetRandomTopics = new HashSet<Topic>();
+
+                hashSetRandomTopics.UnionWith(removeTopics);
+                hashSetRandomTopics.ExceptWith(trustTopics);
+
+                randomTopics = hashSetRandomTopics.Randomize().Take(16 - trustTopics.Count).ToList();
+            }
+
+            removeTopics.ExceptWith(trustTopics);
+            removeTopics.ExceptWith(randomTopics);
+
+            return new SignatureCollection(removeTopics.Select(n => n.Certificate.ToString()));
         }
 
         // 閲覧中のSectionのCreatorが対象のChannelを作成していた場合、ManagerがTrust認定したMessageを除外
@@ -1410,39 +1451,46 @@ namespace Lair.Windows
 
             HashSet<Message> removeMessages = new HashSet<Message>(_lairManager.GetMessages(channel));
 
-            List<Message> trustMessages = new List<Message>();
-            List<Message> randomMessage = new List<Message>();
+            List<Message> trustMessages;
 
-            foreach (var message in removeMessages)
             {
-                if (trustSignatures.Contains(message.Certificate.ToString()))
+                trustMessages = new List<Message>();
+
+                foreach (var message in removeMessages)
                 {
-                    trustMessages.Add(message);
+                    if (trustSignatures.Contains(message.Certificate.ToString()))
+                    {
+                        trustMessages.Add(message);
+                    }
                 }
-                else
+
+                trustMessages.Sort((x, y) =>
                 {
-                    randomMessage.Add(message);
-                }
+                    int c = x.CreationTime.CompareTo(y.CreationTime);
+                    if (c != 0) return c;
+                    c = x.Content.CompareTo(y.Content);
+                    if (c != 0) return c;
+                    c = Collection.Compare(x.GetHash(HashAlgorithm.Sha512), y.GetHash(HashAlgorithm.Sha512));
+                    if (c != 0) return c;
+
+                    return x.GetHashCode().CompareTo(y.GetHashCode());
+                });
+                trustMessages = trustMessages.Skip(trustMessages.Count - 128).ToList();
             }
 
-            trustMessages.Sort((x, y) =>
+            List<Message> randomMessages;
+
             {
-                int c = x.CreationTime.CompareTo(y.CreationTime);
-                if (c != 0) return c;
-                c = x.Content.CompareTo(y.Content);
-                if (c != 0) return c;
-                c = Collection.Compare(x.GetHash(HashAlgorithm.Sha512), y.GetHash(HashAlgorithm.Sha512));
-                if (c != 0) return c;
+                HashSet<Message> hashSetRandomMessages = new HashSet<Message>();
 
-                return x.GetHashCode().CompareTo(y.GetHashCode());
-            });
-            trustMessages = trustMessages.Skip(trustMessages.Count - 128).ToList();
-            trustMessages.Reverse();
+                hashSetRandomMessages.UnionWith(removeMessages);
+                hashSetRandomMessages.ExceptWith(trustMessages);
 
-            randomMessage = randomMessage.Randomize().Take(256 - trustMessages.Count).ToList();
+                randomMessages = hashSetRandomMessages.Randomize().Take(256 - trustMessages.Count).ToList();
+            }
 
             removeMessages.ExceptWith(trustMessages);
-            removeMessages.ExceptWith(randomMessage);
+            removeMessages.ExceptWith(randomMessages);
 
             return new MessageCollection(removeMessages);
         }
