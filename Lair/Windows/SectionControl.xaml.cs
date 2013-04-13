@@ -273,8 +273,6 @@ namespace Lair.Windows
                         SectionControl.Filter(ref newList, item);
                     }
 
-                    List<MessageWrapper> sortList;
-
                     {
                         var tempList = newList.ToList();
 
@@ -306,10 +304,8 @@ namespace Lair.Windows
                             }
                         }
 
-                        sortList = tempList;
-
                         newList.Clear();
-                        newList.UnionWith(sortList);
+                        newList.UnionWith(tempList);
                     }
 
                     {
@@ -353,7 +349,7 @@ namespace Lair.Windows
                         if (!newList.Contains(item)) removeList.Add(item);
                     }
 
-                    foreach (var item in sortList)
+                    foreach (var item in newList)
                     {
                         if (!oldList.Contains(item)) addList.Add(item);
                     }
@@ -369,7 +365,7 @@ namespace Lair.Windows
                         {
                             _listViewItemCollection.Clear();
 
-                            foreach (var item in sortList)
+                            foreach (var item in newList)
                             {
                                 _listViewItemCollection.Add(item);
                             }
