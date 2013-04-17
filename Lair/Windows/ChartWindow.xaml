@@ -65,11 +65,6 @@
         <Grid Name="_channelGrid" Grid.Column="2" FocusManager.FocusedElement="{Binding ElementName=_channelSearchTextBox}" Visibility="Hidden">
             <local:ListViewEx x:Name="_channelListView" ContextMenuOpening="_channelListView_ContextMenuOpening" GridViewColumnHeader.Click="_channelGridViewColumnHeaderClickedHandler" SelectionChanged="_channelListView_SelectionChanged"
                     VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" Margin="0,0,0,36">
-                <ListView.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <VirtualizingStackPanel CanHorizontallyScroll="False" Orientation="Vertical" IsItemsHost="True"/>
-                    </ItemsPanelTemplate>
-                </ListView.ItemsPanel>
                 <ListView.ContextMenu>
                     <ContextMenu Name="_channelListViewContextMenu" >
                         <MenuItem Name="_channelListViewCopyMenuItem" Header="{Binding Path=ChartWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_channelListViewCopyMenuItem_Click"/>
@@ -91,11 +86,6 @@
         <Grid Name="_signatureGrid" Grid.Column="2" FocusManager.FocusedElement="{Binding ElementName=_signatureSearchTextBox}" Visibility="Hidden">
             <local:ListViewEx x:Name="_signatureListView" ContextMenuOpening="_signatureListView_ContextMenuOpening" GridViewColumnHeader.Click="_signatureGridViewColumnHeaderClickedHandler" SelectionChanged="_signatureListView_SelectionChanged"
                     VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" Margin="0,0,0,36">
-                <ListView.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <VirtualizingStackPanel CanHorizontallyScroll="False" Orientation="Vertical" IsItemsHost="True"/>
-                    </ItemsPanelTemplate>
-                </ListView.ItemsPanel>
                 <ListView.ContextMenu>
                     <ContextMenu Name="_signatureListViewContextMenu" >
                         <MenuItem Name="_signatureListViewCopyMenuItem" Header="{Binding Path=ChartWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_signatureListViewCopyMenuItem_Click"/>

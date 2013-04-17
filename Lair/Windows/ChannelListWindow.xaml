@@ -29,11 +29,6 @@
     <Grid FocusManager.FocusedElement="{Binding ElementName=_searchTextBox}">
         <local:ListViewEx x:Name="_listView" ContextMenuOpening="_listView_ContextMenuOpening" GridViewColumnHeader.Click="GridViewColumnHeaderClickedHandler" PreviewMouseDoubleClick="_listView_PreviewMouseDoubleClick" SelectionChanged="_listView_SelectionChanged"
                     VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" Margin="0,0,0,71">
-            <ListView.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <VirtualizingStackPanel CanHorizontallyScroll="False" Orientation="Vertical" IsItemsHost="True"/>
-                </ItemsPanelTemplate>
-            </ListView.ItemsPanel>
             <ListView.ContextMenu>
                 <ContextMenu Name="_listViewContextMenu" >
                     <MenuItem Name="_listViewCopyMenuItem" Header="{Binding Path=ChannelListWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_listViewCopyMenuItem_Click"/>

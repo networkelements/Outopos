@@ -357,7 +357,7 @@
             </ListView.ItemContainerStyle>
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <local:VirtualizingStackPanelEx CanHorizontallyScroll="False" Orientation="Vertical" IsItemsHost="True"/>
+                    <local:VirtualizingStackPanelEx CanHorizontallyScroll="False" Orientation="Vertical" />
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
             <ListView.View>

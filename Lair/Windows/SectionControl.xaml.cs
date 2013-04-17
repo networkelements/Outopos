@@ -727,6 +727,8 @@ namespace Lair.Windows
             sectionTreeItem.Section = section;
 
             _treeViewItemCollection.Add(new SectionTreeViewItem(sectionTreeItem));
+
+            this.Update();
         }
 
         void RichTextBoxHelper_ChannelClickEvent(object sender, Channel channel)
@@ -761,7 +763,9 @@ namespace Lair.Windows
             var selectCategoryTreeViewItem = ((SearchTreeViewItem)list2[list2.Count - 2]) as SearchTreeViewItem;
 
             selectCategoryTreeViewItem.Value.ChannelTreeItems.Add(new ChannelTreeItem() { Channel = channel });
+
             selectCategoryTreeViewItem.Update();
+            this.Update();
         }
 
         void RichTextBoxHelper_SeedClickEvent(object sender, Library.Net.Amoeba.Seed seed)
@@ -1112,7 +1116,7 @@ namespace Lair.Windows
 
                 var hitItems = new HashSet<TreeViewItem>();
 
-                foreach (var item in items.OfType<ChannelTreeViewItem>().Where(n => n.Value.Messages.Any(m => m.Value.HasFlag(MessageState.New)) || n.Value.IsTopicUpdated))
+                foreach (var item in items.OfType<ChannelTreeViewItem>().Where(n => n.Value.Messages.Any(m => m.Value.HasFlag(MessageState.New))))
                 {
                     hitItems.UnionWith(_treeView.GetLineage(item));
                 }
@@ -3746,30 +3750,32 @@ namespace Lair.Windows
         {
             LockedHashSet<Message> lockedMessages;
 
-            string suffix = "";
+            string suffix;
 
             if (!string.IsNullOrWhiteSpace(_creatorSignature))
             {
-                if (_value.IsFilterEnabled)
+                if (!_value.IsFilterEnabled)
                 {
-                    suffix = " - " + _creatorSignature;
+                    suffix = "-";
                 }
                 else
                 {
-                    suffix = " ! " + _creatorSignature;
+                    suffix = "+";
                 }
+            }
+            else
+            {
+                suffix = "!";
             }
 
             if (Settings.Instance.Global_LockedMessages.TryGetValue(_value.Channel, out lockedMessages))
             {
-                _header.Text = string.Format("{0} ({1}-{2})", _value.Channel.Name, _value.Messages.Count, lockedMessages.Count);
+                _header.Text = string.Format("{0} ({1}-{2}) {3}", _value.Channel.Name, _value.Messages.Count, lockedMessages.Count, suffix);
             }
             else
             {
-                _header.Text = string.Format("{0} ({1})", _value.Channel.Name, _value.Messages.Count);
+                _header.Text = string.Format("{0} ({1}) {2}", _value.Channel.Name, _value.Messages.Count, suffix);
             }
-
-            _header.Text += suffix;
         }
 
         public string CreatorSignature
