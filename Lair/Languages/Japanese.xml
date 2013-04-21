@@ -152,6 +152,11 @@
   <Translate Key="VersionInformationWindow_License" Value="ライセンス" />
   <Translate Key="VersionInformationWindow_Close" Value="閉じる" />
 
+  <Translate Key="CreateSignatureWindow_Title" Value="サイン作成" />
+  <Translate Key="CreateSignatureWindow_Nickname" Value="ニックネーム" />
+  <Translate Key="CreateSignatureWindow_Ok" Value="Ok" />
+  <Translate Key="CreateSignatureWindow_Cancel" Value="キャンセル" />
+
   <Translate Key="ConnectionControl_Uri" Value="Uri" />
   <Translate Key="ConnectionControl_Priority" Value="優先度" />
   <Translate Key="ConnectionControl_SentByteCount" Value="送信Byte数" />
@@ -209,6 +214,7 @@
   <Translate Key="SectionControl_Filter" Value="フィルタ" />
   <Translate Key="SectionControl_FilterWord" Value="この単語でフィルタ" />
   <Translate Key="SectionControl_FilterSignature" Value="このサインでフィルタ" />
+  <Translate Key="SectionControl_NewMessageOnly" Value="非既読のみ" />
   <Translate Key="SectionControl_Message" Value="メッセージ" />
   <Translate Key="SectionControl_Topic" Value="トピック" />
   <Translate Key="SectionControl_AmoebaNotFound_Message" Value="Amoebaが見つかりません。Amoeba.exeへのパスを設定してください。" />

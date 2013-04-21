@@ -690,6 +690,11 @@ namespace Lair.Windows
                     initFlag = true;
 
                     {
+                        CreateSignatureWindow window = new CreateSignatureWindow();
+                        window.ShowDialog();
+                    }
+
+                    {
                         var searchItem = new SearchItem();
                         searchItem.Name = "default";
 
@@ -700,9 +705,15 @@ namespace Lair.Windows
                         searchTreeItem.ChannelTreeItems.Add(new ChannelTreeItem() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAAfSj-05Hm0h_kpMmU78XWVkVepumSh2F2shZe7Fm-LEbORv0II6mAeVZO-3w3kZZIHqk9y2nFTNgOR_SfL9ofiQAAAAQBUm9zYbQuG6Y") });
                         searchTreeItem.ChannelTreeItems.Add(new ChannelTreeItem() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAApd3NdDiaZpygYU5ySICsv8zk2_2P1bRViGigtWhwJtIpw5Xi6IkdUbp3hroB_cN-IJkyscS6c4_cUhtJ9N2zlQAAAAQBVGVzdGSZ__Y") });
 
+                        string leaderSignature;
+                        var section = LairConverter.FromSectionString("Section@AAAAAEAALoinQGza0zKpj-3O_f8O-E3hZzM_1pY78oTC1wkLuIoFNBJXBTwGz695Kmz2aqBcYQq_isLhw3jRO1VRS4E0wgAAABABQWxsaWFuY2UgTmV0d29ya0tEqWU,Lyrise@7seiSbhOCkls6gPxjJYjptxskzlSulgIe3dSfj1KxnJJ6eejKjuJ3R1Ec8yFuKpr4uNcwF7bFh5OrmxnY25y7A", out leaderSignature);
+                        var defaultDigitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault();
+
                         var sectionTreeItem = new SectionTreeItem();
-                        sectionTreeItem.Section = LairConverter.FromSectionString("Section@AAAAAEAALoinQGza0zKpj-3O_f8O-E3hZzM_1pY78oTC1wkLuIoFNBJXBTwGz695Kmz2aqBcYQq_isLhw3jRO1VRS4E0wgAAABABQWxsaWFuY2UgTmV0d29ya0tEqWU");
-                        sectionTreeItem.LeaderSignature = "Lyrise@7seiSbhOCkls6gPxjJYjptxskzlSulgIe3dSfj1KxnJJ6eejKjuJ3R1Ec8yFuKpr4uNcwF7bFh5OrmxnY25y7A";
+                        sectionTreeItem.Section = section;
+                        sectionTreeItem.LeaderSignature = leaderSignature;
+                        sectionTreeItem.UploadSignature = (defaultDigitalSignature != null) ? defaultDigitalSignature.ToString() : null;
+                     
                         sectionTreeItem.SearchTreeItems.Clear();
                         sectionTreeItem.SearchTreeItems.Add(searchTreeItem);
 
@@ -823,9 +834,15 @@ namespace Lair.Windows
                             searchTreeItem.ChannelTreeItems.Add(new ChannelTreeItem() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAAfSj-05Hm0h_kpMmU78XWVkVepumSh2F2shZe7Fm-LEbORv0II6mAeVZO-3w3kZZIHqk9y2nFTNgOR_SfL9ofiQAAAAQBUm9zYbQuG6Y") });
                             searchTreeItem.ChannelTreeItems.Add(new ChannelTreeItem() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAApd3NdDiaZpygYU5ySICsv8zk2_2P1bRViGigtWhwJtIpw5Xi6IkdUbp3hroB_cN-IJkyscS6c4_cUhtJ9N2zlQAAAAQBVGVzdGSZ__Y") });
 
+                            string leaderSignature;
+                            var section = LairConverter.FromSectionString("Section@AAAAAEAALoinQGza0zKpj-3O_f8O-E3hZzM_1pY78oTC1wkLuIoFNBJXBTwGz695Kmz2aqBcYQq_isLhw3jRO1VRS4E0wgAAABABQWxsaWFuY2UgTmV0d29ya0tEqWU,Lyrise@7seiSbhOCkls6gPxjJYjptxskzlSulgIe3dSfj1KxnJJ6eejKjuJ3R1Ec8yFuKpr4uNcwF7bFh5OrmxnY25y7A", out leaderSignature);
+                            var defaultDigitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault();
+
                             var sectionTreeItem = new SectionTreeItem();
-                            sectionTreeItem.Section = LairConverter.FromSectionString("Section@AAAAAEAALoinQGza0zKpj-3O_f8O-E3hZzM_1pY78oTC1wkLuIoFNBJXBTwGz695Kmz2aqBcYQq_isLhw3jRO1VRS4E0wgAAABABQWxsaWFuY2UgTmV0d29ya0tEqWU");
-                            sectionTreeItem.LeaderSignature = "Lyrise@7seiSbhOCkls6gPxjJYjptxskzlSulgIe3dSfj1KxnJJ6eejKjuJ3R1Ec8yFuKpr4uNcwF7bFh5OrmxnY25y7A";
+                            sectionTreeItem.Section = section;
+                            sectionTreeItem.LeaderSignature = leaderSignature;
+                            sectionTreeItem.UploadSignature = (defaultDigitalSignature != null) ? defaultDigitalSignature.ToString() : null;
+                       
                             sectionTreeItem.SearchTreeItems.Clear();
                             sectionTreeItem.SearchTreeItems.Add(searchTreeItem);
 

@@ -25,7 +25,6 @@ namespace Lair.Properties
             : base(new List<Library.Configuration.ISettingsContext>()
             {
                 new Library.Configuration.SettingsContext<LockedList<DigitalSignature>>() { Name = "Global_DigitalSignatureCollection", Value = new LockedList<DigitalSignature>() },
-                new Library.Configuration.SettingsContext<string>() { Name = "Global_UploadDigitalSignature", Value = null },
                 new Library.Configuration.SettingsContext<string>() { Name = "Global_UseLanguage", Value = "English" },
                 new Library.Configuration.SettingsContext<bool>() { Name = "Global_IsStart", Value = true },
                 new Library.Configuration.SettingsContext<LockedHashSet<string>>() { Name = "Global_UrlHistorys", Value = new LockedHashSet<string>() },
@@ -238,25 +237,6 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     this["Global_DigitalSignatureCollection"] = value;
-                }
-            }
-        }
-
-        public string Global_UploadDigitalSignature
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (string)this["Global_UploadDigitalSignature"];
-                }
-            }
-
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["Global_UploadDigitalSignature"] = value;
                 }
             }
         }

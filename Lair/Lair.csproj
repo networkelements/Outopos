@@ -123,6 +123,13 @@
     <Compile Include="Windows\ChartWindow.xaml.cs">
       <DependentUpon>ChartWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\CreateSignatureWindow.xaml.cs">
+      <DependentUpon>CreateSignatureWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Info\SectionInfo.cs" />
+    <Compile Include="Windows\Info\CreatorInfo.cs" />
+    <Compile Include="Windows\Info\LeaderInfo.cs" />
+    <Compile Include="Windows\Info\ManagerInfo.cs" />
     <Compile Include="Windows\TopicPreviewWindow.xaml.cs">
       <DependentUpon>TopicPreviewWindow.xaml</DependentUpon>
     </Compile>
@@ -158,6 +165,10 @@
     <Page Include="Windows\ChartWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\CreateSignatureWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\TopicPreviewWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

@@ -70,7 +70,7 @@ namespace Lair
             }
         }
 
-        public static string ToInfoMessage(Section section)
+        public static string ToInfoMessage(Section section, string leaderSignature)
         {
             try
             {
@@ -78,25 +78,7 @@ namespace Lair
 
                 if (!string.IsNullOrWhiteSpace(section.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Section_Name, section.Name));
                 if (section.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Section_Id, NetworkConverter.ToBase64UrlString(section.Id)));
-
-                if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
-                else return null;
-            }
-            catch (Exception e)
-            {
-                throw new ArgumentException("ArgumentException", e);
-            }
-        }
-
-        public static string ToInfoMessage(SectionTreeItem sectionTreeItem)
-        {
-            try
-            {
-                StringBuilder builder = new StringBuilder();
-
-                if (!string.IsNullOrWhiteSpace(sectionTreeItem.Section.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Section_Name, sectionTreeItem.Section.Name));
-                if (sectionTreeItem.Section.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Section_Id, NetworkConverter.ToBase64UrlString(sectionTreeItem.Section.Id)));
-                if (sectionTreeItem.LeaderSignature != null) builder.AppendLine(string.Format("{0}:\u00A0{1}", LanguagesManager.Instance.SectionTreeItem_LeaderSignature, sectionTreeItem.LeaderSignature));
+                if (leaderSignature != null) builder.AppendLine(string.Format("{0}:\u00A0{1}", LanguagesManager.Instance.SectionTreeItem_LeaderSignature, leaderSignature));
 
                 if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
                 else return null;

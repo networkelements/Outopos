@@ -119,6 +119,19 @@ namespace Lair.Windows
 
             _searchRowDefinition.Height = new GridLength(0);
 
+            CollectionViewSource.GetDefaultView(_listView.ItemsSource).Filter = (object o) =>
+            {
+                var item = o as MessageWrapper;
+                if (o == null) return false;
+
+                if (_newMessageOnlyToggleButton.IsChecked.Value)
+                {
+                    if (!item.State.HasFlag(MessageState.New)) return false;
+                }
+
+                return true;
+            };
+
             _trustToggleButton.IsEnabled = false;
             _topicToggleButton.IsEnabled = false;
             _messageUploadButton.IsEnabled = false;
@@ -174,6 +187,8 @@ namespace Lair.Windows
                             _trustToggleButton.IsEnabled = false;
                             _trustToggleButton.ClearValue(ToggleButton.ForegroundProperty);
 
+                            _newMessageOnlyToggleButton.IsEnabled = false;
+
                             _topicToggleButton.IsEnabled = false;
                             _topicToggleButton.ClearValue(Button.ForegroundProperty);
 
@@ -204,6 +219,8 @@ namespace Lair.Windows
                                 _trustToggleButton.IsEnabled = false;
                                 _trustToggleButton.ClearValue(ToggleButton.ForegroundProperty);
                             }
+
+                            _newMessageOnlyToggleButton.IsEnabled = true;
 
                             if (selectTreeViewItem.Value.Topic != null)
                             {
@@ -244,7 +261,6 @@ namespace Lair.Windows
                     }
 
                     var newList = new HashSet<MessageWrapper>();
-
                     lock (selectTreeViewItem.Value.ThisLock)
                     {
                         lock (selectTreeViewItem.Value.Messages.ThisLock)
@@ -261,10 +277,13 @@ namespace Lair.Windows
                         }
                     }
 
+                    bool isNewMessageOnly = false;
                     List<SearchItem> searchItems = new List<SearchItem>();
 
                     this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                     {
+                        isNewMessageOnly = _newMessageOnlyToggleButton.IsChecked.Value;
+
                         searchItems.AddRange(_treeView.GetLineage(selectTreeViewItem).OfType<SearchTreeViewItem>().Select(n => n.Value.SearchItem));
                     }));
 
@@ -275,21 +294,6 @@ namespace Lair.Windows
 
                     {
                         var tempList = newList.ToList();
-
-                        tempList.Sort((x, y) =>
-                        {
-                            int c = x.Value.CreationTime.CompareTo(y.Value.CreationTime);
-                            if (c != 0) return c;
-                            c = x.Value.Content.CompareTo(y.Value.Content);
-                            if (c != 0) return c;
-                            c = Collection.Compare(x.Value.GetHash(HashAlgorithm.Sha512), y.Value.GetHash(HashAlgorithm.Sha512));
-                            if (c != 0) return c;
-
-                            return x.GetHashCode().CompareTo(y.GetHashCode());
-                        });
-
-                        tempList = tempList.Skip(tempList.Count - 1024).ToList();
-                        tempList.Reverse();
 
                         LockedHashSet<Message> lockedMessages;
 
@@ -302,6 +306,21 @@ namespace Lair.Windows
                             {
                                 tempList.Add(new MessageWrapper(message, 0));
                             }
+                        }
+
+                        newList.Clear();
+                        newList.UnionWith(tempList);
+                    }
+
+                    if (isNewMessageOnly)
+                    {
+                        var tempList = new List<MessageWrapper>();
+
+                        foreach (var messageWrapper in newList)
+                        {
+                            if (!messageWrapper.State.HasFlag(MessageState.New)) continue;
+
+                            tempList.Add(messageWrapper);
                         }
 
                         newList.Clear();
@@ -384,6 +403,9 @@ namespace Lair.Windows
                         }
 
                         this.Sort();
+
+                        var view = CollectionViewSource.GetDefaultView(_listView.ItemsSource);
+                        view.Refresh();
 
                         if (_listViewItemCollection.Count > 0)
                         {
@@ -698,7 +720,7 @@ namespace Lair.Windows
             }
         }
 
-        void RichTextBoxHelper_SectionClickEvent(object sender, Section section)
+        void RichTextBoxHelper_SectionClickEvent(object sender, Section section, string leaderSignature)
         {
             if (section.Name == null || section.Id == null) return;
 
@@ -723,8 +745,12 @@ namespace Lair.Windows
 
             if (sectionList.Contains(section)) return;
 
+            var defaultDigitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault();
+
             var sectionTreeItem = new SectionTreeItem();
             sectionTreeItem.Section = section;
+            sectionTreeItem.LeaderSignature = leaderSignature;
+            sectionTreeItem.UploadSignature = (defaultDigitalSignature != null) ? defaultDigitalSignature.ToString() : null;
 
             _treeViewItemCollection.Add(new SectionTreeViewItem(sectionTreeItem));
 
@@ -1702,7 +1728,7 @@ namespace Lair.Windows
         private void _treeView_ContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
             {
-                var sections = Clipboard.GetSections();
+                var sections = Clipboard.GetSectionInfos();
 
                 _treeViewPasteMenuItem.IsEnabled = sections.Count() > 0 ? true : false;
             }
@@ -1715,8 +1741,12 @@ namespace Lair.Windows
 
             if (window.ShowDialog() == true)
             {
+                var defaultDigitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault();
+
                 var sectionTreeItem = new SectionTreeItem();
                 sectionTreeItem.Section = window.Section;
+                sectionTreeItem.LeaderSignature = (defaultDigitalSignature != null) ? defaultDigitalSignature.ToString() : null;
+                sectionTreeItem.UploadSignature = (defaultDigitalSignature != null) ? defaultDigitalSignature.ToString() : null;
 
                 _treeViewItemCollection.Add(new SectionTreeViewItem(sectionTreeItem));
             }
@@ -1726,10 +1756,14 @@ namespace Lair.Windows
 
         private void _treeViewPasteMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var section in Clipboard.GetSections())
+            var defaultDigitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault();
+
+            foreach (var sectionInfo in Clipboard.GetSectionInfos())
             {
                 var sectionTreeItem = new SectionTreeItem();
-                sectionTreeItem.Section = section;
+                sectionTreeItem.Section = sectionInfo.Section;
+                sectionTreeItem.LeaderSignature = sectionInfo.LeaderSignature;
+                sectionTreeItem.UploadSignature = (defaultDigitalSignature != null) ? defaultDigitalSignature.ToString() : null;
 
                 _treeViewItemCollection.Add(new SectionTreeViewItem(sectionTreeItem));
             }
@@ -1859,7 +1893,7 @@ namespace Lair.Windows
             var selectTreeViewItem = _treeView.SelectedItem as SectionTreeViewItem;
             if (selectTreeViewItem == null) return;
 
-            Clipboard.SetSections(new Section[] { selectTreeViewItem.Value.Section });
+            Clipboard.SetText(LairConverter.ToSectionString(selectTreeViewItem.Value.Section, selectTreeViewItem.Value.LeaderSignature));
         }
 
         private void _sectionTreeViewItemCopyInfoMenuItem_Click(object sender, RoutedEventArgs e)
@@ -1869,11 +1903,10 @@ namespace Lair.Windows
 
             var sb = new StringBuilder();
 
-            sb.AppendLine(LairConverter.ToSectionString(selectTreeViewItem.Value.Section));
-            sb.AppendLine(MessageConverter.ToInfoMessage(selectTreeViewItem.Value));
-            sb.AppendLine();
+            sb.AppendLine(LairConverter.ToSectionString(selectTreeViewItem.Value.Section, selectTreeViewItem.Value.LeaderSignature));
+            sb.AppendLine(MessageConverter.ToInfoMessage(selectTreeViewItem.Value.Section, selectTreeViewItem.Value.LeaderSignature));
 
-            Clipboard.SetText(sb.ToString().TrimEnd('\r', '\n'));
+            Clipboard.SetText(sb.ToString());
         }
 
         private void _sectionTreeViewItemPasteMenuItem_Click(object sender, RoutedEventArgs e)
@@ -2126,7 +2159,55 @@ namespace Lair.Windows
 
             foreach (var item in items)
             {
-                item.Value.IsFilterEnabled = false;
+                lock (item.Value.ThisLock)
+                {
+                    item.Value.IsFilterEnabled = false;
+                }
+
+                item.Update();
+            }
+
+            this.Update_Cache();
+        }
+
+        private void _searchTreeViewItemMarkAllMessagesReadMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var selectTreeViewItem = _treeView.SelectedItem as SearchTreeViewItem;
+            if (selectTreeViewItem == null) return;
+
+            if (MessageBox.Show(_mainWindow, LanguagesManager.Instance.SectionControl_MarkAllMessagesRead_Message, "Section", MessageBoxButton.OKCancel, MessageBoxImage.Information) != MessageBoxResult.OK) return;
+
+            List<ChannelTreeViewItem> items = new List<ChannelTreeViewItem>();
+
+            var list = new List<TreeViewItem>();
+            list.AddRange(selectTreeViewItem.Items.Cast<TreeViewItem>());
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                foreach (TreeViewItem item in list[i].Items)
+                {
+                    list.Add(item);
+                }
+            }
+
+            foreach (var item in list.OfType<ChannelTreeViewItem>())
+            {
+                items.Add(item);
+            }
+
+            foreach (var item in items)
+            {
+                lock (item.Value.ThisLock)
+                {
+                    lock (item.Value.Messages.ThisLock)
+                    {
+                        foreach (var keyValuePair in item.Value.Messages.ToArray())
+                        {
+                            item.Value.Messages[keyValuePair.Key] = keyValuePair.Value & ~MessageState.New;
+                        }
+                    }
+                }
+
                 item.Update();
             }
 
@@ -2419,11 +2500,27 @@ namespace Lair.Windows
 
             selectTreeViewItem.Value.IsFilterEnabled = !selectTreeViewItem.Value.IsFilterEnabled;
 
-            _listViewItemCollection.Clear();
-
             this.Update_Cache();
 
             e.Handled = true;
+        }
+
+        private void _newMessageOnlyToggleButton_Checked(object sender, RoutedEventArgs e)
+        {
+            var view = CollectionViewSource.GetDefaultView(_listView.ItemsSource);
+            view.Refresh();
+
+            _listView.UpdateLayout();
+            _listView.GoBottom();
+        }
+
+        private void _newMessageOnlyToggleButton_Unchecked(object sender, RoutedEventArgs e)
+        {
+            var view = CollectionViewSource.GetDefaultView(_listView.ItemsSource);
+            view.Refresh();
+
+            _listView.UpdateLayout();
+            _listView.GoBottom();
         }
 
         private void _topicToggleButton_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -2559,7 +2656,8 @@ namespace Lair.Windows
                     var index = _listView.GetCurrentIndex(e.GetPosition);
                     if (index == -1) return;
 
-                    var selectItem = _listViewItemCollection[index];
+                    var listViewItemCollection = CollectionViewSource.GetDefaultView(_listView.ItemsSource).OfType<MessageWrapper>().ToArray();
+                    var selectItem = listViewItemCollection[index];
 
                     if (_listView.SelectedItems.Contains(selectItem))
                     {
@@ -2575,7 +2673,8 @@ namespace Lair.Windows
                     var index = _listView.GetCurrentIndex(e.GetPosition);
                     if (index == -1) return;
 
-                    var selectItem = _listViewItemCollection[index];
+                    var listViewItemCollection = CollectionViewSource.GetDefaultView(_listView.ItemsSource).OfType<MessageWrapper>().ToArray();
+                    var selectItem = listViewItemCollection[index];
 
                     if (_listView.SelectedItems.Count != 1 || !_listView.SelectedItems.Contains(selectItem))
                     {
@@ -2589,7 +2688,8 @@ namespace Lair.Windows
                 var index = _listView.GetCurrentIndex(e.GetPosition);
                 if (index == -1) return;
 
-                var selectItem = _listViewItemCollection[index];
+                var listViewItemCollection = CollectionViewSource.GetDefaultView(_listView.ItemsSource).OfType<MessageWrapper>().ToArray();
+                var selectItem = listViewItemCollection[index];
 
                 if (!_listView.SelectedItems.Contains(selectItem))
                 {
@@ -2920,7 +3020,7 @@ namespace Lair.Windows
 
         private void Execute_Paste(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
         {
-            if (Clipboard.GetSections() != null)
+            if (Clipboard.GetSectionInfos() != null)
             {
                 _treeViewPasteMenuItem_Click(null, null);
             }
@@ -3040,419 +3140,6 @@ namespace Lair.Windows
                 }
             }
         }
-    }
-
-    [DataContract(Name = "LeaderInfo", Namespace = "http://Lair/Windows")]
-    class LeaderInfo : IDeepCloneable<LeaderInfo>, IThisLock
-    {
-        private SignatureCollection _creatorSignatures = null;
-        private SignatureCollection _managerSignatures = null;
-        private string _comment = null;
-
-        private object _thisLock = new object();
-        private static object _thisStaticLock = new object();
-
-        public LeaderInfo()
-        {
-
-        }
-
-        public override int GetHashCode()
-        {
-            if (_comment == null) return 0;
-            else return _comment.GetHashCode();
-        }
-
-        public override bool Equals(object obj)
-        {
-            if ((object)obj == null || !(obj is LeaderInfo)) return false;
-
-            return this.Equals((LeaderInfo)obj);
-        }
-
-        public bool Equals(LeaderInfo other)
-        {
-            if ((object)other == null) return false;
-            if (object.ReferenceEquals(this, other)) return true;
-            if (this.GetHashCode() != other.GetHashCode()) return false;
-
-            if (this.Comment != other.Comment)
-            {
-                return false;
-            }
-
-            if (this.CreatorSignatures != null && other.CreatorSignatures != null)
-            {
-                if (this.CreatorSignatures.Count != other.CreatorSignatures.Count) return false;
-
-                for (int i = 0; i < this.CreatorSignatures.Count; i++) if (this.CreatorSignatures[i] != other.CreatorSignatures[i]) return false;
-            }
-
-            if (this.ManagerSignatures != null && other.ManagerSignatures != null)
-            {
-                if (this.ManagerSignatures.Count != other.ManagerSignatures.Count) return false;
-
-                for (int i = 0; i < this.ManagerSignatures.Count; i++) if (this.ManagerSignatures[i] != other.ManagerSignatures[i]) return false;
-            }
-
-            return true;
-        }
-
-        public override string ToString()
-        {
-            return _comment;
-        }
-
-        [DataMember(Name = "CreatorSignatures")]
-        public SignatureCollection CreatorSignatures
-        {
-            get
-            {
-                if (_creatorSignatures == null)
-                    _creatorSignatures = new SignatureCollection(Leader.MaxCreatorSignaturesCount);
-
-                return _creatorSignatures;
-            }
-        }
-
-        [DataMember(Name = "ManagerSignatures")]
-        public SignatureCollection ManagerSignatures
-        {
-            get
-            {
-                if (_managerSignatures == null)
-                    _managerSignatures = new SignatureCollection(Leader.MaxManagerSignaturesCount);
-
-                return _managerSignatures;
-            }
-        }
-
-        [DataMember(Name = "Comment")]
-        public string Comment
-        {
-            get
-            {
-                return _comment;
-            }
-            set
-            {
-                if (value != null && value.Length > Leader.MaxCommentLength)
-                {
-                    throw new ArgumentException();
-                }
-                else
-                {
-                    _comment = value;
-                }
-            }
-        }
-
-        #region IDeepClone<LeaderInfo>
-
-        public LeaderInfo DeepClone()
-        {
-            lock (this.ThisLock)
-            {
-                var ds = new DataContractSerializer(typeof(LeaderInfo));
-
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    using (XmlDictionaryWriter textDictionaryWriter = XmlDictionaryWriter.CreateTextWriter(ms, new UTF8Encoding(false), false))
-                    {
-                        ds.WriteObject(textDictionaryWriter, this);
-                    }
-
-                    ms.Position = 0;
-
-                    using (XmlDictionaryReader textDictionaryReader = XmlDictionaryReader.CreateTextReader(ms, XmlDictionaryReaderQuotas.Max))
-                    {
-                        return (LeaderInfo)ds.ReadObject(textDictionaryReader);
-                    }
-                }
-            }
-        }
-
-        #endregion
-
-        #region IThisLock
-
-        public object ThisLock
-        {
-            get
-            {
-                lock (_thisStaticLock)
-                {
-                    if (_thisLock == null)
-                        _thisLock = new object();
-
-                    return _thisLock;
-                }
-            }
-        }
-
-        #endregion
-    }
-
-    [DataContract(Name = "ManagerInfo", Namespace = "http://Lair/Windows")]
-    class ManagerInfo : IDeepCloneable<ManagerInfo>, IThisLock
-    {
-        private SignatureCollection _trustSignatures = null;
-        private string _comment = null;
-
-        private object _thisLock = new object();
-        private static object _thisStaticLock = new object();
-
-        public ManagerInfo()
-        {
-
-        }
-
-        public override int GetHashCode()
-        {
-            if (_comment == null) return 0;
-            else return _comment.GetHashCode();
-        }
-
-        public override bool Equals(object obj)
-        {
-            if ((object)obj == null || !(obj is ManagerInfo)) return false;
-
-            return this.Equals((ManagerInfo)obj);
-        }
-
-        public bool Equals(ManagerInfo other)
-        {
-            if ((object)other == null) return false;
-            if (object.ReferenceEquals(this, other)) return true;
-            if (this.GetHashCode() != other.GetHashCode()) return false;
-
-            if (this.Comment != other.Comment)
-            {
-                return false;
-            }
-
-            if (this.TrustSignatures != null && other.TrustSignatures != null)
-            {
-                if (this.TrustSignatures.Count != other.TrustSignatures.Count) return false;
-
-                for (int i = 0; i < this.TrustSignatures.Count; i++) if (this.TrustSignatures[i] != other.TrustSignatures[i]) return false;
-            }
-
-            return true;
-        }
-
-        public override string ToString()
-        {
-            return _comment;
-        }
-
-        [DataMember(Name = "TrustSignatures")]
-        public SignatureCollection TrustSignatures
-        {
-            get
-            {
-                if (_trustSignatures == null)
-                    _trustSignatures = new SignatureCollection(Manager.MaxTrustSignaturesCount);
-
-                return _trustSignatures;
-            }
-        }
-
-        [DataMember(Name = "Comment")]
-        public string Comment
-        {
-            get
-            {
-                return _comment;
-            }
-            set
-            {
-                if (value != null && value.Length > Manager.MaxCommentLength)
-                {
-                    throw new ArgumentException();
-                }
-                else
-                {
-                    _comment = value;
-                }
-            }
-        }
-
-        #region IDeepClone<ManagerInfo>
-
-        public ManagerInfo DeepClone()
-        {
-            lock (this.ThisLock)
-            {
-                var ds = new DataContractSerializer(typeof(ManagerInfo));
-
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    using (XmlDictionaryWriter textDictionaryWriter = XmlDictionaryWriter.CreateTextWriter(ms, new UTF8Encoding(false), false))
-                    {
-                        ds.WriteObject(textDictionaryWriter, this);
-                    }
-
-                    ms.Position = 0;
-
-                    using (XmlDictionaryReader textDictionaryReader = XmlDictionaryReader.CreateTextReader(ms, XmlDictionaryReaderQuotas.Max))
-                    {
-                        return (ManagerInfo)ds.ReadObject(textDictionaryReader);
-                    }
-                }
-            }
-        }
-
-        #endregion
-
-        #region IThisLock
-
-        public object ThisLock
-        {
-            get
-            {
-                lock (_thisStaticLock)
-                {
-                    if (_thisLock == null)
-                        _thisLock = new object();
-
-                    return _thisLock;
-                }
-            }
-        }
-
-        #endregion
-    }
-
-    [DataContract(Name = "CreatorInfo", Namespace = "http://Lair/Windows")]
-    class CreatorInfo : IDeepCloneable<CreatorInfo>, IThisLock
-    {
-        private ChannelCollection _channels = null;
-        private string _comment = null;
-
-        private object _thisLock = new object();
-        private static object _thisStaticLock = new object();
-
-        public CreatorInfo()
-        {
-
-        }
-
-        public override int GetHashCode()
-        {
-            if (_comment == null) return 0;
-            else return _comment.GetHashCode();
-        }
-
-        public override bool Equals(object obj)
-        {
-            if ((object)obj == null || !(obj is CreatorInfo)) return false;
-
-            return this.Equals((CreatorInfo)obj);
-        }
-
-        public bool Equals(CreatorInfo other)
-        {
-            if ((object)other == null) return false;
-            if (object.ReferenceEquals(this, other)) return true;
-            if (this.GetHashCode() != other.GetHashCode()) return false;
-
-            if (this.Comment != other.Comment)
-            {
-                return false;
-            }
-
-            if (this.Channels != null && other.Channels != null)
-            {
-                if (this.Channels.Count != other.Channels.Count) return false;
-
-                for (int i = 0; i < this.Channels.Count; i++) if (this.Channels[i] != other.Channels[i]) return false;
-            }
-
-            return true;
-        }
-
-        public override string ToString()
-        {
-            return _comment;
-        }
-
-        [DataMember(Name = "Channels")]
-        public ChannelCollection Channels
-        {
-            get
-            {
-                if (_channels == null)
-                    _channels = new ChannelCollection(Creator.MaxChannelsCount);
-
-                return _channels;
-            }
-        }
-
-        [DataMember(Name = "Comment")]
-        public string Comment
-        {
-            get
-            {
-                return _comment;
-            }
-            set
-            {
-                if (value != null && value.Length > Creator.MaxCommentLength)
-                {
-                    throw new ArgumentException();
-                }
-                else
-                {
-                    _comment = value;
-                }
-            }
-        }
-
-        #region IDeepClone<CreatorInfo>
-
-        public CreatorInfo DeepClone()
-        {
-            lock (this.ThisLock)
-            {
-                var ds = new DataContractSerializer(typeof(CreatorInfo));
-
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    using (XmlDictionaryWriter textDictionaryWriter = XmlDictionaryWriter.CreateTextWriter(ms, new UTF8Encoding(false), false))
-                    {
-                        ds.WriteObject(textDictionaryWriter, this);
-                    }
-
-                    ms.Position = 0;
-
-                    using (XmlDictionaryReader textDictionaryReader = XmlDictionaryReader.CreateTextReader(ms, XmlDictionaryReaderQuotas.Max))
-                    {
-                        return (CreatorInfo)ds.ReadObject(textDictionaryReader);
-                    }
-                }
-            }
-        }
-
-        #endregion
-
-        #region IThisLock
-
-        public object ThisLock
-        {
-            get
-            {
-                lock (_thisStaticLock)
-                {
-                    if (_thisLock == null)
-                        _thisLock = new object();
-
-                    return _thisLock;
-                }
-            }
-        }
-
-        #endregion
     }
 
     class SectionTreeViewItem : TreeViewItem

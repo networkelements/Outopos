@@ -136,19 +136,22 @@ namespace Lair
             }
         }
 
-        public static IEnumerable<Section> GetSections()
+        public static IEnumerable<SectionInfo> GetSectionInfos()
         {
             lock (_thisLock)
             {
-                var list = new List<Section>();
+                var list = new List<SectionInfo>();
 
                 foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     if (!item.StartsWith("Section@")) continue;
 
+                    string leaderSignature;
+
                     try
                     {
-                        list.Add(LairConverter.FromSectionString(item));
+                        var section = LairConverter.FromSectionString(item, out leaderSignature);
+                        list.Add(new SectionInfo() { Section = section, LeaderSignature = leaderSignature });
                     }
                     catch (Exception)
                     {
@@ -160,15 +163,15 @@ namespace Lair
             }
         }
 
-        public static void SetSections(IEnumerable<Section> channels)
+        public static void SetSectionInfos(IEnumerable<SectionInfo> sectionInfos)
         {
             lock (_thisLock)
             {
                 var sb = new StringBuilder();
 
-                foreach (var item in channels)
+                foreach (var item in sectionInfos)
                 {
-                    sb.AppendLine(LairConverter.ToSectionString(item));
+                    sb.AppendLine(LairConverter.ToSectionString(item.Section, item.LeaderSignature));
                 }
 
                 Clipboard.SetText(sb.ToString());

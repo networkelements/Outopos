@@ -152,6 +152,11 @@
   <Translate Key="VersionInformationWindow_License" Value="License" />
   <Translate Key="VersionInformationWindow_Close" Value="Close" />
 
+  <Translate Key="CreateSignatureWindow_Title" Value="Create signature" />
+  <Translate Key="CreateSignatureWindow_Nickname" Value="Nickname" />
+  <Translate Key="CreateSignatureWindow_Ok" Value="Ok" />
+  <Translate Key="CreateSignatureWindow_Cancel" Value="Cancel" />
+
   <Translate Key="ConnectionControl_Uri" Value="Uri" />
   <Translate Key="ConnectionControl_Priority" Value="Priority" />
   <Translate Key="ConnectionControl_SentByteCount" Value="Sent byte count" />
@@ -209,6 +214,7 @@
   <Translate Key="SectionControl_Filter" Value="Filter" />
   <Translate Key="SectionControl_FilterWord" Value="Filter word" />
   <Translate Key="SectionControl_FilterSignature" Value="Filter signature" />
+  <Translate Key="SectionControl_NewMessageOnly" Value="Only" />
   <Translate Key="SectionControl_Message" Value="Message" />
   <Translate Key="SectionControl_Topic" Value="Topic" />
   <Translate Key="SectionControl_AmoebaNotFound_Message" Value="Amoeba Not Found" />

@@ -1681,6 +1681,51 @@ namespace Lair.Properties
         }
 
 
+        public string CreateSignatureWindow_Title
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("CreateSignatureWindow_Title");
+                }
+            }
+        }
+
+        public string CreateSignatureWindow_Nickname
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("CreateSignatureWindow_Nickname");
+                }
+            }
+        }
+
+        public string CreateSignatureWindow_Ok
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("CreateSignatureWindow_Ok");
+                }
+            }
+        }
+
+        public string CreateSignatureWindow_Cancel
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("CreateSignatureWindow_Cancel");
+                }
+            }
+        }
+
+
         public string ConnectionControl_Uri
         {
             get
@@ -2294,6 +2339,17 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("SectionControl_FilterSignature");
+                }
+            }
+        }
+
+        public string SectionControl_NewMessageOnly
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionControl_NewMessageOnly");
                 }
             }
         }

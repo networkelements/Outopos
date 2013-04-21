@@ -19,7 +19,7 @@ namespace Lair.Windows
 {
     delegate void LinkClickEventHandler(object sender, string link);
     delegate void SeedClickEventHandler(object sender, Library.Net.Amoeba.Seed seed);
-    delegate void SectionClickEventHandler(object sender, Library.Net.Lair.Section section);
+    delegate void SectionClickEventHandler(object sender, Library.Net.Lair.Section section, string leaderSignature);
     delegate void ChannelClickEventHandler(object sender, Channel channel);
 
     delegate Message GetAnchorMessageEventHandler(object sender, Channel channel, Key key);
@@ -73,10 +73,12 @@ namespace Lair.Windows
                     }
                     else if (line.StartsWith("Section@"))
                     {
-                        var channel = Library.Net.Lair.LairConverter.FromSectionString(line);
-                        if (channel == null) continue;
+                        string leaderSignature;
 
-                        stringBuilder.AppendLine(MessageConverter.ToInfoMessage(channel));
+                        var section = Library.Net.Lair.LairConverter.FromSectionString(line, out leaderSignature);
+                        if (section == null) continue;
+
+                        stringBuilder.AppendLine(MessageConverter.ToInfoMessage(section, leaderSignature));
                         stringBuilder.AppendLine();
                     }
                     else if (line.StartsWith("Channel@"))
@@ -247,7 +249,9 @@ namespace Lair.Windows
                     }
                     else if (rl.StartsWith("Section@"))
                     {
-                        var section = Library.Net.Lair.LairConverter.FromSectionString(rl);
+                        string leaderSignature;
+
+                        var section = Library.Net.Lair.LairConverter.FromSectionString(rl, out leaderSignature);
                         if (section == null) throw new Exception();
 
                         {
@@ -267,7 +271,7 @@ namespace Lair.Windows
                             {
                                 if (RichTextBoxHelper.SectionClickEvent != null)
                                 {
-                                    RichTextBoxHelper.SectionClickEvent(sender, section);
+                                    RichTextBoxHelper.SectionClickEvent(sender, section, leaderSignature);
                                 }
 
                                 if (Settings.Instance.Global_SectionHistorys.Contains(section)) l.Foreground = new SolidColorBrush(Settings.Instance.Color_Link);
@@ -314,7 +318,7 @@ namespace Lair.Windows
                         {
                             Run r = new Run();
                             r.Foreground = new SolidColorBrush(Color.FromRgb(0xCF, 0xCF, 0xCF));
-                            r.Text = MessageConverter.ToInfoMessage(section);
+                            r.Text = MessageConverter.ToInfoMessage(section, leaderSignature);
 
                             p.Inlines.Add(r);
                         }
@@ -588,7 +592,9 @@ namespace Lair.Windows
                     }
                     else if (rl.StartsWith("Section@"))
                     {
-                        var section = Library.Net.Lair.LairConverter.FromSectionString(rl);
+                        string leaderSignature;
+
+                        var section = Library.Net.Lair.LairConverter.FromSectionString(rl, out leaderSignature);
                         if (section == null) throw new Exception();
 
                         {
@@ -608,7 +614,7 @@ namespace Lair.Windows
                             {
                                 if (RichTextBoxHelper.SectionClickEvent != null)
                                 {
-                                    RichTextBoxHelper.SectionClickEvent(sender, section);
+                                    RichTextBoxHelper.SectionClickEvent(sender, section, leaderSignature);
                                 }
 
                                 if (Settings.Instance.Global_SectionHistorys.Contains(section)) l.Foreground = new SolidColorBrush(Settings.Instance.Color_Link);
@@ -655,7 +661,7 @@ namespace Lair.Windows
                         {
                             Run r = new Run();
                             r.Foreground = new SolidColorBrush(Color.FromRgb(0xCF, 0xCF, 0xCF));
-                            r.Text = MessageConverter.ToInfoMessage(section);
+                            r.Text = MessageConverter.ToInfoMessage(section, leaderSignature);
 
                             p.Inlines.Add(r);
                         }
