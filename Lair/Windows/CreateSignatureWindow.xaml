@@ -10,9 +10,9 @@
         FontFamily="{Binding Path=FontFamily, Mode=OneWay, Source={StaticResource ResourcesInstance}, Converter={StaticResource _stringToFontFamilyConverter}}"
         FontSize="{Binding Path=FontSize, Mode=OneWay, Source={StaticResource ResourcesInstance}, Converter={StaticResource _stringToDoubleConverter}}"
         Background="{DynamicResource WindowBackgroundBrush}"
-        Title="{Binding Path=CreatorSignatureWindow_Title, Source={StaticResource ResourcesInstance}}"
-        Width="{Binding Path=CreatorSignatureWindow_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}"
-        WindowState="{Binding Path=CreatorSignatureWindow_WindowState, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}"
+        Title="{Binding Path=CreateSignatureWindow_Title, Source={StaticResource ResourcesInstance}}"
+        Width="{Binding Path=CreateSignatureWindow_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}"
+        WindowState="{Binding Path=CreateSignatureWindow_WindowState, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}"
         SizeToContent="Height"
         WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded"
@@ -20,8 +20,8 @@
         d:DesignWidth="600">
 
     <Grid FocusManager.FocusedElement="{Binding ElementName=_nicknameTextBox}">
-        <Label Content="{Binding Path=CreatorSignatureWindow_Nickname, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="12,12,0,0" VerticalAlignment="Top" Width="120" VerticalContentAlignment="Center" />
+        <Label Content="{Binding Path=CreateSignatureWindow_Nickname, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="12,12,0,0" VerticalAlignment="Top" Width="120" VerticalContentAlignment="Center" />
         <TextBox Height="24" Margin="138,12,12,0" Name="_nicknameTextBox" VerticalAlignment="Top" TextChanged="_nicknameTextBox_TextChanged" />
-        <Button Content="{Binding Path=CreatorSignatureWindow_Ok, Source={StaticResource ResourcesInstance}}" Height="23" HorizontalAlignment="Right" Margin="0,42,12,12" Name="_okButton" VerticalAlignment="Top" Width="75" Click="_okButton_Click" IsEnabled="False" IsDefault="True" />
+        <Button Content="{Binding Path=CreateSignatureWindow_Ok, Source={StaticResource ResourcesInstance}}" Height="23" HorizontalAlignment="Right" Margin="0,42,12,12" Name="_okButton" VerticalAlignment="Top" Width="75" Click="_okButton_Click" IsEnabled="False" IsDefault="True" />
     </Grid>
 </Window>
