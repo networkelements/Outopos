@@ -1222,7 +1222,7 @@ namespace Lair.Windows
             HashSet<string> removeLeaderSignatures = new HashSet<string>(_lairManager.GetLeaders(section).Select(n => n.Certificate.ToString()));
             removeLeaderSignatures.ExceptWith(lockedLeaderSignatures);
 
-            int capacity = Math.Max(lockedLeaderSignatures.Count * 2, 256);
+            int capacity = Math.Max(lockedLeaderSignatures.Count * 2, 8);
             return new SignatureCollection(removeLeaderSignatures.Randomize().Skip(capacity));
         }
 

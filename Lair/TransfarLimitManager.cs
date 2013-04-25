@@ -312,6 +312,7 @@ namespace Lair
         protected override void Dispose(bool disposing)
         {
             if (_disposed) return;
+            _disposed = true;
 
             if (disposing)
             {
@@ -319,8 +320,6 @@ namespace Lair
 
                 _timerThread.Join();
             }
-
-            _disposed = true;
         }
 
         #region IThisLock

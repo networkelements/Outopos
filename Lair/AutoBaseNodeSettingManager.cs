@@ -510,13 +510,12 @@ namespace Lair
         protected override void Dispose(bool disposing)
         {
             if (_disposed) return;
+            _disposed = true;
 
             if (disposing)
             {
 
             }
-
-            _disposed = true;
         }
 
         #region IThisLock
