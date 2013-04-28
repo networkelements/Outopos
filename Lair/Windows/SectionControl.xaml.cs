@@ -468,6 +468,8 @@ namespace Lair.Windows
                     {
                         if (sectionTreeViewItem.Value.LeaderSignature == null) continue;
 
+                        _lairManager.SendRequest(sectionTreeViewItem.Value.Section);
+
                         var creatorSignatures = new HashSet<string>();
                         var trustSignatures = new HashSet<string>();
                         var channelToCreatorSignatures = new Dictionary<Channel, string>();
@@ -550,6 +552,8 @@ namespace Lair.Windows
 
                         foreach (var selectTreeViewItem in items)
                         {
+                            _lairManager.SendRequest(selectTreeViewItem.Value.Channel);
+
                             Topic topTopic = null;
 
                             if (channelToCreatorSignatures.ContainsKey(selectTreeViewItem.Value.Channel))
