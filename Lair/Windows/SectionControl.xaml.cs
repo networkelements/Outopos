@@ -1203,7 +1203,7 @@ namespace Lair.Windows
             HashSet<Section> removeSections = new HashSet<Section>(_lairManager.GetSections());
             removeSections.ExceptWith(lockedSections);
 
-            int capacity = Math.Max(lockedSections.Count * 2, 256);
+            int capacity = Math.Max(lockedSections.Count, 64);
             return new SectionCollection(removeSections.Randomize().Skip(capacity));
         }
 
@@ -1222,7 +1222,7 @@ namespace Lair.Windows
             HashSet<string> removeLeaderSignatures = new HashSet<string>(_lairManager.GetLeaders(section).Select(n => n.Certificate.ToString()));
             removeLeaderSignatures.ExceptWith(lockedLeaderSignatures);
 
-            int capacity = Math.Max(lockedLeaderSignatures.Count * 2, 8);
+            int capacity = Math.Max(lockedLeaderSignatures.Count, 2);
             return new SignatureCollection(removeLeaderSignatures.Randomize().Skip(capacity));
         }
 
@@ -1253,7 +1253,7 @@ namespace Lair.Windows
             HashSet<string> removeCreatorSignatures = new HashSet<string>(_lairManager.GetCreators(section).Select(n => n.Certificate.ToString()));
             removeCreatorSignatures.ExceptWith(lockedCreatorSignatures);
 
-            int capacity = Math.Max(lockedCreatorSignatures.Count * 2, 256);
+            int capacity = Math.Max(lockedCreatorSignatures.Count, 128);
             return new SignatureCollection(removeCreatorSignatures.Randomize().Skip(capacity));
         }
 
@@ -1284,7 +1284,7 @@ namespace Lair.Windows
             HashSet<string> removeManagerSignatures = new HashSet<string>(_lairManager.GetManagers(section).Select(n => n.Certificate.ToString()));
             removeManagerSignatures.ExceptWith(lockedManagerSignatures);
 
-            int capacity = Math.Max(lockedManagerSignatures.Count * 2, 256);
+            int capacity = Math.Max(lockedManagerSignatures.Count, 128);
             return new SignatureCollection(removeManagerSignatures.Randomize().Skip(capacity));
         }
 
@@ -1311,7 +1311,7 @@ namespace Lair.Windows
             HashSet<Channel> removeChannels = new HashSet<Channel>(_lairManager.GetChannels());
             removeChannels.ExceptWith(lockedChannels);
 
-            int capacity = Math.Max(lockedChannels.Count * 2, 256);
+            int capacity = Math.Max(lockedChannels.Count, 64);
             return new ChannelCollection(removeChannels.Randomize().Skip(capacity));
         }
 
@@ -1509,7 +1509,7 @@ namespace Lair.Windows
                 hashSetRandomMessages.UnionWith(removeMessages);
                 hashSetRandomMessages.ExceptWith(trustMessages);
 
-                randomMessages = hashSetRandomMessages.Randomize().Take(256 - trustMessages.Count).ToList();
+                randomMessages = hashSetRandomMessages.Randomize().Take(128).ToList();
             }
 
             removeMessages.ExceptWith(trustMessages);
