@@ -1389,7 +1389,7 @@ namespace Lair.Windows
 
                     return x.GetHashCode().CompareTo(y.GetHashCode());
                 });
-                trustTopics = trustTopics.Skip(trustTopics.Count - 8).ToList();
+                trustTopics = trustTopics.Skip(trustTopics.Count - 4).ToList();
             }
 
             List<Topic> randomTopics;
@@ -1400,7 +1400,7 @@ namespace Lair.Windows
                 hashSetRandomTopics.UnionWith(removeTopics);
                 hashSetRandomTopics.ExceptWith(trustTopics);
 
-                randomTopics = hashSetRandomTopics.Randomize().Take(16 - trustTopics.Count).ToList();
+                randomTopics = hashSetRandomTopics.Randomize().Take(4).ToList();
             }
 
             removeTopics.ExceptWith(trustTopics);
