@@ -98,7 +98,7 @@ namespace Lair
             return bounds.Contains(mousePos);
         }
     }
-         
+
     static class TreeViewExtensions
     {
         public delegate Point GetPositionDelegate(IInputElement element);
@@ -266,73 +266,97 @@ namespace Lair
     {
         public static void GoBottom(this ItemsControl itemsControl)
         {
-            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
+            var panel = itemsControl.FindItemsHostPanel() as IScrollInfo;
+            if (panel == null) return;
+
             panel.SetVerticalOffset(double.PositiveInfinity);
         }
 
         public static void GoTop(this ItemsControl itemsControl)
         {
-            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
+            var panel = itemsControl.FindItemsHostPanel() as IScrollInfo;
+            if (panel == null) return;
+
             panel.SetVerticalOffset(0);
         }
 
         public static void GoRight(this ItemsControl itemsControl)
         {
-            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
+            var panel = itemsControl.FindItemsHostPanel() as IScrollInfo;
+            if (panel == null) return;
+
             panel.SetHorizontalOffset(double.PositiveInfinity);
         }
 
         public static void GoLeft(this ItemsControl itemsControl)
         {
-            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
+            var panel = itemsControl.FindItemsHostPanel() as IScrollInfo;
+            if (panel == null) return;
+
             panel.SetHorizontalOffset(0);
         }
 
         public static void PageDown(this ItemsControl itemsControl)
         {
-            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
+            var panel = itemsControl.FindItemsHostPanel() as IScrollInfo;
+            if (panel == null) return;
+
             panel.PageDown();
         }
 
         public static void PageUp(this ItemsControl itemsControl)
         {
-            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
+            var panel = itemsControl.FindItemsHostPanel() as IScrollInfo;
+            if (panel == null) return;
+
             panel.PageUp();
         }
 
         public static void PageRight(this ItemsControl itemsControl)
         {
-            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
+            var panel = itemsControl.FindItemsHostPanel() as IScrollInfo;
+            if (panel == null) return;
+
             panel.PageRight();
         }
 
         public static void PageLeft(this ItemsControl itemsControl)
         {
-            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
+            var panel = itemsControl.FindItemsHostPanel() as IScrollInfo;
+            if (panel == null) return;
+
             panel.PageLeft();
         }
 
         public static void LineDown(this ItemsControl itemsControl)
         {
-            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
+            var panel = itemsControl.FindItemsHostPanel() as IScrollInfo;
+            if (panel == null) return;
+
             panel.LineDown();
         }
 
         public static void LineUp(this ItemsControl itemsControl)
         {
-            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
+            var panel = itemsControl.FindItemsHostPanel() as IScrollInfo;
+            if (panel == null) return;
+
             panel.LineUp();
         }
 
         public static void LineRight(this ItemsControl itemsControl)
         {
-            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
+            var panel = itemsControl.FindItemsHostPanel() as IScrollInfo;
+            if (panel == null) return;
+
             panel.LineRight();
         }
 
         public static void LineLeft(this ItemsControl itemsControl)
         {
-            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
+            var panel = itemsControl.FindItemsHostPanel() as IScrollInfo;
+            if (panel == null) return;
+
             panel.LineLeft();
         }
 

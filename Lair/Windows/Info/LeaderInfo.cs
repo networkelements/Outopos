@@ -52,16 +52,12 @@ namespace Lair.Windows
 
             if (this.CreatorSignatures != null && other.CreatorSignatures != null)
             {
-                if (this.CreatorSignatures.Count != other.CreatorSignatures.Count) return false;
-
-                for (int i = 0; i < this.CreatorSignatures.Count; i++) if (this.CreatorSignatures[i] != other.CreatorSignatures[i]) return false;
+                if (!Collection.Equals(this.CreatorSignatures, other.CreatorSignatures)) return false;
             }
 
             if (this.ManagerSignatures != null && other.ManagerSignatures != null)
             {
-                if (this.ManagerSignatures.Count != other.ManagerSignatures.Count) return false;
-
-                for (int i = 0; i < this.ManagerSignatures.Count; i++) if (this.ManagerSignatures[i] != other.ManagerSignatures[i]) return false;
+                if (!Collection.Equals(this.ManagerSignatures, other.ManagerSignatures)) return false;
             }
 
             return true;

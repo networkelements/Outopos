@@ -51,9 +51,7 @@ namespace Lair.Windows
 
             if (this.Channels != null && other.Channels != null)
             {
-                if (this.Channels.Count != other.Channels.Count) return false;
-
-                for (int i = 0; i < this.Channels.Count; i++) if (this.Channels[i] != other.Channels[i]) return false;
+                if (!Collection.Equals(this.Channels, other.Channels)) return false;
             }
 
             return true;

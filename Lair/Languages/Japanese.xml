@@ -214,7 +214,7 @@
   <Translate Key="SectionControl_Filter" Value="フィルタ" />
   <Translate Key="SectionControl_FilterWord" Value="この単語でフィルタ" />
   <Translate Key="SectionControl_FilterSignature" Value="このサインでフィルタ" />
-  <Translate Key="SectionControl_NewMessageOnly" Value="非既読のみ" />
+  <Translate Key="SectionControl_NewMessageOnly" Value="新着のみ" />
   <Translate Key="SectionControl_Message" Value="メッセージ" />
   <Translate Key="SectionControl_Topic" Value="トピック" />
   <Translate Key="SectionControl_AmoebaNotFound_Message" Value="Amoebaが見つかりません。Amoeba.exeへのパスを設定してください。" />
@@ -235,7 +235,7 @@
   <Translate Key="ChartWindow_CopyInfo" Value="コピー (詳細情報)" />
   <Translate Key="ChartWindow_Close" Value="閉じる" />
 
-  <Translate Key="TopicEditWindow_Title" Value="新しいトピック" />
+  <Translate Key="TopicEditWindow_Title" Value="新しいトピック - {0}" />
   <Translate Key="TopicEditWindow_Edit" Value="編集" />
   <Translate Key="TopicEditWindow_Preview" Value="プレビュー" />
   <Translate Key="TopicEditWindow_Comment" Value="コメント" />
@@ -245,7 +245,7 @@
   <Translate Key="TopicPreviewWindow_Title" Value="トピック" />
   <Translate Key="TopicPreviewWindow_Close" Value="閉じる" />
 
-  <Translate Key="MessageEditWindow_Title" Value="新しいメッセージ" />
+  <Translate Key="MessageEditWindow_Title" Value="新しいメッセージ - {0}" />
   <Translate Key="MessageEditWindow_Edit" Value="編集" />
   <Translate Key="MessageEditWindow_Preview" Value="プレビュー" />
   <Translate Key="MessageEditWindow_Comment" Value="コメント" />

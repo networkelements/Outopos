@@ -2428,11 +2428,14 @@ namespace Lair.Windows
                         TopicEditWindow window = new TopicEditWindow(selectTreeViewItem.Value.Channel, content, digitalSignature, _lairManager);
                         window.Owner = _mainWindow;
 
-                        window.ShowDialog();
+                        window.Closed += (object sender2, EventArgs e2) =>
+                        {
+                            selectTreeViewItem.Value.IsTopicUpdated = false;
 
-                        selectTreeViewItem.Value.IsTopicUpdated = false;
+                            this.Update_Cache();
+                        };
 
-                        this.Update_Cache();
+                        window.Show();
                     }
                 }
             }
@@ -2555,10 +2558,12 @@ namespace Lair.Windows
             MessageEditWindow window = new MessageEditWindow(selectTreeViewItem.Value.Channel, "", null, digitalSignature, _lairManager);
             window.Owner = _mainWindow;
 
-            if (window.ShowDialog() == true)
+            window.Closed += (object sender2, EventArgs e2) =>
             {
                 this.Update_Cache();
-            }
+            };
+
+            window.Show();
         }
 
         #endregion

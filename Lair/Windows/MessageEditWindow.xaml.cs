@@ -39,6 +39,8 @@ namespace Lair.Windows
 
             InitializeComponent();
 
+            this.Title = string.Format(LanguagesManager.Instance.MessageEditWindow_Title, channel.Name);
+
             _commentTextBox.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
             _commentTextBox.FontSize = (double)new FontSizeConverter().ConvertFromString(Settings.Instance.Global_Fonts_MessageFontSize + "pt");
 
@@ -119,14 +121,14 @@ namespace Lair.Windows
 
         private void _okButton_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = true;
-
             _lairManager.Upload(new Message(_channel, _commentTextBox.Text, _responsMessages.Select(n => new Key(n.GetHash(HashAlgorithm.Sha512), HashAlgorithm.Sha512)), _digitalSignature));
+
+            this.Close();
         }
 
         private void _cancelButton_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = false;
+            this.Close();
         }
     }
 }

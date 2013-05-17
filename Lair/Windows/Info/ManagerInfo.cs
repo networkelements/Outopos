@@ -51,9 +51,7 @@ namespace Lair.Windows
 
             if (this.TrustSignatures != null && other.TrustSignatures != null)
             {
-                if (this.TrustSignatures.Count != other.TrustSignatures.Count) return false;
-
-                for (int i = 0; i < this.TrustSignatures.Count; i++) if (this.TrustSignatures[i] != other.TrustSignatures[i]) return false;
+                if (!Collection.Equals(this.TrustSignatures, other.TrustSignatures)) return false;
             }
 
             return true;

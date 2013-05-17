@@ -235,7 +235,7 @@
   <Translate Key="ChartWindow_CopyInfo" Value="Copy info" />
   <Translate Key="ChartWindow_Close" Value="Close" />
 
-  <Translate Key="TopicEditWindow_Title" Value="New topic" />
+  <Translate Key="TopicEditWindow_Title" Value="New topic - {0}" />
   <Translate Key="TopicEditWindow_Edit" Value="Edit" />
   <Translate Key="TopicEditWindow_Preview" Value="Preview" />
   <Translate Key="TopicEditWindow_Comment" Value="Comment" />
@@ -245,7 +245,7 @@
   <Translate Key="TopicPreviewWindow_Title" Value="Topic" />
   <Translate Key="TopicPreviewWindow_Close" Value="Close" />
 
-  <Translate Key="MessageEditWindow_Title" Value="New message" />
+  <Translate Key="MessageEditWindow_Title" Value="New message - {0}" />
   <Translate Key="MessageEditWindow_Edit" Value="Edit" />
   <Translate Key="MessageEditWindow_Preview" Value="Preview" />
   <Translate Key="MessageEditWindow_Comment" Value="Comment" />
