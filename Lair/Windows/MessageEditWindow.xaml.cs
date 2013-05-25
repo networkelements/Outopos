@@ -13,6 +13,7 @@ using Lair.Properties;
 using Library.Net;
 using Library.Net.Lair;
 using Library.Security;
+using Library.Collections;
 
 namespace Lair.Windows
 {
@@ -99,6 +100,8 @@ namespace Lair.Windows
                 var m = new Message(_channel, comment, _responsMessages.Select(n => new Key(n.GetHash(HashAlgorithm.Sha512), HashAlgorithm.Sha512)), _digitalSignature);
 
                 RichTextBoxHelper.SetRichTextBox(_richTextBox, m);
+
+                _richTextBox.MaxHeight = double.PositiveInfinity;
             }
         }
 
@@ -121,7 +124,21 @@ namespace Lair.Windows
 
         private void _okButton_Click(object sender, RoutedEventArgs e)
         {
-            _lairManager.Upload(new Message(_channel, _commentTextBox.Text, _responsMessages.Select(n => new Key(n.GetHash(HashAlgorithm.Sha512), HashAlgorithm.Sha512)), _digitalSignature));
+            var message = new Message(_channel, _commentTextBox.Text, _responsMessages.Select(n => new Key(n.GetHash(HashAlgorithm.Sha512), HashAlgorithm.Sha512)), _digitalSignature);
+
+            {
+                LockedHashSet<Message> messages;
+
+                if (!Settings.Instance.Global_LockedMessages.TryGetValue(_channel, out messages))
+                {
+                    messages = new LockedHashSet<Message>();
+                    Settings.Instance.Global_LockedMessages[_channel] = messages;
+                }
+
+                messages.Add(message);
+            }
+
+            _lairManager.Upload(message);
 
             this.Close();
         }

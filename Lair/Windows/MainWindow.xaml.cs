@@ -134,6 +134,8 @@ namespace Lair.Windows
 
                 _transferLimitManager.StartEvent += new EventHandler(_transferLimitManager_StartEvent);
                 _transferLimitManager.StopEvent += new EventHandler(_transferLimitManager_StopEvent);
+
+                Debug.WriteLineIf(System.Runtime.GCSettings.IsServerGC, "GCSettings.IsServerGC");
             }
             catch (Exception e)
             {
@@ -713,7 +715,7 @@ namespace Lair.Windows
                         sectionTreeItem.Section = section;
                         sectionTreeItem.LeaderSignature = leaderSignature;
                         sectionTreeItem.UploadSignature = (defaultDigitalSignature != null) ? defaultDigitalSignature.ToString() : null;
-                     
+
                         sectionTreeItem.SearchTreeItems.Clear();
                         sectionTreeItem.SearchTreeItems.Add(searchTreeItem);
 
@@ -842,7 +844,7 @@ namespace Lair.Windows
                             sectionTreeItem.Section = section;
                             sectionTreeItem.LeaderSignature = leaderSignature;
                             sectionTreeItem.UploadSignature = (defaultDigitalSignature != null) ? defaultDigitalSignature.ToString() : null;
-                       
+
                             sectionTreeItem.SearchTreeItems.Clear();
                             sectionTreeItem.SearchTreeItems.Add(searchTreeItem);
 

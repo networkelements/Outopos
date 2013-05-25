@@ -2721,10 +2721,12 @@ namespace Lair.Windows
             MessageEditWindow window = new MessageEditWindow(selectTreeViewItem.Value.Channel, "", responsMessages, digitalSignature, _lairManager);
             window.Owner = _mainWindow;
 
-            if (window.ShowDialog() == true)
+            window.Closed += (object sender2, EventArgs e2) =>
             {
                 this.Update_Cache();
-            }
+            };
+
+            window.Show();
         }
 
         private void _richTextBoxCopyMenuItem_Click(object sender, RoutedEventArgs e)
