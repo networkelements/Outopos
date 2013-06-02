@@ -223,8 +223,9 @@
             <Grid Grid.Column="2" Visibility="{Binding ElementName=_bandwidthTreeViewItem, Path=IsSelected, Converter={StaticResource _boolToVisibilityConverter}}">
                 <Label Content="{Binding Path=ConnectionsSettingsWindow_ConnectionCount, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" Width="360" VerticalContentAlignment="Center" />
                 <TextBox Height="24" Margin="372,6,6,0" Name="_bandwidthConnectionCountTextBox" VerticalAlignment="Top" TextChanged="_bandwidthConnectionCountTextBox_TextChanged" VerticalContentAlignment="Center" />
-                <Label Content="{Binding Path=ConnectionsSettingsWindow_BandwidthLimit, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,36,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="360" />
-                <TextBox Height="24" Margin="372,36,6,0" Name="_bandwidthLimitTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" />
+                <Label Content="{Binding Path=ConnectionsSettingsWindow_BandwidthLimit, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,36,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="240" />
+                <TextBox Height="24" Margin="252,36,72,0" Name="_bandwidthLimitTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" TextChanged="_bandwidthLimitTextBox_TextChanged" />
+                <ComboBox Height="24" HorizontalAlignment="Right" Margin="0,36,6,0" Name="_bandwidthLimitComboBox" VerticalAlignment="Top" Width="60" SelectionChanged="_bandwidthLimitComboBox_SelectionChanged" />
             </Grid>
 
             <Grid Grid.Column="2" Visibility="{Binding ElementName=_transferTreeViewItem, Path=IsSelected, Converter={StaticResource _boolToVisibilityConverter}}">

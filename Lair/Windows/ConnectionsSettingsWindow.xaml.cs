@@ -70,7 +70,6 @@ namespace Lair.Windows
             _clientFiltersListView.ItemsSource = _clientFilters;
             _serverListenUrisListView.ItemsSource = _listenUris;
             _bandwidthConnectionCountTextBox.Text = _lairManager.ConnectionCountLimit.ToString();
-            _bandwidthLimitTextBox.Text = NetworkConverter.ToSizeString(_lairManager.BandWidthLimit);
             _transferLimitSpanTextBox.Text = _transferLimitManager.TransferLimit.Span.ToString();
             _transferLimitSizeTextBox.Text = NetworkConverter.ToSizeString(_transferLimitManager.TransferLimit.Size);
             _eventAutoBaseNodeSettingCheckBox.IsChecked = Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled;
@@ -92,6 +91,24 @@ namespace Lair.Windows
             _transferInfoUploaded.Content = NetworkConverter.ToSizeString(_transferLimitManager.TotalUploadSize);
             _transferInfoDownloaded.Content = NetworkConverter.ToSizeString(_transferLimitManager.TotalDownloadSize);
             _transferInfoTotal.Content = NetworkConverter.ToSizeString(_transferLimitManager.TotalUploadSize + _transferLimitManager.TotalDownloadSize);
+
+            {
+                try
+                {
+                    _bandwidthLimitTextBox.Text = long.Parse(NetworkConverter.ToSizeString(_lairManager.BandWidthLimit, Settings.Instance.ConnectionsSettingsWindow_BandwidthLimit_Unit).Split(' ')[0]).ToString();
+                }
+                catch (Exception)
+                {
+                    _bandwidthLimitTextBox.Text = "";
+                }
+
+                foreach (var u in new string[] { "Byte", "KB", "MB", "GB", })
+                {
+                    _bandwidthLimitComboBox.Items.Add(u);
+                }
+
+                _bandwidthLimitComboBox.SelectedItem = Settings.Instance.ConnectionsSettingsWindow_BandwidthLimit_Unit;
+            }
         }
 
         protected override void OnInitialized(EventArgs e)
@@ -1266,6 +1283,43 @@ namespace Lair.Windows
             if (_bandwidthConnectionCountTextBox.Text != value) _bandwidthConnectionCountTextBox.Text = value;
         }
 
+        private void _bandwidthLimitTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(_bandwidthLimitTextBox.Text)) return;
+
+            StringBuilder builder = new StringBuilder("");
+
+            foreach (var item in _bandwidthLimitTextBox.Text)
+            {
+                if (Regex.IsMatch(item.ToString(), @"[0-9\.]"))
+                {
+                    builder.Append(item.ToString());
+                }
+            }
+
+            var value = builder.ToString();
+            if (_bandwidthLimitTextBox.Text != value) _bandwidthLimitTextBox.Text = value;
+        }
+
+        private void _bandwidthLimitComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count != 1 || e.RemovedItems.Count != 1) return;
+
+            var newItem = (string)e.AddedItems[0];
+            var oldItem = (string)e.RemovedItems[0];
+
+            try
+            {
+                var size = (long)NetworkConverter.FromSizeString(_bandwidthLimitTextBox.Text + oldItem);
+                _bandwidthLimitTextBox.Text = NetworkConverter.ToSizeString(size, newItem);
+            }
+            catch (Exception)
+            {
+                var size = long.MaxValue;
+                _bandwidthLimitTextBox.Text = NetworkConverter.ToSizeString(size, newItem);
+            }
+        }
+
         #endregion
 
         #region Transfer
@@ -1323,11 +1377,11 @@ namespace Lair.Windows
 
                 try
                 {
-                    bandwidthLimit = (int)NetworkConverter.FromSizeString(_bandwidthLimitTextBox.Text);
+                    bandwidthLimit = (int)NetworkConverter.FromSizeString(_bandwidthLimitTextBox.Text + (string)_bandwidthLimitComboBox.SelectedItem);
                 }
                 catch (Exception)
                 {
-
+                    bandwidthLimit = int.MaxValue;
                 }
 
                 _lairManager.BandWidthLimit = bandwidthLimit;
@@ -1378,6 +1432,7 @@ namespace Lair.Windows
             }
 
             Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled = _eventAutoBaseNodeSettingCheckBox.IsChecked.Value;
+            Settings.Instance.ConnectionsSettingsWindow_BandwidthLimit_Unit = (string)_bandwidthLimitComboBox.SelectedItem;
         }
 
         private void _cancelButton_Click(object sender, RoutedEventArgs e)

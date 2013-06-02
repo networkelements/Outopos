@@ -26,7 +26,7 @@ namespace Lair
         public event EventHandler StopEvent;
 
         private object _thisLock = new object();
-        private volatile bool _disposed = false;
+        private bool _disposed = false;
 
         public TransfarLimitManager(LairManager lairManager)
         {
@@ -34,7 +34,7 @@ namespace Lair
 
             _settings = new Settings();
 
-            _timerThread = new Thread(new ThreadStart(this.Timer));
+            _timerThread = new Thread(this.Timer);
             _timerThread.Priority = ThreadPriority.Highest;
             _timerThread.IsBackground = true;
             _timerThread.Name = "TransfarLimitManager_TimerThread";
@@ -50,7 +50,6 @@ namespace Lair
                     return _settings.TransferLimit;
                 }
             }
-
             set
             {
                 lock (this.ThisLock)
@@ -64,7 +63,10 @@ namespace Lair
         {
             get
             {
-                return _settings.UploadTransferSizeList.Sum(n => n.Value);
+                lock (this.ThisLock)
+                {
+                    return _settings.UploadTransferSizeList.Sum(n => n.Value);
+                }
             }
         }
 
@@ -72,7 +74,10 @@ namespace Lair
         {
             get
             {
-                return _settings.DownloadTransferSizeList.Sum(n => n.Value);
+                lock (this.ThisLock)
+                {
+                    return _settings.DownloadTransferSizeList.Sum(n => n.Value);
+                }
             }
         }
 
@@ -94,9 +99,18 @@ namespace Lair
 
         public void Reset()
         {
-            _settings.UploadTransferSizeList.Clear();
-            _settings.DownloadTransferSizeList.Clear();
+            lock (this.ThisLock)
+            {
+                _settings.UploadTransferSizeList.Clear();
+                _settings.DownloadTransferSizeList.Clear();
+
+                _uploadSize = -_lairManager.SentByteCount;
+                _downloadSize = -_lairManager.ReceivedByteCount;
+            }
         }
+
+        private long _uploadSize;
+        private long _downloadSize;
 
         private void Timer()
         {
@@ -105,11 +119,12 @@ namespace Lair
                 Stopwatch stopwatch = new Stopwatch();
 
                 var now = DateTime.Today;
-                long uploadSize;
-                long downloadSize;
 
-                _settings.UploadTransferSizeList.TryGetValue(now, out uploadSize);
-                _settings.UploadTransferSizeList.TryGetValue(now, out downloadSize);
+                lock (this.ThisLock)
+                {
+                    _settings.UploadTransferSizeList.TryGetValue(now, out _uploadSize);
+                    _settings.DownloadTransferSizeList.TryGetValue(now, out _downloadSize);
+                }
 
                 for (; ; )
                 {
@@ -124,15 +139,21 @@ namespace Lair
                         {
                             now = DateTime.Today;
 
-                            uploadSize = -_lairManager.SentByteCount;
-                            downloadSize = -_lairManager.ReceivedByteCount;
+                            lock (this.ThisLock)
+                            {
+                                _uploadSize = -_lairManager.SentByteCount;
+                                _downloadSize = -_lairManager.ReceivedByteCount;
+                            }
 
                             if (_lairManager.State == ManagerState.Stop) this.OnStartEvent();
                         }
                         else
                         {
-                            _settings.UploadTransferSizeList[now] = uploadSize + _lairManager.SentByteCount;
-                            _settings.DownloadTransferSizeList[now] = downloadSize + _lairManager.ReceivedByteCount;
+                            lock (this.ThisLock)
+                            {
+                                _settings.UploadTransferSizeList[now] = _uploadSize + _lairManager.SentByteCount;
+                                _settings.DownloadTransferSizeList[now] = _downloadSize + _lairManager.ReceivedByteCount;
+                            }
                         }
 
                         if (_settings.TransferLimit.Type != TransferLimitType.None)
@@ -312,7 +333,6 @@ namespace Lair
         protected override void Dispose(bool disposing)
         {
             if (_disposed) return;
-            _disposed = true;
 
             if (disposing)
             {
@@ -320,6 +340,8 @@ namespace Lair
 
                 _timerThread.Join();
             }
+
+            _disposed = true;
         }
 
         #region IThisLock

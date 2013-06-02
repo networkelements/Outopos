@@ -72,7 +72,8 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsSettingsWindow_Client_Filters_GridViewColumn_Option_Width", Value = 200 },
                 new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsSettingsWindow_Server_ListenUris_GridViewColumn_Uri_Width", Value = 400 },
                 new Library.Configuration.SettingsContext<double>() { Name = "ConnectionsSettingsWindow_Grid_ColumnDefinitions_Width", Value = 160 },
-          
+                new Library.Configuration.SettingsContext<string>() { Name = "ConnectionsSettingsWindow_BandwidthLimit_Unit", Value = "Byte" },
+
                 new Library.Configuration.SettingsContext<double>() { Name = "ViewSettingsWindow_Top", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "ViewSettingsWindow_Left", Value = 120 },
                 new Library.Configuration.SettingsContext<double>() { Name = "ViewSettingsWindow_Height", Value = 500 },
@@ -1076,6 +1077,25 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     this["ConnectionsSettingsWindow_Grid_ColumnDefinitions_Width"] = value;
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_BandwidthLimit_Unit
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (string)this["ConnectionsSettingsWindow_BandwidthLimit_Unit"];
+                }
+            }
+
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ConnectionsSettingsWindow_BandwidthLimit_Unit"] = value;
                 }
             }
         }

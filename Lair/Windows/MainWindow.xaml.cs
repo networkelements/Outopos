@@ -200,11 +200,12 @@ namespace Lair.Windows
                 Stopwatch backupStopwatch = new Stopwatch();
                 Stopwatch updateStopwatch = new Stopwatch();
                 Stopwatch uriUpdateStopwatch = new Stopwatch();
-                Stopwatch seedDeleteStopwatch = new Stopwatch();
+                Stopwatch GcStopwatch = new Stopwatch();
                 spaceCheckStopwatch.Start();
                 backupStopwatch.Start();
                 updateStopwatch.Start();
                 uriUpdateStopwatch.Start();
+                GcStopwatch.Start();
 
                 for (; ; )
                 {
@@ -325,6 +326,22 @@ namespace Lair.Windows
                         try
                         {
                             _autoBaseNodeSettingManager.Update();
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Warning(e);
+                        }
+                    }
+
+                    if (GcStopwatch.Elapsed > new TimeSpan(1, 0, 0))
+                    {
+                        GcStopwatch.Restart();
+
+                        try
+                        {
+                            System.GC.Collect();
+                            System.GC.WaitForPendingFinalizers();
+                            System.GC.Collect();
                         }
                         catch (Exception e)
                         {
