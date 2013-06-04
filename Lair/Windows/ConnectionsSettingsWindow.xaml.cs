@@ -95,7 +95,7 @@ namespace Lair.Windows
             {
                 try
                 {
-                    _bandwidthLimitTextBox.Text = long.Parse(NetworkConverter.ToSizeString(_lairManager.BandWidthLimit, Settings.Instance.ConnectionsSettingsWindow_BandwidthLimit_Unit).Split(' ')[0]).ToString();
+                    _bandwidthLimitTextBox.Text = NetworkConverter.ToSizeString(_lairManager.BandWidthLimit, Settings.Instance.ConnectionsSettingsWindow_BandwidthLimit_Unit);
                 }
                 catch (Exception)
                 {
