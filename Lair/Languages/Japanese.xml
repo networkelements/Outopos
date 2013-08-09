@@ -193,36 +193,36 @@
   <Translate Key="ConnectionControl_Copy" Value="コピー" />
   <Translate Key="ConnectionControl_Paste" Value="貼り付け" />
 
-  <Translate Key="SectionControl_New" Value="新規" />
-  <Translate Key="SectionControl_Edit" Value="編集" />
-  <Translate Key="SectionControl_Delete" Value="削除" />
-  <Translate Key="SectionControl_Cut" Value="切り取り" />
-  <Translate Key="SectionControl_Copy" Value="コピー" />
-  <Translate Key="SectionControl_CopyInfo" Value="コピー (詳細情報)" />
-  <Translate Key="SectionControl_Paste" Value="貼り付け" />
-  <Translate Key="SectionControl_Chart" Value="組織図" />
-  <Translate Key="SectionControl_ChannelList" Value="チャンネルリスト" />
-  <Translate Key="SectionControl_Respons" Value="返信" />
-  <Translate Key="SectionControl_Trust" Value="トラスト" />
-  <Translate Key="SectionControl_Trust_On" Value="トラスト有効" />
-  <Translate Key="SectionControl_Trust_Off" Value="トラスト無効" />
-  <Translate Key="SectionControl_Lock" Value="ロック" />
-  <Translate Key="SectionControl_LockThis" Value="このメッセージをロック" />
-  <Translate Key="SectionControl_UnlockThis" Value="このメッセージのロックを解除" />
-  <Translate Key="SectionControl_LockAll" Value="すべてのメッセージをロック" />
-  <Translate Key="SectionControl_UnlockAll" Value="すべてのメッセージのロックを解除" />
-  <Translate Key="SectionControl_Filter" Value="フィルタ" />
-  <Translate Key="SectionControl_FilterWord" Value="この単語でフィルタ" />
-  <Translate Key="SectionControl_FilterSignature" Value="このサインでフィルタ" />
-  <Translate Key="SectionControl_NewMessageOnly" Value="新着のみ" />
-  <Translate Key="SectionControl_Message" Value="メッセージ" />
-  <Translate Key="SectionControl_Topic" Value="トピック" />
-  <Translate Key="SectionControl_AmoebaNotFound_Message" Value="Amoebaが見つかりません。Amoeba.exeへのパスを設定してください。" />
-  <Translate Key="SectionControl_MarkAllMessagesRead" Value="全てのメッセージを既読にする" />
-  <Translate Key="SectionControl_MarkAllMessagesRead_Message" Value="全てのメッセージを既読にしますか？" />
-  <Translate Key="SectionControl_ImportLockedMessages" Value="ロックされたメッセージのインポート" />
-  <Translate Key="SectionControl_ExportLockedMessages" Value="ロックされたメッセージのエクスポート" />
-  <Translate Key="SectionControl_TopicUpload" Value="トピックの作成" />
+  <Translate Key="ChannelControl_New" Value="新規" />
+  <Translate Key="ChannelControl_Edit" Value="編集" />
+  <Translate Key="ChannelControl_Delete" Value="削除" />
+  <Translate Key="ChannelControl_Cut" Value="切り取り" />
+  <Translate Key="ChannelControl_Copy" Value="コピー" />
+  <Translate Key="ChannelControl_CopyInfo" Value="コピー (詳細情報)" />
+  <Translate Key="ChannelControl_Paste" Value="貼り付け" />
+  <Translate Key="ChannelControl_Chart" Value="組織図" />
+  <Translate Key="ChannelControl_ChannelList" Value="チャンネルリスト" />
+  <Translate Key="ChannelControl_Respons" Value="返信" />
+  <Translate Key="ChannelControl_Trust" Value="トラスト" />
+  <Translate Key="ChannelControl_Trust_On" Value="トラスト有効" />
+  <Translate Key="ChannelControl_Trust_Off" Value="トラスト無効" />
+  <Translate Key="ChannelControl_Lock" Value="ロック" />
+  <Translate Key="ChannelControl_LockThis" Value="このメッセージをロック" />
+  <Translate Key="ChannelControl_UnlockThis" Value="このメッセージのロックを解除" />
+  <Translate Key="ChannelControl_LockAll" Value="すべてのメッセージをロック" />
+  <Translate Key="ChannelControl_UnlockAll" Value="すべてのメッセージのロックを解除" />
+  <Translate Key="ChannelControl_Filter" Value="フィルタ" />
+  <Translate Key="ChannelControl_FilterWord" Value="この単語でフィルタ" />
+  <Translate Key="ChannelControl_FilterSignature" Value="このサインでフィルタ" />
+  <Translate Key="ChannelControl_NewMessageOnly" Value="新着のみ" />
+  <Translate Key="ChannelControl_Message" Value="メッセージ" />
+  <Translate Key="ChannelControl_Topic" Value="トピック" />
+  <Translate Key="ChannelControl_AmoebaNotFound_Message" Value="Amoebaが見つかりません。Amoeba.exeへのパスを設定してください。" />
+  <Translate Key="ChannelControl_MarkAllMessagesRead" Value="全てのメッセージを既読にする" />
+  <Translate Key="ChannelControl_MarkAllMessagesRead_Message" Value="全てのメッセージを既読にしますか？" />
+  <Translate Key="ChannelControl_ImportLockedMessages" Value="ロックされたメッセージのインポート" />
+  <Translate Key="ChannelControl_ExportLockedMessages" Value="ロックされたメッセージのエクスポート" />
+  <Translate Key="ChannelControl_TopicUpload" Value="トピックの作成" />
 
   <Translate Key="ChartWindow_Title" Value="チャート" />
   <Translate Key="ChartWindow_Leader" Value="リーダー" />

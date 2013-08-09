@@ -24,7 +24,7 @@ namespace Lair
         static Clipboard()
         {
             _clipboardWatcher = new ClipboardWatcher();
-            _clipboardWatcher.DrawClipboard += (sender2, e2) =>
+            _clipboardWatcher.DrawClipboard += (sender, e) =>
             {
                 _searchTreeItemList.Clear();
                 _channelTreeItemList.Clear();
@@ -136,11 +136,11 @@ namespace Lair
             }
         }
 
-        public static IEnumerable<SectionInfo> GetSectionInfos()
+        public static IEnumerable<SectionTreeItem> GetSectionInfos()
         {
             lock (_thisLock)
             {
-                var list = new List<SectionInfo>();
+                var list = new List<SectionTreeItem>();
 
                 foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
                 {
@@ -151,7 +151,7 @@ namespace Lair
                     try
                     {
                         var section = LairConverter.FromSectionString(item, out leaderSignature);
-                        list.Add(new SectionInfo() { Section = section, LeaderSignature = leaderSignature });
+                        list.Add(new SectionTreeItem() { Section = section, LeaderSignature = leaderSignature });
                     }
                     catch (Exception)
                     {
@@ -163,7 +163,7 @@ namespace Lair
             }
         }
 
-        public static void SetSectionInfos(IEnumerable<SectionInfo> sectionInfos)
+        public static void SetSectionInfos(IEnumerable<SectionTreeItem> sectionInfos)
         {
             lock (_thisLock)
             {

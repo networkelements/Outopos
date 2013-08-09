@@ -142,11 +142,4 @@ Global
 		{82230C99-6599-4130-AAC9-FC926ABC0724}.Release|Any CPU.Build.0 = Release|Any CPU
 		{82230C99-6599-4130-AAC9-FC926ABC0724}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Lair_Gtk\Lair_Gtk.csproj
-		version = 
-	EndGlobalSection
 EndGlobal

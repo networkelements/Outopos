@@ -106,25 +106,5 @@ namespace Lair
                 throw new ArgumentException("ArgumentException", e);
             }
         }
-
-        public static string ToInfoMessage(Message message)
-        {
-            try
-            {
-                StringBuilder builder = new StringBuilder();
-
-                if (message.Channel != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Message_Channel, MessageConverter.ToChannelString(message.Channel)));
-                if (message.Certificate != null) builder.AppendLine(string.Format("{0}:\u00A0{1}", LanguagesManager.Instance.Message_Signature, message.Certificate.ToString()));
-                builder.AppendLine(string.Format("{0}: {1} UTC", LanguagesManager.Instance.Message_CreationTime, message.CreationTime.ToUniversalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
-                if (!string.IsNullOrWhiteSpace(message.Content)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Message_Content, message.Content));
-
-                if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
-                else return null;
-            }
-            catch (Exception e)
-            {
-                throw new ArgumentException("ArgumentException", e);
-            }
-        }
     }
 }

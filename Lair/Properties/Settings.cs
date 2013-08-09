@@ -40,7 +40,7 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<string>() { Name = "Global_Amoeba_Path", Value = "" },
                 new Library.Configuration.SettingsContext<string>() { Name = "Global_Fonts_MessageFontFamily", Value = "MS PGothic" },
                 new Library.Configuration.SettingsContext<double>() { Name = "Global_Fonts_MessageFontSize", Value = 12 },
-                new Library.Configuration.SettingsContext<LockedDictionary<Channel, LockedHashSet<Message>>>() { Name = "Global_LockedMessages", Value = new LockedDictionary<Channel,LockedHashSet<Message>>() },
+                new Library.Configuration.SettingsContext<LockedDictionary<Channel, LockedHashSet<MessageItem>>>() { Name = "Global_LockedMessageItems", Value = new LockedDictionary<Channel, LockedHashSet<MessageItem>>() },
 
                 new Library.Configuration.SettingsContext<Color>() { Name = "Color_Tree_Hit", Value = Colors.LightPink },
                 new Library.Configuration.SettingsContext<Color>() { Name = "Color_Message", Value = Colors.Black },
@@ -100,8 +100,8 @@ namespace Lair.Properties
                 new Library.Configuration.SettingsContext<double>() { Name = "ConnectionControl_GridViewColumn_Name_Width", Value = -1 },
                 new Library.Configuration.SettingsContext<double>() { Name = "ConnectionControl_GridViewColumn_Value_Width", Value = 100 },
 
-                new Library.Configuration.SettingsContext<LockedList<SectionTreeItem>>() { Name = "SectionControl_SectionTreeItems", Value = new LockedList<SectionTreeItem>() },
-                new Library.Configuration.SettingsContext<double>() { Name = "SectionControl_Grid_ColumnDefinitions_Width", Value = 200 },
+                new Library.Configuration.SettingsContext<LockedList<SectionTreeItem>>() { Name = "ChannelControl_SectionTreeItems", Value = new LockedList<SectionTreeItem>() },
+                new Library.Configuration.SettingsContext<double>() { Name = "ChannelControl_Grid_ColumnDefinitions_Width", Value = 200 },
                                 
                 new Library.Configuration.SettingsContext<double>() { Name = "ChartWindow_Grid_ColumnDefinitions_Width", Value = 200 },
                 new Library.Configuration.SettingsContext<double>() { Name = "ChartWindow_GridViewColumn_Name_Width", Value = 120 },
@@ -527,13 +527,13 @@ namespace Lair.Properties
             }
         }
 
-        public LockedDictionary<Channel, LockedHashSet<Message>> Global_LockedMessages
+        public LockedDictionary<Channel, LockedHashSet<MessageItem>> Global_LockedMessageItems
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (LockedDictionary<Channel, LockedHashSet<Message>>)this["Global_LockedMessages"];
+                   return (LockedDictionary<Channel, LockedHashSet<MessageItem>>)this["Global_LockedMessageItems"];
                 }
             }
 
@@ -541,7 +541,7 @@ namespace Lair.Properties
             {
                 lock (this.ThisLock)
                 {
-                    this["Global_LockedMessages"] = value;
+                    this["Global_LockedMessageItems"] = value;
                 }
             }
         }
@@ -1541,13 +1541,13 @@ namespace Lair.Properties
         }
 
 
-        public LockedList<SectionTreeItem> SectionControl_SectionTreeItems
+        public LockedList<SectionTreeItem> ChannelControl_SectionTreeItems
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (LockedList<SectionTreeItem>)this["SectionControl_SectionTreeItems"];
+                   return (LockedList<SectionTreeItem>)this["ChannelControl_SectionTreeItems"];
                 }
             }
 
@@ -1555,18 +1555,18 @@ namespace Lair.Properties
             {
                 lock (this.ThisLock)
                 {
-                    this["SectionControl_SectionTreeItems"] = value;
+                    this["ChannelControl_SectionTreeItems"] = value;
                 }
             }
         }
 
-        public double SectionControl_Grid_ColumnDefinitions_Width
+        public double ChannelControl_Grid_ColumnDefinitions_Width
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["SectionControl_Grid_ColumnDefinitions_Width"];
+                   return (double)this["ChannelControl_Grid_ColumnDefinitions_Width"];
                 }
             }
 
@@ -1574,7 +1574,7 @@ namespace Lair.Properties
             {
                 lock (this.ThisLock)
                 {
-                    this["SectionControl_Grid_ColumnDefinitions_Width"] = value;
+                    this["ChannelControl_Grid_ColumnDefinitions_Width"] = value;
                 }
             }
         }

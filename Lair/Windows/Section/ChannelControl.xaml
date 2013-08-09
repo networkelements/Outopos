@@ -1,0 +1,376 @@
+﻿<UserControl x:Class="Lair.Windows.ChannelControl"
+        x:ClassModifier="internal"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:prop="clr-namespace:Lair.Properties"     
+        xmlns:local="clr-namespace:Lair.Windows" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        mc:Ignorable="d" 
+        d:DesignHeight="600" d:DesignWidth="800">
+    
+    <UserControl.Resources>
+        <Style x:Key="_headerStyle" TargetType="{x:Type GridViewColumnHeader}">
+            <Setter Property="Visibility" Value="Collapsed"/>
+        </Style>
+
+        <ContextMenu x:Key="_sectionTreeViewItemContextMenu">
+            <MenuItem Name="_sectionTreeViewItemNewMenuItem" Header="{Binding Path=ChannelControl_New, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemNewMenuItem_Click"/>
+            <MenuItem Name="_sectionTreeViewItemEditMenuItem" Header="{Binding Path=ChannelControl_Edit, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemEditMenuItem_Click"/>
+            <MenuItem Name="_sectionTreeViewItemDeleteMenuItem" Header="{Binding Path=ChannelControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemDeleteMenuItem_Click"/>
+            <Separator />
+            <MenuItem Name="_sectionTreeViewItemCopyMenuItem" Header="{Binding Path=ChannelControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemCopyMenuItem_Click" />
+            <MenuItem Name="_sectionTreeViewItemCopyInfoMenuItem" Header="{Binding Path=ChannelControl_CopyInfo, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemCopyInfoMenuItem_Click" />
+            <MenuItem Name="_sectionTreeViewItemPasteMenuItem" Header="{Binding Path=ChannelControl_Paste, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemPasteMenuItem_Click" />
+            <Separator />
+            <MenuItem Name="_sectionTreeViewItemChartMenuItem" Header="{Binding Path=ChannelControl_Chart, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemChartMenuItem_Click" />
+        </ContextMenu>
+
+        <ContextMenu x:Key="_searchTreeViewItemContextMenu">
+            <MenuItem Name="_searchTreeViewItemNewMenuItem" Header="{Binding Path=ChannelControl_New, Source={StaticResource ResourcesInstance}}" Click="_searchTreeViewItemNewMenuItem_Click"/>
+            <MenuItem Name="_searchTreeViewItemEditMenuItem" Header="{Binding Path=ChannelControl_Edit, Source={StaticResource ResourcesInstance}}" Click="_searchTreeViewItemEditMenuItem_Click"/>
+            <MenuItem Name="_searchTreeViewItemDeleteMenuItem" Header="{Binding Path=ChannelControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_searchTreeViewItemDeleteMenuItem_Click"/>
+            <Separator />
+            <MenuItem Name="_searchTreeViewItemCutMenuItem" Header="{Binding Path=ChannelControl_Cut, Source={StaticResource ResourcesInstance}}" Click="_searchTreeViewItemCutMenuItem_Click" />
+            <MenuItem Name="_searchTreeViewItemCopyMenuItem" Header="{Binding Path=ChannelControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_searchTreeViewItemCopyMenuItem_Click" />
+            <MenuItem Name="_searchTreeViewItemPasteMenuItem" Header="{Binding Path=ChannelControl_Paste, Source={StaticResource ResourcesInstance}}" Click="_searchTreeViewItemPasteMenuItem_Click" />
+            <Separator />
+            <MenuItem Name="_searchTreeViewItemTrustOnMenuItem" Header="{Binding Path=ChannelControl_Trust_On, Source={StaticResource ResourcesInstance}}" Click="_searchTreeViewItemTrustOnMenuItem_Click" />
+            <MenuItem Name="_searchTreeViewItemTrustOffMenuItem" Header="{Binding Path=ChannelControl_Trust_Off, Source={StaticResource ResourcesInstance}}" Click="_searchTreeViewItemTrustOffMenuItem_Click" />
+            <Separator />
+            <MenuItem Name="_searchTreeViewItemMarkAllMessagesReadMenuItem" Header="{Binding Path=ChannelControl_MarkAllMessagesRead, Source={StaticResource ResourcesInstance}}" Click="_searchTreeViewItemMarkAllMessagesReadMenuItem_Click" />
+            <Separator />
+            <MenuItem Name="_searchTreeViewItemChannelListMenuItem" Header="{Binding Path=ChannelControl_ChannelList, Source={StaticResource ResourcesInstance}}" Click="_searchTreeViewItemChannelListMenuItem_Click"/>
+        </ContextMenu>
+       
+        <ContextMenu x:Key="_channelTreeItemTreeViewItemContextMenu">
+            <MenuItem Name="_channelTreeItemTreeViewItemDeleteMenuItem" Header="{Binding Path=ChannelControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_channelTreeItemTreeViewItemDeleteMenuItem_Click"/>
+            <Separator />
+            <MenuItem Name="_channelTreeItemTreeViewItemCutMenuItem" Header="{Binding Path=ChannelControl_Cut, Source={StaticResource ResourcesInstance}}" Click="_channelTreeItemTreeViewItemCutMenuItem_Click" />
+            <MenuItem Name="_channelTreeItemTreeViewItemCopyMenuItem" Header="{Binding Path=ChannelControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_channelTreeItemTreeViewItemCopyMenuItem_Click" />
+            <Separator />
+            <MenuItem Name="_channelTreeItemTreeViewItemTopicUploadMenuItem" Header="{Binding Path=ChannelControl_TopicUpload, Source={StaticResource ResourcesInstance}}" Click="_channelTreeItemTreeViewItemTopicUploadMenuItem_Click" />
+            <Separator />
+            <MenuItem Name="_channelTreeItemTreeViewItemExportLockedMessagesMenuItem" Header="{Binding Path=ChannelControl_ExportLockedMessages, Source={StaticResource ResourcesInstance}}" Click="_channelTreeItemTreeViewItemExportLockedMessagesMenuItem_Click" />
+        </ContextMenu>
+        
+        <ContextMenu x:Key="_richTextBoxContextMenu" FontFamily="{Binding Path=FontFamily, Mode=OneWay, Source={StaticResource ResourcesInstance}, Converter={StaticResource _stringToFontFamilyConverter}}" FontSize="{Binding Path=FontSize, Mode=OneWay, Source={StaticResource ResourcesInstance}, Converter={StaticResource _stringToDoubleConverter}}">
+            <MenuItem Name="_richTextBoxCopyMenuItem" Header="{Binding Path=ChannelControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxCopyMenuItem_Click" />
+            <Separator />
+            <MenuItem Name="_richTextBoxResponsMenuItem" Header="{Binding Path=ChannelControl_Respons, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxResponsMenuItem_Click" />
+            <Separator />
+            <MenuItem Name="_richTextBoxTrustMenuItem" Header="{Binding Path=ChannelControl_Trust, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxTrustMenuItem_Click"/>
+            <MenuItem Name="_richTextBoxLockMenuItem" Header="{Binding Path=ChannelControl_Lock, Source={StaticResource ResourcesInstance}}" >
+                <MenuItem Name="_richTextBoxLockThisMenuItem" Header="{Binding Path=ChannelControl_LockThis, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxLockThisMenuItem_Click"/>
+                <MenuItem Name="_richTextBoxUnlockThisMenuItem" Header="{Binding Path=ChannelControl_UnlockThis, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxUnlockThisMenuItem_Click"/>
+                <MenuItem Name="_richTextBoxLockAllMenuItem" Header="{Binding Path=ChannelControl_LockAll, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxLockAllMenuItem_Click"/>
+                <MenuItem Name="_richTextBoxUnlockAllMenuItem" Header="{Binding Path=ChannelControl_UnlockAll, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxUnlockAllMenuItem_Click"/>
+            </MenuItem>
+            <MenuItem Name="_richTextBoxFilterMenuItem" Header="{Binding Path=ChannelControl_Filter, Source={StaticResource ResourcesInstance}}" >
+                <MenuItem Name="_richTextBoxFilterWordMenuItem" Header="{Binding Path=ChannelControl_FilterWord, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxFilterWordMenuItem_Click"/>
+                <MenuItem Name="_richTextBoxFilterSignatureMenuItem" Header="{Binding Path=ChannelControl_FilterSignature, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxFilterSignatureMenuItem_Click"/>
+            </MenuItem>
+        </ContextMenu>
+        
+        <Style x:Key="ExpanderDownHeaderStyle" TargetType="{x:Type ToggleButton}">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <ControlTemplate.Resources>
+                            <Storyboard x:Key="HoverOn">
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HoverRectangle" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="1"/>
+                                </DoubleAnimationUsingKeyFrames>
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HoverShineRectangle" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="1"/>
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+                            <Storyboard x:Key="HoverOff">
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HoverShineRectangle" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
+                                </DoubleAnimationUsingKeyFrames>
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HoverRectangle" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+                            <Storyboard x:Key="PressedOn">
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="PressedRectangle" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="1"/>
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+                            <Storyboard x:Key="PressedOff">
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="PressedRectangle" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </ControlTemplate.Resources>
+                        <Border Padding="{TemplateBinding Padding}" Background="Transparent"  BorderBrush="{DynamicResource NormalBorderBrush}" BorderThickness="1,1,1,1" CornerRadius="2,2,2,2">
+                            <Grid SnapsToDevicePixels="False" Background="Transparent">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="19" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Rectangle Margin="2,2,2,2" x:Name="Rectangle" Fill="{DynamicResource NormalBrush}" Stroke="{DynamicResource NormalBorderBrush}" StrokeThickness="1" RadiusX="1" RadiusY="1" />
+                                <Rectangle Margin="2,2,2,2" x:Name="ShineRectangle" Fill="{DynamicResource ShineBrush}" Stroke="{DynamicResource NormalBorderBrush}" StrokeThickness="1" RadiusX="1" RadiusY="1" />
+                                <Rectangle Margin="2,2,2,2" x:Name="HoverRectangle" Fill="{DynamicResource HoverBrush}" Stroke="{DynamicResource NormalBorderBrush}" StrokeThickness="1" RadiusX="1" RadiusY="1" Opacity="0" />
+                                <Rectangle Margin="2,2,2,2" x:Name="HoverShineRectangle" Fill="{DynamicResource HoverShineBrush}" Stroke="{DynamicResource NormalBorderBrush}" StrokeThickness="1" RadiusX="1" RadiusY="1" Opacity="0" />
+                                <Rectangle Margin="2,2,2,2" x:Name="PressedRectangle" Fill="{DynamicResource PressedBrush}" Stroke="{DynamicResource PressedBorderBrush}" StrokeThickness="1" RadiusX="1" RadiusY="1" Opacity="0" />
+                                <Path HorizontalAlignment="Center" x:Name="Up_Arrow" VerticalAlignment="Center" Fill="{DynamicResource GlyphBrush}" Data="M 0 0 L 4 4 L 8 0 Z" />
+                                <Path Visibility="Collapsed" HorizontalAlignment="Center" x:Name="Down_Arrow" VerticalAlignment="Center" Fill="{DynamicResource GlyphBrush}" Data="M 0 4 L 4 0 L 8 4 Z" />
+                                <ContentPresenter SnapsToDevicePixels="True" HorizontalAlignment="Left" Margin="4,2,0,2" VerticalAlignment="Center" Grid.Column="1" RecognizesAccessKey="True" />
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="true">
+                                <Setter Property="Visibility" TargetName="Down_Arrow" Value="Visible" />
+                                <Setter Property="Visibility" TargetName="Up_Arrow" Value="Collapsed" />
+
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard Storyboard="{StaticResource HoverOff}" x:Name="HoverOff_BeginStoryboard"/>
+                                </Trigger.ExitActions>
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard Storyboard="{StaticResource HoverOn}"/>
+                                </Trigger.EnterActions>
+
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard Storyboard="{StaticResource PressedOff}" x:Name="PressedOff_BeginStoryboard"/>
+                                </Trigger.ExitActions>
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard Storyboard="{StaticResource PressedOn}" x:Name="PressedOn_BeginStoryboard"/>
+                                </Trigger.EnterActions>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type Expander}">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="VerticalContentAlignment" Value="Stretch" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Expander}">
+                        <Border x:Name="Border" Opacity="1" BorderBrush="Black" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="2,2,2,2" Background="{TemplateBinding Background}">
+                            <DockPanel x:Name="dockPanel">
+                                <ToggleButton FontFamily="{TemplateBinding FontFamily}" FontSize="{TemplateBinding FontSize}" FontStretch="{TemplateBinding FontStretch}" FontStyle="{TemplateBinding FontStyle}" FontWeight="{TemplateBinding FontWeight}" Foreground="{TemplateBinding Foreground}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Padding="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" FocusVisualStyle="{StaticResource ExpanderHeaderFocusVisual}" Margin="1,1,1,0" MinHeight="0" MinWidth="0" x:Name="HeaderSite" Style="{StaticResource ExpanderDownHeaderStyle}" Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}" IsChecked="{Binding Path=IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" DockPanel.Dock="Top" />
+                                <Border Visibility="Collapsed" BorderThickness="1,0,1,1" CornerRadius="3,3,3,3" x:Name="border" Margin="1,1,1,1">
+                                    <ContentPresenter Focusable="false" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="1,1,1,1" x:Name="ExpandSite" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" DockPanel.Dock="Bottom" />
+                                </Border>
+                            </DockPanel>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsExpanded" Value="true">
+                                <Setter Property="Visibility" TargetName="border" Value="Visible" />
+                            </Trigger>
+                            <Trigger Property="ExpandDirection" Value="Down" />
+                            <Trigger Property="ExpandDirection" Value="Right">
+                                <Setter Property="DockPanel.Dock" TargetName="ExpandSite" Value="Right" />
+                                <Setter Property="DockPanel.Dock" TargetName="HeaderSite" Value="Left" />
+                                <Setter Property="Style" TargetName="HeaderSite" Value="{StaticResource ExpanderRightHeaderStyle}" />
+                            </Trigger>
+                            <Trigger Property="ExpandDirection" Value="Up">
+                                <Setter Property="DockPanel.Dock" TargetName="ExpandSite" Value="Top" />
+                                <Setter Property="DockPanel.Dock" TargetName="HeaderSite" Value="Bottom" />
+                                <Setter Property="Style" TargetName="HeaderSite" Value="{StaticResource ExpanderUpHeaderStyle}" />
+                            </Trigger>
+                            <Trigger Property="ExpandDirection" Value="Left">
+                                <Setter Property="DockPanel.Dock" TargetName="ExpandSite" Value="Left" />
+                                <Setter Property="DockPanel.Dock" TargetName="HeaderSite" Value="Right" />
+                                <Setter Property="Style" TargetName="HeaderSite" Value="{StaticResource ExpanderLeftHeaderStyle}" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type local:RichTextBoxEx}">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="UseLayoutRounding" Value="True" />
+            <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+            <Setter Property="IsReadOnly" Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type local:RichTextBoxEx}">
+                        <Grid Background="{TemplateBinding Background}">
+                            <ScrollViewer Margin="0" x:Name="PART_ContentHost" Style="{DynamicResource NuclearScrollViewer}" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+            <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}"/>
+            <Setter Property="BorderBrush" Value="#FF000000"/>
+            <Setter Property="ContextMenu" Value="{StaticResource _richTextBoxContextMenu}" />
+        </Style>
+
+        <DataTemplate x:Key="_myTemplate_ListView">
+            <Grid>
+                <local:RichTextBoxEx x:Name="_richTextBox" local:RichTextBoxHelper.DocumentValue="{Binding Path=Value, Mode=OneWay}" Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType=Grid}}" ContextMenuOpening="_richTextBox_ContextMenuOpening">
+                    <RichTextBox.Style>
+                        <Style TargetType="{x:Type local:RichTextBoxEx}">
+                            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                            <Setter Property="SnapsToDevicePixels" Value="True" />
+                            <Setter Property="UseLayoutRounding" Value="True" />
+                            <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+                            <Setter Property="IsReadOnly" Value="True" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type RichTextBox}">
+                                        <Grid>
+                                            <Border x:Name="Border" Opacity="1" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="2,2,2,2" Background="{TemplateBinding Background}">
+                                                <Grid>
+                                                    <Border BorderThickness="1">
+                                                        <ScrollViewer Margin="0" x:Name="PART_ContentHost" Style="{DynamicResource NuclearScrollViewer}" />
+                                                    </Border>
+                                                </Grid>
+                                            </Border>
+                                        </Grid>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+                            <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}"/>
+                            <Setter Property="BorderBrush" Value="#FF000000"/>
+                            <Setter Property="ContextMenu" Value="{StaticResource _richTextBoxContextMenu}" />
+                        </Style>
+                    </RichTextBox.Style>
+                    <RichTextBox.BorderBrush>
+                        <MultiBinding Converter="{StaticResource _messageWrapperOfBorderBrushConverter}">
+                            <Binding Mode="OneWay"/>
+                            <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}" Path="IsSelected" />
+                        </MultiBinding>
+                    </RichTextBox.BorderBrush>
+                </local:RichTextBoxEx>
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <UserControl.CommandBindings>
+        <CommandBinding Command="New" Executed="Execute_New" />
+        <CommandBinding Command="Delete" Executed="Execute_Delete" />
+        <CommandBinding Command="Cut" Executed="Execute_Cut" />
+        <CommandBinding Command="Copy" Executed="Execute_Copy" />
+        <CommandBinding Command="Paste" Executed="Execute_Paste" />
+        <CommandBinding Command="Search"  Executed="Execute_Search" />
+    </UserControl.CommandBindings>
+
+    <UserControl.InputBindings>
+        <KeyBinding Gesture="CTRL+N" Command="New" />
+        <KeyBinding Gesture="Delete" Command="Delete" />
+        <KeyBinding Gesture="CTRL+X" Command="Cut" />
+        <KeyBinding Gesture="CTRL+C" Command="Copy" />
+        <KeyBinding Gesture="CTRL+V" Command="Paste" />
+        <KeyBinding Gesture="CTRL+F" Command="Search" />
+    </UserControl.InputBindings>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="23" />
+            <RowDefinition Height="546*" />
+            <RowDefinition Name="_searchRowDefinition" Height="24" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="{Binding Path=ChannelControl_Grid_ColumnDefinitions_Width, Mode=TwoWay, Converter={StaticResource _doubleToGridLengthConverter}, Source={x:Static prop:Settings.Instance}}" />
+            <ColumnDefinition Width="4" />
+            <ColumnDefinition Width="506*" />
+        </Grid.ColumnDefinitions>
+
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.RowSpan="3" />
+
+        <TreeView Name="_treeView" ContextMenuOpening="_treeView_ContextMenuOpening" SelectedItemChanged="_treeView_SelectedItemChanged" PreviewMouseMove="_treeView_PreviewMouseMove" AllowDrop="True" PreviewDrop="_treeView_PreviewDrop" PreviewMouseLeftButtonDown="_treeView_PreviewMouseLeftButtonDown" PreviewDragOver="_treeView_PreviewDragOver"
+                VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" Grid.RowSpan="3">
+            <TreeView.Resources>
+                <Style TargetType="{x:Type local:SectionTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" >
+                    <Setter Property="ContextMenu" Value="{StaticResource _sectionTreeViewItemContextMenu}" />
+                    <EventSetter Event="ContextMenuOpening" Handler="_sectionTreeViewItemContextMenu_ContextMenuOpening" />
+                </Style>
+                <Style TargetType="{x:Type local:SearchTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" >
+                    <Setter Property="ContextMenu" Value="{StaticResource _searchTreeViewItemContextMenu}" />
+                    <EventSetter Event="ContextMenuOpening" Handler="_searchTreeViewItemContextMenu_ContextMenuOpening" />
+                </Style>
+                <Style TargetType="{x:Type local:ChannelTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" >
+                    <Setter Property="ContextMenu" Value="{StaticResource _channelTreeItemTreeViewItemContextMenu}" />
+                    <EventSetter Event="ContextMenuOpening" Handler="_channelTreeItemTreeViewItemContextMenu_ContextMenuOpening" />
+                </Style>
+            </TreeView.Resources>
+
+            <TreeView.ContextMenu>
+                <ContextMenu Name="_treeViewContextMenu">
+                    <MenuItem Name="_treeViewNewMenuItem" Header="{Binding Path=ChannelControl_New, Source={StaticResource ResourcesInstance}}" Click="_treeViewNewMenuItem_Click"/>
+                    <Separator />
+                    <MenuItem Name="_treeViewPasteMenuItem" Header="{Binding Path=ChannelControl_Paste, Source={StaticResource ResourcesInstance}}" Click="_treeViewPasteMenuItem_Click"/>
+                    <Separator />
+                    <MenuItem Name="_treeViewImportLockedMessagesMenuItem" Header="{Binding Path=ChannelControl_ImportLockedMessages, Source={StaticResource ResourcesInstance}}" Click="_treeViewImportLockedMessagesMenuItem_Click" />
+                </ContextMenu>
+            </TreeView.ContextMenu>
+        </TreeView>
+
+        <ToggleButton Content="{Binding Path=ChannelControl_Trust, Source={StaticResource ResourcesInstance}}" Grid.Column="2" Height="23" HorizontalAlignment="Left" Margin="6,0,0,0" Name="_trustToggleButton" VerticalAlignment="Top" Width="90" PreviewMouseDown="_trustToggleButton_PreviewMouseDown" IsEnabled="False" />
+        <ToggleButton Content="{Binding Path=ChannelControl_NewMessageOnly, Source={StaticResource ResourcesInstance}}" Grid.Column="2" Height="23" HorizontalAlignment="Left" Margin="102,0,0,0" Name="_newMessageOnlyToggleButton" VerticalAlignment="Top" Width="90" Checked="_newMessageOnlyToggleButton_Checked" Unchecked="_newMessageOnlyToggleButton_Unchecked" />
+        
+        <ToggleButton Content="{Binding Path=ChannelControl_Topic, Source={StaticResource ResourcesInstance}}" Height="23" HorizontalAlignment="Right" Margin="0,0,87,0" Name="_topicToggleButton" VerticalAlignment="Top" Width="75" Grid.Column="2" PreviewMouseDown="_topicToggleButton_PreviewMouseDown" IsEnabled="False" />
+        <Button Content="{Binding Path=ChannelControl_Message, Source={StaticResource ResourcesInstance}}" Grid.Column="2" Height="23" HorizontalAlignment="Right" Name="_messageUploadButton" VerticalAlignment="Top" Width="75" Margin="0,0,6,0" Click="_messageUploadButton_Click" IsEnabled="False" />
+        
+        <local:ListViewEx Grid.Column="2" Grid.Row="1" x:Name="_listView" Padding="0,1,0,0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SizeChanged="_listView_SizeChanged" PreviewKeyDown="_listView_PreviewKeyDown" LayoutUpdated="_listView_LayoutUpdated"
+                VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Standard" Grid.ColumnSpan="3" PreviewMouseDown="_listView_PreviewMouseDown">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="OverridesDefaultStyle" Value="True" />
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="BorderThickness" Value="1" />
+                    <Setter Property="Margin" Value="0" />
+                    <Setter Property="VerticalAlignment" Value="Stretch" />
+                    <Setter Property="HorizontalAlignment" Value="Stretch" />
+                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                <Border SnapsToDevicePixels="true" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="2" x:Name="border">
+                                    <Grid Margin="0,3,0,0">
+                                        <GridViewRowPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Margin="0,2,0,2" VerticalAlignment="Stretch" />
+                                    </Grid>
+                                </Border>
+                                <!--<ControlTemplate.Triggers>
+                                    <Trigger Property="IsKeyboardFocusWithin" Value="true">
+                                        <Setter Property="IsSelected" Value="true" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>-->
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <local:VirtualizingStackPanelEx CanHorizontallyScroll="False" Orientation="Vertical" />
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+            <ListView.View>
+                <GridView AllowsColumnReorder="False" ColumnHeaderContainerStyle="{StaticResource _headerStyle}">
+                    <GridViewColumn x:Name="_gridViewColumn" Header="Value" CellTemplate="{StaticResource _myTemplate_ListView}" />
+                </GridView>
+            </ListView.View>
+        </local:ListViewEx>
+       
+        <TextBox Grid.Column="2" Grid.Row="2" Margin="24,0,0,0" Name="_searchTextBox" Grid.ColumnSpan="3" KeyDown="_searchTextBox_KeyDown" />
+        <Button Content="×" Grid.Column="2" Grid.Row="2" Height="16" HorizontalAlignment="Left" Margin="4,4,0,0" Name="_searchCloseButton" VerticalAlignment="Top" Width="16" Padding="0,-2,0,0" Click="_searchCloseButton_Click" />
+    </Grid>
+</UserControl>

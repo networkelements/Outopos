@@ -714,14 +714,13 @@ namespace Lair.Windows
                     }
 
                     {
-                        var searchItem = new SearchItem();
+                        var searchItem = new FilterItem();
                         searchItem.Name = "default";
 
                         var searchTreeItem = new SearchTreeItem();
                         searchTreeItem.SearchItem = searchItem;
                         searchTreeItem.ChannelTreeItems.Add(new ChannelTreeItem() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAAmJGDzJZZe2LYTKX_h2n34Hwnp4Ez19bD-9mjkRwps4jt28VDAEiw3LUlRtc1nwgDNuFbtto2o7wHYpokMSOKUwAAAAYBQW1vZWJhN9Bj5Q") });
                         searchTreeItem.ChannelTreeItems.Add(new ChannelTreeItem() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAAzCXi8JdCucrX16V-WAViFxWmALOLwEwN6YxrpzwttvOrBmkPb5dJOg1y20TrMovemnObJ8Iy3ivXm_wkBkErlAAAAAQBTGFpcr3Cip8") });
-                        searchTreeItem.ChannelTreeItems.Add(new ChannelTreeItem() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAAfSj-05Hm0h_kpMmU78XWVkVepumSh2F2shZe7Fm-LEbORv0II6mAeVZO-3w3kZZIHqk9y2nFTNgOR_SfL9ofiQAAAAQBUm9zYbQuG6Y") });
                         searchTreeItem.ChannelTreeItems.Add(new ChannelTreeItem() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAApd3NdDiaZpygYU5ySICsv8zk2_2P1bRViGigtWhwJtIpw5Xi6IkdUbp3hroB_cN-IJkyscS6c4_cUhtJ9N2zlQAAAAQBVGVzdGSZ__Y") });
 
                         string leaderSignature;
@@ -736,7 +735,7 @@ namespace Lair.Windows
                         sectionTreeItem.SearchTreeItems.Clear();
                         sectionTreeItem.SearchTreeItems.Add(searchTreeItem);
 
-                        Settings.Instance.SectionControl_SectionTreeItems.Add(sectionTreeItem);
+                        Settings.Instance.ChannelControl_SectionTreeItems.Add(sectionTreeItem);
                     }
 
                     _lairManager.ConnectionCountLimit = 12;
@@ -843,14 +842,13 @@ namespace Lair.Windows
                     if (version < new Version(1, 0, 0))
                     {
                         {
-                            var searchItem = new SearchItem();
+                            var searchItem = new FilterItem();
                             searchItem.Name = "default";
 
                             var searchTreeItem = new SearchTreeItem();
                             searchTreeItem.SearchItem = searchItem;
                             searchTreeItem.ChannelTreeItems.Add(new ChannelTreeItem() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAAmJGDzJZZe2LYTKX_h2n34Hwnp4Ez19bD-9mjkRwps4jt28VDAEiw3LUlRtc1nwgDNuFbtto2o7wHYpokMSOKUwAAAAYBQW1vZWJhN9Bj5Q") });
                             searchTreeItem.ChannelTreeItems.Add(new ChannelTreeItem() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAAzCXi8JdCucrX16V-WAViFxWmALOLwEwN6YxrpzwttvOrBmkPb5dJOg1y20TrMovemnObJ8Iy3ivXm_wkBkErlAAAAAQBTGFpcr3Cip8") });
-                            searchTreeItem.ChannelTreeItems.Add(new ChannelTreeItem() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAAfSj-05Hm0h_kpMmU78XWVkVepumSh2F2shZe7Fm-LEbORv0II6mAeVZO-3w3kZZIHqk9y2nFTNgOR_SfL9ofiQAAAAQBUm9zYbQuG6Y") });
                             searchTreeItem.ChannelTreeItems.Add(new ChannelTreeItem() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAApd3NdDiaZpygYU5ySICsv8zk2_2P1bRViGigtWhwJtIpw5Xi6IkdUbp3hroB_cN-IJkyscS6c4_cUhtJ9N2zlQAAAAQBVGVzdGSZ__Y") });
 
                             string leaderSignature;
@@ -865,7 +863,7 @@ namespace Lair.Windows
                             sectionTreeItem.SearchTreeItems.Clear();
                             sectionTreeItem.SearchTreeItems.Add(searchTreeItem);
 
-                            Settings.Instance.SectionControl_SectionTreeItems.Add(sectionTreeItem);
+                            Settings.Instance.ChannelControl_SectionTreeItems.Add(sectionTreeItem);
                         }
                     }
 
@@ -1255,7 +1253,7 @@ namespace Lair.Windows
             _connectionControl.Width = Double.NaN;
             _connectionTabItem.Content = _connectionControl;
 
-            SectionControl _sectionControl = new SectionControl(this, _lairManager, _bufferManager);
+            ChannelControl _sectionControl = new ChannelControl(this, _lairManager, _bufferManager);
             _sectionControl.Height = Double.NaN;
             _sectionControl.Width = Double.NaN;
             _sectionTabItem.Content = _sectionControl;
@@ -1504,40 +1502,6 @@ namespace Lair.Windows
             VersionInformationWindow window = new VersionInformationWindow();
             window.Owner = this;
             window.ShowDialog();
-        }
-    }
-
-    class LanguageMenuItem : MenuItem
-    {
-        private string _value;
-
-        public LanguageMenuItem()
-        {
-            LanguagesManager.UsingLanguageChangedEvent += new UsingLanguageChangedEventHandler(this.LanguagesManager_UsingLanguageChangedEvent);
-        }
-
-        void LanguagesManager_UsingLanguageChangedEvent(object sender)
-        {
-            this.Update();
-        }
-
-        public string Value
-        {
-            get
-            {
-                return _value;
-            }
-            set
-            {
-                _value = value;
-
-                this.Update();
-            }
-        }
-
-        private void Update()
-        {
-            base.Header = LanguagesManager.Instance.Translate("Languages_" + _value) ?? _value;
         }
     }
 }

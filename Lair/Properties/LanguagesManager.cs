@@ -2112,332 +2112,332 @@ namespace Lair.Properties
         }
 
 
-        public string SectionControl_New
+        public string ChannelControl_New
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_New");
+                    return this.Translate("ChannelControl_New");
                 }
             }
         }
 
-        public string SectionControl_Edit
+        public string ChannelControl_Edit
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_Edit");
+                    return this.Translate("ChannelControl_Edit");
                 }
             }
         }
 
-        public string SectionControl_Delete
+        public string ChannelControl_Delete
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_Delete");
+                    return this.Translate("ChannelControl_Delete");
                 }
             }
         }
 
-        public string SectionControl_Cut
+        public string ChannelControl_Cut
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_Cut");
+                    return this.Translate("ChannelControl_Cut");
                 }
             }
         }
 
-        public string SectionControl_Copy
+        public string ChannelControl_Copy
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_Copy");
+                    return this.Translate("ChannelControl_Copy");
                 }
             }
         }
 
-        public string SectionControl_CopyInfo
+        public string ChannelControl_CopyInfo
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_CopyInfo");
+                    return this.Translate("ChannelControl_CopyInfo");
                 }
             }
         }
 
-        public string SectionControl_Paste
+        public string ChannelControl_Paste
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_Paste");
+                    return this.Translate("ChannelControl_Paste");
                 }
             }
         }
 
-        public string SectionControl_Chart
+        public string ChannelControl_Chart
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_Chart");
+                    return this.Translate("ChannelControl_Chart");
                 }
             }
         }
 
-        public string SectionControl_ChannelList
+        public string ChannelControl_ChannelList
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_ChannelList");
+                    return this.Translate("ChannelControl_ChannelList");
                 }
             }
         }
 
-        public string SectionControl_Respons
+        public string ChannelControl_Respons
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_Respons");
+                    return this.Translate("ChannelControl_Respons");
                 }
             }
         }
 
-        public string SectionControl_Trust
+        public string ChannelControl_Trust
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_Trust");
+                    return this.Translate("ChannelControl_Trust");
                 }
             }
         }
 
-        public string SectionControl_Trust_On
+        public string ChannelControl_Trust_On
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_Trust_On");
+                    return this.Translate("ChannelControl_Trust_On");
                 }
             }
         }
 
-        public string SectionControl_Trust_Off
+        public string ChannelControl_Trust_Off
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_Trust_Off");
+                    return this.Translate("ChannelControl_Trust_Off");
                 }
             }
         }
 
-        public string SectionControl_Lock
+        public string ChannelControl_Lock
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_Lock");
+                    return this.Translate("ChannelControl_Lock");
                 }
             }
         }
 
-        public string SectionControl_LockThis
+        public string ChannelControl_LockThis
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_LockThis");
+                    return this.Translate("ChannelControl_LockThis");
                 }
             }
         }
 
-        public string SectionControl_UnlockThis
+        public string ChannelControl_UnlockThis
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_UnlockThis");
+                    return this.Translate("ChannelControl_UnlockThis");
                 }
             }
         }
 
-        public string SectionControl_LockAll
+        public string ChannelControl_LockAll
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_LockAll");
+                    return this.Translate("ChannelControl_LockAll");
                 }
             }
         }
 
-        public string SectionControl_UnlockAll
+        public string ChannelControl_UnlockAll
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_UnlockAll");
+                    return this.Translate("ChannelControl_UnlockAll");
                 }
             }
         }
 
-        public string SectionControl_Filter
+        public string ChannelControl_Filter
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_Filter");
+                    return this.Translate("ChannelControl_Filter");
                 }
             }
         }
 
-        public string SectionControl_FilterWord
+        public string ChannelControl_FilterWord
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_FilterWord");
+                    return this.Translate("ChannelControl_FilterWord");
                 }
             }
         }
 
-        public string SectionControl_FilterSignature
+        public string ChannelControl_FilterSignature
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_FilterSignature");
+                    return this.Translate("ChannelControl_FilterSignature");
                 }
             }
         }
 
-        public string SectionControl_NewMessageOnly
+        public string ChannelControl_NewMessageOnly
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_NewMessageOnly");
+                    return this.Translate("ChannelControl_NewMessageOnly");
                 }
             }
         }
 
-        public string SectionControl_Message
+        public string ChannelControl_Message
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_Message");
+                    return this.Translate("ChannelControl_Message");
                 }
             }
         }
 
-        public string SectionControl_Topic
+        public string ChannelControl_Topic
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_Topic");
+                    return this.Translate("ChannelControl_Topic");
                 }
             }
         }
 
-        public string SectionControl_AmoebaNotFound_Message
+        public string ChannelControl_AmoebaNotFound_Message
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_AmoebaNotFound_Message");
+                    return this.Translate("ChannelControl_AmoebaNotFound_Message");
                 }
             }
         }
 
-        public string SectionControl_MarkAllMessagesRead
+        public string ChannelControl_MarkAllMessagesRead
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_MarkAllMessagesRead");
+                    return this.Translate("ChannelControl_MarkAllMessagesRead");
                 }
             }
         }
 
-        public string SectionControl_MarkAllMessagesRead_Message
+        public string ChannelControl_MarkAllMessagesRead_Message
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_MarkAllMessagesRead_Message");
+                    return this.Translate("ChannelControl_MarkAllMessagesRead_Message");
                 }
             }
         }
 
-        public string SectionControl_ImportLockedMessages
+        public string ChannelControl_ImportLockedMessages
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_ImportLockedMessages");
+                    return this.Translate("ChannelControl_ImportLockedMessages");
                 }
             }
         }
 
-        public string SectionControl_ExportLockedMessages
+        public string ChannelControl_ExportLockedMessages
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_ExportLockedMessages");
+                    return this.Translate("ChannelControl_ExportLockedMessages");
                 }
             }
         }
 
-        public string SectionControl_TopicUpload
+        public string ChannelControl_TopicUpload
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_TopicUpload");
+                    return this.Translate("ChannelControl_TopicUpload");
                 }
             }
         }
