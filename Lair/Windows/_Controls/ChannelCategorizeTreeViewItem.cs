@@ -22,10 +22,10 @@ namespace Lair.Windows
         private ObservableCollection<TreeViewItem> _listViewItemCollection = new ObservableCollection<TreeViewItem>();
         private TextBlock _header = new TextBlock();
 
-        public ChannelCategorizeTreeViewItem()
+        public ChannelCategorizeTreeViewItem(ChannelCategorizeTreeItem value)
             : base()
         {
-            this.Value = new ChannelCategorizeTreeItem();
+            if (value == null) throw new ArgumentNullException("value");
 
             base.ItemsSource = _listViewItemCollection;
             base.Header = _header;
@@ -34,20 +34,8 @@ namespace Lair.Windows
             {
                 e.Handled = true;
             };
-        }
 
-        public ChannelCategorizeTreeViewItem(ChannelCategorizeTreeItem storeCategorizeTreeItem)
-            : base()
-        {
-            this.Value = storeCategorizeTreeItem;
-
-            base.ItemsSource = _listViewItemCollection;
-            base.Header = _header;
-
-            base.RequestBringIntoView += (object sender, RequestBringIntoViewEventArgs e) =>
-            {
-                e.Handled = true;
-            };
+            this.Value = value;
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e)

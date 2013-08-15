@@ -20,10 +20,10 @@ namespace Lair.Windows
 
         private TextBlock _header = new TextBlock();
 
-        public SectionTreeViewItem(SectionTreeItem sectionTreeItem)
+        public SectionTreeViewItem(SectionTreeItem value)
             : base()
         {
-            this.Value = sectionTreeItem;
+            if (value == null) throw new ArgumentNullException("value");
 
             base.Header = _header;
 
@@ -31,6 +31,8 @@ namespace Lair.Windows
             {
                 e.Handled = true;
             };
+
+            this.Value = value;
         }
 
         protected override void OnMouseDown(System.Windows.Input.MouseButtonEventArgs e)

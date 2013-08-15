@@ -117,98 +117,19 @@
     <Compile Include="NativeMethods.cs" />
     <Compile Include="TransfarLimitManager.cs" />
     <Compile Include="WindowPosition.cs" />
-    <Compile Include="Windows\Mail\MailControl.xaml.cs">
-      <DependentUpon>MailControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\Section\ChannelListWindow.xaml.cs">
-      <DependentUpon>ChannelListWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\Section\ChartWindow.xaml.cs">
-      <DependentUpon>ChartWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\Section\CreateSignatureWindow.xaml.cs">
-      <DependentUpon>CreateSignatureWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\Section\DocumentControl.xaml.cs">
-      <DependentUpon>DocumentControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\Section\SectionControl.xaml.cs">
-      <DependentUpon>SectionControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Windows\_Controls\ChannelCategorizeTreeViewItem.cs" />
     <Compile Include="Windows\_Controls\SectionCategorizeTreeViewItem.cs" />
     <Compile Include="Windows\_Items\ChannelTreeItem.cs" />
     <Compile Include="Windows\_Controls\ChannelTreeViewItem.cs" />
     <Compile Include="Windows\_Items\ChannelCategorizeTreeItem.cs" />
-    <Compile Include="Windows\_Items\MessageWrapper.cs" />
     <Compile Include="Windows\_Items\SectionCategorizeTreeItem.cs" />
     <Compile Include="Windows\_Controls\SignatureTreeViewItem.cs" />
-    <Compile Include="Windows\_Items\MessageItem.cs" />
     <Compile Include="Windows\_Controls\SectionTreeViewItem.cs" />
     <Compile Include="Windows\_Items\SectionTreeItem.cs" />
-    <Compile Include="Windows\_Items\FilterItem.cs" />
     <Compile Include="Windows\_Controls\DigitalSignatureComboBoxItem.cs" />
     <Compile Include="Windows\_Controls\LanguageMenuItem.cs" />
     <Compile Include="Windows\_Items\UpdateOption.cs" />
-    <Compile Include="Windows\Section\TopicPreviewWindow.xaml.cs">
-      <DependentUpon>TopicPreviewWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\Section\TopicEditWindow.xaml.cs">
-      <DependentUpon>TopicEditWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\Section\SearchItemEditWindow.xaml.cs">
-      <DependentUpon>SearchItemEditWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\Section\ChannelControl.xaml.cs">
-      <DependentUpon>ChannelControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\Section\NewSectionWindow.xaml.cs">
-      <DependentUpon>NewSectionWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\Section\SectionTreeItemEditWindow.xaml.cs">
-      <DependentUpon>SectionTreeItemEditWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Windows\_Controls\VirtualizingStackPanelEx.cs" />
-    <Page Include="Windows\Mail\MailControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\Section\ChannelListWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\Section\ChartWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\Section\CreateSignatureWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\Section\DocumentControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\Section\SectionControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\Section\TopicPreviewWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\Section\TopicEditWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\Section\SearchItemEditWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\Section\ChannelControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Windows\ConnectionControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -220,22 +141,6 @@
       <Generator>MSBuild:Compile</Generator>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\Section\NewSectionWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\Section\NewChannelWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\Section\MessageEditWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\Section\SectionTreeItemEditWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\ViewSettingsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -261,13 +166,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Windows\Section\NewChannelWindow.xaml.cs">
-      <DependentUpon>NewChannelWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\Section\MessageEditWindow.xaml.cs">
-      <DependentUpon>MessageEditWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\_Controls\RichTextBoxHelper.cs" />
     <Compile Include="Windows\ViewSettingsWindow.xaml.cs">
       <DependentUpon>ViewSettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -425,7 +323,10 @@
       <Name>Library</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Windows\Mail\" />
+    <Folder Include="Windows\Section\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

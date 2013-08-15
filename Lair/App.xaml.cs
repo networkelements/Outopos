@@ -39,6 +39,7 @@ namespace Lair
         public static Version LairVersion { get; private set; }
         public static Dictionary<string, string> DirectoryPaths { get; private set; }
         public static TabItemType SelectTab { get; set; }
+        public LairColors Colors { get; private set; }
         private FileStream _lockStream = null;
         private LockedList<Process> _processList = new LockedList<Process>();
 
@@ -567,5 +568,10 @@ namespace Lair
                 _lockStream = null;
             }
         }
+    }
+
+    public class LairColors
+    {
+
     }
 }

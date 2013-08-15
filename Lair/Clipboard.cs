@@ -14,7 +14,9 @@ namespace Lair
 {
     static class Clipboard
     {
-        private static List<SearchTreeItem> _searchTreeItemList = new List<SearchTreeItem>();
+        private static List<SectionCategorizeTreeItem> _sectionCategorizeTreeItemList = new List<SectionCategorizeTreeItem>();
+        private static List<SectionTreeItem> _sectionTreeItemList = new List<SectionTreeItem>();
+        private static List<ChannelCategorizeTreeItem> _channelCategorizeTreeItemList = new List<ChannelCategorizeTreeItem>();
         private static List<ChannelTreeItem> _channelTreeItemList = new List<ChannelTreeItem>();
 
         private static ClipboardWatcher _clipboardWatcher;
@@ -26,7 +28,9 @@ namespace Lair
             _clipboardWatcher = new ClipboardWatcher();
             _clipboardWatcher.DrawClipboard += (sender, e) =>
             {
-                _searchTreeItemList.Clear();
+                _sectionCategorizeTreeItemList.Clear();
+                _sectionTreeItemList.Clear();
+                _channelCategorizeTreeItemList.Clear();
                 _channelTreeItemList.Clear();
             };
         }
@@ -136,48 +140,6 @@ namespace Lair
             }
         }
 
-        public static IEnumerable<SectionTreeItem> GetSectionInfos()
-        {
-            lock (_thisLock)
-            {
-                var list = new List<SectionTreeItem>();
-
-                foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    if (!item.StartsWith("Section@")) continue;
-
-                    string leaderSignature;
-
-                    try
-                    {
-                        var section = LairConverter.FromSectionString(item, out leaderSignature);
-                        list.Add(new SectionTreeItem() { Section = section, LeaderSignature = leaderSignature });
-                    }
-                    catch (Exception)
-                    {
-
-                    }
-                }
-
-                return list.Where(n => n != null);
-            }
-        }
-
-        public static void SetSectionInfos(IEnumerable<SectionTreeItem> sectionInfos)
-        {
-            lock (_thisLock)
-            {
-                var sb = new StringBuilder();
-
-                foreach (var item in sectionInfos)
-                {
-                    sb.AppendLine(LairConverter.ToSectionString(item.Section, item.LeaderSignature));
-                }
-
-                Clipboard.SetText(sb.ToString());
-            }
-        }
-
         public static IEnumerable<Channel> GetChannels()
         {
             lock (_thisLock)
@@ -214,88 +176,6 @@ namespace Lair
                 }
 
                 Clipboard.SetText(sb.ToString());
-            }
-        }
-
-        public static IEnumerable<SearchTreeItem> GetSearchTreeItems()
-        {
-            lock (_thisLock)
-            {
-                return _searchTreeItemList.Select(n => n.DeepClone()).ToArray();
-            }
-        }
-
-        public static void SetSearchTreeItems(IEnumerable<SearchTreeItem> searchTreeItems)
-        {
-            lock (_thisLock)
-            {
-                {
-                    List<Channel> channels = new List<Channel>();
-                    List<SearchTreeItem> searchTreeItemList = new List<SearchTreeItem>();
-
-                    searchTreeItemList.AddRange(searchTreeItems);
-
-                    for (int i = 0; i < searchTreeItemList.Count; i++)
-                    {
-                        searchTreeItemList.AddRange(searchTreeItemList[i].SearchTreeItems);
-
-                        var tempList = searchTreeItemList[i].ChannelTreeItems.Select(n => n.Channel).ToList();
-
-                        tempList.Sort((x, y) =>
-                        {
-                            int c = x.Name.CompareTo(y.Name);
-                            if (c != 0) return c;
-
-                            return Collection.Compare(x.Id, y.Id);
-                        });
-
-                        channels.AddRange(tempList);
-                    }
-
-                    var sb = new StringBuilder();
-
-                    foreach (var item in channels)
-                    {
-                        sb.AppendLine(LairConverter.ToChannelString(item));
-                    }
-
-                    Clipboard.SetText(sb.ToString());
-                }
-
-                {
-                    _searchTreeItemList.Clear();
-                    _searchTreeItemList.AddRange(searchTreeItems.Select(n => n.DeepClone()));
-                }
-            }
-        }
-
-        public static IEnumerable<ChannelTreeItem> GetChannelTreeItems()
-        {
-            lock (_thisLock)
-            {
-                return _channelTreeItemList.Select(n => n.DeepClone()).ToArray();
-            }
-        }
-
-        public static void SetChannelTreeItems(IEnumerable<ChannelTreeItem> channelTreeItems)
-        {
-            lock (_thisLock)
-            {
-                {
-                    var sb = new StringBuilder();
-
-                    foreach (var item in channelTreeItems)
-                    {
-                        sb.AppendLine(LairConverter.ToChannelString(item.Channel));
-                    }
-
-                    Clipboard.SetText(sb.ToString());
-                }
-
-                {
-                    _channelTreeItemList.Clear();
-                    _channelTreeItemList.AddRange(channelTreeItems.Select(n => n.DeepClone()));
-                }
             }
         }
 
@@ -340,6 +220,139 @@ namespace Lair
                 }
 
                 Clipboard.SetText(sb.ToString());
+            }
+        }
+
+        public static IEnumerable<SectionCategorizeTreeItem> GetSectionCategorizeTreeItems()
+        {
+            lock (_thisLock)
+            {
+                return _sectionCategorizeTreeItemList.ToArray();
+            }
+        }
+
+        public static void SetSectionCategorizeTreeItems(IEnumerable<SectionCategorizeTreeItem> items)
+        {
+            lock (_thisLock)
+            {
+                _sectionCategorizeTreeItemList.Clear();
+                _sectionCategorizeTreeItemList.AddRange(items.Select(n => n.DeepClone()));
+            }
+        }
+
+        public static IEnumerable<SectionTreeItem> GetSectionTreeItems()
+        {
+            lock (_thisLock)
+            {
+                var list = new List<SectionTreeItem>(_sectionTreeItemList);
+
+                foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    if (!item.StartsWith("Section@")) continue;
+
+                    try
+                    {
+                        string leaderSignature;
+                        var section = LairConverter.FromSectionString(item, out leaderSignature);
+                        if (list.Any(n => n.Section == section && n.LeaderSignature == leaderSignature)) continue;
+
+                        list.Add(new SectionTreeItem() { Section = section, LeaderSignature = leaderSignature });
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                }
+
+                return list.Where(n => n != null);
+            }
+        }
+
+        public static void SetSectionTreeItems(IEnumerable<SectionTreeItem> items)
+        {
+            lock (_thisLock)
+            {
+                {
+                    var sb = new StringBuilder();
+
+                    foreach (var item in items)
+                    {
+                        sb.AppendLine(LairConverter.ToSectionString(item.Section, item.LeaderSignature));
+                    }
+
+                    Clipboard.SetText(sb.ToString());
+                }
+
+                {
+                    _sectionTreeItemList.Clear();
+                    _sectionTreeItemList.AddRange(items.Select(n => n.DeepClone()));
+                }
+            }
+        }
+
+        public static IEnumerable<ChannelCategorizeTreeItem> GetChannelCategorizeTreeItems()
+        {
+            lock (_thisLock)
+            {
+                return _channelCategorizeTreeItemList.ToArray();
+            }
+        }
+
+        public static void SetChannelCategorizeTreeItems(IEnumerable<ChannelCategorizeTreeItem> items)
+        {
+            lock (_thisLock)
+            {
+                _channelCategorizeTreeItemList.Clear();
+                _channelCategorizeTreeItemList.AddRange(items.Select(n => n.DeepClone()));
+            }
+        }
+
+        public static IEnumerable<ChannelTreeItem> GetChannelTreeItems()
+        {
+            lock (_thisLock)
+            {
+                var list = new List<ChannelTreeItem>(_channelTreeItemList);
+
+                foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    if (!item.StartsWith("Channel@")) continue;
+
+                    try
+                    {
+                        var channel = LairConverter.FromChannelString(item);
+                        if (list.Any(n => n.Channel == channel)) continue;
+
+                        list.Add(new ChannelTreeItem() { Channel = channel });
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                }
+
+                return list.Where(n => n != null);
+            }
+        }
+
+        public static void SetChannelTreeItems(IEnumerable<ChannelTreeItem> items)
+        {
+            lock (_thisLock)
+            {
+                {
+                    var sb = new StringBuilder();
+
+                    foreach (var item in items)
+                    {
+                        sb.AppendLine(LairConverter.ToChannelString(item.Channel));
+                    }
+
+                    Clipboard.SetText(sb.ToString());
+                }
+
+                {
+                    _channelTreeItemList.Clear();
+                    _channelTreeItemList.AddRange(items.Select(n => n.DeepClone()));
+                }
             }
         }
 

@@ -19,9 +19,8 @@ namespace Lair.Windows
         private bool _isTrustFilterEnabled = true;
 
         private Topic _topic;
-        private bool _isTopicUpdated;
 
-        private LockedHashSet<MessageItem> _messageItems;
+        private LockedHashSet<Message> _messages;
 
         private object _thisLock = new object();
         private static object _thisStaticLock = new object();
@@ -83,41 +82,22 @@ namespace Lair.Windows
             }
         }
 
-        [DataMember(Name = "IsTopicUpdated")]
-        public bool IsTopicUpdated
+        [DataMember(Name = "Messages")]
+        public LockedHashSet<Message> Messages
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return _isTopicUpdated;
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    _isTopicUpdated = value;
+                    if (_messages == null)
+                        _messages = new LockedHashSet<Message>();
+
+                    return _messages;
                 }
             }
         }
 
-        [DataMember(Name = "MessageItems")]
-        public LockedHashSet<MessageItem> MessageItems
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    if (_messageItems == null)
-                        _messageItems = new LockedHashSet<MessageItem>();
-
-                    return _messageItems;
-                }
-            }
-        }
-
-        #region IDeepClone<ChannelItem>
+        #region IDeepClone<ChannelTreeItem>
 
         public ChannelTreeItem DeepClone()
         {

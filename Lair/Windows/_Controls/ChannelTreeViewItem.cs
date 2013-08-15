@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using Lair.Properties;
 using Library.Collections;
 using Library.Net.Lair;
+using System;
 
 namespace Lair.Windows
 {
@@ -12,10 +13,10 @@ namespace Lair.Windows
 
         private TextBlock _header = new TextBlock();
 
-        public ChannelTreeViewItem(ChannelTreeItem channelTreeItem)
+        public ChannelTreeViewItem(ChannelTreeItem value)
             : base()
         {
-            this.Value = channelTreeItem;
+            if (value == null) throw new ArgumentNullException("value");
 
             base.Header = _header;
 
@@ -23,6 +24,8 @@ namespace Lair.Windows
             {
                 e.Handled = true;
             };
+
+            this.Value = value;
         }
 
         protected override void OnMouseDown(System.Windows.Input.MouseButtonEventArgs e)
@@ -34,22 +37,13 @@ namespace Lair.Windows
 
         public void Update()
         {
-            string suffix;
-
             if (!_value.IsTrustFilterEnabled)
             {
-                suffix = "!";
-            }
-
-            LockedHashSet<MessageItem> lockedMessageItems;
-
-            if (Settings.Instance.Global_LockedMessageItems.TryGetValue(_value.Channel, out lockedMessageItems))
-            {
-                _header.Text = string.Format("{0} ({1}-{2}) {3}", _value.Channel.Name, _value.MessageItems.Count, lockedMessageItems.Count, suffix);
+                _header.Text = string.Format("{0} ({1}) {2}", _value.Channel.Name, _value.Messages.Count, "!");
             }
             else
             {
-                _header.Text = string.Format("{0} ({1}) {2}", _value.Channel.Name, _value.MessageItems.Count, suffix);
+                _header.Text = string.Format("{0} ({1})", _value.Channel.Name, _value.Messages.Count);
             }
         }
 
