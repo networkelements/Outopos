@@ -1226,6 +1226,11 @@ namespace Lair.Windows
             _connectionControl.Width = Double.NaN;
             _connectionTabItem.Content = _connectionControl;
 
+            SectionControl _sectionControl = new SectionControl(this, _lairManager, _bufferManager);
+            _sectionControl.Height = Double.NaN;
+            _sectionControl.Width = Double.NaN;
+            _sectionTabItem.Content = _sectionControl;
+
             if (Settings.Instance.Global_IsStart)
             {
                 _startMenuItem_Click(null, null);

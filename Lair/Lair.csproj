@@ -120,6 +120,10 @@
     <Compile Include="Windows\Section\ChannelControl.xaml.cs">
       <DependentUpon>ChannelControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="RichTextBoxHelper.cs" />
+    <Compile Include="Windows\Section\SectionControl.xaml.cs">
+      <DependentUpon>SectionControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\_Controls\ChannelCategorizeTreeViewItem.cs" />
     <Compile Include="Windows\_Controls\SectionCategorizeTreeViewItem.cs" />
     <Compile Include="Windows\_Items\ChannelTreeItem.cs" />
@@ -148,6 +152,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\Section\ChannelControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\Section\SectionControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

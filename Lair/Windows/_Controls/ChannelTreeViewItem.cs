@@ -60,5 +60,7 @@ namespace Lair.Windows
                 this.Update();
             }
         }
+
+        public FlowDocumentScrollViewer FlowDocumentScrollViewer { get; set; }
     }
 }

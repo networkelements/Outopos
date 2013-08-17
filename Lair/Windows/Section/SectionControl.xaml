@@ -1,0 +1,92 @@
+﻿<UserControl x:Class="Lair.Windows.SectionControl"
+        x:ClassModifier="internal"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:prop="clr-namespace:Lair.Properties"     
+        xmlns:local="clr-namespace:Lair.Windows" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        mc:Ignorable="d" 
+        d:DesignHeight="600" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <ContextMenu x:Key="_sectionCategorizeTreeViewItemContextMenu">
+            <MenuItem Name="_sectionCategorizeTreeViewItemNewMenuItem" Header="{Binding Path=SectionControl_New, Source={StaticResource ResourcesInstance}}" Click="_sectionCategorizeTreeViewItemNewMenuItem_Click"/>
+            <MenuItem Name="_sectionCategorizeTreeViewItemEditMenuItem" Header="{Binding Path=SectionControl_Edit, Source={StaticResource ResourcesInstance}}" Click="_sectionCategorizeTreeViewItemEditMenuItem_Click"/>
+            <MenuItem Name="_sectionCategorizeTreeViewItemDeleteMenuItem" Header="{Binding Path=SectionControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_sectionCategorizeTreeViewItemDeleteMenuItem_Click"/>
+            <Separator />
+            <MenuItem Name="_sectionCategorizeTreeViewItemCutMenuItem" Header="{Binding Path=SectionControl_Cut, Source={StaticResource ResourcesInstance}}" Click="_sectionCategorizeTreeViewItemCutMenuItem_Click" />
+            <MenuItem Name="_sectionCategorizeTreeViewItemCopyMenuItem" Header="{Binding Path=SectionControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_sectionCategorizeTreeViewItemCopyMenuItem_Click" />
+            <MenuItem Name="_sectionCategorizeTreeViewItemCopyInfoMenuItem" Header="{Binding Path=SectionControl_CopyInfo, Source={StaticResource ResourcesInstance}}" Click="_sectionCategorizeTreeViewItemCopyInfoMenuItem_Click" />
+            <MenuItem Name="_sectionCategorizeTreeViewItemPasteMenuItem" Header="{Binding Path=SectionControl_Paste, Source={StaticResource ResourcesInstance}}" Click="_sectionCategorizeTreeViewItemPasteMenuItem_Click" />
+            <Separator />
+            <MenuItem Name="_sectionCategorizeTreeViewItemChartMenuItem" Header="{Binding Path=SectionControl_Chart, Source={StaticResource ResourcesInstance}}" Click="_sectionCategorizeTreeViewItemChartMenuItem_Click"/>
+        </ContextMenu>
+
+        <ContextMenu x:Key="_sectionTreeItemTreeViewItemContextMenu">
+            <MenuItem Name="_sectionTreeItemTreeViewItemDeleteMenuItem" Header="{Binding Path=SectionControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeItemTreeViewItemDeleteMenuItem_Click"/>
+            <Separator />
+            <MenuItem Name="_sectionTreeItemTreeViewItemCutMenuItem" Header="{Binding Path=SectionControl_Cut, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeItemTreeViewItemCutMenuItem_Click" />
+            <MenuItem Name="_sectionTreeItemTreeViewItemCopyMenuItem" Header="{Binding Path=SectionControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeItemTreeViewItemCopyMenuItem_Click" />
+            <MenuItem Name="_sectionTreeItemTreeViewItemCopyInfoMenuItem" Header="{Binding Path=SectionControl_CopyInfo, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeItemTreeViewItemCopyInfoMenuItem_Click" />
+        </ContextMenu>
+    </UserControl.Resources>
+
+    <UserControl.CommandBindings>
+        <CommandBinding Command="New" Executed="Execute_New" />
+        <CommandBinding Command="Delete" Executed="Execute_Delete" />
+        <CommandBinding Command="Cut" Executed="Execute_Cut" />
+        <CommandBinding Command="Copy" Executed="Execute_Copy" />
+        <CommandBinding Command="Paste" Executed="Execute_Paste" />
+    </UserControl.CommandBindings>
+
+    <UserControl.InputBindings>
+        <KeyBinding Gesture="CTRL+N" Command="New" />
+        <KeyBinding Gesture="Delete" Command="Delete" />
+        <KeyBinding Gesture="CTRL+X" Command="Cut" />
+        <KeyBinding Gesture="CTRL+C" Command="Copy" />
+        <KeyBinding Gesture="CTRL+V" Command="Paste" />
+    </UserControl.InputBindings>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="23" />
+            <RowDefinition Height="546*" />
+            <RowDefinition Name="_searchRowDefinition" Height="24" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="{Binding Path=SectionControl_Grid_ColumnDefinitions_Width, Mode=TwoWay, Converter={StaticResource _doubleToGridLengthConverter}, Source={x:Static prop:Settings.Instance}}" />
+            <ColumnDefinition Width="4" />
+            <ColumnDefinition Width="506*" />
+        </Grid.ColumnDefinitions>
+
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.RowSpan="3" />
+
+        <TreeView Name="_treeView" Grid.RowSpan="3" AllowDrop="True"
+                  PreviewDragOver="_treeView_PreviewDragOver"
+                  PreviewMouseMove="_treeView_PreviewMouseMove" 
+                  PreviewDrop="_treeView_PreviewDrop" 
+                  PreviewMouseLeftButtonDown="_treeView_PreviewMouseLeftButtonDown" 
+                  SelectedItemChanged="_treeView_SelectedItemChanged"
+                VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
+            <TreeView.Resources>
+                <Style TargetType="{x:Type local:SectionCategorizeTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" >
+                    <Setter Property="ContextMenu" Value="{StaticResource _sectionCategorizeTreeViewItemContextMenu}" />
+                    <EventSetter Event="ContextMenuOpening" Handler="_sectionCategorizeTreeViewItemContextMenu_ContextMenuOpening" />
+                </Style>
+                <Style TargetType="{x:Type local:SectionTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" >
+                    <Setter Property="ContextMenu" Value="{StaticResource _sectionTreeItemTreeViewItemContextMenu}" />
+                    <EventSetter Event="ContextMenuOpening" Handler="_sectionTreeItemTreeViewItemContextMenu_ContextMenuOpening" />
+                </Style>
+            </TreeView.Resources>
+        </TreeView>
+        <TabControl Grid.Column="2" Name="_tabControl" Grid.RowSpan="3">
+            <TabItem Name="_channelTabItem" Header="{Binding Path=SectionControl_Channel, Source={StaticResource ResourcesInstance}}">
+                <Grid Name="_channelGrid" />
+            </TabItem>
+            <TabItem Name="_documentTabItem" Header="{Binding Path=SectionControl_Document, Source={StaticResource ResourcesInstance}}">
+                <Grid Name="_documentGrid" />
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

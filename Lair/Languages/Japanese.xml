@@ -195,6 +195,17 @@
   <Translate Key="ConnectionControl_Copy" Value="コピー" />
   <Translate Key="ConnectionControl_Paste" Value="貼り付け" />
 
+  <Translate Key="SectionControl_New" Value="New" />
+  <Translate Key="SectionControl_Edit" Value="Edit" />
+  <Translate Key="SectionControl_Delete" Value="Delete" />
+  <Translate Key="SectionControl_Cut" Value="Cut" />
+  <Translate Key="SectionControl_Copy" Value="Copy" />
+  <Translate Key="SectionControl_CopyInfo" Value="Copy info" />
+  <Translate Key="SectionControl_Paste" Value="Paste" />
+  <Translate Key="SectionControl_Chart" Value="Chart" />
+  <Translate Key="SectionControl_Channel" Value="Channel" />
+  <Translate Key="SectionControl_Document" Value="Document" />
+
   <Translate Key="ChannelControl_New" Value="新規" />
   <Translate Key="ChannelControl_Edit" Value="編集" />
   <Translate Key="ChannelControl_Delete" Value="削除" />
@@ -202,7 +213,6 @@
   <Translate Key="ChannelControl_Copy" Value="コピー" />
   <Translate Key="ChannelControl_CopyInfo" Value="コピー (詳細情報)" />
   <Translate Key="ChannelControl_Paste" Value="貼り付け" />
-  <Translate Key="ChannelControl_Chart" Value="組織図" />
   <Translate Key="ChannelControl_ChannelList" Value="チャンネルリスト" />
   <Translate Key="ChannelControl_Respons" Value="返信" />
   <Translate Key="ChannelControl_Trust" Value="トラスト" />

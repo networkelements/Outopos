@@ -580,5 +580,9 @@ namespace Lair
         public System.Windows.Media.Color Trust_On { get; set; }
 
         public System.Windows.Media.Color Tree_Hit { get; set; }
+
+        public System.Windows.Media.Color Link_New { get; set; }
+
+        public System.Windows.Media.Color Link { get; set; }
     }
 }

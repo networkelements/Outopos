@@ -2134,6 +2134,117 @@ namespace Lair.Properties
         }
 
 
+        public string SectionControl_New
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionControl_New");
+                }
+            }
+        }
+
+        public string SectionControl_Edit
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionControl_Edit");
+                }
+            }
+        }
+
+        public string SectionControl_Delete
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionControl_Delete");
+                }
+            }
+        }
+
+        public string SectionControl_Cut
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionControl_Cut");
+                }
+            }
+        }
+
+        public string SectionControl_Copy
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionControl_Copy");
+                }
+            }
+        }
+
+        public string SectionControl_CopyInfo
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionControl_CopyInfo");
+                }
+            }
+        }
+
+        public string SectionControl_Paste
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionControl_Paste");
+                }
+            }
+        }
+
+        public string SectionControl_Chart
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionControl_Chart");
+                }
+            }
+        }
+
+        public string SectionControl_Channel
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionControl_Channel");
+                }
+            }
+        }
+
+        public string SectionControl_Document
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionControl_Document");
+                }
+            }
+        }
+
+
         public string ChannelControl_New
         {
             get
@@ -2207,17 +2318,6 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("ChannelControl_Paste");
-                }
-            }
-        }
-
-        public string ChannelControl_Chart
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChannelControl_Chart");
                 }
             }
         }
