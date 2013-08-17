@@ -344,10 +344,6 @@ namespace Lair.Windows
             {
                 return MessageConverter.ToInfoMessage((Channel)value);
             }
-            else if (value is Message)
-            {
-                return MessageConverter.ToInfoMessage((Message)value);
-            }
 
             return null;
         }
@@ -610,49 +606,6 @@ namespace Lair.Windows
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    class MessageWrapperOfBorderBrushConverter : IMultiValueConverter
-    {
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
-        {
-            var item = values[0] as MessageItem;
-            if (item == null) return null;
-
-            System.Windows.Media.Color color;
-
-            bool isSelected = (bool)values[1];
-
-            if (isSelected)
-            {
-                color = Settings.Instance.Color_Message_Select;
-            }
-            else
-            {
-                LockedHashSet<Message> hashSet = null;
-
-                if (Settings.Instance.Global_LockedMessageItems.TryGetValue(item.Message.Channel, out hashSet)
-                    && hashSet.Contains(item.Message))
-                {
-                    color = Settings.Instance.Color_Message_Lock;
-                }
-                else if (item.State.HasFlag(MessageState.New))
-                {
-                    color = Settings.Instance.Color_Message_New;
-                }
-                else
-                {
-                    color = Settings.Instance.Color_Message;
-                }
-            }
-
-            return new SolidColorBrush(color);
-        }
-
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }

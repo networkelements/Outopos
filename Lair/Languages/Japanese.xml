@@ -48,6 +48,7 @@
   <Translate Key="MainWindow_SendSpeed" Value="送信:" />
   <Translate Key="MainWindow_ReceiveSpeed" Value="受信:" />
   <Translate Key="MainWindow_DiskSpaceNotFound_Message" Value="ディスクに空き領域がありません。" />
+  <Translate Key="MainWindow_CacheSpaceNotFound_Message" Value="Space of cache not found." />
   <Translate Key="MainWindow_CheckUpdate_Message" Value="&quot;{0}&quot; へ更新しますか?" />
   <Translate Key="MainWindow_LatestVersion_Message" Value="最新のバージョンです。" />
   <Translate Key="MainWindow_Restart_Message" Value="更新が完了しました。再起動してください。" />
@@ -100,6 +101,7 @@
   <Translate Key="ConnectionsSettingsWindow_Cut" Value="切り取り" />
   <Translate Key="ConnectionsSettingsWindow_Copy" Value="コピー" />
   <Translate Key="ConnectionsSettingsWindow_Paste" Value="貼り付け" />
+  <Translate Key="ConnectionsSettingsWindow_CacheResize_Message" Value="キャッシュサイズの変更は重要なブロックを削除する可能性があります。それでもよろしいですか？" />
 
   <Translate Key="ConnectionType_None" Value="無効" />
   <Translate Key="ConnectionType_Tcp" Value="Tcp" />

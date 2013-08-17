@@ -59,6 +59,9 @@ namespace Lair.Windows
         private Thread _timer2Thread = null;
 
         private volatile bool _diskSpaceNotFoundException = false;
+        private volatile bool _cacheSpaceNotFoundException = false;
+
+        private string _cacheBlocksPath = null;
 
         public MainWindow()
         {
@@ -213,7 +216,7 @@ namespace Lair.Windows
                     if (!_isRun) return;
 
                     {
-                        if (_diskSpaceNotFoundException)
+                        if (_diskSpaceNotFoundException || _cacheSpaceNotFoundException)
                         {
                             this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                             {
@@ -263,9 +266,26 @@ namespace Lair.Windows
 
                             _diskSpaceNotFoundException = false;
                         }
+
+                        if (_cacheSpaceNotFoundException)
+                        {
+                            Log.Warning(LanguagesManager.Instance.MainWindow_CacheSpaceNotFound_Message);
+
+                            this.Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new Action(() =>
+                            {
+                                MessageBox.Show(
+                                    this,
+                                    LanguagesManager.Instance.MainWindow_CacheSpaceNotFound_Message,
+                                    "Warning",
+                                    MessageBoxButton.OK,
+                                    MessageBoxImage.Warning);
+                            }));
+
+                            _cacheSpaceNotFoundException = false;
+                        }
                     }
 
-                    if (spaceCheckStopwatch.Elapsed > new TimeSpan(0, 1, 0))
+                    if (Settings.Instance.Global_IsStart && spaceCheckStopwatch.Elapsed > new TimeSpan(0, 1, 0))
                     {
                         spaceCheckStopwatch.Restart();
 
@@ -273,9 +293,26 @@ namespace Lair.Windows
                         {
                             DriveInfo drive = new DriveInfo(Directory.GetCurrentDirectory());
 
-                            if (drive.AvailableFreeSpace < NetworkConverter.FromSizeString("32MB"))
+                            if (drive.AvailableFreeSpace < NetworkConverter.FromSizeString("256MB"))
                             {
                                 _diskSpaceNotFoundException = true;
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Warning(e);
+                        }
+
+                        try
+                        {
+                            if (!string.IsNullOrWhiteSpace(_cacheBlocksPath))
+                            {
+                                DriveInfo drive = new DriveInfo(Path.GetDirectoryName(Path.GetFullPath(_cacheBlocksPath)));
+
+                                if (drive.AvailableFreeSpace < NetworkConverter.FromSizeString("256MB"))
+                                {
+                                    _diskSpaceNotFoundException = true;
+                                }
                             }
                         }
                         catch (Exception e)
@@ -292,7 +329,7 @@ namespace Lair.Windows
                         {
                             _transferLimitManager.Save(_configrationDirectoryPaths["TransfarLimitManager"]);
                             _autoBaseNodeSettingManager.Save(_configrationDirectoryPaths["AutoBaseNodeSettingManager"]);
-                            _lairManager.Save(_configrationDirectoryPaths["LairManager"]);
+                            _lairManager.Save(_configrationDirectoryPaths["AmoebaManager"]);
                             Settings.Instance.Save(_configrationDirectoryPaths["MainWindow"]);
                         }
                         catch (Exception e)
@@ -319,7 +356,7 @@ namespace Lair.Windows
                         }
                     }
 
-                    if (uriUpdateStopwatch.Elapsed > new TimeSpan(3, 0, 0))
+                    if (uriUpdateStopwatch.Elapsed > new TimeSpan(1, 0, 0))
                     {
                         uriUpdateStopwatch.Restart();
 
@@ -690,7 +727,24 @@ namespace Lair.Windows
             {
                 bool initFlag = false;
 
-                _lairManager = new LairManager(_bufferManager);
+                if (File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Cache.path")))
+                {
+                    using (StreamReader reader = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Cache.path"), new UTF8Encoding(false)))
+                    {
+                        _cacheBlocksPath = reader.ReadLine();
+                    }
+                }
+                else
+                {
+                    _cacheBlocksPath = Path.Combine(App.DirectoryPaths["Configuration"], "Cache.blocks");
+
+                    using (StreamWriter writer = new StreamWriter(Path.Combine(App.DirectoryPaths["Configuration"], "Cache.path"), false, new UTF8Encoding(false)))
+                    {
+                        writer.WriteLine(_cacheBlocksPath);
+                    }
+                }
+
+                _lairManager = new LairManager(_cacheBlocksPath, _bufferManager);
                 _lairManager.Load(_configrationDirectoryPaths["LairManager"]);
 
                 if (_lairManager.BaseNode == null || _lairManager.BaseNode.Id == null)
@@ -707,36 +761,6 @@ namespace Lair.Windows
                 if (!File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Lair.version")))
                 {
                     initFlag = true;
-
-                    {
-                        CreateSignatureWindow window = new CreateSignatureWindow();
-                        window.ShowDialog();
-                    }
-
-                    {
-                        var searchItem = new FilterItem();
-                        searchItem.Name = "default";
-
-                        var searchTreeItem = new SearchTreeItem();
-                        searchTreeItem.SearchItem = searchItem;
-                        searchTreeItem.ChannelTreeItems.Add(new ChannelTreeItem() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAAmJGDzJZZe2LYTKX_h2n34Hwnp4Ez19bD-9mjkRwps4jt28VDAEiw3LUlRtc1nwgDNuFbtto2o7wHYpokMSOKUwAAAAYBQW1vZWJhN9Bj5Q") });
-                        searchTreeItem.ChannelTreeItems.Add(new ChannelTreeItem() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAAzCXi8JdCucrX16V-WAViFxWmALOLwEwN6YxrpzwttvOrBmkPb5dJOg1y20TrMovemnObJ8Iy3ivXm_wkBkErlAAAAAQBTGFpcr3Cip8") });
-                        searchTreeItem.ChannelTreeItems.Add(new ChannelTreeItem() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAApd3NdDiaZpygYU5ySICsv8zk2_2P1bRViGigtWhwJtIpw5Xi6IkdUbp3hroB_cN-IJkyscS6c4_cUhtJ9N2zlQAAAAQBVGVzdGSZ__Y") });
-
-                        string leaderSignature;
-                        var section = LairConverter.FromSectionString("Section@AAAAAEAALoinQGza0zKpj-3O_f8O-E3hZzM_1pY78oTC1wkLuIoFNBJXBTwGz695Kmz2aqBcYQq_isLhw3jRO1VRS4E0wgAAABABQWxsaWFuY2UgTmV0d29ya0tEqWU,Lyrise@7seiSbhOCkls6gPxjJYjptxskzlSulgIe3dSfj1KxnJJ6eejKjuJ3R1Ec8yFuKpr4uNcwF7bFh5OrmxnY25y7A", out leaderSignature);
-                        var defaultDigitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault();
-
-                        var sectionTreeItem = new SectionTreeItem();
-                        sectionTreeItem.Section = section;
-                        sectionTreeItem.LeaderSignature = leaderSignature;
-                        sectionTreeItem.UploadSignature = (defaultDigitalSignature != null) ? defaultDigitalSignature.ToString() : null;
-
-                        sectionTreeItem.SearchTreeItems.Clear();
-                        sectionTreeItem.SearchTreeItems.Add(searchTreeItem);
-
-                        Settings.Instance.ChannelControl_SectionTreeItems.Add(sectionTreeItem);
-                    }
 
                     _lairManager.ConnectionCountLimit = 12;
 
@@ -816,60 +840,9 @@ namespace Lair.Windows
                         version = new Version(reader.ReadLine());
                     }
 
-                    if (version <= new Version(0, 0, 46))
+                    if (version <= new Version(2, 0, 0))
                     {
-                        if (Settings.Instance.Global_Update_ProxyUri == "tcp:127.0.0.1:8118")
-                            Settings.Instance.Global_Update_ProxyUri = "tcp:127.0.0.1:28118";
-
-                        var torConnectionFilter = new ConnectionFilter()
-                        {
-                            ConnectionType = ConnectionType.Socks5Proxy,
-                            ProxyUri = "tcp:127.0.0.1:29050",
-                            UriCondition = new UriCondition()
-                            {
-                                Value = @"tor:.*",
-                            },
-                        };
-
-                        _lairManager.Filters.Add(torConnectionFilter);
-                    }
-
-                    if (version <= new Version(0, 0, 54))
-                    {
-                        _lairManager.ConnectionCountLimit = Math.Max(Math.Min(_lairManager.ConnectionCountLimit, 50), 12);
-                    }
-
-                    if (version < new Version(1, 0, 0))
-                    {
-                        {
-                            var searchItem = new FilterItem();
-                            searchItem.Name = "default";
-
-                            var searchTreeItem = new SearchTreeItem();
-                            searchTreeItem.SearchItem = searchItem;
-                            searchTreeItem.ChannelTreeItems.Add(new ChannelTreeItem() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAAmJGDzJZZe2LYTKX_h2n34Hwnp4Ez19bD-9mjkRwps4jt28VDAEiw3LUlRtc1nwgDNuFbtto2o7wHYpokMSOKUwAAAAYBQW1vZWJhN9Bj5Q") });
-                            searchTreeItem.ChannelTreeItems.Add(new ChannelTreeItem() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAAzCXi8JdCucrX16V-WAViFxWmALOLwEwN6YxrpzwttvOrBmkPb5dJOg1y20TrMovemnObJ8Iy3ivXm_wkBkErlAAAAAQBTGFpcr3Cip8") });
-                            searchTreeItem.ChannelTreeItems.Add(new ChannelTreeItem() { Channel = LairConverter.FromChannelString("Channel@AAAAAEAApd3NdDiaZpygYU5ySICsv8zk2_2P1bRViGigtWhwJtIpw5Xi6IkdUbp3hroB_cN-IJkyscS6c4_cUhtJ9N2zlQAAAAQBVGVzdGSZ__Y") });
-
-                            string leaderSignature;
-                            var section = LairConverter.FromSectionString("Section@AAAAAEAALoinQGza0zKpj-3O_f8O-E3hZzM_1pY78oTC1wkLuIoFNBJXBTwGz695Kmz2aqBcYQq_isLhw3jRO1VRS4E0wgAAABABQWxsaWFuY2UgTmV0d29ya0tEqWU,Lyrise@7seiSbhOCkls6gPxjJYjptxskzlSulgIe3dSfj1KxnJJ6eejKjuJ3R1Ec8yFuKpr4uNcwF7bFh5OrmxnY25y7A", out leaderSignature);
-                            var defaultDigitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault();
-
-                            var sectionTreeItem = new SectionTreeItem();
-                            sectionTreeItem.Section = section;
-                            sectionTreeItem.LeaderSignature = leaderSignature;
-                            sectionTreeItem.UploadSignature = (defaultDigitalSignature != null) ? defaultDigitalSignature.ToString() : null;
-
-                            sectionTreeItem.SearchTreeItems.Clear();
-                            sectionTreeItem.SearchTreeItems.Add(searchTreeItem);
-
-                            Settings.Instance.ChannelControl_SectionTreeItems.Add(sectionTreeItem);
-                        }
-                    }
-
-                    if (version <= new Version(1, 0, 6))
-                    {
-                        Settings.Instance.Global_Update_Signature = "Lyrise@7seiSbhOCkls6gPxjJYjptxskzlSulgIe3dSfj1KxnJJ6eejKjuJ3R1Ec8yFuKpr4uNcwF7bFh5OrmxnY25y7A";
+                        
                     }
                 }
 
@@ -1252,11 +1225,6 @@ namespace Lair.Windows
             _connectionControl.Height = Double.NaN;
             _connectionControl.Width = Double.NaN;
             _connectionTabItem.Content = _connectionControl;
-
-            ChannelControl _sectionControl = new ChannelControl(this, _lairManager, _bufferManager);
-            _sectionControl.Height = Double.NaN;
-            _sectionControl.Width = Double.NaN;
-            _sectionTabItem.Content = _sectionControl;
 
             if (Settings.Instance.Global_IsStart)
             {

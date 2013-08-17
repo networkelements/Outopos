@@ -117,11 +117,16 @@
     <Compile Include="NativeMethods.cs" />
     <Compile Include="TransfarLimitManager.cs" />
     <Compile Include="WindowPosition.cs" />
+    <Compile Include="Windows\Section\ChannelControl.xaml.cs">
+      <DependentUpon>ChannelControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\_Controls\ChannelCategorizeTreeViewItem.cs" />
     <Compile Include="Windows\_Controls\SectionCategorizeTreeViewItem.cs" />
     <Compile Include="Windows\_Items\ChannelTreeItem.cs" />
     <Compile Include="Windows\_Controls\ChannelTreeViewItem.cs" />
     <Compile Include="Windows\_Items\ChannelCategorizeTreeItem.cs" />
+    <Compile Include="Windows\_Items\TopicInformation.cs" />
+    <Compile Include="Windows\_Items\MessageInformation.cs" />
     <Compile Include="Windows\_Items\SectionCategorizeTreeItem.cs" />
     <Compile Include="Windows\_Controls\SignatureTreeViewItem.cs" />
     <Compile Include="Windows\_Controls\SectionTreeViewItem.cs" />
@@ -139,6 +144,10 @@
     <Page Include="Windows\ConnectionsSettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\Section\ChannelControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -325,7 +334,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Windows\Mail\" />
-    <Folder Include="Windows\Section\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

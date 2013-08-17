@@ -12,7 +12,7 @@
         Left="{Binding Path=ConnectionsSettingsWindow_Left, Mode=TwoWay, Source={x:Static prop:Settings.Instance}, Converter={StaticResource _leftRelativeDoubleConverter}}"
         Height="{Binding Path=ConnectionsSettingsWindow_Height, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}"
         Width="{Binding Path=ConnectionsSettingsWindow_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}"
-        WindowState="{Binding Path=ConnectionsSettingsWindow_WindowState, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" 
+        WindowState="{Binding Path=ConnectionsSettingsWindow_WindowState, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}"
         Loaded="Window_Loaded">
 
     <Window.Resources>
@@ -64,9 +64,10 @@
             <TreeView HorizontalAlignment="Stretch" Name="_treeView" VerticalAlignment="Stretch">
                 <TreeViewItem Name="_baseNodeTreeViewItem" Header="{Binding Path=ConnectionsSettingsWindow_BaseNode, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
                 <TreeViewItem Name="_otherNodesTreeViewItem" Header="{Binding Path=ConnectionsSettingsWindow_OtherNodes, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
-                <TreeViewItem Name="_clientTreeViewItem" Header="{Binding Path=ConnectionsSettingsWindow_Client, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
+                <TreeViewItem Name="_clientTreeViewItem" Header="{Binding Path=ConnectionsSettingsWindow_Client, Source={StaticResource ResourcesInstance}}" />
                 <TreeViewItem Name="_serverTreeViewItem" Header="{Binding Path=ConnectionsSettingsWindow_Server, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
-                <TreeViewItem Name="_bandwidthTreeViewItem" Header="{Binding Path=ConnectionsSettingsWindow_Bandwidth, Source={StaticResource ResourcesInstance}}" IsSelected="True" />
+                <TreeViewItem Name="_dataTreeViewItem" Header="{Binding Path=ConnectionsSettingsWindow_Data, Source={StaticResource ResourcesInstance}}" IsSelected="True" />
+                <TreeViewItem Name="_bandwidthTreeViewItem" Header="{Binding Path=ConnectionsSettingsWindow_Bandwidth, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
                 <TreeViewItem Name="_transferTreeViewItem" Header="{Binding Path=ConnectionsSettingsWindow_Transfer, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
                 <TreeViewItem Name="_eventsTreeViewItem" Header="{Binding Path=ConnectionsSettingsWindow_Events, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
             </TreeView>
@@ -218,6 +219,12 @@
                         <Button Name="_serverListenUriDeleteButton" Height="23" HorizontalAlignment="Right" Margin="0,0,6,6" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=ConnectionsSettingsWindow_Delete, Source={StaticResource ResourcesInstance}}" Click="_serverListenUriDeleteButton_Click" />
                     </Grid>
                 </GroupBox>
+            </Grid>
+
+            <Grid Grid.Column="2" Visibility="{Binding ElementName=_dataTreeViewItem, Path=IsSelected, Converter={StaticResource _boolToVisibilityConverter}}">
+                <Label Content="{Binding Path=ConnectionsSettingsWindow_CacheSize, Source={StaticResource ResourcesInstance}}" Height="22" HorizontalAlignment="Left" Margin="6,36,0,0" VerticalAlignment="Top" Width="240" VerticalContentAlignment="Center" />
+                <TextBox Height="24" Margin="252,36,72,0" Name="_dataCacheSizeTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" TextChanged="_dataCacheSizeTextBox_TextChanged" />
+                <ComboBox Height="24" Margin="0,36,6,0" Name="_dataCacheSizeComboBox" VerticalAlignment="Top" HorizontalAlignment="Right" Width="60" SelectionChanged="_dataCacheSizeComboBox_SelectionChanged" />
             </Grid>
 
             <Grid Grid.Column="2" Visibility="{Binding ElementName=_bandwidthTreeViewItem, Path=IsSelected, Converter={StaticResource _boolToVisibilityConverter}}">

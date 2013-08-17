@@ -39,7 +39,7 @@ namespace Lair
         public static Version LairVersion { get; private set; }
         public static Dictionary<string, string> DirectoryPaths { get; private set; }
         public static TabItemType SelectTab { get; set; }
-        public LairColors Colors { get; private set; }
+        public static LairColors Colors { get; private set; }
         private FileStream _lockStream = null;
         private LockedList<Process> _processList = new LockedList<Process>();
 
@@ -573,5 +573,12 @@ namespace Lair
     public class LairColors
     {
 
+        public System.Windows.Media.Color Color_Trust_On { get; set; }
+
+        public System.Windows.Media.Color Trust_Off { get; set; }
+
+        public System.Windows.Media.Color Trust_On { get; set; }
+
+        public System.Windows.Media.Color Tree_Hit { get; set; }
     }
 }

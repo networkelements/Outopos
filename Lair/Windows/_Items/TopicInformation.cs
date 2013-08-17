@@ -12,101 +12,81 @@ using Library.Collections;
 
 namespace Lair.Windows
 {
-    [DataContract(Name = "ChannelTreeItem", Namespace = "http://Lair/Windows")]
-    class ChannelTreeItem : IDeepCloneable<ChannelTreeItem>, IThisLock
+    [DataContract(Name = "TopicInformation", Namespace = "http://Lair/Windows")]
+    class TopicInformation : IDeepCloneable<TopicInformation>, IThisLock
     {
-        private Channel _channel;
-        private bool _isTrustFilterEnabled = true;
-
-        private TopicInformation _topicInformation;
-        private List<MessageInformation> _messageInformation;
+        private bool _isNew;
+        private Topic _message;
+        private TopicContent _messageContent;
 
         private object _thisLock = new object();
         private static object _thisStaticLock = new object();
 
-        [DataMember(Name = "Channel")]
-        public Channel Channel
+        [DataMember(Name = "IsNew")]
+        public bool IsNew
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return _channel;
+                    return _isNew;
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    _channel = value;
+                    _isNew = value;
                 }
             }
         }
 
-        [DataMember(Name = "IsTrustFilterEnabled")]
-        public bool IsTrustFilterEnabled
+        [DataMember(Name = "Topic")]
+        public Topic Topic
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return _isTrustFilterEnabled;
+                    return _message;
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    _isTrustFilterEnabled = value;
+                    _message = value;
                 }
             }
         }
 
-        [DataMember(Name = "TopicInformation")]
-        public TopicInformation TopicInformation
+
+        [DataMember(Name = "TopicContent")]
+        public TopicContent TopicContent
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return _topicInformation;
+                    return _messageContent;
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    _topicInformation = value;
+                    _messageContent = value;
                 }
             }
         }
 
-        [DataMember(Name = "MessageInformation")]
-        public List<MessageInformation> MessageInformation
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return _messageInformation;
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    _messageInformation = value;
-                }
-            }
-        }
+        #region IDeepClone<TopicInformation>
 
-        #region IDeepClone<ChannelTreeItem>
-
-        public ChannelTreeItem DeepClone()
+        public TopicInformation DeepClone()
         {
             lock (this.ThisLock)
             {
-                var ds = new DataContractSerializer(typeof(ChannelTreeItem));
+                var ds = new DataContractSerializer(typeof(TopicInformation));
 
                 using (MemoryStream ms = new MemoryStream())
                 {
@@ -119,7 +99,7 @@ namespace Lair.Windows
 
                     using (XmlDictionaryReader textDictionaryReader = XmlDictionaryReader.CreateTextReader(ms, XmlDictionaryReaderQuotas.Max))
                     {
-                        return (ChannelTreeItem)ds.ReadObject(textDictionaryReader);
+                        return (TopicInformation)ds.ReadObject(textDictionaryReader);
                     }
                 }
             }

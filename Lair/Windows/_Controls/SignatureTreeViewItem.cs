@@ -22,8 +22,6 @@ namespace Lair.Windows
         public SignatureTreeViewItem(string signature)
             : base()
         {
-            _signature = signature;
-
             base.Header = _header;
 
             base.RequestBringIntoView += (object sender, RequestBringIntoViewEventArgs e) =>
@@ -31,6 +29,7 @@ namespace Lair.Windows
                 e.Handled = true;
             };
 
+            _signature = signature;
             this.Update();
         }
 
@@ -41,7 +40,7 @@ namespace Lair.Windows
             e.Handled = true;
         }
 
-        public void Update()
+        private void Update()
         {
             _header.Text = _signature;
         }

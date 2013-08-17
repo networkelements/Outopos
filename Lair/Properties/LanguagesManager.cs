@@ -607,6 +607,17 @@ namespace Lair.Properties
             }
         }
 
+        public string MainWindow_CacheSpaceNotFound_Message
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("MainWindow_CacheSpaceNotFound_Message");
+                }
+            }
+        }
+
         public string MainWindow_CheckUpdate_Message
         {
             get
@@ -1165,6 +1176,17 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("ConnectionsSettingsWindow_Paste");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_CacheResize_Message
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_CacheResize_Message");
                 }
             }
         }

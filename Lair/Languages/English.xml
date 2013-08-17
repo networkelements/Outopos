@@ -48,6 +48,7 @@
   <Translate Key="MainWindow_SendSpeed" Value="Send:" />
   <Translate Key="MainWindow_ReceiveSpeed" Value="Receive:" />
   <Translate Key="MainWindow_DiskSpaceNotFound_Message" Value="Space of disk not found." />
+  <Translate Key="MainWindow_CacheSpaceNotFound_Message" Value="Space of cache not found." />
   <Translate Key="MainWindow_CheckUpdate_Message" Value="Do you want to update to &quot;{0}&quot;?" />
   <Translate Key="MainWindow_LatestVersion_Message" Value="It is the latest version." />
   <Translate Key="MainWindow_Restart_Message" Value="Update has been completed. Please restart." />
@@ -100,6 +101,7 @@
   <Translate Key="ConnectionsSettingsWindow_Cut" Value="Cut" />
   <Translate Key="ConnectionsSettingsWindow_Copy" Value="Copy" />
   <Translate Key="ConnectionsSettingsWindow_Paste" Value="Paste" />
+  <Translate Key="ConnectionsSettingsWindow_CacheResize_Message" Value="Resizing of cache will delete important block. Would that be all right?" />
 
   <Translate Key="ConnectionType_None" Value="None" />
   <Translate Key="ConnectionType_Tcp" Value="Tcp" />

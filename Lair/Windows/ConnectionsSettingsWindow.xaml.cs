@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -91,6 +90,24 @@ namespace Lair.Windows
             _transferInfoUploaded.Content = NetworkConverter.ToSizeString(_transferLimitManager.TotalUploadSize);
             _transferInfoDownloaded.Content = NetworkConverter.ToSizeString(_transferLimitManager.TotalDownloadSize);
             _transferInfoTotal.Content = NetworkConverter.ToSizeString(_transferLimitManager.TotalUploadSize + _transferLimitManager.TotalDownloadSize);
+
+            {
+                try
+                {
+                    _dataCacheSizeTextBox.Text = NetworkConverter.ToSizeString(_lairManager.Size, Settings.Instance.ConnectionsSettingsWindow_DataCacheSize_Unit);
+                }
+                catch (Exception)
+                {
+                    _dataCacheSizeTextBox.Text = "";
+                }
+
+                foreach (var u in new string[] { "Byte", "KB", "MB", "GB", "TB" })
+                {
+                    _dataCacheSizeComboBox.Items.Add(u);
+                }
+
+                _dataCacheSizeComboBox.SelectedItem = Settings.Instance.ConnectionsSettingsWindow_DataCacheSize_Unit;
+            }
 
             {
                 try
@@ -1237,6 +1254,47 @@ namespace Lair.Windows
 
         #endregion
 
+        #region Data
+
+        private void _dataCacheSizeTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(_dataCacheSizeTextBox.Text)) return;
+
+            StringBuilder builder = new StringBuilder("");
+
+            foreach (var item in _dataCacheSizeTextBox.Text)
+            {
+                if (Regex.IsMatch(item.ToString(), @"[0-9\.]"))
+                {
+                    builder.Append(item.ToString());
+                }
+            }
+
+            var value = builder.ToString();
+            if (_dataCacheSizeTextBox.Text != value) _dataCacheSizeTextBox.Text = value;
+        }
+
+        private void _dataCacheSizeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count != 1 || e.RemovedItems.Count != 1) return;
+
+            var newItem = (string)e.AddedItems[0];
+            var oldItem = (string)e.RemovedItems[0];
+
+            try
+            {
+                var size = (long)NetworkConverter.FromSizeString(_dataCacheSizeTextBox.Text + oldItem);
+                _dataCacheSizeTextBox.Text = NetworkConverter.ToSizeString(size, newItem);
+            }
+            catch (Exception)
+            {
+                var size = long.MaxValue;
+                _dataCacheSizeTextBox.Text = NetworkConverter.ToSizeString(size, newItem);
+            }
+        }
+
+        #endregion
+
         #region Bandwidth
 
         private static int GetStringToInt(string value)
@@ -1367,6 +1425,37 @@ namespace Lair.Windows
 
             lock (_lairManager.ThisLock)
             {
+
+                long size = (long)NetworkConverter.FromSizeString("50 GB");
+
+                try
+                {
+                    size = (long)NetworkConverter.FromSizeString(_dataCacheSizeTextBox.Text + (string)_dataCacheSizeComboBox.SelectedItem);
+                }
+                catch (Exception)
+                {
+                    size = long.MaxValue;
+                }
+
+#if !DEBUG
+                size = Math.Max((long)NetworkConverter.FromSizeString("50 GB"), size);
+#endif
+
+                if (_lairManager.Size != size)
+                {
+                    if (((long)_lairManager.Information["UsingSpace"]) > size)
+                    {
+                        if (MessageBox.Show(this, LanguagesManager.Instance.ConnectionsSettingsWindow_CacheResize_Message, "Connections Settings", MessageBoxButton.OKCancel, MessageBoxImage.Information) == MessageBoxResult.OK)
+                        {
+                            _lairManager.Resize(size);
+                        }
+                    }
+                    else
+                    {
+                        _lairManager.Resize(size);
+                    }
+                }
+
                 _lairManager.BaseNode = _baseNode.DeepClone();
                 _lairManager.SetOtherNodes(_otherNodes.Where(n => n != null && n.Id != null && n.Uris.Count != 0));
 
@@ -1407,7 +1496,7 @@ namespace Lair.Windows
                     int day = ConnectionsSettingsWindow.GetStringToInt(_transferLimitSpanTextBox.Text);
                     _transferLimitManager.TransferLimit.Span = Math.Max(Math.Min(day, 31), 1);
 
-                    long size = (long)NetworkConverter.FromSizeString("256 KB");
+                    long size = (long)NetworkConverter.FromSizeString("32 GB");
 
                     try
                     {
@@ -1418,7 +1507,7 @@ namespace Lair.Windows
 
                     }
 
-                    _transferLimitManager.TransferLimit.Size = Math.Max((long)NetworkConverter.FromSizeString("1 KB"), size);
+                    _transferLimitManager.TransferLimit.Size = size;
                 }
             }
 
@@ -1432,6 +1521,7 @@ namespace Lair.Windows
             }
 
             Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled = _eventAutoBaseNodeSettingCheckBox.IsChecked.Value;
+            Settings.Instance.ConnectionsSettingsWindow_DataCacheSize_Unit = (string)_dataCacheSizeComboBox.SelectedItem;
             Settings.Instance.ConnectionsSettingsWindow_BandwidthLimit_Unit = (string)_bandwidthLimitComboBox.SelectedItem;
         }
 

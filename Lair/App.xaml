@@ -17,7 +17,6 @@
 
             <Style TargetType="{x:Type local:ListViewEx}" BasedOn="{StaticResource {x:Type ListView}}" />
             <Style TargetType="{x:Type local:DigitalSignatureComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}" />
-            <Style TargetType="{x:Type local:EnabledFlowDocument}" BasedOn="{StaticResource {x:Type FlowDocument}}" />
             <Style TargetType="{x:Type local:LanguageMenuItem}" BasedOn="{StaticResource {x:Type MenuItem}}" />
 
             <local:ObjectToImageConverter x:Key="_objectToImageConverter"/>
@@ -41,7 +40,6 @@
             <local:StringToDoubleConverter x:Key="_stringToDoubleConverter"/>
             <local:ConnectionTypeToStringConverter x:Key="_connectionTypeToStringConverter"/>
             <local:TransferLimitTypeToStringConverter x:Key="_transferLimitTypeToStringConverter"/>
-            <local:MessageWrapperOfBorderBrushConverter x:Key="_messageWrapperOfBorderBrushConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -39,11 +39,11 @@ namespace Lair.Windows
         {
             if (!_value.IsTrustFilterEnabled)
             {
-                _header.Text = string.Format("{0} ({1}) {2}", _value.Channel.Name, _value.Messages.Count, "!");
+                _header.Text = string.Format("{0} ({1}) {2}", _value.Channel.Name, _value.MessageInformation.Count, "!");
             }
             else
             {
-                _header.Text = string.Format("{0} ({1})", _value.Channel.Name, _value.Messages.Count);
+                _header.Text = string.Format("{0} ({1})", _value.Channel.Name, _value.MessageInformation.Count);
             }
         }
 
