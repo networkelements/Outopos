@@ -122,10 +122,13 @@ namespace Lair.Windows
                         {
                             _refresh = false;
 
+                            _channelGrid.Visibility = System.Windows.Visibility.Hidden;
                         }
                         else if (_treeView.SelectedItem is SectionTreeViewItem)
                         {
                             selectTreeViewItem = (SectionTreeViewItem)_treeView.SelectedItem;
+
+                            _channelGrid.Visibility = System.Windows.Visibility.Visible;
                         }
                     }));
 
@@ -337,7 +340,7 @@ namespace Lair.Windows
             this.Update();
         }
 
-        private void _sectionCategorizeTreeViewContextMenu_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        private void _sectionCategorizeTreeViewItemContextMenu_ContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
 
         }

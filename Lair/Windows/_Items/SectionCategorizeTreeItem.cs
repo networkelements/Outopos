@@ -23,6 +23,11 @@ namespace Lair.Windows
         private object _thisLock = new object();
         private static object _thisStaticLock = new object();
 
+        public SectionCategorizeTreeItem()
+        {
+
+        }
+
         [DataMember(Name = "Name")]
         public string Name
         {

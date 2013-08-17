@@ -21,6 +21,7 @@ using Library;
 using Library.Collections;
 using Library.Io;
 using Library.Net.Lair;
+using System.Windows.Media;
 
 namespace Lair
 {
@@ -39,7 +40,7 @@ namespace Lair
         public static Version LairVersion { get; private set; }
         public static Dictionary<string, string> DirectoryPaths { get; private set; }
         public static TabItemType SelectTab { get; set; }
-        public static LairColors Colors { get; private set; }
+        public static LairColors LairColors { get; private set; }
         private FileStream _lockStream = null;
         private LockedList<Process> _processList = new LockedList<Process>();
 
@@ -315,6 +316,48 @@ namespace Lair
                 }
             }
 
+            // Colors
+            {
+                if (!File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Colors.settings")))
+                {
+                    using (StreamWriter writer = new StreamWriter(Path.Combine(App.DirectoryPaths["Configuration"], "Colors.settings"), false, new UTF8Encoding(false)))
+                    {
+                        writer.WriteLine(string.Format("Tree_Hit {0}", System.Windows.Media.Colors.LightPink));
+
+                        writer.WriteLine(string.Format("Trust_On {0}", System.Windows.Media.Colors.DeepSkyBlue));
+                        writer.WriteLine(string.Format("Trust_Off {0}", System.Windows.Media.Colors.HotPink));
+
+                        writer.WriteLine(string.Format("Link {0}", System.Windows.Media.Colors.LightGray));
+                        writer.WriteLine(string.Format("Link_New {0}", System.Windows.Media.Colors.LightPink));
+
+                        writer.WriteLine(string.Format("Message {0}", System.Windows.Media.Colors.Black));
+                        writer.WriteLine(string.Format("Message_Select {0}", System.Windows.Media.Colors.White));
+                        writer.WriteLine(string.Format("Message_New {0}", System.Windows.Media.Colors.LightPink));
+                    }
+                }
+
+                App.LairColors = new LairColors();
+
+                using (StreamReader reader = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Colors.settings"), new UTF8Encoding(false)))
+                {
+                    var items = reader.ReadLine().Split(' ');
+                    var name = items[0];
+                    var value = items[1];
+
+                    if (name == "Tree_Hit") App.LairColors.Tree_Hit = (Color)ColorConverter.ConvertFromString(value);
+
+                    else if (name == "Trust_On") App.LairColors.Trust_On = (Color)ColorConverter.ConvertFromString(value);
+                    else if (name == "Trust_Off") App.LairColors.Trust_Off = (Color)ColorConverter.ConvertFromString(value);
+
+                    else if (name == "Link") App.LairColors.Link = (Color)ColorConverter.ConvertFromString(value);
+                    else if (name == "Link_New") App.LairColors.Link_New = (Color)ColorConverter.ConvertFromString(value);
+
+                    else if (name == "Message") App.LairColors.Message = (Color)ColorConverter.ConvertFromString(value);
+                    else if (name == "Message_Select") App.LairColors.Message = (Color)ColorConverter.ConvertFromString(value);
+                    else if (name == "Message_New") App.LairColors.Message = (Color)ColorConverter.ConvertFromString(value);
+                }
+            }
+
             this.StartupUri = new Uri("Windows/MainWindow.xaml", UriKind.Relative);
         }
 
@@ -572,17 +615,31 @@ namespace Lair
 
     public class LairColors
     {
+        public LairColors()
+        {
+            this.Tree_Hit = System.Windows.Media.Colors.LightPink;
 
-        public System.Windows.Media.Color Color_Trust_On { get; set; }
+            this.Trust_On = System.Windows.Media.Colors.DeepSkyBlue;
+            this.Trust_Off = System.Windows.Media.Colors.HotPink;
 
-        public System.Windows.Media.Color Trust_Off { get; set; }
+            this.Link = System.Windows.Media.Colors.LightGray;
+            this.Link_New = System.Windows.Media.Colors.LightPink;
 
-        public System.Windows.Media.Color Trust_On { get; set; }
+            this.Message = System.Windows.Media.Colors.Black;
+            this.Message_Select = System.Windows.Media.Colors.White;
+            this.Message_New = System.Windows.Media.Colors.LightPink;
+        }
 
         public System.Windows.Media.Color Tree_Hit { get; set; }
 
-        public System.Windows.Media.Color Link_New { get; set; }
+        public System.Windows.Media.Color Trust_On { get; set; }
+        public System.Windows.Media.Color Trust_Off { get; set; }
 
         public System.Windows.Media.Color Link { get; set; }
+        public System.Windows.Media.Color Link_New { get; set; }
+
+        public System.Windows.Media.Color Message { get; set; }
+        public System.Windows.Media.Color Message_Select { get; set; }
+        public System.Windows.Media.Color Message_New { get; set; }
     }
 }

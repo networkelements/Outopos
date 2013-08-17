@@ -762,6 +762,45 @@ namespace Lair.Windows
                 {
                     initFlag = true;
 
+                    {
+                        var channelCategorizeTreeItem = new ChannelCategorizeTreeItem();
+                        channelCategorizeTreeItem.Name = "Channel";
+                        channelCategorizeTreeItem.ChannelTreeItems.Add(new ChannelTreeItem()
+                        {
+                            IsTrustFilterEnabled = true,
+                            TopicInformation = new TopicInformation(),
+                            Channel = LairConverter.FromChannelString("Channel@AAAAAEAAmJGDzJZZe2LYTKX_h2n34Hwnp4Ez19bD-9mjkRwps4jt28VDAEiw3LUlRtc1nwgDNuFbtto2o7wHYpokMSOKUwAAAAYBQW1vZWJhN9Bj5Q"),
+                        });
+                        channelCategorizeTreeItem.ChannelTreeItems.Add(new ChannelTreeItem()
+                        {
+                            IsTrustFilterEnabled = true,
+                            TopicInformation = new TopicInformation(),
+                            Channel = LairConverter.FromChannelString("Channel@AAAAAEAAzCXi8JdCucrX16V-WAViFxWmALOLwEwN6YxrpzwttvOrBmkPb5dJOg1y20TrMovemnObJ8Iy3ivXm_wkBkErlAAAAAQBTGFpcr3Cip8"),
+                        });
+                        channelCategorizeTreeItem.ChannelTreeItems.Add(new ChannelTreeItem()
+                        {
+                            IsTrustFilterEnabled = true,
+                            TopicInformation = new TopicInformation(),
+                            Channel = LairConverter.FromChannelString("Channel@AAAAAEAApd3NdDiaZpygYU5ySICsv8zk2_2P1bRViGigtWhwJtIpw5Xi6IkdUbp3hroB_cN-IJkyscS6c4_cUhtJ9N2zlQAAAAQBVGVzdGSZ__Y"),
+                        });
+                        channelCategorizeTreeItem.IsExpanded = true;
+
+                        string leaderSignature;
+                        var section = LairConverter.FromSectionString("Section@AAAAAEAALoinQGza0zKpj-3O_f8O-E3hZzM_1pY78oTC1wkLuIoFNBJXBTwGz695Kmz2aqBcYQq_isLhw3jRO1VRS4E0wgAAABABQWxsaWFuY2UgTmV0d29ya0tEqWU,Lyrise@7seiSbhOCkls6gPxjJYjptxskzlSulgIe3dSfj1KxnJJ6eejKjuJ3R1Ec8yFuKpr4uNcwF7bFh5OrmxnY25y7A", out leaderSignature);
+
+                        var sectionTreeItem = new SectionTreeItem();
+                        sectionTreeItem.Section = section;
+                        sectionTreeItem.LeaderSignature = leaderSignature;
+                        sectionTreeItem.ChannelCategorizeTreeItem = channelCategorizeTreeItem;
+
+                        var sectionCategorizeTreeItem = new SectionCategorizeTreeItem();
+                        sectionCategorizeTreeItem.Name = "Section";
+                        sectionCategorizeTreeItem.SectionTreeItems.Add(sectionTreeItem);
+                        sectionCategorizeTreeItem.IsExpanded = true;
+
+                        Settings.Instance.SectionControl_SectionCategorizeTreeItem = sectionCategorizeTreeItem;
+                    }
+
                     _lairManager.ConnectionCountLimit = 12;
 
                     Random random = new Random();
@@ -842,7 +881,7 @@ namespace Lair.Windows
 
                     if (version <= new Version(2, 0, 0))
                     {
-                        
+
                     }
                 }
 

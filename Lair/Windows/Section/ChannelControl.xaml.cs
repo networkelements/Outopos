@@ -114,7 +114,7 @@ namespace Lair.Windows
 
         private void LanguagesManager_UsingLanguageChangedEvent(object sender)
         {
-
+            _listView.Items.Refresh();
         }
 
         private void Search()
@@ -155,11 +155,11 @@ namespace Lair.Windows
 
                                 if (selectTreeViewItem.Value.IsTrustFilterEnabled)
                                 {
-                                    _trustToggleButton.Foreground = new SolidColorBrush(App.Colors.Trust_On);
+                                    _trustToggleButton.Foreground = new SolidColorBrush(App.LairColors.Trust_On);
                                 }
                                 else
                                 {
-                                    _trustToggleButton.Foreground = new SolidColorBrush(App.Colors.Trust_Off);
+                                    _trustToggleButton.Foreground = new SolidColorBrush(App.LairColors.Trust_Off);
                                 }
                             }
 
@@ -538,7 +538,7 @@ namespace Lair.Windows
 
                         if (selectTreeViewItem != item)
                         {
-                            textBlock.Foreground = new SolidColorBrush(App.Colors.Tree_Hit);
+                            textBlock.Foreground = new SolidColorBrush(App.LairColors.Tree_Hit);
                         }
                         else
                         {
@@ -726,7 +726,7 @@ namespace Lair.Windows
             this.Update();
         }
 
-        private void _channelCategorizeTreeViewContextMenu_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        private void _channelCategorizeTreeViewItemContextMenu_ContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
 
         }
@@ -1078,7 +1078,7 @@ namespace Lair.Windows
         {
 
         }
-        
+
         private void _richTextBoxCopyMenuItem_Click(object sender, RoutedEventArgs e)
         {
 

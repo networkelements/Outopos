@@ -24,6 +24,11 @@ namespace Lair.Windows
         private object _thisLock = new object();
         private static object _thisStaticLock = new object();
 
+        public ChannelTreeItem()
+        {
+
+        }
+
         [DataMember(Name = "Channel")]
         public Channel Channel
         {
@@ -88,14 +93,10 @@ namespace Lair.Windows
             {
                 lock (this.ThisLock)
                 {
+                    if (_messageInformation == null)
+                        _messageInformation = new List<MessageInformation>();
+
                     return _messageInformation;
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    _messageInformation = value;
                 }
             }
         }

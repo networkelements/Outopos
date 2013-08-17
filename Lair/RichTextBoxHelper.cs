@@ -177,14 +177,14 @@ namespace Lair.Windows
                             Hyperlink l = new Hyperlink();
                             l.Cursor = System.Windows.Input.Cursors.Hand;
 
-                            if (Settings.Instance.Global_SeedHistorys.Contains(seed)) l.Foreground = new SolidColorBrush(App.Colors.Link);
-                            else l.Foreground = new SolidColorBrush(App.Colors.Link_New);
+                            if (Settings.Instance.Global_SeedHistorys.Contains(seed)) l.Foreground = new SolidColorBrush(App.LairColors.Link);
+                            else l.Foreground = new SolidColorBrush(App.LairColors.Link_New);
 
                             l.PreviewMouseLeftButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
                             {
                                 RichTextBoxHelper.SeedClickEvent(sender, seed);
 
-                                if (Settings.Instance.Global_SeedHistorys.Contains(seed)) l.Foreground = new SolidColorBrush(App.Colors.Link);
+                                if (Settings.Instance.Global_SeedHistorys.Contains(seed)) l.Foreground = new SolidColorBrush(App.LairColors.Link);
                             };
                             l.PreviewMouseRightButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
                             {
@@ -252,14 +252,14 @@ namespace Lair.Windows
                             Hyperlink l = new Hyperlink();
                             l.Cursor = System.Windows.Input.Cursors.Hand;
 
-                            if (Settings.Instance.Global_SectionHistorys.Contains(section)) l.Foreground = new SolidColorBrush(App.Colors.Link);
-                            else l.Foreground = new SolidColorBrush(App.Colors.Link_New);
+                            if (Settings.Instance.Global_SectionHistorys.Contains(section)) l.Foreground = new SolidColorBrush(App.LairColors.Link);
+                            else l.Foreground = new SolidColorBrush(App.LairColors.Link_New);
 
                             l.PreviewMouseLeftButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
                             {
                                 RichTextBoxHelper.SectionClickEvent(sender, section, leaderSignature);
 
-                                if (Settings.Instance.Global_SectionHistorys.Contains(section)) l.Foreground = new SolidColorBrush(App.Colors.Link);
+                                if (Settings.Instance.Global_SectionHistorys.Contains(section)) l.Foreground = new SolidColorBrush(App.LairColors.Link);
                             };
                             l.PreviewMouseRightButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
                             {
@@ -325,14 +325,14 @@ namespace Lair.Windows
                             Hyperlink l = new Hyperlink();
                             l.Cursor = System.Windows.Input.Cursors.Hand;
 
-                            if (Settings.Instance.Global_ChannelHistorys.Contains(channel)) l.Foreground = new SolidColorBrush(App.Colors.Link);
-                            else l.Foreground = new SolidColorBrush(App.Colors.Link_New);
+                            if (Settings.Instance.Global_ChannelHistorys.Contains(channel)) l.Foreground = new SolidColorBrush(App.LairColors.Link);
+                            else l.Foreground = new SolidColorBrush(App.LairColors.Link_New);
 
                             l.PreviewMouseLeftButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
                             {
                                 RichTextBoxHelper.ChannelClickEvent(sender, channel);
 
-                                if (Settings.Instance.Global_ChannelHistorys.Contains(channel)) l.Foreground = new SolidColorBrush(App.Colors.Link);
+                                if (Settings.Instance.Global_ChannelHistorys.Contains(channel)) l.Foreground = new SolidColorBrush(App.LairColors.Link);
                             };
                             l.PreviewMouseRightButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
                             {
@@ -400,14 +400,14 @@ namespace Lair.Windows
                                 Hyperlink l = new Hyperlink();
                                 l.Cursor = System.Windows.Input.Cursors.Hand;
 
-                                if (Settings.Instance.Global_UrlHistorys.Contains(url)) l.Foreground = new SolidColorBrush(App.Colors.Link);
-                                else l.Foreground = new SolidColorBrush(App.Colors.Link_New);
+                                if (Settings.Instance.Global_UrlHistorys.Contains(url)) l.Foreground = new SolidColorBrush(App.LairColors.Link);
+                                else l.Foreground = new SolidColorBrush(App.LairColors.Link_New);
 
                                 l.PreviewMouseLeftButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
                                 {
                                     RichTextBoxHelper.LinkClickEvent(sender, url);
 
-                                    if (Settings.Instance.Global_UrlHistorys.Contains(url)) l.Foreground = new SolidColorBrush(App.Colors.Link);
+                                    if (Settings.Instance.Global_UrlHistorys.Contains(url)) l.Foreground = new SolidColorBrush(App.LairColors.Link);
                                 };
                                 l.PreviewMouseRightButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
                                 {
@@ -491,14 +491,14 @@ namespace Lair.Windows
                             Hyperlink l = new Hyperlink();
                             l.Cursor = System.Windows.Input.Cursors.Hand;
 
-                            if (Settings.Instance.Global_SeedHistorys.Contains(seed)) l.Foreground = new SolidColorBrush(App.Colors.Link);
-                            else l.Foreground = new SolidColorBrush(App.Colors.Link_New);
+                            if (Settings.Instance.Global_SeedHistorys.Contains(seed)) l.Foreground = new SolidColorBrush(App.LairColors.Link);
+                            else l.Foreground = new SolidColorBrush(App.LairColors.Link_New);
 
                             l.PreviewMouseLeftButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
                             {
                                 RichTextBoxHelper.SeedClickEvent(sender, seed);
 
-                                if (Settings.Instance.Global_SeedHistorys.Contains(seed)) l.Foreground = new SolidColorBrush(App.Colors.Link);
+                                if (Settings.Instance.Global_SeedHistorys.Contains(seed)) l.Foreground = new SolidColorBrush(App.LairColors.Link);
                             };
                             l.PreviewMouseRightButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
                             {
@@ -566,14 +566,14 @@ namespace Lair.Windows
                             Hyperlink l = new Hyperlink();
                             l.Cursor = System.Windows.Input.Cursors.Hand;
 
-                            if (Settings.Instance.Global_SectionHistorys.Contains(section)) l.Foreground = new SolidColorBrush(App.Colors.Link);
-                            else l.Foreground = new SolidColorBrush(App.Colors.Link_New);
+                            if (Settings.Instance.Global_SectionHistorys.Contains(section)) l.Foreground = new SolidColorBrush(App.LairColors.Link);
+                            else l.Foreground = new SolidColorBrush(App.LairColors.Link_New);
 
                             l.PreviewMouseLeftButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
                             {
                                 RichTextBoxHelper.SectionClickEvent(sender, section, leaderSignature);
 
-                                if (Settings.Instance.Global_SectionHistorys.Contains(section)) l.Foreground = new SolidColorBrush(App.Colors.Link);
+                                if (Settings.Instance.Global_SectionHistorys.Contains(section)) l.Foreground = new SolidColorBrush(App.LairColors.Link);
                             };
                             l.PreviewMouseRightButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
                             {
@@ -639,14 +639,14 @@ namespace Lair.Windows
                             Hyperlink l = new Hyperlink();
                             l.Cursor = System.Windows.Input.Cursors.Hand;
 
-                            if (Settings.Instance.Global_ChannelHistorys.Contains(channel)) l.Foreground = new SolidColorBrush(App.Colors.Link);
-                            else l.Foreground = new SolidColorBrush(App.Colors.Link_New);
+                            if (Settings.Instance.Global_ChannelHistorys.Contains(channel)) l.Foreground = new SolidColorBrush(App.LairColors.Link);
+                            else l.Foreground = new SolidColorBrush(App.LairColors.Link_New);
 
                             l.PreviewMouseLeftButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
                             {
                                 RichTextBoxHelper.ChannelClickEvent(sender, channel);
 
-                                if (Settings.Instance.Global_ChannelHistorys.Contains(channel)) l.Foreground = new SolidColorBrush(App.Colors.Link);
+                                if (Settings.Instance.Global_ChannelHistorys.Contains(channel)) l.Foreground = new SolidColorBrush(App.LairColors.Link);
                             };
                             l.PreviewMouseRightButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
                             {
@@ -714,14 +714,14 @@ namespace Lair.Windows
                                 Hyperlink l = new Hyperlink();
                                 l.Cursor = System.Windows.Input.Cursors.Hand;
 
-                                if (Settings.Instance.Global_UrlHistorys.Contains(url)) l.Foreground = new SolidColorBrush(App.Colors.Link);
-                                else l.Foreground = new SolidColorBrush(App.Colors.Link_New);
+                                if (Settings.Instance.Global_UrlHistorys.Contains(url)) l.Foreground = new SolidColorBrush(App.LairColors.Link);
+                                else l.Foreground = new SolidColorBrush(App.LairColors.Link_New);
 
                                 l.PreviewMouseLeftButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
                                 {
                                     RichTextBoxHelper.LinkClickEvent(sender, url);
 
-                                    if (Settings.Instance.Global_UrlHistorys.Contains(url)) l.Foreground = new SolidColorBrush(App.Colors.Link);
+                                    if (Settings.Instance.Global_UrlHistorys.Contains(url)) l.Foreground = new SolidColorBrush(App.LairColors.Link);
                                 };
                                 l.PreviewMouseRightButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
                                 {
