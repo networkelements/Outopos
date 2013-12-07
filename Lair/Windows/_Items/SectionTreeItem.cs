@@ -8,43 +8,21 @@ using System.Xml;
 using Library;
 using Library.Net.Lair;
 using Library.Security;
+using Library.Io;
 
 namespace Lair.Windows
 {
     [DataContract(Name = "SectionTreeItem", Namespace = "http://Lair/Windows")]
-    class SectionTreeItem : IDeepCloneable<SectionTreeItem>, IThisLock
+    class SectionTreeItem : ICloneable<SectionTreeItem>, IThisLock
     {
-        private Section _section;
         private string _leaderSignature;
-        private string _uploadSignature;
 
-        private ChannelCategorizeTreeItem _channelCategorizeTreeItem;
-
-        private object _thisLock = new object();
+        private volatile object _thisLock;
         private static object _thisStaticLock = new object();
 
         public SectionTreeItem()
         {
 
-        }
-
-        [DataMember(Name = "Section")]
-        public Section Section
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return _section;
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    _section = value;
-                }
-            }
         }
 
         [DataMember(Name = "LeaderSignature")]
@@ -66,45 +44,7 @@ namespace Lair.Windows
             }
         }
 
-        [DataMember(Name = "UploadSignature")]
-        public string UploadSignature
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return _uploadSignature;
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    _uploadSignature = value;
-                }
-            }
-        }
-
-        [DataMember(Name = "ChannelCategorizeTreeItem")]
-        public ChannelCategorizeTreeItem ChannelCategorizeTreeItem
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return _channelCategorizeTreeItem;
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    _channelCategorizeTreeItem = value;
-                }
-            }
-        }
-
-        #region IDeepClone<SectionTreeItem>
+        #region ICloneable<SectionTreeItem>
 
         public SectionTreeItem DeepClone()
         {
@@ -112,16 +52,17 @@ namespace Lair.Windows
             {
                 var ds = new DataContractSerializer(typeof(SectionTreeItem));
 
-                using (MemoryStream ms = new MemoryStream())
+                using (BufferStream stream = new BufferStream(BufferManager.Instance))
                 {
-                    using (XmlDictionaryWriter textDictionaryWriter = XmlDictionaryWriter.CreateTextWriter(ms, new UTF8Encoding(false), false))
+                    using (WrapperStream wrapperStream = new WrapperStream(stream, true))
+                    using (XmlDictionaryWriter textDictionaryWriter = XmlDictionaryWriter.CreateBinaryWriter(wrapperStream))
                     {
                         ds.WriteObject(textDictionaryWriter, this);
                     }
 
                     ms.Position = 0;
 
-                    using (XmlDictionaryReader textDictionaryReader = XmlDictionaryReader.CreateTextReader(ms, XmlDictionaryReaderQuotas.Max))
+                    using (XmlDictionaryReader textDictionaryReader = XmlDictionaryReader.CreateBinaryReader(stream, XmlDictionaryReaderQuotas.Max))
                     {
                         return (SectionTreeItem)ds.ReadObject(textDictionaryReader);
                     }

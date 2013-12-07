@@ -16,9 +16,9 @@ namespace Lair.Properties
     {
         private static LanguagesManager _defaultInstance = new LanguagesManager();
         private static Dictionary<string, Dictionary<string, string>> _dic = new Dictionary<string, Dictionary<string, string>>();
-        private static string _usingLanguage = null;
+        private static string _usingLanguage;
         private static ObjectDataProvider provider;
-        private object _thisLock = new object();
+        private readonly object _thisLock = new object();
 
         public static UsingLanguageChangedEventHandler UsingLanguageChangedEvent;
 
@@ -217,6 +217,62 @@ namespace Lair.Properties
         }
 
 
+        public string Link_Tag
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("Link_Tag");
+                }
+            }
+        }
+
+        public string Link_Tag_Name
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("Link_Tag_Name");
+                }
+            }
+        }
+
+        public string Link_Tag_Id
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("Link_Tag_Id");
+                }
+            }
+        }
+
+        public string Link_Type
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("Link_Type");
+                }
+            }
+        }
+
+        public string Link_Path
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("Link_Path");
+                }
+            }
+        }
+
+
         public string Seed_Name
         {
             get
@@ -284,52 +340,6 @@ namespace Lair.Properties
         }
 
 
-        public string Channel_Name
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("Channel_Name");
-                }
-            }
-        }
-
-        public string Channel_Id
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("Channel_Id");
-                }
-            }
-        }
-
-
-        public string Section_Name
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("Section_Name");
-                }
-            }
-        }
-
-        public string Section_Id
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("Section_Id");
-                }
-            }
-        }
-
-
         public string SectionTreeItem_LeaderSignature
         {
             get
@@ -342,13 +352,13 @@ namespace Lair.Properties
         }
 
 
-        public string Message_Channel
+        public string Message_Chat
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("Message_Channel");
+                    return this.Translate("Message_Chat");
                 }
             }
         }
@@ -894,6 +904,17 @@ namespace Lair.Properties
             }
         }
 
+        public string ConnectionsSettingsWindow_Data
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_Data");
+                }
+            }
+        }
+
         public string ConnectionsSettingsWindow_Bandwidth
         {
             get
@@ -1022,6 +1043,17 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("ConnectionsSettingsWindow_ConnectionCount");
+                }
+            }
+        }
+
+        public string ConnectionsSettingsWindow_CacheSize
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionsSettingsWindow_CacheSize");
                 }
             }
         }
@@ -1902,13 +1934,13 @@ namespace Lair.Properties
             }
         }
 
-        public string ConnectionControl_ChannelCount
+        public string ConnectionControl_ChatCount
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ConnectionControl_ChannelCount");
+                    return this.Translate("ConnectionControl_ChatCount");
                 }
             }
         }
@@ -1990,13 +2022,13 @@ namespace Lair.Properties
             }
         }
 
-        public string ConnectionControl_PushChannelRequestCount
+        public string ConnectionControl_PushChatRequestCount
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ConnectionControl_PushChannelRequestCount");
+                    return this.Translate("ConnectionControl_PushChatRequestCount");
                 }
             }
         }
@@ -2078,13 +2110,13 @@ namespace Lair.Properties
             }
         }
 
-        public string ConnectionControl_PullChannelRequestCount
+        public string ConnectionControl_PullChatRequestCount
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ConnectionControl_PullChannelRequestCount");
+                    return this.Translate("ConnectionControl_PullChatRequestCount");
                 }
             }
         }
@@ -2222,13 +2254,13 @@ namespace Lair.Properties
             }
         }
 
-        public string SectionControl_Channel
+        public string SectionControl_Chat
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_Channel");
+                    return this.Translate("SectionControl_Chat");
                 }
             }
         }
@@ -2244,322 +2276,333 @@ namespace Lair.Properties
             }
         }
 
-
-        public string ChannelControl_New
+        public string SectionControl_AmoebaNotFound_Message
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_New");
+                    return this.Translate("SectionControl_AmoebaNotFound_Message");
                 }
             }
         }
 
-        public string ChannelControl_Edit
+
+        public string ChatControl_New
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_Edit");
+                    return this.Translate("ChatControl_New");
                 }
             }
         }
 
-        public string ChannelControl_Delete
+        public string ChatControl_Edit
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_Delete");
+                    return this.Translate("ChatControl_Edit");
                 }
             }
         }
 
-        public string ChannelControl_Cut
+        public string ChatControl_Delete
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_Cut");
+                    return this.Translate("ChatControl_Delete");
                 }
             }
         }
 
-        public string ChannelControl_Copy
+        public string ChatControl_Cut
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_Copy");
+                    return this.Translate("ChatControl_Cut");
                 }
             }
         }
 
-        public string ChannelControl_CopyInfo
+        public string ChatControl_Copy
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_CopyInfo");
+                    return this.Translate("ChatControl_Copy");
                 }
             }
         }
 
-        public string ChannelControl_Paste
+        public string ChatControl_CopyInfo
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_Paste");
+                    return this.Translate("ChatControl_CopyInfo");
                 }
             }
         }
 
-        public string ChannelControl_ChannelList
+        public string ChatControl_Paste
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_ChannelList");
+                    return this.Translate("ChatControl_Paste");
                 }
             }
         }
 
-        public string ChannelControl_Respons
+        public string ChatControl_ChatList
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_Respons");
+                    return this.Translate("ChatControl_ChatList");
                 }
             }
         }
 
-        public string ChannelControl_Trust
+        public string ChatControl_Respons
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_Trust");
+                    return this.Translate("ChatControl_Respons");
                 }
             }
         }
 
-        public string ChannelControl_Trust_On
+        public string ChatControl_Trust
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_Trust_On");
+                    return this.Translate("ChatControl_Trust");
                 }
             }
         }
 
-        public string ChannelControl_Trust_Off
+        public string ChatControl_Trust_On
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_Trust_Off");
+                    return this.Translate("ChatControl_Trust_On");
                 }
             }
         }
 
-        public string ChannelControl_Lock
+        public string ChatControl_Trust_Off
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_Lock");
+                    return this.Translate("ChatControl_Trust_Off");
                 }
             }
         }
 
-        public string ChannelControl_LockThis
+        public string ChatControl_Lock
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_LockThis");
+                    return this.Translate("ChatControl_Lock");
                 }
             }
         }
 
-        public string ChannelControl_UnlockThis
+        public string ChatControl_LockThis
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_UnlockThis");
+                    return this.Translate("ChatControl_LockThis");
                 }
             }
         }
 
-        public string ChannelControl_LockAll
+        public string ChatControl_UnlockThis
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_LockAll");
+                    return this.Translate("ChatControl_UnlockThis");
                 }
             }
         }
 
-        public string ChannelControl_UnlockAll
+        public string ChatControl_LockAll
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_UnlockAll");
+                    return this.Translate("ChatControl_LockAll");
                 }
             }
         }
 
-        public string ChannelControl_Filter
+        public string ChatControl_UnlockAll
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_Filter");
+                    return this.Translate("ChatControl_UnlockAll");
                 }
             }
         }
 
-        public string ChannelControl_FilterWord
+        public string ChatControl_Filter
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_FilterWord");
+                    return this.Translate("ChatControl_Filter");
                 }
             }
         }
 
-        public string ChannelControl_FilterSignature
+        public string ChatControl_FilterWord
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_FilterSignature");
+                    return this.Translate("ChatControl_FilterWord");
                 }
             }
         }
 
-        public string ChannelControl_NewMessageOnly
+        public string ChatControl_FilterSignature
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_NewMessageOnly");
+                    return this.Translate("ChatControl_FilterSignature");
                 }
             }
         }
 
-        public string ChannelControl_Message
+        public string ChatControl_NewMessageOnly
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_Message");
+                    return this.Translate("ChatControl_NewMessageOnly");
                 }
             }
         }
 
-        public string ChannelControl_Topic
+        public string ChatControl_Message
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_Topic");
+                    return this.Translate("ChatControl_Message");
                 }
             }
         }
 
-        public string ChannelControl_AmoebaNotFound_Message
+        public string ChatControl_Topic
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_AmoebaNotFound_Message");
+                    return this.Translate("ChatControl_Topic");
                 }
             }
         }
 
-        public string ChannelControl_MarkAllMessagesRead
+        public string ChatControl_AmoebaNotFound_Message
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_MarkAllMessagesRead");
+                    return this.Translate("ChatControl_AmoebaNotFound_Message");
                 }
             }
         }
 
-        public string ChannelControl_MarkAllMessagesRead_Message
+        public string ChatControl_MarkAllMessagesRead
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_MarkAllMessagesRead_Message");
+                    return this.Translate("ChatControl_MarkAllMessagesRead");
                 }
             }
         }
 
-        public string ChannelControl_ImportLockedMessages
+        public string ChatControl_MarkAllMessagesRead_Message
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_ImportLockedMessages");
+                    return this.Translate("ChatControl_MarkAllMessagesRead_Message");
                 }
             }
         }
 
-        public string ChannelControl_ExportLockedMessages
+        public string ChatControl_ImportLockedMessages
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_ExportLockedMessages");
+                    return this.Translate("ChatControl_ImportLockedMessages");
                 }
             }
         }
 
-        public string ChannelControl_TopicUpload
+        public string ChatControl_ExportLockedMessages
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelControl_TopicUpload");
+                    return this.Translate("ChatControl_ExportLockedMessages");
+                }
+            }
+        }
+
+        public string ChatControl_TopicUpload
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatControl_TopicUpload");
                 }
             }
         }
@@ -2878,46 +2921,46 @@ namespace Lair.Properties
         }
 
 
-        public string NewChannelWindow_Title
+        public string NewChatWindow_Title
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("NewChannelWindow_Title");
+                    return this.Translate("NewChatWindow_Title");
                 }
             }
         }
 
-        public string NewChannelWindow_Name
+        public string NewChatWindow_Name
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("NewChannelWindow_Name");
+                    return this.Translate("NewChatWindow_Name");
                 }
             }
         }
 
-        public string NewChannelWindow_Ok
+        public string NewChatWindow_Ok
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("NewChannelWindow_Ok");
+                    return this.Translate("NewChatWindow_Ok");
                 }
             }
         }
 
-        public string NewChannelWindow_Cancel
+        public string NewChatWindow_Cancel
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("NewChannelWindow_Cancel");
+                    return this.Translate("NewChatWindow_Cancel");
                 }
             }
         }
@@ -3178,13 +3221,13 @@ namespace Lair.Properties
         }
 
 
-        public string CreatorControl_Channels
+        public string CreatorControl_Chats
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("CreatorControl_Channels");
+                    return this.Translate("CreatorControl_Chats");
                 }
             }
         }
@@ -3698,79 +3741,79 @@ namespace Lair.Properties
         }
 
 
-        public string ChannelListWindow_Title
+        public string ChatListWindow_Title
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelListWindow_Title");
+                    return this.Translate("ChatListWindow_Title");
                 }
             }
         }
 
-        public string ChannelListWindow_Name
+        public string ChatListWindow_Name
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelListWindow_Name");
+                    return this.Translate("ChatListWindow_Name");
                 }
             }
         }
 
-        public string ChannelListWindow_Id
+        public string ChatListWindow_Id
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelListWindow_Id");
+                    return this.Translate("ChatListWindow_Id");
                 }
             }
         }
 
-        public string ChannelListWindow_Copy
+        public string ChatListWindow_Copy
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelListWindow_Copy");
+                    return this.Translate("ChatListWindow_Copy");
                 }
             }
         }
 
-        public string ChannelListWindow_CopyInfo
+        public string ChatListWindow_CopyInfo
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelListWindow_CopyInfo");
+                    return this.Translate("ChatListWindow_CopyInfo");
                 }
             }
         }
 
-        public string ChannelListWindow_Join
+        public string ChatListWindow_Join
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelListWindow_Join");
+                    return this.Translate("ChatListWindow_Join");
                 }
             }
         }
 
-        public string ChannelListWindow_Close
+        public string ChatListWindow_Close
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChannelListWindow_Close");
+                    return this.Translate("ChatListWindow_Close");
                 }
             }
         }

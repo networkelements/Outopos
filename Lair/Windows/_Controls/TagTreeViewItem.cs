@@ -1,19 +1,26 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
+using System.Runtime.Serialization;
+using System.Text;
+using System.Windows;
 using System.Windows.Controls;
-using Lair.Properties;
-using Library.Collections;
+using System.Xml;
+using Library;
 using Library.Net.Lair;
-using System;
+using Library.Security;
 
 namespace Lair.Windows
 {
-    class ChannelTreeViewItem : TreeViewItem
+    class TagTreeViewItem : TreeViewItemEx
     {
-        private ChannelTreeItem _value;
+        private TagTreeItem _value;
 
         private TextBlock _header = new TextBlock();
 
-        public ChannelTreeViewItem(ChannelTreeItem value)
+        public TagTreeViewItem(TagTreeItem value)
             : base()
         {
             if (value == null) throw new ArgumentNullException("value");
@@ -37,23 +44,16 @@ namespace Lair.Windows
 
         public void Update()
         {
-            if (!_value.IsTrustFilterEnabled)
-            {
-                _header.Text = string.Format("{0} ({1}) {2}", _value.Channel.Name, _value.MessageInformation.Count, "!");
-            }
-            else
-            {
-                _header.Text = string.Format("{0} ({1})", _value.Channel.Name, _value.MessageInformation.Count);
-            }
+            _header.Text = MessageConverter.ToTagString(this.Value.Tag);
         }
 
-        public ChannelTreeItem Value
+        public TagTreeItem Value
         {
             get
             {
                 return _value;
             }
-            set
+            private set
             {
                 _value = value;
 
@@ -61,6 +61,6 @@ namespace Lair.Windows
             }
         }
 
-        public FlowDocumentScrollViewer FlowDocumentScrollViewer { get; set; }
+        public ChatControl ChatControl { get; set; }
     }
 }

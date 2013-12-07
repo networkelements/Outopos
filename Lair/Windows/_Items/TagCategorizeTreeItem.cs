@@ -13,18 +13,18 @@ using Library.Io;
 
 namespace Lair.Windows
 {
-    [DataContract(Name = "SectionCategorizeTreeItem", Namespace = "http://Amoeba/Windows")]
-    class SectionCategorizeTreeItem : ICloneable<SectionCategorizeTreeItem>, IThisLock
+    [DataContract(Name = "TagCategorizeTreeItem", Namespace = "http://Amoeba/Windows")]
+    class TagCategorizeTreeItem : ICloneable<TagCategorizeTreeItem>, IThisLock
     {
         private string _name;
-        private LockedList<SectionTreeItem> _sectionTreeItems;
-        private LockedList<SectionCategorizeTreeItem> _children;
+        private LockedList<TagTreeItem> _tagTreeItems;
+        private LockedList<TagCategorizeTreeItem> _children;
         private bool _isExpanded = true;
 
-        private object _thisLock = new object();
-        private static object _thisStaticLock = new object();
+        private volatile object _thisLock;
+        private static readonly object _initializeLock = new object();
 
-        public SectionCategorizeTreeItem()
+        public TagCategorizeTreeItem()
         {
 
         }
@@ -48,30 +48,30 @@ namespace Lair.Windows
             }
         }
 
-        [DataMember(Name = "SectionTreeItems")]
-        public LockedList<SectionTreeItem> SectionTreeItems
+        [DataMember(Name = "TagTreeItems")]
+        public LockedList<TagTreeItem> TagTreeItems
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    if (_sectionTreeItems == null)
-                        _sectionTreeItems = new LockedList<SectionTreeItem>();
+                    if (_tagTreeItems == null)
+                        _tagTreeItems = new LockedList<TagTreeItem>();
 
-                    return _sectionTreeItems;
+                    return _tagTreeItems;
                 }
             }
         }
 
         [DataMember(Name = "Children")]
-        public LockedList<SectionCategorizeTreeItem> Children
+        public LockedList<TagCategorizeTreeItem> Children
         {
             get
             {
                 lock (this.ThisLock)
                 {
                     if (_children == null)
-                        _children = new LockedList<SectionCategorizeTreeItem>();
+                        _children = new LockedList<TagCategorizeTreeItem>();
 
                     return _children;
                 }
@@ -97,13 +97,13 @@ namespace Lair.Windows
             }
         }
 
-        #region ICloneable<SectionCategorizeTreeItem>
+        #region ICloneable<TagCategorizeTreeItem>
 
-        public SectionCategorizeTreeItem DeepClone()
+        public TagCategorizeTreeItem Clone()
         {
             lock (this.ThisLock)
             {
-                var ds = new DataContractSerializer(typeof(SectionCategorizeTreeItem));
+                var ds = new DataContractSerializer(typeof(TagCategorizeTreeItem));
 
                 using (BufferStream stream = new BufferStream(BufferManager.Instance))
                 {
@@ -113,11 +113,11 @@ namespace Lair.Windows
                         ds.WriteObject(textDictionaryWriter, this);
                     }
 
-                    ms.Position = 0;
+                    stream.Position = 0;
 
                     using (XmlDictionaryReader textDictionaryReader = XmlDictionaryReader.CreateBinaryReader(stream, XmlDictionaryReaderQuotas.Max))
                     {
-                        return (SectionCategorizeTreeItem)ds.ReadObject(textDictionaryReader);
+                        return (TagCategorizeTreeItem)ds.ReadObject(textDictionaryReader);
                     }
                 }
             }
@@ -131,13 +131,18 @@ namespace Lair.Windows
         {
             get
             {
-                lock (_thisStaticLock)
+                if (_thisLock == null)
                 {
-                    if (_thisLock == null)
-                        _thisLock = new object();
-
-                    return _thisLock;
+                    lock (_initializeLock)
+                    {
+                        if (_thisLock == null)
+                        {
+                            _thisLock = new object();
+                        }
+                    }
                 }
+
+                return _thisLock;
             }
         }
 

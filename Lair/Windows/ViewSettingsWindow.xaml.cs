@@ -32,7 +32,7 @@ namespace Lair.Windows
         public ViewSettingsWindow(BufferManager bufferManager)
         {
             _bufferManager = bufferManager;
-            _signatureListViewItemCollection = new ObservableCollection<SignatureListViewItem>(Settings.Instance.Global_DigitalSignatureCollection.Select(n => new SignatureListViewItem(n.DeepClone())));
+            _signatureListViewItemCollection = new ObservableCollection<SignatureListViewItem>(Settings.Instance.Global_DigitalSignatureCollection.Select(n => new SignatureListViewItem(n.Clone())));
             _fontMessageFontFamilyComboBoxItemCollection.AddRange(Fonts.SystemFontFamilies.Select(n => n.ToString()));
 
             InitializeComponent();

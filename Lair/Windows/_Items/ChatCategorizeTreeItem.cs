@@ -9,21 +9,22 @@ using Library;
 using Library.Net.Lair;
 using Library.Security;
 using Library.Collections;
+using Library.Io;
 
 namespace Lair.Windows
 {
-    [DataContract(Name = "ChannelCategorizeTreeItem", Namespace = "http://Amoeba/Windows")]
-    class ChannelCategorizeTreeItem : IDeepCloneable<ChannelCategorizeTreeItem>, IThisLock
+    [DataContract(Name = "ChatCategorizeTreeItem", Namespace = "http://Amoeba/Windows")]
+    class ChatCategorizeTreeItem : ICloneable<ChatCategorizeTreeItem>, IThisLock
     {
         private string _name;
-        private LockedList<ChannelTreeItem> _channelTreeItems;
-        private LockedList<ChannelCategorizeTreeItem> _children;
+        private LockedList<ChatTreeItem> _chatTreeItems;
+        private LockedList<ChatCategorizeTreeItem> _children;
         private bool _isExpanded = true;
 
-        private object _thisLock = new object();
-        private static object _thisStaticLock = new object();
+        private readonly object _thisLock = new object();
+        private static readonly object _initializeLock = new object();
 
-        public ChannelCategorizeTreeItem()
+        public ChatCategorizeTreeItem()
         {
 
         }
@@ -47,30 +48,30 @@ namespace Lair.Windows
             }
         }
 
-        [DataMember(Name = "ChannelTreeItems")]
-        public LockedList<ChannelTreeItem> ChannelTreeItems
+        [DataMember(Name = "ChatTreeItems")]
+        public LockedList<ChatTreeItem> ChatTreeItems
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    if (_channelTreeItems == null)
-                        _channelTreeItems = new LockedList<ChannelTreeItem>();
+                    if (_chatTreeItems == null)
+                        _chatTreeItems = new LockedList<ChatTreeItem>();
 
-                    return _channelTreeItems;
+                    return _chatTreeItems;
                 }
             }
         }
 
         [DataMember(Name = "Children")]
-        public LockedList<ChannelCategorizeTreeItem> Children
+        public LockedList<ChatCategorizeTreeItem> Children
         {
             get
             {
                 lock (this.ThisLock)
                 {
                     if (_children == null)
-                        _children = new LockedList<ChannelCategorizeTreeItem>();
+                        _children = new LockedList<ChatCategorizeTreeItem>();
 
                     return _children;
                 }
@@ -96,26 +97,27 @@ namespace Lair.Windows
             }
         }
 
-        #region IDeepClone<ChannelCategorizeTreeItem>
+        #region ICloneable<ChatCategorizeTreeItem>
 
-        public ChannelCategorizeTreeItem DeepClone()
+        public ChatCategorizeTreeItem Clone()
         {
             lock (this.ThisLock)
             {
-                var ds = new DataContractSerializer(typeof(ChannelCategorizeTreeItem));
+                var ds = new DataContractSerializer(typeof(ChatCategorizeTreeItem));
 
-                using (MemoryStream ms = new MemoryStream())
+                using (BufferStream stream = new BufferStream(BufferManager.Instance))
                 {
-                    using (XmlDictionaryWriter textDictionaryWriter = XmlDictionaryWriter.CreateTextWriter(ms, new UTF8Encoding(false), false))
+                    using (WrapperStream wrapperStream = new WrapperStream(stream, true))
+                    using (XmlDictionaryWriter textDictionaryWriter = XmlDictionaryWriter.CreateBinaryWriter(wrapperStream))
                     {
                         ds.WriteObject(textDictionaryWriter, this);
                     }
 
-                    ms.Position = 0;
+                    stream.Position = 0;
 
-                    using (XmlDictionaryReader textDictionaryReader = XmlDictionaryReader.CreateTextReader(ms, XmlDictionaryReaderQuotas.Max))
+                    using (XmlDictionaryReader textDictionaryReader = XmlDictionaryReader.CreateBinaryReader(stream, XmlDictionaryReaderQuotas.Max))
                     {
-                        return (ChannelCategorizeTreeItem)ds.ReadObject(textDictionaryReader);
+                        return (ChatCategorizeTreeItem)ds.ReadObject(textDictionaryReader);
                     }
                 }
             }
@@ -129,13 +131,18 @@ namespace Lair.Windows
         {
             get
             {
-                lock (_thisStaticLock)
+                if (_thisLock == null)
                 {
-                    if (_thisLock == null)
-                        _thisLock = new object();
-
-                    return _thisLock;
+                    lock (_initializeLock)
+                    {
+                        if (_thisLock == null)
+                        {
+                            _thisLock = new object();
+                        }
+                    }
                 }
+
+                return _thisLock;
             }
         }
 

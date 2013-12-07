@@ -12,33 +12,66 @@ using Library.Net.Lair;
 
 namespace Lair
 {
-    class TransfarLimitManager : ManagerBase, Library.Configuration.ISettings, IThisLock
+    class TransfarLimitManager : StateManagerBase, Library.Configuration.ISettings, IThisLock
     {
         private LairManager _lairManager;
 
         private Settings _settings;
 
-        private bool _isRun = true;
+        private long _uploadSize;
+        private long _downloadSize;
 
-        private Thread _timerThread = null;
+        private volatile Thread _timerThread;
 
-        public event EventHandler StartEvent;
-        public event EventHandler StopEvent;
+        private ManagerState _state = ManagerState.Stop;
 
-        private object _thisLock = new object();
-        private bool _disposed = false;
+        public EventHandler _startEvent;
+        public EventHandler _stopEvent;
+
+        private volatile bool _disposed;
+        private readonly object _thisLock = new object();
 
         public TransfarLimitManager(LairManager lairManager)
         {
             _lairManager = lairManager;
 
-            _settings = new Settings();
+            _settings = new Settings(this.ThisLock);
+        }
 
-            _timerThread = new Thread(this.Timer);
-            _timerThread.Priority = ThreadPriority.Highest;
-            _timerThread.IsBackground = true;
-            _timerThread.Name = "TransfarLimitManager_TimerThread";
-            _timerThread.Start();
+        public event EventHandler StartEvent
+        {
+            add
+            {
+                lock (this.ThisLock)
+                {
+                    _startEvent += value;
+                }
+            }
+            remove
+            {
+                lock (this.ThisLock)
+                {
+                    _startEvent -= value;
+                }
+            }
+        }
+
+        public event EventHandler StopEvent
+        {
+            add
+            {
+                lock (this.ThisLock)
+                {
+                    _stopEvent += value;
+                }
+            }
+            remove
+            {
+                lock (this.ThisLock)
+                {
+                    _stopEvent -= value;
+                }
+            }
         }
 
         public TransferLimit TransferLimit
@@ -83,17 +116,17 @@ namespace Lair
 
         protected virtual void OnStartEvent()
         {
-            if (this.StartEvent != null)
+            if (_startEvent != null)
             {
-                this.StartEvent(this, new EventArgs());
+                _startEvent(this, new EventArgs());
             }
         }
 
         protected virtual void OnStopEvent()
         {
-            if (this.StopEvent != null)
+            if (_stopEvent != null)
             {
-                this.StopEvent(this, new EventArgs());
+                _stopEvent(this, new EventArgs());
             }
         }
 
@@ -109,9 +142,6 @@ namespace Lair
             }
         }
 
-        private long _uploadSize;
-        private long _downloadSize;
-
         private void Timer()
         {
             try
@@ -122,16 +152,29 @@ namespace Lair
 
                 lock (this.ThisLock)
                 {
-                    _settings.UploadTransferSizeList.TryGetValue(now, out _uploadSize);
-                    _settings.DownloadTransferSizeList.TryGetValue(now, out _downloadSize);
+                    foreach (var item in _settings.UploadTransferSizeList.ToArray())
+                    {
+                        if ((now - item.Key).TotalDays >= _settings.TransferLimit.Span)
+                        {
+                            _settings.UploadTransferSizeList.Remove(item.Key);
+                        }
+                    }
+
+                    foreach (var item in _settings.DownloadTransferSizeList.ToArray())
+                    {
+                        if ((now - item.Key).TotalDays >= _settings.TransferLimit.Span)
+                        {
+                            _settings.DownloadTransferSizeList.Remove(item.Key);
+                        }
+                    }
                 }
 
                 for (; ; )
                 {
-                    Thread.Sleep(1000);
-                    if (!_isRun) return;
+                    Thread.Sleep(1000 * 1);
+                    if (this.State == ManagerState.Stop) return;
 
-                    if (!stopwatch.IsRunning || stopwatch.Elapsed > new TimeSpan(0, 1, 0))
+                    if (!stopwatch.IsRunning || stopwatch.ElapsedMilliseconds > 1000 * 20)
                     {
                         stopwatch.Restart();
 
@@ -141,6 +184,22 @@ namespace Lair
 
                             lock (this.ThisLock)
                             {
+                                foreach (var item in _settings.UploadTransferSizeList.ToArray())
+                                {
+                                    if ((now - item.Key).TotalDays >= _settings.TransferLimit.Span)
+                                    {
+                                        _settings.UploadTransferSizeList.Remove(item.Key);
+                                    }
+                                }
+
+                                foreach (var item in _settings.DownloadTransferSizeList.ToArray())
+                                {
+                                    if ((now - item.Key).TotalDays >= _settings.TransferLimit.Span)
+                                    {
+                                        _settings.DownloadTransferSizeList.Remove(item.Key);
+                                    }
+                                }
+
                                 _uploadSize = -_lairManager.SentByteCount;
                                 _downloadSize = -_lairManager.ReceivedByteCount;
                             }
@@ -156,49 +215,32 @@ namespace Lair
                             }
                         }
 
-                        if (_settings.TransferLimit.Type != TransferLimitType.None)
+                        if (_settings.TransferLimit.Type == TransferLimitType.Uploads)
                         {
-                            foreach (var item in _settings.UploadTransferSizeList.ToArray())
+                            var totalUploadSize = _settings.UploadTransferSizeList.Sum(n => n.Value);
+
+                            if (totalUploadSize > _settings.TransferLimit.Size)
                             {
-                                if ((now - item.Key).TotalDays >= _settings.TransferLimit.Span)
-                                    _settings.UploadTransferSizeList.Remove(item.Key);
+                                if (_lairManager.State == ManagerState.Start) this.OnStopEvent();
                             }
+                        }
+                        else if (_settings.TransferLimit.Type == TransferLimitType.Downloads)
+                        {
+                            var totalDownloadSize = _settings.DownloadTransferSizeList.Sum(n => n.Value);
 
-                            foreach (var item in _settings.DownloadTransferSizeList.ToArray())
+                            if (totalDownloadSize > _settings.TransferLimit.Size)
                             {
-                                if ((now - item.Key).TotalDays >= _settings.TransferLimit.Span)
-                                    _settings.DownloadTransferSizeList.Remove(item.Key);
+                                if (_lairManager.State == ManagerState.Start) this.OnStopEvent();
                             }
+                        }
+                        else if (_settings.TransferLimit.Type == TransferLimitType.Total)
+                        {
+                            var totalUploadSize = _settings.UploadTransferSizeList.Sum(n => n.Value);
+                            var totalDownloadSize = _settings.DownloadTransferSizeList.Sum(n => n.Value);
 
-                            if (_settings.TransferLimit.Type == TransferLimitType.Uploads)
+                            if ((totalUploadSize + totalDownloadSize) > _settings.TransferLimit.Size)
                             {
-                                var totalUploadSize = _settings.UploadTransferSizeList.Sum(n => n.Value);
-
-                                if (totalUploadSize > _settings.TransferLimit.Size)
-                                {
-                                    if (_lairManager.State == ManagerState.Start) this.OnStopEvent();
-                                }
-                            }
-
-                            if (_settings.TransferLimit.Type == TransferLimitType.Downloads)
-                            {
-                                var totalDownloadSize = _settings.DownloadTransferSizeList.Sum(n => n.Value);
-
-                                if (totalDownloadSize > _settings.TransferLimit.Size)
-                                {
-                                    if (_lairManager.State == ManagerState.Start) this.OnStopEvent();
-                                }
-                            }
-
-                            if (_settings.TransferLimit.Type == TransferLimitType.Total)
-                            {
-                                var totalUploadSize = _settings.UploadTransferSizeList.Sum(n => n.Value);
-                                var totalDownloadSize = _settings.DownloadTransferSizeList.Sum(n => n.Value);
-
-                                if ((totalUploadSize + totalDownloadSize) > _settings.TransferLimit.Size)
-                                {
-                                    if (_lairManager.State == ManagerState.Start) this.OnStopEvent();
-                                }
+                                if (_lairManager.State == ManagerState.Start) this.OnStopEvent();
                             }
                         }
                     }
@@ -210,6 +252,45 @@ namespace Lair
             }
         }
 
+        public override ManagerState State
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return _state;
+                }
+            }
+        }
+
+        public override void Start()
+        {
+            while (_timerThread != null) Thread.Sleep(1000);
+
+            lock (this.ThisLock)
+            {
+                if (this.State == ManagerState.Start) return;
+                _state = ManagerState.Start;
+
+                _timerThread = new Thread(this.Timer);
+                _timerThread.Priority = ThreadPriority.Lowest;
+                _timerThread.Name = "TransfarLimitManager_Timer";
+                _timerThread.Start();
+            }
+        }
+
+        public override void Stop()
+        {
+            lock (this.ThisLock)
+            {
+                if (this.State == ManagerState.Stop) return;
+                _state = ManagerState.Stop;
+            }
+
+            _timerThread.Join();
+            _timerThread = null;
+        }
+
         #region ISettings
 
         public void Load(string directoryPath)
@@ -217,6 +298,11 @@ namespace Lair
             lock (this.ThisLock)
             {
                 _settings.Load(directoryPath);
+
+                var now = DateTime.Today;
+
+                _settings.UploadTransferSizeList.TryGetValue(now, out _uploadSize);
+                _settings.DownloadTransferSizeList.TryGetValue(now, out _downloadSize);
             }
         }
 
@@ -230,23 +316,23 @@ namespace Lair
 
         #endregion
 
-        private class Settings : Library.Configuration.SettingsBase, IThisLock
+        private class Settings : Library.Configuration.SettingsBase
         {
-            private object _thisLock = new object();
+            private object _thisLock;
 
-            public Settings()
-                : base(new List<Library.Configuration.ISettingsContext>() { 
-                new Library.Configuration.SettingsContext<TransferLimit>() { Name = "TransferLimit", Value = new TransferLimit() },
-                new Library.Configuration.SettingsContext<LockedDictionary<DateTime, long>>() { Name = "UploadTransferSizeList", Value = new LockedDictionary<DateTime, long>() },
-                new Library.Configuration.SettingsContext<LockedDictionary<DateTime, long>>() { Name = "DownloadTransferSizeList", Value = new LockedDictionary<DateTime, long>() },
+            public Settings(object lockObject)
+                : base(new List<Library.Configuration.ISettingContent>() { 
+                new Library.Configuration.SettingContent<TransferLimit>() { Name = "TransferLimit", Value = new TransferLimit() },
+                new Library.Configuration.SettingContent<LockedDictionary<DateTime, long>>() { Name = "UploadTransferSizeList", Value = new LockedDictionary<DateTime, long>() },
+                new Library.Configuration.SettingContent<LockedDictionary<DateTime, long>>() { Name = "DownloadTransferSizeList", Value = new LockedDictionary<DateTime, long>() },
                 })
             {
-
+                _thisLock = lockObject;
             }
 
             public override void Load(string directoryPath)
             {
-                lock (this.ThisLock)
+                lock (_thisLock)
                 {
                     base.Load(directoryPath);
                 }
@@ -254,7 +340,7 @@ namespace Lair
 
             public override void Save(string directoryPath)
             {
-                lock (this.ThisLock)
+                lock (_thisLock)
                 {
                     base.Save(directoryPath);
                 }
@@ -264,7 +350,7 @@ namespace Lair
             {
                 get
                 {
-                    lock (this.ThisLock)
+                    lock (_thisLock)
                     {
                         return (TransferLimit)this["TransferLimit"];
                     }
@@ -272,7 +358,7 @@ namespace Lair
 
                 set
                 {
-                    lock (this.ThisLock)
+                    lock (_thisLock)
                     {
                         this["TransferLimit"] = value;
                     }
@@ -283,7 +369,7 @@ namespace Lair
             {
                 get
                 {
-                    lock (this.ThisLock)
+                    lock (_thisLock)
                     {
                         return (LockedDictionary<DateTime, long>)this["UploadTransferSizeList"];
                     }
@@ -291,7 +377,7 @@ namespace Lair
 
                 set
                 {
-                    lock (this.ThisLock)
+                    lock (_thisLock)
                     {
                         this["UploadTransferSizeList"] = value;
                     }
@@ -302,7 +388,7 @@ namespace Lair
             {
                 get
                 {
-                    lock (this.ThisLock)
+                    lock (_thisLock)
                     {
                         return (LockedDictionary<DateTime, long>)this["DownloadTransferSizeList"];
                     }
@@ -310,38 +396,23 @@ namespace Lair
 
                 set
                 {
-                    lock (this.ThisLock)
+                    lock (_thisLock)
                     {
                         this["DownloadTransferSizeList"] = value;
                     }
                 }
             }
-
-            #region IThisLock
-
-            public object ThisLock
-            {
-                get
-                {
-                    return _thisLock;
-                }
-            }
-
-            #endregion
         }
 
         protected override void Dispose(bool disposing)
         {
             if (_disposed) return;
+            _disposed = true;
 
             if (disposing)
             {
-                _isRun = false;
 
-                _timerThread.Join();
             }
-
-            _disposed = true;
         }
 
         #region IThisLock
@@ -380,8 +451,8 @@ namespace Lair
         private int _span = 1;
         private long _size = 1024 * 1024;
 
-        private object _thisLock = new object();
-        private static object _thisStaticLock = new object();
+        private volatile object _thisLock;
+        private static readonly object _initializeLock = new object();
 
         [DataMember(Name = "Type")]
         public TransferLimitType Type
@@ -446,13 +517,18 @@ namespace Lair
         {
             get
             {
-                lock (_thisStaticLock)
+                if (_thisLock == null)
                 {
-                    if (_thisLock == null)
-                        _thisLock = new object();
-
-                    return _thisLock;
+                    lock (_initializeLock)
+                    {
+                        if (_thisLock == null)
+                        {
+                            _thisLock = new object();
+                        }
+                    }
                 }
+
+                return _thisLock;
             }
         }
 

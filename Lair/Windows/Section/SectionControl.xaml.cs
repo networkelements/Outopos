@@ -36,21 +36,25 @@ namespace Lair.Windows
     /// </summary>
     partial class SectionControl : UserControl
     {
-        private MainWindow _mainWindow;
+        private MainWindow _mainWindow = (MainWindow)Application.Current.MainWindow;
         private BufferManager _bufferManager;
         private LairManager _lairManager;
 
-        private Thread _searchThread = null;
-
-        private volatile bool _refresh = false;
-
         private static Random _random = new Random();
+
+        private LockedDictionary<SectionTreeItem, ChatControl> _chatControls = new LockedDictionary<SectionTreeItem, ChatControl>();
+
+        private Thread _searchThread;
+        private Thread _watchThread;
+
+        private volatile bool _refresh;
 
         private SectionCategorizeTreeViewItem _treeViewItem;
 
-        public SectionControl(MainWindow mainWindow, LairManager lairManager, BufferManager bufferManager)
+        private LockedHashSet<string> _trustSignatures = new LockedHashSet<string>();
+
+        public SectionControl(LairManager lairManager, BufferManager bufferManager)
         {
-            _mainWindow = mainWindow;
             _bufferManager = bufferManager;
             _lairManager = lairManager;
 
@@ -71,9 +75,12 @@ namespace Lair.Windows
 
             _mainWindow._tabControl.SelectionChanged += (object sender, SelectionChangedEventArgs e) =>
             {
-                if (App.SelectTab != TabItemType.Section || _refresh) return;
+                if (e.OriginalSource != _mainWindow._tabControl) return;
 
-                this.UpdateTitle();
+                if (_mainWindow.SelectedTab == MainWindowTabType.Section)
+                {
+                    if (!_refresh) this.Update_Title();
+                }
             };
 
             _searchThread = new Thread(new ThreadStart(this.Search));
@@ -82,23 +89,18 @@ namespace Lair.Windows
             _searchThread.Name = "SectionControl_SearchThread";
             _searchThread.Start();
 
+            _watchThread = new Thread(new ThreadStart(this.Watch));
+            _watchThread.Priority = ThreadPriority.Highest;
+            _watchThread.IsBackground = true;
+            _watchThread.Name = "LibraryControl_WatchThread";
+            _watchThread.Start();
+
             this.Update();
         }
 
-        private void UpdateTitle()
+        public IEnumerable<string> GetTrustSignatures()
         {
-            if (_treeView.SelectedItem is SectionCategorizeTreeViewItem)
-            {
-                var selectItem = (SectionCategorizeTreeViewItem)_treeView.SelectedItem;
-
-                _mainWindow.Title = string.Format("Lair {0} - {1}", App.LairVersion, selectItem.Value.Name);
-            }
-            else if (_treeView.SelectedItem is SectionTreeViewItem)
-            {
-                var selectItem = (SectionTreeViewItem)_treeView.SelectedItem;
-
-                _mainWindow.Title = string.Format("Lair {0} - {1}", App.LairVersion, MessageConverter.ToSectionString(selectItem.Value.Section));
-            }
+            return _trustSignatures;
         }
 
         private void Search()
@@ -107,59 +109,45 @@ namespace Lair.Windows
             {
                 for (; ; )
                 {
-                    Thread.Sleep(1000);
+                    Thread.Sleep(100);
                     if (!_refresh) continue;
 
-                    SectionTreeViewItem selectTreeViewItem = null;
+                    TreeViewItem selectTreeViewItem = null;
 
                     this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                     {
-                        if (App.SelectTab != TabItemType.Section) return;
-
-                        this.UpdateTitle();
-
-                        if (_treeView.SelectedItem is SectionCategorizeTreeViewItem)
-                        {
-                            _refresh = false;
-
-                            _channelGrid.Visibility = System.Windows.Visibility.Hidden;
-                        }
-                        else if (_treeView.SelectedItem is SectionTreeViewItem)
-                        {
-                            selectTreeViewItem = (SectionTreeViewItem)_treeView.SelectedItem;
-
-                            _channelGrid.Visibility = System.Windows.Visibility.Visible;
-                        }
+                        selectTreeViewItem = (TreeViewItem)_treeView.SelectedItem;
                     }));
 
                     if (selectTreeViewItem == null) continue;
 
-                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
+                    if (selectTreeViewItem is SectionCategorizeTreeViewItem)
                     {
-                        if (selectTreeViewItem != _treeView.SelectedItem) return;
-                        _refresh = false;
-
-                        if (selectTreeViewItem.ChannelControl == null)
+                        this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                         {
-                            var channelControl = new ChannelControl(_mainWindow, _lairManager, _bufferManager,
-                                selectTreeViewItem.Value.ChannelCategorizeTreeItem, selectTreeViewItem.Value.UploadSignature);
+                            if (selectTreeViewItem != _treeView.SelectedItem) return;
+                            _refresh = false;
 
-                            selectTreeViewItem.ChannelControl = channelControl;
-                            _channelGrid.Children.Add(selectTreeViewItem.ChannelControl);
-                        }
+                            _chatGrid.Children.Clear();
 
-                        foreach (var item in _channelGrid.Children.OfType<ChannelControl>())
+                            this.Update_Title();
+                        }));
+                    }
+                    else if (selectTreeViewItem is SectionTreeViewItem)
+                    {
+                        SectionTreeViewItem sectionTreeViewItem = (SectionTreeViewItem)selectTreeViewItem;
+
+                        this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                         {
-                            if (item == selectTreeViewItem.ChannelControl)
-                            {
-                                item.Visibility = System.Windows.Visibility.Visible;
-                            }
-                            else
-                            {
-                                item.Visibility = System.Windows.Visibility.Hidden;
-                            }
-                        }
-                    }));
+                            if (sectionTreeViewItem != _treeView.SelectedItem) return;
+                            _refresh = false;
+
+                            _chatGrid.Children.Clear();
+                            _chatGrid.Children.Add(_chatControls[sectionTreeViewItem.Value]);
+
+                            this.Update_Title();
+                        }));
+                    }
                 }
             }
             catch (Exception e)
@@ -168,12 +156,118 @@ namespace Lair.Windows
             }
         }
 
+        private void Watch()
+        {
+            try
+            {
+                for (; ; )
+                {
+                    var sectionTreeViewItems = new List<SectionTreeViewItem>();
+
+                    {
+                        var categorizeSectionTreeViewItems = new List<SectionCategorizeTreeViewItem>();
+                        categorizeSectionTreeViewItems.Add(_treeViewItem);
+
+                        for (int i = 0; i < categorizeSectionTreeViewItems.Count; i++)
+                        {
+                            categorizeSectionTreeViewItems.AddRange(categorizeSectionTreeViewItems[i].Items.OfType<SectionCategorizeTreeViewItem>());
+                            sectionTreeViewItems.AddRange(categorizeSectionTreeViewItems[i].Items.OfType<SectionTreeViewItem>());
+                        }
+                    }
+
+                    foreach (var item in sectionTreeViewItems)
+                    {
+                        Dictionary<string, SectionProfileContent> sectionProfiles = new Dictionary<string, SectionProfileContent>();
+
+                        foreach (var profile in _lairManager.GetSectionProfiles(item.Value.Section))
+                        {
+                            sectionProfiles[profile.Certificate.ToString()] = profile;
+                        }
+
+                        SectionProfileContent leaderSectionProfile;
+                        if (!sectionProfiles.TryGetValue(item.Value.LeaderSignature, out leaderSectionProfile)) continue;
+
+                        var leaderContent = _lairManager.GetContent(leaderSectionProfile);
+
+                        List<string> trustSignatureList = new List<string>();
+
+                        trustSignatureList.AddRange(leaderContent.TrustSignatures);
+
+                        for (int i = 0; i < trustSignatureList.Count; i++)
+                        {
+                        }
+                    }
+
+                    Thread.Sleep(1000 * 60);
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
         private void Update()
         {
             Settings.Instance.SectionControl_SectionCategorizeTreeItem = _treeViewItem.Value;
 
+            {
+                var sectionTreeViewItems = new List<SectionTreeViewItem>();
+
+                {
+                    var categorizeSectionTreeViewItems = new List<SectionCategorizeTreeViewItem>();
+                    categorizeSectionTreeViewItems.Add(_treeViewItem);
+
+                    for (int i = 0; i < categorizeSectionTreeViewItems.Count; i++)
+                    {
+                        categorizeSectionTreeViewItems.AddRange(categorizeSectionTreeViewItems[i].Items.OfType<SectionCategorizeTreeViewItem>());
+                        sectionTreeViewItems.AddRange(categorizeSectionTreeViewItems[i].Items.OfType<SectionTreeViewItem>());
+                    }
+                }
+
+                foreach (var item in sectionTreeViewItems)
+                {
+                    if (_chatControls.ContainsKey(item.Value)) continue;
+
+                    var chatControl = new ChatControl(this, _lairManager, _bufferManager, item);
+                    chatControl.Height = Double.NaN;
+                    chatControl.Width = Double.NaN;
+
+                    _chatControls[item.Value] = chatControl;
+                }
+
+                foreach (var item in _chatControls.ToArray())
+                {
+                    if (sectionTreeViewItems.Any(n => n.Value == item.Key)) continue;
+
+                    item.Value.Dispose();
+                    _chatControls.Remove(item.Key);
+                }
+            }
+
             _mainWindow.Title = string.Format("Lair {0}", App.LairVersion);
             _refresh = true;
+        }
+
+        private void Update_Title()
+        {
+            if (_refresh) return;
+
+            if (_mainWindow.SelectedTab == MainWindowTabType.Section)
+            {
+                if (_treeView.SelectedItem is SectionCategorizeTreeViewItem)
+                {
+                    var selectItem = (SectionCategorizeTreeViewItem)_treeView.SelectedItem;
+
+                    _mainWindow.Title = string.Format("Lair {0} - {1}", App.LairVersion, selectItem.Value.Name);
+                }
+                else if (_treeView.SelectedItem is SectionTreeViewItem)
+                {
+                    var selectItem = (SectionTreeViewItem)_treeView.SelectedItem;
+
+                    _mainWindow.Title = string.Format("Lair {0} - {1}", App.LairVersion, MessageConverter.ToSectionString(selectItem.Value.Section));
+                }
+            }
         }
 
         #region _treeView
@@ -249,9 +343,9 @@ namespace Lair.Windows
                         var d = (SectionCategorizeTreeViewItem)destinationItem;
 
                         if (d.Value.Children.Any(n => object.ReferenceEquals(n, s.Value))) return;
-                        if (_treeView.GetLineage(d).Any(n => object.ReferenceEquals(n, s))) return;
+                        if (_treeView.GetAncestors(d).Any(n => object.ReferenceEquals(n, s))) return;
 
-                        var parentItem = (TreeViewItem)_treeView.GetParent(s);
+                        var parentItem = (TreeViewItem)s.Parent;
 
                         if (parentItem is SectionCategorizeTreeViewItem)
                         {
@@ -279,9 +373,9 @@ namespace Lair.Windows
                         var d = (SectionCategorizeTreeViewItem)destinationItem;
 
                         if (d.Value.SectionTreeItems.Any(n => object.ReferenceEquals(n, s.Value))) return;
-                        if (_treeView.GetLineage(d).Any(n => object.ReferenceEquals(n, s))) return;
+                        if (_treeView.GetAncestors(d).Any(n => object.ReferenceEquals(n, s))) return;
 
-                        var parentItem = (TreeViewItem)_treeView.GetParent(s);
+                        var parentItem = (TreeViewItem)s.Parent;
 
                         if (parentItem is SectionCategorizeTreeViewItem)
                         {
@@ -362,7 +456,7 @@ namespace Lair.Windows
 
             if (MessageBox.Show(_mainWindow, LanguagesManager.Instance.MainWindow_Delete_Message, "Section", MessageBoxButton.OKCancel, MessageBoxImage.Information) != MessageBoxResult.OK) return;
 
-            var parent = (SectionCategorizeTreeViewItem)_treeView.GetParent(selectTreeViewItem);
+            var parent = (SectionCategorizeTreeViewItem)selectTreeViewItem.Parent;
 
             parent.IsSelected = true;
             parent.Value.Children.Remove(selectTreeViewItem.Value);
@@ -378,7 +472,7 @@ namespace Lair.Windows
 
             Clipboard.SetSectionCategorizeTreeItems(new SectionCategorizeTreeItem[] { selectTreeViewItem.Value });
 
-            var parent = (SectionCategorizeTreeViewItem)_treeView.GetParent(selectTreeViewItem);
+            var parent = (SectionCategorizeTreeViewItem)selectTreeViewItem.Parent;
 
             parent.IsSelected = true;
             parent.Value.Children.Remove(selectTreeViewItem.Value);
@@ -481,7 +575,7 @@ namespace Lair.Windows
 
             if (MessageBox.Show(_mainWindow, LanguagesManager.Instance.MainWindow_Delete_Message, "Section", MessageBoxButton.OKCancel, MessageBoxImage.Information) != MessageBoxResult.OK) return;
 
-            var searchTreeViewItem = _treeView.GetLineage((TreeViewItem)_treeView.SelectedItem).OfType<SectionCategorizeTreeViewItem>().LastOrDefault() as SectionCategorizeTreeViewItem;
+            var searchTreeViewItem = _treeView.GetAncestors((TreeViewItem)_treeView.SelectedItem).OfType<SectionCategorizeTreeViewItem>().LastOrDefault() as SectionCategorizeTreeViewItem;
             if (searchTreeViewItem == null) return;
 
             searchTreeViewItem.IsSelected = true;
@@ -499,7 +593,7 @@ namespace Lair.Windows
 
             Clipboard.SetSectionTreeItems(new SectionTreeItem[] { selectTreeViewItem.Value });
 
-            var searchTreeViewItem = _treeView.GetLineage((TreeViewItem)_treeView.SelectedItem).OfType<SectionCategorizeTreeViewItem>().LastOrDefault() as SectionCategorizeTreeViewItem;
+            var searchTreeViewItem = _treeView.GetAncestors((TreeViewItem)_treeView.SelectedItem).OfType<SectionCategorizeTreeViewItem>().LastOrDefault() as SectionCategorizeTreeViewItem;
             if (searchTreeViewItem == null) return;
 
             searchTreeViewItem.IsSelected = true;

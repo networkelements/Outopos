@@ -8,6 +8,12 @@
   <Translate Key="Languages_English" Value="英語" />
   <Translate Key="Languages_Japanese" Value="日本語" />
 
+  <Translate Key="Link_Tag" Value="Tag" />
+  <Translate Key="Link_Tag_Name" Value="Name" />
+  <Translate Key="Link_Tag_Id" Value="ID" />
+  <Translate Key="Link_Type" Value="Type" />
+  <Translate Key="Link_Path" Value="Path" />
+
   <Translate Key="Seed_Name" Value="名前" />
   <Translate Key="Seed_Signature" Value="サイン" />
   <Translate Key="Seed_Length" Value="サイズ" />
@@ -15,15 +21,9 @@
   <Translate Key="Seed_CreationTime" Value="作成日" />
   <Translate Key="Seed_Comment" Value="コメント" />
 
-  <Translate Key="Channel_Name" Value="名前" />
-  <Translate Key="Channel_Id" Value="ID" />
-
-  <Translate Key="Section_Name" Value="名前" />
-  <Translate Key="Section_Id" Value="ID" />
-
   <Translate Key="SectionTreeItem_LeaderSignature" Value="リーダーのサイン" />
 
-  <Translate Key="Message_Channel" Value="チャンネル" />
+  <Translate Key="Message_Chat" Value="チャンネル" />
   <Translate Key="Message_Signature" Value="サイン" />
   <Translate Key="Message_CreationTime" Value="作成日" />
   <Translate Key="Message_Content" Value="コンテンツ" />
@@ -75,6 +75,7 @@
   <Translate Key="ConnectionsSettingsWindow_Server" Value="サーバー" />
   <Translate Key="ConnectionsSettingsWindow_ListenUris" Value="受信 Uris" />
   <Translate Key="ConnectionsSettingsWindow_Events" Value="イベント" />
+  <Translate Key="ConnectionsSettingsWindow_Data" Value="データ" />
   <Translate Key="ConnectionsSettingsWindow_Bandwidth" Value="帯域幅" />
   <Translate Key="ConnectionsSettingsWindow_BandwidthLimit" Value="帯域幅制限 (*/s) [0 Byte: 無制限]" />
   <Translate Key="ConnectionsSettingsWindow_Transfer" Value="転送量" />
@@ -87,6 +88,7 @@
   <Translate Key="ConnectionsSettingsWindow_Total" Value="トータル" />
   <Translate Key="ConnectionsSettingsWindow_Reset" Value="リセット" />
   <Translate Key="ConnectionsSettingsWindow_ConnectionCount" Value="接続数上限" />
+  <Translate Key="ConnectionsSettingsWindow_CacheSize" Value="キャッシュサイズ" />
   <Translate Key="ConnectionsSettingsWindow_AutoBaseNodeSetting" Value="基礎ノードを自動で設定する" />
   <Translate Key="ConnectionsSettingsWindow_Tor" Value="Tor" />
   <Translate Key="ConnectionsSettingsWindow_Ipv4" Value="Ipv4" />
@@ -173,7 +175,7 @@
   <Translate Key="ConnectionControl_LeaderCount" Value="リーダー情報数" />
   <Translate Key="ConnectionControl_CreatorCount" Value="クリエイター情報数" />
   <Translate Key="ConnectionControl_ManagerCount" Value="マネージャー情報数" />
-  <Translate Key="ConnectionControl_ChannelCount" Value="チャンネル情報数" />
+  <Translate Key="ConnectionControl_ChatCount" Value="チャンネル情報数" />
   <Translate Key="ConnectionControl_TopicCount" Value="トピック情報数" />
   <Translate Key="ConnectionControl_MessageCount" Value="メッセージ情報数" />
   <Translate Key="ConnectionControl_PushNodeCount" Value="送信ノード情報数" />
@@ -181,7 +183,7 @@
   <Translate Key="ConnectionControl_PushLeaderCount" Value="送信リーダー情報数" />
   <Translate Key="ConnectionControl_PushCreatorCount" Value="送信クリエイター情報数" />
   <Translate Key="ConnectionControl_PushManagerCount" Value="送信マネージャー情報数" />
-  <Translate Key="ConnectionControl_PushChannelRequestCount" Value="送信チャンネルリクエスト情報数" />
+  <Translate Key="ConnectionControl_PushChatRequestCount" Value="送信チャンネルリクエスト情報数" />
   <Translate Key="ConnectionControl_PushTopicCount" Value="送信トピック情報数" />
   <Translate Key="ConnectionControl_PushMessageCount" Value="送信メッセージ情報数" />
   <Translate Key="ConnectionControl_PullNodeCount" Value="受信ノード情報数" />
@@ -189,7 +191,7 @@
   <Translate Key="ConnectionControl_PullLeaderCount" Value="受信リーダー情報数" />
   <Translate Key="ConnectionControl_PullCreatorCount" Value="受信クリエイター情報数" />
   <Translate Key="ConnectionControl_PullManagerCount" Value="受信マネージャー情報数" />
-  <Translate Key="ConnectionControl_PullChannelRequestCount" Value="受信チャンネルリクエスト情報数" />
+  <Translate Key="ConnectionControl_PullChatRequestCount" Value="受信チャンネルリクエスト情報数" />
   <Translate Key="ConnectionControl_PullTopicCount" Value="受信トピック情報数" />
   <Translate Key="ConnectionControl_PullMessageCount" Value="受信メッセージ情報数" />
   <Translate Key="ConnectionControl_Copy" Value="コピー" />
@@ -203,38 +205,39 @@
   <Translate Key="SectionControl_CopyInfo" Value="Copy info" />
   <Translate Key="SectionControl_Paste" Value="Paste" />
   <Translate Key="SectionControl_Chart" Value="Chart" />
-  <Translate Key="SectionControl_Channel" Value="Channel" />
+  <Translate Key="SectionControl_Chat" Value="Chat" />
   <Translate Key="SectionControl_Document" Value="Document" />
+  <Translate Key="SectionControl_AmoebaNotFound_Message" Value="Amoeba Not Found" />
 
-  <Translate Key="ChannelControl_New" Value="新規" />
-  <Translate Key="ChannelControl_Edit" Value="編集" />
-  <Translate Key="ChannelControl_Delete" Value="削除" />
-  <Translate Key="ChannelControl_Cut" Value="切り取り" />
-  <Translate Key="ChannelControl_Copy" Value="コピー" />
-  <Translate Key="ChannelControl_CopyInfo" Value="コピー (詳細情報)" />
-  <Translate Key="ChannelControl_Paste" Value="貼り付け" />
-  <Translate Key="ChannelControl_ChannelList" Value="チャンネルリスト" />
-  <Translate Key="ChannelControl_Respons" Value="返信" />
-  <Translate Key="ChannelControl_Trust" Value="トラスト" />
-  <Translate Key="ChannelControl_Trust_On" Value="トラスト有効" />
-  <Translate Key="ChannelControl_Trust_Off" Value="トラスト無効" />
-  <Translate Key="ChannelControl_Lock" Value="ロック" />
-  <Translate Key="ChannelControl_LockThis" Value="このメッセージをロック" />
-  <Translate Key="ChannelControl_UnlockThis" Value="このメッセージのロックを解除" />
-  <Translate Key="ChannelControl_LockAll" Value="すべてのメッセージをロック" />
-  <Translate Key="ChannelControl_UnlockAll" Value="すべてのメッセージのロックを解除" />
-  <Translate Key="ChannelControl_Filter" Value="フィルタ" />
-  <Translate Key="ChannelControl_FilterWord" Value="この単語でフィルタ" />
-  <Translate Key="ChannelControl_FilterSignature" Value="このサインでフィルタ" />
-  <Translate Key="ChannelControl_NewMessageOnly" Value="新着のみ" />
-  <Translate Key="ChannelControl_Message" Value="メッセージ" />
-  <Translate Key="ChannelControl_Topic" Value="トピック" />
-  <Translate Key="ChannelControl_AmoebaNotFound_Message" Value="Amoebaが見つかりません。Amoeba.exeへのパスを設定してください。" />
-  <Translate Key="ChannelControl_MarkAllMessagesRead" Value="全てのメッセージを既読にする" />
-  <Translate Key="ChannelControl_MarkAllMessagesRead_Message" Value="全てのメッセージを既読にしますか？" />
-  <Translate Key="ChannelControl_ImportLockedMessages" Value="ロックされたメッセージのインポート" />
-  <Translate Key="ChannelControl_ExportLockedMessages" Value="ロックされたメッセージのエクスポート" />
-  <Translate Key="ChannelControl_TopicUpload" Value="トピックの作成" />
+  <Translate Key="ChatControl_New" Value="新規" />
+  <Translate Key="ChatControl_Edit" Value="編集" />
+  <Translate Key="ChatControl_Delete" Value="削除" />
+  <Translate Key="ChatControl_Cut" Value="切り取り" />
+  <Translate Key="ChatControl_Copy" Value="コピー" />
+  <Translate Key="ChatControl_CopyInfo" Value="コピー (詳細情報)" />
+  <Translate Key="ChatControl_Paste" Value="貼り付け" />
+  <Translate Key="ChatControl_ChatList" Value="チャンネルリスト" />
+  <Translate Key="ChatControl_Respons" Value="返信" />
+  <Translate Key="ChatControl_Trust" Value="トラスト" />
+  <Translate Key="ChatControl_Trust_On" Value="トラスト有効" />
+  <Translate Key="ChatControl_Trust_Off" Value="トラスト無効" />
+  <Translate Key="ChatControl_Lock" Value="ロック" />
+  <Translate Key="ChatControl_LockThis" Value="このメッセージをロック" />
+  <Translate Key="ChatControl_UnlockThis" Value="このメッセージのロックを解除" />
+  <Translate Key="ChatControl_LockAll" Value="すべてのメッセージをロック" />
+  <Translate Key="ChatControl_UnlockAll" Value="すべてのメッセージのロックを解除" />
+  <Translate Key="ChatControl_Filter" Value="フィルタ" />
+  <Translate Key="ChatControl_FilterWord" Value="この単語でフィルタ" />
+  <Translate Key="ChatControl_FilterSignature" Value="このサインでフィルタ" />
+  <Translate Key="ChatControl_NewMessageOnly" Value="新着のみ" />
+  <Translate Key="ChatControl_Message" Value="メッセージ" />
+  <Translate Key="ChatControl_Topic" Value="トピック" />
+  <Translate Key="ChatControl_AmoebaNotFound_Message" Value="Amoebaが見つかりません。Amoeba.exeへのパスを設定してください。" />
+  <Translate Key="ChatControl_MarkAllMessagesRead" Value="全てのメッセージを既読にする" />
+  <Translate Key="ChatControl_MarkAllMessagesRead_Message" Value="全てのメッセージを既読にしますか？" />
+  <Translate Key="ChatControl_ImportLockedMessages" Value="ロックされたメッセージのインポート" />
+  <Translate Key="ChatControl_ExportLockedMessages" Value="ロックされたメッセージのエクスポート" />
+  <Translate Key="ChatControl_TopicUpload" Value="トピックの作成" />
 
   <Translate Key="ChartWindow_Title" Value="チャート" />
   <Translate Key="ChartWindow_Leader" Value="リーダー" />
@@ -269,10 +272,10 @@
   <Translate Key="NewSectionWindow_Ok" Value="Ok" />
   <Translate Key="NewSectionWindow_Cancel" Value="キャンセル" />
 
-  <Translate Key="NewChannelWindow_Title" Value="新しいチャンネル" />
-  <Translate Key="NewChannelWindow_Name" Value="チャンネル名" />
-  <Translate Key="NewChannelWindow_Ok" Value="Ok" />
-  <Translate Key="NewChannelWindow_Cancel" Value="キャンセル" />
+  <Translate Key="NewChatWindow_Title" Value="新しいチャンネル" />
+  <Translate Key="NewChatWindow_Name" Value="チャンネル名" />
+  <Translate Key="NewChatWindow_Ok" Value="Ok" />
+  <Translate Key="NewChatWindow_Cancel" Value="キャンセル" />
 
   <Translate Key="SectionTreeItemEditWindow_Title" Value="セクションの編集" />
   <Translate Key="SectionTreeItemEditWindow_Signature" Value="サイン" />
@@ -299,7 +302,7 @@
   <Translate Key="LeaderControl_Copy" Value="コピー" />
   <Translate Key="LeaderControl_Paste" Value="貼り付け" />
 
-  <Translate Key="CreatorControl_Channels" Value="チャンネル" />
+  <Translate Key="CreatorControl_Chats" Value="チャンネル" />
   <Translate Key="CreatorControl_Comment" Value="コメント" />
   <Translate Key="CreatorControl_Name" Value="名前" />
   <Translate Key="CreatorControl_Id" Value="ID" />
@@ -349,12 +352,12 @@
   <Translate Key="SearchItemEditWindow_Copy" Value="コピー" />
   <Translate Key="SearchItemEditWindow_Paste" Value="貼り付け" />
 
-  <Translate Key="ChannelListWindow_Title" Value="チャンネルリスト" />
-  <Translate Key="ChannelListWindow_Name" Value="名前" />
-  <Translate Key="ChannelListWindow_Id" Value="ID" />
-  <Translate Key="ChannelListWindow_Copy" Value="コピー" />
-  <Translate Key="ChannelListWindow_CopyInfo" Value="コピー (詳細情報)" />
-  <Translate Key="ChannelListWindow_Join" Value="入る" />
-  <Translate Key="ChannelListWindow_Close" Value="閉じる" />
+  <Translate Key="ChatListWindow_Title" Value="チャンネルリスト" />
+  <Translate Key="ChatListWindow_Name" Value="名前" />
+  <Translate Key="ChatListWindow_Id" Value="ID" />
+  <Translate Key="ChatListWindow_Copy" Value="コピー" />
+  <Translate Key="ChatListWindow_CopyInfo" Value="コピー (詳細情報)" />
+  <Translate Key="ChatListWindow_Join" Value="入る" />
+  <Translate Key="ChatListWindow_Close" Value="閉じる" />
 
 </Configuration>

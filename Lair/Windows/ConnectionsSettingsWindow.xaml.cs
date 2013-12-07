@@ -43,9 +43,9 @@ namespace Lair.Windows
 
             lock (_lairManager.ThisLock)
             {
-                _baseNode = _lairManager.BaseNode.DeepClone();
-                _otherNodes.AddRange(_lairManager.OtherNodes.Select(n => n.DeepClone()));
-                _clientFilters.AddRange(_lairManager.Filters.Select(n => n.DeepClone()));
+                _baseNode = _lairManager.BaseNode.Clone();
+                _otherNodes.AddRange(_lairManager.OtherNodes.Select(n => n.Clone()));
+                _clientFilters.AddRange(_lairManager.Filters.Select(n => n.Clone()));
                 _listenUris.AddRange(_lairManager.ListenUris);
             }
 
@@ -1456,7 +1456,7 @@ namespace Lair.Windows
                     }
                 }
 
-                _lairManager.BaseNode = _baseNode.DeepClone();
+                _lairManager.BaseNode = _baseNode.Clone();
                 _lairManager.SetOtherNodes(_otherNodes.Where(n => n != null && n.Id != null && n.Uris.Count != 0));
 
                 int count = ConnectionsSettingsWindow.GetStringToInt(_bandwidthConnectionCountTextBox.Text);
@@ -1476,7 +1476,7 @@ namespace Lair.Windows
                 _lairManager.BandWidthLimit = bandwidthLimit;
 
                 _lairManager.Filters.Clear();
-                _lairManager.Filters.AddRange(_clientFilters.Select(n => n.DeepClone()));
+                _lairManager.Filters.AddRange(_clientFilters.Select(n => n.Clone()));
 
                 if (!Collection.Equals(_lairManager.ListenUris, _listenUris))
                 {

@@ -26,7 +26,7 @@ using Lair.Properties;
 using Library;
 using Library.Collections;
 using Library.Io;
-using Library.Net.Connection;
+using Library.Net.Connections;
 using Library.Net.Lair;
 using Library.Net.Proxy;
 using Library.Net.Upnp;
@@ -49,19 +49,21 @@ namespace Lair.Windows
         private WindowState _windowState;
 
         private Dictionary<string, string> _configrationDirectoryPaths = new Dictionary<string, string>();
-        private string _logPath = null;
+        private string _logPath;
 
         private bool _isRun = true;
-        private bool _autoStop = false;
+        private bool _autoStop;
 
         private System.Timers.Timer _refreshTimer = new System.Timers.Timer();
-        private Thread _timerThread = null;
-        private Thread _timer2Thread = null;
+        private Thread _timerThread;
+        private Thread _timer2Thread;
 
-        private volatile bool _diskSpaceNotFoundException = false;
-        private volatile bool _cacheSpaceNotFoundException = false;
+        private volatile bool _diskSpaceNotFoundException;
+        private volatile bool _cacheSpaceNotFoundException;
 
-        private string _cacheBlocksPath = null;
+        private string _cacheBlocksPath;
+
+        private MainWindowTabType _selectedTab;
 
         public MainWindow()
         {
@@ -145,6 +147,22 @@ namespace Lair.Windows
                 Log.Error(e);
 
                 throw;
+            }
+        }
+
+        public MainWindowTabType SelectedTab
+        {
+            get
+            {
+                this.VerifyAccess();
+
+                return _selectedTab;
+            }
+            set
+            {
+                this.VerifyAccess();
+
+                _selectedTab = value;
             }
         }
 
@@ -442,7 +460,7 @@ namespace Lair.Windows
         }
 
         private ConnectionInformation _ci = new ConnectionInformation();
-        private bool _refreshTimer_Running = false;
+        private bool _refreshTimer_Running;
 
         void _refreshTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
@@ -763,35 +781,32 @@ namespace Lair.Windows
                     initFlag = true;
 
                     {
-                        var channelCategorizeTreeItem = new ChannelCategorizeTreeItem();
-                        channelCategorizeTreeItem.Name = "Channel";
-                        channelCategorizeTreeItem.ChannelTreeItems.Add(new ChannelTreeItem()
+                        var chatCategorizeTreeItem = new ChatCategorizeTreeItem();
+                        chatCategorizeTreeItem.Name = "Chat";
+                        chatCategorizeTreeItem.ChatTreeItems.Add(new ChatTreeItem()
                         {
-                            IsTrustFilterEnabled = true,
-                            TopicInformation = new TopicInformation(),
-                            Channel = LairConverter.FromChannelString("Channel@AAAAAEAAmJGDzJZZe2LYTKX_h2n34Hwnp4Ez19bD-9mjkRwps4jt28VDAEiw3LUlRtc1nwgDNuFbtto2o7wHYpokMSOKUwAAAAYBQW1vZWJhN9Bj5Q"),
+                            IsTrustEnabled = true,
+                            Chat = LairConverter.FromChatString("Chat:AAAAAEAAmJGDzJZZe2LYTKX_h2n34Hwnp4Ez19bD-9mjkRwps4jt28VDAEiw3LUlRtc1nwgDNuFbtto2o7wHYpokMSOKUwAAAAYBQW1vZWJhN9Bj5Q"),
                         });
-                        channelCategorizeTreeItem.ChannelTreeItems.Add(new ChannelTreeItem()
+                        chatCategorizeTreeItem.ChatTreeItems.Add(new ChatTreeItem()
                         {
-                            IsTrustFilterEnabled = true,
-                            TopicInformation = new TopicInformation(),
-                            Channel = LairConverter.FromChannelString("Channel@AAAAAEAAzCXi8JdCucrX16V-WAViFxWmALOLwEwN6YxrpzwttvOrBmkPb5dJOg1y20TrMovemnObJ8Iy3ivXm_wkBkErlAAAAAQBTGFpcr3Cip8"),
+                            IsTrustEnabled = true,
+                            Chat = LairConverter.FromChatString("Chat:AAAAAEAAzCXi8JdCucrX16V-WAViFxWmALOLwEwN6YxrpzwttvOrBmkPb5dJOg1y20TrMovemnObJ8Iy3ivXm_wkBkErlAAAAAQBTGFpcr3Cip8"),
                         });
-                        channelCategorizeTreeItem.ChannelTreeItems.Add(new ChannelTreeItem()
+                        chatCategorizeTreeItem.ChatTreeItems.Add(new ChatTreeItem()
                         {
-                            IsTrustFilterEnabled = true,
-                            TopicInformation = new TopicInformation(),
-                            Channel = LairConverter.FromChannelString("Channel@AAAAAEAApd3NdDiaZpygYU5ySICsv8zk2_2P1bRViGigtWhwJtIpw5Xi6IkdUbp3hroB_cN-IJkyscS6c4_cUhtJ9N2zlQAAAAQBVGVzdGSZ__Y"),
+                            IsTrustEnabled = true,
+                            Chat = LairConverter.FromChatString("Chat:AAAAAEAApd3NdDiaZpygYU5ySICsv8zk2_2P1bRViGigtWhwJtIpw5Xi6IkdUbp3hroB_cN-IJkyscS6c4_cUhtJ9N2zlQAAAAQBVGVzdGSZ__Y"),
                         });
-                        channelCategorizeTreeItem.IsExpanded = true;
+                        chatCategorizeTreeItem.IsExpanded = true;
 
                         string leaderSignature;
-                        var section = LairConverter.FromSectionString("Section@AAAAAEAALoinQGza0zKpj-3O_f8O-E3hZzM_1pY78oTC1wkLuIoFNBJXBTwGz695Kmz2aqBcYQq_isLhw3jRO1VRS4E0wgAAABABQWxsaWFuY2UgTmV0d29ya0tEqWU,Lyrise@7seiSbhOCkls6gPxjJYjptxskzlSulgIe3dSfj1KxnJJ6eejKjuJ3R1Ec8yFuKpr4uNcwF7bFh5OrmxnY25y7A", out leaderSignature);
+                        var section = LairConverter.FromSectionString("Section:AAAAAEAALoinQGza0zKpj-3O_f8O-E3hZzM_1pY78oTC1wkLuIoFNBJXBTwGz695Kmz2aqBcYQq_isLhw3jRO1VRS4E0wgAAABABQWxsaWFuY2UgTmV0d29ya0tEqWU,Lyrise@7seiSbhOCkls6gPxjJYjptxskzlSulgIe3dSfj1KxnJJ6eejKjuJ3R1Ec8yFuKpr4uNcwF7bFh5OrmxnY25y7A", out leaderSignature);
 
                         var sectionTreeItem = new SectionTreeItem();
                         sectionTreeItem.Section = section;
                         sectionTreeItem.LeaderSignature = leaderSignature;
-                        sectionTreeItem.ChannelCategorizeTreeItem = channelCategorizeTreeItem;
+                        sectionTreeItem.ChatCategorizeTreeItem = chatCategorizeTreeItem;
 
                         var sectionCategorizeTreeItem = new SectionCategorizeTreeItem();
                         sectionCategorizeTreeItem.Name = "Section";
@@ -1020,7 +1035,7 @@ namespace Lair.Windows
         }
 
         private object _updateLockObject = new object();
-        private Version _updateCancelVersion = null;
+        private Version _updateCancelVersion;
 
         private void CheckUpdate(bool isLogFlag)
         {
@@ -1265,7 +1280,7 @@ namespace Lair.Windows
             _connectionControl.Width = Double.NaN;
             _connectionTabItem.Content = _connectionControl;
 
-            SectionControl _sectionControl = new SectionControl(this, _lairManager, _bufferManager);
+            SectionControl _sectionControl = new SectionControl(_lairManager, _bufferManager);
             _sectionControl.Height = Double.NaN;
             _sectionControl.Width = Double.NaN;
             _sectionTabItem.Content = _sectionControl;
@@ -1319,7 +1334,7 @@ namespace Lair.Windows
                     {
                         Settings.Instance.Global_UrlHistorys.Clear();
                         Settings.Instance.Global_SeedHistorys.Clear();
-                        Settings.Instance.Global_ChannelHistorys.Clear();
+                        Settings.Instance.Global_ChatHistorys.Clear();
                     }
 
                     _transferLimitManager.Save(_configrationDirectoryPaths["TransfarLimitManager"]);
@@ -1363,24 +1378,26 @@ namespace Lair.Windows
 
         private void _tabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (e.OriginalSource != _tabControl) return;
+
             if (_tabControl.SelectedItem == _connectionTabItem)
             {
-                App.SelectTab = TabItemType.Connection;
+                this.SelectedTab = MainWindowTabType.Connection;
             }
             else if (_tabControl.SelectedItem == _sectionTabItem)
             {
-                App.SelectTab = TabItemType.Section;
+                this.SelectedTab = MainWindowTabType.Section;
             }
             else if (_tabControl.SelectedItem == _logTabItem)
             {
-                App.SelectTab = TabItemType.Log;
+                this.SelectedTab = MainWindowTabType.Log;
 
                 _logRichTextBox.UpdateLayout();
                 _logRichTextBox.ScrollToEnd();
             }
             else
             {
-                App.SelectTab = 0;
+                this.SelectedTab = 0;
             }
 
             this.Title = string.Format("Lair {0}", App.LairVersion);
@@ -1454,11 +1471,11 @@ namespace Lair.Windows
 
         private void _clearUrlHistoryMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show(this, LanguagesManager.Instance.MainWindow_Delete_Message, "Channel", MessageBoxButton.OKCancel, MessageBoxImage.Information) != MessageBoxResult.OK) return;
+            if (MessageBox.Show(this, LanguagesManager.Instance.MainWindow_Delete_Message, "Chat", MessageBoxButton.OKCancel, MessageBoxImage.Information) != MessageBoxResult.OK) return;
 
             Settings.Instance.Global_UrlHistorys.Clear();
             Settings.Instance.Global_SeedHistorys.Clear();
-            Settings.Instance.Global_ChannelHistorys.Clear();
+            Settings.Instance.Global_ChatHistorys.Clear();
         }
 
         private void _viewSettingsMenuItem_Click(object sender, RoutedEventArgs e)

@@ -340,9 +340,9 @@ namespace Lair.Windows
             {
                 return MessageConverter.ToInfoMessage((Library.Net.Amoeba.Seed)value);
             }
-            else if (value is Channel)
+            else if (value is Chat)
             {
-                return MessageConverter.ToInfoMessage((Channel)value);
+                return MessageConverter.ToInfoMessage((Chat)value);
             }
 
             return null;

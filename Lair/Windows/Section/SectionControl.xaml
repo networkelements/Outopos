@@ -81,8 +81,8 @@
             </TreeView.Resources>
         </TreeView>
         <TabControl Grid.Column="2" Name="_tabControl" Grid.RowSpan="3">
-            <TabItem Name="_channelTabItem" Header="{Binding Path=SectionControl_Channel, Source={StaticResource ResourcesInstance}}">
-                <Grid Name="_channelGrid" />
+            <TabItem Name="_chatTabItem" Header="{Binding Path=SectionControl_Chat, Source={StaticResource ResourcesInstance}}">
+                <Grid Name="_chatGrid" />
             </TabItem>
             <TabItem Name="_documentTabItem" Header="{Binding Path=SectionControl_Document, Source={StaticResource ResourcesInstance}}">
                 <Grid Name="_documentGrid" />

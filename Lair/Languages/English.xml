@@ -8,6 +8,12 @@
   <Translate Key="Languages_English" Value="English" />
   <Translate Key="Languages_Japanese" Value="Japanese" />
 
+  <Translate Key="Link_Tag" Value="Tag" />
+  <Translate Key="Link_Tag_Name" Value="Name" />
+  <Translate Key="Link_Tag_Id" Value="ID" />
+  <Translate Key="Link_Type" Value="Type" />
+  <Translate Key="Link_Path" Value="Path" />
+
   <Translate Key="Seed_Name" Value="Name" />
   <Translate Key="Seed_Signature" Value="Signature" />
   <Translate Key="Seed_Length" Value="Length" />
@@ -15,15 +21,9 @@
   <Translate Key="Seed_CreationTime" Value="Creation time" />
   <Translate Key="Seed_Comment" Value="Comment" />
 
-  <Translate Key="Channel_Name" Value="Name" />
-  <Translate Key="Channel_Id" Value="ID" />
-
-  <Translate Key="Section_Name" Value="Name" />
-  <Translate Key="Section_Id" Value="ID" />
-
   <Translate Key="SectionTreeItem_LeaderSignature" Value="Leader Signature" />
 
-  <Translate Key="Message_Channel" Value="Channel" />
+  <Translate Key="Message_Chat" Value="Chat" />
   <Translate Key="Message_Signature" Value="Signature" />
   <Translate Key="Message_CreationTime" Value="Creation time" />
   <Translate Key="Message_Content" Value="Content" />
@@ -75,6 +75,7 @@
   <Translate Key="ConnectionsSettingsWindow_Server" Value="Server" />
   <Translate Key="ConnectionsSettingsWindow_ListenUris" Value="Listen uris" />
   <Translate Key="ConnectionsSettingsWindow_Events" Value="Events" />
+  <Translate Key="ConnectionsSettingsWindow_Data" Value="Data" />
   <Translate Key="ConnectionsSettingsWindow_Bandwidth" Value="Bandwidth" />
   <Translate Key="ConnectionsSettingsWindow_BandwidthLimit" Value="Bandwidth limit (*/s) [0 Byte: unlimited]" />
   <Translate Key="ConnectionsSettingsWindow_Transfer" Value="Transfer" />
@@ -87,6 +88,7 @@
   <Translate Key="ConnectionsSettingsWindow_Total" Value="Total" />
   <Translate Key="ConnectionsSettingsWindow_Reset" Value="Reset" />
   <Translate Key="ConnectionsSettingsWindow_ConnectionCount" Value="Connection count" />
+  <Translate Key="ConnectionsSettingsWindow_CacheSize" Value="Cache size" />
   <Translate Key="ConnectionsSettingsWindow_AutoBaseNodeSetting" Value="Auto base node setting" />
   <Translate Key="ConnectionsSettingsWindow_Tor" Value="Tor" />
   <Translate Key="ConnectionsSettingsWindow_Ipv4" Value="Ipv4" />
@@ -173,7 +175,7 @@
   <Translate Key="ConnectionControl_LeaderCount" Value="Leader count" />
   <Translate Key="ConnectionControl_CreatorCount" Value="Creator count" />
   <Translate Key="ConnectionControl_ManagerCount" Value="Manager count" />
-  <Translate Key="ConnectionControl_ChannelCount" Value="Channel count" />
+  <Translate Key="ConnectionControl_ChatCount" Value="Chat count" />
   <Translate Key="ConnectionControl_TopicCount" Value="Topic count" />
   <Translate Key="ConnectionControl_MessageCount" Value="Message count" />
   <Translate Key="ConnectionControl_PushNodeCount" Value="PushNode count" />
@@ -181,7 +183,7 @@
   <Translate Key="ConnectionControl_PushLeaderCount" Value="PushLeader count" />
   <Translate Key="ConnectionControl_PushCreatorCount" Value="PushCreator count" />
   <Translate Key="ConnectionControl_PushManagerCount" Value="PushManager count" />
-  <Translate Key="ConnectionControl_PushChannelRequestCount" Value="PushChannelRequest count" />
+  <Translate Key="ConnectionControl_PushChatRequestCount" Value="PushChatRequest count" />
   <Translate Key="ConnectionControl_PushTopicCount" Value="PushTopic count" />
   <Translate Key="ConnectionControl_PushMessageCount" Value="PushMessage count" />
   <Translate Key="ConnectionControl_PullNodeCount" Value="PullNode count" />
@@ -189,7 +191,7 @@
   <Translate Key="ConnectionControl_PullLeaderCount" Value="PullLeader count" />
   <Translate Key="ConnectionControl_PullCreatorCount" Value="PullCreator count" />
   <Translate Key="ConnectionControl_PullManagerCount" Value="PullManager count" />
-  <Translate Key="ConnectionControl_PullChannelRequestCount" Value="PullChannelRequest count" />
+  <Translate Key="ConnectionControl_PullChatRequestCount" Value="PullChatRequest count" />
   <Translate Key="ConnectionControl_PullTopicCount" Value="PullTopic count" />
   <Translate Key="ConnectionControl_PullMessageCount" Value="PullMessage count" />
   <Translate Key="ConnectionControl_Copy" Value="Copy" />
@@ -203,38 +205,39 @@
   <Translate Key="SectionControl_CopyInfo" Value="Copy info" />
   <Translate Key="SectionControl_Paste" Value="Paste" />
   <Translate Key="SectionControl_Chart" Value="Chart" />
-  <Translate Key="SectionControl_Channel" Value="Channel" />
+  <Translate Key="SectionControl_Chat" Value="Chat" />
   <Translate Key="SectionControl_Document" Value="Document" />
+  <Translate Key="SectionControl_AmoebaNotFound_Message" Value="Amoeba Not Found" />
 
-  <Translate Key="ChannelControl_New" Value="New" />
-  <Translate Key="ChannelControl_Edit" Value="Edit" />
-  <Translate Key="ChannelControl_Delete" Value="Delete" />
-  <Translate Key="ChannelControl_Cut" Value="Cut" />
-  <Translate Key="ChannelControl_Copy" Value="Copy" />
-  <Translate Key="ChannelControl_CopyInfo" Value="Copy info" />
-  <Translate Key="ChannelControl_Paste" Value="Paste" />
-  <Translate Key="ChannelControl_ChannelList" Value="Channel List" />
-  <Translate Key="ChannelControl_Respons" Value="Respons" />
-  <Translate Key="ChannelControl_Trust" Value="Trust" />
-  <Translate Key="ChannelControl_Trust_On" Value="Trust On" />
-  <Translate Key="ChannelControl_Trust_Off" Value="Trust Off" />
-  <Translate Key="ChannelControl_Lock" Value="Lock" />
-  <Translate Key="ChannelControl_LockThis" Value="Lock this" />
-  <Translate Key="ChannelControl_UnlockThis" Value="Unlock this" />
-  <Translate Key="ChannelControl_LockAll" Value="Lock all" />
-  <Translate Key="ChannelControl_UnlockAll" Value="Unlock all" />
-  <Translate Key="ChannelControl_Filter" Value="Filter" />
-  <Translate Key="ChannelControl_FilterWord" Value="Filter word" />
-  <Translate Key="ChannelControl_FilterSignature" Value="Filter signature" />
-  <Translate Key="ChannelControl_NewMessageOnly" Value="Only" />
-  <Translate Key="ChannelControl_Message" Value="Message" />
-  <Translate Key="ChannelControl_Topic" Value="Topic" />
-  <Translate Key="ChannelControl_AmoebaNotFound_Message" Value="Amoeba Not Found" />
-  <Translate Key="ChannelControl_MarkAllMessagesRead" Value="Mark all messages read" />
-  <Translate Key="ChannelControl_MarkAllMessagesRead_Message" Value="Do you want to mark all messages read?" />
-  <Translate Key="ChannelControl_ImportLockedMessages" Value="Import locked messages" />
-  <Translate Key="ChannelControl_ExportLockedMessages" Value="Export locked messages" />
-  <Translate Key="ChannelControl_TopicUpload" Value="New Topic" />
+  <Translate Key="ChatControl_New" Value="New" />
+  <Translate Key="ChatControl_Edit" Value="Edit" />
+  <Translate Key="ChatControl_Delete" Value="Delete" />
+  <Translate Key="ChatControl_Cut" Value="Cut" />
+  <Translate Key="ChatControl_Copy" Value="Copy" />
+  <Translate Key="ChatControl_CopyInfo" Value="Copy info" />
+  <Translate Key="ChatControl_Paste" Value="Paste" />
+  <Translate Key="ChatControl_ChatList" Value="Chat List" />
+  <Translate Key="ChatControl_Respons" Value="Respons" />
+  <Translate Key="ChatControl_Trust" Value="Trust" />
+  <Translate Key="ChatControl_Trust_On" Value="Trust On" />
+  <Translate Key="ChatControl_Trust_Off" Value="Trust Off" />
+  <Translate Key="ChatControl_Lock" Value="Lock" />
+  <Translate Key="ChatControl_LockThis" Value="Lock this" />
+  <Translate Key="ChatControl_UnlockThis" Value="Unlock this" />
+  <Translate Key="ChatControl_LockAll" Value="Lock all" />
+  <Translate Key="ChatControl_UnlockAll" Value="Unlock all" />
+  <Translate Key="ChatControl_Filter" Value="Filter" />
+  <Translate Key="ChatControl_FilterWord" Value="Filter word" />
+  <Translate Key="ChatControl_FilterSignature" Value="Filter signature" />
+  <Translate Key="ChatControl_NewMessageOnly" Value="Only" />
+  <Translate Key="ChatControl_Message" Value="Message" />
+  <Translate Key="ChatControl_Topic" Value="Topic" />
+  <Translate Key="ChatControl_AmoebaNotFound_Message" Value="Amoeba Not Found" />
+  <Translate Key="ChatControl_MarkAllMessagesRead" Value="Mark all messages read" />
+  <Translate Key="ChatControl_MarkAllMessagesRead_Message" Value="Do you want to mark all messages read?" />
+  <Translate Key="ChatControl_ImportLockedMessages" Value="Import locked messages" />
+  <Translate Key="ChatControl_ExportLockedMessages" Value="Export locked messages" />
+  <Translate Key="ChatControl_TopicUpload" Value="New Topic" />
 
   <Translate Key="ChartWindow_Title" Value="Chart" />
   <Translate Key="ChartWindow_Leader" Value="Leader" />
@@ -264,15 +267,15 @@
   <Translate Key="MessageEditWindow_Ok" Value="Ok" />
   <Translate Key="MessageEditWindow_Cancel" Value="Cancel" />
 
-  <Translate Key="NewSectionWindow_Title" Value="New channel" />
+  <Translate Key="NewSectionWindow_Title" Value="New chat" />
   <Translate Key="NewSectionWindow_Name" Value="Name" />
   <Translate Key="NewSectionWindow_Ok" Value="Ok" />
   <Translate Key="NewSectionWindow_Cancel" Value="Cancel" />
 
-  <Translate Key="NewChannelWindow_Title" Value="New channel" />
-  <Translate Key="NewChannelWindow_Name" Value="Name" />
-  <Translate Key="NewChannelWindow_Ok" Value="Ok" />
-  <Translate Key="NewChannelWindow_Cancel" Value="Cancel" />
+  <Translate Key="NewChatWindow_Title" Value="New chat" />
+  <Translate Key="NewChatWindow_Name" Value="Name" />
+  <Translate Key="NewChatWindow_Ok" Value="Ok" />
+  <Translate Key="NewChatWindow_Cancel" Value="Cancel" />
 
   <Translate Key="SectionTreeItemEditWindow_Title" Value="Section edit" />
   <Translate Key="SectionTreeItemEditWindow_Signature" Value="Signature" />
@@ -299,7 +302,7 @@
   <Translate Key="LeaderControl_Copy" Value="Copy" />
   <Translate Key="LeaderControl_Paste" Value="Paste" />
 
-  <Translate Key="CreatorControl_Channels" Value="Channels" />
+  <Translate Key="CreatorControl_Chats" Value="Chats" />
   <Translate Key="CreatorControl_Comment" Value="Comment" />
   <Translate Key="CreatorControl_Name" Value="Name" />
   <Translate Key="CreatorControl_Id" Value="ID" />
@@ -349,12 +352,12 @@
   <Translate Key="SearchItemEditWindow_Copy" Value="Copy" />
   <Translate Key="SearchItemEditWindow_Paste" Value="Paste" />
 
-  <Translate Key="ChannelListWindow_Title" Value="Channel list" />
-  <Translate Key="ChannelListWindow_Name" Value="Name" />
-  <Translate Key="ChannelListWindow_Id" Value="ID" />
-  <Translate Key="ChannelListWindow_Copy" Value="Copy" />
-  <Translate Key="ChannelListWindow_CopyInfo" Value="Copy info" />
-  <Translate Key="ChannelListWindow_Join" Value="Join" />
-  <Translate Key="ChannelListWindow_Close" Value="Close" />
+  <Translate Key="ChatListWindow_Title" Value="Chat list" />
+  <Translate Key="ChatListWindow_Name" Value="Name" />
+  <Translate Key="ChatListWindow_Id" Value="ID" />
+  <Translate Key="ChatListWindow_Copy" Value="Copy" />
+  <Translate Key="ChatListWindow_CopyInfo" Value="Copy info" />
+  <Translate Key="ChatListWindow_Join" Value="Join" />
+  <Translate Key="ChatListWindow_Close" Value="Close" />
 
 </Configuration>

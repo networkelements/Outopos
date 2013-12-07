@@ -7,22 +7,22 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Xml;
 using Library;
 using Library.Net.Lair;
 using Library.Security;
-using System.Windows.Input;
 
 namespace Lair.Windows
 {
-    class ChannelCategorizeTreeViewItem : TreeViewItem
+    class TagCategorizeTreeViewItem : TreeViewItemEx
     {
-        private ChannelCategorizeTreeItem _value;
+        private TagCategorizeTreeItem _value;
 
         private ObservableCollection<TreeViewItem> _listViewItemCollection = new ObservableCollection<TreeViewItem>();
         private TextBlock _header = new TextBlock();
 
-        public ChannelCategorizeTreeViewItem(ChannelCategorizeTreeItem value)
+        public TagCategorizeTreeViewItem(TagCategorizeTreeItem value)
             : base()
         {
             if (value == null) throw new ArgumentNullException("value");
@@ -64,7 +64,7 @@ namespace Lair.Windows
             _header.Text = this.Value.Name;
             base.IsExpanded = this.Value.IsExpanded;
 
-            foreach (var item in _listViewItemCollection.OfType<ChannelCategorizeTreeViewItem>().ToArray())
+            foreach (var item in _listViewItemCollection.OfType<TagCategorizeTreeViewItem>().ToArray())
             {
                 if (!_value.Children.Any(n => object.ReferenceEquals(n, item.Value)))
                 {
@@ -74,25 +74,31 @@ namespace Lair.Windows
 
             foreach (var item in _value.Children)
             {
-                if (!_listViewItemCollection.OfType<ChannelCategorizeTreeViewItem>().Any(n => object.ReferenceEquals(n.Value, item)))
+                if (!_listViewItemCollection.OfType<TagCategorizeTreeViewItem>().Any(n => object.ReferenceEquals(n.Value, item)))
                 {
-                    _listViewItemCollection.Add(new ChannelCategorizeTreeViewItem(item));
+                    var treeViewItem = new TagCategorizeTreeViewItem(item);
+                    treeViewItem.Parent = this;
+
+                    _listViewItemCollection.Add(treeViewItem);
                 }
             }
 
-            foreach (var item in _listViewItemCollection.OfType<ChannelTreeViewItem>().ToArray())
+            foreach (var item in _listViewItemCollection.OfType<TagTreeViewItem>().ToArray())
             {
-                if (!_value.ChannelTreeItems.Any(n => object.ReferenceEquals(n, item.Value)))
+                if (!_value.TagTreeItems.Any(n => object.ReferenceEquals(n, item.Value)))
                 {
                     _listViewItemCollection.Remove(item);
                 }
             }
 
-            foreach (var item in _value.ChannelTreeItems)
+            foreach (var item in _value.TagTreeItems)
             {
-                if (!_listViewItemCollection.OfType<ChannelTreeViewItem>().Any(n => object.ReferenceEquals(n.Value, item)))
+                if (!_listViewItemCollection.OfType<TagTreeViewItem>().Any(n => object.ReferenceEquals(n.Value, item)))
                 {
-                    _listViewItemCollection.Add(new ChannelTreeViewItem(item));
+                    var treeViewItem = new TagTreeViewItem(item);
+                    treeViewItem.Parent = this;
+
+                    _listViewItemCollection.Add(treeViewItem);
                 }
             }
 
@@ -105,40 +111,42 @@ namespace Lair.Windows
 
             list.Sort((x, y) =>
             {
-                if (x is ChannelCategorizeTreeViewItem)
+                if (x is TagCategorizeTreeViewItem)
                 {
-                    if (y is ChannelCategorizeTreeViewItem)
+                    if (y is TagCategorizeTreeViewItem)
                     {
-                        var vx = ((ChannelCategorizeTreeViewItem)x).Value;
-                        var vy = ((ChannelCategorizeTreeViewItem)y).Value;
+                        var vx = ((TagCategorizeTreeViewItem)x).Value;
+                        var vy = ((TagCategorizeTreeViewItem)y).Value;
 
                         int c = vx.Name.CompareTo(vy.Name);
                         if (c != 0) return c;
-                        c = vx.ChannelTreeItems.Count.CompareTo(vy.ChannelTreeItems.Count);
+                        c = vx.TagTreeItems.Count.CompareTo(vy.TagTreeItems.Count);
                         if (c != 0) return c;
                         c = vx.GetHashCode().CompareTo(vy.GetHashCode());
                         if (c != 0) return c;
                     }
-                    else if (y is ChannelTreeViewItem)
+                    else if (y is TagTreeViewItem)
                     {
                         return 1;
                     }
                 }
-                else if (x is ChannelTreeViewItem)
+                else if (x is TagTreeViewItem)
                 {
-                    if (y is ChannelTreeViewItem)
+                    if (y is TagTreeViewItem)
                     {
-                        var vx = ((ChannelTreeViewItem)x).Value;
-                        var vy = ((ChannelTreeViewItem)y).Value;
+                        var vx = ((TagTreeViewItem)x).Value;
+                        var vy = ((TagTreeViewItem)y).Value;
 
-                        int c = vx.Channel.Name.CompareTo(vy.Channel.Name);
+                        int c = vx.Tag.Name.CompareTo(vy.Tag.Name);
                         if (c != 0) return c;
-                        c = Collection.Compare(vx.Channel.Id, vy.Channel.Id);
+                        c = Collection.Compare(vx.Tag.Id, vy.Tag.Id);
+                        if (c != 0) return c;
+                        c = vx.LeaderSignature.CompareTo(vy.LeaderSignature);
                         if (c != 0) return c;
                         c = vx.GetHashCode().CompareTo(vy.GetHashCode());
                         if (c != 0) return c;
                     }
-                    else if (y is ChannelCategorizeTreeViewItem)
+                    else if (y is TagCategorizeTreeViewItem)
                     {
                         return -1;
                     }
@@ -155,13 +163,13 @@ namespace Lair.Windows
             }
         }
 
-        public ChannelCategorizeTreeItem Value
+        public TagCategorizeTreeItem Value
         {
             get
             {
                 return _value;
             }
-            set
+            private set
             {
                 _value = value;
 

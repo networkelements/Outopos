@@ -1,73 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using System.Runtime.InteropServices;
-using System.Diagnostics;
 using System.Windows.Controls.Primitives;
+using System.Windows.Media;
+using Lair.Windows;
 
 namespace Lair
 {
-    static class ListViewExtensions
+    static class ContextMenuExtensions
     {
-        public delegate Point GetPositionDelegate(IInputElement element);
-
-        public static int GetCurrentIndex(this ListView myListView, GetPositionDelegate getPosition)
+        public static MenuItem GetMenuItem(this ContextMenu thisContextMenu, string name)
         {
-            try
+            List<MenuItem> menus = new List<MenuItem>();
+            menus.AddRange(thisContextMenu.Items.OfType<MenuItem>());
+
+            for (int i = 0; i < menus.Count; i++)
             {
-                for (int i = 0; i < myListView.Items.Count; i++)
+                if (menus[i].Name == name)
                 {
-                    ListViewItem item = ListViewExtensions.GetListViewItem(myListView, i);
-
-                    if (ListViewExtensions.IsMouseOverTarget(myListView, item, getPosition))
-                    {
-                        return i;
-                    }
+                    return menus[i];
                 }
-            }
-            catch (Exception)
-            {
 
+                menus.AddRange(menus[i].Items.OfType<MenuItem>());
             }
 
-            return -1;
-        }
-
-        private static ListViewItem GetListViewItem(ListView myListView, int index)
-        {
-            if (myListView.ItemContainerGenerator.Status != System.Windows.Controls.Primitives.GeneratorStatus.ContainersGenerated)
-                return null;
-
-            return myListView.ItemContainerGenerator.ContainerFromIndex(index) as ListViewItem;
-        }
-
-        private static bool IsMouseOverTarget(ListView myListView, Visual target, GetPositionDelegate getPosition)
-        {
-            if (target == null) return false;
-
-            Rect bounds = VisualTreeHelper.GetDescendantBounds(target);
-            Point mousePos = MouseUtilities.GetMousePosition(target);
-            return bounds.Contains(mousePos);
+            return null;
         }
     }
 
-    static class ListBoxExtensions
-    {
-        public delegate Point GetPositionDelegate(IInputElement element);
+    public delegate Point GetPositionDelegate(IInputElement element);
 
-        public static int GetCurrentIndex(this ListBox myListBox, GetPositionDelegate getPosition)
+    static class ItemsControlExtensions
+    {
+        public static int GetCurrentIndex(this ItemsControl thisItemsControl, GetPositionDelegate getPosition)
         {
             try
             {
-                for (int i = 0; i < myListBox.Items.Count; i++)
-                {
-                    ListBoxItem item = ListBoxExtensions.GetListBoxItem(myListBox, i);
+                if (!ItemsControlExtensions.IsMouseOverTarget(thisItemsControl, getPosition)) return -1;
 
-                    if (ListBoxExtensions.IsMouseOverTarget(myListBox, item, getPosition))
+                for (int i = 0; i < thisItemsControl.Items.Count; i++)
+                {
+                    Visual item = ItemsControlExtensions.GetItemsControlItem(thisItemsControl, i);
+
+                    if (ItemsControlExtensions.IsMouseOverTarget(item, getPosition))
                     {
                         return i;
                     }
@@ -81,15 +62,15 @@ namespace Lair
             return -1;
         }
 
-        private static ListBoxItem GetListBoxItem(ListBox myListBox, int index)
+        private static Visual GetItemsControlItem(ItemsControl thisItemsControl, int index)
         {
-            if (myListBox.ItemContainerGenerator.Status != System.Windows.Controls.Primitives.GeneratorStatus.ContainersGenerated)
+            if (thisItemsControl.ItemContainerGenerator.Status != System.Windows.Controls.Primitives.GeneratorStatus.ContainersGenerated)
                 return null;
 
-            return myListBox.ItemContainerGenerator.ContainerFromIndex(index) as ListBoxItem;
+            return thisItemsControl.ItemContainerGenerator.ContainerFromIndex(index) as Visual;
         }
 
-        private static bool IsMouseOverTarget(ListBox myListBox, Visual target, GetPositionDelegate getPosition)
+        private static bool IsMouseOverTarget(Visual target, GetPositionDelegate getPosition)
         {
             if (target == null) return false;
 
@@ -101,14 +82,14 @@ namespace Lair
 
     static class TreeViewExtensions
     {
-        public delegate Point GetPositionDelegate(IInputElement element);
-
-        public static object GetCurrentItem(this TreeView myTreeView, GetPositionDelegate getPosition)
+        public static object GetCurrentItem(this TreeView thisTreeView, GetPositionDelegate getPosition)
         {
             try
             {
+                if (!TreeViewExtensions.IsMouseOverTarget(thisTreeView, getPosition)) return null;
+
                 var items = new List<TreeViewItem>();
-                items.AddRange(myTreeView.Items.OfType<TreeViewItem>());
+                items.AddRange(thisTreeView.Items.OfType<TreeViewItem>());
 
                 for (int i = 0; i < items.Count; i++)
                 {
@@ -124,7 +105,7 @@ namespace Lair
 
                 foreach (var item in items)
                 {
-                    if (TreeViewExtensions.IsMouseOverTarget(myTreeView, item, getPosition))
+                    if (TreeViewExtensions.IsMouseOverTarget(item, getPosition))
                     {
                         return item;
                     }
@@ -138,7 +119,7 @@ namespace Lair
             return null;
         }
 
-        private static bool IsMouseOverTarget(TreeView myTreeView, Visual target, GetPositionDelegate getPosition)
+        private static bool IsMouseOverTarget(Visual target, GetPositionDelegate getPosition)
         {
             if (target == null) return false;
 
@@ -147,34 +128,54 @@ namespace Lair
             return bounds.Contains(mousePos);
         }
 
-        public static IEnumerable<TreeViewItem> GetLineage(this TreeView parentView, TreeViewItem childItem)
+        public static IEnumerable<TreeViewItem> GetAncestors(this TreeView parentView, TreeViewItem childItem)
         {
-            var targetList = new List<TreeViewItem>();
-            targetList.Add(childItem);
-
-            try
+            if (childItem is TreeViewItemEx)
             {
+                var targetList = new LinkedList<TreeViewItemEx>();
+                targetList.AddFirst((TreeViewItemEx)childItem);
+
                 for (; ; )
                 {
-                    var item = VisualTreeHelper.GetParent(childItem) as TreeViewItem;
-                    if (item == null) break;
+                    var parent = targetList.First.Value.Parent;
+                    if (parent == null) break;
 
-                    targetList.Add(item);
+                    targetList.AddFirst(parent);
                 }
+
+                return targetList;
             }
-            catch (Exception)
+            else
             {
+                var list = new List<TreeViewItem>();
+                list.AddRange(parentView.Items.Cast<TreeViewItem>());
 
+                for (int i = 0; i < list.Count; i++)
+                {
+                    foreach (TreeViewItem item in list[i].Items)
+                    {
+                        list.Add(item);
+                    }
+                }
+
+                var current = childItem;
+
+                var targetList = new LinkedList<TreeViewItem>();
+                targetList.AddFirst(current);
+
+                for (int i = list.Count - 1; i >= 0; i--)
+                {
+                    if (list[i].Items.Contains(current))
+                    {
+                        current = list[i];
+                        targetList.AddFirst(current);
+
+                        if (parentView.Items.Contains(current)) break;
+                    }
+                }
+
+                return targetList;
             }
-
-            targetList.Reverse();
-
-            return targetList;
-        }
-
-        public static TreeViewItem GetParent(this TreeView parentView, TreeViewItem childItem)
-        {
-            return VisualTreeHelper.GetParent(childItem) as TreeViewItem;
         }
     }
 
@@ -221,97 +222,73 @@ namespace Lair
     {
         public static void GoBottom(this ItemsControl itemsControl)
         {
-            var panel = itemsControl.FindItemsHostPanel() as IScrollInfo;
-            if (panel == null) return;
-
+            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
             panel.SetVerticalOffset(double.PositiveInfinity);
         }
 
         public static void GoTop(this ItemsControl itemsControl)
         {
-            var panel = itemsControl.FindItemsHostPanel() as IScrollInfo;
-            if (panel == null) return;
-
+            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
             panel.SetVerticalOffset(0);
         }
 
         public static void GoRight(this ItemsControl itemsControl)
         {
-            var panel = itemsControl.FindItemsHostPanel() as IScrollInfo;
-            if (panel == null) return;
-
+            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
             panel.SetHorizontalOffset(double.PositiveInfinity);
         }
 
         public static void GoLeft(this ItemsControl itemsControl)
         {
-            var panel = itemsControl.FindItemsHostPanel() as IScrollInfo;
-            if (panel == null) return;
-
+            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
             panel.SetHorizontalOffset(0);
         }
 
         public static void PageDown(this ItemsControl itemsControl)
         {
-            var panel = itemsControl.FindItemsHostPanel() as IScrollInfo;
-            if (panel == null) return;
-
+            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
             panel.PageDown();
         }
 
         public static void PageUp(this ItemsControl itemsControl)
         {
-            var panel = itemsControl.FindItemsHostPanel() as IScrollInfo;
-            if (panel == null) return;
-
+            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
             panel.PageUp();
         }
 
         public static void PageRight(this ItemsControl itemsControl)
         {
-            var panel = itemsControl.FindItemsHostPanel() as IScrollInfo;
-            if (panel == null) return;
-
+            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
             panel.PageRight();
         }
 
         public static void PageLeft(this ItemsControl itemsControl)
         {
-            var panel = itemsControl.FindItemsHostPanel() as IScrollInfo;
-            if (panel == null) return;
-
+            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
             panel.PageLeft();
         }
 
         public static void LineDown(this ItemsControl itemsControl)
         {
-            var panel = itemsControl.FindItemsHostPanel() as IScrollInfo;
-            if (panel == null) return;
-
+            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
             panel.LineDown();
         }
 
         public static void LineUp(this ItemsControl itemsControl)
         {
-            var panel = itemsControl.FindItemsHostPanel() as IScrollInfo;
-            if (panel == null) return;
-
+            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
             panel.LineUp();
         }
 
         public static void LineRight(this ItemsControl itemsControl)
         {
-            var panel = itemsControl.FindItemsHostPanel() as IScrollInfo;
-            if (panel == null) return;
-
+            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
             panel.LineRight();
         }
 
         public static void LineLeft(this ItemsControl itemsControl)
         {
-            var panel = itemsControl.FindItemsHostPanel() as IScrollInfo;
-            if (panel == null) return;
-
+            var panel = (VirtualizingStackPanel)itemsControl.FindItemsHostPanel();
             panel.LineLeft();
         }
 
@@ -323,16 +300,24 @@ namespace Lair
         private static Panel Find(this IItemContainerGenerator generator, DependencyObject control)
         {
             int count = VisualTreeHelper.GetChildrenCount(control);
+
             for (int i = 0; i < count; i++)
             {
                 DependencyObject child = VisualTreeHelper.GetChild(control, i);
+
                 if (IsItemsHostPanel(generator, child))
+                {
                     return (Panel)child;
+                }
 
                 Panel panel = Find(generator, child);
+
                 if (panel != null)
+                {
                     return panel;
+                }
             }
+
             return null;
         }
 

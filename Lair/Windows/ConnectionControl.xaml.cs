@@ -28,6 +28,7 @@ namespace Lair.Windows
     /// </summary>
     partial class ConnectionControl : UserControl
     {
+        private MainWindow _mainWindow = (MainWindow)Application.Current.MainWindow;
         private LairManager _lairManager;
 
         private ObservableCollection<LairInfomationListViewItem> _infomationListViewItemCollection = new ObservableCollection<LairInfomationListViewItem>();
@@ -60,7 +61,7 @@ namespace Lair.Windows
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_LeaderCount" });
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_CreatorCount" });
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_ManagerCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_ChannelCount" });
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_ChatCount" });
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_TopicCount" });
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_MessageCount" });
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem());
@@ -70,7 +71,7 @@ namespace Lair.Windows
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PushLeaderCount" });
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PushCreatorCount" });
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PushManagerCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PushChannelRequestCount" });
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PushChatRequestCount" });
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PushTopicCount" });
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PushMessageCount" });
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem());
@@ -80,7 +81,7 @@ namespace Lair.Windows
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullLeaderCount" });
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullCreatorCount" });
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullManagerCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullChannelRequestCount" });
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullChatRequestCount" });
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullTopicCount" });
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullMessageCount" });
 
@@ -121,7 +122,7 @@ namespace Lair.Windows
                     dic["ConnectionControl_LeaderCount"] = ((int)information["LeaderCount"]).ToString();
                     dic["ConnectionControl_CreatorCount"] = ((int)information["CreatorCount"]).ToString();
                     dic["ConnectionControl_ManagerCount"] = ((int)information["ManagerCount"]).ToString();
-                    dic["ConnectionControl_ChannelCount"] = ((int)information["ChannelCount"]).ToString();
+                    dic["ConnectionControl_ChatCount"] = ((int)information["ChatCount"]).ToString();
                     dic["ConnectionControl_MessageCount"] = ((int)information["MessageCount"]).ToString();
                     dic["ConnectionControl_TopicCount"] = ((int)information["TopicCount"]).ToString();
 
@@ -130,7 +131,7 @@ namespace Lair.Windows
                     dic["ConnectionControl_PushLeaderCount"] = ((int)information["PushLeaderCount"]).ToString();
                     dic["ConnectionControl_PushCreatorCount"] = ((int)information["PushCreatorCount"]).ToString();
                     dic["ConnectionControl_PushManagerCount"] = ((int)information["PushManagerCount"]).ToString();
-                    dic["ConnectionControl_PushChannelRequestCount"] = ((int)information["PushChannelRequestCount"]).ToString();
+                    dic["ConnectionControl_PushChatRequestCount"] = ((int)information["PushChatRequestCount"]).ToString();
                     dic["ConnectionControl_PushMessageCount"] = ((int)information["PushMessageCount"]).ToString();
                     dic["ConnectionControl_PushTopicCount"] = ((int)information["PushTopicCount"]).ToString();
 
@@ -139,7 +140,7 @@ namespace Lair.Windows
                     dic["ConnectionControl_PullLeaderCount"] = ((int)information["PullLeaderCount"]).ToString();
                     dic["ConnectionControl_PullCreatorCount"] = ((int)information["PullCreatorCount"]).ToString();
                     dic["ConnectionControl_PullManagerCount"] = ((int)information["PullManagerCount"]).ToString();
-                    dic["ConnectionControl_PullChannelRequestCount"] = ((int)information["PullChannelRequestCount"]).ToString();
+                    dic["ConnectionControl_PullChatRequestCount"] = ((int)information["PullChatRequestCount"]).ToString();
                     dic["ConnectionControl_PullMessageCount"] = ((int)information["PullMessageCount"]).ToString();
                     dic["ConnectionControl_PullTopicCount"] = ((int)information["PullTopicCount"]).ToString();
 
@@ -167,7 +168,7 @@ namespace Lair.Windows
                 for (; ; )
                 {
                     Thread.Sleep(100);
-                    if (App.SelectTab != TabItemType.Connection) continue;
+                    if (_mainWindow.SelectedTab != MainWindowTabType.Connection) continue;
 
                     var connectionInformation = _lairManager.ConnectionInformation.ToArray();
                     Dictionary<int, Information> dic = new Dictionary<int, Information>();
@@ -496,8 +497,8 @@ namespace Lair.Windows
                 this.NotifyPropertyChanged("Name");
             }
 
-            private string _id = null;
-            private string _value = null;
+            private string _id;
+            private string _value;
 
             public string Id
             {
@@ -559,10 +560,10 @@ namespace Lair.Windows
             }
 
             private Information _information;
-            private string _uri = null;
-            private int _priority = 0;
-            private long _receivedByteCount = 0;
-            private long _sentByteCount = 0;
+            private string _uri;
+            private int _priority;
+            private long _receivedByteCount;
+            private long _sentByteCount;
 
             public ConnectionListViewItem(Information information)
             {

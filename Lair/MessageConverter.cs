@@ -18,27 +18,13 @@ namespace Lair
 {
     static class MessageConverter
     {
-        public static string ToSectionString(Section section)
+        public static string ToTagString(Tag tag)
         {
-            if (section.Name == null || section.Id == null) return null;
+            if (tag.Name == null || tag.Id == null) return null;
 
             try
             {
-                return section.Name + " - " + NetworkConverter.ToBase64UrlString(section.Id);
-            }
-            catch (Exception e)
-            {
-                throw new ArgumentException("ArgumentException", e);
-            }
-        }
-
-        public static string ToChannelString(Channel channel)
-        {
-            if (channel.Name == null || channel.Id == null) return null;
-
-            try
-            {
-                return channel.Name + " - " + NetworkConverter.ToBase64UrlString(channel.Id);
+                return tag.Name + " - " + NetworkConverter.ToBase64UrlString(tag.Id);
             }
             catch (Exception e)
             {
@@ -48,6 +34,8 @@ namespace Lair
 
         public static string ToInfoMessage(Library.Net.Amoeba.Seed seed)
         {
+            if (seed == null) throw new ArgumentNullException("seed");
+
             try
             {
                 var keywords = seed.Keywords.Where(n => !string.IsNullOrWhiteSpace(n)).ToList();
@@ -70,33 +58,29 @@ namespace Lair
             }
         }
 
-        public static string ToInfoMessage(Section section, string leaderSignature)
+        public static string ToInfoMessage(LinkOption linkOption)
         {
+                if(linkOption == null )throw new ArgumentNullException("linkOption");
+
             try
             {
                 StringBuilder builder = new StringBuilder();
 
-                if (!string.IsNullOrWhiteSpace(section.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Section_Name, section.Name));
-                if (section.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Section_Id, NetworkConverter.ToBase64UrlString(section.Id)));
-                if (leaderSignature != null) builder.AppendLine(string.Format("{0}:\u00A0{1}", LanguagesManager.Instance.SectionTreeItem_LeaderSignature, leaderSignature));
+                if(linkOption.Link != null){
 
-                if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
-                else return null;
-            }
-            catch (Exception e)
-            {
-                throw new ArgumentException("ArgumentException", e);
-            }
-        }
+                    var link = linkOption.Link;
 
-        public static string ToInfoMessage(Channel channel)
-        {
-            try
-            {
-                StringBuilder builder = new StringBuilder();
+                if(link.Tag != null){
+                    var tag = link.Tag;
 
-                if (!string.IsNullOrWhiteSpace(channel.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Channel_Name, channel.Name));
-                if (channel.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Channel_Id, NetworkConverter.ToBase64UrlString(channel.Id)));
+                    if (!string.IsNullOrWhiteSpace(tag.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Tag_Name, tag.Name));
+                    if (tag.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Tag_Id, NetworkConverter.ToBase64UrlString(tag.Id)));                
+                }
+
+                if (!string.IsNullOrWhiteSpace(link.Type)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Link_Type, link.Type));
+                if (!string.IsNullOrWhiteSpace(link.Path)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Link_Path, link.Path));
+                    
+                }
 
                 if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
                 else return null;
