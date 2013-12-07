@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -10,6 +9,7 @@ using System.Management;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -24,14 +24,13 @@ using System.Windows.Navigation;
 using System.Windows.Threading;
 using Lair.Properties;
 using Library;
-using Library.Collections;
 using Library.Io;
-using Library.Net.Connections;
 using Library.Net.Lair;
+using Library.Net.Connections;
 using Library.Net.Proxy;
 using Library.Net.Upnp;
 using Library.Security;
-using a = Library.Net.Amoeba;
+using Library.Collections;
 
 namespace Lair.Windows
 {
@@ -41,8 +40,9 @@ namespace Lair.Windows
     partial class MainWindow : Window
     {
         private BufferManager _bufferManager;
-        private LairManager _lairManager;
+        private LairManager _amoebaManager;
         private AutoBaseNodeSettingManager _autoBaseNodeSettingManager;
+        private OverlayNetworkManager _overlayNetworkManager;
         private TransfarLimitManager _transferLimitManager;
 
         private System.Windows.Forms.NotifyIcon _notifyIcon = new System.Windows.Forms.NotifyIcon();
@@ -56,19 +56,22 @@ namespace Lair.Windows
 
         private System.Timers.Timer _refreshTimer = new System.Timers.Timer();
         private Thread _timerThread;
-        private Thread _timer2Thread;
+        private Thread _statusBarTimerThread;
 
         private volatile bool _diskSpaceNotFoundException;
         private volatile bool _cacheSpaceNotFoundException;
 
         private string _cacheBlocksPath;
 
-        private MainWindowTabType _selectedTab;
+        private volatile MainWindowTabType _selectedTab;
 
         public MainWindow()
         {
             try
             {
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+
                 _bufferManager = BufferManager.Instance;
 
                 this.Setting_Log();
@@ -76,6 +79,7 @@ namespace Lair.Windows
                 _configrationDirectoryPaths.Add("MainWindow", Path.Combine(App.DirectoryPaths["Configuration"], @"Lair/Properties/Settings"));
                 _configrationDirectoryPaths.Add("LairManager", Path.Combine(App.DirectoryPaths["Configuration"], @"Library/Net/Lair/LairManager"));
                 _configrationDirectoryPaths.Add("AutoBaseNodeSettingManager", Path.Combine(App.DirectoryPaths["Configuration"], @"Lair/AutoBaseNodeSettingManager"));
+                _configrationDirectoryPaths.Add("OverlayNetworkManager", Path.Combine(App.DirectoryPaths["Configuration"], @"Lair/OverlayNetworkManager"));
                 _configrationDirectoryPaths.Add("TransfarLimitManager", Path.Combine(App.DirectoryPaths["Configuration"], @"Lair/TransfarLimitManager"));
 
                 Settings.Instance.Load(_configrationDirectoryPaths["MainWindow"]);
@@ -122,25 +126,28 @@ namespace Lair.Windows
                 };
 
                 _refreshTimer = new System.Timers.Timer();
-                _refreshTimer.Elapsed += new System.Timers.ElapsedEventHandler(_refreshTimer_Elapsed);
+                _refreshTimer.Elapsed += _refreshTimer_Elapsed;
                 _refreshTimer.Interval = 1000;
                 _refreshTimer.AutoReset = true;
                 _refreshTimer.Start();
 
-                _timerThread = new Thread(new ThreadStart(this.Timer));
+                _timerThread = new Thread(this.Timer);
                 _timerThread.Priority = ThreadPriority.Highest;
                 _timerThread.Name = "MainWindow_TimerThread";
                 _timerThread.Start();
 
-                _timer2Thread = new Thread(new ThreadStart(this.Timer2));
-                _timer2Thread.Priority = ThreadPriority.Highest;
-                _timer2Thread.Name = "MainWindow_Timer2Thread";
-                _timer2Thread.Start();
+                _statusBarTimerThread = new Thread(this.StatusBarTimer);
+                _statusBarTimerThread.Priority = ThreadPriority.Highest;
+                _statusBarTimerThread.Name = "MainWindow_StatusBarTimerThread";
+                _statusBarTimerThread.Start();
 
-                _transferLimitManager.StartEvent += new EventHandler(_transferLimitManager_StartEvent);
-                _transferLimitManager.StopEvent += new EventHandler(_transferLimitManager_StopEvent);
+                _transferLimitManager.StartEvent += _transferLimitManager_StartEvent;
+                _transferLimitManager.StopEvent += _transferLimitManager_StopEvent;
 
                 Debug.WriteLineIf(System.Runtime.GCSettings.IsServerGC, "GCSettings.IsServerGC");
+
+                sw.Stop();
+                Debug.WriteLine("StartUp {0}", sw.ElapsedMilliseconds);
             }
             catch (Exception e)
             {
@@ -154,14 +161,10 @@ namespace Lair.Windows
         {
             get
             {
-                this.VerifyAccess();
-
                 return _selectedTab;
             }
             set
             {
-                this.VerifyAccess();
-
                 _selectedTab = value;
             }
         }
@@ -253,17 +256,28 @@ namespace Lair.Windows
                             _autoBaseNodeSettingManager.Stop();
                         }
 
-                        if (_lairManager.State == ManagerState.Stop
+                        if (_overlayNetworkManager.State == ManagerState.Stop
+                            && (Settings.Instance.Global_IsStart && Settings.Instance.Global_I2p_SamBridge_IsEnabled))
+                        {
+                            _overlayNetworkManager.Start();
+                        }
+                        else if (_overlayNetworkManager.State == ManagerState.Start
+                            && (!Settings.Instance.Global_IsStart || !Settings.Instance.Global_I2p_SamBridge_IsEnabled))
+                        {
+                            _overlayNetworkManager.Stop();
+                        }
+
+                        if (_amoebaManager.State == ManagerState.Stop
                             && Settings.Instance.Global_IsStart)
                         {
-                            _lairManager.Start();
+                            _amoebaManager.Start();
 
                             Log.Information("Start");
                         }
-                        else if (_lairManager.State == ManagerState.Start
+                        else if (_amoebaManager.State == ManagerState.Start
                             && !Settings.Instance.Global_IsStart)
                         {
-                            _lairManager.Stop();
+                            _amoebaManager.Stop();
 
                             Log.Information("Stop");
                         }
@@ -346,8 +360,9 @@ namespace Lair.Windows
                         try
                         {
                             _transferLimitManager.Save(_configrationDirectoryPaths["TransfarLimitManager"]);
+                            _overlayNetworkManager.Save(_configrationDirectoryPaths["OverlayNetworkManager"]);
                             _autoBaseNodeSettingManager.Save(_configrationDirectoryPaths["AutoBaseNodeSettingManager"]);
-                            _lairManager.Save(_configrationDirectoryPaths["AmoebaManager"]);
+                            _amoebaManager.Save(_configrationDirectoryPaths["LairManager"]);
                             Settings.Instance.Save(_configrationDirectoryPaths["MainWindow"]);
                         }
                         catch (Exception e)
@@ -411,17 +426,16 @@ namespace Lair.Windows
             }
         }
 
-        private void Timer2()
+        private void StatusBarTimer()
         {
             try
             {
-
                 for (; ; )
                 {
                     Thread.Sleep(1000);
                     if (!_isRun) return;
 
-                    var state = _lairManager.State;
+                    var state = _amoebaManager.State;
 
                     this.Dispatcher.Invoke(DispatcherPriority.Send, new TimeSpan(0, 0, 1), new Action(() =>
                     {
@@ -437,14 +451,12 @@ namespace Lair.Windows
 
                         try
                         {
-                            if (state == ManagerState.Start)
-                            {
-                                _stateTextBlock.Text = LanguagesManager.Instance.MainWindow_Start;
-                            }
-                            else
-                            {
-                                _stateTextBlock.Text = LanguagesManager.Instance.MainWindow_Stop;
-                            }
+                            string coreText = null;
+
+                            if (state == ManagerState.Start) coreText = LanguagesManager.Instance.MainWindow_Running;
+                            else coreText = LanguagesManager.Instance.MainWindow_Stopping;
+
+                            _stateTextBlock.Text = string.Format(LanguagesManager.Instance.MainWindow_StatesBar, coreText);
                         }
                         catch (Exception)
                         {
@@ -469,8 +481,8 @@ namespace Lair.Windows
 
             try
             {
-                var sentByteCount = _lairManager.SentByteCount;
-                var receivedByteCount = _lairManager.ReceivedByteCount;
+                var sentByteCount = _amoebaManager.SentByteCount;
+                var receivedByteCount = _amoebaManager.ReceivedByteCount;
 
                 _ci.SentByteCountList[_ci.Count] = sentByteCount - _ci.SentByteCount;
                 _ci.SentByteCount = sentByteCount;
@@ -589,18 +601,18 @@ namespace Lair.Windows
                 {
                     if (logCount == 0)
                     {
-                        _logPath = Path.Combine(App.DirectoryPaths["Log"], string.Format("{0}.txt", DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss", System.Globalization.DateTimeFormatInfo.InvariantInfo)));
+                        _logPath = Path.Combine(App.DirectoryPaths["Log"], string.Format("{0}.txt", DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss", System.Globalization.DateTimeFormatInfo.InvariantInfo)));
                     }
                     else
                     {
-                        _logPath = Path.Combine(App.DirectoryPaths["Log"], string.Format("{0}.({1}).txt", DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss", System.Globalization.DateTimeFormatInfo.InvariantInfo), logCount));
+                        _logPath = Path.Combine(App.DirectoryPaths["Log"], string.Format("{0}.({1}).txt", DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss", System.Globalization.DateTimeFormatInfo.InvariantInfo), logCount));
                     }
 
                     logCount++;
                 } while (File.Exists(_logPath));
             }
 
-            Log.LogEvent += new LogEventHandler((object sender, LogEventArgs e) =>
+            Log.LogEvent += (object sender, LogEventArgs e) =>
             {
                 lock (_logPath)
                 {
@@ -621,7 +633,7 @@ namespace Lair.Windows
                                     "Time:\t\t{0}\r\n" +
                                     "Level:\t\t{1}\r\n" +
                                     "{2}",
-                                    DateTime.UtcNow.ToString("yyyy/MM/dd HH:mm:ss"), e.MessageLevel, e.Message));
+                                    DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"), e.MessageLevel, e.Message));
                                 writer.Flush();
                             }
                         }
@@ -631,10 +643,16 @@ namespace Lair.Windows
 
                     }
                 }
-            });
+            };
 
-            Log.LogEvent += new LogEventHandler((object sender, LogEventArgs e) =>
+            Log.LogEvent += (object sender, LogEventArgs e) =>
             {
+                if (e.Exception != null && e.Exception.GetType().ToString() == "Library.Net.Lair.SpaceNotFoundException")
+                {
+                    if (Settings.Instance.Global_IsStart)
+                        _cacheSpaceNotFoundException = true;
+                }
+
                 try
                 {
                     this.Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new Action(() =>
@@ -660,7 +678,7 @@ namespace Lair.Windows
                 {
 
                 }
-            });
+            };
 
             Debug.Listeners.Add(new MyTraceListener(this));
         }
@@ -715,7 +733,7 @@ namespace Lair.Windows
             {
                 var menuItem = new LanguageMenuItem() { IsCheckable = true, Value = item };
 
-                menuItem.Click += new RoutedEventHandler((object sender, RoutedEventArgs e) =>
+                menuItem.Click += (object sender, RoutedEventArgs e) =>
                 {
                     foreach (var item3 in _languagesMenuItem.Items.Cast<LanguageMenuItem>())
                     {
@@ -723,13 +741,13 @@ namespace Lair.Windows
                     }
 
                     menuItem.IsChecked = true;
-                });
+                };
 
-                menuItem.Checked += new RoutedEventHandler((object sender, RoutedEventArgs e) =>
+                menuItem.Checked += (object sender, RoutedEventArgs e) =>
                 {
                     Settings.Instance.Global_UseLanguage = (string)menuItem.Value;
                     LanguagesManager.ChangeLanguage((string)menuItem.Value);
-                });
+                };
 
                 _languagesMenuItem.Items.Add(menuItem);
             }
@@ -762,66 +780,47 @@ namespace Lair.Windows
                     }
                 }
 
-                _lairManager = new LairManager(_cacheBlocksPath, _bufferManager);
-                _lairManager.Load(_configrationDirectoryPaths["LairManager"]);
-
-                if (_lairManager.BaseNode == null || _lairManager.BaseNode.Id == null)
-                {
-                    byte[] buffer = new byte[64];
-                    (new RNGCryptoServiceProvider()).GetBytes(buffer);
-
-                    var baseNode = new Node();
-                    baseNode.Id = buffer;
-
-                    _lairManager.BaseNode = baseNode;
-                }
+                _amoebaManager = new LairManager(_cacheBlocksPath, _bufferManager);
+                _amoebaManager.Load(_configrationDirectoryPaths["LairManager"]);
 
                 if (!File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Lair.version")))
                 {
                     initFlag = true;
 
                     {
-                        var chatCategorizeTreeItem = new ChatCategorizeTreeItem();
-                        chatCategorizeTreeItem.Name = "Chat";
-                        chatCategorizeTreeItem.ChatTreeItems.Add(new ChatTreeItem()
+                        System.Diagnostics.ProcessStartInfo p = new System.Diagnostics.ProcessStartInfo();
+                        p.UseShellExecute = true;
+                        p.FileName = Path.Combine(App.DirectoryPaths["Core"], "Lair.exe");
+                        p.Arguments = "Relate on";
+
+                        OperatingSystem osInfo = Environment.OSVersion;
+
+                        if (osInfo.Platform == PlatformID.Win32NT && osInfo.Version.Major >= 6)
                         {
-                            IsTrustEnabled = true,
-                            Chat = LairConverter.FromChatString("Chat:AAAAAEAAmJGDzJZZe2LYTKX_h2n34Hwnp4Ez19bD-9mjkRwps4jt28VDAEiw3LUlRtc1nwgDNuFbtto2o7wHYpokMSOKUwAAAAYBQW1vZWJhN9Bj5Q"),
-                        });
-                        chatCategorizeTreeItem.ChatTreeItems.Add(new ChatTreeItem()
+                            p.Verb = "runas";
+                        }
+
+                        try
                         {
-                            IsTrustEnabled = true,
-                            Chat = LairConverter.FromChatString("Chat:AAAAAEAAzCXi8JdCucrX16V-WAViFxWmALOLwEwN6YxrpzwttvOrBmkPb5dJOg1y20TrMovemnObJ8Iy3ivXm_wkBkErlAAAAAQBTGFpcr3Cip8"),
-                        });
-                        chatCategorizeTreeItem.ChatTreeItems.Add(new ChatTreeItem()
+                            System.Diagnostics.Process.Start(p);
+                        }
+                        catch (System.ComponentModel.Win32Exception)
                         {
-                            IsTrustEnabled = true,
-                            Chat = LairConverter.FromChatString("Chat:AAAAAEAApd3NdDiaZpygYU5ySICsv8zk2_2P1bRViGigtWhwJtIpw5Xi6IkdUbp3hroB_cN-IJkyscS6c4_cUhtJ9N2zlQAAAAQBVGVzdGSZ__Y"),
-                        });
-                        chatCategorizeTreeItem.IsExpanded = true;
 
-                        string leaderSignature;
-                        var section = LairConverter.FromSectionString("Section:AAAAAEAALoinQGza0zKpj-3O_f8O-E3hZzM_1pY78oTC1wkLuIoFNBJXBTwGz695Kmz2aqBcYQq_isLhw3jRO1VRS4E0wgAAABABQWxsaWFuY2UgTmV0d29ya0tEqWU,Lyrise@7seiSbhOCkls6gPxjJYjptxskzlSulgIe3dSfj1KxnJJ6eejKjuJ3R1Ec8yFuKpr4uNcwF7bFh5OrmxnY25y7A", out leaderSignature);
-
-                        var sectionTreeItem = new SectionTreeItem();
-                        sectionTreeItem.Section = section;
-                        sectionTreeItem.LeaderSignature = leaderSignature;
-                        sectionTreeItem.ChatCategorizeTreeItem = chatCategorizeTreeItem;
-
-                        var sectionCategorizeTreeItem = new SectionCategorizeTreeItem();
-                        sectionCategorizeTreeItem.Name = "Section";
-                        sectionCategorizeTreeItem.SectionTreeItems.Add(sectionTreeItem);
-                        sectionCategorizeTreeItem.IsExpanded = true;
-
-                        Settings.Instance.SectionControl_SectionCategorizeTreeItem = sectionCategorizeTreeItem;
+                        }
                     }
 
-                    _lairManager.ConnectionCountLimit = 12;
+                    {
+                        byte[] buffer = new byte[64];
+                        (new RNGCryptoServiceProvider()).GetBytes(buffer);
+
+                        _amoebaManager.SetBaseNode(new Node(buffer, null));
+                    }
 
                     Random random = new Random();
-                    _lairManager.ListenUris.Clear();
-                    _lairManager.ListenUris.Add(string.Format("tcp:{0}:{1}", IPAddress.Any.ToString(), random.Next(1024, 65536)));
-                    _lairManager.ListenUris.Add(string.Format("tcp:[{0}]:{1}", IPAddress.IPv6Any.ToString(), random.Next(1024, 65536)));
+                    _amoebaManager.ListenUris.Clear();
+                    _amoebaManager.ListenUris.Add(string.Format("tcp:{0}:{1}", IPAddress.Any.ToString(), random.Next(1024, 65536)));
+                    _amoebaManager.ListenUris.Add(string.Format("tcp:[{0}]:{1}", IPAddress.IPv6Any.ToString(), random.Next(1024, 65536)));
 
                     var ipv4ConnectionFilter = new ConnectionFilter()
                     {
@@ -853,7 +852,7 @@ namespace Lair.Windows
                     var torConnectionFilter = new ConnectionFilter()
                     {
                         ConnectionType = ConnectionType.Socks5Proxy,
-                        ProxyUri = "tcp:127.0.0.1:29050",
+                        ProxyUri = "tcp:127.0.0.1:19050",
                         UriCondition = new UriCondition()
                         {
                             Value = @"tor:.*",
@@ -869,12 +868,12 @@ namespace Lair.Windows
                         },
                     };
 
-                    _lairManager.Filters.Clear();
-                    _lairManager.Filters.Add(ipv4ConnectionFilter);
-                    _lairManager.Filters.Add(ipv6ConnectionFilter);
-                    _lairManager.Filters.Add(tcpConnectionFilter);
-                    _lairManager.Filters.Add(torConnectionFilter);
-                    _lairManager.Filters.Add(i2pConnectionFilter);
+                    _amoebaManager.Filters.Clear();
+                    _amoebaManager.Filters.Add(ipv4ConnectionFilter);
+                    _amoebaManager.Filters.Add(ipv6ConnectionFilter);
+                    _amoebaManager.Filters.Add(tcpConnectionFilter);
+                    _amoebaManager.Filters.Add(torConnectionFilter);
+                    _amoebaManager.Filters.Add(i2pConnectionFilter);
 
                     if (CultureInfo.CurrentUICulture.Name == "ja-JP")
                     {
@@ -893,11 +892,6 @@ namespace Lair.Windows
                     {
                         version = new Version(reader.ReadLine());
                     }
-
-                    if (version <= new Version(2, 0, 0))
-                    {
-
-                    }
                 }
 
                 using (StreamWriter writer = new StreamWriter(Path.Combine(App.DirectoryPaths["Configuration"], "Lair.version"), false, new UTF8Encoding(false)))
@@ -910,7 +904,6 @@ namespace Lair.Windows
                 {
                     using (StreamReader reader = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Debug_NodeId.txt"), new UTF8Encoding(false)))
                     {
-                        var baseNode = new Node();
                         byte[] buffer = new byte[64];
 
                         byte b = byte.Parse(reader.ReadLine());
@@ -920,62 +913,44 @@ namespace Lair.Windows
                             buffer[i] = b;
                         }
 
-                        baseNode.Id = buffer;
-                        baseNode.Uris.AddRange(_lairManager.BaseNode.Uris);
+                        var baseNode = _amoebaManager.BaseNode;
 
-                        _lairManager.BaseNode = baseNode;
+                        _amoebaManager.SetBaseNode(new Node(buffer, baseNode.Uris));
                     }
                 }
 #endif
 
-                if (string.IsNullOrWhiteSpace(Settings.Instance.Global_Amoeba_Path))
-                {
-                    foreach (var p in Process.GetProcessesByName("Amoeba"))
-                    {
-                        try
-                        {
-                            var path = p.MainModule.FileName;
-
-                            if (Path.GetFileName(path) == "Amoeba.exe")
-                            {
-                                Settings.Instance.Global_Amoeba_Path = path;
-
-                                break;
-                            }
-                        }
-                        catch (Exception)
-                        {
-
-                        }
-                    }
-                }
-
-                _autoBaseNodeSettingManager = new AutoBaseNodeSettingManager(_lairManager);
+                _autoBaseNodeSettingManager = new AutoBaseNodeSettingManager(_amoebaManager);
                 _autoBaseNodeSettingManager.Load(_configrationDirectoryPaths["AutoBaseNodeSettingManager"]);
 
-                _transferLimitManager = new TransfarLimitManager(_lairManager);
+                _overlayNetworkManager = new OverlayNetworkManager(_amoebaManager, _bufferManager);
+                _overlayNetworkManager.Load(_configrationDirectoryPaths["OverlayNetworkManager"]);
+
+                _transferLimitManager = new TransfarLimitManager(_amoebaManager);
                 _transferLimitManager.Load(_configrationDirectoryPaths["TransfarLimitManager"]);
+                _transferLimitManager.Start();
 
                 if (initFlag)
                 {
                     _transferLimitManager.Save(_configrationDirectoryPaths["TransfarLimitManager"]);
+                    _overlayNetworkManager.Save(_configrationDirectoryPaths["OverlayNetworkManager"]);
                     _autoBaseNodeSettingManager.Save(_configrationDirectoryPaths["AutoBaseNodeSettingManager"]);
-                    _lairManager.Save(_configrationDirectoryPaths["LairManager"]);
+                    _amoebaManager.Save(_configrationDirectoryPaths["LairManager"]);
                     Settings.Instance.Save(_configrationDirectoryPaths["MainWindow"]);
                 }
 
                 {
-                    var lairPath = Path.Combine(App.DirectoryPaths["Configuration"], "Lair");
+                    var amoebaPath = Path.Combine(App.DirectoryPaths["Configuration"], "Lair");
                     var libraryPath = Path.Combine(App.DirectoryPaths["Configuration"], "Library");
 
                     try
                     {
-                        if (Directory.Exists(lairPath))
+                        if (Directory.Exists(amoebaPath))
                         {
-                            if (Directory.Exists(lairPath + ".old"))
-                                Directory.Delete(lairPath + ".old", true);
+                            if (Directory.Exists(amoebaPath + ".old"))
+                                Directory.Delete(amoebaPath + ".old", true);
 
-                            MainWindow.CopyDirectory(lairPath, lairPath + ".old");
+                            MainWindow.CopyDirectory(amoebaPath, amoebaPath + ".old");
                         }
 
                         if (Directory.Exists(libraryPath))
@@ -1275,15 +1250,10 @@ namespace Lair.Windows
                 return this.PointToScreen(new Point(0, 0)).X;
             };
 
-            ConnectionControl _connectionControl = new ConnectionControl(_lairManager);
-            _connectionControl.Height = Double.NaN;
-            _connectionControl.Width = Double.NaN;
-            _connectionTabItem.Content = _connectionControl;
-
-            SectionControl _sectionControl = new SectionControl(_lairManager, _bufferManager);
-            _sectionControl.Height = Double.NaN;
-            _sectionControl.Width = Double.NaN;
-            _sectionTabItem.Content = _sectionControl;
+            ConnectionControl connectionControl = new ConnectionControl(_amoebaManager);
+            connectionControl.Height = Double.NaN;
+            connectionControl.Width = Double.NaN;
+            _connectionTabItem.Content = connectionControl;
 
             if (Settings.Instance.Global_IsStart)
             {
@@ -1297,7 +1267,7 @@ namespace Lair.Windows
             }
         }
 
-        private void Window_Closing(object sender, CancelEventArgs e)
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (MessageBox.Show(
                 this,
@@ -1318,7 +1288,7 @@ namespace Lair.Windows
 
             _isRun = false;
 
-            var thread = new Thread(new ThreadStart(() =>
+            var thread = new Thread(() =>
             {
                 try
                 {
@@ -1327,16 +1297,10 @@ namespace Lair.Windows
                     _timerThread.Join();
                     _timerThread = null;
 
-                    _timer2Thread.Join();
-                    _timer2Thread = null;
+                    _statusBarTimerThread.Join();
+                    _statusBarTimerThread = null;
 
-                    if (Settings.Instance.Global_UrlClearHistory_IsEnabled)
-                    {
-                        Settings.Instance.Global_UrlHistorys.Clear();
-                        Settings.Instance.Global_SeedHistorys.Clear();
-                        Settings.Instance.Global_ChatHistorys.Clear();
-                    }
-
+                    _transferLimitManager.Stop();
                     _transferLimitManager.Save(_configrationDirectoryPaths["TransfarLimitManager"]);
                     _transferLimitManager.Dispose();
 
@@ -1344,9 +1308,13 @@ namespace Lair.Windows
                     _autoBaseNodeSettingManager.Save(_configrationDirectoryPaths["AutoBaseNodeSettingManager"]);
                     _autoBaseNodeSettingManager.Dispose();
 
-                    _lairManager.Stop();
-                    _lairManager.Save(_configrationDirectoryPaths["LairManager"]);
-                    _lairManager.Dispose();
+                    _overlayNetworkManager.Stop();
+                    _overlayNetworkManager.Save(_configrationDirectoryPaths["OverlayNetworkManager"]);
+                    _overlayNetworkManager.Dispose();
+
+                    _amoebaManager.Stop();
+                    _amoebaManager.Save(_configrationDirectoryPaths["LairManager"]);
+                    _amoebaManager.Dispose();
 
                     Settings.Instance.Save(_configrationDirectoryPaths["MainWindow"]);
                 }
@@ -1354,7 +1322,7 @@ namespace Lair.Windows
                 {
                     Log.Error(ex);
                 }
-            }));
+            });
             thread.Priority = ThreadPriority.Highest;
             thread.Name = "MainWindow_CloseThread";
             thread.Start();
@@ -1384,10 +1352,6 @@ namespace Lair.Windows
             {
                 this.SelectedTab = MainWindowTabType.Connection;
             }
-            else if (_tabControl.SelectedItem == _sectionTabItem)
-            {
-                this.SelectedTab = MainWindowTabType.Section;
-            }
             else if (_tabControl.SelectedItem == _logTabItem)
             {
                 this.SelectedTab = MainWindowTabType.Log;
@@ -1403,9 +1367,10 @@ namespace Lair.Windows
             this.Title = string.Format("Lair {0}", App.LairVersion);
         }
 
-        private void _connectionsMenuItem_SubmenuOpened(object sender, RoutedEventArgs e)
+        private void _coreMenuItem_SubmenuOpened(object sender, RoutedEventArgs e)
         {
-            _updateBaseNodeMenuItem.IsEnabled = Settings.Instance.Global_IsStart && Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled && _updateBaseNodeMenuItem_IsEnabled;
+            _updateBaseNodeMenuItem.IsEnabled = Settings.Instance.Global_IsStart && _updateBaseNodeMenuItem_IsEnabled
+                && (Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled || Settings.Instance.Global_I2p_SamBridge_IsEnabled);
         }
 
         private void _startMenuItem_Click(object sender, RoutedEventArgs e)
@@ -1433,7 +1398,7 @@ namespace Lair.Windows
             if (!_updateBaseNodeMenuItem_IsEnabled) return;
             _updateBaseNodeMenuItem_IsEnabled = false;
 
-            ThreadPool.QueueUserWorkItem(new WaitCallback((object state) =>
+            ThreadPool.QueueUserWorkItem((object state) =>
             {
                 Thread.CurrentThread.IsBackground = true;
 
@@ -1445,42 +1410,40 @@ namespace Lair.Windows
 #endif
 
                     _autoBaseNodeSettingManager.Update();
+                    _overlayNetworkManager.Restart();
 
 #if DEBUG
                     sw.Stop();
                     Debug.WriteLine(sw.Elapsed.ToString());
 #endif
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-
+                    Log.Error(ex);
                 }
                 finally
                 {
                     _updateBaseNodeMenuItem_IsEnabled = true;
                 }
-            }));
+            });
         }
 
-        private void _connectionsSettingsMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _coreOptionsMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            ConnectionsSettingsWindow window = new ConnectionsSettingsWindow(_lairManager, _autoBaseNodeSettingManager, _transferLimitManager, _bufferManager);
+            CoreOptionsWindow window = new CoreOptionsWindow(
+                _amoebaManager,
+                _autoBaseNodeSettingManager,
+                _overlayNetworkManager,
+                _transferLimitManager,
+                _bufferManager);
+
             window.Owner = this;
             window.ShowDialog();
         }
 
-        private void _clearUrlHistoryMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _viewOptionsMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show(this, LanguagesManager.Instance.MainWindow_Delete_Message, "Chat", MessageBoxButton.OKCancel, MessageBoxImage.Information) != MessageBoxResult.OK) return;
-
-            Settings.Instance.Global_UrlHistorys.Clear();
-            Settings.Instance.Global_SeedHistorys.Clear();
-            Settings.Instance.Global_ChatHistorys.Clear();
-        }
-
-        private void _viewSettingsMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            ViewSettingsWindow window = new ViewSettingsWindow(_bufferManager);
+            ViewOptionsWindow window = new ViewOptionsWindow(_bufferManager);
             window.Owner = this;
             window.ShowDialog();
         }
@@ -1507,7 +1470,7 @@ namespace Lair.Windows
             if (!_checkUpdateMenuItem_IsEnabled) return;
             _checkUpdateMenuItem_IsEnabled = false;
 
-            ThreadPool.QueueUserWorkItem(new WaitCallback((object state) =>
+            ThreadPool.QueueUserWorkItem((object state) =>
             {
                 Thread.CurrentThread.IsBackground = true;
 
@@ -1523,7 +1486,7 @@ namespace Lair.Windows
                 {
                     _checkUpdateMenuItem_IsEnabled = true;
                 }
-            }));
+            });
         }
 
         private void _versionInformationMenuItem_Click(object sender, RoutedEventArgs e)

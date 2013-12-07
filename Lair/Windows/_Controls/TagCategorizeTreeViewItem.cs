@@ -141,8 +141,6 @@ namespace Lair.Windows
                         if (c != 0) return c;
                         c = Collection.Compare(vx.Tag.Id, vy.Tag.Id);
                         if (c != 0) return c;
-                        c = vx.LeaderSignature.CompareTo(vy.LeaderSignature);
-                        if (c != 0) return c;
                         c = vx.GetHashCode().CompareTo(vy.GetHashCode());
                         if (c != 0) return c;
                     }

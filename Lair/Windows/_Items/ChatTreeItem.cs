@@ -16,12 +16,12 @@ namespace Lair.Windows
     [DataContract(Name = "ChatTreeItem", Namespace = "http://Lair/Windows")]
     class ChatTreeItem : ICloneable<ChatTreeItem>, IThisLock
     {
-        private Chat _chat;
+        private string _path;
         private bool _isTrustEnabled = true;
-        private ChatTopicInformation _chatTopicInformation;
-        private List<ChatMessageInformaiton> _chatMessageInformation;
+        private ChatTopicInfo _chatTopicInfo;
+        private List<ChatMessageInfo> _chatMessageInfo;
 
-        private readonly object _thisLock = new object();
+        private volatile object _thisLock;
         private static readonly object _initializeLock = new object();
 
         public ChatTreeItem()
@@ -29,21 +29,21 @@ namespace Lair.Windows
 
         }
 
-        [DataMember(Name = "Chat")]
-        public Chat Chat
+        [DataMember(Name = "Path")]
+        public string Path
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return _chat;
+                    return _path;
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    _chat = value;
+                    _path = value;
                 }
             }
         }
@@ -67,36 +67,36 @@ namespace Lair.Windows
             }
         }
 
-        [DataMember(Name = "ChatTopicInformation")]
-        public ChatTopicInformation ChatTopicInformation
+        [DataMember(Name = "ChatTopicInfo")]
+        public ChatTopicInfo ChatTopicInfo
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return _chatTopicInformation;
+                    return _chatTopicInfo;
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    _chatTopicInformation = value;
+                    _chatTopicInfo = value;
                 }
             }
         }
 
-        [DataMember(Name = "ChatMessageInformation")]
-        public List<ChatMessageInformaiton> ChatMessageInformation
+        [DataMember(Name = "ChatMessageInfo")]
+        public List<ChatMessageInfo> ChatMessageInfo
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    if (_chatMessageInformation == null)
-                        _chatMessageInformation = new List<ChatMessageInformaiton>();
+                    if (_chatMessageInfo == null)
+                        _chatMessageInfo = new List<ChatMessageInfo>();
 
-                    return _chatMessageInformation;
+                    return _chatMessageInfo;
                 }
             }
         }

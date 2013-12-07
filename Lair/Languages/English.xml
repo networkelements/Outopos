@@ -32,6 +32,9 @@
   <Translate Key="MainWindow_Section" Value="Section" />
   <Translate Key="MainWindow_Log" Value="Log" />
   <Translate Key="MainWindow_Connections" Value="Connections" />
+  <Translate Key="MainWindow_StatesBar" Value="Connect: {0}  Convert: {1}" />
+  <Translate Key="MainWindow_Running" Value="Running" />
+  <Translate Key="MainWindow_Stopping" Value="Stopping" />
   <Translate Key="MainWindow_Start" Value="Start" />
   <Translate Key="MainWindow_Stop" Value="Stop" />
   <Translate Key="MainWindow_UpdateBaseNode" Value="Update Base Node Uri" />
@@ -57,53 +60,57 @@
   <Translate Key="MainWindow_TransferLimit_Message" Value="Transfer limit" />
   <Translate Key="MainWindow_Upload_Message" Value="Do you want to upload?" />
 
-  <Translate Key="ConnectionsSettingsWindow_Title" Value="Connections settings" />
-  <Translate Key="ConnectionsSettingsWindow_BaseNode" Value="Base node" />
-  <Translate Key="ConnectionsSettingsWindow_Node" Value="Node" />
-  <Translate Key="ConnectionsSettingsWindow_Uris" Value="Uris" />
-  <Translate Key="ConnectionsSettingsWindow_Uri" Value="Uri" />
-  <Translate Key="ConnectionsSettingsWindow_OtherNodes" Value="Other nodes" />
-  <Translate Key="ConnectionsSettingsWindow_Nodes" Value="Nodes" />
-  <Translate Key="ConnectionsSettingsWindow_Client" Value="Client" />
-  <Translate Key="ConnectionsSettingsWindow_Filters" Value="Filters" />
-  <Translate Key="ConnectionsSettingsWindow_ConnectionType" Value="Connection type" />
-  <Translate Key="ConnectionsSettingsWindow_ProxyUri" Value="Proxy uri" />
-  <Translate Key="ConnectionsSettingsWindow_UriCondition" Value="Uri condition" />
-  <Translate Key="ConnectionsSettingsWindow_Option" Value="Option" />
-  <Translate Key="ConnectionsSettingsWindow_Type" Value="Type" />
-  <Translate Key="ConnectionsSettingsWindow_Host" Value="Host" />
-  <Translate Key="ConnectionsSettingsWindow_Server" Value="Server" />
-  <Translate Key="ConnectionsSettingsWindow_ListenUris" Value="Listen uris" />
-  <Translate Key="ConnectionsSettingsWindow_Events" Value="Events" />
-  <Translate Key="ConnectionsSettingsWindow_Data" Value="Data" />
-  <Translate Key="ConnectionsSettingsWindow_Bandwidth" Value="Bandwidth" />
-  <Translate Key="ConnectionsSettingsWindow_BandwidthLimit" Value="Bandwidth limit (*/s) [0 Byte: unlimited]" />
-  <Translate Key="ConnectionsSettingsWindow_Transfer" Value="Transfer" />
-  <Translate Key="ConnectionsSettingsWindow_TransferLimitType" Value="Limit type" />
-  <Translate Key="ConnectionsSettingsWindow_TransferLimitSpan" Value="Limit span (day)" />
-  <Translate Key="ConnectionsSettingsWindow_TransferLimitSize" Value="Limit size" />
-  <Translate Key="ConnectionsSettingsWindow_TransferInformation" Value="Transfer information" />
-  <Translate Key="ConnectionsSettingsWindow_Downloaded" Value="Downloaded" />
-  <Translate Key="ConnectionsSettingsWindow_Uploaded" Value="Uploaded" />
-  <Translate Key="ConnectionsSettingsWindow_Total" Value="Total" />
-  <Translate Key="ConnectionsSettingsWindow_Reset" Value="Reset" />
-  <Translate Key="ConnectionsSettingsWindow_ConnectionCount" Value="Connection count" />
-  <Translate Key="ConnectionsSettingsWindow_CacheSize" Value="Cache size" />
-  <Translate Key="ConnectionsSettingsWindow_AutoBaseNodeSetting" Value="Auto base node setting" />
-  <Translate Key="ConnectionsSettingsWindow_Tor" Value="Tor" />
-  <Translate Key="ConnectionsSettingsWindow_Ipv4" Value="Ipv4" />
-  <Translate Key="ConnectionsSettingsWindow_Ipv6" Value="Ipv6" />
-  <Translate Key="ConnectionsSettingsWindow_Up" Value="Up" />
-  <Translate Key="ConnectionsSettingsWindow_Down" Value="Down" />
-  <Translate Key="ConnectionsSettingsWindow_Add" Value="Add" />
-  <Translate Key="ConnectionsSettingsWindow_Edit" Value="Edit" />
-  <Translate Key="ConnectionsSettingsWindow_Delete" Value="Delete" />
-  <Translate Key="ConnectionsSettingsWindow_Ok" Value="Ok" />
-  <Translate Key="ConnectionsSettingsWindow_Cancel" Value="Cancel" />
-  <Translate Key="ConnectionsSettingsWindow_Cut" Value="Cut" />
-  <Translate Key="ConnectionsSettingsWindow_Copy" Value="Copy" />
-  <Translate Key="ConnectionsSettingsWindow_Paste" Value="Paste" />
-  <Translate Key="ConnectionsSettingsWindow_CacheResize_Message" Value="Resizing of cache will delete important block. Would that be all right?" />
+  <Translate Key="CoreOptionsWindow_Title" Value="Core options" />
+  <Translate Key="CoreOptionsWindow_BaseNode" Value="Base node" />
+  <Translate Key="CoreOptionsWindow_Node" Value="Node" />
+  <Translate Key="CoreOptionsWindow_Uris" Value="Uris" />
+  <Translate Key="CoreOptionsWindow_Uri" Value="Uri" />
+  <Translate Key="CoreOptionsWindow_OtherNodes" Value="Other nodes" />
+  <Translate Key="CoreOptionsWindow_Nodes" Value="Nodes" />
+  <Translate Key="CoreOptionsWindow_Client" Value="Client" />
+  <Translate Key="CoreOptionsWindow_Filters" Value="Filters" />
+  <Translate Key="CoreOptionsWindow_ConnectionType" Value="Connection type" />
+  <Translate Key="CoreOptionsWindow_ProxyUri" Value="Proxy uri" />
+  <Translate Key="CoreOptionsWindow_UriCondition" Value="Uri condition" />
+  <Translate Key="CoreOptionsWindow_Option" Value="Option" />
+  <Translate Key="CoreOptionsWindow_Type" Value="Type" />
+  <Translate Key="CoreOptionsWindow_Host" Value="Host" />
+  <Translate Key="CoreOptionsWindow_Server" Value="Server" />
+  <Translate Key="CoreOptionsWindow_ListenUris" Value="Listen uris" />
+  <Translate Key="CoreOptionsWindow_Data" Value="Data" />
+  <Translate Key="CoreOptionsWindow_Bandwidth" Value="Bandwidth" />
+  <Translate Key="CoreOptionsWindow_BandwidthLimit" Value="Bandwidth limit (*/s) [0 Byte: unlimited]" />
+  <Translate Key="CoreOptionsWindow_Transfer" Value="Transfer" />
+  <Translate Key="CoreOptionsWindow_TransferLimitType" Value="Limit type" />
+  <Translate Key="CoreOptionsWindow_TransferLimitSpan" Value="Limit span (day)" />
+  <Translate Key="CoreOptionsWindow_TransferLimitSize" Value="Limit size" />
+  <Translate Key="CoreOptionsWindow_TransferInformation" Value="Transfer information" />
+  <Translate Key="CoreOptionsWindow_Downloaded" Value="Downloaded" />
+  <Translate Key="CoreOptionsWindow_Uploaded" Value="Uploaded" />
+  <Translate Key="CoreOptionsWindow_Total" Value="Total" />
+  <Translate Key="CoreOptionsWindow_Reset" Value="Reset" />
+  <Translate Key="CoreOptionsWindow_ConnectionCount" Value="Connection count" />
+  <Translate Key="CoreOptionsWindow_DownloadDirectory" Value="Download directory" />
+  <Translate Key="CoreOptionsWindow_CacheSize" Value="Cache size" />
+  <Translate Key="CoreOptionsWindow_Events" Value="Events" />
+  <Translate Key="CoreOptionsWindow_Events_Connection" Value="Connection" />
+  <Translate Key="CoreOptionsWindow_Events_OpenPortAndGetIpAddress" Value="Open port and get IP address." />
+  <Translate Key="CoreOptionsWindow_Events_UseI2p" Value="Use I2P." />
+  <Translate Key="CoreOptionsWindow_Events_UseI2p_SamBridgeUri" Value="Sam bridge uri:" />
+  <Translate Key="CoreOptionsWindow_Tor" Value="Tor" />
+  <Translate Key="CoreOptionsWindow_Ipv4" Value="Ipv4" />
+  <Translate Key="CoreOptionsWindow_Ipv6" Value="Ipv6" />
+  <Translate Key="CoreOptionsWindow_Up" Value="Up" />
+  <Translate Key="CoreOptionsWindow_Down" Value="Down" />
+  <Translate Key="CoreOptionsWindow_Add" Value="Add" />
+  <Translate Key="CoreOptionsWindow_Edit" Value="Edit" />
+  <Translate Key="CoreOptionsWindow_Delete" Value="Delete" />
+  <Translate Key="CoreOptionsWindow_Ok" Value="Ok" />
+  <Translate Key="CoreOptionsWindow_Cancel" Value="Cancel" />
+  <Translate Key="CoreOptionsWindow_Cut" Value="Cut" />
+  <Translate Key="CoreOptionsWindow_Copy" Value="Copy" />
+  <Translate Key="CoreOptionsWindow_Paste" Value="Paste" />
+  <Translate Key="CoreOptionsWindow_CacheResize_Message" Value="Resizing of cache will delete important block. Would that be all right?" />
 
   <Translate Key="ConnectionType_None" Value="None" />
   <Translate Key="ConnectionType_Tcp" Value="Tcp" />
@@ -131,8 +138,8 @@
   <Translate Key="ViewSettingsWindow_None" Value="None" />
   <Translate Key="ViewSettingsWindow_AutoCheck" Value="Auto check" />
   <Translate Key="ViewSettingsWindow_AutoUpdate" Value="Auto update" />
-  <Translate Key="ViewSettingsWindow_Amoeba" Value="Amoeba" />
-  <Translate Key="ViewSettingsWindow_AmoebaPath" Value="Amoeba path" />
+  <Translate Key="ViewSettingsWindow_Lair" Value="Lair" />
+  <Translate Key="ViewSettingsWindow_LairPath" Value="Lair path" />
   <Translate Key="ViewSettingsWindow_Fonts" Value="Fonts" />
   <Translate Key="ViewSettingsWindow_MessageFontFamily" Value="Message font family" />
   <Translate Key="ViewSettingsWindow_MessageFontSize" Value="Message font size (pt)" />
@@ -207,7 +214,7 @@
   <Translate Key="SectionControl_Chart" Value="Chart" />
   <Translate Key="SectionControl_Chat" Value="Chat" />
   <Translate Key="SectionControl_Document" Value="Document" />
-  <Translate Key="SectionControl_AmoebaNotFound_Message" Value="Amoeba Not Found" />
+  <Translate Key="SectionControl_LairNotFound_Message" Value="Lair Not Found" />
 
   <Translate Key="ChatControl_New" Value="New" />
   <Translate Key="ChatControl_Edit" Value="Edit" />
@@ -232,7 +239,7 @@
   <Translate Key="ChatControl_NewMessageOnly" Value="Only" />
   <Translate Key="ChatControl_Message" Value="Message" />
   <Translate Key="ChatControl_Topic" Value="Topic" />
-  <Translate Key="ChatControl_AmoebaNotFound_Message" Value="Amoeba Not Found" />
+  <Translate Key="ChatControl_LairNotFound_Message" Value="Lair Not Found" />
   <Translate Key="ChatControl_MarkAllMessagesRead" Value="Mark all messages read" />
   <Translate Key="ChatControl_MarkAllMessagesRead_Message" Value="Do you want to mark all messages read?" />
   <Translate Key="ChatControl_ImportLockedMessages" Value="Import locked messages" />

@@ -106,6 +106,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Extensions.cs" />
     <Compile Include="MainWindowTabType.cs" />
     <Compile Include="ObservableCollectionEx.cs" />
@@ -114,24 +118,20 @@
     <Compile Include="NativeMethods.cs" />
     <Compile Include="TransfarLimitManager.cs" />
     <Compile Include="WindowPosition.cs" />
-    <Compile Include="Windows\Section\ChatControl.xaml.cs">
-      <DependentUpon>ChatControl.xaml</DependentUpon>
+    <Compile Include="Windows\ConnectionControl.xaml.cs">
+      <DependentUpon>ConnectionControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\Section\MessageEditWindow.xaml.cs">
-      <DependentUpon>MessageEditWindow.xaml</DependentUpon>
+    <Compile Include="Windows\CoreOptionsWindow.xaml.cs">
+      <DependentUpon>CoreOptionsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\Section\SectionControl.xaml.cs">
-      <DependentUpon>SectionControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\Section\TopicEditWindow.xaml.cs">
-      <DependentUpon>TopicEditWindow.xaml</DependentUpon>
+    <Compile Include="Windows\ViewOptionsWindow.xaml.cs">
+      <DependentUpon>ViewOptionsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\_Controls\ChatCategorizeTreeViewItem.cs" />
     <Compile Include="Windows\_Controls\ChatTreeViewItem.cs" />
     <Compile Include="Windows\_Controls\DigitalSignatureComboBoxItem.cs" />
     <Compile Include="Windows\_Controls\LanguageMenuItem.cs" />
     <Compile Include="Windows\_Controls\ListViewEx.cs" />
-    <Compile Include="Windows\_Controls\SectionCategorizeTreeViewItem.cs" />
     <Compile Include="Windows\_Controls\SectionTreeViewItem.cs" />
     <Compile Include="Windows\_Controls\TagCategorizeTreeViewItem.cs" />
     <Compile Include="Windows\_Controls\TagTreeViewItem.cs" />
@@ -139,43 +139,26 @@
     <Compile Include="Windows\_Controls\TreeViewItemEx.cs" />
     <Compile Include="Windows\_Controls\ValueConverter.cs" />
     <Compile Include="Windows\_Controls\VirtualizingStackPanelEx.cs" />
+    <Compile Include="Windows\_Information\ChatTopicInfo.cs" />
+    <Compile Include="Windows\_Information\ChatMessageInfo.cs" />
     <Compile Include="Windows\_Items\ChatTreeItem.cs" />
     <Compile Include="Windows\_Items\ChatCategorizeTreeItem.cs" />
     <Compile Include="Windows\_Items\LinkOption.cs" />
-    <Compile Include="Windows\_Items\SectionCategorizeTreeItem.cs" />
     <Compile Include="Windows\_Items\SectionTreeItem.cs" />
     <Compile Include="Windows\_Items\TagCategorizeTreeItem.cs" />
     <Compile Include="Windows\_Items\TagTreeItem.cs" />
     <Compile Include="Windows\_Items\UpdateOption.cs" />
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
     <Page Include="Windows\ConnectionControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\ConnectionsSettingsWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\Section\ChatControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\Section\MessageEditWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\Section\SectionControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\Section\TopicEditWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\ViewSettingsWindow.xaml">
+    <Page Include="Windows\CoreOptionsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -195,22 +178,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="Windows\ViewSettingsWindow.xaml.cs">
-      <DependentUpon>ViewSettingsWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Windows\ViewOptionsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Clipboard.cs" />
-    <Compile Include="Windows\ConnectionControl.xaml.cs">
-      <DependentUpon>ConnectionControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\ConnectionsSettingsWindow.xaml.cs">
-      <DependentUpon>ConnectionsSettingsWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="MessageConverter.cs" />
     <Compile Include="Properties\LanguagesManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

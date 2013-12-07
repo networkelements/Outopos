@@ -137,9 +137,7 @@ namespace Lair.Windows
                         var vx = ((ChatTreeViewItem)x).Value;
                         var vy = ((ChatTreeViewItem)y).Value;
 
-                        int c = vx.Chat.Name.CompareTo(vy.Chat.Name);
-                        if (c != 0) return c;
-                        c = Collection.Compare(vx.Chat.Id, vy.Chat.Id);
+                        int c = vx.Path.CompareTo(vy.Path);
                         if (c != 0) return c;
                         c = vx.GetHashCode().CompareTo(vy.GetHashCode());
                         if (c != 0) return c;

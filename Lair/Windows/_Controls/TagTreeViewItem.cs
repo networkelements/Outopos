@@ -60,7 +60,5 @@ namespace Lair.Windows
                 this.Update();
             }
         }
-
-        public ChatControl ChatControl { get; set; }
     }
 }

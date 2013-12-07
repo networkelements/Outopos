@@ -44,7 +44,7 @@ namespace Lair.Windows
 
         public void Update()
         {
-            _header.Text = MessageConverter.ToSectionString(this.Value.Section);
+            _header.Text = this.Value.LeaderSignature;
         }
 
         public SectionTreeItem Value
@@ -60,7 +60,5 @@ namespace Lair.Windows
                 this.Update();
             }
         }
-
-        public ChannelControl ChannelControl { get; set; }
     }
 }

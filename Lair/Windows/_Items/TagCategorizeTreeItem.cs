@@ -13,7 +13,7 @@ using Library.Io;
 
 namespace Lair.Windows
 {
-    [DataContract(Name = "TagCategorizeTreeItem", Namespace = "http://Amoeba/Windows")]
+    [DataContract(Name = "TagCategorizeTreeItem", Namespace = "http://Lair/Windows")]
     class TagCategorizeTreeItem : ICloneable<TagCategorizeTreeItem>, IThisLock
     {
         private string _name;

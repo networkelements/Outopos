@@ -18,7 +18,7 @@ namespace Lair.Windows
         private Tag _tag;
         private string _uploadSignature;
 
-        private SectionCategorizeTreeItem _sectionCategorizeTreeItem;
+        private SectionTreeItem _sectionTreeItem;
         private ChatCategorizeTreeItem _chatCategorizeTreeItem;
 
         private volatile object _thisLock;
@@ -67,21 +67,21 @@ namespace Lair.Windows
             }
         }
 
-        [DataMember(Name = "SectionCategorizeTreeItem")]
-        public SectionCategorizeTreeItem SectionCategorizeTreeItem
+        [DataMember(Name = "SectionTreeItem")]
+        public SectionTreeItem SectionTreeItem
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return _sectionCategorizeTreeItem;
+                    return _sectionTreeItem;
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    _sectionCategorizeTreeItem = value;
+                    _sectionTreeItem = value;
                 }
             }
         }

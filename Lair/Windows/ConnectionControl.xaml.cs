@@ -29,17 +29,17 @@ namespace Lair.Windows
     partial class ConnectionControl : UserControl
     {
         private MainWindow _mainWindow = (MainWindow)Application.Current.MainWindow;
-        private LairManager _lairManager;
+        private LairManager _amoebaManager;
 
-        private ObservableCollection<LairInfomationListViewItem> _infomationListViewItemCollection = new ObservableCollection<LairInfomationListViewItem>();
-        private ObservableCollection<ConnectionListViewItem> _listViewItemCollection = new ObservableCollection<ConnectionListViewItem>();
+        private ObservableCollectionEx<LairInfomationListViewItem> _infomationListViewItemCollection = new ObservableCollectionEx<LairInfomationListViewItem>();
+        private ObservableCollectionEx<ConnectionListViewItem> _listViewItemCollection = new ObservableCollectionEx<ConnectionListViewItem>();
 
         private Thread _showLairInfomationThread;
         private Thread _showConnectionInfomationwThread;
 
-        public ConnectionControl(LairManager lairManager)
+        public ConnectionControl(LairManager amoebaManager)
         {
-            _lairManager = lairManager;
+            _amoebaManager = amoebaManager;
 
             InitializeComponent();
 
@@ -54,46 +54,46 @@ namespace Lair.Windows
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem());
 
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_SurroundingNodeCount" });
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_RelayBlockCount" });
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem());
+
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_LockSpace" });
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_FreeSpace" });
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_UsingSpace" });
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem());
 
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_NodeCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_SectionCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_LeaderCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_CreatorCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_ManagerCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_ChatCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_TopicCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_MessageCount" });
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_SeedCount" });
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_BlockCount" });
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_DownloadCount" });
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_UploadCount" });
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_ShareCount" });
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem());
 
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PushNodeCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PushSectionRequestCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PushLeaderCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PushCreatorCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PushManagerCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PushChatRequestCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PushTopicCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PushMessageCount" });
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PushBlockLinkCount" });
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PushBlockRequestCount" });
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PushBlockCount" });
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PushSeedRequestCount" });
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PushSeedCount" });
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem());
 
             _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullNodeCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullSectionRequestCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullLeaderCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullCreatorCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullManagerCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullChatRequestCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullTopicCount" });
-            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullMessageCount" });
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullBlockLinkCount" });
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullBlockRequestCount" });
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullBlockCount" });
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullSeedRequestCount" });
+            _infomationListViewItemCollection.Add(new LairInfomationListViewItem() { Id = "ConnectionControl_PullSeedCount" });
 
             _infomationListView.ItemsSource = _infomationListViewItemCollection;
 
-            _showLairInfomationThread = new Thread(new ThreadStart(this.ShowLairInfomation));
+            _showLairInfomationThread = new Thread(this.ShowLairInfomation);
             _showLairInfomationThread.Priority = ThreadPriority.Highest;
             _showLairInfomationThread.IsBackground = true;
             _showLairInfomationThread.Name = "ConnectionControl_ShowLairInfomationThread";
             _showLairInfomationThread.Start();
 
-            _showConnectionInfomationwThread = new Thread(new ThreadStart(this.ShowConnectionInfomation));
+            _showConnectionInfomationwThread = new Thread(this.ShowConnectionInfomation);
             _showConnectionInfomationwThread.Priority = ThreadPriority.Highest;
             _showConnectionInfomationwThread.IsBackground = true;
             _showConnectionInfomationwThread.Name = "ConnectionControl_ShowConnectionInfomationThread";
@@ -106,43 +106,42 @@ namespace Lair.Windows
             {
                 for (; ; )
                 {
-                    var information = _lairManager.Information;
+                    var information = _amoebaManager.Information;
                     Dictionary<string, string> dic = new Dictionary<string, string>();
 
-                    dic["ConnectionControl_SentByteCount"] = NetworkConverter.ToSizeString(_lairManager.SentByteCount);
-                    dic["ConnectionControl_ReceivedByteCount"] = NetworkConverter.ToSizeString(_lairManager.ReceivedByteCount);
+                    dic["ConnectionControl_SentByteCount"] = NetworkConverter.ToSizeString(_amoebaManager.SentByteCount);
+                    dic["ConnectionControl_ReceivedByteCount"] = NetworkConverter.ToSizeString(_amoebaManager.ReceivedByteCount);
 
                     dic["ConnectionControl_CreateConnectionCount"] = ((int)information["CreateConnectionCount"]).ToString();
                     dic["ConnectionControl_AcceptConnectionCount"] = ((int)information["AcceptConnectionCount"]).ToString();
 
                     dic["ConnectionControl_SurroundingNodeCount"] = ((int)information["SurroundingNodeCount"]).ToString();
+                    dic["ConnectionControl_RelayBlockCount"] = ((int)information["RelayBlockCount"]).ToString();
+
+                    dic["ConnectionControl_LockSpace"] = NetworkConverter.ToSizeString(((long)information["LockSpace"])).ToString();
+                    dic["ConnectionControl_FreeSpace"] = NetworkConverter.ToSizeString(((long)information["FreeSpace"])).ToString();
+                    dic["ConnectionControl_UsingSpace"] = NetworkConverter.ToSizeString(((long)information["UsingSpace"])).ToString();
 
                     dic["ConnectionControl_NodeCount"] = ((int)information["OtherNodeCount"]).ToString();
-                    dic["ConnectionControl_SectionCount"] = ((int)information["SectionCount"]).ToString();
-                    dic["ConnectionControl_LeaderCount"] = ((int)information["LeaderCount"]).ToString();
-                    dic["ConnectionControl_CreatorCount"] = ((int)information["CreatorCount"]).ToString();
-                    dic["ConnectionControl_ManagerCount"] = ((int)information["ManagerCount"]).ToString();
-                    dic["ConnectionControl_ChatCount"] = ((int)information["ChatCount"]).ToString();
-                    dic["ConnectionControl_MessageCount"] = ((int)information["MessageCount"]).ToString();
-                    dic["ConnectionControl_TopicCount"] = ((int)information["TopicCount"]).ToString();
+                    dic["ConnectionControl_SeedCount"] = ((int)information["SeedCount"]).ToString();
+                    dic["ConnectionControl_BlockCount"] = ((int)information["BlockCount"]).ToString();
+                    dic["ConnectionControl_DownloadCount"] = ((int)information["DownloadingCount"]).ToString();
+                    dic["ConnectionControl_UploadCount"] = ((int)information["UploadingCount"]).ToString();
+                    dic["ConnectionControl_ShareCount"] = ((int)information["ShareCount"]).ToString();
 
                     dic["ConnectionControl_PushNodeCount"] = ((int)information["PushNodeCount"]).ToString();
-                    dic["ConnectionControl_PushSectionRequestCount"] = ((int)information["PushSectionRequestCount"]).ToString();
-                    dic["ConnectionControl_PushLeaderCount"] = ((int)information["PushLeaderCount"]).ToString();
-                    dic["ConnectionControl_PushCreatorCount"] = ((int)information["PushCreatorCount"]).ToString();
-                    dic["ConnectionControl_PushManagerCount"] = ((int)information["PushManagerCount"]).ToString();
-                    dic["ConnectionControl_PushChatRequestCount"] = ((int)information["PushChatRequestCount"]).ToString();
-                    dic["ConnectionControl_PushMessageCount"] = ((int)information["PushMessageCount"]).ToString();
-                    dic["ConnectionControl_PushTopicCount"] = ((int)information["PushTopicCount"]).ToString();
+                    dic["ConnectionControl_PushBlockLinkCount"] = ((int)information["PushBlockLinkCount"]).ToString();
+                    dic["ConnectionControl_PushBlockRequestCount"] = ((int)information["PushBlockRequestCount"]).ToString();
+                    dic["ConnectionControl_PushBlockCount"] = ((int)information["PushBlockCount"]).ToString();
+                    dic["ConnectionControl_PushSeedRequestCount"] = ((int)information["PushSeedRequestCount"]).ToString();
+                    dic["ConnectionControl_PushSeedCount"] = ((int)information["PushSeedCount"]).ToString();
 
                     dic["ConnectionControl_PullNodeCount"] = ((int)information["PullNodeCount"]).ToString();
-                    dic["ConnectionControl_PullSectionRequestCount"] = ((int)information["PullSectionRequestCount"]).ToString();
-                    dic["ConnectionControl_PullLeaderCount"] = ((int)information["PullLeaderCount"]).ToString();
-                    dic["ConnectionControl_PullCreatorCount"] = ((int)information["PullCreatorCount"]).ToString();
-                    dic["ConnectionControl_PullManagerCount"] = ((int)information["PullManagerCount"]).ToString();
-                    dic["ConnectionControl_PullChatRequestCount"] = ((int)information["PullChatRequestCount"]).ToString();
-                    dic["ConnectionControl_PullMessageCount"] = ((int)information["PullMessageCount"]).ToString();
-                    dic["ConnectionControl_PullTopicCount"] = ((int)information["PullTopicCount"]).ToString();
+                    dic["ConnectionControl_PullBlockLinkCount"] = ((int)information["PullBlockLinkCount"]).ToString();
+                    dic["ConnectionControl_PullBlockRequestCount"] = ((int)information["PullBlockRequestCount"]).ToString();
+                    dic["ConnectionControl_PullBlockCount"] = ((int)information["PullBlockCount"]).ToString();
+                    dic["ConnectionControl_PullSeedRequestCount"] = ((int)information["PullSeedRequestCount"]).ToString();
+                    dic["ConnectionControl_PullSeedCount"] = ((int)information["PullSeedCount"]).ToString();
 
                     this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                     {
@@ -170,7 +169,7 @@ namespace Lair.Windows
                     Thread.Sleep(100);
                     if (_mainWindow.SelectedTab != MainWindowTabType.Connection) continue;
 
-                    var connectionInformation = _lairManager.ConnectionInformation.ToArray();
+                    var connectionInformation = _amoebaManager.ConnectionInformation.ToArray();
                     Dictionary<int, Information> dic = new Dictionary<int, Information>();
 
                     foreach (var item in connectionInformation.ToArray())
@@ -184,7 +183,7 @@ namespace Lair.Windows
                     {
                         foreach (var item in _listViewItemCollection.ToArray())
                         {
-                            dic2[(int)item.Information["Id"]] = item;
+                            dic2[item.Id] = item;
                         }
                     }));
 
@@ -194,7 +193,7 @@ namespace Lair.Windows
                     {
                         foreach (var item in _listViewItemCollection.ToArray())
                         {
-                            if (!dic.ContainsKey((int)item.Information["Id"]))
+                            if (!dic.ContainsKey(item.Id))
                             {
                                 removeList.Add(item);
                             }
@@ -221,12 +220,12 @@ namespace Lair.Windows
 
                         this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                         {
-                            hid.UnionWith(_listView.SelectedItems.OfType<ConnectionListViewItem>().Select(n => (int)n.Information["Id"]));
+                            hid.UnionWith(_listView.SelectedItems.OfType<ConnectionListViewItem>().Select(n => n.Id));
                         }));
 
                         foreach (var item in newList)
                         {
-                            if (hid.Contains((int)item.Information["Id"]))
+                            if (hid.Contains(item.Id))
                             {
                                 selectItems.Add(item);
                             }
@@ -331,7 +330,7 @@ namespace Lair.Windows
 
         private void _listViewPasteMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            _lairManager.SetOtherNodes(Clipboard.GetNodes());
+            _amoebaManager.SetOtherNodes(Clipboard.GetNodes());
         }
 
         #region Sort
@@ -376,6 +375,8 @@ namespace Lair.Windows
             }
             else
             {
+                _listView.Items.SortDescriptions.Clear();
+
                 if (Settings.Instance.ConnectionControl_LastHeaderClicked != null)
                 {
                     var list = Sort(_listViewItemCollection, Settings.Instance.ConnectionControl_LastHeaderClicked, Settings.Instance.ConnectionControl_ListSortDirection).ToList();
@@ -422,7 +423,7 @@ namespace Lair.Windows
                 {
                     int c = x.Uri.CompareTo(y.Uri);
                     if (c != 0) return c;
-                    c = ((int)x.Information["Id"]).CompareTo((int)y.Information["Id"]);
+                    c = x.Id.CompareTo(y.Id);
                     if (c != 0) return c;
 
                     return 0;
@@ -434,7 +435,7 @@ namespace Lair.Windows
                 {
                     int c = x.Priority.CompareTo(y.Priority);
                     if (c != 0) return c;
-                    c = ((int)x.Information["Id"]).CompareTo((int)y.Information["Id"]);
+                    c = x.Id.CompareTo(y.Id);
                     if (c != 0) return c;
 
                     return 0;
@@ -444,9 +445,9 @@ namespace Lair.Windows
             {
                 list.Sort((x, y) =>
                 {
-                    int c = ((long)x.Information["ReceivedByteCount"]).CompareTo((long)y.Information["ReceivedByteCount"]);
+                    int c = x.ReceivedByteCount.CompareTo(y.ReceivedByteCount);
                     if (c != 0) return c;
-                    c = ((int)x.Information["Id"]).CompareTo((int)y.Information["Id"]);
+                    c = x.Id.CompareTo(y.Id);
                     if (c != 0) return c;
 
                     return 0;
@@ -456,9 +457,9 @@ namespace Lair.Windows
             {
                 list.Sort((x, y) =>
                 {
-                    int c = ((long)x.Information["SentByteCount"]).CompareTo((long)y.Information["SentByteCount"]);
+                    int c = x.SentByteCount.CompareTo(y.SentByteCount);
                     if (c != 0) return c;
-                    c = ((int)x.Information["Id"]).CompareTo((int)y.Information["Id"]);
+                    c = x.Id.CompareTo(y.Id);
                     if (c != 0) return c;
 
                     return 0;
@@ -489,7 +490,7 @@ namespace Lair.Windows
 
             public LairInfomationListViewItem()
             {
-                LanguagesManager.UsingLanguageChangedEvent += new UsingLanguageChangedEventHandler(this.LanguagesManager_UsingLanguageChangedEvent);
+                LanguagesManager.UsingLanguageChangedEvent += this.LanguagesManager_UsingLanguageChangedEvent;
             }
 
             void LanguagesManager_UsingLanguageChangedEvent(object sender)
@@ -559,6 +560,7 @@ namespace Lair.Windows
                 }
             }
 
+            private int _id;
             private Information _information;
             private string _uri;
             private int _priority;
@@ -568,6 +570,16 @@ namespace Lair.Windows
             public ConnectionListViewItem(Information information)
             {
                 this.Information = information;
+
+                _id = (int)this.Information["Id"];
+            }
+
+            public int Id
+            {
+                get
+                {
+                    return _id;
+                }
             }
 
             public Information Information

@@ -336,13 +336,9 @@ namespace Lair.Windows
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is Library.Net.Amoeba.Seed)
+            if (value is a.Seed)
             {
-                return MessageConverter.ToInfoMessage((Library.Net.Amoeba.Seed)value);
-            }
-            else if (value is Chat)
-            {
-                return MessageConverter.ToInfoMessage((Chat)value);
+                return MessageConverter.ToInfoMessage((a.Seed)value);
             }
 
             return null;

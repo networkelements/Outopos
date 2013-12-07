@@ -1,109 +1,90 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Xml;
 using Library;
-using Library.Net.Lair;
-using Library.Security;
-using Library.Collections;
 using Library.Io;
+using Library.Net.Lair;
 
 namespace Lair.Windows
 {
-    [DataContract(Name = "ChatCategorizeTreeItem", Namespace = "http://Lair/Windows")]
-    class ChatCategorizeTreeItem : ICloneable<ChatCategorizeTreeItem>, IThisLock
+    [DataContract(Name = "ChatTopicInfo", Namespace = "http://Lair/Windows")]
+    class ChatTopicInfo : ICloneable<ChatTopicInfo>, IThisLock
     {
-        private string _name;
-        private LockedList<ChatTreeItem> _chatTreeItems;
-        private LockedList<ChatCategorizeTreeItem> _children;
-        private bool _isExpanded = true;
+        private bool _isNew;
+        private Header _header;
+        private ChatTopicContent _content;
 
         private volatile object _thisLock;
         private static readonly object _initializeLock = new object();
 
-        public ChatCategorizeTreeItem()
-        {
-
-        }
-
-        [DataMember(Name = "Name")]
-        public string Name
+        [DataMember(Name = "IsNew")]
+        public bool IsNew
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return _name;
+                    return _isNew;
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    _name = value;
+                    _isNew = value;
                 }
             }
         }
 
-        [DataMember(Name = "ChatTreeItems")]
-        public LockedList<ChatTreeItem> ChatTreeItems
+        [DataMember(Name = "Header")]
+        public Header Header
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    if (_chatTreeItems == null)
-                        _chatTreeItems = new LockedList<ChatTreeItem>();
-
-                    return _chatTreeItems;
-                }
-            }
-        }
-
-        [DataMember(Name = "Children")]
-        public LockedList<ChatCategorizeTreeItem> Children
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    if (_children == null)
-                        _children = new LockedList<ChatCategorizeTreeItem>();
-
-                    return _children;
-                }
-            }
-        }
-
-        [DataMember(Name = "IsExpanded")]
-        public bool IsExpanded
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return _isExpanded;
+                    return _header;
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    _isExpanded = value;
+                    _header = value;
                 }
             }
         }
 
-        #region ICloneable<ChatCategorizeTreeItem>
 
-        public ChatCategorizeTreeItem Clone()
+        [DataMember(Name = "Content")]
+        public ChatTopicContent Content
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return _content;
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    _content = value;
+                }
+            }
+        }
+
+        #region ICloneable<ChatTopicInfo>
+
+        public ChatTopicInfo Clone()
         {
             lock (this.ThisLock)
             {
-                var ds = new DataContractSerializer(typeof(ChatCategorizeTreeItem));
+                var ds = new DataContractSerializer(typeof(TagTreeItem));
 
                 using (BufferStream stream = new BufferStream(BufferManager.Instance))
                 {
@@ -117,7 +98,7 @@ namespace Lair.Windows
 
                     using (XmlDictionaryReader textDictionaryReader = XmlDictionaryReader.CreateBinaryReader(stream, XmlDictionaryReaderQuotas.Max))
                     {
-                        return (ChatCategorizeTreeItem)ds.ReadObject(textDictionaryReader);
+                        return (ChatTopicInfo)ds.ReadObject(textDictionaryReader);
                     }
                 }
             }
