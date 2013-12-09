@@ -15,14 +15,38 @@ namespace Lair.Windows
     [DataContract(Name = "SectionTreeItem", Namespace = "http://Lair/Windows")]
     class SectionTreeItem : ICloneable<SectionTreeItem>, IThisLock
     {
+        private Tag _tag;
         private string _leaderSignature;
+
+        private string _uploadSignature;
+
+        private ChatCategorizeTreeItem _chatCategorizeTreeItem;
 
         private volatile object _thisLock;
         private static readonly object _initializeLock = new object();
 
-        public SectionTreeItem()
+        public SectionTreeItem(Tag tag)
         {
+            this.Tag = tag;
+        }
 
+        [DataMember(Name = "Tag")]
+        public Tag Tag
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return _tag;
+                }
+            }
+            private set
+            {
+                lock (this.ThisLock)
+                {
+                    _tag = value;
+                }
+            }
         }
 
         [DataMember(Name = "LeaderSignature")]
@@ -40,6 +64,44 @@ namespace Lair.Windows
                 lock (this.ThisLock)
                 {
                     _leaderSignature = value;
+                }
+            }
+        }
+
+        [DataMember(Name = "UploadSignature")]
+        public string UploadSignature
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return _uploadSignature;
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    _uploadSignature = value;
+                }
+            }
+        }
+
+        [DataMember(Name = "ChatCategorizeTreeItem")]
+        public ChatCategorizeTreeItem ChatCategorizeTreeItem
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return _chatCategorizeTreeItem;
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    _chatCategorizeTreeItem = value;
                 }
             }
         }

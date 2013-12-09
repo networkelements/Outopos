@@ -169,13 +169,6 @@ namespace Lair.Windows
             }
         }
 
-        protected override void OnInitialized(EventArgs e)
-        {
-            WindowPosition.Move(this);
-
-            base.OnInitialized(e);
-        }
-
         void _transferLimitManager_StartEvent(object sender, EventArgs e)
         {
             if (_autoStop && !Settings.Instance.Global_IsStart)
@@ -1255,6 +1248,11 @@ namespace Lair.Windows
             connectionControl.Width = Double.NaN;
             _connectionTabItem.Content = connectionControl;
 
+            SectionControl sectionControl = new SectionControl(_amoebaManager, _bufferManager);
+            sectionControl.Height = Double.NaN;
+            sectionControl.Width = Double.NaN;
+            _sectionTabItem.Content = sectionControl;
+
             if (Settings.Instance.Global_IsStart)
             {
                 _startMenuItem_Click(null, null);
@@ -1265,6 +1263,8 @@ namespace Lair.Windows
             {
                 _checkUpdateMenuItem_Click(null, null);
             }
+
+            WindowPosition.Move(this);
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

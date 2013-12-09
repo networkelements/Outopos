@@ -87,8 +87,11 @@ namespace Lair.Properties
                 new Library.Configuration.SettingContent<double>() { Name = "ConnectionControl_GridViewColumn_Name_Width", Value = -1 },
                 new Library.Configuration.SettingContent<double>() { Name = "ConnectionControl_GridViewColumn_Value_Width", Value = 100 },
    
-                new Library.Configuration.SettingContent<double>() { Name = "ProgressWindow_Width", Value = 700 },
-                new Library.Configuration.SettingContent<WindowState>() { Name = "ProgressWindow_WindowState", Value = WindowState.Normal },
+                new Library.Configuration.SettingContent<LockedList<SectionTreeItem>>() { Name = "SectionControl_SectionTreeItems", Value = new LockedList<SectionTreeItem>() },
+                new Library.Configuration.SettingContent<double>() { Name = "SectionControl_Grid_ColumnDefinitions_Width", Value = 200 },
+                new Library.Configuration.SettingContent<SectionCategorizeTreeItem>() { Name = "SectionControl_SectionCategorizeTreeItem", Value = new SectionCategorizeTreeItem(){ Name = "Category", IsExpanded = true } },
+
+                new Library.Configuration.SettingContent<LockedDictionary<Tag, ChatCategorizeTreeItem>>() { Name = "ChatControl_ChatCategorizeTreeItem", Value = new LockedDictionary<Tag,ChatCategorizeTreeItem>() },
 
                 new Library.Configuration.SettingContent<double>() { Name = "SignatureWindow_Top", Value = 120 },
                 new Library.Configuration.SettingContent<double>() { Name = "SignatureWindow_Left", Value = 120 },
@@ -1182,38 +1185,75 @@ namespace Lair.Properties
         }
 
 
-        public double ProgressWindow_Width
+        public LockedList<SectionTreeItem> SectionControl_SectionTreeItems
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ProgressWindow_Width"];
+                   return (LockedList<SectionTreeItem>)this["SectionControl_SectionTreeItems"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["ProgressWindow_Width"] = value;
+                    this["SectionControl_SectionTreeItems"] = value;
                 }
             }
         }
 
-        public WindowState ProgressWindow_WindowState
+        public double SectionControl_Grid_ColumnDefinitions_Width
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (WindowState)this["ProgressWindow_WindowState"];
+                   return (double)this["SectionControl_Grid_ColumnDefinitions_Width"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["ProgressWindow_WindowState"] = value;
+                    this["SectionControl_Grid_ColumnDefinitions_Width"] = value;
+                }
+            }
+        }
+
+        public SectionCategorizeTreeItem SectionControl_SectionCategorizeTreeItem
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (SectionCategorizeTreeItem)this["SectionControl_SectionCategorizeTreeItem"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SectionControl_SectionCategorizeTreeItem"] = value;
+                }
+            }
+        }
+
+
+        public LockedDictionary<Tag, ChatCategorizeTreeItem> ChatControl_ChatCategorizeTreeItem
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (LockedDictionary<Tag, ChatCategorizeTreeItem>)this["ChatControl_ChatCategorizeTreeItem"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChatControl_ChatCategorizeTreeItem"] = value;
                 }
             }
         }

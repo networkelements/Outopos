@@ -14,7 +14,7 @@ using System.Windows;
 
 namespace Lair.Windows
 {
-    class SectionTreeViewItem : TreeViewItem
+    class SectionTreeViewItem : TreeViewItemEx
     {
         private SectionTreeItem _value;
 
@@ -44,7 +44,7 @@ namespace Lair.Windows
 
         public void Update()
         {
-            _header.Text = this.Value.LeaderSignature;
+            _header.Text = MessageConverter.ToTagString(this.Value.Tag);
         }
 
         public SectionTreeItem Value
@@ -53,12 +53,14 @@ namespace Lair.Windows
             {
                 return _value;
             }
-            set
+            private set
             {
                 _value = value;
 
                 this.Update();
             }
         }
+
+        public ChatControl ChatControl { get; set; }
     }
 }

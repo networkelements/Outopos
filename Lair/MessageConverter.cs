@@ -59,31 +59,24 @@ namespace Lair
             }
         }
 
-        public static string ToInfoMessage(LinkOption linkOption)
+        public static string ToInfoMessage(Link link)
         {
-            if (linkOption == null) throw new ArgumentNullException("linkOption");
+            if (link == null) throw new ArgumentNullException("link");
 
             try
             {
                 StringBuilder builder = new StringBuilder();
 
-                if (linkOption.Link != null)
+                if (link.Tag != null)
                 {
+                    var tag = link.Tag;
 
-                    var link = linkOption.Link;
-
-                    if (link.Tag != null)
-                    {
-                        var tag = link.Tag;
-
-                        if (!string.IsNullOrWhiteSpace(tag.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Link_Tag_Name, tag.Name));
-                        if (tag.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Link_Tag_Id, NetworkConverter.ToBase64UrlString(tag.Id)));
-                    }
-
-                    if (!string.IsNullOrWhiteSpace(link.Type)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Link_Type, link.Type));
-                    if (!string.IsNullOrWhiteSpace(link.Path)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Link_Path, link.Path));
-
+                    if (!string.IsNullOrWhiteSpace(tag.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Link_Tag_Name, tag.Name));
+                    if (tag.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Link_Tag_Id, NetworkConverter.ToBase64UrlString(tag.Id)));
                 }
+
+                if (!string.IsNullOrWhiteSpace(link.Type)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Link_Type, link.Type));
+                if (!string.IsNullOrWhiteSpace(link.Path)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Link_Path, link.Path));
 
                 if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
                 else return null;

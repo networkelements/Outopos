@@ -13,18 +13,18 @@ using Library.Io;
 
 namespace Lair.Windows
 {
-    [DataContract(Name = "TagCategorizeTreeItem", Namespace = "http://Lair/Windows")]
-    class TagCategorizeTreeItem : ICloneable<TagCategorizeTreeItem>, IThisLock
+    [DataContract(Name = "SectionCategorizeTreeItem", Namespace = "http://Lair/Windows")]
+    class SectionCategorizeTreeItem : ICloneable<SectionCategorizeTreeItem>, IThisLock
     {
         private string _name;
-        private LockedList<TagTreeItem> _tagTreeItems;
-        private LockedList<TagCategorizeTreeItem> _children;
+        private LockedList<SectionTreeItem> _tagTreeItems;
+        private LockedList<SectionCategorizeTreeItem> _children;
         private bool _isExpanded = true;
 
         private volatile object _thisLock;
         private static readonly object _initializeLock = new object();
 
-        public TagCategorizeTreeItem()
+        public SectionCategorizeTreeItem()
         {
 
         }
@@ -48,15 +48,15 @@ namespace Lair.Windows
             }
         }
 
-        [DataMember(Name = "TagTreeItems")]
-        public LockedList<TagTreeItem> TagTreeItems
+        [DataMember(Name = "SectionTreeItems")]
+        public LockedList<SectionTreeItem> SectionTreeItems
         {
             get
             {
                 lock (this.ThisLock)
                 {
                     if (_tagTreeItems == null)
-                        _tagTreeItems = new LockedList<TagTreeItem>();
+                        _tagTreeItems = new LockedList<SectionTreeItem>();
 
                     return _tagTreeItems;
                 }
@@ -64,14 +64,14 @@ namespace Lair.Windows
         }
 
         [DataMember(Name = "Children")]
-        public LockedList<TagCategorizeTreeItem> Children
+        public LockedList<SectionCategorizeTreeItem> Children
         {
             get
             {
                 lock (this.ThisLock)
                 {
                     if (_children == null)
-                        _children = new LockedList<TagCategorizeTreeItem>();
+                        _children = new LockedList<SectionCategorizeTreeItem>();
 
                     return _children;
                 }
@@ -97,13 +97,13 @@ namespace Lair.Windows
             }
         }
 
-        #region ICloneable<TagCategorizeTreeItem>
+        #region ICloneable<SectionCategorizeTreeItem>
 
-        public TagCategorizeTreeItem Clone()
+        public SectionCategorizeTreeItem Clone()
         {
             lock (this.ThisLock)
             {
-                var ds = new DataContractSerializer(typeof(TagCategorizeTreeItem));
+                var ds = new DataContractSerializer(typeof(SectionCategorizeTreeItem));
 
                 using (BufferStream stream = new BufferStream(BufferManager.Instance))
                 {
@@ -117,7 +117,7 @@ namespace Lair.Windows
 
                     using (XmlDictionaryReader textDictionaryReader = XmlDictionaryReader.CreateBinaryReader(stream, XmlDictionaryReaderQuotas.Max))
                     {
-                        return (TagCategorizeTreeItem)ds.ReadObject(textDictionaryReader);
+                        return (SectionCategorizeTreeItem)ds.ReadObject(textDictionaryReader);
                     }
                 }
             }

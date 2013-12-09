@@ -15,14 +15,14 @@ using Library.Security;
 
 namespace Lair.Windows
 {
-    class TagCategorizeTreeViewItem : TreeViewItemEx
+    class SectionCategorizeTreeViewItem : TreeViewItemEx
     {
-        private TagCategorizeTreeItem _value;
+        private SectionCategorizeTreeItem _value;
 
         private ObservableCollection<TreeViewItem> _listViewItemCollection = new ObservableCollection<TreeViewItem>();
         private TextBlock _header = new TextBlock();
 
-        public TagCategorizeTreeViewItem(TagCategorizeTreeItem value)
+        public SectionCategorizeTreeViewItem(SectionCategorizeTreeItem value)
             : base()
         {
             if (value == null) throw new ArgumentNullException("value");
@@ -64,7 +64,7 @@ namespace Lair.Windows
             _header.Text = this.Value.Name;
             base.IsExpanded = this.Value.IsExpanded;
 
-            foreach (var item in _listViewItemCollection.OfType<TagCategorizeTreeViewItem>().ToArray())
+            foreach (var item in _listViewItemCollection.OfType<SectionCategorizeTreeViewItem>().ToArray())
             {
                 if (!_value.Children.Any(n => object.ReferenceEquals(n, item.Value)))
                 {
@@ -74,28 +74,28 @@ namespace Lair.Windows
 
             foreach (var item in _value.Children)
             {
-                if (!_listViewItemCollection.OfType<TagCategorizeTreeViewItem>().Any(n => object.ReferenceEquals(n.Value, item)))
+                if (!_listViewItemCollection.OfType<SectionCategorizeTreeViewItem>().Any(n => object.ReferenceEquals(n.Value, item)))
                 {
-                    var treeViewItem = new TagCategorizeTreeViewItem(item);
+                    var treeViewItem = new SectionCategorizeTreeViewItem(item);
                     treeViewItem.Parent = this;
 
                     _listViewItemCollection.Add(treeViewItem);
                 }
             }
 
-            foreach (var item in _listViewItemCollection.OfType<TagTreeViewItem>().ToArray())
+            foreach (var item in _listViewItemCollection.OfType<SectionTreeViewItem>().ToArray())
             {
-                if (!_value.TagTreeItems.Any(n => object.ReferenceEquals(n, item.Value)))
+                if (!_value.SectionTreeItems.Any(n => object.ReferenceEquals(n, item.Value)))
                 {
                     _listViewItemCollection.Remove(item);
                 }
             }
 
-            foreach (var item in _value.TagTreeItems)
+            foreach (var item in _value.SectionTreeItems)
             {
-                if (!_listViewItemCollection.OfType<TagTreeViewItem>().Any(n => object.ReferenceEquals(n.Value, item)))
+                if (!_listViewItemCollection.OfType<SectionTreeViewItem>().Any(n => object.ReferenceEquals(n.Value, item)))
                 {
-                    var treeViewItem = new TagTreeViewItem(item);
+                    var treeViewItem = new SectionTreeViewItem(item);
                     treeViewItem.Parent = this;
 
                     _listViewItemCollection.Add(treeViewItem);
@@ -111,31 +111,31 @@ namespace Lair.Windows
 
             list.Sort((x, y) =>
             {
-                if (x is TagCategorizeTreeViewItem)
+                if (x is SectionCategorizeTreeViewItem)
                 {
-                    if (y is TagCategorizeTreeViewItem)
+                    if (y is SectionCategorizeTreeViewItem)
                     {
-                        var vx = ((TagCategorizeTreeViewItem)x).Value;
-                        var vy = ((TagCategorizeTreeViewItem)y).Value;
+                        var vx = ((SectionCategorizeTreeViewItem)x).Value;
+                        var vy = ((SectionCategorizeTreeViewItem)y).Value;
 
                         int c = vx.Name.CompareTo(vy.Name);
                         if (c != 0) return c;
-                        c = vx.TagTreeItems.Count.CompareTo(vy.TagTreeItems.Count);
+                        c = vx.SectionTreeItems.Count.CompareTo(vy.SectionTreeItems.Count);
                         if (c != 0) return c;
                         c = vx.GetHashCode().CompareTo(vy.GetHashCode());
                         if (c != 0) return c;
                     }
-                    else if (y is TagTreeViewItem)
+                    else if (y is SectionTreeViewItem)
                     {
                         return 1;
                     }
                 }
-                else if (x is TagTreeViewItem)
+                else if (x is SectionTreeViewItem)
                 {
-                    if (y is TagTreeViewItem)
+                    if (y is SectionTreeViewItem)
                     {
-                        var vx = ((TagTreeViewItem)x).Value;
-                        var vy = ((TagTreeViewItem)y).Value;
+                        var vx = ((SectionTreeViewItem)x).Value;
+                        var vy = ((SectionTreeViewItem)y).Value;
 
                         int c = vx.Tag.Name.CompareTo(vy.Tag.Name);
                         if (c != 0) return c;
@@ -144,7 +144,7 @@ namespace Lair.Windows
                         c = vx.GetHashCode().CompareTo(vy.GetHashCode());
                         if (c != 0) return c;
                     }
-                    else if (y is TagCategorizeTreeViewItem)
+                    else if (y is SectionCategorizeTreeViewItem)
                     {
                         return -1;
                     }
@@ -161,7 +161,7 @@ namespace Lair.Windows
             }
         }
 
-        public TagCategorizeTreeItem Value
+        public SectionCategorizeTreeItem Value
         {
             get
             {

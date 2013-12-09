@@ -19,7 +19,7 @@ namespace Lair.Windows
         private string _path;
         private bool _isTrustEnabled = true;
         private ChatTopicInfo _chatTopicInfo;
-        private List<ChatMessageInfo> _chatMessageInfo;
+        private LockedList<ChatMessageInfo> _chatMessageInfos;
 
         private volatile object _thisLock;
         private static readonly object _initializeLock = new object();
@@ -86,17 +86,17 @@ namespace Lair.Windows
             }
         }
 
-        [DataMember(Name = "ChatMessageInfo")]
-        public List<ChatMessageInfo> ChatMessageInfo
+        [DataMember(Name = "ChatMessageInfos")]
+        public LockedList<ChatMessageInfo> ChatMessageInfos
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    if (_chatMessageInfo == null)
-                        _chatMessageInfo = new List<ChatMessageInfo>();
+                    if (_chatMessageInfos == null)
+                        _chatMessageInfos = new LockedList<ChatMessageInfo>();
 
-                    return _chatMessageInfo;
+                    return _chatMessageInfos;
                 }
             }
         }

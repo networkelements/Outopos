@@ -69,14 +69,14 @@ namespace Lair.Windows
 
         protected override void OnInitialized(EventArgs e)
         {
-            WindowPosition.Move(this);
-
             base.OnInitialized(e);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             _updateTreeViewItem.IsSelected = true;
+
+            WindowPosition.Move(this);
         }
 
         #region Signature

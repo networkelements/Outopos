@@ -222,9 +222,9 @@
             </Grid>
 
             <Grid Grid.Column="2" Visibility="{Binding ElementName=_dataTreeViewItem, Path=IsSelected, Converter={StaticResource _boolToVisibilityConverter}}">
-                <Label Content="{Binding Path=CoreOptionsWindow_CacheSize, Source={StaticResource ResourcesInstance}}" Height="22" HorizontalAlignment="Left" Margin="6,36,0,0" VerticalAlignment="Top" Width="240" VerticalContentAlignment="Center" />
-                <TextBox Height="24" Margin="0,36,72,0" Name="_dataCacheSizeTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" TextChanged="_dataCacheSizeTextBox_TextChanged" HorizontalAlignment="Right" Width="120" />
-                <ComboBox Height="24" Margin="0,36,6,0" Name="_dataCacheSizeComboBox" VerticalAlignment="Top" HorizontalAlignment="Right" Width="60" SelectionChanged="_dataCacheSizeComboBox_SelectionChanged" />
+                <Label Content="{Binding Path=CoreOptionsWindow_CacheSize, Source={StaticResource ResourcesInstance}}" Height="22" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" Width="240" VerticalContentAlignment="Center" />
+                <TextBox Height="24" Margin="0,6,72,0" Name="_dataCacheSizeTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" TextChanged="_dataCacheSizeTextBox_TextChanged" HorizontalAlignment="Right" Width="120" />
+                <ComboBox Height="24" Margin="0,6,6,0" Name="_dataCacheSizeComboBox" VerticalAlignment="Top" HorizontalAlignment="Right" Width="60" SelectionChanged="_dataCacheSizeComboBox_SelectionChanged" />
             </Grid>
 
             <Grid Grid.Column="2" Visibility="{Binding ElementName=_bandwidthTreeViewItem, Path=IsSelected, Converter={StaticResource _boolToVisibilityConverter}}">

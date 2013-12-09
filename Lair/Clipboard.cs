@@ -15,12 +15,19 @@ namespace Lair
     static class Clipboard
     {
         private static bool _isNodesCached;
-        private static bool _isSeedsCached;
+        private static bool _isTagsCached;
         private static bool _isLinkOptionsCached;
+        private static bool _isSeedsCached;
 
         private static LockedList<Node> _nodeList = new LockedList<Node>();
-        private static LockedList<a.Seed> _seedList = new LockedList<a.Seed>();
+        private static LockedList<Tag> _tagList = new LockedList<Tag>();
         private static LockedList<LinkOption> _linkOptionList = new LockedList<LinkOption>();
+        private static LockedList<a.Seed> _seedList = new LockedList<a.Seed>();
+
+        private static LockedList<Windows.SectionCategorizeTreeItem> _sectionCategorizeTreeItemList = new LockedList<SectionCategorizeTreeItem>();
+        private static LockedList<Windows.SectionTreeItem> _sectionTreeItemList = new LockedList<SectionTreeItem>();
+        private static LockedList<Windows.ChatCategorizeTreeItem> _chatCategorizeTreeItemList = new LockedList<ChatCategorizeTreeItem>();
+        private static LockedList<Windows.ChatTreeItem> _chatTreeItemList = new LockedList<ChatTreeItem>();
 
         private static ClipboardWatcher _clipboardWatcher;
 
@@ -34,12 +41,19 @@ namespace Lair
                 lock (_thisLock)
                 {
                     _isNodesCached = false;
-                    _isSeedsCached = false;
+                    _isTagsCached = false;
                     _isLinkOptionsCached = false;
+                    _isSeedsCached = false;
 
                     _nodeList.Clear();
                     _seedList.Clear();
                     _linkOptionList.Clear();
+
+                    _sectionCategorizeTreeItemList.Clear();
+                    _sectionTreeItemList.Clear();
+
+                    _chatCategorizeTreeItemList.Clear();
+                    _chatTreeItemList.Clear();
                 }
             };
         }
@@ -202,41 +216,6 @@ namespace Lair
             }
         }
 
-        public static bool ContainsLinkOptions()
-        {
-            lock (_thisLock)
-            {
-                if (!_isLinkOptionsCached)
-                {
-                    foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
-                    {
-                        try
-                        {
-                            var list = item.Split(new char[] { ',' }, 1);
-
-                            if (list.Length == 1)
-                            {
-                                var link = LairConverter.FromLinkString(list[0]);
-                                if (link == null) continue;
-
-                                var option = list[1];
-
-                                _linkOptionList.Add(new LinkOption(link, option));
-                            }
-                        }
-                        catch (Exception)
-                        {
-
-                        }
-                    }
-
-                    _isLinkOptionsCached = true;
-                }
-
-                return _linkOptionList.Count != 0;
-            }
-        }
-
         public static IEnumerable<LinkOption> GetLinkOptions()
         {
             lock (_thisLock)
@@ -369,6 +348,120 @@ namespace Lair
 
                 _seedList.AddRange(seeds.Select(n => n.Clone()));
                 _isSeedsCached = true;
+            }
+        }
+
+        public static bool ContainsSectionCategorizeTreeItems()
+        {
+            lock (_thisLock)
+            {
+                return _sectionCategorizeTreeItemList.Count != 0;
+            }
+        }
+
+        public static IEnumerable<Windows.SectionCategorizeTreeItem> GetSectionCategorizeTreeItems()
+        {
+            lock (_thisLock)
+            {
+                return _sectionCategorizeTreeItemList.Select(n => n.Clone()).ToArray();
+            }
+        }
+
+        public static void SetSectionCategorizeTreeItems(IEnumerable<Windows.SectionCategorizeTreeItem> sectionCategorizeTreeItems)
+        {
+            lock (_thisLock)
+            {
+                System.Windows.Clipboard.Clear();
+
+                _sectionCategorizeTreeItemList.AddRange(sectionCategorizeTreeItems.Select(n => n.Clone()));
+            }
+        }
+
+        public static bool ContainsSectionTreeItems()
+        {
+            lock (_thisLock)
+            {
+                return _sectionTreeItemList.Count != 0;
+            }
+        }
+
+        public static IEnumerable<Windows.SectionTreeItem> GetSectionTreeItems()
+        {
+            lock (_thisLock)
+            {
+                return _sectionTreeItemList.Select(n => n.Clone()).ToArray();
+            }
+        }
+
+        public static void SetSectionTreeItems(IEnumerable<Windows.SectionTreeItem> sectionTreeItems)
+        {
+            lock (_thisLock)
+            {
+                {
+                    var sb = new StringBuilder();
+
+                    foreach (var item in sectionTreeItems)
+                    {
+                        var link = new Link(item.Tag, "Section", null);
+                        sb.AppendLine(LairConverter.ToLinkString(link));
+                    }
+
+                    Clipboard.SetText(sb.ToString());
+                }
+
+                _sectionTreeItemList.AddRange(sectionTreeItems.Select(n => n.Clone()));
+            }
+        }
+
+        public static bool ContainsChatCategorizeTreeItems()
+        {
+            lock (_thisLock)
+            {
+                return _chatCategorizeTreeItemList.Count != 0;
+            }
+        }
+
+        public static IEnumerable<Windows.ChatCategorizeTreeItem> GetChatCategorizeTreeItems()
+        {
+            lock (_thisLock)
+            {
+                return _chatCategorizeTreeItemList.Select(n => n.Clone()).ToArray();
+            }
+        }
+
+        public static void SetChatCategorizeTreeItems(IEnumerable<Windows.ChatCategorizeTreeItem> chatCategorizeTreeItems)
+        {
+            lock (_thisLock)
+            {
+                System.Windows.Clipboard.Clear();
+
+                _chatCategorizeTreeItemList.AddRange(chatCategorizeTreeItems.Select(n => n.Clone()));
+            }
+        }
+
+        public static bool ContainsChatTreeItems()
+        {
+            lock (_thisLock)
+            {
+                return _chatTreeItemList.Count != 0;
+            }
+        }
+
+        public static IEnumerable<Windows.ChatTreeItem> GetChatTreeItems()
+        {
+            lock (_thisLock)
+            {
+                return _chatTreeItemList.Select(n => n.Clone()).ToArray();
+            }
+        }
+
+        public static void SetChatTreeItems(IEnumerable<Windows.ChatTreeItem> chatTreeItems)
+        {
+            lock (_thisLock)
+            {
+                System.Windows.Clipboard.Clear();
+
+                _chatTreeItemList.AddRange(chatTreeItems.Select(n => n.Clone()));
             }
         }
 

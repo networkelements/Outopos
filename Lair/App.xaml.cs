@@ -158,112 +158,6 @@ namespace Lair
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            if (e.Args.Length == 2 && e.Args[0] == "Relate")
-            {
-                if (e.Args[1] == "on")
-                {
-                    try
-                    {
-                        string extension = ".box";
-                        string commandline = "\"" + Path.GetFullPath(Path.Combine(App.DirectoryPaths["Core"], "Lair.exe")) + "\" \"%1\"";
-                        string fileType = "Lair";
-                        string description = "Lair Box";
-                        string verb = "open";
-                        string iconPath = Path.GetFullPath(Path.Combine(App.DirectoryPaths["Icons"], "Box.ico"));
-
-                        using (var regkey = Microsoft.Win32.Registry.ClassesRoot.CreateSubKey(extension))
-                        {
-                            regkey.SetValue("", fileType);
-                        }
-
-                        using (var shellkey = Microsoft.Win32.Registry.ClassesRoot.CreateSubKey(fileType))
-                        {
-                            shellkey.SetValue("", description);
-
-                            using (var shellkey2 = shellkey.CreateSubKey("shell\\" + verb))
-                            {
-                                using (var shellkey3 = shellkey2.CreateSubKey("command"))
-                                {
-                                    shellkey3.SetValue("", commandline);
-                                    shellkey3.Close();
-                                }
-                            }
-                        }
-
-                        using (var iconkey = Microsoft.Win32.Registry.ClassesRoot.CreateSubKey(fileType + "\\DefaultIcon"))
-                        {
-                            iconkey.SetValue("", "\"" + iconPath + "\"");
-                        }
-                    }
-                    catch (Exception)
-                    {
-
-                    }
-
-                    this.Shutdown();
-
-                    return;
-                }
-                else if (e.Args[1] == "off")
-                {
-                    try
-                    {
-                        string extension = ".box";
-                        string fileType = "Lair";
-
-                        Microsoft.Win32.Registry.ClassesRoot.DeleteSubKeyTree(extension);
-                        Microsoft.Win32.Registry.ClassesRoot.DeleteSubKeyTree(fileType);
-                    }
-                    catch (Exception)
-                    {
-
-                    }
-
-                    this.Shutdown();
-
-                    return;
-                }
-            }
-            if (e.Args.Length >= 2 && e.Args[0] == "Download")
-            {
-                try
-                {
-                    if (!Directory.Exists(App.DirectoryPaths["Input"]))
-                        Directory.CreateDirectory(App.DirectoryPaths["Input"]);
-
-                    using (FileStream stream = App.GetUniqueFileStream(Path.Combine(App.DirectoryPaths["Input"], "seed.txt")))
-                    using (StreamWriter writer = new StreamWriter(stream))
-                    {
-                        foreach (var item in e.Args.Skip(1))
-                        {
-                            if (string.IsNullOrWhiteSpace(item)) continue;
-                            writer.WriteLine(item);
-                        }
-                    }
-                }
-                catch (Exception)
-                {
-
-                }
-            }
-            else if (e.Args.Length == 1 && e.Args[0].EndsWith(".box") && File.Exists(e.Args[0]))
-            {
-                try
-                {
-                    if (Path.GetExtension(e.Args[0]).ToLower() == ".box")
-                    {
-                        if (!Directory.Exists(App.DirectoryPaths["Input"]))
-                            Directory.CreateDirectory(App.DirectoryPaths["Input"]);
-
-                        File.Copy(e.Args[0], App.GetUniqueFilePath(Path.Combine(App.DirectoryPaths["Input"], Path.GetRandomFileName() + "_temp.box")));
-                    }
-                }
-                catch (Exception)
-                {
-
-                }
-            }
-
             // 多重起動防止
             {
                 Process currentProcess = Process.GetCurrentProcess();
@@ -734,5 +628,9 @@ namespace Lair
         }
 
         public System.Windows.Media.Color Tree_Hit { get; set; }
+
+        public Color Trust_On { get; set; }
+
+        public Color Trust_Off { get; set; }
     }
 }

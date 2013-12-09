@@ -23,26 +23,21 @@
 
   <Translate Key="SectionTreeItem_LeaderSignature" Value="リーダーのサイン" />
 
-  <Translate Key="Message_Chat" Value="チャンネル" />
-  <Translate Key="Message_Signature" Value="サイン" />
-  <Translate Key="Message_CreationTime" Value="作成日" />
-  <Translate Key="Message_Content" Value="コンテンツ" />
-
   <Translate Key="MainWindow_Connection" Value="コネクション" />
-  <Translate Key="MainWindow_Section" Value="セクション" />
+  <Translate Key="MainWindow_Section" Value="Section" />
   <Translate Key="MainWindow_Log" Value="ログ" />
-  <Translate Key="MainWindow_Connections" Value="接続" />
-  <Translate Key="MainWindow_StatesBar" Value="Connect: {0}  Convert: {1}" />
-  <Translate Key="MainWindow_Running" Value="Running" />
-  <Translate Key="MainWindow_Stopping" Value="Stopping" />
+  <Translate Key="MainWindow_Core" Value="コア" />
+  <Translate Key="MainWindow_StatesBar" Value="接続: {0}  変換: {1}" />
+  <Translate Key="MainWindow_Running" Value="実行中" />
+  <Translate Key="MainWindow_Stopping" Value="停止中" />
   <Translate Key="MainWindow_Start" Value="開始" />
   <Translate Key="MainWindow_Stop" Value="停止" />
-  <Translate Key="MainWindow_UpdateBaseNode" Value="基礎ノードUriの更新" />
-  <Translate Key="MainWindow_ConnectionsSettings" Value="接続設定" />
+  <Translate Key="MainWindow_UpdateBaseNode" Value="基礎ノード情報の更新" />
+  <Translate Key="MainWindow_CoreOptions" Value="コア設定" />
+  <Translate Key="MainWindow_Cache" Value="キャッシュ" />
   <Translate Key="MainWindow_View" Value="表示" />
-  <Translate Key="MainWindow_ClearUrlHistory" Value="URLクリック履歴の削除" />
-  <Translate Key="MainWindow_ViewSettings" Value="表示設定" />
   <Translate Key="MainWindow_Languages" Value="言語" />
+  <Translate Key="MainWindow_ViewOptions" Value="表示設定" />
   <Translate Key="MainWindow_Help" Value="ヘルプ" />
   <Translate Key="MainWindow_ManualSite" Value="ドキュメント" />
   <Translate Key="MainWindow_DeveloperSite" Value="ソースコード" />
@@ -51,10 +46,13 @@
   <Translate Key="MainWindow_SendSpeed" Value="送信:" />
   <Translate Key="MainWindow_ReceiveSpeed" Value="受信:" />
   <Translate Key="MainWindow_DiskSpaceNotFound_Message" Value="ディスクに空き領域がありません。" />
-  <Translate Key="MainWindow_CacheSpaceNotFound_Message" Value="Space of cache not found." />
+  <Translate Key="MainWindow_CacheSpaceNotFound_Message" Value="キャッシュに空き領域がありません。" />
+  <Translate Key="MainWindow_CheckInternalBlocks_Message" Value="内部ブロックの破損チェック" />
+  <Translate Key="MainWindow_CheckExternalBlocks_Message" Value="外部ブロックの破損チェック" />
+  <Translate Key="MainWindow_CheckBlocks_State" Value="チェック済み:{1} 破損:{0} 総ブロック数:{2}" />
   <Translate Key="MainWindow_CheckUpdate_Message" Value="&quot;{0}&quot; へ更新しますか?" />
   <Translate Key="MainWindow_LatestVersion_Message" Value="最新のバージョンです。" />
-  <Translate Key="MainWindow_Restart_Message" Value="更新が完了しました。再起動してください。" />
+  <Translate Key="MainWindow_Restart_Message" Value="アップデートが完了しました。再起動してください。" />
   <Translate Key="MainWindow_Close_Message" Value="終了しますか？" />
   <Translate Key="MainWindow_Delete_Message" Value="本当に削除しますか？" />
   <Translate Key="MainWindow_TransferLimit_Message" Value="転送量制限を越えたので停止しました。" />
@@ -112,7 +110,7 @@
   <Translate Key="CoreOptionsWindow_Paste" Value="貼り付け" />
   <Translate Key="CoreOptionsWindow_CacheResize_Message" Value="キャッシュサイズの変更は重要なブロックを削除する可能性があります。それでもよろしいですか？" />
 
-  <Translate Key="ConnectionType_None" Value="無効" />
+  <Translate Key="ConnectionType_None" Value="None" />
   <Translate Key="ConnectionType_Tcp" Value="Tcp" />
   <Translate Key="ConnectionType_Socks4Proxy" Value="Socks4 プロキシ" />
   <Translate Key="ConnectionType_Socks4aProxy" Value="Socks4a プロキシ" />
@@ -128,34 +126,36 @@
   <Translate Key="ProgressWindow_Cancel" Value="キャンセル" />
   <Translate Key="ProgressWindow_Ok" Value="Ok" />
 
-  <Translate Key="ViewSettingsWindow_Title" Value="表示設定" />
-  <Translate Key="ViewSettingsWindow_Update" Value="アップデート" />
-  <Translate Key="ViewSettingsWindow_UpdateUrl" Value="アップデート Url" />
-  <Translate Key="ViewSettingsWindow_ProxyUri" Value="プロキシ Uri" />
-  <Translate Key="ViewSettingsWindow_Signature" Value="サイン" />
-  <Translate Key="ViewSettingsWindow_Signatures" Value="サイン" />
-  <Translate Key="ViewSettingsWindow_UpdateOption" Value="アップデートオプション" />
-  <Translate Key="ViewSettingsWindow_None" Value="無効" />
-  <Translate Key="ViewSettingsWindow_AutoCheck" Value="自動でチェックする" />
-  <Translate Key="ViewSettingsWindow_AutoUpdate" Value="自動でアップデートする" />
-  <Translate Key="ViewSettingsWindow_Lair" Value="Lair" />
-  <Translate Key="ViewSettingsWindow_LairPath" Value="Lair path" />
-  <Translate Key="ViewSettingsWindow_Fonts" Value="フォント" />
-  <Translate Key="ViewSettingsWindow_MessageFontFamily" Value="メッセージフォント" />
-  <Translate Key="ViewSettingsWindow_MessageFontSize" Value="メッセージフォントサイズ (pt)" />
-  <Translate Key="ViewSettingsWindow_Events" Value="イベント" />
-  <Translate Key="ViewSettingsWindow_ClearUrlHistory" Value="Lairの終了時にURLクリック履歴を削除する" />
-  <Translate Key="ViewSettingsWindow_Value" Value="値" />
-  <Translate Key="ViewSettingsWindow_Import" Value="インポート" />
-  <Translate Key="ViewSettingsWindow_Export" Value="エクスポート" />
-  <Translate Key="ViewSettingsWindow_Up" Value="上へ" />
-  <Translate Key="ViewSettingsWindow_Down" Value="下へ" />
-  <Translate Key="ViewSettingsWindow_Add" Value="追加" />
-  <Translate Key="ViewSettingsWindow_Edit" Value="編集" />
-  <Translate Key="ViewSettingsWindow_Delete" Value="削除" />
-  <Translate Key="ViewSettingsWindow_Copy" Value="コピー" />
-  <Translate Key="ViewSettingsWindow_Ok" Value="Ok" />
-  <Translate Key="ViewSettingsWindow_Cancel" Value="キャンセル" />
+  <Translate Key="ViewOptionsWindow_Title" Value="表示設定" />
+  <Translate Key="ViewOptionsWindow_Update" Value="アップデート" />
+  <Translate Key="ViewOptionsWindow_UpdateUrl" Value="アップデート Url" />
+  <Translate Key="ViewOptionsWindow_ProxyUri" Value="プロキシ Uri" />
+  <Translate Key="ViewOptionsWindow_Signature" Value="サイン" />
+  <Translate Key="ViewOptionsWindow_Signatures" Value="サイン" />
+  <Translate Key="ViewOptionsWindow_Keywords" Value="キーワード" />
+  <Translate Key="ViewOptionsWindow_Miscellaneous" Value="その他" />
+  <Translate Key="ViewOptionsWindow_Box" Value="ボックス" />
+  <Translate Key="ViewOptionsWindow_RelateBoxFile" Value="Boxファイルを関連付ける" />
+  <Translate Key="ViewOptionsWindow_Events" Value="イベント" />
+  <Translate Key="ViewOptionsWindow_OpenBox" Value="ダウンロードされたBoxファイルを展開する" />
+  <Translate Key="ViewOptionsWindow_ExtractTo" Value="展開先" />
+  <Translate Key="ViewOptionsWindow_UpdateOption" Value="アップデートオプション" />
+  <Translate Key="ViewOptionsWindow_None" Value="無し" />
+  <Translate Key="ViewOptionsWindow_AutoCheck" Value="自動でチェックする" />
+  <Translate Key="ViewOptionsWindow_AutoUpdate" Value="自動でアップデートする" />
+  <Translate Key="ViewOptionsWindow_Value" Value="値" />
+  <Translate Key="ViewOptionsWindow_Import" Value="インポート" />
+  <Translate Key="ViewOptionsWindow_Export" Value="エクスポート" />
+  <Translate Key="ViewOptionsWindow_Up" Value="上へ" />
+  <Translate Key="ViewOptionsWindow_Down" Value="下へ" />
+  <Translate Key="ViewOptionsWindow_Add" Value="追加" />
+  <Translate Key="ViewOptionsWindow_Edit" Value="編集" />
+  <Translate Key="ViewOptionsWindow_Delete" Value="削除" />
+  <Translate Key="ViewOptionsWindow_Ok" Value="Ok" />
+  <Translate Key="ViewOptionsWindow_Cancel" Value="キャンセル" />
+  <Translate Key="ViewOptionsWindow_Cut" Value="切り取り" />
+  <Translate Key="ViewOptionsWindow_Copy" Value="コピー" />
+  <Translate Key="ViewOptionsWindow_Paste" Value="貼り付け" />
 
   <Translate Key="VersionInformationWindow_Title" Value="バージョン情報" />
   <Translate Key="VersionInformationWindow_FileName" Value="ファイル名" />
@@ -163,10 +163,15 @@
   <Translate Key="VersionInformationWindow_License" Value="ライセンス" />
   <Translate Key="VersionInformationWindow_Close" Value="閉じる" />
 
-  <Translate Key="CreateSignatureWindow_Title" Value="サイン作成" />
-  <Translate Key="CreateSignatureWindow_Nickname" Value="ニックネーム" />
-  <Translate Key="CreateSignatureWindow_Ok" Value="Ok" />
-  <Translate Key="CreateSignatureWindow_Cancel" Value="キャンセル" />
+  <Translate Key="SignatureWindow_Title" Value="サイン設定" />
+  <Translate Key="SignatureWindow_Signature" Value="サイン" />
+  <Translate Key="SignatureWindow_Ok" Value="Ok" />
+  <Translate Key="SignatureWindow_Cancel" Value="キャンセル" />
+
+  <Translate Key="NameWindow_Title" Value="名前設定" />
+  <Translate Key="NameWindow_Name" Value="名前" />
+  <Translate Key="NameWindow_Ok" Value="Ok" />
+  <Translate Key="NameWindow_Cancel" Value="キャンセル" />
 
   <Translate Key="ConnectionControl_Uri" Value="Uri" />
   <Translate Key="ConnectionControl_Priority" Value="優先度" />
@@ -177,34 +182,34 @@
   <Translate Key="ConnectionControl_CreateConnectionCount" Value="成功した接続試行数" />
   <Translate Key="ConnectionControl_AcceptConnectionCount" Value="成功した接続受信数" />
   <Translate Key="ConnectionControl_SurroundingNodeCount" Value="確認できる周辺ノード数" />
-  <Translate Key="ConnectionControl_NodeCount" Value="ノード情報数" />
-  <Translate Key="ConnectionControl_SectionCount" Value="セクション情報数" />
-  <Translate Key="ConnectionControl_LeaderCount" Value="リーダー情報数" />
-  <Translate Key="ConnectionControl_CreatorCount" Value="クリエイター情報数" />
-  <Translate Key="ConnectionControl_ManagerCount" Value="マネージャー情報数" />
-  <Translate Key="ConnectionControl_ChatCount" Value="チャンネル情報数" />
-  <Translate Key="ConnectionControl_TopicCount" Value="トピック情報数" />
-  <Translate Key="ConnectionControl_MessageCount" Value="メッセージ情報数" />
+  <Translate Key="ConnectionControl_RelayBlockCount" Value="中継ブロック数" />
+  <Translate Key="ConnectionControl_FreeSpace" Value="空き領域" />
+  <Translate Key="ConnectionControl_LockSpace" Value="保護領域" />
+  <Translate Key="ConnectionControl_UsingSpace" Value="使用領域" />
+  <Translate Key="ConnectionControl_NodeCount" Value="保持ノード情報数" />
+  <Translate Key="ConnectionControl_SeedCount" Value="保持シード情報数" />
+  <Translate Key="ConnectionControl_BlockCount" Value="保持ブロック情報数" />
+  <Translate Key="ConnectionControl_DownloadCount" Value="ダウンロード数" />
+  <Translate Key="ConnectionControl_UploadCount" Value="アップロード数" />
+  <Translate Key="ConnectionControl_ShareCount" Value="シェア数" />
   <Translate Key="ConnectionControl_PushNodeCount" Value="送信ノード情報数" />
-  <Translate Key="ConnectionControl_PushSectionRequestCount" Value="送信セクションリクエスト情報数" />
-  <Translate Key="ConnectionControl_PushLeaderCount" Value="送信リーダー情報数" />
-  <Translate Key="ConnectionControl_PushCreatorCount" Value="送信クリエイター情報数" />
-  <Translate Key="ConnectionControl_PushManagerCount" Value="送信マネージャー情報数" />
-  <Translate Key="ConnectionControl_PushChatRequestCount" Value="送信チャンネルリクエスト情報数" />
-  <Translate Key="ConnectionControl_PushTopicCount" Value="送信トピック情報数" />
-  <Translate Key="ConnectionControl_PushMessageCount" Value="送信メッセージ情報数" />
+  <Translate Key="ConnectionControl_PushBlockLinkCount" Value="送信ブロックリンク情報数" />
+  <Translate Key="ConnectionControl_PushBlockRequestCount" Value="送信ブロックリクエスト情報数" />
+  <Translate Key="ConnectionControl_PushBlockCount" Value="送信ブロック情報数" />
+  <Translate Key="ConnectionControl_PushSeedRequestCount" Value="送信シードリクエスト情報数" />
+  <Translate Key="ConnectionControl_PushSeedCount" Value="送信シード情報数" />
   <Translate Key="ConnectionControl_PullNodeCount" Value="受信ノード情報数" />
-  <Translate Key="ConnectionControl_PullSectionRequestCount" Value="受信セクションリクエスト情報数" />
-  <Translate Key="ConnectionControl_PullLeaderCount" Value="受信リーダー情報数" />
-  <Translate Key="ConnectionControl_PullCreatorCount" Value="受信クリエイター情報数" />
-  <Translate Key="ConnectionControl_PullManagerCount" Value="受信マネージャー情報数" />
-  <Translate Key="ConnectionControl_PullChatRequestCount" Value="受信チャンネルリクエスト情報数" />
-  <Translate Key="ConnectionControl_PullTopicCount" Value="受信トピック情報数" />
-  <Translate Key="ConnectionControl_PullMessageCount" Value="受信メッセージ情報数" />
+  <Translate Key="ConnectionControl_PullBlockLinkCount" Value="受信ブロックリンク情報数" />
+  <Translate Key="ConnectionControl_PullBlockRequestCount" Value="受信ブロックリクエスト情報数" />
+  <Translate Key="ConnectionControl_PullBlockCount" Value="受信ブロック情報数" />
+  <Translate Key="ConnectionControl_PullSeedRequestCount" Value="受信シードリクエスト情報数" />
+  <Translate Key="ConnectionControl_PullSeedCount" Value="受信シード情報数" />
   <Translate Key="ConnectionControl_Copy" Value="コピー" />
   <Translate Key="ConnectionControl_Paste" Value="貼り付け" />
 
-  <Translate Key="SectionControl_New" Value="New" />
+  <Translate Key="SectionControl_NewSection_NameWindowTitle" Value="New tag name" />
+  <Translate Key="SectionControl_NewSection" Value="New section" />
+  <Translate Key="SectionControl_NewCategory" Value="New category" />
   <Translate Key="SectionControl_Edit" Value="Edit" />
   <Translate Key="SectionControl_Delete" Value="Delete" />
   <Translate Key="SectionControl_Cut" Value="Cut" />
@@ -215,6 +220,18 @@
   <Translate Key="SectionControl_Chat" Value="Chat" />
   <Translate Key="SectionControl_Document" Value="Document" />
   <Translate Key="SectionControl_LairNotFound_Message" Value="Lair Not Found" />
+
+  <Translate Key="SectionTreeItemEditWindow_Title" Value="セクションの編集" />
+  <Translate Key="SectionTreeItemEditWindow_Signature" Value="サイン" />
+  <Translate Key="SectionTreeItemEditWindow_Section" Value="セクション" />
+  <Translate Key="SectionTreeItemEditWindow_Tag" Value="Tag" />
+  <Translate Key="SectionTreeItemEditWindow_LeaderSignature" Value="リーダーのサイン" />
+  <Translate Key="SectionTreeItemEditWindow_Leader" Value="リーダー" />
+  <Translate Key="SectionTreeItemEditWindow_Creator" Value="クリエイター" />
+  <Translate Key="SectionTreeItemEditWindow_Manager" Value="マネージャー" />
+  <Translate Key="SectionTreeItemEditWindow_Copy" Value="コピー" />
+  <Translate Key="SectionTreeItemEditWindow_Ok" Value="Ok" />
+  <Translate Key="SectionTreeItemEditWindow_Cancel" Value="キャンセル" />
 
   <Translate Key="ChatControl_New" Value="新規" />
   <Translate Key="ChatControl_Edit" Value="編集" />
@@ -245,126 +262,5 @@
   <Translate Key="ChatControl_ImportLockedMessages" Value="ロックされたメッセージのインポート" />
   <Translate Key="ChatControl_ExportLockedMessages" Value="ロックされたメッセージのエクスポート" />
   <Translate Key="ChatControl_TopicUpload" Value="トピックの作成" />
-
-  <Translate Key="ChartWindow_Title" Value="チャート" />
-  <Translate Key="ChartWindow_Leader" Value="リーダー" />
-  <Translate Key="ChartWindow_Creator" Value="クリエーター" />
-  <Translate Key="ChartWindow_Manager" Value="マネージャー" />
-  <Translate Key="ChartWindow_Name" Value="名前" />
-  <Translate Key="ChartWindow_Id" Value="ID" />
-  <Translate Key="ChartWindow_Signature" Value="サイン" />
-  <Translate Key="ChartWindow_Copy" Value="コピー" />
-  <Translate Key="ChartWindow_CopyInfo" Value="コピー (詳細情報)" />
-  <Translate Key="ChartWindow_Close" Value="閉じる" />
-
-  <Translate Key="TopicEditWindow_Title" Value="新しいトピック - {0}" />
-  <Translate Key="TopicEditWindow_Edit" Value="編集" />
-  <Translate Key="TopicEditWindow_Preview" Value="プレビュー" />
-  <Translate Key="TopicEditWindow_Comment" Value="コメント" />
-  <Translate Key="TopicEditWindow_Ok" Value="Ok" />
-  <Translate Key="TopicEditWindow_Cancel" Value="キャンセル" />
-
-  <Translate Key="TopicPreviewWindow_Title" Value="トピック" />
-  <Translate Key="TopicPreviewWindow_Close" Value="閉じる" />
-
-  <Translate Key="MessageEditWindow_Title" Value="新しいメッセージ - {0}" />
-  <Translate Key="MessageEditWindow_Edit" Value="編集" />
-  <Translate Key="MessageEditWindow_Preview" Value="プレビュー" />
-  <Translate Key="MessageEditWindow_Comment" Value="コメント" />
-  <Translate Key="MessageEditWindow_Ok" Value="Ok" />
-  <Translate Key="MessageEditWindow_Cancel" Value="キャンセル" />
-
-  <Translate Key="NewSectionWindow_Title" Value="新しいセクション" />
-  <Translate Key="NewSectionWindow_Name" Value="セクション名" />
-  <Translate Key="NewSectionWindow_Ok" Value="Ok" />
-  <Translate Key="NewSectionWindow_Cancel" Value="キャンセル" />
-
-  <Translate Key="NewChatWindow_Title" Value="新しいチャンネル" />
-  <Translate Key="NewChatWindow_Name" Value="チャンネル名" />
-  <Translate Key="NewChatWindow_Ok" Value="Ok" />
-  <Translate Key="NewChatWindow_Cancel" Value="キャンセル" />
-
-  <Translate Key="SectionTreeItemEditWindow_Title" Value="セクションの編集" />
-  <Translate Key="SectionTreeItemEditWindow_Signature" Value="サイン" />
-  <Translate Key="SectionTreeItemEditWindow_Section" Value="セクション" />
-  <Translate Key="SectionTreeItemEditWindow_LeaderSignature" Value="リーダーのサイン" />
-  <Translate Key="SectionTreeItemEditWindow_Leader" Value="リーダー" />
-  <Translate Key="SectionTreeItemEditWindow_Creator" Value="クリエイター" />
-  <Translate Key="SectionTreeItemEditWindow_Manager" Value="マネージャー" />
-  <Translate Key="SectionTreeItemEditWindow_Copy" Value="コピー" />
-  <Translate Key="SectionTreeItemEditWindow_Ok" Value="Ok" />
-  <Translate Key="SectionTreeItemEditWindow_Cancel" Value="キャンセル" />
-
-  <Translate Key="LeaderControl_Creators" Value="クリエーター" />
-  <Translate Key="LeaderControl_Managers" Value="マネージャー" />
-  <Translate Key="LeaderControl_Comment" Value="コメント" />
-  <Translate Key="LeaderControl_Signature" Value="サイン" />
-  <Translate Key="LeaderControl_Up" Value="上へ" />
-  <Translate Key="LeaderControl_Down" Value="下へ" />
-  <Translate Key="LeaderControl_Add" Value="追加" />
-  <Translate Key="LeaderControl_Edit" Value="編集" />
-  <Translate Key="LeaderControl_Delete" Value="削除" />
-  <Translate Key="LeaderControl_Upload" Value="アップロード" />
-  <Translate Key="LeaderControl_Cut" Value="切り取り" />
-  <Translate Key="LeaderControl_Copy" Value="コピー" />
-  <Translate Key="LeaderControl_Paste" Value="貼り付け" />
-
-  <Translate Key="CreatorControl_Chats" Value="チャンネル" />
-  <Translate Key="CreatorControl_Comment" Value="コメント" />
-  <Translate Key="CreatorControl_Name" Value="名前" />
-  <Translate Key="CreatorControl_Id" Value="ID" />
-  <Translate Key="CreatorControl_New" Value="新規" />
-  <Translate Key="CreatorControl_Up" Value="上へ" />
-  <Translate Key="CreatorControl_Down" Value="下へ" />
-  <Translate Key="CreatorControl_Add" Value="追加" />
-  <Translate Key="CreatorControl_Edit" Value="編集" />
-  <Translate Key="CreatorControl_Delete" Value="削除" />
-  <Translate Key="CreatorControl_Upload" Value="アップロード" />
-  <Translate Key="CreatorControl_Cut" Value="切り取り" />
-  <Translate Key="CreatorControl_Copy" Value="コピー" />
-  <Translate Key="CreatorControl_Paste" Value="貼り付け" />
-
-  <Translate Key="ManagerControl_Trusts" Value="トラスト" />
-  <Translate Key="ManagerControl_Comment" Value="コメント" />
-  <Translate Key="ManagerControl_Signature" Value="サイン" />
-  <Translate Key="ManagerControl_Up" Value="上へ" />
-  <Translate Key="ManagerControl_Down" Value="下へ" />
-  <Translate Key="ManagerControl_Add" Value="追加" />
-  <Translate Key="ManagerControl_Edit" Value="編集" />
-  <Translate Key="ManagerControl_Delete" Value="削除" />
-  <Translate Key="ManagerControl_Upload" Value="アップロード" />
-  <Translate Key="ManagerControl_Cut" Value="切り取り" />
-  <Translate Key="ManagerControl_Copy" Value="コピー" />
-  <Translate Key="ManagerControl_Paste" Value="貼り付け" />
-
-  <Translate Key="SearchItemEditWindow_Title" Value="カテゴリの編集" />
-  <Translate Key="SearchItemEditWindow_Name" Value="名前" />
-  <Translate Key="SearchItemEditWindow_Word" Value="単語" />
-  <Translate Key="SearchItemEditWindow_Regex" Value="正規表現" />
-  <Translate Key="SearchItemEditWindow_Signature" Value="サイン" />
-  <Translate Key="SearchItemEditWindow_CreationTimeRange" Value="作成日 範囲" />
-  <Translate Key="SearchItemEditWindow_Contains" Value="有効" />
-  <Translate Key="SearchItemEditWindow_IsIgnoreCase" Value="大文字小文字の違いを無視" />
-  <Translate Key="SearchItemEditWindow_Value" Value="値" />
-  <Translate Key="SearchItemEditWindow_Min" Value="最小" />
-  <Translate Key="SearchItemEditWindow_Max" Value="最大" />
-  <Translate Key="SearchItemEditWindow_Up" Value="上へ" />
-  <Translate Key="SearchItemEditWindow_Down" Value="下へ" />
-  <Translate Key="SearchItemEditWindow_Add" Value="追加" />
-  <Translate Key="SearchItemEditWindow_Edit" Value="編集" />
-  <Translate Key="SearchItemEditWindow_Delete" Value="削除" />
-  <Translate Key="SearchItemEditWindow_Ok" Value="Ok" />
-  <Translate Key="SearchItemEditWindow_Cancel" Value="キャンセル" />
-  <Translate Key="SearchItemEditWindow_Cut" Value="切り取り" />
-  <Translate Key="SearchItemEditWindow_Copy" Value="コピー" />
-  <Translate Key="SearchItemEditWindow_Paste" Value="貼り付け" />
-
-  <Translate Key="ChatListWindow_Title" Value="チャンネルリスト" />
-  <Translate Key="ChatListWindow_Name" Value="名前" />
-  <Translate Key="ChatListWindow_Id" Value="ID" />
-  <Translate Key="ChatListWindow_Copy" Value="コピー" />
-  <Translate Key="ChatListWindow_CopyInfo" Value="コピー (詳細情報)" />
-  <Translate Key="ChatListWindow_Join" Value="入る" />
-  <Translate Key="ChatListWindow_Close" Value="閉じる" />
 
 </Configuration>
