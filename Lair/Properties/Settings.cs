@@ -27,8 +27,10 @@ namespace Lair.Properties
                 new Library.Configuration.SettingContent<string>() { Name = "Global_UseLanguage", Value = "English" },
                 new Library.Configuration.SettingContent<bool>() { Name = "Global_IsStart", Value = true },
                 new Library.Configuration.SettingContent<LockedHashSet<string>>() { Name = "Global_UrlHistorys", Value = new LockedHashSet<string>() },
+                new Library.Configuration.SettingContent<LockedHashSet<Section>>() { Name = "Global_SectionHistorys", Value = new LockedHashSet<Section>() },
+                new Library.Configuration.SettingContent<LockedHashSet<Archive>>() { Name = "Global_ArchiveHistorys", Value = new LockedHashSet<Archive>() },
+                new Library.Configuration.SettingContent<LockedHashSet<Chat>>() { Name = "Global_ChatHistorys", Value = new LockedHashSet<Chat>() },
                 new Library.Configuration.SettingContent<LockedHashSet<a.Seed>>() { Name = "Global_SeedHistorys", Value = new LockedHashSet<a.Seed>() },
-                new Library.Configuration.SettingContent<LockedHashSet<Link>>() { Name = "Global_LinkHistorys", Value = new LockedHashSet<Link>() },
                 new Library.Configuration.SettingContent<bool>() { Name = "Global_UrlClearHistory_IsEnabled", Value = false },
                 new Library.Configuration.SettingContent<bool>() { Name = "Global_AutoBaseNodeSetting_IsEnabled", Value = true },
                 new Library.Configuration.SettingContent<bool>() { Name = "Global_I2p_SamBridge_IsEnabled", Value = true },
@@ -37,6 +39,8 @@ namespace Lair.Properties
                 new Library.Configuration.SettingContent<string>() { Name = "Global_Update_Signature", Value = "Lyrise@7seiSbhOCkls6gPxjJYjptxskzlSulgIe3dSfj1KxnJJ6eejKjuJ3R1Ec8yFuKpr4uNcwF7bFh5OrmxnY25y7A" },
                 new Library.Configuration.SettingContent<UpdateOption>() { Name = "Global_Update_Option", Value = UpdateOption.AutoCheck },
                 new Library.Configuration.SettingContent<string>() { Name = "Global_Amoeba_Path", Value = "" },
+                new Library.Configuration.SettingContent<string>() { Name = "Global_Fonts_MessageFontFamily", Value = "MS PGothic" },
+                new Library.Configuration.SettingContent<double>() { Name = "Global_Fonts_MessageFontSize", Value = 12 },
 
                 new Library.Configuration.SettingContent<double>() { Name = "MainWindow_Top", Value = 120 },
                 new Library.Configuration.SettingContent<double>() { Name = "MainWindow_Left", Value = 120 },
@@ -91,12 +95,23 @@ namespace Lair.Properties
                 new Library.Configuration.SettingContent<double>() { Name = "SectionControl_Grid_ColumnDefinitions_Width", Value = 200 },
                 new Library.Configuration.SettingContent<SectionCategorizeTreeItem>() { Name = "SectionControl_SectionCategorizeTreeItem", Value = new SectionCategorizeTreeItem(){ Name = "Category", IsExpanded = true } },
 
-                new Library.Configuration.SettingContent<LockedDictionary<Tag, ChatCategorizeTreeItem>>() { Name = "ChatControl_ChatCategorizeTreeItem", Value = new LockedDictionary<Tag,ChatCategorizeTreeItem>() },
+                new Library.Configuration.SettingContent<double>() { Name = "SectionTreeItemEditWindow_Top", Value = 120 },
+                new Library.Configuration.SettingContent<double>() { Name = "SectionTreeItemEditWindow_Left", Value = 120 },
+                new Library.Configuration.SettingContent<double>() { Name = "SectionTreeItemEditWindow_Height", Value = 500 },
+                new Library.Configuration.SettingContent<double>() { Name = "SectionTreeItemEditWindow_Width", Value = 700 },
+                new Library.Configuration.SettingContent<WindowState>() { Name = "SectionTreeItemEditWindow_WindowState", Value = WindowState.Normal },
+                new Library.Configuration.SettingContent<double>() { Name = "SectionTreeItemEditWindow_GridViewColumn_TrustSignature_Width", Value = 600 },
+                new Library.Configuration.SettingContent<double>() { Name = "SectionTreeItemEditWindow_GridViewColumn_Archive_Width", Value = 600 },
+                new Library.Configuration.SettingContent<double>() { Name = "SectionTreeItemEditWindow_GridViewColumn_Chat_Width", Value = 600 },
 
-                new Library.Configuration.SettingContent<double>() { Name = "SignatureWindow_Top", Value = 120 },
-                new Library.Configuration.SettingContent<double>() { Name = "SignatureWindow_Left", Value = 120 },
-                new Library.Configuration.SettingContent<double>() { Name = "SignatureWindow_Width", Value = 700 },
-                new Library.Configuration.SettingContent<WindowState>() { Name = "SignatureWindow_WindowState", Value = WindowState.Normal },
+                new Library.Configuration.SettingContent<double>() { Name = "SectionProfileInformationWindow_Top", Value = 120 },
+                new Library.Configuration.SettingContent<double>() { Name = "SectionProfileInformationWindow_Left", Value = 120 },
+                new Library.Configuration.SettingContent<double>() { Name = "SectionProfileInformationWindow_Height", Value = 500 },
+                new Library.Configuration.SettingContent<double>() { Name = "SectionProfileInformationWindow_Width", Value = 700 },
+                new Library.Configuration.SettingContent<WindowState>() { Name = "SectionProfileInformationWindow_WindowState", Value = WindowState.Normal },
+                new Library.Configuration.SettingContent<double>() { Name = "SectionProfileInformationWindow_GridViewColumn_TrustSignature_Width", Value = 600 },
+                new Library.Configuration.SettingContent<double>() { Name = "SectionProfileInformationWindow_GridViewColumn_Archive_Width", Value = 600 },
+                new Library.Configuration.SettingContent<double>() { Name = "SectionProfileInformationWindow_GridViewColumn_Chat_Width", Value = 600 },
             })
         {
 
@@ -207,6 +222,60 @@ namespace Lair.Properties
             }
         }
 
+        public LockedHashSet<Section> Global_SectionHistorys
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (LockedHashSet<Section>)this["Global_SectionHistorys"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["Global_SectionHistorys"] = value;
+                }
+            }
+        }
+
+        public LockedHashSet<Archive> Global_ArchiveHistorys
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (LockedHashSet<Archive>)this["Global_ArchiveHistorys"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["Global_ArchiveHistorys"] = value;
+                }
+            }
+        }
+
+        public LockedHashSet<Chat> Global_ChatHistorys
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (LockedHashSet<Chat>)this["Global_ChatHistorys"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["Global_ChatHistorys"] = value;
+                }
+            }
+        }
+
         public LockedHashSet<a.Seed> Global_SeedHistorys
         {
             get
@@ -221,24 +290,6 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     this["Global_SeedHistorys"] = value;
-                }
-            }
-        }
-
-        public LockedHashSet<Link> Global_LinkHistorys
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (LockedHashSet<Link>)this["Global_LinkHistorys"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["Global_LinkHistorys"] = value;
                 }
             }
         }
@@ -383,6 +434,42 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     this["Global_Amoeba_Path"] = value;
+                }
+            }
+        }
+
+        public string Global_Fonts_MessageFontFamily
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (string)this["Global_Fonts_MessageFontFamily"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["Global_Fonts_MessageFontFamily"] = value;
+                }
+            }
+        }
+
+        public double Global_Fonts_MessageFontSize
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["Global_Fonts_MessageFontSize"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["Global_Fonts_MessageFontSize"] = value;
                 }
             }
         }
@@ -1240,93 +1327,291 @@ namespace Lair.Properties
         }
 
 
-        public LockedDictionary<Tag, ChatCategorizeTreeItem> ChatControl_ChatCategorizeTreeItem
+        public double SectionTreeItemEditWindow_Top
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (LockedDictionary<Tag, ChatCategorizeTreeItem>)this["ChatControl_ChatCategorizeTreeItem"];
+                   return (double)this["SectionTreeItemEditWindow_Top"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["ChatControl_ChatCategorizeTreeItem"] = value;
+                    this["SectionTreeItemEditWindow_Top"] = value;
+                }
+            }
+        }
+
+        public double SectionTreeItemEditWindow_Left
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SectionTreeItemEditWindow_Left"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SectionTreeItemEditWindow_Left"] = value;
+                }
+            }
+        }
+
+        public double SectionTreeItemEditWindow_Height
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SectionTreeItemEditWindow_Height"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SectionTreeItemEditWindow_Height"] = value;
+                }
+            }
+        }
+
+        public double SectionTreeItemEditWindow_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SectionTreeItemEditWindow_Width"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SectionTreeItemEditWindow_Width"] = value;
+                }
+            }
+        }
+
+        public WindowState SectionTreeItemEditWindow_WindowState
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (WindowState)this["SectionTreeItemEditWindow_WindowState"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SectionTreeItemEditWindow_WindowState"] = value;
+                }
+            }
+        }
+
+        public double SectionTreeItemEditWindow_GridViewColumn_TrustSignature_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SectionTreeItemEditWindow_GridViewColumn_TrustSignature_Width"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SectionTreeItemEditWindow_GridViewColumn_TrustSignature_Width"] = value;
+                }
+            }
+        }
+
+        public double SectionTreeItemEditWindow_GridViewColumn_Archive_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SectionTreeItemEditWindow_GridViewColumn_Archive_Width"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SectionTreeItemEditWindow_GridViewColumn_Archive_Width"] = value;
+                }
+            }
+        }
+
+        public double SectionTreeItemEditWindow_GridViewColumn_Chat_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SectionTreeItemEditWindow_GridViewColumn_Chat_Width"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SectionTreeItemEditWindow_GridViewColumn_Chat_Width"] = value;
                 }
             }
         }
 
 
-        public double SignatureWindow_Top
+        public double SectionProfileInformationWindow_Top
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["SignatureWindow_Top"];
+                   return (double)this["SectionProfileInformationWindow_Top"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["SignatureWindow_Top"] = value;
+                    this["SectionProfileInformationWindow_Top"] = value;
                 }
             }
         }
 
-        public double SignatureWindow_Left
+        public double SectionProfileInformationWindow_Left
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["SignatureWindow_Left"];
+                   return (double)this["SectionProfileInformationWindow_Left"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["SignatureWindow_Left"] = value;
+                    this["SectionProfileInformationWindow_Left"] = value;
                 }
             }
         }
 
-        public double SignatureWindow_Width
+        public double SectionProfileInformationWindow_Height
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["SignatureWindow_Width"];
+                   return (double)this["SectionProfileInformationWindow_Height"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["SignatureWindow_Width"] = value;
+                    this["SectionProfileInformationWindow_Height"] = value;
                 }
             }
         }
 
-        public WindowState SignatureWindow_WindowState
+        public double SectionProfileInformationWindow_Width
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (WindowState)this["SignatureWindow_WindowState"];
+                   return (double)this["SectionProfileInformationWindow_Width"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["SignatureWindow_WindowState"] = value;
+                    this["SectionProfileInformationWindow_Width"] = value;
+                }
+            }
+        }
+
+        public WindowState SectionProfileInformationWindow_WindowState
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (WindowState)this["SectionProfileInformationWindow_WindowState"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SectionProfileInformationWindow_WindowState"] = value;
+                }
+            }
+        }
+
+        public double SectionProfileInformationWindow_GridViewColumn_TrustSignature_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SectionProfileInformationWindow_GridViewColumn_TrustSignature_Width"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SectionProfileInformationWindow_GridViewColumn_TrustSignature_Width"] = value;
+                }
+            }
+        }
+
+        public double SectionProfileInformationWindow_GridViewColumn_Archive_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SectionProfileInformationWindow_GridViewColumn_Archive_Width"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SectionProfileInformationWindow_GridViewColumn_Archive_Width"] = value;
+                }
+            }
+        }
+
+        public double SectionProfileInformationWindow_GridViewColumn_Chat_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SectionProfileInformationWindow_GridViewColumn_Chat_Width"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SectionProfileInformationWindow_GridViewColumn_Chat_Width"] = value;
                 }
             }
         }

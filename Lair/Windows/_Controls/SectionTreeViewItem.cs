@@ -44,7 +44,7 @@ namespace Lair.Windows
 
         public void Update()
         {
-            _header.Text = MessageConverter.ToTagString(this.Value.Tag);
+            _header.Text = MessageConverter.ToSectionString(this.Value.Tag);
         }
 
         public SectionTreeItem Value
@@ -60,7 +60,5 @@ namespace Lair.Windows
                 this.Update();
             }
         }
-
-        public ChatControl ChatControl { get; set; }
     }
 }

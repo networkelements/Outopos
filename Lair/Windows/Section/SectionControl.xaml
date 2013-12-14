@@ -23,11 +23,18 @@
         </ContextMenu>
 
         <ContextMenu x:Key="_sectionTreeViewItemContextMenu">
+            <MenuItem Name="_sectionTreeViewItemEditMenuItem" Header="{Binding Path=SectionControl_Edit, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemEditMenuItem_Click"/>
             <MenuItem Name="_sectionTreeViewItemDeleteMenuItem" Header="{Binding Path=SectionControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemDeleteMenuItem_Click"/>
             <Separator />
             <MenuItem Name="_sectionTreeViewItemCutMenuItem" Header="{Binding Path=SectionControl_Cut, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemCutMenuItem_Click" />
             <MenuItem Name="_sectionTreeViewItemCopyMenuItem" Header="{Binding Path=SectionControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemCopyMenuItem_Click" />
             <MenuItem Name="_sectionTreeViewItemCopyInfoMenuItem" Header="{Binding Path=SectionControl_CopyInfo, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemCopyInfoMenuItem_Click" />
+        </ContextMenu>
+
+        <ContextMenu x:Key="_signatureTreeViewItemContextMenu">
+            <MenuItem Name="_signatureTreeViewItemCopyMenuItem" Header="{Binding Path=SectionControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_signatureTreeViewItemCopyMenuItem_Click" />
+            <Separator />
+            <MenuItem Name="_signatureTreeViewItemInformationMenuItem" Header="{Binding Path=SectionControl_Information, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemInformationMenuItem_Click" />
         </ContextMenu>
     </UserControl.Resources>
 
@@ -49,8 +56,7 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="23" />
-            <RowDefinition Height="546*" />
+            <RowDefinition Height="*" />
             <RowDefinition Name="_searchRowDefinition" Height="24" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -79,13 +85,14 @@
                 </Style>
             </TreeView.Resources>
         </TreeView>
-        <TabControl Grid.Column="2" Name="_tabControl" Grid.RowSpan="3">
-            <TabItem Name="_channelTabItem" Header="{Binding Path=SectionControl_Chat, Source={StaticResource ResourcesInstance}}">
-                <Grid Name="_channelGrid" />
-            </TabItem>
-            <TabItem Name="_documentTabItem" Header="{Binding Path=SectionControl_Document, Source={StaticResource ResourcesInstance}}">
-                <Grid Name="_documentGrid" />
-            </TabItem>
-        </TabControl>
+       
+        <TreeView Grid.Column="2" Name="_signatureTreeView" Grid.RowSpan="2">
+            <TreeView.Resources>
+                <Style TargetType="{x:Type local:SignatureTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" >
+                    <Setter Property="ContextMenu" Value="{StaticResource _signatureTreeViewItemContextMenu}" />
+                    <EventSetter Event="ContextMenuOpening" Handler="_signatureTreeViewItemContextMenu_ContextMenuOpening" />
+                </Style>
+            </TreeView.Resources>
+        </TreeView>
     </Grid>
 </UserControl>

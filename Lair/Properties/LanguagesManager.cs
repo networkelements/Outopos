@@ -217,57 +217,103 @@ namespace Lair.Properties
         }
 
 
-        public string Link_Tag
+        public string Section_Name
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("Link_Tag");
+                    return this.Translate("Section_Name");
                 }
             }
         }
 
-        public string Link_Tag_Name
+        public string Section_Id
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("Link_Tag_Name");
+                    return this.Translate("Section_Id");
                 }
             }
         }
 
-        public string Link_Tag_Id
+        public string Section_Option
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("Link_Tag_Id");
+                    return this.Translate("Section_Option");
                 }
             }
         }
 
-        public string Link_Type
+
+        public string Archive_Name
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("Link_Type");
+                    return this.Translate("Archive_Name");
                 }
             }
         }
 
-        public string Link_Path
+        public string Archive_Id
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("Link_Path");
+                    return this.Translate("Archive_Id");
+                }
+            }
+        }
+
+        public string Archive_Option
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("Archive_Option");
+                }
+            }
+        }
+
+
+        public string Chat_Name
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("Chat_Name");
+                }
+            }
+        }
+
+        public string Chat_Id
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("Chat_Id");
+                }
+            }
+        }
+
+        public string Chat_Option
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("Chat_Option");
                 }
             }
         }
@@ -335,18 +381,6 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("Seed_Comment");
-                }
-            }
-        }
-
-
-        public string SectionTreeItem_LeaderSignature
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SectionTreeItem_LeaderSignature");
                 }
             }
         }
@@ -1878,6 +1912,17 @@ namespace Lair.Properties
             }
         }
 
+        public string NameWindow_Title_Category
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("NameWindow_Title_Category");
+                }
+            }
+        }
+
         public string NameWindow_Name
         {
             get
@@ -2276,17 +2321,6 @@ namespace Lair.Properties
         }
 
 
-        public string SectionControl_NewSection_NameWindowTitle
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SectionControl_NewSection_NameWindowTitle");
-                }
-            }
-        }
-
         public string SectionControl_NewSection
         {
             get
@@ -2375,46 +2409,69 @@ namespace Lair.Properties
             }
         }
 
-        public string SectionControl_Chart
+        public string SectionControl_Information
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_Chart");
+                    return this.Translate("SectionControl_Information");
                 }
             }
         }
 
-        public string SectionControl_Chat
+
+        public string NewSectionWindow_Title
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_Chat");
+                    return this.Translate("NewSectionWindow_Title");
                 }
             }
         }
 
-        public string SectionControl_Document
+        public string NewSectionWindow_SectionName
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_Document");
+                    return this.Translate("NewSectionWindow_SectionName");
                 }
             }
         }
 
-        public string SectionControl_LairNotFound_Message
+        public string NewSectionWindow_LeaderSignature
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_LairNotFound_Message");
+                    return this.Translate("NewSectionWindow_LeaderSignature");
+                }
+            }
+        }
+
+        public string NewSectionWindow_Ok
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("NewSectionWindow_Ok");
+                }
+            }
+        }
+
+        public string NewSectionWindow_Cancel
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("NewSectionWindow_Cancel");
                 }
             }
         }
@@ -2431,13 +2488,13 @@ namespace Lair.Properties
             }
         }
 
-        public string SectionTreeItemEditWindow_Signature
+        public string SectionTreeItemEditWindow_YourSignature
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionTreeItemEditWindow_Signature");
+                    return this.Translate("SectionTreeItemEditWindow_YourSignature");
                 }
             }
         }
@@ -2453,13 +2510,13 @@ namespace Lair.Properties
             }
         }
 
-        public string SectionTreeItemEditWindow_Tag
+        public string SectionTreeItemEditWindow_SectionTag
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionTreeItemEditWindow_Tag");
+                    return this.Translate("SectionTreeItemEditWindow_SectionTag");
                 }
             }
         }
@@ -2475,35 +2532,134 @@ namespace Lair.Properties
             }
         }
 
-        public string SectionTreeItemEditWindow_Leader
+        public string SectionTreeItemEditWindow_Trust
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionTreeItemEditWindow_Leader");
+                    return this.Translate("SectionTreeItemEditWindow_Trust");
                 }
             }
         }
 
-        public string SectionTreeItemEditWindow_Creator
+        public string SectionTreeItemEditWindow_Signature
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionTreeItemEditWindow_Creator");
+                    return this.Translate("SectionTreeItemEditWindow_Signature");
                 }
             }
         }
 
-        public string SectionTreeItemEditWindow_Manager
+        public string SectionTreeItemEditWindow_Chat
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionTreeItemEditWindow_Manager");
+                    return this.Translate("SectionTreeItemEditWindow_Chat");
+                }
+            }
+        }
+
+        public string SectionTreeItemEditWindow_Archive
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionTreeItemEditWindow_Archive");
+                }
+            }
+        }
+
+        public string SectionTreeItemEditWindow_Value
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionTreeItemEditWindow_Value");
+                }
+            }
+        }
+
+        public string SectionTreeItemEditWindow_Up
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionTreeItemEditWindow_Up");
+                }
+            }
+        }
+
+        public string SectionTreeItemEditWindow_Down
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionTreeItemEditWindow_Down");
+                }
+            }
+        }
+
+        public string SectionTreeItemEditWindow_Add
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionTreeItemEditWindow_Add");
+                }
+            }
+        }
+
+        public string SectionTreeItemEditWindow_New
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionTreeItemEditWindow_New");
+                }
+            }
+        }
+
+        public string SectionTreeItemEditWindow_Edit
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionTreeItemEditWindow_Edit");
+                }
+            }
+        }
+
+        public string SectionTreeItemEditWindow_Delete
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionTreeItemEditWindow_Delete");
+                }
+            }
+        }
+
+        public string SectionTreeItemEditWindow_Cut
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionTreeItemEditWindow_Cut");
                 }
             }
         }
@@ -2515,6 +2671,17 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("SectionTreeItemEditWindow_Copy");
+                }
+            }
+        }
+
+        public string SectionTreeItemEditWindow_Paste
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionTreeItemEditWindow_Paste");
                 }
             }
         }
@@ -2537,6 +2704,117 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("SectionTreeItemEditWindow_Cancel");
+                }
+            }
+        }
+
+
+        public string SectionProfileInformationWindow_Title
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionProfileInformationWindow_Title");
+                }
+            }
+        }
+
+        public string SectionProfileInformationWindow_TargetSignature
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionProfileInformationWindow_TargetSignature");
+                }
+            }
+        }
+
+        public string SectionProfileInformationWindow_Signature
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionProfileInformationWindow_Signature");
+                }
+            }
+        }
+
+        public string SectionProfileInformationWindow_Section
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionProfileInformationWindow_Section");
+                }
+            }
+        }
+
+        public string SectionProfileInformationWindow_Trust
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionProfileInformationWindow_Trust");
+                }
+            }
+        }
+
+        public string SectionProfileInformationWindow_Chat
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionProfileInformationWindow_Chat");
+                }
+            }
+        }
+
+        public string SectionProfileInformationWindow_Archive
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionProfileInformationWindow_Archive");
+                }
+            }
+        }
+
+        public string SectionProfileInformationWindow_Value
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionProfileInformationWindow_Value");
+                }
+            }
+        }
+
+        public string SectionProfileInformationWindow_Copy
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionProfileInformationWindow_Copy");
+                }
+            }
+        }
+
+        public string SectionProfileInformationWindow_Close
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionProfileInformationWindow_Close");
                 }
             }
         }

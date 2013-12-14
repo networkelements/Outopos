@@ -40,11 +40,11 @@ namespace Lair.Windows
         {
             if (!_value.IsTrustEnabled)
             {
-                _header.Text = string.Format("{0} ({1}) {2}", _value.Path, _hit, "!");
+                _header.Text = string.Format("{0} ({1}) {2}", _value.Tag.Name, _hit, "!");
             }
             else
             {
-                _header.Text = string.Format("{0} ({1})", _value.Path, _hit);
+                _header.Text = string.Format("{0} ({1})", _value.Tag.Name, _hit);
             }
         }
 

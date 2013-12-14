@@ -23,6 +23,7 @@ using Library;
 using Library.Collections;
 using Library.Net.Lair;
 using a = Library.Net.Amoeba;
+using l = Library.Net.Lair;
 
 namespace Lair.Windows
 {
@@ -359,6 +360,57 @@ namespace Lair.Windows
             if (item == null) return null;
 
             return LairConverter.ToNodeString(item);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    [ValueConversion(typeof(l.Section), typeof(string))]
+    class SectionToStringConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var item = value as l.Section;
+            if (item == null) return null;
+
+            return MessageConverter.ToSectionString(item);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    [ValueConversion(typeof(Archive), typeof(string))]
+    class ArchiveToStringConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var item = value as Archive;
+            if (item == null) return null;
+
+            return MessageConverter.ToArchiveString(item);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    [ValueConversion(typeof(Chat), typeof(string))]
+    class ChatToStringConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var item = value as Chat;
+            if (item == null) return null;
+
+            return MessageConverter.ToChatString(item);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

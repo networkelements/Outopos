@@ -19,13 +19,41 @@ namespace Lair
 {
     static class MessageConverter
     {
-        public static string ToTagString(Tag tag)
+        public static string ToSectionString(Section section)
         {
-            if (tag.Name == null || tag.Id == null) return null;
+            if (section.Name == null || section.Id == null) return null;
 
             try
             {
-                return tag.Name + " - " + NetworkConverter.ToBase64UrlString(tag.Id);
+                return section.Name + " - " + NetworkConverter.ToBase64UrlString(section.Id);
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException("ArgumentException", e);
+            }
+        }
+
+        public static string ToArchiveString(Archive archive)
+        {
+            if (archive.Name == null || archive.Id == null) return null;
+
+            try
+            {
+                return archive.Name + " - " + NetworkConverter.ToBase64UrlString(archive.Id);
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException("ArgumentException", e);
+            }
+        }
+
+        public static string ToChatString(Chat chat)
+        {
+            if (chat.Name == null || chat.Id == null) return null;
+
+            try
+            {
+                return chat.Name + " - " + NetworkConverter.ToBase64UrlString(chat.Id);
             }
             catch (Exception e)
             {
@@ -59,24 +87,53 @@ namespace Lair
             }
         }
 
-        public static string ToInfoMessage(Link link)
+        public static string ToInfoMessage(Section section, string option)
         {
-            if (link == null) throw new ArgumentNullException("link");
-
             try
             {
                 StringBuilder builder = new StringBuilder();
 
-                if (link.Tag != null)
-                {
-                    var tag = link.Tag;
+                if (!string.IsNullOrWhiteSpace(section.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Section_Name, section.Name));
+                if (section.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Section_Id, NetworkConverter.ToBase64UrlString(section.Id)));
+                if (!string.IsNullOrWhiteSpace(option)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Section_Option, option));
 
-                    if (!string.IsNullOrWhiteSpace(tag.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Link_Tag_Name, tag.Name));
-                    if (tag.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Link_Tag_Id, NetworkConverter.ToBase64UrlString(tag.Id)));
-                }
+                if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
+                else return null;
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException("ArgumentException", e);
+            }
+        }
 
-                if (!string.IsNullOrWhiteSpace(link.Type)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Link_Type, link.Type));
-                if (!string.IsNullOrWhiteSpace(link.Path)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Link_Path, link.Path));
+        public static string ToInfoMessage(Archive archive, string option)
+        {
+            try
+            {
+                StringBuilder builder = new StringBuilder();
+
+                if (!string.IsNullOrWhiteSpace(archive.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Archive_Name, archive.Name));
+                if (archive.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Archive_Id, NetworkConverter.ToBase64UrlString(archive.Id)));
+                if (!string.IsNullOrWhiteSpace(option)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Archive_Option, option));
+
+                if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
+                else return null;
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException("ArgumentException", e);
+            }
+        }
+
+        public static string ToInfoMessage(Chat chat, string option)
+        {
+            try
+            {
+                StringBuilder builder = new StringBuilder();
+
+                if (!string.IsNullOrWhiteSpace(chat.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Chat_Name, chat.Name));
+                if (chat.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Chat_Id, NetworkConverter.ToBase64UrlString(chat.Id)));
+                if (!string.IsNullOrWhiteSpace(option)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Chat_Option, option));
 
                 if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
                 else return null;

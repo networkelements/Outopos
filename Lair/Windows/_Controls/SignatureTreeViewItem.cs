@@ -10,46 +10,120 @@ using System.Xml;
 using Library;
 using Library.Net.Lair;
 using Library.Security;
+using System.Windows.Input;
 
 namespace Lair.Windows
 {
-    class SignatureTreeViewItem : TreeViewItem
+    class SignatureTreeViewItem : TreeViewItemEx
     {
-        private string _signature;
+        private SignatureTreeItem _value;
 
+        private ObservableCollectionEx<SignatureTreeViewItem> _listViewItemCollection = new ObservableCollectionEx<SignatureTreeViewItem>();
         private TextBlock _header = new TextBlock();
+        private int _hit;
 
-        public SignatureTreeViewItem(string signature)
+        public SignatureTreeViewItem(SignatureTreeItem value)
             : base()
         {
+            if (value == null) throw new ArgumentNullException("value");
+
+            base.ItemsSource = _listViewItemCollection;
             base.Header = _header;
+            base.IsExpanded = true;
 
             base.RequestBringIntoView += (object sender, RequestBringIntoViewEventArgs e) =>
             {
                 e.Handled = true;
             };
 
-            _signature = signature;
-            this.Update();
+            this.Value = value;
         }
 
-        protected override void OnMouseDown(System.Windows.Input.MouseButtonEventArgs e)
+        protected override void OnMouseDown(MouseButtonEventArgs e)
         {
             this.IsSelected = true;
 
             e.Handled = true;
         }
 
-        private void Update()
+        public void Update()
         {
-            _header.Text = _signature;
+            _header.Text = _value.SectionProfilePack.Header.Certificate.ToString();
+
+            foreach (var item in _listViewItemCollection.OfType<SignatureTreeViewItem>().ToArray())
+            {
+                if (!_value.Children.Any(n => object.ReferenceEquals(n, item.Value)))
+                {
+                    _listViewItemCollection.Remove(item);
+                }
+            }
+
+            foreach (var item in _value.Children)
+            {
+                if (!_listViewItemCollection.OfType<SignatureTreeViewItem>().Any(n => object.ReferenceEquals(n.Value, item)))
+                {
+                    var treeViewItem = new SignatureTreeViewItem(item);
+                    treeViewItem.Parent = this;
+
+                    _listViewItemCollection.Add(treeViewItem);
+                }
+            }
+
+            this.Sort();
         }
 
-        public string Signature
+        public void Sort()
+        {
+            var list = _listViewItemCollection.OfType<SignatureTreeViewItem>().ToList();
+
+            list.Sort((x, y) =>
+            {
+                int c = x.Value.SectionProfilePack.Header.Certificate.ToString().CompareTo(y.Value.SectionProfilePack.Header.Certificate.ToString());
+                if (c != 0) return c;
+                c = x.Hit.CompareTo(y.Hit);
+                if (c != 0) return c;
+
+                return x.GetHashCode().CompareTo(y.GetHashCode());
+            });
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                var o = _listViewItemCollection.IndexOf(list[i]);
+
+                if (i != o) _listViewItemCollection.Move(o, i);
+            }
+
+            foreach (var item in this.Items.OfType<SignatureTreeViewItem>())
+            {
+                item.Sort();
+            }
+        }
+
+        public SignatureTreeItem Value
         {
             get
             {
-                return _signature;
+                return _value;
+            }
+            private set
+            {
+                _value = value;
+
+                this.Update();
+            }
+        }
+
+        public int Hit
+        {
+            get
+            {
+                return _hit;
+            }
+            set
+            {
+                _hit = value;
+
+                this.Update();
             }
         }
     }

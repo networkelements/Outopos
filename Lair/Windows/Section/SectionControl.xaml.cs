@@ -47,8 +47,9 @@ namespace Lair.Windows
         private static Random _random = new Random();
 
         private SectionCategorizeTreeViewItem _treeViewItem;
+        private Dictionary<Section, SectionManager> _sectionManagers = new Dictionary<Section, SectionManager>();
 
-        private Dictionary<Tag, SectionManager> _sectionManagers = new Dictionary<Tag, SectionManager>();
+        private Thread _showConnectionInfomationwThread;
 
         public SectionControl(LairManager lairManager, BufferManager bufferManager)
         {
@@ -86,6 +87,12 @@ namespace Lair.Windows
             _searchThread.Name = "SectionControl_SearchThread";
             _searchThread.Start();
 
+            _showConnectionInfomationwThread = new Thread(this.Watch);
+            _showConnectionInfomationwThread.Priority = ThreadPriority.Highest;
+            _showConnectionInfomationwThread.IsBackground = true;
+            _showConnectionInfomationwThread.Name = "ConnectionControl_ShowConnectionInfomationThread";
+            _showConnectionInfomationwThread.Start();
+
             this.Update();
         }
 
@@ -112,45 +119,36 @@ namespace Lair.Windows
                             if (tempTreeViewItem != _treeView.SelectedItem) return;
                             _refresh = false;
 
+                            _signatureTreeView.Items.Clear();
+
                             this.Update_Title();
                         }));
                     }
                     else if (tempTreeViewItem is SectionTreeViewItem)
                     {
-                        var tagTreeViewItem = (SectionTreeViewItem)tempTreeViewItem;
+                        var sectionTreeViewItem = (SectionTreeViewItem)tempTreeViewItem;
+                        SignatureTreeItem signatureTreeItem = null;
+
+                        {
+                            var leaderSignature = sectionTreeViewItem.Value.LeaderSignature;
+                            var sectionProfilePacks = sectionTreeViewItem.Value.SectionProfilePacks;
+
+                            signatureTreeItem = SectionControl.GetSignatureTreeViewItem(sectionProfilePacks, leaderSignature);
+                        }
 
                         this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                         {
                             if (tempTreeViewItem != _treeView.SelectedItem) return;
                             _refresh = false;
 
-                            SectionManager sectionManager;
+                            _signatureTreeView.Items.Clear();
 
-                            if (!_sectionManagers.TryGetValue(tagTreeViewItem.Value.Tag, out sectionManager))
+                            if (signatureTreeItem != null)
                             {
-                                sectionManager = _lairManager.GetSectionManager(tagTreeViewItem.Value.Tag, tagTreeViewItem.Value.LeaderSignature);
-                                _sectionManagers[tagTreeViewItem.Value.Tag] = sectionManager;
+                                _signatureTreeView.Items.Add(new SignatureTreeViewItem(signatureTreeItem));
                             }
 
-                            if (tagTreeViewItem.ChatControl == null)
-                            {
-                                var chatControl = new ChatControl(tagTreeViewItem.Value.ChatCategorizeTreeItem, _lairManager, sectionManager, _bufferManager);
-
-                                tagTreeViewItem.ChatControl = chatControl;
-                                _channelGrid.Children.Add(chatControl);
-                            }
-
-                            foreach (var item in _channelGrid.Children.OfType<ChatControl>())
-                            {
-                                if (item == tagTreeViewItem.ChatControl)
-                                {
-                                    item.Visibility = System.Windows.Visibility.Visible;
-                                }
-                                else
-                                {
-                                    item.Visibility = System.Windows.Visibility.Hidden;
-                                }
-                            }
+                            this.Update_Title();
                         }));
                     }
                 }
@@ -158,6 +156,146 @@ namespace Lair.Windows
             catch (Exception e)
             {
                 Log.Error(e);
+            }
+        }
+
+        static SignatureTreeItem GetSignatureTreeViewItem(IEnumerable<SectionProfilePack> sectionProfilePacks, string leaderSignature)
+        {
+            Dictionary<string, SectionProfilePack> dic = new Dictionary<string, SectionProfilePack>();
+
+            foreach (var pack in sectionProfilePacks)
+            {
+                dic[pack.Header.Certificate.ToString()] = pack;
+            }
+
+            List<SignatureTreeItem> signatureTreeItems = new List<SignatureTreeItem>();
+
+            {
+                SectionProfilePack leaderSectionProfilePack;
+                if (!dic.TryGetValue(leaderSignature, out leaderSectionProfilePack)) return null;
+
+                signatureTreeItems.Add(new SignatureTreeItem(leaderSectionProfilePack));
+            }
+
+            for (int i = 0; i < signatureTreeItems.Count; i++)
+            {
+                foreach (var trustSignature in signatureTreeItems[i].SectionProfilePack.Content.TrustSignatures)
+                {
+                    if (signatureTreeItems.Any(n => n.SectionProfilePack.Header.Certificate.ToString() == trustSignature)) continue;
+
+                    SectionProfilePack sectionProfilePack;
+                    if (!dic.TryGetValue(trustSignature, out sectionProfilePack)) return null;
+
+                    var tempItem = new SignatureTreeItem(sectionProfilePack);
+                    signatureTreeItems.Add(tempItem);
+                    signatureTreeItems[i].Children.Add(tempItem);
+                }
+            }
+
+            return signatureTreeItems[0];
+        }
+
+        private void Watch()
+        {
+            Stopwatch refreshStopwatch = new Stopwatch();
+
+            for (; ; )
+            {
+                Thread.Sleep(1000);
+
+                if (!refreshStopwatch.IsRunning || refreshStopwatch.Elapsed.TotalMinutes >= 1)
+                {
+                    refreshStopwatch.Restart();
+
+                    var sectionTreeViewItems = new List<SectionTreeViewItem>();
+
+                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
+                    {
+                        var sectionCategorizeTreeViewItems = new List<SectionCategorizeTreeViewItem>();
+                        sectionCategorizeTreeViewItems.Add(_treeViewItem);
+
+                        for (int i = 0; i < sectionCategorizeTreeViewItems.Count; i++)
+                        {
+                            sectionCategorizeTreeViewItems.AddRange(sectionCategorizeTreeViewItems[i].Items.OfType<SectionCategorizeTreeViewItem>());
+                            sectionTreeViewItems.AddRange(sectionCategorizeTreeViewItems[i].Items.OfType<SectionTreeViewItem>());
+                        }
+                    }));
+
+                    foreach (var sectionTreeItem in sectionTreeViewItems.Select(n => n.Value))
+                    {
+                        var headers = new Dictionary<string, SectionProfileHeader>();
+
+                        foreach (var item in _lairManager.GetSectionProfileHeaders(sectionTreeItem.Tag))
+                        {
+                            headers[item.Certificate.ToString()] = item;
+                        }
+
+                        var packs = new List<SectionProfilePack>();
+
+                        var checkedSignatures = new HashSet<string>();
+                        var checkingSignatures = new Queue<string>();
+
+                        checkingSignatures.Enqueue(sectionTreeItem.LeaderSignature);
+
+                        while (checkingSignatures.Count != 0)
+                        {
+                            var targetSignature = checkingSignatures.Dequeue();
+                            if (targetSignature == null || checkedSignatures.Contains(targetSignature)) continue;
+
+                            bool flag = false;
+                            SectionProfileHeader header = null;
+                            SectionProfileContent content = null;
+
+                            if (headers.TryGetValue(targetSignature, out header)
+                                && (content = _lairManager.GetContent(header)) != null)
+                            {
+                                flag = true;
+                            }
+
+                            if (!flag)
+                            {
+                                var pack = sectionTreeItem.SectionProfilePacks
+                                    .FirstOrDefault(n => n.Header.Certificate.ToString() == targetSignature);
+
+                                if (pack != null)
+                                {
+                                    header = pack.Header;
+                                    content = pack.Content;
+
+                                    flag = true;
+                                }
+                            }
+
+                            if (flag)
+                            {
+                                try
+                                {
+                                    foreach (var trustSignature in content.TrustSignatures)
+                                    {
+                                        checkingSignatures.Enqueue(trustSignature);
+                                    }
+
+                                    packs.Add(new SectionProfilePack(header, content));
+                                }
+                                catch (Exception)
+                                {
+
+                                }
+                            }
+
+                            checkedSignatures.Add(targetSignature);
+                        }
+
+                        lock (sectionTreeItem.ThisLock)
+                        {
+                            lock (sectionTreeItem.SectionProfilePacks.ThisLock)
+                            {
+                                sectionTreeItem.SectionProfilePacks.Clear();
+                                sectionTreeItem.SectionProfilePacks.AddRange(packs);
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -185,7 +323,7 @@ namespace Lair.Windows
                 {
                     var selectTreeViewItem = (SectionTreeViewItem)_treeView.SelectedItem;
 
-                    _mainWindow.Title = string.Format("Lair {0} - {1}", App.LairVersion, selectTreeViewItem.Value.Tag.Name);
+                    _mainWindow.Title = string.Format("Lair {0} - {1}", App.LairVersion, MessageConverter.ToSectionString(selectTreeViewItem.Value.Tag));
                 }
             }
         }
@@ -356,7 +494,21 @@ namespace Lair.Windows
 
         private void _sectionCategorizeTreeViewItemContextMenu_ContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
+            var selectTreeViewItem = _treeView.SelectedItem as SectionCategorizeTreeViewItem;
+            if (selectTreeViewItem == null || _treeView.SelectedItem != selectTreeViewItem) return;
 
+            var contextMenu = selectTreeViewItem.ContextMenu as ContextMenu;
+            if (contextMenu == null) return;
+
+            _startPoint = new Point(-1, -1);
+
+            MenuItem sectionCategorizeTreeViewItemDeleteMenuItem = contextMenu.GetMenuItem("_sectionCategorizeTreeViewItemDeleteMenuItem");
+            MenuItem sectionCategorizeTreeViewItemCutMenuItem = contextMenu.GetMenuItem("_sectionCategorizeTreeViewItemCutMenuItem");
+            MenuItem sectionCategorizeTreeViewItemPasteMenuItem = contextMenu.GetMenuItem("_sectionCategorizeTreeViewItemPasteMenuItem");
+
+            sectionCategorizeTreeViewItemDeleteMenuItem.IsEnabled = (selectTreeViewItem != _treeViewItem);
+            sectionCategorizeTreeViewItemCutMenuItem.IsEnabled = (selectTreeViewItem != _treeViewItem);
+            sectionCategorizeTreeViewItemPasteMenuItem.IsEnabled = Clipboard.ContainsSectionCategorizeTreeItems() || Clipboard.ContainsSectionTreeItems();
         }
 
         private void _sectionCategorizeTreeViewItemNewSectionMenuItem_Click(object sender, RoutedEventArgs e)
@@ -364,28 +516,38 @@ namespace Lair.Windows
             var selectTreeViewItem = _treeView.SelectedItem as SectionCategorizeTreeViewItem;
             if (selectTreeViewItem == null) return;
 
-            NameWindow window = new NameWindow();
-            window.Owner = _mainWindow;
-            window.Title = LanguagesManager.Instance.SectionControl_NewSection_NameWindowTitle;
-
-            if (window.ShowDialog() == true)
+            if (Settings.Instance.Global_DigitalSignatureCollection.Count == 0)
             {
-                byte[] id = new byte[64];
-                (new System.Security.Cryptography.RNGCryptoServiceProvider()).GetBytes(id);
+                ViewOptionsWindow window = new ViewOptionsWindow(_bufferManager);
+                window.Owner = _mainWindow;
+                window.SelectTab("Signature");
+                window.ShowDialog();
+            }
 
-                var tag = new Tag(id, window.Text);
-                var sectionTreeItem = new SectionTreeItem(tag);
+            if (Settings.Instance.Global_DigitalSignatureCollection.Count > 0)
+            {
+                NewSectionWindow newSectionwindow = new NewSectionWindow();
+                newSectionwindow.Owner = _mainWindow;
 
-                sectionTreeItem.ChatCategorizeTreeItem = new ChatCategorizeTreeItem();
-
-                SectionTreeItemEditWindow sectionTreeItemEditWindow = new SectionTreeItemEditWindow(sectionTreeItem, _lairManager, _bufferManager);
-                sectionTreeItemEditWindow.Owner = _mainWindow;
-
-                if (sectionTreeItemEditWindow.ShowDialog() == true)
+                if (newSectionwindow.ShowDialog() == true)
                 {
-                    selectTreeViewItem.Value.SectionTreeItems.Add(sectionTreeItem);
+                    byte[] id = new byte[64];
+                    (new System.Security.Cryptography.RNGCryptoServiceProvider()).GetBytes(id);
 
-                    selectTreeViewItem.Update();
+                    var tag = new Section(id, newSectionwindow.SectionName);
+                    var sectionTreeItem = new SectionTreeItem(tag);
+                    sectionTreeItem.LeaderSignature = newSectionwindow.LeaderSignature;
+                    sectionTreeItem.Exchange = new Exchange(ExchangeAlgorithm.Rsa2048);
+
+                    SectionTreeItemEditWindow sectionTreeItemEditWindow = new SectionTreeItemEditWindow(sectionTreeItem, _lairManager, _bufferManager);
+                    sectionTreeItemEditWindow.Owner = _mainWindow;
+
+                    if (sectionTreeItemEditWindow.ShowDialog() == true)
+                    {
+                        selectTreeViewItem.Value.SectionTreeItems.Add(sectionTreeItem);
+
+                        selectTreeViewItem.Update();
+                    }
                 }
             }
 
@@ -398,6 +560,7 @@ namespace Lair.Windows
             if (selectTreeViewItem == null) return;
 
             NameWindow window = new NameWindow();
+            window.Title = LanguagesManager.Instance.NameWindow_Title_Category;
             window.Owner = _mainWindow;
 
             if (window.ShowDialog() == true)
@@ -472,10 +635,8 @@ namespace Lair.Windows
 
             foreach (var item in sectionTreeViewItems)
             {
-                var link = new Link(item.Value.Tag, "Section", null);
-
-                sb.AppendLine(LairConverter.ToLinkString(link));
-                sb.AppendLine(MessageConverter.ToInfoMessage(link));
+                sb.AppendLine(LairConverter.ToSectionString(item.Value.Tag, item.Value.LeaderSignature));
+                sb.AppendLine(MessageConverter.ToInfoMessage(item.Value.Tag, item.Value.LeaderSignature));
                 sb.AppendLine();
             }
 
@@ -504,12 +665,23 @@ namespace Lair.Windows
 
         private void _sectionTreeViewItemContextMenu_ContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
-            var selectTreeViewItem = sender as SectionTreeViewItem;
-            if (selectTreeViewItem == null || _treeView.SelectedItem != selectTreeViewItem) return;
 
-            var contextMenu = selectTreeViewItem.ContextMenu as ContextMenu;
-            if (contextMenu == null) return;
+        }
 
+        private void _sectionTreeViewItemEditMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var selectTreeViewItem = _treeView.SelectedItem as SectionTreeViewItem;
+            if (selectTreeViewItem == null) return;
+
+            SectionTreeItemEditWindow sectionTreeItemEditWindow = new SectionTreeItemEditWindow(selectTreeViewItem.Value, _lairManager, _bufferManager);
+            sectionTreeItemEditWindow.Owner = _mainWindow;
+
+            if (sectionTreeItemEditWindow.ShowDialog() == true)
+            {
+                selectTreeViewItem.Update();
+            }
+
+            this.Update();
         }
 
         private void _sectionTreeViewItemDeleteMenuItem_Click(object sender, RoutedEventArgs e)
@@ -563,11 +735,37 @@ namespace Lair.Windows
 
             var sb = new StringBuilder();
 
-            var link = new Link(selectTreeViewItem.Value.Tag, "Section", null);
-            sb.AppendLine(LairConverter.ToLinkString(link));
-            sb.AppendLine(MessageConverter.ToInfoMessage(link));
+            sb.AppendLine(LairConverter.ToSectionString(selectTreeViewItem.Value.Tag, selectTreeViewItem.Value.LeaderSignature));
+            sb.AppendLine(MessageConverter.ToInfoMessage(selectTreeViewItem.Value.Tag, selectTreeViewItem.Value.LeaderSignature));
 
             Clipboard.SetText(sb.ToString());
+        }
+
+        #endregion
+
+        #region _signatureTreeView
+
+        private void _signatureTreeViewItemContextMenu_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+
+        }
+
+        private void _signatureTreeViewItemCopyMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var signatureTreeViewItem = _signatureTreeView.SelectedItem as SignatureTreeViewItem;
+            if (signatureTreeViewItem == null) return;
+
+            Clipboard.SetText(signatureTreeViewItem.Value.SectionProfilePack.Header.Certificate.ToString());
+        }
+
+        private void _sectionTreeViewItemInformationMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var signatureTreeViewItem = _signatureTreeView.SelectedItem as SignatureTreeViewItem;
+            if (signatureTreeViewItem == null) return;
+
+            SectionProfileInformationWindow sectionProfilePackInformationWindow = new SectionProfileInformationWindow(signatureTreeViewItem.Value.SectionProfilePack);
+            sectionProfilePackInformationWindow.Owner = _mainWindow;
+            sectionProfilePackInformationWindow.ShowDialog();
         }
 
         #endregion

@@ -110,6 +110,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Windows\Section\SectionProfilePackInformationWindow.xaml.cs">
+      <DependentUpon>SectionProfilePackInformationWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Section\NewSectionWindow.xaml.cs">
+      <DependentUpon>NewSectionWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\_Items\SignatureTreeItem.cs" />
+    <Compile Include="Windows\_Items\SectionProfilePack.cs" />
+    <Compile Include="SectionManager.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="MainWindowTabType.cs" />
     <Compile Include="ObservableCollectionEx.cs" />
@@ -118,9 +127,6 @@
     <Compile Include="NativeMethods.cs" />
     <Compile Include="TransfarLimitManager.cs" />
     <Compile Include="WindowPosition.cs" />
-    <Compile Include="Windows\ChatControl.xaml.cs">
-      <DependentUpon>ChatControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Windows\ConnectionControl.xaml.cs">
       <DependentUpon>ConnectionControl.xaml</DependentUpon>
     </Compile>
@@ -130,10 +136,10 @@
     <Compile Include="Windows\NameWindow.xaml.cs">
       <DependentUpon>NameWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\SectionControl.xaml.cs">
+    <Compile Include="Windows\Section\SectionControl.xaml.cs">
       <DependentUpon>SectionControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\SectionTreeItemEditWindow.xaml.cs">
+    <Compile Include="Windows\Section\SectionTreeItemEditWindow.xaml.cs">
       <DependentUpon>SectionTreeItemEditWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\ViewOptionsWindow.xaml.cs">
@@ -152,7 +158,8 @@
     <Compile Include="Windows\_Controls\VirtualizingStackPanelEx.cs" />
     <Compile Include="Windows\_Items\ChatTreeItem.cs" />
     <Compile Include="Windows\_Items\ChatCategorizeTreeItem.cs" />
-    <Compile Include="Windows\_Items\LinkOption.cs" />
+    <Compile Include="Windows\_Items\ChatMessagePack.cs" />
+    <Compile Include="Windows\_Items\ChatTopicPack.cs" />
     <Compile Include="Windows\_Items\SectionCategorizeTreeItem.cs" />
     <Compile Include="Windows\_Items\SectionTreeItem.cs" />
     <Compile Include="Windows\_Items\UpdateOption.cs" />
@@ -162,11 +169,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Windows\ChatControl.xaml">
+    <Page Include="Windows\ConnectionControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\ConnectionControl.xaml">
+    <Page Include="Windows\Section\SectionProfilePackInformationWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\Section\NewSectionWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -188,11 +199,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\SectionControl.xaml">
+    <Page Include="Windows\Section\SectionControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\SectionTreeItemEditWindow.xaml">
+    <Page Include="Windows\Section\SectionTreeItemEditWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

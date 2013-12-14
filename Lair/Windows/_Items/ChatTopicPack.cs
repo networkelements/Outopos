@@ -1,25 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
+using System.Text;
+using System.Xml;
+using Library;
 using Library.Net.Lair;
+using Library.Security;
+using Library.Collections;
+using Library.Io;
 
 namespace Lair.Windows
 {
-    [DataContract(Name = "LinkOption", Namespace = "http://Lair/Windows")]
-    class LinkOption
+    [DataContract(Name = "ChatTopicPack", Namespace = "http://Lair/Windows")]
+    class ChatTopicPack
     {
-        private Link _link;
-        private string _option;
+        private ChatTopicHeader _header;
+        private ChatTopicContent _content;
 
         private volatile object _thisLock;
         private static readonly object _initializeLock = new object();
 
-        public LinkOption(Link link, string option)
+        public ChatTopicPack(ChatTopicHeader header, ChatTopicContent content)
         {
-            this.Link = link;
-            this.Option = option;
+            this.Header = header;
+            this.Content = content;
         }
 
         private object ThisLock
@@ -41,40 +47,40 @@ namespace Lair.Windows
             }
         }
 
-        [DataMember(Name = "Link")]
-        public Link Link
+        [DataMember(Name = "Header")]
+        public ChatTopicHeader Header
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return _link;
+                    return _header;
                 }
             }
-            set
+            private set
             {
                 lock (this.ThisLock)
                 {
-                    _link = value;
+                    _header = value;
                 }
             }
         }
 
-        [DataMember(Name = "Option")]
-        public string Option
+        [DataMember(Name = "Content")]
+        public ChatTopicContent Content
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return _option;
+                    return _content;
                 }
             }
-            set
+            private set
             {
                 lock (this.ThisLock)
                 {
-                    _option = value;
+                    _content = value;
                 }
             }
         }

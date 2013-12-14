@@ -15,13 +15,15 @@ namespace Lair
     static class Clipboard
     {
         private static bool _isNodesCached;
-        private static bool _isTagsCached;
-        private static bool _isLinkOptionsCached;
+        private static bool _isSectionsCached;
+        private static bool _isArchivesCached;
+        private static bool _isChatsCached;
         private static bool _isSeedsCached;
 
         private static LockedList<Node> _nodeList = new LockedList<Node>();
-        private static LockedList<Tag> _tagList = new LockedList<Tag>();
-        private static LockedList<LinkOption> _linkOptionList = new LockedList<LinkOption>();
+        private static LockedList<Tuple<Section, string>> _sectionList = new LockedList<Tuple<Section, string>>();
+        private static LockedList<Tuple<Archive, string>> _archiveList = new LockedList<Tuple<Archive, string>>();
+        private static LockedList<Tuple<Chat, string>> _chatList = new LockedList<Tuple<Chat, string>>();
         private static LockedList<a.Seed> _seedList = new LockedList<a.Seed>();
 
         private static LockedList<Windows.SectionCategorizeTreeItem> _sectionCategorizeTreeItemList = new LockedList<SectionCategorizeTreeItem>();
@@ -41,13 +43,16 @@ namespace Lair
                 lock (_thisLock)
                 {
                     _isNodesCached = false;
-                    _isTagsCached = false;
-                    _isLinkOptionsCached = false;
+                    _isSectionsCached = false;
+                    _isArchivesCached = false;
+                    _isChatsCached = false;
                     _isSeedsCached = false;
 
                     _nodeList.Clear();
+                    _sectionList.Clear();
+                    _archiveList.Clear();
+                    _chatList.Clear();
                     _seedList.Clear();
-                    _linkOptionList.Clear();
 
                     _sectionCategorizeTreeItemList.Clear();
                     _sectionTreeItemList.Clear();
@@ -216,27 +221,22 @@ namespace Lair
             }
         }
 
-        public static IEnumerable<LinkOption> GetLinkOptions()
+        public static bool ContainsSections()
         {
             lock (_thisLock)
             {
-                if (!_isLinkOptionsCached)
+                if (!_isSectionsCached)
                 {
                     foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
                     {
                         try
                         {
-                            var list = item.Split(new char[] { ',' }, 1);
+                            string option;
 
-                            if (list.Length == 1)
-                            {
-                                var link = LairConverter.FromLinkString(list[0]);
-                                if (link == null) continue;
+                            var tag = LairConverter.FromSectionString(item, out option);
+                            if (tag == null) continue;
 
-                                var option = list[1];
-
-                                _linkOptionList.Add(new LinkOption(link, option));
-                            }
+                            _sectionList.Add(new Tuple<Section, string>(tag, option));
                         }
                         catch (Exception)
                         {
@@ -244,30 +244,220 @@ namespace Lair
                         }
                     }
 
-                    _isLinkOptionsCached = true;
+                    _isSectionsCached = true;
                 }
 
-                return _linkOptionList.ToArray();
+                return _sectionList.Count != 0;
             }
         }
 
-        public static void SetLinkOptions(IEnumerable<LinkOption> linkOptions)
+        public static IEnumerable<Tuple<Section, string>> GetSections()
+        {
+            lock (_thisLock)
+            {
+                if (!_isSectionsCached)
+                {
+                    foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        try
+                        {
+                            string option;
+
+                            var tag = LairConverter.FromSectionString(item, out option);
+                            if (tag == null) continue;
+
+                            _sectionList.Add(new Tuple<Section, string>(tag, option));
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                    }
+
+                    _isSectionsCached = true;
+                }
+
+                return _sectionList.ToArray();
+            }
+        }
+
+        public static void SetSections(IEnumerable<Tuple<Section, string>> sections)
         {
             lock (_thisLock)
             {
                 {
                     var sb = new StringBuilder();
 
-                    foreach (var item in linkOptions)
+                    foreach (var tuple in sections)
                     {
-                        sb.AppendLine(string.Format("{0},{1}", LairConverter.ToLinkString(item.Link), item.Option));
+                        sb.AppendLine(LairConverter.ToSectionString(tuple.Item1, tuple.Item2));
                     }
 
                     Clipboard.SetText(sb.ToString());
                 }
 
-                _linkOptionList.AddRange(linkOptions);
-                _isLinkOptionsCached = true;
+                _sectionList.AddRange(sections);
+                _isSectionsCached = true;
+            }
+        }
+
+        public static bool ContainsArchives()
+        {
+            lock (_thisLock)
+            {
+                if (!_isArchivesCached)
+                {
+                    foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        try
+                        {
+                            string option;
+
+                            var tag = LairConverter.FromArchiveString(item, out option);
+                            if (tag == null) continue;
+
+                            _archiveList.Add(new Tuple<Archive, string>(tag, option));
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                    }
+
+                    _isArchivesCached = true;
+                }
+
+                return _archiveList.Count != 0;
+            }
+        }
+
+        public static IEnumerable<Tuple<Archive, string>> GetArchives()
+        {
+            lock (_thisLock)
+            {
+                if (!_isArchivesCached)
+                {
+                    foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        try
+                        {
+                            string option;
+
+                            var tag = LairConverter.FromArchiveString(item, out option);
+                            if (tag == null) continue;
+
+                            _archiveList.Add(new Tuple<Archive, string>(tag, option));
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                    }
+
+                    _isArchivesCached = true;
+                }
+
+                return _archiveList.ToArray();
+            }
+        }
+
+        public static void SetArchives(IEnumerable<Tuple<Archive, string>> sections)
+        {
+            lock (_thisLock)
+            {
+                {
+                    var sb = new StringBuilder();
+
+                    foreach (var tuple in sections)
+                    {
+                        sb.AppendLine(LairConverter.ToArchiveString(tuple.Item1, tuple.Item2));
+                    }
+
+                    Clipboard.SetText(sb.ToString());
+                }
+
+                _archiveList.AddRange(sections);
+                _isArchivesCached = true;
+            }
+        }
+
+        public static bool ContainsChats()
+        {
+            lock (_thisLock)
+            {
+                if (!_isChatsCached)
+                {
+                    foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        try
+                        {
+                            string option;
+
+                            var tag = LairConverter.FromChatString(item, out option);
+                            if (tag == null) continue;
+
+                            _chatList.Add(new Tuple<Chat, string>(tag, option));
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                    }
+
+                    _isChatsCached = true;
+                }
+
+                return _chatList.Count != 0;
+            }
+        }
+
+        public static IEnumerable<Tuple<Chat, string>> GetChats()
+        {
+            lock (_thisLock)
+            {
+                if (!_isChatsCached)
+                {
+                    foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        try
+                        {
+                            string option;
+
+                            var tag = LairConverter.FromChatString(item, out option);
+                            if (tag == null) continue;
+
+                            _chatList.Add(new Tuple<Chat, string>(tag, option));
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                    }
+
+                    _isChatsCached = true;
+                }
+
+                return _chatList.ToArray();
+            }
+        }
+
+        public static void SetChats(IEnumerable<Tuple<Chat, string>> sections)
+        {
+            lock (_thisLock)
+            {
+                {
+                    var sb = new StringBuilder();
+
+                    foreach (var tuple in sections)
+                    {
+                        sb.AppendLine(LairConverter.ToChatString(tuple.Item1, tuple.Item2));
+                    }
+
+                    Clipboard.SetText(sb.ToString());
+                }
+
+                _chatList.AddRange(sections);
+                _isChatsCached = true;
             }
         }
 
@@ -402,8 +592,7 @@ namespace Lair
 
                     foreach (var item in sectionTreeItems)
                     {
-                        var link = new Link(item.Tag, "Section", null);
-                        sb.AppendLine(LairConverter.ToLinkString(link));
+                        sb.AppendLine(LairConverter.ToSectionString(item.Tag, item.LeaderSignature));
                     }
 
                     Clipboard.SetText(sb.ToString());

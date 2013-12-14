@@ -9,29 +9,34 @@ using Library;
 using Library.Net.Lair;
 using Library.Security;
 using Library.Io;
+using Library.Collections;
 
 namespace Lair.Windows
 {
     [DataContract(Name = "SectionTreeItem", Namespace = "http://Lair/Windows")]
     class SectionTreeItem : ICloneable<SectionTreeItem>, IThisLock
     {
-        private Tag _tag;
+        private Section _tag;
         private string _leaderSignature;
-
         private string _uploadSignature;
 
-        private ChatCategorizeTreeItem _chatCategorizeTreeItem;
+        private Exchange _exchange;
+        private LockedList<string> _trustSignatures;
+        private LockedList<Archive> _archives;
+        private LockedList<Chat> _chats;
+
+        private LockedList<SectionProfilePack> _sectionProfilePacks;
 
         private volatile object _thisLock;
         private static readonly object _initializeLock = new object();
 
-        public SectionTreeItem(Tag tag)
+        public SectionTreeItem(Section section)
         {
-            this.Tag = tag;
+            this.Tag = section;
         }
 
         [DataMember(Name = "Tag")]
-        public Tag Tag
+        public Section Tag
         {
             get
             {
@@ -68,6 +73,25 @@ namespace Lair.Windows
             }
         }
 
+        [DataMember(Name = "Exchange")]
+        public Exchange Exchange
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return _exchange;
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    _exchange = value;
+                }
+            }
+        }
+
         [DataMember(Name = "UploadSignature")]
         public string UploadSignature
         {
@@ -87,21 +111,62 @@ namespace Lair.Windows
             }
         }
 
-        [DataMember(Name = "ChatCategorizeTreeItem")]
-        public ChatCategorizeTreeItem ChatCategorizeTreeItem
+        [DataMember(Name = "TrustSignatures")]
+        public LockedList<string> TrustSignatures
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return _chatCategorizeTreeItem;
+                    if (_trustSignatures == null)
+                        _trustSignatures = new LockedList<string>();
+
+                    return _trustSignatures;
                 }
             }
-            set
+        }
+
+        [DataMember(Name = "Chats")]
+        public LockedList<Chat> Chats
+        {
+            get
             {
                 lock (this.ThisLock)
                 {
-                    _chatCategorizeTreeItem = value;
+                    if (_chats == null)
+                        _chats = new LockedList<Chat>();
+
+                    return _chats;
+                }
+            }
+        }
+
+        [DataMember(Name = "Archivess")]
+        public LockedList<Archive> Archives
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    if (_archives == null)
+                        _archives = new LockedList<Archive>();
+
+                    return _archives;
+                }
+            }
+        }
+
+        [DataMember(Name = "SectionProfilePacks")]
+        public LockedList<SectionProfilePack> SectionProfilePacks
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    if (_sectionProfilePacks == null)
+                        _sectionProfilePacks = new LockedList<SectionProfilePack>();
+
+                    return _sectionProfilePacks;
                 }
             }
         }

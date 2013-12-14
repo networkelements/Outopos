@@ -163,7 +163,7 @@ namespace Lair.Windows
             {
                 return _selectedTab;
             }
-            set
+            private set
             {
                 _selectedTab = value;
             }
@@ -1351,6 +1351,10 @@ namespace Lair.Windows
             if (_tabControl.SelectedItem == _connectionTabItem)
             {
                 this.SelectedTab = MainWindowTabType.Connection;
+            }
+            else if (_tabControl.SelectedItem == _sectionTabItem)
+            {
+                this.SelectedTab = MainWindowTabType.Section;
             }
             else if (_tabControl.SelectedItem == _logTabItem)
             {

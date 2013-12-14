@@ -28,6 +28,8 @@ namespace Lair.Windows
 
         private ObservableCollectionEx<SignatureListViewItem> _signatureListViewItemCollection;
 
+        private string _selectTabName = null;
+
         public ViewOptionsWindow(BufferManager bufferManager)
         {
             _bufferManager = bufferManager;
@@ -67,6 +69,11 @@ namespace Lair.Windows
             _signatureListViewUpdate();
         }
 
+        public void SelectTab(string name)
+        {
+            _selectTabName = name;
+        }
+
         protected override void OnInitialized(EventArgs e)
         {
             base.OnInitialized(e);
@@ -75,6 +82,11 @@ namespace Lair.Windows
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             _updateTreeViewItem.IsSelected = true;
+
+            if (_selectTabName == "Signature")
+            {
+                _signaturesTreeViewItem.IsSelected = true;
+            }
 
             WindowPosition.Move(this);
         }
@@ -181,6 +193,21 @@ namespace Lair.Windows
             var selectItems = _signatureListView.SelectedItems;
 
             _signatureListViewDeleteMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
+        }
+
+        private void _signatureListViewCopyMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (_signatureListView.SelectedItems.Count == 0) return;
+
+            var sb = new StringBuilder();
+
+            foreach (var item in _signatureListView.SelectedItems.OfType<SignatureListViewItem>().Select(n => n.Value))
+            {
+                sb.AppendLine(item.ToString());
+                sb.AppendLine();
+            }
+
+            Clipboard.SetText(sb.ToString().TrimEnd('\r', '\n'));
         }
 
         private void _signatureListViewDeleteMenuItem_Click(object sender, RoutedEventArgs e)

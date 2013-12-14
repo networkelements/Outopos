@@ -632,5 +632,9 @@ namespace Lair
         public Color Trust_On { get; set; }
 
         public Color Trust_Off { get; set; }
+
+        public Color Link_New { get; set; }
+
+        public Color Link { get; set; }
     }
 }
