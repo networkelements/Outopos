@@ -91,7 +91,6 @@ namespace Lair.Properties
                 new Library.Configuration.SettingContent<double>() { Name = "ConnectionControl_GridViewColumn_Name_Width", Value = -1 },
                 new Library.Configuration.SettingContent<double>() { Name = "ConnectionControl_GridViewColumn_Value_Width", Value = 100 },
    
-                new Library.Configuration.SettingContent<LockedList<SectionTreeItem>>() { Name = "SectionControl_SectionTreeItems", Value = new LockedList<SectionTreeItem>() },
                 new Library.Configuration.SettingContent<double>() { Name = "SectionControl_Grid_ColumnDefinitions_Width", Value = 200 },
                 new Library.Configuration.SettingContent<SectionCategorizeTreeItem>() { Name = "SectionControl_SectionCategorizeTreeItem", Value = new SectionCategorizeTreeItem(){ Name = "Category", IsExpanded = true } },
 
@@ -112,7 +111,10 @@ namespace Lair.Properties
                 new Library.Configuration.SettingContent<double>() { Name = "SectionProfileInformationWindow_GridViewColumn_TrustSignature_Width", Value = 600 },
                 new Library.Configuration.SettingContent<double>() { Name = "SectionProfileInformationWindow_GridViewColumn_Archive_Width", Value = 600 },
                 new Library.Configuration.SettingContent<double>() { Name = "SectionProfileInformationWindow_GridViewColumn_Chat_Width", Value = 600 },
-            })
+         
+                new Library.Configuration.SettingContent<double>() { Name = "ChatControl_Grid_ColumnDefinitions_Width", Value = 200 },
+                new Library.Configuration.SettingContent<ChatCategorizeTreeItem>() { Name = "ChatControl_ChatCategorizeTreeItem", Value = new ChatCategorizeTreeItem(){ Name = "Category", IsExpanded = true } },
+                })
         {
 
         }
@@ -1272,24 +1274,6 @@ namespace Lair.Properties
         }
 
 
-        public LockedList<SectionTreeItem> SectionControl_SectionTreeItems
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (LockedList<SectionTreeItem>)this["SectionControl_SectionTreeItems"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["SectionControl_SectionTreeItems"] = value;
-                }
-            }
-        }
-
         public double SectionControl_Grid_ColumnDefinitions_Width
         {
             get
@@ -1612,6 +1596,43 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     this["SectionProfileInformationWindow_GridViewColumn_Chat_Width"] = value;
+                }
+            }
+        }
+
+
+        public double ChatControl_Grid_ColumnDefinitions_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChatControl_Grid_ColumnDefinitions_Width"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChatControl_Grid_ColumnDefinitions_Width"] = value;
+                }
+            }
+        }
+
+        public ChatCategorizeTreeItem ChatControl_ChatCategorizeTreeItem
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (ChatCategorizeTreeItem)this["ChatControl_ChatCategorizeTreeItem"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChatControl_ChatCategorizeTreeItem"] = value;
                 }
             }
         }

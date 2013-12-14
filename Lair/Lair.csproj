@@ -110,6 +110,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="RichTextBoxHelper.cs" />
+    <Compile Include="Windows\Chat\ChatControl.xaml.cs">
+      <DependentUpon>ChatControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\Section\SectionProfilePackInformationWindow.xaml.cs">
       <DependentUpon>SectionProfilePackInformationWindow.xaml</DependentUpon>
     </Compile>
@@ -118,7 +122,6 @@
     </Compile>
     <Compile Include="Windows\_Items\SignatureTreeItem.cs" />
     <Compile Include="Windows\_Items\SectionProfilePack.cs" />
-    <Compile Include="SectionManager.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="MainWindowTabType.cs" />
     <Compile Include="ObservableCollectionEx.cs" />
@@ -169,6 +172,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Windows\Chat\ChatControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Windows\ConnectionControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
