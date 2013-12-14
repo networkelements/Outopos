@@ -21,8 +21,8 @@ namespace Lair.Windows
 {
     delegate void LinkClickEventHandler(object sender, string link);
     delegate void SectionClickEventHandler(object sender, l.Section section, string leaderSignature);
-    delegate void SectionClickEventHandler(object sender, Archive archive, string path);
-    delegate void ChannelClickEventHandler(object sender, Chat chat);
+    delegate void ArchiveClickEventHandler(object sender, Archive archive, string path);
+    delegate void ChatClickEventHandler(object sender, Chat chat);
     delegate void SeedClickEventHandler(object sender, Library.Net.Amoeba.Seed seed);
 
     delegate ChatMessagePack GetAnchorMessageEventHandler(object sender, Chat chat, Key key);
@@ -33,7 +33,7 @@ namespace Lair.Windows
         public static event LinkClickEventHandler LinkClickEvent;
         public static event SeedClickEventHandler SeedClickEvent;
         public static event SectionClickEventHandler SectionClickEvent;
-        public static event ChannelClickEventHandler ChannelClickEvent;
+        public static event ChatClickEventHandler ChatClickEvent;
         public static GetAnchorMessageEventHandler GetAnchorMessageEvent;
         public static GetMaxHeightEventHandler GetMaxHeightEvent;
 
@@ -349,7 +349,7 @@ namespace Lair.Windows
 
                             l.PreviewMouseLeftButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
                             {
-                                RichTextBoxHelper.ChannelClickEvent(sender, chat);
+                                RichTextBoxHelper.ChatClickEvent(sender, chat);
 
                                 if (Settings.Instance.Global_ChatHistorys.Contains(chat)) l.Foreground = new SolidColorBrush(App.LairColors.Link);
                             };
@@ -647,7 +647,7 @@ namespace Lair.Windows
                     {
                         string dummy;
 
-                        var chat = Library.Net.Lair.LairConverter.FromChannelString(rl);
+                        var chat = Library.Net.Lair.LairConverter.FromChatString(rl, out dummy);
                         if (chat == null) throw new Exception();
 
                         {
@@ -660,14 +660,14 @@ namespace Lair.Windows
                             Hyperlink l = new Hyperlink();
                             l.Cursor = System.Windows.Input.Cursors.Hand;
 
-                            if (Settings.Instance.Global_ChannelHistorys.Contains(chat)) l.Foreground = new SolidColorBrush(App.LairColors.Link);
+                            if (Settings.Instance.Global_ChatHistorys.Contains(chat)) l.Foreground = new SolidColorBrush(App.LairColors.Link);
                             else l.Foreground = new SolidColorBrush(App.LairColors.Link_New);
 
                             l.PreviewMouseLeftButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
                             {
-                                RichTextBoxHelper.ChannelClickEvent(sender, chat);
+                                RichTextBoxHelper.ChatClickEvent(sender, chat);
 
-                                if (Settings.Instance.Global_ChannelHistorys.Contains(chat)) l.Foreground = new SolidColorBrush(App.LairColors.Link);
+                                if (Settings.Instance.Global_ChatHistorys.Contains(chat)) l.Foreground = new SolidColorBrush(App.LairColors.Link);
                             };
                             l.PreviewMouseRightButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
                             {
@@ -711,7 +711,7 @@ namespace Lair.Windows
                         {
                             Run r = new Run();
                             r.Foreground = new SolidColorBrush(Color.FromRgb(0xCF, 0xCF, 0xCF));
-                            r.Text = MessageConverter.ToInfoMessage(chat);
+                            r.Text = MessageConverter.ToInfoMessage(chat, null);
 
                             p.Inlines.Add(r);
                         }
@@ -776,21 +776,21 @@ namespace Lair.Windows
                 p.Inlines.Remove(p.Inlines.LastInline);
             }
 
-            foreach (var anchor in pack.MessageContent.Anchors)
+            foreach (var anchor in pack.Content.Anchors)
             {
-                var anchorInformation = RichTextBoxHelper.GetAnchorMessageEvent(null, pack.Message.Channel, anchor);
+                var anchorPack = RichTextBoxHelper.GetAnchorMessageEvent(null, pack.Header.Tag, anchor);
 
-                if (anchorInformation != null)
+                if (anchorPack != null)
                 {
                     var targetRichTextBox = new RichTextBox();
-                    RichTextBoxHelper.SetRichTextBox(targetRichTextBox, anchorInformation);
+                    RichTextBoxHelper.SetRichTextBox(targetRichTextBox, anchorPack);
 
                     var grid = new Grid();
                     grid.Children.Add(targetRichTextBox);
 
                     var text = string.Format("{0} - {1}",
-                            anchorInformation.Message.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo),
-                            anchorInformation.Message.Certificate.ToString());
+                            anchorPack.Header.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo),
+                            anchorPack.Header.Certificate.ToString());
 
                     var textBlock = new TextBlock() { Text = text };
 

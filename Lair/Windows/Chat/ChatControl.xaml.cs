@@ -38,7 +38,6 @@ namespace Lair.Windows
     {
         private MainWindow _mainWindow = (MainWindow)Application.Current.MainWindow;
         private LairManager _lairManager;
-        private SectionManager _sectionManager;
         private BufferManager _bufferManager;
 
         private static Random _random = new Random();
@@ -54,13 +53,13 @@ namespace Lair.Windows
         private ObservableCollection<object> _listViewItemCollection = new ObservableCollection<object>();
 
         private string _uploadSignature;
+        private LockedList<string> _trustSignatures = new LockedList<string>();
 
         private volatile bool _disposed;
 
-        public ChatControl(ChatCategorizeTreeItem chatCategorizeTreeItem, LairManager lairManager, SectionManager sectionManager, BufferManager bufferManager)
+        public ChatControl(ChatCategorizeTreeItem chatCategorizeTreeItem, LairManager lairManager, BufferManager bufferManager)
         {
             _lairManager = lairManager;
-            _sectionManager = sectionManager;
             _bufferManager = bufferManager;
 
             _treeViewItem = new ChatCategorizeTreeViewItem(chatCategorizeTreeItem);
@@ -94,7 +93,6 @@ namespace Lair.Windows
 
             _searchRowDefinition.Height = new GridLength(0);
 
-            _trustToggleButton.IsEnabled = false;
             _topicUploadButton.IsEnabled = false;
             _messageUploadButton.IsEnabled = false;
 
@@ -117,6 +115,15 @@ namespace Lair.Windows
             set
             {
                 _uploadSignature = value;
+            }
+        }
+
+        public void SetTrustSigantures(IEnumerable<string> trustSignatures)
+        {
+            lock (_trustSignatures.ThisLock)
+            {
+                _trustSignatures.Clear();
+                _trustSignatures.AddRange(trustSignatures);
             }
         }
 
@@ -143,10 +150,6 @@ namespace Lair.Windows
                             if (tempTreeViewItem != _treeView.SelectedItem) return;
                             _refresh = false;
 
-                            _trustToggleButton.ClearValue(ToggleButton.ForegroundProperty);
-                            _trustToggleButton.IsEnabled = false;
-                            _trustToggleButton.IsChecked = false;
-
                             _topicUploadButton.IsEnabled = false;
                             _messageUploadButton.IsEnabled = false;
 
@@ -157,14 +160,12 @@ namespace Lair.Windows
                     {
                         ChatTreeViewItem chatTreeViewItem = (ChatTreeViewItem)tempTreeViewItem;
 
-                        var newList = new HashSet<ChatMessageInfo>();
+                        var newList = new HashSet<ChatMessagePack>();
 
                         lock (chatTreeViewItem.Value.ThisLock)
                         {
-                            foreach (var item in chatTreeViewItem.Value.ChatMessageInfos)
-                            {
-                                newList.Add(item);
-                            }
+                            newList.UnionWith(chatTreeViewItem.Value.ReadChatMessagePacks);
+                            newList.UnionWith(chatTreeViewItem.Value.UnreadChatMessagePacks);
                         }
 
                         {
@@ -178,7 +179,7 @@ namespace Lair.Windows
                             if (!string.IsNullOrWhiteSpace(searchText))
                             {
                                 //var words = searchText.ToLower().Split(new string[] { " ", "　" }, StringSplitOptions.RemoveEmptyEntries);
-                                //List<ChatMessageInfo> list = new List<ChatMessageInfo>();
+                                //List<ChatMessagePack> list = new List<ChatMessagePack>();
 
                                 //foreach (var item in newList)
                                 //{
@@ -193,20 +194,23 @@ namespace Lair.Windows
                             }
                         }
 
-                        var oldList = new HashSet<ChatMessageInfo>();
+                        var oldList = new HashSet<ChatMessagePack>();
 
-                        //this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
-                        //{
-                        //    oldList.UnionWith(_listViewItemCollection.OfType<ChatMessageInfo>().ToArray());
+                        this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
+                        {
+                            oldList.UnionWith(_listViewItemCollection.OfType<ChatMessagePack>().ToArray());
 
-                        //    foreach (var item in oldList)
-                        //    {
-                        //        item.IsNew = false;
-                        //    }
-                        //}));
+                            foreach (var item in chatTreeViewItem.Value.UnreadChatMessagePacks.ToArray())
+                            {
+                                if (!oldList.Contains(item)) continue;
 
-                        var removeList = new List<ChatMessageInfo>();
-                        var addList = new List<ChatMessageInfo>();
+                                chatTreeViewItem.Value.UnreadChatMessagePacks.Remove(item);
+                                chatTreeViewItem.Value.ReadChatMessagePacks.Add(item);
+                            }
+                        }));
+
+                        var removeList = new List<ChatMessagePack>();
+                        var addList = new List<ChatMessagePack>();
 
                         foreach (var item in oldList)
                         {
@@ -227,18 +231,6 @@ namespace Lair.Windows
 
                             {
                                 var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == this.UploadSignature);
-                                {
-                                    _trustToggleButton.IsEnabled = true;
-
-                                    if (chatTreeViewItem.Value.IsTrustEnabled)
-                                    {
-                                        _trustToggleButton.Foreground = new SolidColorBrush(App.LairColors.Trust_On);
-                                    }
-                                    else
-                                    {
-                                        _trustToggleButton.Foreground = new SolidColorBrush(App.LairColors.Trust_Off);
-                                    }
-                                }
 
                                 _topicUploadButton.IsEnabled = (digitalSignature != null);
                                 _messageUploadButton.IsEnabled = (digitalSignature != null);
@@ -276,8 +268,8 @@ namespace Lair.Windows
                                 _listView.GoBottom();
 
                                 _listView.UpdateLayout();
-                                var topItem = _listViewItemCollection.OfType<ChatMessageInfo>().FirstOrDefault();
-                                if (topItem == null) topItem = _listViewItemCollection.OfType<ChatMessageInfo>().LastOrDefault();
+                                var topItem = _listViewItemCollection.OfType<ChatMessagePack>().FirstOrDefault();
+                                if (topItem == null) topItem = _listViewItemCollection.OfType<ChatMessagePack>().LastOrDefault();
                                 if (topItem != null) _listView.ScrollIntoView(topItem);
                             }
 
@@ -291,8 +283,8 @@ namespace Lair.Windows
                         this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                         {
                             _listView.UpdateLayout();
-                            var topItem = _listViewItemCollection.OfType<ChatMessageInfo>().FirstOrDefault();
-                            if (topItem == null) topItem = _listViewItemCollection.OfType<ChatMessageInfo>().LastOrDefault();
+                            var topItem = _listViewItemCollection.OfType<ChatMessagePack>().FirstOrDefault();
+                            if (topItem == null) topItem = _listViewItemCollection.OfType<ChatMessagePack>().LastOrDefault();
                             if (topItem != null) _listView.ScrollIntoView(topItem);
                         }));
                     }
@@ -330,31 +322,30 @@ namespace Lair.Windows
 
                         // ChatTopic
                         {
-                            var info = _sectionManager.GetChatTopic(treeViewItem.Value.Path);
+                            var tempChatTopicPack = this.GetChatTopic(treeViewItem.Value.Tag);
 
-                            lock (treeViewItem.Value.ThisLock)
+                            if (tempChatTopicPack != null)
                             {
-                                if (treeViewItem.Value.ChatTopicInfo != info)
-                                {
-                                    treeViewItem.Value.ChatTopicInfo = info;
-                                    isUpdate |= true;
-                                }
+                                treeViewItem.Value.ChatTopicPack = tempChatTopicPack;
+                                treeViewItem.Value.IsNewTopic = true;
+                                isUpdate |= true;
                             }
                         }
 
                         // ChatMessage
                         {
-                            var oldList = new HashSet<ChatMessageInfo>();
+                            var oldList = new HashSet<ChatMessagePack>();
 
                             lock (treeViewItem.Value.ThisLock)
                             {
                                 lock (treeViewItem.Value.ThisLock)
                                 {
-                                    oldList.UnionWith(treeViewItem.Value.ChatMessageInfos);
+                                    oldList.UnionWith(treeViewItem.Value.ReadChatMessagePacks);
+                                    oldList.UnionWith(treeViewItem.Value.UnreadChatMessagePacks);
                                 }
                             }
 
-                            var newList = new HashSet<ChatMessageInfo>(_sectionManager.GetChatMessage(treeViewItem.Value.Path));
+                            var newList = new HashSet<ChatMessagePack>(this.GetChatMessage(treeViewItem.Value.Tag));
 
                             lock (treeViewItem.Value.ThisLock)
                             {
@@ -362,7 +353,8 @@ namespace Lair.Windows
                                 {
                                     if (!newList.Contains(item))
                                     {
-                                        treeViewItem.Value.ChatMessageInfos.Remove(item);
+                                        treeViewItem.Value.ReadChatMessagePacks.Remove(item);
+                                        treeViewItem.Value.UnreadChatMessagePacks.Remove(item);
                                         isUpdate |= true;
                                     }
                                 }
@@ -371,7 +363,7 @@ namespace Lair.Windows
                                 {
                                     if (!oldList.Contains(item))
                                     {
-                                        treeViewItem.Value.ChatMessageInfos.Add(item);
+                                        treeViewItem.Value.UnreadChatMessagePacks.Add(item);
                                         isUpdate |= true;
                                     }
                                 }
@@ -409,6 +401,61 @@ namespace Lair.Windows
             }
         }
 
+        public ChatTopicPack GetChatTopic(Chat tag)
+        {
+            var headers = new List<ChatTopicHeader>();
+
+            foreach (var item in _lairManager.GetChatTopicHeaders(tag))
+            {
+                if (!_trustSignatures.Contains(item.Certificate.ToString())) continue;
+
+                headers.Add(item);
+            }
+
+            headers.Sort((x, y) =>
+            {
+                return y.CreationTime.CompareTo(x.CreationTime);
+            });
+
+            var lastHeader = headers.FirstOrDefault();
+            if (lastHeader == null) return null;
+
+            var content = _lairManager.GetContent(lastHeader);
+            if (content == null) return null;
+
+            return new ChatTopicPack(lastHeader, content);
+        }
+
+        public IEnumerable<ChatMessagePack> GetChatMessage(Chat tag)
+        {
+            var headers = new List<ChatMessageHeader>();
+
+            foreach (var item in _lairManager.GetChatMessageHeaders(tag))
+            {
+                if (!_trustSignatures.Contains(item.Certificate.ToString())) continue;
+
+                headers.Add(item);
+            }
+
+            headers.Sort((x, y) =>
+            {
+                return y.CreationTime.CompareTo(x.CreationTime);
+            });
+
+            var packs = new List<ChatMessagePack>();
+
+            foreach (var header in headers.Take(8192))
+            {
+                var content = _lairManager.GetContent(header);
+                if (content == null) return null;
+
+                packs.Add(new ChatMessagePack(header, content));
+                if (packs.Count > 1024) break;
+            }
+
+            return packs;
+        }
+
         private void Update()
         {
             this.Update_TreeView_Color();
@@ -440,11 +487,11 @@ namespace Lair.Windows
 
                 var hitItems = new HashSet<TreeViewItem>();
 
-                //foreach (var item in items.OfType<ChatTreeViewItem>()
-                //    .Where(n => (n.Value.ChatTopicInfo != null && n.Value.ChatTopicInfo.IsNew) || n.Value.ChatMessageInformation.Any(m => m.IsNew)))
-                //{
-                //    hitItems.UnionWith(_treeView.GetAncestors(item));
-                //}
+                foreach (var item in items.OfType<ChatTreeViewItem>()
+                    .Where(n => n.Value.IsNewTopic || n.Value.UnreadChatMessagePacks.Count > 0))
+                {
+                    hitItems.UnionWith(_treeView.GetAncestors(item));
+                }
 
                 foreach (var item in items)
                 {
@@ -721,10 +768,8 @@ namespace Lair.Windows
 
             foreach (var item in chatTreeViewItems)
             {
-                var link = new Link(_sectionManager.Tag, "Chat", item.Value.Path);
-
-                sb.AppendLine(LairConverter.ToLinkString(link));
-                sb.AppendLine(MessageConverter.ToInfoMessage(link));
+                sb.AppendLine(LairConverter.ToChatString(item.Value.Tag, null));
+                sb.AppendLine(MessageConverter.ToInfoMessage(item.Value.Tag, null));
             }
 
             Clipboard.SetText(sb.ToString());
@@ -891,7 +936,7 @@ namespace Lair.Windows
                     var index = _listView.GetCurrentIndex(e.GetPosition);
                     if (index == -1) return;
 
-                    var listViewItemCollection = CollectionViewSource.GetDefaultView(_listView.ItemsSource).OfType<ChatMessageInfo>().ToArray();
+                    var listViewItemCollection = CollectionViewSource.GetDefaultView(_listView.ItemsSource).OfType<ChatMessagePack>().ToArray();
                     var selectItem = listViewItemCollection[index];
 
                     if (_listView.SelectedItems.Contains(selectItem))
@@ -908,7 +953,7 @@ namespace Lair.Windows
                     var index = _listView.GetCurrentIndex(e.GetPosition);
                     if (index == -1) return;
 
-                    var listViewItemCollection = CollectionViewSource.GetDefaultView(_listView.ItemsSource).OfType<ChatMessageInfo>().ToArray();
+                    var listViewItemCollection = CollectionViewSource.GetDefaultView(_listView.ItemsSource).OfType<ChatMessagePack>().ToArray();
                     var selectItem = listViewItemCollection[index];
 
                     if (_listView.SelectedItems.Count != 1 || !_listView.SelectedItems.Contains(selectItem))
@@ -923,7 +968,7 @@ namespace Lair.Windows
                 var index = _listView.GetCurrentIndex(e.GetPosition);
                 if (index == -1) return;
 
-                var listViewItemCollection = CollectionViewSource.GetDefaultView(_listView.ItemsSource).OfType<ChatMessageInfo>().ToArray();
+                var listViewItemCollection = CollectionViewSource.GetDefaultView(_listView.ItemsSource).OfType<ChatMessagePack>().ToArray();
                 var selectItem = listViewItemCollection[index];
 
                 if (!_listView.SelectedItems.Contains(selectItem))
@@ -944,36 +989,36 @@ namespace Lair.Windows
 
             list.Sort((x, y) =>
             {
-                if (x is ChatTopicInfo)
+                if (x is ChatTopicPack)
                 {
-                    if (y is ChatTopicInfo)
+                    if (y is ChatTopicPack)
                     {
-                        var vx = ((ChatTopicInfo)x).Header;
-                        var vy = ((ChatTopicInfo)y).Header;
+                        var vx = ((ChatTopicPack)x).Header;
+                        var vy = ((ChatTopicPack)y).Header;
 
                         int c = vx.CreationTime.CompareTo(vy.CreationTime);
                         if (c != 0) return c;
                         c = vx.GetHashCode().CompareTo(vy.GetHashCode());
                         if (c != 0) return c;
                     }
-                    else if (y is ChatMessageInfo)
+                    else if (y is ChatMessagePack)
                     {
                         return 1;
                     }
                 }
-                else if (x is ChatMessageInfo)
+                else if (x is ChatMessagePack)
                 {
-                    if (y is ChatMessageInfo)
+                    if (y is ChatMessagePack)
                     {
-                        var vx = ((ChatMessageInfo)x).Header;
-                        var vy = ((ChatMessageInfo)y).Header;
+                        var vx = ((ChatMessagePack)x).Header;
+                        var vy = ((ChatMessagePack)y).Header;
 
                         int c = vx.CreationTime.CompareTo(vy.CreationTime);
                         if (c != 0) return c;
                         c = vx.GetHashCode().CompareTo(vy.GetHashCode());
                         if (c != 0) return c;
                     }
-                    else if (y is ChatTopicInfo)
+                    else if (y is ChatTopicPack)
                     {
                         return -1;
                     }
@@ -1027,18 +1072,6 @@ namespace Lair.Windows
         #endregion
 
         #region Tool
-
-        private void _trustToggleButton_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            var selectTreeViewItem = _treeView.SelectedItem as ChatTreeViewItem;
-            if (selectTreeViewItem == null) return;
-
-            selectTreeViewItem.Value.IsTrustEnabled = !selectTreeViewItem.Value.IsTrustEnabled;
-
-            this.Update_Cache();
-
-            e.Handled = true;
-        }
 
         private void _topicUploadButton_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {

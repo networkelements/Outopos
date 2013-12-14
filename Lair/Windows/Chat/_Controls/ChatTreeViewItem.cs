@@ -38,14 +38,7 @@ namespace Lair.Windows
 
         public void Update()
         {
-            if (!_value.IsTrustEnabled)
-            {
-                _header.Text = string.Format("{0} ({1}) {2}", _value.Tag.Name, _hit, "!");
-            }
-            else
-            {
-                _header.Text = string.Format("{0} ({1})", _value.Tag.Name, _hit);
-            }
+            _header.Text = string.Format("{0} ({1})", _value.Tag.Name, _hit);
         }
 
         public ChatTreeItem Value

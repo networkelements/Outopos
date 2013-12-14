@@ -2409,13 +2409,13 @@ namespace Lair.Properties
             }
         }
 
-        public string SectionControl_Information
+        public string SectionControl_TrustInformation
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionControl_Information");
+                    return this.Translate("SectionControl_TrustInformation");
                 }
             }
         }
@@ -2709,112 +2709,145 @@ namespace Lair.Properties
         }
 
 
-        public string SectionProfileInformationWindow_Title
+        public string TrustInformationWindow_Title
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionProfileInformationWindow_Title");
+                    return this.Translate("TrustInformationWindow_Title");
                 }
             }
         }
 
-        public string SectionProfileInformationWindow_TargetSignature
+        public string TrustInformationWindow_Copy
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionProfileInformationWindow_TargetSignature");
+                    return this.Translate("TrustInformationWindow_Copy");
                 }
             }
         }
 
-        public string SectionProfileInformationWindow_Signature
+        public string TrustInformationWindow_Profile
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionProfileInformationWindow_Signature");
+                    return this.Translate("TrustInformationWindow_Profile");
                 }
             }
         }
 
-        public string SectionProfileInformationWindow_Section
+        public string SectionProfileWindow_Title
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionProfileInformationWindow_Section");
+                    return this.Translate("SectionProfileWindow_Title");
                 }
             }
         }
 
-        public string SectionProfileInformationWindow_Trust
+        public string SectionProfileWindow_TargetSignature
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionProfileInformationWindow_Trust");
+                    return this.Translate("SectionProfileWindow_TargetSignature");
                 }
             }
         }
 
-        public string SectionProfileInformationWindow_Chat
+        public string SectionProfileWindow_Signature
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionProfileInformationWindow_Chat");
+                    return this.Translate("SectionProfileWindow_Signature");
                 }
             }
         }
 
-        public string SectionProfileInformationWindow_Archive
+        public string SectionProfileWindow_Section
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionProfileInformationWindow_Archive");
+                    return this.Translate("SectionProfileWindow_Section");
                 }
             }
         }
 
-        public string SectionProfileInformationWindow_Value
+        public string SectionProfileWindow_Trust
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionProfileInformationWindow_Value");
+                    return this.Translate("SectionProfileWindow_Trust");
                 }
             }
         }
 
-        public string SectionProfileInformationWindow_Copy
+        public string SectionProfileWindow_Chat
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionProfileInformationWindow_Copy");
+                    return this.Translate("SectionProfileWindow_Chat");
                 }
             }
         }
 
-        public string SectionProfileInformationWindow_Close
+        public string SectionProfileWindow_Archive
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionProfileInformationWindow_Close");
+                    return this.Translate("SectionProfileWindow_Archive");
+                }
+            }
+        }
+
+        public string SectionProfileWindow_Value
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionProfileWindow_Value");
+                }
+            }
+        }
+
+        public string SectionProfileWindow_Copy
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionProfileWindow_Copy");
+                }
+            }
+        }
+
+        public string SectionProfileWindow_Close
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionProfileWindow_Close");
                 }
             }
         }

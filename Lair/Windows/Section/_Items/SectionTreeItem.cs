@@ -27,12 +27,16 @@ namespace Lair.Windows
 
         private LockedList<SectionProfilePack> _sectionProfilePacks;
 
+        private ChatCategorizeTreeItem _chatCategorizeTreeItem;
+
         private volatile object _thisLock;
         private static readonly object _initializeLock = new object();
 
         public SectionTreeItem(Section section)
         {
             this.Tag = section;
+            this.Exchange = new Exchange(ExchangeAlgorithm.Rsa2048);
+            this.ChatCategorizeTreeItem = new ChatCategorizeTreeItem();
         }
 
         [DataMember(Name = "Tag")]
@@ -141,7 +145,7 @@ namespace Lair.Windows
             }
         }
 
-        [DataMember(Name = "Archivess")]
+        [DataMember(Name = "Archives")]
         public LockedList<Archive> Archives
         {
             get
@@ -167,6 +171,25 @@ namespace Lair.Windows
                         _sectionProfilePacks = new LockedList<SectionProfilePack>();
 
                     return _sectionProfilePacks;
+                }
+            }
+        }
+
+        [DataMember(Name = "ChatCategorizeTreeItem")]
+        public ChatCategorizeTreeItem ChatCategorizeTreeItem
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return _chatCategorizeTreeItem;
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    _chatCategorizeTreeItem = value;
                 }
             }
         }

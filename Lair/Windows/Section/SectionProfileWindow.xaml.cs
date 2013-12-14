@@ -21,7 +21,7 @@ namespace Lair.Windows
     /// <summary>
     /// Interaction logic for SectionProfilePackInformation.xaml
     /// </summary>
-    partial class SectionProfileInformationWindow : Window
+    partial class SectionProfileWindow : Window
     {
         private SectionProfilePack _sectionProfilePack;
 
@@ -29,7 +29,7 @@ namespace Lair.Windows
         private ObservableCollectionEx<Archive> _archiveCollection;
         private ObservableCollectionEx<Chat> _chatCollection;
 
-        public SectionProfileInformationWindow(SectionProfilePack sectionProfilePack)
+        public SectionProfileWindow(SectionProfilePack sectionProfilePack)
         {
             _sectionProfilePack = sectionProfilePack;
 

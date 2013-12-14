@@ -47,7 +47,6 @@ namespace Lair.Windows
         private static Random _random = new Random();
 
         private SectionCategorizeTreeViewItem _treeViewItem;
-        private Dictionary<Section, SectionManager> _sectionManagers = new Dictionary<Section, SectionManager>();
 
         private Thread _showConnectionInfomationwThread;
 
@@ -119,34 +118,15 @@ namespace Lair.Windows
                             if (tempTreeViewItem != _treeView.SelectedItem) return;
                             _refresh = false;
 
-                            _signatureTreeView.Items.Clear();
-
                             this.Update_Title();
                         }));
                     }
                     else if (tempTreeViewItem is SectionTreeViewItem)
                     {
-                        var sectionTreeViewItem = (SectionTreeViewItem)tempTreeViewItem;
-                        SignatureTreeItem signatureTreeItem = null;
-
-                        {
-                            var leaderSignature = sectionTreeViewItem.Value.LeaderSignature;
-                            var sectionProfilePacks = sectionTreeViewItem.Value.SectionProfilePacks;
-
-                            signatureTreeItem = SectionControl.GetSignatureTreeViewItem(sectionProfilePacks, leaderSignature);
-                        }
-
                         this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                         {
                             if (tempTreeViewItem != _treeView.SelectedItem) return;
                             _refresh = false;
-
-                            _signatureTreeView.Items.Clear();
-
-                            if (signatureTreeItem != null)
-                            {
-                                _signatureTreeView.Items.Add(new SignatureTreeViewItem(signatureTreeItem));
-                            }
 
                             this.Update_Title();
                         }));
@@ -537,7 +517,6 @@ namespace Lair.Windows
                     var tag = new Section(id, newSectionwindow.SectionName);
                     var sectionTreeItem = new SectionTreeItem(tag);
                     sectionTreeItem.LeaderSignature = newSectionwindow.LeaderSignature;
-                    sectionTreeItem.Exchange = new Exchange(ExchangeAlgorithm.Rsa2048);
 
                     SectionTreeItemEditWindow sectionTreeItemEditWindow = new SectionTreeItemEditWindow(sectionTreeItem, _lairManager, _bufferManager);
                     sectionTreeItemEditWindow.Owner = _mainWindow;
@@ -741,31 +720,26 @@ namespace Lair.Windows
             Clipboard.SetText(sb.ToString());
         }
 
-        #endregion
-
-        #region _signatureTreeView
-
-        private void _signatureTreeViewItemContextMenu_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        private void _sectionTreeViewItemTrustInformationMenuItem_Click(object sender, RoutedEventArgs e)
         {
+            var selectTreeViewItem = _treeView.SelectedItem as SectionTreeViewItem;
+            if (selectTreeViewItem == null) return;
 
-        }
+            SignatureTreeItem signatureTreeItem = null;
 
-        private void _signatureTreeViewItemCopyMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            var signatureTreeViewItem = _signatureTreeView.SelectedItem as SignatureTreeViewItem;
-            if (signatureTreeViewItem == null) return;
+            {
+                var leaderSignature = selectTreeViewItem.Value.LeaderSignature;
+                var sectionProfilePacks = selectTreeViewItem.Value.SectionProfilePacks;
 
-            Clipboard.SetText(signatureTreeViewItem.Value.SectionProfilePack.Header.Certificate.ToString());
-        }
+                signatureTreeItem = SectionControl.GetSignatureTreeViewItem(sectionProfilePacks, leaderSignature);
+            }
 
-        private void _sectionTreeViewItemInformationMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            var signatureTreeViewItem = _signatureTreeView.SelectedItem as SignatureTreeViewItem;
-            if (signatureTreeViewItem == null) return;
-
-            SectionProfileInformationWindow sectionProfilePackInformationWindow = new SectionProfileInformationWindow(signatureTreeViewItem.Value.SectionProfilePack);
-            sectionProfilePackInformationWindow.Owner = _mainWindow;
-            sectionProfilePackInformationWindow.ShowDialog();
+            if (signatureTreeItem != null)
+            {
+                TrustInformationWindow window = new TrustInformationWindow(signatureTreeItem);
+                window.Owner = _mainWindow;
+                window.ShowDialog();
+            }
         }
 
         #endregion

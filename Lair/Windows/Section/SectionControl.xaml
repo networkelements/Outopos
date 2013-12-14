@@ -29,12 +29,8 @@
             <MenuItem Name="_sectionTreeViewItemCutMenuItem" Header="{Binding Path=SectionControl_Cut, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemCutMenuItem_Click" />
             <MenuItem Name="_sectionTreeViewItemCopyMenuItem" Header="{Binding Path=SectionControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemCopyMenuItem_Click" />
             <MenuItem Name="_sectionTreeViewItemCopyInfoMenuItem" Header="{Binding Path=SectionControl_CopyInfo, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemCopyInfoMenuItem_Click" />
-        </ContextMenu>
-
-        <ContextMenu x:Key="_signatureTreeViewItemContextMenu">
-            <MenuItem Name="_signatureTreeViewItemCopyMenuItem" Header="{Binding Path=SectionControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_signatureTreeViewItemCopyMenuItem_Click" />
             <Separator />
-            <MenuItem Name="_signatureTreeViewItemInformationMenuItem" Header="{Binding Path=SectionControl_Information, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemInformationMenuItem_Click" />
+            <MenuItem Name="_sectionTreeViewItemTrustInformationMenuItem" Header="{Binding Path=SectionControl_TrustInformation, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemTrustInformationMenuItem_Click" />
         </ContextMenu>
     </UserControl.Resources>
 
@@ -82,15 +78,6 @@
                 <Style TargetType="{x:Type local:SectionTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" >
                     <Setter Property="ContextMenu" Value="{StaticResource _sectionTreeViewItemContextMenu}" />
                     <EventSetter Event="ContextMenuOpening" Handler="_sectionTreeViewItemContextMenu_ContextMenuOpening" />
-                </Style>
-            </TreeView.Resources>
-        </TreeView>
-       
-        <TreeView Grid.Column="2" Name="_signatureTreeView" Grid.RowSpan="2">
-            <TreeView.Resources>
-                <Style TargetType="{x:Type local:SignatureTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" >
-                    <Setter Property="ContextMenu" Value="{StaticResource _signatureTreeViewItemContextMenu}" />
-                    <EventSetter Event="ContextMenuOpening" Handler="_signatureTreeViewItemContextMenu_ContextMenuOpening" />
                 </Style>
             </TreeView.Resources>
         </TreeView>

@@ -220,7 +220,7 @@
   <Translate Key="SectionControl_Copy" Value="Copy" />
   <Translate Key="SectionControl_CopyInfo" Value="Copy info" />
   <Translate Key="SectionControl_Paste" Value="Paste" />
-  <Translate Key="SectionControl_Information" Value="Information" />
+  <Translate Key="SectionControl_TrustInformation" Value="Trust information" />
 
   <Translate Key="NewSectionWindow_Title" Value="New section" />
   <Translate Key="NewSectionWindow_SectionName" Value="Section name" />
@@ -250,16 +250,19 @@
   <Translate Key="SectionTreeItemEditWindow_Ok" Value="Ok" />
   <Translate Key="SectionTreeItemEditWindow_Cancel" Value="Cancel" />
 
-  <Translate Key="SectionProfileInformationWindow_Title" Value="Section profile information" />
-  <Translate Key="SectionProfileInformationWindow_TargetSignature" Value="Target signature" />
-  <Translate Key="SectionProfileInformationWindow_Signature" Value="signature" />
-  <Translate Key="SectionProfileInformationWindow_Section" Value="Section" />
-  <Translate Key="SectionProfileInformationWindow_Trust" Value="Trust" />
-  <Translate Key="SectionProfileInformationWindow_Chat" Value="Chat" />
-  <Translate Key="SectionProfileInformationWindow_Archive" Value="Archive" />
-  <Translate Key="SectionProfileInformationWindow_Value" Value="Value" />
-  <Translate Key="SectionProfileInformationWindow_Copy" Value="Copy" />
-  <Translate Key="SectionProfileInformationWindow_Close" Value="Close" />
+  <Translate Key="TrustInformationWindow_Title" Value="Trust information" />
+  <Translate Key="TrustInformationWindow_Copy" Value="Copy" />
+  <Translate Key="TrustInformationWindow_Profile" Value="Profile" />
+  <Translate Key="SectionProfileWindow_Title" Value="Section profile information" />
+  <Translate Key="SectionProfileWindow_TargetSignature" Value="Target signature" />
+  <Translate Key="SectionProfileWindow_Signature" Value="signature" />
+  <Translate Key="SectionProfileWindow_Section" Value="Section" />
+  <Translate Key="SectionProfileWindow_Trust" Value="Trust" />
+  <Translate Key="SectionProfileWindow_Chat" Value="Chat" />
+  <Translate Key="SectionProfileWindow_Archive" Value="Archive" />
+  <Translate Key="SectionProfileWindow_Value" Value="Value" />
+  <Translate Key="SectionProfileWindow_Copy" Value="Copy" />
+  <Translate Key="SectionProfileWindow_Close" Value="Close" />
 
   <Translate Key="ChatControl_New" Value="新規" />
   <Translate Key="ChatControl_Edit" Value="編集" />

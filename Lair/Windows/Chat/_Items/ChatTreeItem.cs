@@ -17,8 +17,8 @@ namespace Lair.Windows
     class ChatTreeItem : ICloneable<ChatTreeItem>, IThisLock
     {
         private Chat _tag;
-        private bool _isTrustEnabled = true;
 
+        private bool _isNewTopic;
         private ChatTopicPack _chatTopicPack;
         private LockedList<ChatMessagePack> _unreadChatMessagePacks;
         private LockedList<ChatMessagePack> _readChatMessagePacks;
@@ -50,21 +50,21 @@ namespace Lair.Windows
             }
         }
 
-        [DataMember(Name = "IsTrustEnabled")]
-        public bool IsTrustEnabled
+        [DataMember(Name = "IsNewTopic")]
+        public bool IsNewTopic
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return _isTrustEnabled;
+                    return _isNewTopic;
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    _isTrustEnabled = value;
+                    _isNewTopic = value;
                 }
             }
         }

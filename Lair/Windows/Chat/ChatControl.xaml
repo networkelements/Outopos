@@ -202,7 +202,7 @@
 
         <DataTemplate x:Key="_myTemplate_ListView">
             <Grid>
-                <RichTextBox x:Name="_richTextBox" Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType=Grid}}" ContextMenuOpening="_richTextBox_ContextMenuOpening">
+                <RichTextBox x:Name="_richTextBox" local:RichTextBoxHelper.DocumentMessage="{Binding Path=Value, Mode=OneWay}" Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType=Grid}}" ContextMenuOpening="_richTextBox_ContextMenuOpening">
                     <RichTextBox.Style>
                         <Style TargetType="{x:Type RichTextBox}">
                             <Setter Property="FocusVisualStyle" Value="{x:Null}" />
@@ -231,12 +231,6 @@
                             <Setter Property="ContextMenu" Value="{StaticResource _richTextBoxContextMenu}" />
                         </Style>
                     </RichTextBox.Style>
-                    <RichTextBox.BorderBrush>
-                        <MultiBinding Converter="{StaticResource _messageWrapperOfBorderBrushConverter}">
-                            <Binding Mode="OneWay"/>
-                            <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}" Path="IsSelected" />
-                        </MultiBinding>
-                    </RichTextBox.BorderBrush>
                 </RichTextBox>
             </Grid>
         </DataTemplate>
@@ -292,8 +286,6 @@
                 </Style>
             </TreeView.Resources>
         </TreeView>
-
-        <ToggleButton Content="{Binding Path=ChatControl_Trust, Source={StaticResource ResourcesInstance}}" Grid.Column="2" Height="23" HorizontalAlignment="Left" Margin="6,0,0,0" Name="_trustToggleButton" VerticalAlignment="Top" Width="90" PreviewMouseDown="_trustToggleButton_PreviewMouseDown" IsEnabled="False" />
         
         <Button Content="{Binding Path=ChatControl_Topic, Source={StaticResource ResourcesInstance}}" Height="23" HorizontalAlignment="Right" Margin="0,0,87,0" Name="_topicUploadButton" VerticalAlignment="Top" Width="75" Grid.Column="2" PreviewMouseDown="_topicUploadButton_PreviewMouseDown" IsEnabled="False" />
         <Button Content="{Binding Path=ChatControl_Message, Source={StaticResource ResourcesInstance}}" Grid.Column="2" Height="23" HorizontalAlignment="Right" Name="_messageUploadButton" VerticalAlignment="Top" Width="75" Margin="0,0,6,0" Click="_messageUploadButton_Click" IsEnabled="False" />
