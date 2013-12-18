@@ -28,10 +28,11 @@
             <local:ObjectToInfoStringConverter x:Key="_objectToInfoStringConverter"/>
             <local:NodeToStringConverter x:Key="_nodeToStringConverter"/>
             <local:SectionToStringConverter x:Key="_sectionToStringConverter"/>
-            <local:ArchiveToStringConverter x:Key="_archiveToStringConverter"/>
+            <local:WikiToStringConverter x:Key="_wikiToStringConverter"/>
             <local:ChatToStringConverter x:Key="_chatToStringConverter"/>
             <local:SeedToStringConverter x:Key="_seedToStringConverter"/>
             <local:BytesToHexStringConverter x:Key="_bytesToHexStringConverter"/>
+            <local:BytesToBase64StringConverter x:Key="_bytesToBase64StringConverter"/>
             <local:StringsToStringConverter x:Key="_stringsToStringConverter"/>
             <local:LongToSizeStringConverter x:Key="_longToSizeStringConverter"/>
             <local:BoolToStringConverter x:Key="_boolToStringConverter"/>

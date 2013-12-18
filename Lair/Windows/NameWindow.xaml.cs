@@ -24,6 +24,17 @@ namespace Lair.Windows
     {
         private string _text;
 
+        public NameWindow()
+            : this(null)
+        {
+        }
+
+        public NameWindow(int maxLength)
+            : this(null)
+        {
+            _textBox.MaxLength = maxLength;
+        }
+
         public NameWindow(string text)
         {
             _text = text;
@@ -44,9 +55,10 @@ namespace Lair.Windows
             _textBox.Text = _text;
         }
 
-        public NameWindow()
-            : this(null)
+        public NameWindow(string text, int maxLength)
+            : this(text)
         {
+            _textBox.MaxLength = maxLength;
         }
 
         protected override void OnInitialized(EventArgs e)

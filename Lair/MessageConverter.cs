@@ -13,7 +13,7 @@ using Library.Net.Lair;
 using Library.Security;
 using Library;
 using Lair.Windows;
-using a = Library.Net.Amoeba;
+using A = Library.Net.Amoeba;
 
 namespace Lair
 {
@@ -33,13 +33,13 @@ namespace Lair
             }
         }
 
-        public static string ToArchiveString(Archive archive)
+        public static string ToWikiString(Wiki wiki)
         {
-            if (archive.Name == null || archive.Id == null) return null;
+            if (wiki.Name == null || wiki.Id == null) return null;
 
             try
             {
-                return archive.Name + " - " + NetworkConverter.ToBase64UrlString(archive.Id);
+                return wiki.Name + " - " + NetworkConverter.ToBase64UrlString(wiki.Id);
             }
             catch (Exception e)
             {
@@ -61,7 +61,7 @@ namespace Lair
             }
         }
 
-        public static string ToInfoMessage(a.Seed seed)
+        public static string ToInfoMessage(A.Seed seed)
         {
             if (seed == null) throw new ArgumentNullException("seed");
 
@@ -106,15 +106,15 @@ namespace Lair
             }
         }
 
-        public static string ToInfoMessage(Archive archive, string option)
+        public static string ToInfoMessage(Wiki wiki, string option)
         {
             try
             {
                 StringBuilder builder = new StringBuilder();
 
-                if (!string.IsNullOrWhiteSpace(archive.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Archive_Name, archive.Name));
-                if (archive.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Archive_Id, NetworkConverter.ToBase64UrlString(archive.Id)));
-                if (!string.IsNullOrWhiteSpace(option)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Archive_Option, option));
+                if (!string.IsNullOrWhiteSpace(wiki.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Wiki_Name, wiki.Name));
+                if (wiki.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Wiki_Id, NetworkConverter.ToBase64UrlString(wiki.Id)));
+                if (!string.IsNullOrWhiteSpace(option)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Wiki_Option, option));
 
                 if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
                 else return null;

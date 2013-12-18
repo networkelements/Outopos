@@ -157,14 +157,14 @@
                             </Setter>
                         </Style>
 
-                        <Style TargetType="{x:Type local:RichTextBoxEx}">
+                        <Style TargetType="{x:Type RichTextBox}">
                             <Setter Property="KeyboardNavigation.TabNavigation" Value="None" />
                             <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                             <Setter Property="AllowDrop" Value="true" />
                             <Setter Property="SnapsToDevicePixels" Value="True" />
                             <Setter Property="Template">
                                 <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type local:RichTextBoxEx}">
+                                    <ControlTemplate TargetType="{x:Type RichTextBox}">
                                         <Grid Background="{TemplateBinding Background}">
                                             <ScrollViewer Margin="0" x:Name="PART_ContentHost" Style="{DynamicResource NuclearScrollViewer}" />
                                         </Grid>
@@ -177,7 +177,7 @@
                             <EventSetter Event="PreviewMouseRightButtonDown" Handler="RichTextBoxEx_PreviewMouseRightButtonDown" />
                         </Style>
                     </Grid.Resources>
-                    <local:RichTextBoxEx Margin="6" x:Name="_richTextBox" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" />
+                    <RichTextBox Margin="6" x:Name="_richTextBox" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" />
                 </Grid>
             </TabItem>
         </TabControl>

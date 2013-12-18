@@ -18,10 +18,12 @@ namespace Lair.Windows
     {
         private Chat _tag;
 
+        private bool _isTrustEnabled = true;
+
         private bool _isNewTopic;
-        private ChatTopicPack _chatTopicPack;
-        private LockedList<ChatMessagePack> _unreadChatMessagePacks;
-        private LockedList<ChatMessagePack> _readChatMessagePacks;
+        private ChatTopic _chatTopic;
+        private LockedList<ChatMessage> _unreadChatMessages;
+        private LockedList<ChatMessage> _readChatMessages;
 
         private volatile object _thisLock;
         private static readonly object _initializeLock = new object();
@@ -29,6 +31,25 @@ namespace Lair.Windows
         public ChatTreeItem()
         {
 
+        }
+
+        [DataMember(Name = "IsTrustEnabled")]
+        public bool IsTrustEnabled
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return _isTrustEnabled;
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    _isTrustEnabled = value;
+                }
+            }
         }
 
         [DataMember(Name = "Tag")]
@@ -69,51 +90,51 @@ namespace Lair.Windows
             }
         }
 
-        [DataMember(Name = "ChatTopicPack")]
-        public ChatTopicPack ChatTopicPack
+        [DataMember(Name = "ChatTopic")]
+        public ChatTopic ChatTopic
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return _chatTopicPack;
+                    return _chatTopic;
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    _chatTopicPack = value;
+                    _chatTopic = value;
                 }
             }
         }
 
-        [DataMember(Name = "UnreadChatMessagePacks")]
-        public LockedList<ChatMessagePack> UnreadChatMessagePacks
+        [DataMember(Name = "UnreadChatMessages")]
+        public LockedList<ChatMessage> UnreadChatMessages
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    if (_unreadChatMessagePacks == null)
-                        _unreadChatMessagePacks = new LockedList<ChatMessagePack>();
+                    if (_unreadChatMessages == null)
+                        _unreadChatMessages = new LockedList<ChatMessage>();
 
-                    return _unreadChatMessagePacks;
+                    return _unreadChatMessages;
                 }
             }
         }
 
-        [DataMember(Name = "ReadChatMessagePacks")]
-        public LockedList<ChatMessagePack> ReadChatMessagePacks
+        [DataMember(Name = "ReadChatMessages")]
+        public LockedList<ChatMessage> ReadChatMessages
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    if (_readChatMessagePacks == null)
-                        _readChatMessagePacks = new LockedList<ChatMessagePack>();
+                    if (_readChatMessages == null)
+                        _readChatMessages = new LockedList<ChatMessage>();
 
-                    return _readChatMessagePacks;
+                    return _readChatMessages;
                 }
             }
         }

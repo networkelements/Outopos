@@ -29,7 +29,7 @@ namespace Lair.Windows
 
         private string _uploadSignature;
         private ObservableCollectionEx<string> _trustSignatureCollection = new ObservableCollectionEx<string>();
-        private ObservableCollectionEx<Archive> _archiveCollection;
+        private ObservableCollectionEx<Wiki> _wikiCollection;
         private ObservableCollectionEx<Chat> _chatCollection;
 
         public SectionTreeItemEditWindow(SectionTreeItem sectionTreeItem, LairManager lairManager, BufferManager bufferManager)
@@ -44,18 +44,22 @@ namespace Lair.Windows
 
             InitializeComponent();
 
+            _wikiTextBox.MaxLength = Wiki.MaxNameLength;
+            _chatTextBox.MaxLength = Chat.MaxNameLength;
+
             lock (_sectionTreeItem.ThisLock)
             {
                 _tagTextBox.Text = MessageConverter.ToSectionString(_sectionTreeItem.Tag);
                 _sectionLeaderSignatureTextBox.Text = _sectionTreeItem.LeaderSignature;
                 _uploadSignature = _sectionTreeItem.UploadSignature;
                 _trustSignatureCollection.AddRange(_sectionTreeItem.TrustSignatures);
-                _archiveCollection = new ObservableCollectionEx<Archive>(_sectionTreeItem.Archives);
+                _wikiCollection = new ObservableCollectionEx<Wiki>(_sectionTreeItem.Wikis);
                 _chatCollection = new ObservableCollectionEx<Chat>(_sectionTreeItem.Chats);
+                _commentTextBox.Text = _sectionTreeItem.Comment;
             }
 
             _trustSignatureListView.ItemsSource = _trustSignatureCollection;
-            _archiveListView.ItemsSource = _archiveCollection;
+            _wikiListView.ItemsSource = _wikiCollection;
             _chatListView.ItemsSource = _chatCollection;
 
             _signatureComboBox.ItemsSource = digitalSignatureCollection;
@@ -146,59 +150,59 @@ namespace Lair.Windows
 
         #endregion
 
-        #region _archiveListView
+        #region _wikiListView
 
-        private void _archiveTextBox_KeyDown(object sender, KeyEventArgs e)
+        private void _wikiTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == System.Windows.Input.Key.Enter)
             {
-                if (_archiveListView.SelectedIndex == -1)
+                if (_wikiListView.SelectedIndex == -1)
                 {
-                    _archiveAddButton_Click(null, null);
+                    _wikiAddButton_Click(null, null);
                 }
 
                 e.Handled = true;
             }
         }
 
-        private void _archiveListViewUpdate()
+        private void _wikiListViewUpdate()
         {
-            _archiveListView_SelectionChanged(this, null);
+            _wikiListView_SelectionChanged(this, null);
         }
 
-        private void _archiveListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void _wikiListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
             {
-                var selectIndex = _archiveListView.SelectedIndex;
+                var selectIndex = _wikiListView.SelectedIndex;
 
                 if (selectIndex == -1)
                 {
-                    _archiveUpButton.IsEnabled = false;
-                    _archiveDownButton.IsEnabled = false;
+                    _wikiUpButton.IsEnabled = false;
+                    _wikiDownButton.IsEnabled = false;
                 }
                 else
                 {
                     if (selectIndex == 0)
                     {
-                        _archiveUpButton.IsEnabled = false;
+                        _wikiUpButton.IsEnabled = false;
                     }
                     else
                     {
-                        _archiveUpButton.IsEnabled = true;
+                        _wikiUpButton.IsEnabled = true;
                     }
 
-                    if (selectIndex == _archiveCollection.Count - 1)
+                    if (selectIndex == _wikiCollection.Count - 1)
                     {
-                        _archiveDownButton.IsEnabled = false;
+                        _wikiDownButton.IsEnabled = false;
                     }
                     else
                     {
-                        _archiveDownButton.IsEnabled = true;
+                        _wikiDownButton.IsEnabled = true;
                     }
                 }
 
-                _archiveListView_PreviewMouseLeftButtonDown(this, null);
+                _wikiListView_PreviewMouseLeftButtonDown(this, null);
             }
             catch (Exception)
             {
@@ -206,61 +210,61 @@ namespace Lair.Windows
             }
         }
 
-        private void _archiveListView_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void _wikiListView_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            var selectIndex = _archiveListView.SelectedIndex;
+            var selectIndex = _wikiListView.SelectedIndex;
             if (selectIndex == -1)
             {
-                _archiveTextBox.Text = "";
+                _wikiTextBox.Text = "";
 
                 return;
             }
         }
 
-        private void _archiveListView_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        private void _wikiListView_ContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
-            var selectItems = _archiveListView.SelectedItems;
+            var selectItems = _wikiListView.SelectedItems;
 
-            _archiveListViewDeleteMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
-            _archiveListViewCopyMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
-            _archiveListViewCutMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
+            _wikiListViewDeleteMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
+            _wikiListViewCopyMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
+            _wikiListViewCutMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
 
             {
-                _archiveListViewPasteMenuItem.IsEnabled = Clipboard.ContainsArchives();
+                _wikiListViewPasteMenuItem.IsEnabled = Clipboard.ContainsWikis();
             }
         }
 
-        private void _archiveListViewDeleteMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _wikiListViewDeleteMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            _archiveDeleteButton_Click(null, null);
+            _wikiDeleteButton_Click(null, null);
         }
 
-        private void _archiveListViewCutMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _wikiListViewCutMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            _archiveListViewCopyMenuItem_Click(null, null);
-            _archiveDeleteButton_Click(null, null);
+            _wikiListViewCopyMenuItem_Click(null, null);
+            _wikiDeleteButton_Click(null, null);
         }
 
-        private void _archiveListViewCopyMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _wikiListViewCopyMenuItem_Click(object sender, RoutedEventArgs e)
         {
             var sb = new StringBuilder();
 
-            foreach (var item in _archiveListView.SelectedItems.OfType<Archive>())
+            foreach (var item in _wikiListView.SelectedItems.OfType<Wiki>())
             {
-                sb.AppendLine(LairConverter.ToArchiveString(item, null));
+                sb.AppendLine(LairConverter.ToWikiString(item, null));
             }
 
             Clipboard.SetText(sb.ToString());
         }
 
-        private void _archiveListViewPasteMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _wikiListViewPasteMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var tuple in Clipboard.GetArchives())
+            foreach (var tuple in Clipboard.GetWikis())
             {
                 try
                 {
-                    if (_archiveCollection.Contains(tuple.Item1)) continue;
-                    _archiveCollection.Add(tuple.Item1);
+                    if (_wikiCollection.Contains(tuple.Item1)) continue;
+                    _wikiCollection.Add(tuple.Item1);
                 }
                 catch (Exception)
                 {
@@ -268,61 +272,61 @@ namespace Lair.Windows
                 }
             }
 
-            _archiveListViewUpdate();
+            _wikiListViewUpdate();
         }
 
-        private void _archiveUpButton_Click(object sender, RoutedEventArgs e)
+        private void _wikiUpButton_Click(object sender, RoutedEventArgs e)
         {
-            var item = _archiveListView.SelectedItem as Archive;
+            var item = _wikiListView.SelectedItem as Wiki;
             if (item == null) return;
 
-            var selectIndex = _archiveListView.SelectedIndex;
+            var selectIndex = _wikiListView.SelectedIndex;
             if (selectIndex == -1) return;
 
-            _archiveCollection.Move(selectIndex, selectIndex - 1);
+            _wikiCollection.Move(selectIndex, selectIndex - 1);
 
-            _archiveListViewUpdate();
+            _wikiListViewUpdate();
         }
 
-        private void _archiveDownButton_Click(object sender, RoutedEventArgs e)
+        private void _wikiDownButton_Click(object sender, RoutedEventArgs e)
         {
-            var item = _archiveListView.SelectedItem as Archive;
+            var item = _wikiListView.SelectedItem as Wiki;
             if (item == null) return;
 
-            var selectIndex = _archiveListView.SelectedIndex;
+            var selectIndex = _wikiListView.SelectedIndex;
             if (selectIndex == -1) return;
 
-            _archiveCollection.Move(selectIndex, selectIndex + 1);
+            _wikiCollection.Move(selectIndex, selectIndex + 1);
 
-            _archiveListViewUpdate();
+            _wikiListViewUpdate();
         }
 
-        private void _archiveAddButton_Click(object sender, RoutedEventArgs e)
+        private void _wikiAddButton_Click(object sender, RoutedEventArgs e)
         {
-            if (_archiveTextBox.Text == "") return;
+            if (_wikiTextBox.Text == "") return;
 
             byte[] id = new byte[64];
             (new System.Security.Cryptography.RNGCryptoServiceProvider()).GetBytes(id);
 
-            var item = new Archive(id, _archiveTextBox.Text);
+            var item = new Wiki(id, _wikiTextBox.Text);
 
-            if (_archiveCollection.Contains(item)) return;
-            _archiveCollection.Add(item);
+            if (_wikiCollection.Contains(item)) return;
+            _wikiCollection.Add(item);
 
-            _archiveListViewUpdate();
+            _wikiListViewUpdate();
         }
 
-        private void _archiveDeleteButton_Click(object sender, RoutedEventArgs e)
+        private void _wikiDeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            int selectIndex = _archiveListView.SelectedIndex;
+            int selectIndex = _wikiListView.SelectedIndex;
             if (selectIndex == -1) return;
 
-            foreach (var item in _archiveListView.SelectedItems.OfType<Archive>().ToArray())
+            foreach (var item in _wikiListView.SelectedItems.OfType<Wiki>().ToArray())
             {
-                _archiveCollection.Remove(item);
+                _wikiCollection.Remove(item);
             }
 
-            _archiveListViewUpdate();
+            _wikiListViewUpdate();
         }
 
         #endregion
@@ -515,8 +519,6 @@ namespace Lair.Windows
             var digitalSignatureComboBoxItem = _signatureComboBox.SelectedItem as DigitalSignatureComboBoxItem;
             DigitalSignature digitalSignature = digitalSignatureComboBoxItem == null ? null : digitalSignatureComboBoxItem.Value;
 
-            SectionProfileContent content = null;
-
             lock (_sectionTreeItem.ThisLock)
             {
                 _sectionTreeItem.UploadSignature = (digitalSignature == null) ? null : digitalSignature.ToString();
@@ -527,10 +529,10 @@ namespace Lair.Windows
                     _sectionTreeItem.TrustSignatures.AddRange(_trustSignatureCollection);
                 }
 
-                lock (_sectionTreeItem.Archives.ThisLock)
+                lock (_sectionTreeItem.Wikis.ThisLock)
                 {
-                    _sectionTreeItem.Archives.Clear();
-                    _sectionTreeItem.Archives.AddRange(_archiveCollection);
+                    _sectionTreeItem.Wikis.Clear();
+                    _sectionTreeItem.Wikis.AddRange(_wikiCollection);
                 }
 
                 lock (_sectionTreeItem.Chats.ThisLock)
@@ -539,16 +541,18 @@ namespace Lair.Windows
                     _sectionTreeItem.Chats.AddRange(_chatCollection);
                 }
 
-                content = new SectionProfileContent(null,
-                    _sectionTreeItem.Exchange.GetPublicKey(),
-                    _sectionTreeItem.TrustSignatures,
-                    _sectionTreeItem.Archives,
-                    _sectionTreeItem.Chats);
+                _sectionTreeItem.Comment = _commentTextBox.Text;
             }
 
             if (digitalSignature != null)
             {
-                _lairManager.Upload(_sectionTreeItem.Tag, content, digitalSignature);
+                _lairManager.UploadSectionProfile(_sectionTreeItem.Tag,
+                    _sectionTreeItem.Comment,
+                    _sectionTreeItem.Exchange.GetPublicKey(),
+                    _sectionTreeItem.TrustSignatures,
+                    _sectionTreeItem.Wikis,
+                    _sectionTreeItem.Chats,
+                    digitalSignature);
             }
         }
 

@@ -12,9 +12,9 @@
   <Translate Key="Section_Id" Value="ID" />
   <Translate Key="Section_Option" Value="Option" />
 
-  <Translate Key="Archive_Name" Value="Name" />
-  <Translate Key="Archive_Id" Value="ID" />
-  <Translate Key="Archive_Option" Value="Option" />
+  <Translate Key="Wiki_Name" Value="Name" />
+  <Translate Key="Wiki_Id" Value="ID" />
+  <Translate Key="Wiki_Option" Value="Option" />
 
   <Translate Key="Chat_Name" Value="Name" />
   <Translate Key="Chat_Id" Value="ID" />
@@ -192,23 +192,20 @@
   <Translate Key="ConnectionControl_LockSpace" Value="Lock space" />
   <Translate Key="ConnectionControl_UsingSpace" Value="Using space" />
   <Translate Key="ConnectionControl_NodeCount" Value="Node count" />
-  <Translate Key="ConnectionControl_SeedCount" Value="Seed count" />
+  <Translate Key="ConnectionControl_HeaderCount" Value="Header count" />
   <Translate Key="ConnectionControl_BlockCount" Value="Block count" />
-  <Translate Key="ConnectionControl_DownloadCount" Value="Download count" />
-  <Translate Key="ConnectionControl_UploadCount" Value="Upload count" />
-  <Translate Key="ConnectionControl_ShareCount" Value="Share count" />
   <Translate Key="ConnectionControl_PushNodeCount" Value="PushNode count" />
   <Translate Key="ConnectionControl_PushBlockLinkCount" Value="PushBlockLink count" />
   <Translate Key="ConnectionControl_PushBlockRequestCount" Value="PushBlockRequest count" />
   <Translate Key="ConnectionControl_PushBlockCount" Value="PushBlock count" />
-  <Translate Key="ConnectionControl_PushSeedRequestCount" Value="PushSeedRequest count" />
-  <Translate Key="ConnectionControl_PushSeedCount" Value="PushSeed count" />
+  <Translate Key="ConnectionControl_PushHeaderRequestCount" Value="PushHeaderRequest count" />
+  <Translate Key="ConnectionControl_PushHeaderCount" Value="PushHeader count" />
   <Translate Key="ConnectionControl_PullNodeCount" Value="PullNode count" />
   <Translate Key="ConnectionControl_PullBlockLinkCount" Value="PullBlocksLink count" />
   <Translate Key="ConnectionControl_PullBlockRequestCount" Value="PullBlockRequest count" />
   <Translate Key="ConnectionControl_PullBlockCount" Value="PullBlock count" />
-  <Translate Key="ConnectionControl_PullSeedRequestCount" Value="PullSeedRequest count" />
-  <Translate Key="ConnectionControl_PullSeedCount" Value="PullSeed count" />
+  <Translate Key="ConnectionControl_PullHeaderRequestCount" Value="PullHeaderRequest count" />
+  <Translate Key="ConnectionControl_PullHeaderCount" Value="PullHeader count" />
   <Translate Key="ConnectionControl_Copy" Value="Copy" />
   <Translate Key="ConnectionControl_Paste" Value="Paste" />
 
@@ -220,7 +217,10 @@
   <Translate Key="SectionControl_Copy" Value="Copy" />
   <Translate Key="SectionControl_CopyInfo" Value="Copy info" />
   <Translate Key="SectionControl_Paste" Value="Paste" />
-  <Translate Key="SectionControl_TrustInformation" Value="Trust information" />
+  <Translate Key="SectionControl_TrustSignaturesPreview" Value="Trust information" />
+  <Translate Key="SectionControl_Chat" Value="Chat" />
+  <Translate Key="SectionControl_Wiki" Value="Wiki" />
+  <Translate Key="SectionControl_Mail" Value="Mail" />
 
   <Translate Key="NewSectionWindow_Title" Value="New section" />
   <Translate Key="NewSectionWindow_SectionName" Value="Section name" />
@@ -231,13 +231,14 @@
   <Translate Key="SectionTreeItemEditWindow_Title" Value="Section edit" />
   <Translate Key="SectionTreeItemEditWindow_YourSignature" Value="Your signature" />
   <Translate Key="SectionTreeItemEditWindow_Section" Value="Section" />
-  <Translate Key="SectionTreeItemEditWindow_SectionTag" Value="Section tag" />
   <Translate Key="SectionTreeItemEditWindow_LeaderSignature" Value="Leader signature" />
+  <Translate Key="SectionTreeItemEditWindow_YourProfile" Value="Your profile" />
   <Translate Key="SectionTreeItemEditWindow_Trust" Value="Trust" />
   <Translate Key="SectionTreeItemEditWindow_Signature" Value="Signature" />
   <Translate Key="SectionTreeItemEditWindow_Chat" Value="Chat" />
-  <Translate Key="SectionTreeItemEditWindow_Archive" Value="Archive" />
+  <Translate Key="SectionTreeItemEditWindow_Wiki" Value="Wiki" />
   <Translate Key="SectionTreeItemEditWindow_Value" Value="Value" />
+  <Translate Key="SectionTreeItemEditWindow_Comment" Value="Comment" />
   <Translate Key="SectionTreeItemEditWindow_Up" Value="Up" />
   <Translate Key="SectionTreeItemEditWindow_Down" Value="Down" />
   <Translate Key="SectionTreeItemEditWindow_Add" Value="Add" />
@@ -250,22 +251,18 @@
   <Translate Key="SectionTreeItemEditWindow_Ok" Value="Ok" />
   <Translate Key="SectionTreeItemEditWindow_Cancel" Value="Cancel" />
 
-  <Translate Key="TrustInformationWindow_Title" Value="Trust information" />
-  <Translate Key="TrustInformationWindow_Copy" Value="Copy" />
-  <Translate Key="TrustInformationWindow_Profile" Value="Profile" />
-  
-  <Translate Key="SectionProfileWindow_Title" Value="Section profile information" />
-  <Translate Key="SectionProfileWindow_TargetSignature" Value="Target signature" />
-  <Translate Key="SectionProfileWindow_Signature" Value="Signature" />
-  <Translate Key="SectionProfileWindow_Section" Value="Section" />
-  <Translate Key="SectionProfileWindow_Trust" Value="Trust" />
-  <Translate Key="SectionProfileWindow_Chat" Value="Chat" />
-  <Translate Key="SectionProfileWindow_Archive" Value="Archive" />
-  <Translate Key="SectionProfileWindow_Value" Value="Value" />
-  <Translate Key="SectionProfileWindow_Copy" Value="Copy" />
-  <Translate Key="SectionProfileWindow_Close" Value="Close" />
+  <Translate Key="TrustSignaturesPreviewWindow_Title" Value="Trust information" />
+  <Translate Key="TrustSignaturesPreviewWindow_Copy" Value="Copy" />
+  <Translate Key="TrustSignaturesPreviewWindow_Signature" Value="Signature" />
+  <Translate Key="TrustSignaturesPreviewWindow_Section" Value="Section" />
+  <Translate Key="TrustSignaturesPreviewWindow_Trust" Value="Trust" />
+  <Translate Key="TrustSignaturesPreviewWindow_Chat" Value="Chat" />
+  <Translate Key="TrustSignaturesPreviewWindow_Wiki" Value="Wiki" />
+  <Translate Key="TrustSignaturesPreviewWindow_Value" Value="Value" />
+  <Translate Key="TrustSignaturesPreviewWindow_Comment" Value="Comment" />
+  <Translate Key="TrustSignaturesPreviewWindow_Close" Value="Close" />
 
-  <Translate Key="ChatControl_New" Value="New" />
+  <Translate Key="ChatControl_NewCategory" Value="New category" />
   <Translate Key="ChatControl_Edit" Value="Edit" />
   <Translate Key="ChatControl_Delete" Value="Delete" />
   <Translate Key="ChatControl_Cut" Value="Cut" />
@@ -294,5 +291,20 @@
   <Translate Key="ChatControl_ImportLockedMessages" Value="Import locked messages" />
   <Translate Key="ChatControl_ExportLockedMessages" Value="Export locked messages" />
   <Translate Key="ChatControl_TopicUpload" Value="New Topic" />
+
+  <Translate Key="ChatListWindow_Title" Value="Chat list" />
+  <Translate Key="ChatListWindow_Name" Value="Name" />
+  <Translate Key="ChatListWindow_Id" Value="ID" />
+  <Translate Key="ChatListWindow_Copy" Value="Copy" />
+  <Translate Key="ChatListWindow_CopyInfo" Value="Copy info" />
+  <Translate Key="ChatListWindow_Join" Value="Join" />
+  <Translate Key="ChatListWindow_Close" Value="Close" />
+
+  <Translate Key="MessageEditWindow_Title" Value="New message - {0}" />
+  <Translate Key="MessageEditWindow_Edit" Value="Edit" />
+  <Translate Key="MessageEditWindow_Preview" Value="Preview" />
+  <Translate Key="MessageEditWindow_Comment" Value="Comment" />
+  <Translate Key="MessageEditWindow_Ok" Value="Ok" />
+  <Translate Key="MessageEditWindow_Cancel" Value="Cancel" />
 
 </Configuration>

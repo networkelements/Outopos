@@ -14,6 +14,7 @@ using Lair.Properties;
 using Library;
 using Library.Net.Lair;
 using Library.Security;
+using l = Library.Net.Lair;
 
 namespace Lair.Windows
 {
@@ -31,6 +32,8 @@ namespace Lair.Windows
             digitalSignatureCollection.AddRange(Settings.Instance.Global_DigitalSignatureCollection.Select(n => new DigitalSignatureComboBoxItem(n)).ToArray());
 
             InitializeComponent();
+
+            _sectionNameTextBox.MaxLength = l.Section.MaxNameLength;
 
             _signatureComboBox.ItemsSource = digitalSignatureCollection;
             _signatureComboBox.SelectedIndex = 0;

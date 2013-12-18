@@ -22,15 +22,15 @@ namespace Lair.Windows
     /// </summary>
     partial class MessageEditWindow : Window
     {
-        private Chat _channel;
-        private List<ChatMessagePack> _anchors = new List<ChatMessagePack>();
+        private Chat _chat;
+        private List<ChatMessage> _responsMessages = new List<ChatMessage>();
         private DigitalSignature _digitalSignature;
         private LairManager _lairManager;
 
-        public MessageEditWindow(Chat channel, string content, IEnumerable<Message> responsMessages, DigitalSignature digitalSignature, LairManager lairManager)
+        public MessageEditWindow(Chat chat, string content, IEnumerable<ChatMessage> responsMessages, DigitalSignature digitalSignature, LairManager lairManager)
         {
-            _channel = channel;
-            if (responsMessages != null) _anchors.AddRange(responsMessages);
+            _chat = chat;
+            if (responsMessages != null) _responsMessages.AddRange(responsMessages);
             _digitalSignature = digitalSignature;
             _lairManager = lairManager;
 
@@ -39,8 +39,6 @@ namespace Lair.Windows
             digitalSignatureCollection.AddRange(Settings.Instance.Global_DigitalSignatureCollection.Select(n => new DigitalSignatureComboBoxItem(n)).ToArray());
 
             InitializeComponent();
-
-            this.Title = string.Format(LanguagesManager.Instance.MessageEditWindow_Title, channel.Name);
 
             _commentTextBox.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
             _commentTextBox.FontSize = (double)new FontSizeConverter().ConvertFromString(Settings.Instance.Global_Fonts_MessageFontSize + "pt");
@@ -60,9 +58,6 @@ namespace Lair.Windows
 
             _commentTextBox.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
             _commentTextBox.FontSize = Settings.Instance.Global_Fonts_MessageFontSize;
-
-            //_commentTextBox.CaretIndex = _commentTextBox.Text.Length;
-            //_commentTextBox.ScrollToEnd();
 
             _commentTextBox_TextChanged(null, null);
         }
@@ -92,14 +87,12 @@ namespace Lair.Windows
 
                 string comment = _commentTextBox.Text;
 
-                if (comment.Length > Message.MaxContentLength)
+                if (comment.Length > ChatMessage.MaxCommentLength)
                 {
-                    comment = comment.Substring(0, Message.MaxContentLength);
+                    comment = comment.Substring(0, ChatMessage.MaxCommentLength);
                 }
 
-                var m = new Message(_channel, comment, _anchors.Select(n => new Key(n.GetHash(HashAlgorithm.Sha512), HashAlgorithm.Sha512)), _digitalSignature);
-
-                RichTextBoxHelper.SetRichTextBox(_richTextBox, m);
+                RichTextBoxHelper.SetRichTextBox(_richTextBox, _chat, _digitalSignature.ToString(), DateTime.UtcNow, comment, _responsMessages.Select(n => new Anchor(n.Signature, n.CreationTime)));
 
                 _richTextBox.MaxHeight = double.PositiveInfinity;
             }
@@ -107,7 +100,7 @@ namespace Lair.Windows
 
         private void _commentTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(_commentTextBox.Text) || _commentTextBox.Text.Length > Message.MaxContentLength)
+            if (string.IsNullOrWhiteSpace(_commentTextBox.Text) || _commentTextBox.Text.Length > ChatMessage.MaxCommentLength)
             {
                 _okButton.IsEnabled = false;
             }
@@ -118,27 +111,13 @@ namespace Lair.Windows
 
             if (_commentTextBox.Text != null)
             {
-                _countLabel.Content = string.Format("{0} / {1}", _commentTextBox.Text.Length, Message.MaxContentLength);
+                _countLabel.Content = string.Format("{0} / {1}", _commentTextBox.Text.Length, ChatMessage.MaxCommentLength);
             }
         }
 
         private void _okButton_Click(object sender, RoutedEventArgs e)
         {
-            var message = new Message(_channel, _commentTextBox.Text, _anchors.Select(n => new Key(n.GetHash(HashAlgorithm.Sha512), HashAlgorithm.Sha512)), _digitalSignature);
-
-            {
-                LockedHashSet<Message> messages;
-
-                if (!Settings.Instance.Global_LockedMessages.TryGetValue(_channel, out messages))
-                {
-                    messages = new LockedHashSet<Message>();
-                    Settings.Instance.Global_LockedMessages[_channel] = messages;
-                }
-
-                messages.Add(message);
-            }
-
-            _lairManager.Upload(message);
+            _lairManager.UploadChatMessage(_chat, _commentTextBox.Text, _responsMessages.Select(n => new Anchor(n.Signature, n.CreationTime)), _digitalSignature);
 
             this.Close();
         }

@@ -30,7 +30,7 @@
             <MenuItem Name="_sectionTreeViewItemCopyMenuItem" Header="{Binding Path=SectionControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemCopyMenuItem_Click" />
             <MenuItem Name="_sectionTreeViewItemCopyInfoMenuItem" Header="{Binding Path=SectionControl_CopyInfo, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemCopyInfoMenuItem_Click" />
             <Separator />
-            <MenuItem Name="_sectionTreeViewItemTrustInformationMenuItem" Header="{Binding Path=SectionControl_TrustInformation, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemTrustInformationMenuItem_Click" />
+            <MenuItem Name="_sectionTreeViewItemTrustSignaturesPreviewMenuItem" Header="{Binding Path=SectionControl_TrustSignaturesPreview, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemTrustSignaturesPreviewMenuItem_Click" />
         </ContextMenu>
     </UserControl.Resources>
 
@@ -81,5 +81,16 @@
                 </Style>
             </TreeView.Resources>
         </TreeView>
+        <TabControl Grid.Column="2" Name="tabControl1" Grid.RowSpan="2">
+            <TabItem Header="{Binding Path=SectionControl_Chat, Source={StaticResource ResourcesInstance}}" >
+                <Grid Name="_chatGrid" />
+            </TabItem>
+            <TabItem Header="{Binding Path=SectionControl_Wiki, Source={StaticResource ResourcesInstance}}" >
+                <Grid Name="_wikiGrid" />
+            </TabItem>
+            <TabItem Header="{Binding Path=SectionControl_Mail, Source={StaticResource ResourcesInstance}}" >
+                <Grid Name="_mailGrid" />
+            </TabItem>
+        </TabControl>
     </Grid>
 </UserControl>

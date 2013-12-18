@@ -8,7 +8,7 @@ using Lair.Windows;
 using Library;
 using Library.Collections;
 using Library.Net.Lair;
-using a = Library.Net.Amoeba;
+using A = Library.Net.Amoeba;
 
 namespace Lair
 {
@@ -16,15 +16,15 @@ namespace Lair
     {
         private static bool _isNodesCached;
         private static bool _isSectionsCached;
-        private static bool _isArchivesCached;
+        private static bool _isWikisCached;
         private static bool _isChatsCached;
         private static bool _isSeedsCached;
 
         private static LockedList<Node> _nodeList = new LockedList<Node>();
         private static LockedList<Tuple<Section, string>> _sectionList = new LockedList<Tuple<Section, string>>();
-        private static LockedList<Tuple<Archive, string>> _archiveList = new LockedList<Tuple<Archive, string>>();
+        private static LockedList<Tuple<Wiki, string>> _wikiList = new LockedList<Tuple<Wiki, string>>();
         private static LockedList<Tuple<Chat, string>> _chatList = new LockedList<Tuple<Chat, string>>();
-        private static LockedList<a.Seed> _seedList = new LockedList<a.Seed>();
+        private static LockedList<A.Seed> _seedList = new LockedList<A.Seed>();
 
         private static LockedList<Windows.SectionCategorizeTreeItem> _sectionCategorizeTreeItemList = new LockedList<SectionCategorizeTreeItem>();
         private static LockedList<Windows.SectionTreeItem> _sectionTreeItemList = new LockedList<SectionTreeItem>();
@@ -44,13 +44,13 @@ namespace Lair
                 {
                     _isNodesCached = false;
                     _isSectionsCached = false;
-                    _isArchivesCached = false;
+                    _isWikisCached = false;
                     _isChatsCached = false;
                     _isSeedsCached = false;
 
                     _nodeList.Clear();
                     _sectionList.Clear();
-                    _archiveList.Clear();
+                    _wikiList.Clear();
                     _chatList.Clear();
                     _seedList.Clear();
 
@@ -301,11 +301,11 @@ namespace Lair
             }
         }
 
-        public static bool ContainsArchives()
+        public static bool ContainsWikis()
         {
             lock (_thisLock)
             {
-                if (!_isArchivesCached)
+                if (!_isWikisCached)
                 {
                     foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
                     {
@@ -313,10 +313,10 @@ namespace Lair
                         {
                             string option;
 
-                            var tag = LairConverter.FromArchiveString(item, out option);
+                            var tag = LairConverter.FromWikiString(item, out option);
                             if (tag == null) continue;
 
-                            _archiveList.Add(new Tuple<Archive, string>(tag, option));
+                            _wikiList.Add(new Tuple<Wiki, string>(tag, option));
                         }
                         catch (Exception)
                         {
@@ -324,18 +324,18 @@ namespace Lair
                         }
                     }
 
-                    _isArchivesCached = true;
+                    _isWikisCached = true;
                 }
 
-                return _archiveList.Count != 0;
+                return _wikiList.Count != 0;
             }
         }
 
-        public static IEnumerable<Tuple<Archive, string>> GetArchives()
+        public static IEnumerable<Tuple<Wiki, string>> GetWikis()
         {
             lock (_thisLock)
             {
-                if (!_isArchivesCached)
+                if (!_isWikisCached)
                 {
                     foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
                     {
@@ -343,10 +343,10 @@ namespace Lair
                         {
                             string option;
 
-                            var tag = LairConverter.FromArchiveString(item, out option);
+                            var tag = LairConverter.FromWikiString(item, out option);
                             if (tag == null) continue;
 
-                            _archiveList.Add(new Tuple<Archive, string>(tag, option));
+                            _wikiList.Add(new Tuple<Wiki, string>(tag, option));
                         }
                         catch (Exception)
                         {
@@ -354,14 +354,14 @@ namespace Lair
                         }
                     }
 
-                    _isArchivesCached = true;
+                    _isWikisCached = true;
                 }
 
-                return _archiveList.ToArray();
+                return _wikiList.ToArray();
             }
         }
 
-        public static void SetArchives(IEnumerable<Tuple<Archive, string>> sections)
+        public static void SetWikis(IEnumerable<Tuple<Wiki, string>> sections)
         {
             lock (_thisLock)
             {
@@ -370,14 +370,14 @@ namespace Lair
 
                     foreach (var tuple in sections)
                     {
-                        sb.AppendLine(LairConverter.ToArchiveString(tuple.Item1, tuple.Item2));
+                        sb.AppendLine(LairConverter.ToWikiString(tuple.Item1, tuple.Item2));
                     }
 
                     Clipboard.SetText(sb.ToString());
                 }
 
-                _archiveList.AddRange(sections);
-                _isArchivesCached = true;
+                _wikiList.AddRange(sections);
+                _isWikisCached = true;
             }
         }
 
@@ -471,7 +471,7 @@ namespace Lair
                     {
                         try
                         {
-                            var seed = a.AmoebaConverter.FromSeedString(item);
+                            var seed = A.AmoebaConverter.FromSeedString(item);
                             if (seed == null) continue;
 
                             if (!seed.VerifyCertificate()) seed.CreateCertificate(null);
@@ -491,7 +491,7 @@ namespace Lair
             }
         }
 
-        public static IEnumerable<a.Seed> GetSeeds()
+        public static IEnumerable<A.Seed> GetSeeds()
         {
             lock (_thisLock)
             {
@@ -501,7 +501,7 @@ namespace Lair
                     {
                         try
                         {
-                            var seed = a.AmoebaConverter.FromSeedString(item);
+                            var seed = A.AmoebaConverter.FromSeedString(item);
                             if (seed == null) continue;
 
                             if (!seed.VerifyCertificate()) seed.CreateCertificate(null);
@@ -521,7 +521,7 @@ namespace Lair
             }
         }
 
-        public static void SetSeeds(IEnumerable<a.Seed> seeds)
+        public static void SetSeeds(IEnumerable<A.Seed> seeds)
         {
             lock (_thisLock)
             {
@@ -530,7 +530,7 @@ namespace Lair
 
                     foreach (var item in seeds)
                     {
-                        sb.AppendLine(a.AmoebaConverter.ToSeedString(item));
+                        sb.AppendLine(A.AmoebaConverter.ToSeedString(item));
                     }
 
                     Clipboard.SetText(sb.ToString());

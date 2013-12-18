@@ -49,9 +49,6 @@
             <TreeView HorizontalAlignment="Stretch" Name="_treeView" VerticalAlignment="Stretch">
                 <TreeViewItem Name="_updateTreeViewItem" Header="{Binding Path=ViewOptionsWindow_Update, Source={StaticResource ResourcesInstance}}" IsSelected="False" IsEnabled="True" />
                 <TreeViewItem Name="_signaturesTreeViewItem" Header="{Binding Path=ViewOptionsWindow_Signatures, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
-                <TreeViewItem Name="_keywordsTreeViewItem" Header="{Binding Path=ViewOptionsWindow_Keywords, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
-                <TreeViewItem Name="_boxTreeViewItem" Header="{Binding Path=ViewOptionsWindow_Box, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
-                <!--<TreeViewItem Name="_eventsTreeViewItem" Header="{Binding Path=ViewOptionsWindow_Events, Source={StaticResource ResourcesInstance}}" IsSelected="False" />-->
             </TreeView>
 
             <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.RowSpan="3" />
@@ -95,15 +92,6 @@
                 <TextBox Height="23" Margin="6,0,6,35" Name="_signatureTextBox" VerticalAlignment="Bottom" VerticalContentAlignment="Center" KeyDown="_signatureTextBox_KeyDown" />
             </Grid>
 
-            <Grid Grid.Column="2" Visibility="{Binding ElementName=_boxTreeViewItem, Path=IsSelected, Converter={StaticResource _boolToVisibilityConverter}}">
-                <CheckBox Content="{Binding Path=ViewOptionsWindow_RelateBoxFile, Source={StaticResource ResourcesInstance}}" Height="16" HorizontalAlignment="Left" Margin="6,6,0,0" Name="_boxRelateFileCheckBox" VerticalAlignment="Top" />
-                <CheckBox Content="{Binding Path=ViewOptionsWindow_OpenBox, Source={StaticResource ResourcesInstance}}" Height="16" HorizontalAlignment="Left" Margin="6,28,0,0" Name="_boxOpenCheckBox" VerticalAlignment="Top" />
-                <Label Content="{Binding Path=ViewOptionsWindow_ExtractTo, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,50,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="240" />
-                <TextBox Height="24" Margin="252,50,6,0" Name="_boxExtractToTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" />
-            </Grid>
-
-            <!--<Grid Grid.Column="2" Visibility="{Binding ElementName=_eventsTreeViewItem, Path=IsSelected, Converter={StaticResource _boolToVisibilityConverter}}">
-            </Grid>-->
         </Grid>
         
         <Button Height="23" HorizontalAlignment="Right" Margin="0,0,93,12" Name="_okButton" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=ViewOptionsWindow_Ok, Source={StaticResource ResourcesInstance}}" Click="_okButton_Click" IsDefault="True" />

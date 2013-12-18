@@ -48,7 +48,7 @@ namespace Lair.Windows
 
         public void Update()
         {
-            _header.Text = _value.SectionProfilePack.Header.Certificate.ToString();
+            _header.Text = _value.SectionProfile.Signature;
 
             foreach (var item in _listViewItemCollection.OfType<SignatureTreeViewItem>().ToArray())
             {
@@ -78,7 +78,7 @@ namespace Lair.Windows
 
             list.Sort((x, y) =>
             {
-                int c = x.Value.SectionProfilePack.Header.Certificate.ToString().CompareTo(y.Value.SectionProfilePack.Header.Certificate.ToString());
+                int c = x.Value.SectionProfile.Signature.CompareTo(y.Value.SectionProfile.Signature);
                 if (c != 0) return c;
                 c = x.Hit.CompareTo(y.Hit);
                 if (c != 0) return c;

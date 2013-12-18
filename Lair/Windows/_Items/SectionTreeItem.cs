@@ -20,12 +20,13 @@ namespace Lair.Windows
         private string _leaderSignature;
         private string _uploadSignature;
 
+        private string _comment;
         private Exchange _exchange;
         private LockedList<string> _trustSignatures;
-        private LockedList<Archive> _archives;
+        private LockedList<Wiki> _wikis;
         private LockedList<Chat> _chats;
 
-        private LockedList<SectionProfilePack> _sectionProfilePacks;
+        private LockedList<SectionProfile> _cacheSectionProfiles;
 
         private ChatCategorizeTreeItem _chatCategorizeTreeItem;
 
@@ -36,7 +37,6 @@ namespace Lair.Windows
         {
             this.Tag = section;
             this.Exchange = new Exchange(ExchangeAlgorithm.Rsa2048);
-            this.ChatCategorizeTreeItem = new ChatCategorizeTreeItem();
         }
 
         [DataMember(Name = "Tag")]
@@ -77,25 +77,6 @@ namespace Lair.Windows
             }
         }
 
-        [DataMember(Name = "Exchange")]
-        public Exchange Exchange
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return _exchange;
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    _exchange = value;
-                }
-            }
-        }
-
         [DataMember(Name = "UploadSignature")]
         public string UploadSignature
         {
@@ -115,6 +96,44 @@ namespace Lair.Windows
             }
         }
 
+        [DataMember(Name = "Comment")]
+        public string Comment
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return _comment;
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    _comment = value;
+                }
+            }
+        }
+
+        [DataMember(Name = "Exchange")]
+        public Exchange Exchange
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return _exchange;
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    _exchange = value;
+                }
+            }
+        }
+
         [DataMember(Name = "TrustSignatures")]
         public LockedList<string> TrustSignatures
         {
@@ -126,6 +145,21 @@ namespace Lair.Windows
                         _trustSignatures = new LockedList<string>();
 
                     return _trustSignatures;
+                }
+            }
+        }
+
+        [DataMember(Name = "Wikis")]
+        public LockedList<Wiki> Wikis
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    if (_wikis == null)
+                        _wikis = new LockedList<Wiki>();
+
+                    return _wikis;
                 }
             }
         }
@@ -145,32 +179,17 @@ namespace Lair.Windows
             }
         }
 
-        [DataMember(Name = "Archives")]
-        public LockedList<Archive> Archives
+        [DataMember(Name = "CacheSectionProfiles")]
+        public LockedList<SectionProfile> CacheSectionProfiles
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    if (_archives == null)
-                        _archives = new LockedList<Archive>();
+                    if (_cacheSectionProfiles == null)
+                        _cacheSectionProfiles = new LockedList<SectionProfile>();
 
-                    return _archives;
-                }
-            }
-        }
-
-        [DataMember(Name = "SectionProfilePacks")]
-        public LockedList<SectionProfilePack> SectionProfilePacks
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    if (_sectionProfilePacks == null)
-                        _sectionProfilePacks = new LockedList<SectionProfilePack>();
-
-                    return _sectionProfilePacks;
+                    return _cacheSectionProfiles;
                 }
             }
         }
@@ -182,10 +201,16 @@ namespace Lair.Windows
             {
                 lock (this.ThisLock)
                 {
+                    if (_chatCategorizeTreeItem == null)
+                    {
+                        _chatCategorizeTreeItem = new ChatCategorizeTreeItem();
+                        _chatCategorizeTreeItem.Name = "Category";
+                    }
+
                     return _chatCategorizeTreeItem;
                 }
             }
-            set
+            private set
             {
                 lock (this.ThisLock)
                 {

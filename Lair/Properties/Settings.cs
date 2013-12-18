@@ -11,7 +11,7 @@ using Library.Collections;
 using Library.Net;
 using Library.Net.Lair;
 using Library.Security;
-using a = Library.Net.Amoeba;
+using A = Library.Net.Amoeba;
 
 namespace Lair.Properties
 {
@@ -28,9 +28,9 @@ namespace Lair.Properties
                 new Library.Configuration.SettingContent<bool>() { Name = "Global_IsStart", Value = true },
                 new Library.Configuration.SettingContent<LockedHashSet<string>>() { Name = "Global_UrlHistorys", Value = new LockedHashSet<string>() },
                 new Library.Configuration.SettingContent<LockedHashSet<Section>>() { Name = "Global_SectionHistorys", Value = new LockedHashSet<Section>() },
-                new Library.Configuration.SettingContent<LockedHashSet<Archive>>() { Name = "Global_ArchiveHistorys", Value = new LockedHashSet<Archive>() },
+                new Library.Configuration.SettingContent<LockedHashSet<Wiki>>() { Name = "Global_WikiHistorys", Value = new LockedHashSet<Wiki>() },
                 new Library.Configuration.SettingContent<LockedHashSet<Chat>>() { Name = "Global_ChatHistorys", Value = new LockedHashSet<Chat>() },
-                new Library.Configuration.SettingContent<LockedHashSet<a.Seed>>() { Name = "Global_SeedHistorys", Value = new LockedHashSet<a.Seed>() },
+                new Library.Configuration.SettingContent<LockedHashSet<A.Seed>>() { Name = "Global_SeedHistorys", Value = new LockedHashSet<A.Seed>() },
                 new Library.Configuration.SettingContent<bool>() { Name = "Global_UrlClearHistory_IsEnabled", Value = false },
                 new Library.Configuration.SettingContent<bool>() { Name = "Global_AutoBaseNodeSetting_IsEnabled", Value = true },
                 new Library.Configuration.SettingContent<bool>() { Name = "Global_I2p_SamBridge_IsEnabled", Value = true },
@@ -100,27 +100,37 @@ namespace Lair.Properties
                 new Library.Configuration.SettingContent<double>() { Name = "SectionTreeItemEditWindow_Width", Value = 700 },
                 new Library.Configuration.SettingContent<WindowState>() { Name = "SectionTreeItemEditWindow_WindowState", Value = WindowState.Normal },
                 new Library.Configuration.SettingContent<double>() { Name = "SectionTreeItemEditWindow_GridViewColumn_TrustSignature_Width", Value = 600 },
-                new Library.Configuration.SettingContent<double>() { Name = "SectionTreeItemEditWindow_GridViewColumn_Archive_Width", Value = 600 },
+                new Library.Configuration.SettingContent<double>() { Name = "SectionTreeItemEditWindow_GridViewColumn_Wiki_Width", Value = 600 },
                 new Library.Configuration.SettingContent<double>() { Name = "SectionTreeItemEditWindow_GridViewColumn_Chat_Width", Value = 600 },
 
-                new Library.Configuration.SettingContent<double>() { Name = "TrustInformationWindow_Top", Value = 120 },
-                new Library.Configuration.SettingContent<double>() { Name = "TrustInformationWindow_Left", Value = 120 },
-                new Library.Configuration.SettingContent<double>() { Name = "TrustInformationWindow_Height", Value = 500 },
-                new Library.Configuration.SettingContent<double>() { Name = "TrustInformationWindow_Width", Value = 700 },
-                new Library.Configuration.SettingContent<WindowState>() { Name = "TrustInformationWindow_WindowState", Value = WindowState.Normal },
+                new Library.Configuration.SettingContent<double>() { Name = "TrustSignaturesPreviewWindow_Top", Value = 120 },
+                new Library.Configuration.SettingContent<double>() { Name = "TrustSignaturesPreviewWindow_Left", Value = 120 },
+                new Library.Configuration.SettingContent<double>() { Name = "TrustSignaturesPreviewWindow_Height", Value = 500 },
+                new Library.Configuration.SettingContent<double>() { Name = "TrustSignaturesPreviewWindow_Width", Value = 700 },
+                new Library.Configuration.SettingContent<WindowState>() { Name = "TrustSignaturesPreviewWindow_WindowState", Value = WindowState.Normal },
+                new Library.Configuration.SettingContent<double>() { Name = "TrustSignaturesPreviewWindow_Grid_ColumnDefinitions_Width", Value = 200 },
+                new Library.Configuration.SettingContent<double>() { Name = "TrustSignaturesPreviewWindow_GridViewColumn_TrustSignature_Width", Value = 600 },
+                new Library.Configuration.SettingContent<double>() { Name = "TrustSignaturesPreviewWindow_GridViewColumn_Wiki_Width", Value = 600 },
+                new Library.Configuration.SettingContent<double>() { Name = "TrustSignaturesPreviewWindow_GridViewColumn_Chat_Width", Value = 600 },
 
-                new Library.Configuration.SettingContent<double>() { Name = "SectionProfileWindow_Top", Value = 120 },
-                new Library.Configuration.SettingContent<double>() { Name = "SectionProfileWindow_Left", Value = 120 },
-                new Library.Configuration.SettingContent<double>() { Name = "SectionProfileWindow_Height", Value = 500 },
-                new Library.Configuration.SettingContent<double>() { Name = "SectionProfileWindow_Width", Value = 700 },
-                new Library.Configuration.SettingContent<WindowState>() { Name = "SectionProfileWindow_WindowState", Value = WindowState.Normal },
-                new Library.Configuration.SettingContent<double>() { Name = "SectionProfileWindow_GridViewColumn_TrustSignature_Width", Value = 600 },
-                new Library.Configuration.SettingContent<double>() { Name = "SectionProfileWindow_GridViewColumn_Archive_Width", Value = 600 },
-                new Library.Configuration.SettingContent<double>() { Name = "SectionProfileWindow_GridViewColumn_Chat_Width", Value = 600 },
-         
                 new Library.Configuration.SettingContent<double>() { Name = "ChatControl_Grid_ColumnDefinitions_Width", Value = 200 },
-                new Library.Configuration.SettingContent<ChatCategorizeTreeItem>() { Name = "ChatControl_ChatCategorizeTreeItem", Value = new ChatCategorizeTreeItem(){ Name = "Category", IsExpanded = true } },
-                })
+             
+                new Library.Configuration.SettingContent<double>() { Name = "ChatListWindow_Top", Value = 120 },
+                new Library.Configuration.SettingContent<double>() { Name = "ChatListWindow_Left", Value = 120 },
+                new Library.Configuration.SettingContent<double>() { Name = "ChatListWindow_Height", Value = 500 },
+                new Library.Configuration.SettingContent<double>() { Name = "ChatListWindow_Width", Value = 700 },
+                new Library.Configuration.SettingContent<WindowState>() { Name = "ChatListWindow_WindowState", Value = WindowState.Normal },
+                new Library.Configuration.SettingContent<string>() { Name = "ChatListWindow_LastHeaderClicked", Value = "Name" },
+                new Library.Configuration.SettingContent<ListSortDirection>() { Name = "ChatListWindow_ListSortDirection", Value = ListSortDirection.Descending },
+                new Library.Configuration.SettingContent<double>() { Name = "ChatListWindow_GridViewColumn_Name_Width", Value = 120 },
+                new Library.Configuration.SettingContent<double>() { Name = "ChatListWindow_GridViewColumn_Id_Width", Value = 120 },
+          
+                new Library.Configuration.SettingContent<double>() { Name = "MessageEditWindow_Top", Value = 120 },
+                new Library.Configuration.SettingContent<double>() { Name = "MessageEditWindow_Left", Value = 120 },
+                new Library.Configuration.SettingContent<double>() { Name = "MessageEditWindow_Height", Value = 500 },
+                new Library.Configuration.SettingContent<double>() { Name = "MessageEditWindow_Width", Value = 700 },
+                new Library.Configuration.SettingContent<WindowState>() { Name = "MessageEditWindow_WindowState", Value = WindowState.Normal },
+            })
         {
 
         }
@@ -248,20 +258,20 @@ namespace Lair.Properties
             }
         }
 
-        public LockedHashSet<Archive> Global_ArchiveHistorys
+        public LockedHashSet<Wiki> Global_WikiHistorys
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (LockedHashSet<Archive>)this["Global_ArchiveHistorys"];
+                   return (LockedHashSet<Wiki>)this["Global_WikiHistorys"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["Global_ArchiveHistorys"] = value;
+                    this["Global_WikiHistorys"] = value;
                 }
             }
         }
@@ -284,13 +294,13 @@ namespace Lair.Properties
             }
         }
 
-        public LockedHashSet<a.Seed> Global_SeedHistorys
+        public LockedHashSet<A.Seed> Global_SeedHistorys
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (LockedHashSet<a.Seed>)this["Global_SeedHistorys"];
+                   return (LockedHashSet<A.Seed>)this["Global_SeedHistorys"];
                 }
             }
             set
@@ -1425,20 +1435,20 @@ namespace Lair.Properties
             }
         }
 
-        public double SectionTreeItemEditWindow_GridViewColumn_Archive_Width
+        public double SectionTreeItemEditWindow_GridViewColumn_Wiki_Width
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["SectionTreeItemEditWindow_GridViewColumn_Archive_Width"];
+                   return (double)this["SectionTreeItemEditWindow_GridViewColumn_Wiki_Width"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["SectionTreeItemEditWindow_GridViewColumn_Archive_Width"] = value;
+                    this["SectionTreeItemEditWindow_GridViewColumn_Wiki_Width"] = value;
                 }
             }
         }
@@ -1462,237 +1472,164 @@ namespace Lair.Properties
         }
 
 
-        public double TrustInformationWindow_Top
+        public double TrustSignaturesPreviewWindow_Top
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["TrustInformationWindow_Top"];
+                   return (double)this["TrustSignaturesPreviewWindow_Top"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["TrustInformationWindow_Top"] = value;
+                    this["TrustSignaturesPreviewWindow_Top"] = value;
                 }
             }
         }
 
-        public double TrustInformationWindow_Left
+        public double TrustSignaturesPreviewWindow_Left
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["TrustInformationWindow_Left"];
+                   return (double)this["TrustSignaturesPreviewWindow_Left"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["TrustInformationWindow_Left"] = value;
+                    this["TrustSignaturesPreviewWindow_Left"] = value;
                 }
             }
         }
 
-        public double TrustInformationWindow_Height
+        public double TrustSignaturesPreviewWindow_Height
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["TrustInformationWindow_Height"];
+                   return (double)this["TrustSignaturesPreviewWindow_Height"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["TrustInformationWindow_Height"] = value;
+                    this["TrustSignaturesPreviewWindow_Height"] = value;
                 }
             }
         }
 
-        public double TrustInformationWindow_Width
+        public double TrustSignaturesPreviewWindow_Width
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["TrustInformationWindow_Width"];
+                   return (double)this["TrustSignaturesPreviewWindow_Width"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["TrustInformationWindow_Width"] = value;
+                    this["TrustSignaturesPreviewWindow_Width"] = value;
                 }
             }
         }
 
-        public WindowState TrustInformationWindow_WindowState
+        public WindowState TrustSignaturesPreviewWindow_WindowState
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (WindowState)this["TrustInformationWindow_WindowState"];
+                   return (WindowState)this["TrustSignaturesPreviewWindow_WindowState"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["TrustInformationWindow_WindowState"] = value;
+                    this["TrustSignaturesPreviewWindow_WindowState"] = value;
                 }
             }
         }
 
-
-        public double SectionProfileWindow_Top
+        public double TrustSignaturesPreviewWindow_Grid_ColumnDefinitions_Width
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["SectionProfileWindow_Top"];
+                   return (double)this["TrustSignaturesPreviewWindow_Grid_ColumnDefinitions_Width"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["SectionProfileWindow_Top"] = value;
+                    this["TrustSignaturesPreviewWindow_Grid_ColumnDefinitions_Width"] = value;
                 }
             }
         }
 
-        public double SectionProfileWindow_Left
+        public double TrustSignaturesPreviewWindow_GridViewColumn_TrustSignature_Width
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["SectionProfileWindow_Left"];
+                   return (double)this["TrustSignaturesPreviewWindow_GridViewColumn_TrustSignature_Width"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["SectionProfileWindow_Left"] = value;
+                    this["TrustSignaturesPreviewWindow_GridViewColumn_TrustSignature_Width"] = value;
                 }
             }
         }
 
-        public double SectionProfileWindow_Height
+        public double TrustSignaturesPreviewWindow_GridViewColumn_Wiki_Width
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["SectionProfileWindow_Height"];
+                   return (double)this["TrustSignaturesPreviewWindow_GridViewColumn_Wiki_Width"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["SectionProfileWindow_Height"] = value;
+                    this["TrustSignaturesPreviewWindow_GridViewColumn_Wiki_Width"] = value;
                 }
             }
         }
 
-        public double SectionProfileWindow_Width
+        public double TrustSignaturesPreviewWindow_GridViewColumn_Chat_Width
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["SectionProfileWindow_Width"];
+                   return (double)this["TrustSignaturesPreviewWindow_GridViewColumn_Chat_Width"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["SectionProfileWindow_Width"] = value;
-                }
-            }
-        }
-
-        public WindowState SectionProfileWindow_WindowState
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (WindowState)this["SectionProfileWindow_WindowState"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["SectionProfileWindow_WindowState"] = value;
-                }
-            }
-        }
-
-        public double SectionProfileWindow_GridViewColumn_TrustSignature_Width
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["SectionProfileWindow_GridViewColumn_TrustSignature_Width"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["SectionProfileWindow_GridViewColumn_TrustSignature_Width"] = value;
-                }
-            }
-        }
-
-        public double SectionProfileWindow_GridViewColumn_Archive_Width
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["SectionProfileWindow_GridViewColumn_Archive_Width"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["SectionProfileWindow_GridViewColumn_Archive_Width"] = value;
-                }
-            }
-        }
-
-        public double SectionProfileWindow_GridViewColumn_Chat_Width
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["SectionProfileWindow_GridViewColumn_Chat_Width"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["SectionProfileWindow_GridViewColumn_Chat_Width"] = value;
+                    this["TrustSignaturesPreviewWindow_GridViewColumn_Chat_Width"] = value;
                 }
             }
         }
@@ -1716,20 +1653,256 @@ namespace Lair.Properties
             }
         }
 
-        public ChatCategorizeTreeItem ChatControl_ChatCategorizeTreeItem
+
+        public double ChatListWindow_Top
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (ChatCategorizeTreeItem)this["ChatControl_ChatCategorizeTreeItem"];
+                   return (double)this["ChatListWindow_Top"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["ChatControl_ChatCategorizeTreeItem"] = value;
+                    this["ChatListWindow_Top"] = value;
+                }
+            }
+        }
+
+        public double ChatListWindow_Left
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChatListWindow_Left"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChatListWindow_Left"] = value;
+                }
+            }
+        }
+
+        public double ChatListWindow_Height
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChatListWindow_Height"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChatListWindow_Height"] = value;
+                }
+            }
+        }
+
+        public double ChatListWindow_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChatListWindow_Width"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChatListWindow_Width"] = value;
+                }
+            }
+        }
+
+        public WindowState ChatListWindow_WindowState
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (WindowState)this["ChatListWindow_WindowState"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChatListWindow_WindowState"] = value;
+                }
+            }
+        }
+
+        public string ChatListWindow_LastHeaderClicked
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (string)this["ChatListWindow_LastHeaderClicked"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChatListWindow_LastHeaderClicked"] = value;
+                }
+            }
+        }
+
+        public ListSortDirection ChatListWindow_ListSortDirection
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (ListSortDirection)this["ChatListWindow_ListSortDirection"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChatListWindow_ListSortDirection"] = value;
+                }
+            }
+        }
+
+        public double ChatListWindow_GridViewColumn_Name_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChatListWindow_GridViewColumn_Name_Width"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChatListWindow_GridViewColumn_Name_Width"] = value;
+                }
+            }
+        }
+
+        public double ChatListWindow_GridViewColumn_Id_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChatListWindow_GridViewColumn_Id_Width"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChatListWindow_GridViewColumn_Id_Width"] = value;
+                }
+            }
+        }
+
+
+        public double MessageEditWindow_Top
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["MessageEditWindow_Top"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["MessageEditWindow_Top"] = value;
+                }
+            }
+        }
+
+        public double MessageEditWindow_Left
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["MessageEditWindow_Left"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["MessageEditWindow_Left"] = value;
+                }
+            }
+        }
+
+        public double MessageEditWindow_Height
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["MessageEditWindow_Height"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["MessageEditWindow_Height"] = value;
+                }
+            }
+        }
+
+        public double MessageEditWindow_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["MessageEditWindow_Width"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["MessageEditWindow_Width"] = value;
+                }
+            }
+        }
+
+        public WindowState MessageEditWindow_WindowState
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (WindowState)this["MessageEditWindow_WindowState"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["MessageEditWindow_WindowState"] = value;
                 }
             }
         }

@@ -11,7 +11,7 @@
     
     <UserControl.Resources>
         <ContextMenu x:Key="_chatCategorizeTreeViewItemContextMenu">
-            <MenuItem Name="_chatCategorizeTreeViewItemNewMenuItem" Header="{Binding Path=ChatControl_New, Source={StaticResource ResourcesInstance}}" Click="_chatCategorizeTreeViewItemNewMenuItem_Click"/>
+            <MenuItem Name="_chatCategorizeTreeViewItemNewCategoryMenuItem" Header="{Binding Path=ChatControl_NewCategory, Source={StaticResource ResourcesInstance}}" Click="_chatCategorizeTreeViewItemNewCategoryMenuItem_Click"/>
             <MenuItem Name="_chatCategorizeTreeViewItemEditMenuItem" Header="{Binding Path=ChatControl_Edit, Source={StaticResource ResourcesInstance}}" Click="_chatCategorizeTreeViewItemEditMenuItem_Click"/>
             <MenuItem Name="_chatCategorizeTreeViewItemDeleteMenuItem" Header="{Binding Path=ChatControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_chatCategorizeTreeViewItemDeleteMenuItem_Click"/>
             <Separator />
@@ -286,8 +286,9 @@
                 </Style>
             </TreeView.Resources>
         </TreeView>
-        
-        <Button Content="{Binding Path=ChatControl_Topic, Source={StaticResource ResourcesInstance}}" Height="23" HorizontalAlignment="Right" Margin="0,0,87,0" Name="_topicUploadButton" VerticalAlignment="Top" Width="75" Grid.Column="2" PreviewMouseDown="_topicUploadButton_PreviewMouseDown" IsEnabled="False" />
+
+        <ToggleButton Content="{Binding Path=ChatControl_Trust, Source={StaticResource ResourcesInstance}}" Grid.Column="2" Height="23" HorizontalAlignment="Left" Margin="6,0,0,0" Name="_trustToggleButton" VerticalAlignment="Top" Width="90" Checked="_trustToggleButton_Checked" Unchecked="_trustToggleButton_Unchecked" />
+        <Button Content="{Binding Path=ChatControl_Topic, Source={StaticResource ResourcesInstance}}" Height="23" HorizontalAlignment="Right" Margin="0,0,87,0" Name="_topicUploadButton" VerticalAlignment="Top" Width="75" Grid.Column="2" IsEnabled="False" Click="_topicUploadButton_Click" />
         <Button Content="{Binding Path=ChatControl_Message, Source={StaticResource ResourcesInstance}}" Grid.Column="2" Height="23" HorizontalAlignment="Right" Name="_messageUploadButton" VerticalAlignment="Top" Width="75" Margin="0,0,6,0" Click="_messageUploadButton_Click" IsEnabled="False" />
 
         <local:ListViewEx x:Name="_listView" Padding="0,1,0,0" Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="3" 

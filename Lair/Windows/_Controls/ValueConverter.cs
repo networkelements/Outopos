@@ -22,7 +22,7 @@ using Lair.Properties;
 using Library;
 using Library.Collections;
 using Library.Net.Lair;
-using a = Library.Net.Amoeba;
+using A = Library.Net.Amoeba;
 using l = Library.Net.Lair;
 
 namespace Lair.Windows
@@ -106,9 +106,9 @@ namespace Lair.Windows
 
             try
             {
-                if (value is a.Seed)
+                if (value is A.Seed)
                 {
-                    a.Seed seed = (a.Seed)value;
+                    A.Seed seed = (A.Seed)value;
                     if (string.IsNullOrWhiteSpace(seed.Name)) return null;
 
                     var ext = Path.GetExtension(seed.Name);
@@ -124,7 +124,7 @@ namespace Lair.Windows
 
                     return _icon[ext];
                 }
-                else if (value is a.Box)
+                else if (value is A.Box)
                 {
                     return _boxIcon;
                 }
@@ -143,15 +143,15 @@ namespace Lair.Windows
         }
     }
 
-    [ValueConversion(typeof(a.Seed), typeof(string))]
+    [ValueConversion(typeof(A.Seed), typeof(string))]
     class SeedToStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var item = value as a.Seed;
+            var item = value as A.Seed;
             if (item == null) return null;
 
-            return a.AmoebaConverter.ToSeedString(item);
+            return A.AmoebaConverter.ToSeedString(item);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -337,9 +337,9 @@ namespace Lair.Windows
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is a.Seed)
+            if (value is A.Seed)
             {
-                return MessageConverter.ToInfoMessage((a.Seed)value);
+                return MessageConverter.ToInfoMessage((A.Seed)value);
             }
 
             return null;
@@ -368,6 +368,23 @@ namespace Lair.Windows
         }
     }
 
+    [ValueConversion(typeof(byte[]), typeof(string))]
+    class BytesToBase64StringConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var item = value as byte[];
+            if (item == null) return null;
+
+            return NetworkConverter.ToBase64UrlString(item);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotSupportedException();
+        }
+    }
+
     [ValueConversion(typeof(l.Section), typeof(string))]
     class SectionToStringConverter : IValueConverter
     {
@@ -385,15 +402,15 @@ namespace Lair.Windows
         }
     }
 
-    [ValueConversion(typeof(Archive), typeof(string))]
-    class ArchiveToStringConverter : IValueConverter
+    [ValueConversion(typeof(Wiki), typeof(string))]
+    class WikiToStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var item = value as Archive;
+            var item = value as Wiki;
             if (item == null) return null;
 
-            return MessageConverter.ToArchiveString(item);
+            return MessageConverter.ToWikiString(item);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -428,23 +445,6 @@ namespace Lair.Windows
             if (item == null) return null;
 
             return NetworkConverter.ToHexString(item);
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotSupportedException();
-        }
-    }
-
-    [ValueConversion(typeof(byte[]), typeof(string))]
-    class BytesToBase64StringConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            var item = value as byte[];
-            if (item == null) return null;
-
-            return NetworkConverter.ToBase64UrlString(item);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

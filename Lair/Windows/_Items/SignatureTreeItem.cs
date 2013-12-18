@@ -16,37 +16,37 @@ namespace Lair.Windows
     [DataContract(Name = "SignatureTreeItem", Namespace = "http://Lair/Windows")]
     class SignatureTreeItem : ICloneable<SignatureTreeItem>, IThisLock
     {
-        private SectionProfilePack _sectionProfilePack;
+        private SectionProfile _sectionProfile;
         private LockedList<SignatureTreeItem> _children;
 
         private volatile object _thisLock;
         private static readonly object _initializeLock = new object();
 
-        public SignatureTreeItem(SectionProfilePack sectionProfilePack)
+        public SignatureTreeItem(SectionProfile sectionProfile)
         {
-            this.SectionProfilePack = sectionProfilePack;
+            this.SectionProfile = sectionProfile;
         }
 
-        [DataMember(Name = "SectionProfilePack")]
-        public SectionProfilePack SectionProfilePack
+        [DataMember(Name = "SectionProfile")]
+        public SectionProfile SectionProfile
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return _sectionProfilePack;
+                    return _sectionProfile;
                 }
             }
             private set
             {
                 lock (this.ThisLock)
                 {
-                    _sectionProfilePack = value;
+                    _sectionProfile = value;
                 }
             }
         }
 
-        [DataMember(Name = "SignatureTreeItem")]
+        [DataMember(Name = "Children")]
         public LockedList<SignatureTreeItem> Children
         {
             get

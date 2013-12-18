@@ -38,7 +38,14 @@ namespace Lair.Windows
 
         public void Update()
         {
-            _header.Text = string.Format("{0} ({1})", _value.Tag.Name, _hit);
+            if (!_value.IsTrustEnabled)
+            {
+                _header.Text = string.Format("{0} ({1}) {2}", _value.Tag.Name, this.Value.ReadChatMessages.Count + this.Value.UnreadChatMessages.Count, "!");
+            }
+            else
+            {
+                _header.Text = string.Format("{0} ({1})", _value.Tag.Name, this.Value.ReadChatMessages.Count + this.Value.UnreadChatMessages.Count, _hit);
+            }
         }
 
         public ChatTreeItem Value
@@ -50,20 +57,6 @@ namespace Lair.Windows
             private set
             {
                 _value = value;
-
-                this.Update();
-            }
-        }
-
-        public int Hit
-        {
-            get
-            {
-                return _hit;
-            }
-            set
-            {
-                _hit = value;
 
                 this.Update();
             }
