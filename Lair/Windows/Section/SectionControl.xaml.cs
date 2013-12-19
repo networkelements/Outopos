@@ -246,6 +246,15 @@ namespace Lair.Windows
                                     }
                                 }
                             }
+
+                            lock (sectionTreeItem.ThisLock)
+                            {
+                                lock (sectionTreeItem.CacheSectionProfiles.ThisLock)
+                                {
+                                    sectionTreeItem.CacheSectionProfiles.Clear();
+                                    sectionTreeItem.CacheSectionProfiles.AddRange(sectionProfiles);
+                                }
+                            }
                         }
 
                         // _chatControlsの同期
@@ -498,7 +507,7 @@ namespace Lair.Windows
 
             sectionCategorizeTreeViewItemDeleteMenuItem.IsEnabled = (selectTreeViewItem != _treeViewItem);
             sectionCategorizeTreeViewItemCutMenuItem.IsEnabled = (selectTreeViewItem != _treeViewItem);
-            sectionCategorizeTreeViewItemPasteMenuItem.IsEnabled = Clipboard.ContainsSectionCategorizeTreeItems() || Clipboard.ContainsSectionTreeItems();
+            sectionCategorizeTreeViewItemPasteMenuItem.IsEnabled = Clipboard.ContainsSectionCategorizeTreeItems() || Clipboard.ContainsSectionTreeItems() || Clipboard.ContainsSections();
         }
 
         private void _sectionCategorizeTreeViewItemNewSectionMenuItem_Click(object sender, RoutedEventArgs e)
@@ -644,7 +653,19 @@ namespace Lair.Windows
 
             foreach (var item in Clipboard.GetSectionTreeItems())
             {
+                if (selectTreeViewItem.Value.SectionTreeItems.Any(n => n.Tag == item.Tag)) continue;
+
                 selectTreeViewItem.Value.SectionTreeItems.Add(item);
+            }
+
+            foreach (var item in Clipboard.GetSections())
+            {
+                if (selectTreeViewItem.Value.SectionTreeItems.Any(n => n.Tag == item.Item1)) continue;
+
+                var sectionTreeItem = new SectionTreeItem(item.Item1);
+                sectionTreeItem.LeaderSignature = item.Item2;
+
+                selectTreeViewItem.Value.SectionTreeItems.Add(sectionTreeItem);
             }
 
             selectTreeViewItem.Update();
@@ -737,12 +758,9 @@ namespace Lair.Windows
 
             SignatureTreeItem signatureTreeItem = SectionControl.GetSignatureTreeViewItem(selectTreeViewItem.Value);
 
-            if (signatureTreeItem != null)
-            {
-                TrustSignaturesPreviewWindow window = new TrustSignaturesPreviewWindow(signatureTreeItem);
-                window.Owner = _mainWindow;
-                window.ShowDialog();
-            }
+            TrustSignaturesPreviewWindow window = new TrustSignaturesPreviewWindow(signatureTreeItem);
+            window.Owner = _mainWindow;
+            window.ShowDialog();
         }
 
         static SignatureTreeItem GetSignatureTreeViewItem(SectionTreeItem sectionTreeItem)

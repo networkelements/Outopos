@@ -207,9 +207,11 @@ namespace Lair.Windows
                             _refresh = false;
 
                             {
+                                _trustToggleButton.IsChecked = chatTreeViewItem.Value.IsTrustEnabled;
+
                                 var trustSignature = new HashSet<string>();
+                                trustSignature.Add(_sectionTreeViewItem.Value.LeaderSignature);
                                 trustSignature.UnionWith(_sectionTreeViewItem.Value.CacheSectionProfiles.SelectMany(n => n.TrustSignatures));
-                                trustSignature.UnionWith(_sectionTreeViewItem.Value.CacheSectionProfiles.Select(n => n.Signature));
 
                                 _topicUploadButton.IsEnabled = trustSignature.Contains(_sectionTreeViewItem.Value.UploadSignature);
 
@@ -657,7 +659,7 @@ namespace Lair.Windows
 
             chatCategorizeTreeViewItemDeleteMenuItem.IsEnabled = (selectTreeViewItem != _treeViewItem);
             chatCategorizeTreeViewItemCutMenuItem.IsEnabled = (selectTreeViewItem != _treeViewItem);
-            chatCategorizeTreeViewItemPasteMenuItem.IsEnabled = Clipboard.ContainsChatCategorizeTreeItems() || Clipboard.ContainsChatTreeItems();
+            chatCategorizeTreeViewItemPasteMenuItem.IsEnabled = Clipboard.ContainsChatCategorizeTreeItems() || Clipboard.ContainsChatTreeItems() || Clipboard.ContainsChats();
         }
 
         private void _chatCategorizeTreeViewItemNewCategoryMenuItem_Click(object sender, RoutedEventArgs e)
@@ -776,7 +778,18 @@ namespace Lair.Windows
 
             foreach (var item in Clipboard.GetChatTreeItems())
             {
+                if (selectTreeViewItem.Value.ChatTreeItems.Any(n => n.Tag == item.Tag)) continue;
+
                 selectTreeViewItem.Value.ChatTreeItems.Add(item);
+            }
+
+            foreach (var item in Clipboard.GetChats())
+            {
+                if (selectTreeViewItem.Value.ChatTreeItems.Any(n => n.Tag == item.Item1)) continue;
+
+                var chatTreeItem = new ChatTreeItem(item.Item1);
+
+                selectTreeViewItem.Value.ChatTreeItems.Add(chatTreeItem);
             }
 
             selectTreeViewItem.Update();
@@ -885,8 +898,7 @@ namespace Lair.Windows
 
             window.ChatJoinEvent += (object sender2, Chat tag) =>
             {
-                var channelTreeItem = new ChatTreeItem();
-                channelTreeItem.Tag = tag;
+                var channelTreeItem = new ChatTreeItem(tag);
 
                 selectTreeViewItem.Value.ChatTreeItems.Add(channelTreeItem);
 

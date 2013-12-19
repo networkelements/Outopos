@@ -28,9 +28,28 @@ namespace Lair.Windows
         private volatile object _thisLock;
         private static readonly object _initializeLock = new object();
 
-        public ChatTreeItem()
+        public ChatTreeItem(Chat chat)
         {
+            this.Tag = chat;
+        }
 
+        [DataMember(Name = "Tag")]
+        public Chat Tag
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return _tag;
+                }
+            }
+            private set
+            {
+                lock (this.ThisLock)
+                {
+                    _tag = value;
+                }
+            }
         }
 
         [DataMember(Name = "IsTrustEnabled")]
@@ -48,25 +67,6 @@ namespace Lair.Windows
                 lock (this.ThisLock)
                 {
                     _isTrustEnabled = value;
-                }
-            }
-        }
-
-        [DataMember(Name = "Tag")]
-        public Chat Tag
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return _tag;
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    _tag = value;
                 }
             }
         }

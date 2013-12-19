@@ -25,16 +25,19 @@ namespace Lair.Windows
         {
             InitializeComponent();
 
-            _treeViewItem = new SignatureTreeViewItem(signatureTreeItem);
-            _signatureTreeView.Items.Add(_treeViewItem);
-
-            try
+            if (signatureTreeItem != null)
             {
-                _treeViewItem.IsSelected = true;
-            }
-            catch (Exception)
-            {
+                _treeViewItem = new SignatureTreeViewItem(signatureTreeItem);
+                _signatureTreeView.Items.Add(_treeViewItem);
 
+                try
+                {
+                    _treeViewItem.IsSelected = true;
+                }
+                catch (Exception)
+                {
+
+                }
             }
         }
 

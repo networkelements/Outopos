@@ -12,7 +12,6 @@ namespace Lair.Windows
         private ChatTreeItem _value;
 
         private TextBlock _header = new TextBlock();
-        private int _hit;
 
         public ChatTreeViewItem(ChatTreeItem value)
             : base()
@@ -44,7 +43,7 @@ namespace Lair.Windows
             }
             else
             {
-                _header.Text = string.Format("{0} ({1})", _value.Tag.Name, this.Value.ReadChatMessages.Count + this.Value.UnreadChatMessages.Count, _hit);
+                _header.Text = string.Format("{0} ({1})", _value.Tag.Name, this.Value.ReadChatMessages.Count + this.Value.UnreadChatMessages.Count);
             }
         }
 
