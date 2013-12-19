@@ -205,6 +205,8 @@ namespace Lair
         {
             lock (_thisLock)
             {
+                System.Windows.Clipboard.Clear();
+
                 {
                     var sb = new StringBuilder();
 
@@ -285,6 +287,8 @@ namespace Lair
         {
             lock (_thisLock)
             {
+                System.Windows.Clipboard.Clear();
+
                 {
                     var sb = new StringBuilder();
 
@@ -365,6 +369,8 @@ namespace Lair
         {
             lock (_thisLock)
             {
+                System.Windows.Clipboard.Clear();
+
                 {
                     var sb = new StringBuilder();
 
@@ -445,6 +451,8 @@ namespace Lair
         {
             lock (_thisLock)
             {
+                System.Windows.Clipboard.Clear();
+
                 {
                     var sb = new StringBuilder();
 
@@ -525,6 +533,8 @@ namespace Lair
         {
             lock (_thisLock)
             {
+                System.Windows.Clipboard.Clear();
+
                 {
                     var sb = new StringBuilder();
 
@@ -587,6 +597,8 @@ namespace Lair
         {
             lock (_thisLock)
             {
+                System.Windows.Clipboard.Clear();
+
                 {
                     var sb = new StringBuilder();
 
