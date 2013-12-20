@@ -9,58 +9,52 @@ using Library;
 using Library.Collections;
 using Library.Net.Lair;
 using A = Library.Net.Amoeba;
+using System.Threading;
 
 namespace Lair
 {
     static class Clipboard
     {
-        private static bool _isNodesCached;
-        private static bool _isSectionsCached;
-        private static bool _isWikisCached;
-        private static bool _isChatsCached;
-        private static bool _isSeedsCached;
-
-        private static LockedList<Node> _nodeList = new LockedList<Node>();
-        private static LockedList<Tuple<Section, string>> _sectionList = new LockedList<Tuple<Section, string>>();
-        private static LockedList<Tuple<Wiki, string>> _wikiList = new LockedList<Tuple<Wiki, string>>();
-        private static LockedList<Tuple<Chat, string>> _chatList = new LockedList<Tuple<Chat, string>>();
-        private static LockedList<A.Seed> _seedList = new LockedList<A.Seed>();
-
         private static LockedList<Windows.SectionCategorizeTreeItem> _sectionCategorizeTreeItemList = new LockedList<SectionCategorizeTreeItem>();
         private static LockedList<Windows.SectionTreeItem> _sectionTreeItemList = new LockedList<SectionTreeItem>();
         private static LockedList<Windows.ChatCategorizeTreeItem> _chatCategorizeTreeItemList = new LockedList<ChatCategorizeTreeItem>();
         private static LockedList<Windows.ChatTreeItem> _chatTreeItemList = new LockedList<ChatTreeItem>();
 
         private static ClipboardWatcher _clipboardWatcher;
+        private static ManualResetEvent _manualResetEvent = new ManualResetEvent(false);
 
         private static object _thisLock = new object();
 
         static Clipboard()
         {
             _clipboardWatcher = new ClipboardWatcher();
+            // Clipboard呼び出しメソッドのスレッドから呼ばれる場合もあるし、そうでない場合もある。
+            // つまり、ちゃんと同期しないといけない。
             _clipboardWatcher.DrawClipboard += (sender, e) =>
             {
                 lock (_thisLock)
                 {
-                    _isNodesCached = false;
-                    _isSectionsCached = false;
-                    _isWikisCached = false;
-                    _isChatsCached = false;
-                    _isSeedsCached = false;
-
-                    _nodeList.Clear();
-                    _sectionList.Clear();
-                    _wikiList.Clear();
-                    _chatList.Clear();
-                    _seedList.Clear();
-
                     _sectionCategorizeTreeItemList.Clear();
                     _sectionTreeItemList.Clear();
 
                     _chatCategorizeTreeItemList.Clear();
                     _chatTreeItemList.Clear();
                 }
+
+                _manualResetEvent.Set();
             };
+        }
+
+        public static void Clear()
+        {
+            _manualResetEvent.Reset();
+
+            lock (_thisLock)
+            {
+                System.Windows.Clipboard.Clear();
+            }
+
+            _manualResetEvent.WaitOne();
         }
 
         public static bool ContainsPaths()
@@ -149,27 +143,12 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                if (!_isNodesCached)
+                foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
-                    {
-                        try
-                        {
-                            var node = LairConverter.FromNodeString(item);
-                            if (node == null) continue;
-
-                            _nodeList.Add(node);
-                        }
-                        catch (Exception)
-                        {
-
-                        }
-                    }
-
-                    _isNodesCached = true;
+                    if (item.StartsWith("Node:")) return true;
                 }
 
-                return _nodeList.Count != 0;
+                return false;
             }
         }
 
@@ -177,27 +156,24 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                if (!_isNodesCached)
+                var list = new List<Node>();
+
+                foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
+                    try
                     {
-                        try
-                        {
-                            var node = LairConverter.FromNodeString(item);
-                            if (node == null) continue;
+                        var node = LairConverter.FromNodeString(item);
+                        if (node == null) continue;
 
-                            _nodeList.Add(node);
-                        }
-                        catch (Exception)
-                        {
-
-                        }
+                        list.Add(node);
                     }
+                    catch (Exception)
+                    {
 
-                    _isNodesCached = true;
+                    }
                 }
 
-                return _nodeList.ToArray();
+                return list;
             }
         }
 
@@ -205,7 +181,7 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                System.Windows.Clipboard.Clear();
+                Clipboard.Clear();
 
                 {
                     var sb = new StringBuilder();
@@ -217,9 +193,6 @@ namespace Lair
 
                     Clipboard.SetText(sb.ToString());
                 }
-
-                _nodeList.AddRange(nodes);
-                _isNodesCached = true;
             }
         }
 
@@ -227,29 +200,12 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                if (!_isSectionsCached)
+                foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
-                    {
-                        try
-                        {
-                            string option;
-
-                            var tag = LairConverter.FromSectionString(item, out option);
-                            if (tag == null) continue;
-
-                            _sectionList.Add(new Tuple<Section, string>(tag, option));
-                        }
-                        catch (Exception)
-                        {
-
-                        }
-                    }
-
-                    _isSectionsCached = true;
+                    if (item.StartsWith("Section:")) return true;
                 }
 
-                return _sectionList.Count != 0;
+                return false;
             }
         }
 
@@ -257,29 +213,26 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                if (!_isSectionsCached)
+                var list = new List<Tuple<Section, string>>();
+
+                foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
+                    try
                     {
-                        try
-                        {
-                            string option;
+                        string option;
 
-                            var tag = LairConverter.FromSectionString(item, out option);
-                            if (tag == null) continue;
+                        var tag = LairConverter.FromSectionString(item, out option);
+                        if (tag == null) continue;
 
-                            _sectionList.Add(new Tuple<Section, string>(tag, option));
-                        }
-                        catch (Exception)
-                        {
-
-                        }
+                        list.Add(new Tuple<Section, string>(tag, option));
                     }
+                    catch (Exception)
+                    {
 
-                    _isSectionsCached = true;
+                    }
                 }
 
-                return _sectionList.ToArray();
+                return list;
             }
         }
 
@@ -287,7 +240,7 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                System.Windows.Clipboard.Clear();
+                Clipboard.Clear();
 
                 {
                     var sb = new StringBuilder();
@@ -299,9 +252,6 @@ namespace Lair
 
                     Clipboard.SetText(sb.ToString());
                 }
-
-                _sectionList.AddRange(sections);
-                _isSectionsCached = true;
             }
         }
 
@@ -309,29 +259,12 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                if (!_isWikisCached)
+                foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
-                    {
-                        try
-                        {
-                            string option;
-
-                            var tag = LairConverter.FromWikiString(item, out option);
-                            if (tag == null) continue;
-
-                            _wikiList.Add(new Tuple<Wiki, string>(tag, option));
-                        }
-                        catch (Exception)
-                        {
-
-                        }
-                    }
-
-                    _isWikisCached = true;
+                    if (item.StartsWith("Wiki:")) return true;
                 }
 
-                return _wikiList.Count != 0;
+                return false;
             }
         }
 
@@ -339,29 +272,26 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                if (!_isWikisCached)
+                var list = new List<Tuple<Wiki, string>>();
+
+                foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
+                    try
                     {
-                        try
-                        {
-                            string option;
+                        string option;
 
-                            var tag = LairConverter.FromWikiString(item, out option);
-                            if (tag == null) continue;
+                        var tag = LairConverter.FromWikiString(item, out option);
+                        if (tag == null) continue;
 
-                            _wikiList.Add(new Tuple<Wiki, string>(tag, option));
-                        }
-                        catch (Exception)
-                        {
-
-                        }
+                        list.Add(new Tuple<Wiki, string>(tag, option));
                     }
+                    catch (Exception)
+                    {
 
-                    _isWikisCached = true;
+                    }
                 }
 
-                return _wikiList.ToArray();
+                return list;
             }
         }
 
@@ -369,7 +299,7 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                System.Windows.Clipboard.Clear();
+                Clipboard.Clear();
 
                 {
                     var sb = new StringBuilder();
@@ -381,9 +311,6 @@ namespace Lair
 
                     Clipboard.SetText(sb.ToString());
                 }
-
-                _wikiList.AddRange(sections);
-                _isWikisCached = true;
             }
         }
 
@@ -391,29 +318,12 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                if (!_isChatsCached)
+                foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
-                    {
-                        try
-                        {
-                            string option;
-
-                            var tag = LairConverter.FromChatString(item, out option);
-                            if (tag == null) continue;
-
-                            _chatList.Add(new Tuple<Chat, string>(tag, option));
-                        }
-                        catch (Exception)
-                        {
-
-                        }
-                    }
-
-                    _isChatsCached = true;
+                    if (item.StartsWith("Chat:")) return true;
                 }
 
-                return _chatList.Count != 0;
+                return false;
             }
         }
 
@@ -421,29 +331,26 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                if (!_isChatsCached)
+                var list = new List<Tuple<Chat, string>>();
+
+                foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
+                    try
                     {
-                        try
-                        {
-                            string option;
+                        string option;
 
-                            var tag = LairConverter.FromChatString(item, out option);
-                            if (tag == null) continue;
+                        var tag = LairConverter.FromChatString(item, out option);
+                        if (tag == null) continue;
 
-                            _chatList.Add(new Tuple<Chat, string>(tag, option));
-                        }
-                        catch (Exception)
-                        {
-
-                        }
+                        list.Add(new Tuple<Chat, string>(tag, option));
                     }
+                    catch (Exception)
+                    {
 
-                    _isChatsCached = true;
+                    }
                 }
 
-                return _chatList.ToArray();
+                return list;
             }
         }
 
@@ -451,7 +358,7 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                System.Windows.Clipboard.Clear();
+                Clipboard.Clear();
 
                 {
                     var sb = new StringBuilder();
@@ -463,9 +370,6 @@ namespace Lair
 
                     Clipboard.SetText(sb.ToString());
                 }
-
-                _chatList.AddRange(sections);
-                _isChatsCached = true;
             }
         }
 
@@ -473,29 +377,12 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                if (!_isSeedsCached)
+                foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
-                    {
-                        try
-                        {
-                            var seed = A.AmoebaConverter.FromSeedString(item);
-                            if (seed == null) continue;
-
-                            if (!seed.VerifyCertificate()) seed.CreateCertificate(null);
-
-                            _seedList.Add(seed);
-                        }
-                        catch (Exception)
-                        {
-
-                        }
-                    }
-
-                    _isSeedsCached = true;
+                    if (item.StartsWith("Seed:")) return true;
                 }
 
-                return _seedList.Count != 0;
+                return false;
             }
         }
 
@@ -503,29 +390,24 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                if (!_isSeedsCached)
+                var list = new List<A.Seed>();
+
+                foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
+                    try
                     {
-                        try
-                        {
-                            var seed = A.AmoebaConverter.FromSeedString(item);
-                            if (seed == null) continue;
+                        var seed = A.AmoebaConverter.FromSeedString(item);
+                        if (seed == null) continue;
 
-                            if (!seed.VerifyCertificate()) seed.CreateCertificate(null);
-
-                            _seedList.Add(seed);
-                        }
-                        catch (Exception)
-                        {
-
-                        }
+                        list.Add(seed);
                     }
+                    catch (Exception)
+                    {
 
-                    _isSeedsCached = true;
+                    }
                 }
 
-                return _seedList.Select(n => n.Clone()).ToArray();
+                return list;
             }
         }
 
@@ -533,7 +415,7 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                System.Windows.Clipboard.Clear();
+                Clipboard.Clear();
 
                 {
                     var sb = new StringBuilder();
@@ -545,9 +427,6 @@ namespace Lair
 
                     Clipboard.SetText(sb.ToString());
                 }
-
-                _seedList.AddRange(seeds.Select(n => n.Clone()));
-                _isSeedsCached = true;
             }
         }
 
@@ -571,7 +450,7 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                System.Windows.Clipboard.Clear();
+                Clipboard.Clear();
 
                 _sectionCategorizeTreeItemList.AddRange(sectionCategorizeTreeItems.Select(n => n.Clone()));
             }
@@ -597,7 +476,7 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                System.Windows.Clipboard.Clear();
+                Clipboard.Clear();
 
                 {
                     var sb = new StringBuilder();
@@ -634,7 +513,7 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                System.Windows.Clipboard.Clear();
+                Clipboard.Clear();
 
                 _chatCategorizeTreeItemList.AddRange(chatCategorizeTreeItems.Select(n => n.Clone()));
             }
@@ -660,7 +539,7 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                System.Windows.Clipboard.Clear();
+                Clipboard.Clear();
 
                 _chatTreeItemList.AddRange(chatTreeItems.Select(n => n.Clone()));
             }

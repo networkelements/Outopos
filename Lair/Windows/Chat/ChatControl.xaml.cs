@@ -209,11 +209,11 @@ namespace Lair.Windows
                             {
                                 _trustToggleButton.IsChecked = chatTreeViewItem.Value.IsTrustEnabled;
 
-                                var trustSignature = new HashSet<string>();
-                                trustSignature.Add(_sectionTreeViewItem.Value.LeaderSignature);
-                                trustSignature.UnionWith(_sectionTreeViewItem.Value.CacheSectionProfiles.SelectMany(n => n.TrustSignatures));
+                                var trustSignatures = new HashSet<string>();
+                                trustSignatures.Add(_sectionTreeViewItem.Value.LeaderSignature);
+                                trustSignatures.UnionWith(_sectionTreeViewItem.Value.CacheSectionProfiles.SelectMany(n => n.TrustSignatures));
 
-                                _topicUploadButton.IsEnabled = trustSignature.Contains(_sectionTreeViewItem.Value.UploadSignature);
+                                _topicUploadButton.IsEnabled = trustSignatures.Contains(_sectionTreeViewItem.Value.UploadSignature);
 
                                 var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == _sectionTreeViewItem.Value.UploadSignature);
 
@@ -335,12 +335,15 @@ namespace Lair.Windows
 
                             if (treeViewItem.Value.IsTrustEnabled)
                             {
-                                var hashset = new HashSet<string>(_sectionTreeViewItem.Value.CacheSectionProfiles.Select(n => n.Signature));
-                                newList.UnionWith(_lairManager.GetChatMessage(treeViewItem.Value.Tag, hashset));
+                                var trustSignatures = new HashSet<string>();
+                                trustSignatures.Add(_sectionTreeViewItem.Value.LeaderSignature);
+                                trustSignatures.UnionWith(_sectionTreeViewItem.Value.CacheSectionProfiles.SelectMany(n => n.TrustSignatures));
+
+                                newList.UnionWith(_lairManager.GetChatMessage(treeViewItem.Value.Tag, trustSignatures));
 
                                 foreach (var item in Collection.Merge(treeViewItem.Value.ReadChatMessages, treeViewItem.Value.UnreadChatMessages))
                                 {
-                                    if (!hashset.Contains(item.Signature)) continue;
+                                    if (!trustSignatures.Contains(item.Signature)) continue;
                                     newList.Add(item);
                                 }
                             }

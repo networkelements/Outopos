@@ -92,7 +92,59 @@ namespace Lair.Windows
             _watchThread.Name = "SectionControl_Watch";
             _watchThread.Start();
 
+            _lairManager.GetLockCriteriaEvent = this.GetCriteria;
+
             this.Update();
+        }
+
+        private IEnumerable<Criterion> GetCriteria(object sender)
+        {
+            var sectionTreeViewItems = new HashSet<SectionTreeViewItem>();
+
+            this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
+            {
+                var sectionCategorizeTreeViewItems = new List<SectionCategorizeTreeViewItem>();
+                sectionCategorizeTreeViewItems.Add(_treeViewItem);
+
+                for (int i = 0; i < sectionCategorizeTreeViewItems.Count; i++)
+                {
+                    sectionCategorizeTreeViewItems.AddRange(sectionCategorizeTreeViewItems[i].Items.OfType<SectionCategorizeTreeViewItem>());
+                    sectionTreeViewItems.UnionWith(sectionCategorizeTreeViewItems[i].Items.OfType<SectionTreeViewItem>());
+                }
+            }));
+
+            var list = new List<Criterion>();
+
+            foreach (var item in sectionTreeViewItems)
+            {
+                var trustSignatures = new HashSet<string>();
+                var sections = new HashSet<Section>();
+                var chats = new HashSet<Chat>();
+
+                {
+                    trustSignatures.Add(item.Value.LeaderSignature);
+                    trustSignatures.UnionWith(item.Value.CacheSectionProfiles.SelectMany(n => n.TrustSignatures));
+                }
+
+                {
+                    sections.UnionWith(sectionTreeViewItems.Select(n => n.Value.Tag));
+                }
+
+                {
+                    var chatCategorizeTreeItems = new List<ChatCategorizeTreeItem>();
+                    chatCategorizeTreeItems.Add(item.Value.ChatCategorizeTreeItem);
+
+                    for (int i = 0; i < chatCategorizeTreeItems.Count; i++)
+                    {
+                        chatCategorizeTreeItems.AddRange(chatCategorizeTreeItems[i].Children);
+                        chats.UnionWith(chatCategorizeTreeItems[i].ChatTreeItems.Select(n => n.Tag));
+                    }
+                }
+
+                list.Add(new Criterion(trustSignatures, sections, null, chats));
+            }
+
+            return list;
         }
 
         private void Search()
@@ -772,21 +824,28 @@ namespace Lair.Windows
                 dic[item.Signature] = item;
             }
 
-            List<SignatureTreeItem> signatureTreeItems = new List<SignatureTreeItem>();
+            List<SignatureTreeItem> workSignatureTreeItems = new List<SignatureTreeItem>();
             HashSet<string> checkedSignatures = new HashSet<string>();
 
             {
                 SectionProfile leaderSectionProfile;
                 if (!dic.TryGetValue(sectionTreeItem.LeaderSignature, out leaderSectionProfile)) return null;
 
-                signatureTreeItems.Add(new SignatureTreeItem(leaderSectionProfile));
+                workSignatureTreeItems.Add(new SignatureTreeItem(leaderSectionProfile));
                 checkedSignatures.Add(sectionTreeItem.LeaderSignature);
             }
 
-            for (int i = 0; i < signatureTreeItems.Count; i++)
+            //List<SignatureTreeItem> signatureTreeItems = new List<SignatureTreeItem>();
+
+            List<SignatureTreeItem> checkedSignatureTreeItems = new List<SignatureTreeItem>();
+
+            for (int i = 0; workSignatureTreeItems.Count != 0 && i < 256; i++)
             {
-                var sortList = signatureTreeItems[i].SectionProfile.TrustSignatures.ToList();
+                var sortList = workSignatureTreeItems.SelectMany(n => n.SectionProfile.TrustSignatures).ToList();
                 sortList.Sort((x, y) => x.CompareTo(y));
+
+                checkedSignatureTreeItems.AddRange(workSignatureTreeItems);
+                workSignatureTreeItems.Clear();
 
                 foreach (var trustSignature in sortList)
                 {
@@ -796,14 +855,16 @@ namespace Lair.Windows
                     if (!dic.TryGetValue(trustSignature, out sectionProfile)) continue;
 
                     var tempItem = new SignatureTreeItem(sectionProfile);
-                    signatureTreeItems.Add(tempItem);
-                    signatureTreeItems[i].Children.Add(tempItem);
+                    workSignatureTreeItems.Add(tempItem);
+
+                    var target = checkedSignatureTreeItems.FirstOrDefault(n => n.SectionProfile.TrustSignatures.Contains(trustSignature));
+                    target.Children.Add(tempItem);
 
                     checkedSignatures.Add(trustSignature);
                 }
             }
 
-            return signatureTreeItems[0];
+            return checkedSignatureTreeItems[0];
         }
 
         #endregion

@@ -845,7 +845,7 @@ namespace Lair.Windows
                     var torConnectionFilter = new ConnectionFilter()
                     {
                         ConnectionType = ConnectionType.Socks5Proxy,
-                        ProxyUri = "tcp:127.0.0.1:19050",
+                        ProxyUri = "tcp:127.0.0.1:29050",
                         UriCondition = new UriCondition()
                         {
                             Value = @"tor:.*",
@@ -868,6 +868,23 @@ namespace Lair.Windows
                     _amoebaManager.Filters.Add(torConnectionFilter);
                     _amoebaManager.Filters.Add(i2pConnectionFilter);
 
+                    // デフォルトでセクションとチャンネルを設定
+                    {
+                        string chatOption;
+                        var chat = LairConverter.FromChatString("Chat:AAAAAEAA7EGVwK3U57z4eCziwKn6emKp8Q2N0fiPFDbvcBtA6ul4UUcemclKQGs0QfVDKE9nrcPCAlbuIIEkkQ6-EoLVQgAAAAUBU3RhcnQvk9wn", out chatOption);
+
+                        ChatTreeItem chatTreeItem = new ChatTreeItem(chat);
+
+                        string sectionOption;
+                        var section = LairConverter.FromSectionString("Section:AAAAAEAAfqnzk3Ro4Xt2xoRCns8xCNmqhhuv_ue2z-QdlEN6pfnyyUUR2A-031K2kCbdsvteDzN1vbICBwbu3p2dahO2ywAAABABQWxsaWFuY2UgTmV0d29ya9mG6sw,Lyrise@7seiSbhOCkls6gPxjJYjptxskzlSulgIe3dSfj1KxnJJ6eejKjuJ3R1Ec8yFuKpr4uNcwF7bFh5OrmxnY25y7A", out sectionOption);
+
+                        SectionTreeItem sectionTreeItem = new SectionTreeItem(section);
+                        sectionTreeItem.LeaderSignature = sectionOption;
+                        sectionTreeItem.ChatCategorizeTreeItem.ChatTreeItems.Add(chatTreeItem);
+
+                        Settings.Instance.SectionControl_SectionCategorizeTreeItem.SectionTreeItems.Add(sectionTreeItem);
+                    }
+
                     if (CultureInfo.CurrentUICulture.Name == "ja-JP")
                     {
                         Settings.Instance.Global_UseLanguage = "Japanese";
@@ -884,6 +901,26 @@ namespace Lair.Windows
                     using (StreamReader reader = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Lair.version"), new UTF8Encoding(false)))
                     {
                         version = new Version(reader.ReadLine());
+                    }
+
+                    if (version < new Version(2, 0, 2))
+                    {
+                        // デフォルトでセクションとチャンネルを設定
+                        {
+                            string chatOption;
+                            var chat = LairConverter.FromChatString("Chat:AAAAAEAA7EGVwK3U57z4eCziwKn6emKp8Q2N0fiPFDbvcBtA6ul4UUcemclKQGs0QfVDKE9nrcPCAlbuIIEkkQ6-EoLVQgAAAAUBU3RhcnQvk9wn", out chatOption);
+
+                            ChatTreeItem chatTreeItem = new ChatTreeItem(chat);
+
+                            string sectionOption;
+                            var section = LairConverter.FromSectionString("Section:AAAAAEAAfqnzk3Ro4Xt2xoRCns8xCNmqhhuv_ue2z-QdlEN6pfnyyUUR2A-031K2kCbdsvteDzN1vbICBwbu3p2dahO2ywAAABABQWxsaWFuY2UgTmV0d29ya9mG6sw,Lyrise@7seiSbhOCkls6gPxjJYjptxskzlSulgIe3dSfj1KxnJJ6eejKjuJ3R1Ec8yFuKpr4uNcwF7bFh5OrmxnY25y7A", out sectionOption);
+
+                            SectionTreeItem sectionTreeItem = new SectionTreeItem(section);
+                            sectionTreeItem.LeaderSignature = sectionOption;
+                            sectionTreeItem.ChatCategorizeTreeItem.ChatTreeItems.Add(chatTreeItem);
+
+                            Settings.Instance.SectionControl_SectionCategorizeTreeItem.SectionTreeItems.Add(sectionTreeItem);
+                        }
                     }
                 }
 
