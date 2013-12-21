@@ -137,16 +137,15 @@
   <Translate Key="ViewOptionsWindow_Signature" Value="Signature" />
   <Translate Key="ViewOptionsWindow_Signatures" Value="Signatures" />
   <Translate Key="ViewOptionsWindow_Keywords" Value="Keywords" />
-  <Translate Key="ViewOptionsWindow_Miscellaneous" Value="Miscellaneous" />
-  <Translate Key="ViewOptionsWindow_Box" Value="Box" />
-  <Translate Key="ViewOptionsWindow_RelateBoxFile" Value="Box file is related." />
-  <Translate Key="ViewOptionsWindow_Events" Value="Events" />
-  <Translate Key="ViewOptionsWindow_OpenBox" Value="Open a box file that downloaded." />
-  <Translate Key="ViewOptionsWindow_ExtractTo" Value="Extract to path" />
   <Translate Key="ViewOptionsWindow_UpdateOption" Value="Update option" />
   <Translate Key="ViewOptionsWindow_None" Value="None" />
   <Translate Key="ViewOptionsWindow_AutoCheck" Value="Auto check" />
   <Translate Key="ViewOptionsWindow_AutoUpdate" Value="Auto update" />
+  <Translate Key="ViewOptionsWindow_Amoeba" Value="Amoeba" />
+  <Translate Key="ViewOptionsWindow_AmoebaPath" Value="Amoeba path" />
+  <Translate Key="ViewOptionsWindow_Fonts" Value="Fonts" />
+  <Translate Key="ViewOptionsWindow_MessageFontFamily" Value="Message font family" />
+  <Translate Key="ViewOptionsWindow_MessageFontSize" Value="Message font size (pt)" />
   <Translate Key="ViewOptionsWindow_Value" Value="Value" />
   <Translate Key="ViewOptionsWindow_Import" Value="Import" />
   <Translate Key="ViewOptionsWindow_Export" Value="Export" />

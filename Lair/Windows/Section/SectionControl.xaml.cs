@@ -240,7 +240,7 @@ namespace Lair.Windows
                 {
                     Thread.Sleep(1000);
 
-                    if (!refreshStopwatch.IsRunning || refreshStopwatch.Elapsed.TotalMinutes >= 1)
+                    if (!refreshStopwatch.IsRunning || refreshStopwatch.Elapsed.TotalSeconds >= 20)
                     {
                         refreshStopwatch.Restart();
 

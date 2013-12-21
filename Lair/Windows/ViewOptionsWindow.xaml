@@ -49,6 +49,8 @@
             <TreeView HorizontalAlignment="Stretch" Name="_treeView" VerticalAlignment="Stretch">
                 <TreeViewItem Name="_updateTreeViewItem" Header="{Binding Path=ViewOptionsWindow_Update, Source={StaticResource ResourcesInstance}}" IsSelected="False" IsEnabled="True" />
                 <TreeViewItem Name="_signaturesTreeViewItem" Header="{Binding Path=ViewOptionsWindow_Signatures, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
+                <TreeViewItem Name="_fontsTreeViewItem" Header="{Binding Path=ViewOptionsWindow_Fonts, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
+                <TreeViewItem Name="_amoebaTreeViewItem" Header="{Binding Path=ViewOptionsWindow_Amoeba, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
             </TreeView>
 
             <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.RowSpan="3" />
@@ -90,6 +92,24 @@
                 <Button Name="_signatureAddButton" Height="23" Margin="0,0,87,6" VerticalAlignment="Bottom" Content="{Binding Path=ViewOptionsWindow_Add, Source={StaticResource ResourcesInstance}}" Click="_signatureAddButton_Click" HorizontalAlignment="Right" Width="75" />
                 <Button Name="_signatureDeleteButton" Height="23" Margin="0,0,6,6" VerticalAlignment="Bottom" Content="{Binding Path=ViewOptionsWindow_Delete, Source={StaticResource ResourcesInstance}}" Click="_signatureDeleteButton_Click" HorizontalAlignment="Right" Width="75" />
                 <TextBox Height="23" Margin="6,0,6,35" Name="_signatureTextBox" VerticalAlignment="Bottom" VerticalContentAlignment="Center" KeyDown="_signatureTextBox_KeyDown" />
+            </Grid>
+
+            <Grid Grid.Column="2" Visibility="{Binding ElementName=_fontsTreeViewItem, Path=IsSelected, Converter={StaticResource _boolToVisibilityConverter}}">
+                <Label Content="{Binding Path=ViewOptionsWindow_MessageFontFamily, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="360" />
+                <ComboBox Height="24" Margin="372,6,6,0" Name="_fontMessageFontFamilyComboBox" VerticalAlignment="Top">
+                    <ComboBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel />
+                        </ItemsPanelTemplate>
+                    </ComboBox.ItemsPanel>
+                </ComboBox>
+                <Label Content="{Binding Path=ViewOptionsWindow_MessageFontSize, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,36,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="360" />
+                <TextBox Height="24" Margin="372,36,6,0" Name="_fontMessageFontSizeTextBox" VerticalAlignment="Top" TextChanged="_fontMessageFontSizeTextBox_TextChanged" />
+            </Grid>
+
+            <Grid Grid.Column="2" FocusManager.FocusedElement="{Binding ElementName=_amoebaPathTextBox}" Visibility="{Binding ElementName=_amoebaTreeViewItem, Path=IsSelected, Converter={StaticResource _boolToVisibilityConverter}}">
+                <Label Content="{Binding Path=ViewOptionsWindow_AmoebaPath, Source={StaticResource ResourcesInstance}}" Height="24" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="240" />
+                <TextBox Height="24" Margin="252,6,6,0" Name="_amoebaPathTextBox" VerticalAlignment="Top" VerticalContentAlignment="Center" PreviewMouseDoubleClick="_amoebaPathTextBox_PreviewMouseDoubleClick" />
             </Grid>
 
         </Grid>

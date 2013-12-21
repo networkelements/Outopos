@@ -16,6 +16,8 @@ using Lair.Properties;
 using Library;
 using Library.Net.Lair;
 using Library.Security;
+using System.Diagnostics;
+using System.ComponentModel;
 
 namespace Lair.Windows
 {
@@ -27,6 +29,7 @@ namespace Lair.Windows
         private BufferManager _bufferManager;
 
         private ObservableCollectionEx<SignatureListViewItem> _signatureListViewItemCollection;
+        private List<string> _fontMessageFontFamilyComboBoxItemCollection = new List<string>();
 
         private string _selectTabName = null;
 
@@ -67,6 +70,12 @@ namespace Lair.Windows
             _signatureListViewItemCollection = new ObservableCollectionEx<SignatureListViewItem>(Settings.Instance.Global_DigitalSignatureCollection.Select(n => new SignatureListViewItem(n.Clone())));
             _signatureListView.ItemsSource = _signatureListViewItemCollection;
             _signatureListViewUpdate();
+
+            _fontMessageFontFamilyComboBoxItemCollection.AddRange(Fonts.SystemFontFamilies.Select(n => n.ToString()));
+            _fontMessageFontFamilyComboBox.ItemsSource = _fontMessageFontFamilyComboBoxItemCollection;
+            _fontMessageFontFamilyComboBox.SelectedItem = Settings.Instance.Global_Fonts_MessageFontFamily;
+
+            _fontMessageFontSizeTextBox.Text = Settings.Instance.Global_Fonts_MessageFontSize.ToString();
         }
 
         public void SelectTab(string name)
@@ -345,6 +354,87 @@ namespace Lair.Windows
 
         #endregion
 
+        #region Font
+
+        private static double GetStringToDouble(string value)
+        {
+            StringBuilder builder = new StringBuilder("0");
+
+            foreach (var item in value)
+            {
+                var w = item.ToString();
+
+                if (Regex.IsMatch(w, "[0-9\\.]"))
+                {
+                    if (w == ".") builder.Replace(".", "");
+                    builder.Append(w);
+                }
+            }
+
+            double count = 0;
+
+            try
+            {
+                count = double.Parse(builder.ToString().TrimEnd('.'));
+            }
+            catch (OverflowException)
+            {
+                count = double.MaxValue;
+            }
+
+            return count;
+        }
+
+        private void _fontMessageFontSizeTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(_fontMessageFontSizeTextBox.Text)) return;
+
+            StringBuilder builder = new StringBuilder("");
+
+            foreach (var item in _fontMessageFontSizeTextBox.Text)
+            {
+                if (Regex.IsMatch(item.ToString(), "[0-9\\.]"))
+                {
+                    builder.Append(item.ToString());
+                }
+            }
+
+            var value = builder.ToString();
+            if (_fontMessageFontSizeTextBox.Text != value) _fontMessageFontSizeTextBox.Text = value;
+        }
+
+        #endregion
+
+        #region Amoeba
+
+        private void _amoebaPathTextBox_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            using (System.Windows.Forms.OpenFileDialog dialog = new System.Windows.Forms.OpenFileDialog())
+            {
+                dialog.Multiselect = false;
+                dialog.RestoreDirectory = true;
+                dialog.DefaultExt = ".exe";
+                dialog.Filter = "Exe files (*.exe)|*.exe";
+
+                try
+                {
+                    dialog.InitialDirectory = Path.GetDirectoryName(_amoebaPathTextBox.Text);
+                    dialog.FileName = Path.GetFileName(_amoebaPathTextBox.Text);
+                }
+                catch (Exception)
+                {
+
+                }
+
+                if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    _amoebaPathTextBox.Text = dialog.FileName;
+                }
+            }
+        }
+
+        #endregion
+
         private void _okButton_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = true;
@@ -368,6 +458,13 @@ namespace Lair.Windows
             {
                 Settings.Instance.Global_Update_Option = UpdateOption.AutoUpdate;
             }
+
+            Settings.Instance.Global_Amoeba_Path = _amoebaPathTextBox.Text;
+
+            Settings.Instance.Global_Fonts_MessageFontFamily = (string)_fontMessageFontFamilyComboBox.SelectedItem;
+
+            double messageFontSize = ViewOptionsWindow.GetStringToDouble(_fontMessageFontSizeTextBox.Text);
+            Settings.Instance.Global_Fonts_MessageFontSize = Math.Max(Math.Min(messageFontSize, 100), 1);
         }
 
         private void _cancelButton_Click(object sender, RoutedEventArgs e)

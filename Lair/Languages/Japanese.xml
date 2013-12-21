@@ -137,16 +137,15 @@
   <Translate Key="ViewOptionsWindow_Signature" Value="サイン" />
   <Translate Key="ViewOptionsWindow_Signatures" Value="サイン" />
   <Translate Key="ViewOptionsWindow_Keywords" Value="キーワード" />
-  <Translate Key="ViewOptionsWindow_Miscellaneous" Value="その他" />
-  <Translate Key="ViewOptionsWindow_Box" Value="ボックス" />
-  <Translate Key="ViewOptionsWindow_RelateBoxFile" Value="Boxファイルを関連付ける" />
-  <Translate Key="ViewOptionsWindow_Events" Value="イベント" />
-  <Translate Key="ViewOptionsWindow_OpenBox" Value="ダウンロードされたBoxファイルを展開する" />
-  <Translate Key="ViewOptionsWindow_ExtractTo" Value="展開先" />
   <Translate Key="ViewOptionsWindow_UpdateOption" Value="アップデートオプション" />
   <Translate Key="ViewOptionsWindow_None" Value="無し" />
   <Translate Key="ViewOptionsWindow_AutoCheck" Value="自動でチェックする" />
   <Translate Key="ViewOptionsWindow_AutoUpdate" Value="自動でアップデートする" />
+  <Translate Key="ViewOptionsWindow_Amoeba" Value="Amoeba" />
+  <Translate Key="ViewOptionsWindow_AmoebaPath" Value="Amoeba path" />
+  <Translate Key="ViewOptionsWindow_Fonts" Value="Fonts" />
+  <Translate Key="ViewOptionsWindow_MessageFontFamily" Value="Message font family" />
+  <Translate Key="ViewOptionsWindow_MessageFontSize" Value="Message font size (pt)" />
   <Translate Key="ViewOptionsWindow_Value" Value="値" />
   <Translate Key="ViewOptionsWindow_Import" Value="インポート" />
   <Translate Key="ViewOptionsWindow_Export" Value="エクスポート" />

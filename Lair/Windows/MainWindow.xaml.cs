@@ -31,6 +31,7 @@ using Library.Net.Proxy;
 using Library.Net.Upnp;
 using Library.Security;
 using Library.Collections;
+using System.ComponentModel;
 
 namespace Lair.Windows
 {
@@ -40,7 +41,7 @@ namespace Lair.Windows
     partial class MainWindow : Window
     {
         private BufferManager _bufferManager;
-        private LairManager _amoebaManager;
+        private LairManager _lairManager;
         private AutoBaseNodeSettingManager _autoBaseNodeSettingManager;
         private OverlayNetworkManager _overlayNetworkManager;
         private TransfarLimitManager _transferLimitManager;
@@ -260,17 +261,17 @@ namespace Lair.Windows
                             _overlayNetworkManager.Stop();
                         }
 
-                        if (_amoebaManager.State == ManagerState.Stop
+                        if (_lairManager.State == ManagerState.Stop
                             && Settings.Instance.Global_IsStart)
                         {
-                            _amoebaManager.Start();
+                            _lairManager.Start();
 
                             Log.Information("Start");
                         }
-                        else if (_amoebaManager.State == ManagerState.Start
+                        else if (_lairManager.State == ManagerState.Start
                             && !Settings.Instance.Global_IsStart)
                         {
-                            _amoebaManager.Stop();
+                            _lairManager.Stop();
 
                             Log.Information("Stop");
                         }
@@ -355,7 +356,7 @@ namespace Lair.Windows
                             _transferLimitManager.Save(_configrationDirectoryPaths["TransfarLimitManager"]);
                             _overlayNetworkManager.Save(_configrationDirectoryPaths["OverlayNetworkManager"]);
                             _autoBaseNodeSettingManager.Save(_configrationDirectoryPaths["AutoBaseNodeSettingManager"]);
-                            _amoebaManager.Save(_configrationDirectoryPaths["LairManager"]);
+                            _lairManager.Save(_configrationDirectoryPaths["LairManager"]);
                             Settings.Instance.Save(_configrationDirectoryPaths["MainWindow"]);
                         }
                         catch (Exception e)
@@ -428,7 +429,7 @@ namespace Lair.Windows
                     Thread.Sleep(1000);
                     if (!_isRun) return;
 
-                    var state = _amoebaManager.State;
+                    var state = _lairManager.State;
 
                     this.Dispatcher.Invoke(DispatcherPriority.Send, new TimeSpan(0, 0, 1), new Action(() =>
                     {
@@ -474,8 +475,8 @@ namespace Lair.Windows
 
             try
             {
-                var sentByteCount = _amoebaManager.SentByteCount;
-                var receivedByteCount = _amoebaManager.ReceivedByteCount;
+                var sentByteCount = _lairManager.SentByteCount;
+                var receivedByteCount = _lairManager.ReceivedByteCount;
 
                 _ci.SentByteCountList[_ci.Count] = sentByteCount - _ci.SentByteCount;
                 _ci.SentByteCount = sentByteCount;
@@ -773,47 +774,24 @@ namespace Lair.Windows
                     }
                 }
 
-                _amoebaManager = new LairManager(_cacheBlocksPath, _bufferManager);
-                _amoebaManager.Load(_configrationDirectoryPaths["LairManager"]);
+                _lairManager = new LairManager(_cacheBlocksPath, _bufferManager);
+                _lairManager.Load(_configrationDirectoryPaths["LairManager"]);
 
                 if (!File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Lair.version")))
                 {
                     initFlag = true;
 
                     {
-                        System.Diagnostics.ProcessStartInfo p = new System.Diagnostics.ProcessStartInfo();
-                        p.UseShellExecute = true;
-                        p.FileName = Path.Combine(App.DirectoryPaths["Core"], "Lair.exe");
-                        p.Arguments = "Relate on";
-
-                        OperatingSystem osInfo = Environment.OSVersion;
-
-                        if (osInfo.Platform == PlatformID.Win32NT && osInfo.Version.Major >= 6)
-                        {
-                            p.Verb = "runas";
-                        }
-
-                        try
-                        {
-                            System.Diagnostics.Process.Start(p);
-                        }
-                        catch (System.ComponentModel.Win32Exception)
-                        {
-
-                        }
-                    }
-
-                    {
                         byte[] buffer = new byte[64];
                         (new RNGCryptoServiceProvider()).GetBytes(buffer);
 
-                        _amoebaManager.SetBaseNode(new Node(buffer, null));
+                        _lairManager.SetBaseNode(new Node(buffer, null));
                     }
 
                     Random random = new Random();
-                    _amoebaManager.ListenUris.Clear();
-                    _amoebaManager.ListenUris.Add(string.Format("tcp:{0}:{1}", IPAddress.Any.ToString(), random.Next(1024, 65536)));
-                    _amoebaManager.ListenUris.Add(string.Format("tcp:[{0}]:{1}", IPAddress.IPv6Any.ToString(), random.Next(1024, 65536)));
+                    _lairManager.ListenUris.Clear();
+                    _lairManager.ListenUris.Add(string.Format("tcp:{0}:{1}", IPAddress.Any.ToString(), random.Next(1024, 65536)));
+                    _lairManager.ListenUris.Add(string.Format("tcp:[{0}]:{1}", IPAddress.IPv6Any.ToString(), random.Next(1024, 65536)));
 
                     var ipv4ConnectionFilter = new ConnectionFilter()
                     {
@@ -861,12 +839,12 @@ namespace Lair.Windows
                         },
                     };
 
-                    _amoebaManager.Filters.Clear();
-                    _amoebaManager.Filters.Add(ipv4ConnectionFilter);
-                    _amoebaManager.Filters.Add(ipv6ConnectionFilter);
-                    _amoebaManager.Filters.Add(tcpConnectionFilter);
-                    _amoebaManager.Filters.Add(torConnectionFilter);
-                    _amoebaManager.Filters.Add(i2pConnectionFilter);
+                    _lairManager.Filters.Clear();
+                    _lairManager.Filters.Add(ipv4ConnectionFilter);
+                    _lairManager.Filters.Add(ipv6ConnectionFilter);
+                    _lairManager.Filters.Add(tcpConnectionFilter);
+                    _lairManager.Filters.Add(torConnectionFilter);
+                    _lairManager.Filters.Add(i2pConnectionFilter);
 
                     // デフォルトでセクションとチャンネルを設定
                     {
@@ -943,20 +921,20 @@ namespace Lair.Windows
                             buffer[i] = b;
                         }
 
-                        var baseNode = _amoebaManager.BaseNode;
+                        var baseNode = _lairManager.BaseNode;
 
-                        _amoebaManager.SetBaseNode(new Node(buffer, baseNode.Uris));
+                        _lairManager.SetBaseNode(new Node(buffer, baseNode.Uris));
                     }
                 }
 #endif
 
-                _autoBaseNodeSettingManager = new AutoBaseNodeSettingManager(_amoebaManager);
+                _autoBaseNodeSettingManager = new AutoBaseNodeSettingManager(_lairManager);
                 _autoBaseNodeSettingManager.Load(_configrationDirectoryPaths["AutoBaseNodeSettingManager"]);
 
-                _overlayNetworkManager = new OverlayNetworkManager(_amoebaManager, _bufferManager);
+                _overlayNetworkManager = new OverlayNetworkManager(_lairManager, _bufferManager);
                 _overlayNetworkManager.Load(_configrationDirectoryPaths["OverlayNetworkManager"]);
 
-                _transferLimitManager = new TransfarLimitManager(_amoebaManager);
+                _transferLimitManager = new TransfarLimitManager(_lairManager);
                 _transferLimitManager.Load(_configrationDirectoryPaths["TransfarLimitManager"]);
                 _transferLimitManager.Start();
 
@@ -965,7 +943,7 @@ namespace Lair.Windows
                     _transferLimitManager.Save(_configrationDirectoryPaths["TransfarLimitManager"]);
                     _overlayNetworkManager.Save(_configrationDirectoryPaths["OverlayNetworkManager"]);
                     _autoBaseNodeSettingManager.Save(_configrationDirectoryPaths["AutoBaseNodeSettingManager"]);
-                    _amoebaManager.Save(_configrationDirectoryPaths["LairManager"]);
+                    _lairManager.Save(_configrationDirectoryPaths["LairManager"]);
                     Settings.Instance.Save(_configrationDirectoryPaths["MainWindow"]);
                 }
 
@@ -994,6 +972,35 @@ namespace Lair.Windows
                     catch (Exception e2)
                     {
                         Log.Warning(e2);
+                    }
+                }
+
+                {
+                    if (string.IsNullOrWhiteSpace(Settings.Instance.Global_Amoeba_Path)
+                        || !File.Exists(Settings.Instance.Global_Amoeba_Path))
+                    {
+                        foreach (var p in Process.GetProcesses())
+                        {
+                            try
+                            {
+                                var path = p.MainModule.FileName;
+
+                                if (Path.GetFileName(path) == "Amoeba.exe")
+                                {
+                                    Settings.Instance.Global_Amoeba_Path = path;
+
+                                    break;
+                                }
+                            }
+                            catch (Win32Exception)
+                            {
+
+                            }
+                            catch (Exception)
+                            {
+
+                            }
+                        }
                     }
                 }
             }
@@ -1280,12 +1287,12 @@ namespace Lair.Windows
                 return this.PointToScreen(new Point(0, 0)).X;
             };
 
-            ConnectionControl connectionControl = new ConnectionControl(_amoebaManager);
+            ConnectionControl connectionControl = new ConnectionControl(_lairManager);
             connectionControl.Height = Double.NaN;
             connectionControl.Width = Double.NaN;
             _connectionTabItem.Content = connectionControl;
 
-            SectionControl sectionControl = new SectionControl(_amoebaManager, _bufferManager);
+            SectionControl sectionControl = new SectionControl(_lairManager, _bufferManager);
             sectionControl.Height = Double.NaN;
             sectionControl.Width = Double.NaN;
             _sectionTabItem.Content = sectionControl;
@@ -1349,9 +1356,9 @@ namespace Lair.Windows
                     _overlayNetworkManager.Save(_configrationDirectoryPaths["OverlayNetworkManager"]);
                     _overlayNetworkManager.Dispose();
 
-                    _amoebaManager.Stop();
-                    _amoebaManager.Save(_configrationDirectoryPaths["LairManager"]);
-                    _amoebaManager.Dispose();
+                    _lairManager.Stop();
+                    _lairManager.Save(_configrationDirectoryPaths["LairManager"]);
+                    _lairManager.Dispose();
 
                     Settings.Instance.Save(_configrationDirectoryPaths["MainWindow"]);
                 }
@@ -1472,7 +1479,7 @@ namespace Lair.Windows
         private void _coreOptionsMenuItem_Click(object sender, RoutedEventArgs e)
         {
             CoreOptionsWindow window = new CoreOptionsWindow(
-                _amoebaManager,
+                _lairManager,
                 _autoBaseNodeSettingManager,
                 _overlayNetworkManager,
                 _transferLimitManager,

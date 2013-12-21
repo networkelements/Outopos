@@ -1546,72 +1546,6 @@ namespace Lair.Properties
             }
         }
 
-        public string ViewOptionsWindow_Miscellaneous
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ViewOptionsWindow_Miscellaneous");
-                }
-            }
-        }
-
-        public string ViewOptionsWindow_Box
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ViewOptionsWindow_Box");
-                }
-            }
-        }
-
-        public string ViewOptionsWindow_RelateBoxFile
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ViewOptionsWindow_RelateBoxFile");
-                }
-            }
-        }
-
-        public string ViewOptionsWindow_Events
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ViewOptionsWindow_Events");
-                }
-            }
-        }
-
-        public string ViewOptionsWindow_OpenBox
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ViewOptionsWindow_OpenBox");
-                }
-            }
-        }
-
-        public string ViewOptionsWindow_ExtractTo
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ViewOptionsWindow_ExtractTo");
-                }
-            }
-        }
-
         public string ViewOptionsWindow_UpdateOption
         {
             get
@@ -1652,6 +1586,61 @@ namespace Lair.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("ViewOptionsWindow_AutoUpdate");
+                }
+            }
+        }
+
+        public string ViewOptionsWindow_Amoeba
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ViewOptionsWindow_Amoeba");
+                }
+            }
+        }
+
+        public string ViewOptionsWindow_AmoebaPath
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ViewOptionsWindow_AmoebaPath");
+                }
+            }
+        }
+
+        public string ViewOptionsWindow_Fonts
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ViewOptionsWindow_Fonts");
+                }
+            }
+        }
+
+        public string ViewOptionsWindow_MessageFontFamily
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ViewOptionsWindow_MessageFontFamily");
+                }
+            }
+        }
+
+        public string ViewOptionsWindow_MessageFontSize
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ViewOptionsWindow_MessageFontSize");
                 }
             }
         }
