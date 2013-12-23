@@ -206,24 +206,12 @@ namespace Lair.Windows
             var item = value as string;
             if (item == null) return null;
 
-            return item.Replace('\r', ' ').Replace('\n', ' ');
-        }
+            StringBuilder sb = new StringBuilder(item, item.Length);
+            sb.Replace('\r', ' ');
+            sb.Replace('\n', ' ');
+            sb.Replace('\uFFFD', ' ');
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotSupportedException();
-        }
-    }
-
-    [ValueConversion(typeof(string), typeof(string))]
-    class StringRegularization2Converter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            var item = value as string;
-            if (item == null) return null;
-
-            return item;
+            return sb.ToString();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

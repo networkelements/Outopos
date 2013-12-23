@@ -51,6 +51,12 @@ namespace Lair
             {
                 _manualResetEvent.Reset();
 
+                _sectionCategorizeTreeItemList.Clear();
+                _sectionTreeItemList.Clear();
+
+                _chatCategorizeTreeItemList.Clear();
+                _chatTreeItemList.Clear();
+                
                 System.Windows.Clipboard.Clear();
             }
 

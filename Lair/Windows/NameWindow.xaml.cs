@@ -27,6 +27,7 @@ namespace Lair.Windows
         public NameWindow()
             : this(null)
         {
+
         }
 
         public NameWindow(int maxLength)
