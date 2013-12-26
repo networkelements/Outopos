@@ -20,19 +20,19 @@ using Library;
 
 namespace Lair.Windows
 {
-    delegate void ChatJoinEventHandler(object sender, Chat tag);
+    delegate void SignatureAddEventHandler(object sender, string signature);
 
     /// <summary>
-    /// ChatListWindow.xaml の相互作用ロジック
+    /// SignatureListWindow.xaml の相互作用ロジック
     /// </summary>
-    partial class ChatListWindow : Window
+    partial class SignatureListWindow : Window
     {
         private LairManager _lairManager;
-        private ObservableCollectionEx<Chat> _chatCollection;
+        private ObservableCollectionEx<string> _signatureCollection;
 
-        public event ChatJoinEventHandler ChatJoinEvent;
+        public event SignatureAddEventHandler SignatureAddEvent;
 
-        public ChatListWindow(IEnumerable<Chat> chats, LairManager lairManager)
+        public SignatureListWindow(IEnumerable<string> signatures, LairManager lairManager)
         {
             _lairManager = lairManager;
 
@@ -49,19 +49,19 @@ namespace Lair.Windows
                 this.Icon = icon;
             }
 
-            _chatCollection = new ObservableCollectionEx<Chat>(chats);
-            _listView.ItemsSource = _chatCollection;
+            _signatureCollection = new ObservableCollectionEx<string>(signatures);
+            _listView.ItemsSource = _signatureCollection;
 
             CollectionViewSource.GetDefaultView(_listView.ItemsSource).Filter = (object o) =>
             {
                 string searchText = _searchTextBox.Text;
                 if (string.IsNullOrWhiteSpace(searchText)) return true;
 
-                var item = o as Chat;
+                var item = o as string;
                 if (item == null) return false;
 
                 var words = searchText.ToLower().Split(new string[] { " ", "　" }, StringSplitOptions.RemoveEmptyEntries);
-                var text = (item.Name ?? "").ToLower();
+                var text = (item ?? "").ToLower();
 
                 foreach (var word in words)
                 {
@@ -84,11 +84,11 @@ namespace Lair.Windows
             base.OnInitialized(e);
         }
 
-        protected virtual void OnChatJoinEvent(Chat chat)
+        protected virtual void OnSignatureAddEvent(string signature)
         {
-            if (this.ChatJoinEvent != null)
+            if (this.SignatureAddEvent != null)
             {
-                this.ChatJoinEvent(this, chat);
+                this.SignatureAddEvent(this, signature);
             }
         }
 
@@ -96,18 +96,18 @@ namespace Lair.Windows
 
         private void _listView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            _joinButton.IsEnabled = (_listView.SelectedIndex != -1);
+            _addButton.IsEnabled = (_listView.SelectedIndex != -1);
         }
 
         private void _listView_PreviewMouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (_listView.GetCurrentIndex(e.GetPosition) < 0) return;
 
-            foreach (var chat in _listView.SelectedItems.Cast<Chat>().ToArray())
+            foreach (var signature in _listView.SelectedItems.Cast<string>().ToArray())
             {
-                _chatCollection.Remove(chat);
+                _signatureCollection.Remove(signature);
 
-                this.OnChatJoinEvent(chat);
+                this.OnSignatureAddEvent(signature);
             }
         }
 
@@ -116,32 +116,25 @@ namespace Lair.Windows
             var selectItems = _listView.SelectedItems;
 
             _listViewCopyMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
-            _listViewCopyInfoMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
-            _listViewJoinMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
+            _listViewAddMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
         }
 
         private void _listViewCopyMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            Clipboard.SetChats(_listView.SelectedItems.Cast<Chat>().Select(n => new Tuple<Chat, string>(n, null)));
-        }
-
-        private void _listViewCopyInfoMenuItem_Click(object sender, RoutedEventArgs e)
-        {
             var sb = new StringBuilder();
 
-            foreach (var chat in _listView.SelectedItems.Cast<Chat>())
+            foreach (var signature in _listView.SelectedItems.Cast<string>())
             {
-                sb.AppendLine(LairConverter.ToChatString(chat, null));
-                sb.AppendLine(MessageConverter.ToInfoMessage(chat, null));
+                sb.AppendLine(signature);
                 sb.AppendLine();
             }
 
             Clipboard.SetText(sb.ToString().TrimEnd('\r', '\n'));
         }
 
-        private void _listViewJoinMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _listViewAddMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            _joinButton_Click(null, null);
+            _addButton_Click(null, null);
         }
 
         #endregion
@@ -175,13 +168,13 @@ namespace Lair.Windows
 
                 ListSortDirection direction;
 
-                if (headerClicked != Settings.Instance.ChatListWindow_LastHeaderClicked)
+                if (headerClicked != Settings.Instance.SignatureListWindow_LastHeaderClicked)
                 {
                     direction = ListSortDirection.Ascending;
                 }
                 else
                 {
-                    if (Settings.Instance.ChatListWindow_ListSortDirection == ListSortDirection.Ascending)
+                    if (Settings.Instance.SignatureListWindow_ListSortDirection == ListSortDirection.Ascending)
                     {
                         direction = ListSortDirection.Descending;
                     }
@@ -193,14 +186,14 @@ namespace Lair.Windows
 
                 Sort(headerClicked, direction);
 
-                Settings.Instance.ChatListWindow_LastHeaderClicked = headerClicked;
-                Settings.Instance.ChatListWindow_ListSortDirection = direction;
+                Settings.Instance.SignatureListWindow_LastHeaderClicked = headerClicked;
+                Settings.Instance.SignatureListWindow_ListSortDirection = direction;
             }
             else
             {
-                if (Settings.Instance.ChatListWindow_LastHeaderClicked != null)
+                if (Settings.Instance.SignatureListWindow_LastHeaderClicked != null)
                 {
-                    Sort(Settings.Instance.ChatListWindow_LastHeaderClicked, Settings.Instance.ChatListWindow_ListSortDirection);
+                    Sort(Settings.Instance.SignatureListWindow_LastHeaderClicked, Settings.Instance.SignatureListWindow_ListSortDirection);
                 }
             }
         }
@@ -209,47 +202,20 @@ namespace Lair.Windows
         {
             _listView.Items.SortDescriptions.Clear();
 
-            if (sortBy == LanguagesManager.Instance.ChatListWindow_Name)
+            if (sortBy == LanguagesManager.Instance.SignatureListWindow_Value)
             {
-                _listView.Items.SortDescriptions.Add(new SortDescription("Name", direction));
-            }
-            else if (sortBy == LanguagesManager.Instance.ChatListWindow_Id)
-            {
-                ListCollectionView listCollectionView = (ListCollectionView)CollectionViewSource.GetDefaultView(_listView.ItemsSource);
-                listCollectionView.CustomSort = new ChatIdComparer(direction);
-            }
-        }
-
-        sealed class ChatIdComparer : IComparer
-        {
-            private ListSortDirection _direction;
-
-            public ChatIdComparer(ListSortDirection direction)
-            {
-                _direction = direction;
-            }
-
-            public int Compare(object x, object y)
-            {
-                var cx = x as Chat;
-                var cy = y as Chat;
-
-                if (_direction == ListSortDirection.Ascending) return Collection.Compare(cx.Id, cy.Id);
-                if (_direction == ListSortDirection.Descending) return Collection.Compare(cy.Id, cx.Id);
-
-                return 0;
+                _listView.Items.SortDescriptions.Add(new SortDescription(null, direction));
             }
         }
 
         #endregion
 
-        private void _joinButton_Click(object sender, RoutedEventArgs e)
+        private void _addButton_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var chat in _listView.SelectedItems.Cast<Chat>().ToArray())
+            foreach (var signature in _listView.SelectedItems.Cast<string>().ToArray())
             {
-                _chatCollection.Remove(chat);
-
-                this.OnChatJoinEvent(chat);
+                _signatureCollection.Remove(signature);
+                this.OnSignatureAddEvent(signature);
             }
         }
 

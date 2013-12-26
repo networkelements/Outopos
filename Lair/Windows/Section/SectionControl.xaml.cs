@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -49,6 +49,7 @@ namespace Lair.Windows
 
         private SectionCategorizeTreeViewItem _treeViewItem;
         private LockedDictionary<SectionTreeViewItem, ChatControl> _chatControls = new LockedDictionary<SectionTreeViewItem, ChatControl>();
+        private LockedDictionary<SectionTreeViewItem, MailControl> _mailControls = new LockedDictionary<SectionTreeViewItem, MailControl>();
 
         public SectionControl(LairManager lairManager, BufferManager bufferManager)
         {
@@ -94,7 +95,127 @@ namespace Lair.Windows
 
             _lairManager.GetLockCriteriaEvent = this.GetCriteria;
 
+            RichTextBoxHelper.GetMaxHeightEvent = GetMaxHeightEvent;
+            RichTextBoxHelper.GetAnchorSectionMessageWrapperEvent = this.GetAnchorSectionMessageWrapperEvent;
+            RichTextBoxHelper.GetAnchorChatMessageWrapperEvent = this.GetAnchorChatMessageWrapperEvent;
+
             this.Update();
+        }
+
+        private double GetMaxHeightEvent(object sender)
+        {
+            return _tabControl.ActualHeight;
+        }
+
+        private SectionMessageWrapper GetAnchorSectionMessageWrapperEvent(object sender, Section section, Anchor anchor)
+        {
+            var selectTreeViewItem = _treeView.SelectedItem as SectionTreeViewItem;
+            if (selectTreeViewItem == null) return null;
+
+            if (selectTreeViewItem.Value.Tag != section) return null;
+
+            var trustSignatures = new HashSet<string>();
+            trustSignatures.Add(selectTreeViewItem.Value.LeaderSignature);
+            trustSignatures.UnionWith(selectTreeViewItem.Value.CacheSectionProfiles.SelectMany(n => n.TrustSignatures));
+
+            {
+                var mailTreeItems = new HashSet<MailTreeItem>();
+
+                {
+                    var mailCategorizeTreeItems = new List<MailCategorizeTreeItem>();
+                    mailCategorizeTreeItems.Add(selectTreeViewItem.Value.MailCategorizeTreeItem);
+
+                    for (int i = 0; i < mailCategorizeTreeItems.Count; i++)
+                    {
+                        mailCategorizeTreeItems.AddRange(mailCategorizeTreeItems[i].Children);
+                        mailTreeItems.UnionWith(mailCategorizeTreeItems[i].MailTreeItems);
+                    }
+                }
+
+                foreach (var item in mailTreeItems)
+                {
+                    foreach (var sectionMessage in item.SentSectionMessages)
+                    {
+                        if (anchor.Check(sectionMessage)) return new SectionMessageWrapper()
+                        {
+                            Value = sectionMessage,
+                            IsTrust = trustSignatures.Contains(sectionMessage.Signature)
+                        };
+                    }
+
+                    foreach (var sectionMessage in item.ReadSectionMessages)
+                    {
+                        if (anchor.Check(sectionMessage)) return new SectionMessageWrapper()
+                        {
+                            Value = sectionMessage,
+                            IsTrust = trustSignatures.Contains(sectionMessage.Signature)
+                        };
+                    }
+
+                    foreach (var sectionMessage in item.UnreadSectionMessages)
+                    {
+                        if (anchor.Check(sectionMessage)) return new SectionMessageWrapper()
+                        {
+                            Value = sectionMessage,
+                            IsNew = true,
+                            IsTrust = trustSignatures.Contains(sectionMessage.Signature)
+                        };
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        private ChatMessageWrapper GetAnchorChatMessageWrapperEvent(object sender, Chat chat, Anchor anchor)
+        {
+            var selectTreeViewItem = _treeView.SelectedItem as SectionTreeViewItem;
+            if (selectTreeViewItem == null) return null;
+
+            var trustSignatures = new HashSet<string>();
+            trustSignatures.Add(selectTreeViewItem.Value.LeaderSignature);
+            trustSignatures.UnionWith(selectTreeViewItem.Value.CacheSectionProfiles.SelectMany(n => n.TrustSignatures));
+
+            {
+                var chatTreeItems = new HashSet<ChatTreeItem>();
+
+                {
+                    var chatCategorizeTreeItems = new List<ChatCategorizeTreeItem>();
+                    chatCategorizeTreeItems.Add(selectTreeViewItem.Value.ChatCategorizeTreeItem);
+
+                    for (int i = 0; i < chatCategorizeTreeItems.Count; i++)
+                    {
+                        chatCategorizeTreeItems.AddRange(chatCategorizeTreeItems[i].Children);
+                        chatTreeItems.UnionWith(chatCategorizeTreeItems[i].ChatTreeItems);
+                    }
+                }
+
+                foreach (var item in chatTreeItems)
+                {
+                    if (item.Tag != chat) continue;
+
+                    foreach (var chatMessage in item.ReadChatMessages)
+                    {
+                        if (anchor.Check(chatMessage)) return new ChatMessageWrapper()
+                        {
+                            Value = chatMessage,
+                            IsTrust = trustSignatures.Contains(chatMessage.Signature)
+                        };
+                    }
+
+                    foreach (var chatMessage in item.UnreadChatMessages)
+                    {
+                        if (anchor.Check(chatMessage)) return new ChatMessageWrapper()
+                        {
+                            Value = chatMessage,
+                            IsNew = true,
+                            IsTrust = trustSignatures.Contains(chatMessage.Signature)
+                        };
+                    }
+                }
+            }
+
+            return null;
         }
 
         private IEnumerable<Criterion> GetCriteria(object sender)
@@ -175,6 +296,11 @@ namespace Lair.Windows
                                 item.Visibility = System.Windows.Visibility.Hidden;
                             }
 
+                            foreach (var item in _mailGrid.Children.OfType<MailControl>())
+                            {
+                                item.Visibility = System.Windows.Visibility.Hidden;
+                            }
+
                             this.Update_Title();
                         }));
                     }
@@ -183,6 +309,7 @@ namespace Lair.Windows
                         var sectionTreeViewItem = (SectionTreeViewItem)tempTreeViewItem;
 
                         ChatControl chatControl;
+                        MailControl mailControl;
 
                         if (!_chatControls.TryGetValue(sectionTreeViewItem, out chatControl))
                         {
@@ -202,6 +329,24 @@ namespace Lair.Windows
                             }));
                         }
 
+                        if (!_mailControls.TryGetValue(sectionTreeViewItem, out mailControl))
+                        {
+                            this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
+                            {
+                                lock (_mailControls.ThisLock)
+                                {
+                                    if (!_mailControls.TryGetValue(sectionTreeViewItem, out mailControl))
+                                    {
+                                        mailControl = new MailControl(sectionTreeViewItem, sectionTreeViewItem.Value.MailCategorizeTreeItem, _lairManager, _bufferManager);
+                                        _mailControls[sectionTreeViewItem] = mailControl;
+                                        _mailGrid.Children.Add(mailControl);
+
+                                        mailControl.Visibility = System.Windows.Visibility.Hidden;
+                                    }
+                                }
+                            }));
+                        }
+
                         this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                         {
                             if (tempTreeViewItem != _treeView.SelectedItem) return;
@@ -210,6 +355,18 @@ namespace Lair.Windows
                             foreach (var item in _chatGrid.Children.OfType<ChatControl>())
                             {
                                 if (item == chatControl)
+                                {
+                                    item.Visibility = System.Windows.Visibility.Visible;
+                                }
+                                else
+                                {
+                                    item.Visibility = System.Windows.Visibility.Hidden;
+                                }
+                            }
+
+                            foreach (var item in _mailGrid.Children.OfType<MailControl>())
+                            {
+                                if (item == mailControl)
                                 {
                                     item.Visibility = System.Windows.Visibility.Visible;
                                 }
@@ -309,7 +466,7 @@ namespace Lair.Windows
                             }
                         }
 
-                        // _chatControlsの同期
+                        // Controlsの同期
                         {
                             foreach (var sectionTreeViewItem in sectionTreeViewItems)
                             {
@@ -331,6 +488,26 @@ namespace Lair.Windows
                                 }));
                             }
 
+                            foreach (var sectionTreeViewItem in sectionTreeViewItems)
+                            {
+                                if (_mailControls.ContainsKey(sectionTreeViewItem)) continue;
+
+                                this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
+                                {
+                                    lock (_mailControls.ThisLock)
+                                    {
+                                        if (!_mailControls.ContainsKey(sectionTreeViewItem))
+                                        {
+                                            var mailControl = new MailControl(sectionTreeViewItem, sectionTreeViewItem.Value.MailCategorizeTreeItem, _lairManager, _bufferManager);
+                                            _mailControls[sectionTreeViewItem] = mailControl;
+                                            _mailGrid.Children.Add(mailControl);
+
+                                            mailControl.Visibility = System.Windows.Visibility.Hidden;
+                                        }
+                                    }
+                                }));
+                            }
+
                             lock (_chatControls.ThisLock)
                             {
                                 foreach (var key in _chatControls.Keys.ToArray())
@@ -338,6 +515,16 @@ namespace Lair.Windows
                                     if (sectionTreeViewItems.Contains(key)) continue;
 
                                     _chatControls.Remove(key);
+                                }
+                            }
+
+                            lock (_mailControls.ThisLock)
+                            {
+                                foreach (var key in _mailControls.Keys.ToArray())
+                                {
+                                    if (sectionTreeViewItems.Contains(key)) continue;
+
+                                    _mailControls.Remove(key);
                                 }
                             }
                         }
@@ -672,7 +859,7 @@ namespace Lair.Windows
 
             {
                 var categorizeSectionTreeViewItems = new List<SectionCategorizeTreeViewItem>();
-                categorizeSectionTreeViewItems.Add(_treeViewItem);
+                categorizeSectionTreeViewItems.Add(selectTreeViewItem);
 
                 for (int i = 0; i < categorizeSectionTreeViewItems.Count; i++)
                 {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -18,16 +18,17 @@ using Library.Collections;
 namespace Lair.Windows
 {
     /// <summary>
-    /// MessageEditWindow.xaml の相互作用ロジック
+    /// ChatMessageEditWindow.xaml の相互作用ロジック
     /// </summary>
-    partial class MessageEditWindow : Window
+    partial class ChatMessageEditWindow : Window
     {
         private Chat _chat;
         private List<ChatMessage> _responsMessages = new List<ChatMessage>();
         private DigitalSignature _digitalSignature;
         private LairManager _lairManager;
+        private ChatMessage _chatMessage;
 
-        public MessageEditWindow(Chat chat, string content, IEnumerable<ChatMessage> responsMessages, DigitalSignature digitalSignature, LairManager lairManager)
+        public ChatMessageEditWindow(Chat chat, string content, IEnumerable<ChatMessage> responsMessages, DigitalSignature digitalSignature, LairManager lairManager)
         {
             _chat = chat;
             if (responsMessages != null) _responsMessages.AddRange(responsMessages);
@@ -62,6 +63,14 @@ namespace Lair.Windows
             _commentTextBox_TextChanged(null, null);
         }
 
+        public ChatMessage ChatMessage
+        {
+            get
+            {
+                return _chatMessage;
+            }
+        }
+
         protected override void OnInitialized(EventArgs e)
         {
             WindowPosition.Move(this);
@@ -92,7 +101,7 @@ namespace Lair.Windows
                     comment = comment.Substring(0, ChatMessage.MaxCommentLength);
                 }
 
-                RichTextBoxHelper.SetRichTextBox(_richTextBox, _chat, _digitalSignature.ToString(), DateTime.UtcNow, comment, _responsMessages.Select(n => new Anchor(n.Signature, n.CreationTime)));
+                RichTextBoxHelper.SetRichTextBox(_richTextBox, _chat, _digitalSignature.ToString(), DateTime.UtcNow, comment, _responsMessages.Select(n => new Anchor(n.Signature, n.CreationTime)), false);
 
                 _richTextBox.MaxHeight = double.PositiveInfinity;
             }
@@ -117,7 +126,7 @@ namespace Lair.Windows
 
         private void _okButton_Click(object sender, RoutedEventArgs e)
         {
-            _lairManager.UploadChatMessage(_chat, _commentTextBox.Text, _responsMessages.Select(n => new Anchor(n.Signature, n.CreationTime)), _digitalSignature);
+            _chatMessage = _lairManager.UploadChatMessage(_chat, _commentTextBox.Text, _responsMessages.Select(n => new Anchor(n.Signature, n.CreationTime)), _digitalSignature);
 
             this.Close();
         }

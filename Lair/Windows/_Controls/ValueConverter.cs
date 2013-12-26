@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -642,6 +642,74 @@ namespace Lair.Windows
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    class SectionMessageWrapperToBorderBrushConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            var wrapper = values[0] as SectionMessageWrapper;
+            if (wrapper == null) return null;
+
+            var isSelect = values[1] as bool?;
+            if (isSelect == null) return null;
+
+            System.Windows.Media.Color color;
+
+            if (isSelect.HasValue && isSelect.Value)
+            {
+                color = App.LairColors.Message_Select;
+            }
+            else if (wrapper.IsNew)
+            {
+                color = App.LairColors.Message_New;
+            }
+            else
+            {
+                color = App.LairColors.Message;
+            }
+
+            return new SolidColorBrush(color);
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    class ChatMessageWrapperToBorderBrushConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            var wrapper = values[0] as ChatMessageWrapper;
+            if (wrapper == null) return null;
+
+            var isSelect = values[1] as bool?;
+            if (isSelect == null) return null;
+
+            System.Windows.Media.Color color;
+
+            if (isSelect.HasValue && isSelect.Value)
+            {
+                color = App.LairColors.Message_Select;
+            }
+            else if (wrapper.IsNew)
+            {
+                color = App.LairColors.Message_New;
+            }
+            else
+            {
+                color = App.LairColors.Message;
+            }
+
+            return new SolidColorBrush(color);
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }

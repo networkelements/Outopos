@@ -8,13 +8,13 @@ using Library;
 
 namespace Lair.Windows
 {
-    class ChatTreeViewItem : TreeViewItemEx
+    class MailTreeViewItem : TreeViewItemEx
     {
-        private ChatTreeItem _value;
+        private MailTreeItem _value;
 
         private TextBlock _header = new TextBlock();
 
-        public ChatTreeViewItem(ChatTreeItem value)
+        public MailTreeViewItem(MailTreeItem value)
             : base()
         {
             if (value == null) throw new ArgumentNullException("value");
@@ -38,17 +38,10 @@ namespace Lair.Windows
 
         public void Update()
         {
-            if (!_value.IsTrustEnabled)
-            {
-                _header.Text = string.Format("{0} ({1}){2} - {3}", this.Value.Tag.Name, this.Value.ReadChatMessages.Count + this.Value.UnreadChatMessages.Count, "!", NetworkConverter.ToBase64UrlString(this.Value.Tag.Id));
-            }
-            else
-            {
-                _header.Text = string.Format("{0} ({1}) - {2}", this.Value.Tag.Name, this.Value.ReadChatMessages.Count + this.Value.UnreadChatMessages.Count, NetworkConverter.ToBase64UrlString(this.Value.Tag.Id));
-            }
+            _header.Text = string.Format("{0} ({1})", this.Value.TargetSignature, this.Value.SentSectionMessages.Count + this.Value.ReadSectionMessages.Count + this.Value.UnreadSectionMessages.Count);
         }
 
-        public ChatTreeItem Value
+        public MailTreeItem Value
         {
             get
             {

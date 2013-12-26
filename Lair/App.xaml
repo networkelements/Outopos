@@ -1,4 +1,4 @@
-﻿<Application x:Class="Lair.App"
+<Application x:Class="Lair.App"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:prop="clr-namespace:Lair.Properties" 
@@ -41,6 +41,8 @@
             <local:StringToDoubleConverter x:Key="_stringToDoubleConverter"/>
             <local:ConnectionTypeToStringConverter x:Key="_connectionTypeToStringConverter"/>
             <local:TransferLimitTypeToStringConverter x:Key="_transferLimitTypeToStringConverter"/>
+            <local:SectionMessageWrapperToBorderBrushConverter x:Key="_sectionMessageWrapperToBorderBrushConverter"/>
+            <local:ChatMessageWrapperToBorderBrushConverter x:Key="_chatMessageWrapperToBorderBrushConverter"/>
 
         </ResourceDictionary>
     </Application.Resources>

@@ -299,11 +299,35 @@
   <Translate Key="ChatListWindow_Join" Value="Join" />
   <Translate Key="ChatListWindow_Close" Value="Close" />
 
-  <Translate Key="MessageEditWindow_Title" Value="New message - {0}" />
-  <Translate Key="MessageEditWindow_Edit" Value="Edit" />
-  <Translate Key="MessageEditWindow_Preview" Value="Preview" />
-  <Translate Key="MessageEditWindow_Comment" Value="Comment" />
-  <Translate Key="MessageEditWindow_Ok" Value="Ok" />
-  <Translate Key="MessageEditWindow_Cancel" Value="Cancel" />
+  <Translate Key="ChatMessageEditWindow_Title" Value="New message" />
+  <Translate Key="ChatMessageEditWindow_Edit" Value="Edit" />
+  <Translate Key="ChatMessageEditWindow_Preview" Value="Preview" />
+  <Translate Key="ChatMessageEditWindow_Comment" Value="Comment" />
+  <Translate Key="ChatMessageEditWindow_Ok" Value="Ok" />
+  <Translate Key="ChatMessageEditWindow_Cancel" Value="Cancel" />
+
+  <Translate Key="MailControl_NewCategory" Value="New category" />
+  <Translate Key="MailControl_Edit" Value="Edit" />
+  <Translate Key="MailControl_Delete" Value="Delete" />
+  <Translate Key="MailControl_Cut" Value="Cut" />
+  <Translate Key="MailControl_Copy" Value="Copy" />
+  <Translate Key="MailControl_CopyInfo" Value="Copy info" />
+  <Translate Key="MailControl_Paste" Value="Paste" />
+  <Translate Key="MailControl_SignatureList" Value="Signature list" />
+  <Translate Key="MailControl_Respons" Value="Respons" />
+  <Translate Key="MailControl_Message" Value="Message" />
+
+  <Translate Key="SignatureListWindow_Title" Value="Signature list" />
+  <Translate Key="SignatureListWindow_Value" Value="Value" />
+  <Translate Key="SignatureListWindow_Copy" Value="Copy" />
+  <Translate Key="SignatureListWindow_Add" Value="Add" />
+  <Translate Key="SignatureListWindow_Close" Value="Close" />
+
+  <Translate Key="SectionMessageEditWindow_Title" Value="New message" />
+  <Translate Key="SectionMessageEditWindow_Edit" Value="Edit" />
+  <Translate Key="SectionMessageEditWindow_Preview" Value="Preview" />
+  <Translate Key="SectionMessageEditWindow_Comment" Value="Comment" />
+  <Translate Key="SectionMessageEditWindow_Ok" Value="Ok" />
+  <Translate Key="SectionMessageEditWindow_Cancel" Value="Cancel" />
 
 </Configuration>

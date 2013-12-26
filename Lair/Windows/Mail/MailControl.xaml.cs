@@ -32,9 +32,9 @@ using A = Library.Net.Amoeba;
 namespace Lair.Windows
 {
     /// <summary>
-    /// Interaction logic for ChatControl.xaml
+    /// Interaction logic for MailControl.xaml
     /// </summary>
-    partial class ChatControl : UserControl, IDisposable
+    partial class MailControl : UserControl, IDisposable
     {
         private MainWindow _mainWindow = (MainWindow)Application.Current.MainWindow;
         private SectionTreeViewItem _sectionTreeViewItem;
@@ -50,18 +50,18 @@ namespace Lair.Windows
         private volatile bool _cacheUpdate;
         private AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
 
-        private ChatCategorizeTreeViewItem _treeViewItem;
-        private ObservableCollection<ChatMessageWrapper> _listViewItemCollection = new ObservableCollection<ChatMessageWrapper>();
+        private MailCategorizeTreeViewItem _treeViewItem;
+        private ObservableCollection<SectionMessageWrapper> _listViewItemCollection = new ObservableCollection<SectionMessageWrapper>();
 
         private volatile bool _disposed;
 
-        public ChatControl(SectionTreeViewItem sectionTreeViewItem, ChatCategorizeTreeItem chatCategorizeTreeItem, LairManager lairManager, BufferManager bufferManager)
+        public MailControl(SectionTreeViewItem sectionTreeViewItem, MailCategorizeTreeItem mailCategorizeTreeItem, LairManager lairManager, BufferManager bufferManager)
         {
             _sectionTreeViewItem = sectionTreeViewItem;
             _lairManager = lairManager;
             _bufferManager = bufferManager;
 
-            _treeViewItem = new ChatCategorizeTreeViewItem(chatCategorizeTreeItem);
+            _treeViewItem = new MailCategorizeTreeViewItem(mailCategorizeTreeItem);
 
             InitializeComponent();
 
@@ -81,19 +81,17 @@ namespace Lair.Windows
             _searchThread = new Thread(new ThreadStart(this.Search));
             _searchThread.Priority = ThreadPriority.Highest;
             _searchThread.IsBackground = true;
-            _searchThread.Name = "ChatControl_SearchThread";
+            _searchThread.Name = "MailControl_SearchThread";
             _searchThread.Start();
 
             _cacheThread = new Thread(new ThreadStart(this.Cache));
             _cacheThread.Priority = ThreadPriority.Highest;
             _cacheThread.IsBackground = true;
-            _cacheThread.Name = "ChatControl_CacheThread";
+            _cacheThread.Name = "MailControl_CacheThread";
             _cacheThread.Start();
 
             _searchRowDefinition.Height = new GridLength(0);
 
-            _trustToggleButton.IsEnabled = false;
-            _topicUploadButton.IsEnabled = false;
             _messageUploadButton.IsEnabled = false;
 
             LanguagesManager.UsingLanguageChangedEvent += new UsingLanguageChangedEventHandler(this.LanguagesManager_UsingLanguageChangedEvent);
@@ -120,40 +118,43 @@ namespace Lair.Windows
                         tempTreeViewItem = (TreeViewItem)_treeView.SelectedItem;
                     }));
 
-                    if (tempTreeViewItem is ChatCategorizeTreeViewItem)
+                    if (tempTreeViewItem is MailCategorizeTreeViewItem)
                     {
                         this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                         {
                             if (tempTreeViewItem != _treeView.SelectedItem) return;
                             _refresh = false;
 
-                            _trustToggleButton.IsEnabled = false;
-                            _topicUploadButton.IsEnabled = false;
                             _messageUploadButton.IsEnabled = false;
 
                             _listViewItemCollection.Clear();
                         }));
                     }
-                    else if (tempTreeViewItem is ChatTreeViewItem)
+                    else if (tempTreeViewItem is MailTreeViewItem)
                     {
-                        ChatTreeViewItem chatTreeViewItem = (ChatTreeViewItem)tempTreeViewItem;
+                        MailTreeViewItem mailTreeViewItem = (MailTreeViewItem)tempTreeViewItem;
 
                         var trustSignatures = new HashSet<string>();
                         trustSignatures.Add(_sectionTreeViewItem.Value.LeaderSignature);
                         trustSignatures.UnionWith(_sectionTreeViewItem.Value.CacheSectionProfiles.SelectMany(n => n.TrustSignatures));
 
-                        var newList = new HashSet<ChatMessageWrapper>();
+                        var newList = new HashSet<SectionMessageWrapper>();
 
-                        lock (chatTreeViewItem.Value.ThisLock)
+                        lock (mailTreeViewItem.Value.ThisLock)
                         {
-                            newList.UnionWith(chatTreeViewItem.Value.ReadChatMessages
-                                .Select(n => new ChatMessageWrapper() { Value = n, IsTrust = trustSignatures.Contains(n.Signature) }));
+                            newList.UnionWith(mailTreeViewItem.Value.SentSectionMessages
+                                .Select(n => new SectionMessageWrapper() { Value = n, IsTrust = trustSignatures.Contains(n.Signature) }));
 
-                            newList.UnionWith(chatTreeViewItem.Value.UnreadChatMessages
-                                .Select(n => new ChatMessageWrapper() { IsNew = true, Value = n, IsTrust = trustSignatures.Contains(n.Signature) }));
+                            newList.UnionWith(mailTreeViewItem.Value.ReadSectionMessages
+                                .Where(n => !mailTreeViewItem.Value.SentSectionMessages.Contains(n))
+                                .Select(n => new SectionMessageWrapper() { Value = n, IsTrust = trustSignatures.Contains(n.Signature) }));
 
-                            chatTreeViewItem.Value.ReadChatMessages.AddRange(chatTreeViewItem.Value.UnreadChatMessages);
-                            chatTreeViewItem.Value.UnreadChatMessages.Clear();
+                            newList.UnionWith(mailTreeViewItem.Value.UnreadSectionMessages
+                                .Where(n => !mailTreeViewItem.Value.SentSectionMessages.Contains(n))
+                                .Select(n => new SectionMessageWrapper() { IsNew = true, Value = n, IsTrust = trustSignatures.Contains(n.Signature) }));
+
+                            mailTreeViewItem.Value.ReadSectionMessages.AddRange(mailTreeViewItem.Value.UnreadSectionMessages);
+                            mailTreeViewItem.Value.UnreadSectionMessages.Clear();
                         }
 
                         {
@@ -167,7 +168,7 @@ namespace Lair.Windows
                             if (!string.IsNullOrWhiteSpace(searchText))
                             {
                                 var words = searchText.ToLower().Split(new string[] { " ", "　" }, StringSplitOptions.RemoveEmptyEntries);
-                                var list = new List<ChatMessageWrapper>();
+                                var list = new List<SectionMessageWrapper>();
 
                                 foreach (var item in newList)
                                 {
@@ -182,15 +183,15 @@ namespace Lair.Windows
                             }
                         }
 
-                        var oldList = new HashSet<ChatMessageWrapper>();
+                        var oldList = new HashSet<SectionMessageWrapper>();
 
                         this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                         {
                             oldList.UnionWith(_listViewItemCollection.ToArray());
                         }));
 
-                        var removeList = new List<ChatMessageWrapper>();
-                        var addList = new List<ChatMessageWrapper>();
+                        var removeList = new List<SectionMessageWrapper>();
+                        var addList = new List<SectionMessageWrapper>();
 
                         foreach (var item in oldList)
                         {
@@ -206,18 +207,14 @@ namespace Lair.Windows
 
                         this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                         {
-                            if (chatTreeViewItem != _treeView.SelectedItem) return;
+                            if (mailTreeViewItem != _treeView.SelectedItem) return;
                             _refresh = false;
 
                             {
-                                _trustToggleButton.IsEnabled = true;
-                                _trustToggleButton.IsChecked = chatTreeViewItem.Value.IsTrustEnabled;
-
-                                _topicUploadButton.IsEnabled = trustSignatures.Contains(_sectionTreeViewItem.Value.UploadSignature);
-
                                 var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == _sectionTreeViewItem.Value.UploadSignature);
+                                var sectionProfile = _sectionTreeViewItem.Value.CacheSectionProfiles.FirstOrDefault(n => n.Signature == mailTreeViewItem.Value.TargetSignature);
 
-                                _messageUploadButton.IsEnabled = (digitalSignature != null);
+                                _messageUploadButton.IsEnabled = (digitalSignature != null && sectionProfile != null);
                             }
 
                             if (removeList.Count > 100)
@@ -286,97 +283,46 @@ namespace Lair.Windows
             {
                 while (!_disposed)
                 {
-                    var chatTreeViewItems = new List<ChatTreeViewItem>();
+                    var mailTreeViewItems = new List<MailTreeViewItem>();
 
                     this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                     {
-                        var categorizeChatTreeViewItems = new List<ChatCategorizeTreeViewItem>();
-                        categorizeChatTreeViewItems.Add(_treeViewItem);
+                        var categorizeMailTreeViewItems = new List<MailCategorizeTreeViewItem>();
+                        categorizeMailTreeViewItems.Add(_treeViewItem);
 
-                        for (int i = 0; i < categorizeChatTreeViewItems.Count; i++)
+                        for (int i = 0; i < categorizeMailTreeViewItems.Count; i++)
                         {
-                            categorizeChatTreeViewItems.AddRange(categorizeChatTreeViewItems[i].Items.OfType<ChatCategorizeTreeViewItem>());
-                            chatTreeViewItems.AddRange(categorizeChatTreeViewItems[i].Items.OfType<ChatTreeViewItem>());
+                            categorizeMailTreeViewItems.AddRange(categorizeMailTreeViewItems[i].Items.OfType<MailCategorizeTreeViewItem>());
+                            mailTreeViewItems.AddRange(categorizeMailTreeViewItems[i].Items.OfType<MailTreeViewItem>());
                         }
                     }));
 
-                    foreach (var treeViewItem in chatTreeViewItems)
+                    foreach (var treeViewItem in mailTreeViewItems)
                     {
                         bool isUpdate = false;
 
-                        // ChatTopic
+                        // SectionMessage
                         {
-                            var chatTopicList = _lairManager.GetChatTopic(treeViewItem.Value.Tag, _sectionTreeViewItem.Value.CacheSectionProfiles.Select(n => n.Signature)).ToList();
-                            chatTopicList.Sort((x, y) => y.CreationTime.CompareTo(x.CreationTime));
-                            var tempChatTopic = chatTopicList.FirstOrDefault();
-
-                            if (tempChatTopic != null)
-                            {
-                                treeViewItem.Value.ChatTopic = tempChatTopic;
-                                treeViewItem.Value.IsNewTopic = true;
-                                isUpdate |= true;
-                            }
-                        }
-
-                        // ChatMessage
-                        {
-                            var oldList = new HashSet<ChatMessage>();
+                            var oldList = new HashSet<SectionMessage>();
 
                             lock (treeViewItem.Value.ThisLock)
                             {
                                 lock (treeViewItem.Value.ThisLock)
                                 {
-                                    oldList.UnionWith(treeViewItem.Value.ReadChatMessages);
-                                    oldList.UnionWith(treeViewItem.Value.UnreadChatMessages);
+                                    oldList.UnionWith(treeViewItem.Value.ReadSectionMessages);
+                                    oldList.UnionWith(treeViewItem.Value.UnreadSectionMessages);
                                 }
                             }
 
-                            var newList = new HashSet<ChatMessage>();
+                            var newList = new HashSet<SectionMessage>();
 
-                            if (treeViewItem.Value.IsTrustEnabled)
                             {
-                                var trustSignatures = new HashSet<string>();
-                                trustSignatures.Add(_sectionTreeViewItem.Value.LeaderSignature);
-                                trustSignatures.UnionWith(_sectionTreeViewItem.Value.CacheSectionProfiles.SelectMany(n => n.TrustSignatures));
+                                newList.UnionWith(_lairManager.GetSectionMessages(_sectionTreeViewItem.Value.Tag, new string[] { treeViewItem.Value.TargetSignature }, _sectionTreeViewItem.Value.Exchange.GetPrivateKey()));
 
-                                newList.UnionWith(_lairManager.GetChatMessage(treeViewItem.Value.Tag, trustSignatures));
-
-                                foreach (var item in Collection.Merge(treeViewItem.Value.ReadChatMessages, treeViewItem.Value.UnreadChatMessages))
-                                {
-                                    if (!trustSignatures.Contains(item.Signature)) continue;
-                                    newList.Add(item);
-                                }
-                            }
-                            else
-                            {
-                                newList.UnionWith(_lairManager.GetChatMessage(treeViewItem.Value.Tag));
-
-                                foreach (var item in Collection.Merge(treeViewItem.Value.ReadChatMessages, treeViewItem.Value.UnreadChatMessages))
+                                foreach (var item in Collection.Merge(treeViewItem.Value.ReadSectionMessages, treeViewItem.Value.UnreadSectionMessages))
                                 {
                                     newList.Add(item);
                                 }
-                            }
-
-                            {
-                                var sortList = newList.ToList();
-
-                                sortList.Sort((x, y) =>
-                                {
-                                    int c = x.CreationTime.CompareTo(y.CreationTime);
-                                    if (c != 0) return c;
-                                    c = x.Signature.CompareTo(y.Signature);
-                                    if (c != 0) return c;
-
-                                    return x.GetHashCode().CompareTo(y.GetHashCode());
-                                });
-
-                                var tempList = sortList.Skip(sortList.Count - 1024).ToList();
-                                tempList.Reverse();
-
-                                sortList = tempList.ToList();
-
-                                newList.Clear();
-                                newList.UnionWith(sortList);
                             }
 
                             lock (treeViewItem.Value.ThisLock)
@@ -385,8 +331,8 @@ namespace Lair.Windows
                                 {
                                     if (!newList.Contains(item))
                                     {
-                                        treeViewItem.Value.ReadChatMessages.Remove(item);
-                                        treeViewItem.Value.UnreadChatMessages.Remove(item);
+                                        treeViewItem.Value.ReadSectionMessages.Remove(item);
+                                        treeViewItem.Value.UnreadSectionMessages.Remove(item);
                                         isUpdate |= true;
                                     }
                                 }
@@ -395,7 +341,7 @@ namespace Lair.Windows
                                 {
                                     if (!oldList.Contains(item))
                                     {
-                                        treeViewItem.Value.UnreadChatMessages.Add(item);
+                                        treeViewItem.Value.UnreadSectionMessages.Add(item);
                                         isUpdate |= true;
                                     }
                                 }
@@ -407,6 +353,32 @@ namespace Lair.Windows
                             this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                             {
                                 treeViewItem.Update();
+                            }));
+                        }
+                    }
+
+                    {
+                        var trustSignatures = new HashSet<string>();
+                        trustSignatures.Add(_sectionTreeViewItem.Value.LeaderSignature);
+                        trustSignatures.UnionWith(_sectionTreeViewItem.Value.CacheSectionProfiles.SelectMany(n => n.TrustSignatures));
+
+                        HashSet<string> signatures = new HashSet<string>(_lairManager.GetSectionMessages(_sectionTreeViewItem.Value.Tag, trustSignatures, _sectionTreeViewItem.Value.Exchange.GetPrivateKey()).Select(n => n.Signature));
+                        signatures.ExceptWith(mailTreeViewItems.Select(n => n.Value.TargetSignature));
+                        signatures.Remove(_sectionTreeViewItem.Value.UploadSignature);
+
+                        if (signatures.Count > 0)
+                        {
+                            this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
+                            {
+                                foreach (var signature in signatures)
+                                {
+                                    var mailTreeItem = new MailTreeItem();
+                                    mailTreeItem.TargetSignature = signature;
+
+                                    _treeViewItem.Value.MailTreeItems.Add(mailTreeItem);
+                                }
+
+                                _treeViewItem.Update();
                             }));
                         }
                     }
@@ -464,8 +436,8 @@ namespace Lair.Windows
 
                 var hitItems = new HashSet<TreeViewItem>();
 
-                foreach (var item in items.OfType<ChatTreeViewItem>()
-                    .Where(n => n.Value.IsNewTopic || n.Value.UnreadChatMessages.Count > 0))
+                foreach (var item in items.OfType<MailTreeViewItem>()
+                    .Where(n => n.Value.UnreadSectionMessages.Count > 0))
                 {
                     hitItems.UnionWith(_treeView.GetAncestors(item));
                 }
@@ -567,23 +539,23 @@ namespace Lair.Windows
             {
                 var sourceItem = (TreeViewItem)e.Data.GetData("TreeViewItem");
 
-                if (sourceItem is ChatCategorizeTreeViewItem)
+                if (sourceItem is MailCategorizeTreeViewItem)
                 {
                     var destinationItem = (TreeViewItem)_treeView.GetCurrentItem(e.GetPosition);
 
-                    if (destinationItem is ChatCategorizeTreeViewItem)
+                    if (destinationItem is MailCategorizeTreeViewItem)
                     {
-                        var s = (ChatCategorizeTreeViewItem)sourceItem;
-                        var d = (ChatCategorizeTreeViewItem)destinationItem;
+                        var s = (MailCategorizeTreeViewItem)sourceItem;
+                        var d = (MailCategorizeTreeViewItem)destinationItem;
 
                         if (d.Value.Children.Any(n => object.ReferenceEquals(n, s.Value))) return;
                         if (_treeView.GetAncestors(d).Any(n => object.ReferenceEquals(n, s))) return;
 
                         var parentItem = (TreeViewItem)s.Parent;
 
-                        if (parentItem is ChatCategorizeTreeViewItem)
+                        if (parentItem is MailCategorizeTreeViewItem)
                         {
-                            var p = (ChatCategorizeTreeViewItem)parentItem;
+                            var p = (MailCategorizeTreeViewItem)parentItem;
 
                             var tItems = p.Value.Children.Where(n => !object.ReferenceEquals(n, s.Value)).ToArray();
                             p.Value.Children.Clear();
@@ -597,33 +569,33 @@ namespace Lair.Windows
                         d.Update();
                     }
                 }
-                else if (sourceItem is ChatTreeViewItem)
+                else if (sourceItem is MailTreeViewItem)
                 {
                     var destinationItem = (TreeViewItem)_treeView.GetCurrentItem(e.GetPosition);
 
-                    if (destinationItem is ChatCategorizeTreeViewItem)
+                    if (destinationItem is MailCategorizeTreeViewItem)
                     {
-                        var s = (ChatTreeViewItem)sourceItem;
-                        var d = (ChatCategorizeTreeViewItem)destinationItem;
+                        var s = (MailTreeViewItem)sourceItem;
+                        var d = (MailCategorizeTreeViewItem)destinationItem;
 
-                        if (d.Value.ChatTreeItems.Any(n => object.ReferenceEquals(n, s.Value))) return;
+                        if (d.Value.MailTreeItems.Any(n => object.ReferenceEquals(n, s.Value))) return;
                         if (_treeView.GetAncestors(d).Any(n => object.ReferenceEquals(n, s))) return;
 
                         var parentItem = (TreeViewItem)s.Parent;
 
-                        if (parentItem is ChatCategorizeTreeViewItem)
+                        if (parentItem is MailCategorizeTreeViewItem)
                         {
-                            var p = (ChatCategorizeTreeViewItem)parentItem;
+                            var p = (MailCategorizeTreeViewItem)parentItem;
 
-                            var tItems = p.Value.ChatTreeItems.Where(n => !object.ReferenceEquals(n, s.Value)).ToArray();
-                            p.Value.ChatTreeItems.Clear();
-                            p.Value.ChatTreeItems.AddRange(tItems);
+                            var tItems = p.Value.MailTreeItems.Where(n => !object.ReferenceEquals(n, s.Value)).ToArray();
+                            p.Value.MailTreeItems.Clear();
+                            p.Value.MailTreeItems.AddRange(tItems);
 
                             p.Update();
                         }
 
                         d.IsSelected = true;
-                        d.Value.ChatTreeItems.Add(s.Value);
+                        d.Value.MailTreeItems.Add(s.Value);
                         d.Update();
                     }
                 }
@@ -668,9 +640,9 @@ namespace Lair.Windows
             this.Update();
         }
 
-        private void _chatCategorizeTreeViewItemContextMenu_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        private void _mailCategorizeTreeViewItemContextMenu_ContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
-            var selectTreeViewItem = _treeView.SelectedItem as ChatCategorizeTreeViewItem;
+            var selectTreeViewItem = _treeView.SelectedItem as MailCategorizeTreeViewItem;
             if (selectTreeViewItem == null || _treeView.SelectedItem != selectTreeViewItem) return;
 
             var contextMenu = selectTreeViewItem.ContextMenu as ContextMenu;
@@ -678,18 +650,18 @@ namespace Lair.Windows
 
             _startPoint = new Point(-1, -1);
 
-            MenuItem chatCategorizeTreeViewItemDeleteMenuItem = contextMenu.GetMenuItem("_chatCategorizeTreeViewItemDeleteMenuItem");
-            MenuItem chatCategorizeTreeViewItemCutMenuItem = contextMenu.GetMenuItem("_chatCategorizeTreeViewItemCutMenuItem");
-            MenuItem chatCategorizeTreeViewItemPasteMenuItem = contextMenu.GetMenuItem("_chatCategorizeTreeViewItemPasteMenuItem");
+            MenuItem mailCategorizeTreeViewItemDeleteMenuItem = contextMenu.GetMenuItem("_mailCategorizeTreeViewItemDeleteMenuItem");
+            MenuItem mailCategorizeTreeViewItemCutMenuItem = contextMenu.GetMenuItem("_mailCategorizeTreeViewItemCutMenuItem");
+            MenuItem mailCategorizeTreeViewItemPasteMenuItem = contextMenu.GetMenuItem("_mailCategorizeTreeViewItemPasteMenuItem");
 
-            chatCategorizeTreeViewItemDeleteMenuItem.IsEnabled = (selectTreeViewItem != _treeViewItem);
-            chatCategorizeTreeViewItemCutMenuItem.IsEnabled = (selectTreeViewItem != _treeViewItem);
-            chatCategorizeTreeViewItemPasteMenuItem.IsEnabled = Clipboard.ContainsChatCategorizeTreeItems() || Clipboard.ContainsChatTreeItems() || Clipboard.ContainsChats();
+            mailCategorizeTreeViewItemDeleteMenuItem.IsEnabled = (selectTreeViewItem != _treeViewItem);
+            mailCategorizeTreeViewItemCutMenuItem.IsEnabled = (selectTreeViewItem != _treeViewItem);
+            mailCategorizeTreeViewItemPasteMenuItem.IsEnabled = Clipboard.ContainsMailCategorizeTreeItems() || Clipboard.ContainsMailTreeItems();
         }
 
-        private void _chatCategorizeTreeViewItemNewCategoryMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _mailCategorizeTreeViewItemNewCategoryMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            var selectTreeViewItem = _treeView.SelectedItem as ChatCategorizeTreeViewItem;
+            var selectTreeViewItem = _treeView.SelectedItem as MailCategorizeTreeViewItem;
             if (selectTreeViewItem == null) return;
 
             NameWindow window = new NameWindow();
@@ -698,7 +670,7 @@ namespace Lair.Windows
 
             if (window.ShowDialog() == true)
             {
-                selectTreeViewItem.Value.Children.Add(new ChatCategorizeTreeItem() { Name = window.Text });
+                selectTreeViewItem.Value.Children.Add(new MailCategorizeTreeItem() { Name = window.Text });
 
                 selectTreeViewItem.Update();
             }
@@ -706,14 +678,14 @@ namespace Lair.Windows
             this.Update();
         }
 
-        private void _chatCategorizeTreeViewItemEditMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _mailCategorizeTreeViewItemEditMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            var selectTreeViewItem = _treeView.SelectedItem as ChatCategorizeTreeViewItem;
+            var selectTreeViewItem = _treeView.SelectedItem as MailCategorizeTreeViewItem;
             if (selectTreeViewItem == null || selectTreeViewItem == _treeViewItem) return;
 
-            if (MessageBox.Show(_mainWindow, LanguagesManager.Instance.MainWindow_Delete_Message, "Chat", MessageBoxButton.OKCancel, MessageBoxImage.Information) != MessageBoxResult.OK) return;
+            if (MessageBox.Show(_mainWindow, LanguagesManager.Instance.MainWindow_Delete_Message, "Mail", MessageBoxButton.OKCancel, MessageBoxImage.Information) != MessageBoxResult.OK) return;
 
-            var parent = (ChatCategorizeTreeViewItem)selectTreeViewItem.Parent;
+            var parent = (MailCategorizeTreeViewItem)selectTreeViewItem.Parent;
 
             parent.IsSelected = true;
             parent.Value.Children.Remove(selectTreeViewItem.Value);
@@ -722,14 +694,14 @@ namespace Lair.Windows
             this.Update();
         }
 
-        private void _chatCategorizeTreeViewItemDeleteMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _mailCategorizeTreeViewItemDeleteMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            var selectTreeViewItem = _treeView.SelectedItem as ChatCategorizeTreeViewItem;
+            var selectTreeViewItem = _treeView.SelectedItem as MailCategorizeTreeViewItem;
             if (selectTreeViewItem == null || selectTreeViewItem == _treeViewItem) return;
 
-            if (MessageBox.Show(_mainWindow, LanguagesManager.Instance.MainWindow_Delete_Message, "Chat", MessageBoxButton.OKCancel, MessageBoxImage.Information) != MessageBoxResult.OK) return;
+            if (MessageBox.Show(_mainWindow, LanguagesManager.Instance.MainWindow_Delete_Message, "Mail", MessageBoxButton.OKCancel, MessageBoxImage.Information) != MessageBoxResult.OK) return;
 
-            var parent = (ChatCategorizeTreeViewItem)selectTreeViewItem.Parent;
+            var parent = (MailCategorizeTreeViewItem)selectTreeViewItem.Parent;
 
             parent.IsSelected = true;
             parent.Value.Children.Remove(selectTreeViewItem.Value);
@@ -738,14 +710,14 @@ namespace Lair.Windows
             this.Update();
         }
 
-        private void _chatCategorizeTreeViewItemCutMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _mailCategorizeTreeViewItemCutMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            var selectTreeViewItem = _treeView.SelectedItem as ChatCategorizeTreeViewItem;
+            var selectTreeViewItem = _treeView.SelectedItem as MailCategorizeTreeViewItem;
             if (selectTreeViewItem == null || selectTreeViewItem == _treeViewItem) return;
 
-            Clipboard.SetChatCategorizeTreeItems(new ChatCategorizeTreeItem[] { selectTreeViewItem.Value });
+            Clipboard.SetMailCategorizeTreeItems(new MailCategorizeTreeItem[] { selectTreeViewItem.Value });
 
-            var parent = (ChatCategorizeTreeViewItem)selectTreeViewItem.Parent;
+            var parent = (MailCategorizeTreeViewItem)selectTreeViewItem.Parent;
 
             parent.IsSelected = true;
             parent.Value.Children.Remove(selectTreeViewItem.Value);
@@ -754,67 +726,72 @@ namespace Lair.Windows
             this.Update();
         }
 
-        private void _chatCategorizeTreeViewItemCopyMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _mailCategorizeTreeViewItemCopyMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            var selectTreeViewItem = _treeView.SelectedItem as ChatCategorizeTreeViewItem;
+            var selectTreeViewItem = _treeView.SelectedItem as MailCategorizeTreeViewItem;
             if (selectTreeViewItem == null) return;
 
-            Clipboard.SetChatCategorizeTreeItems(new ChatCategorizeTreeItem[] { selectTreeViewItem.Value });
+            Clipboard.SetMailCategorizeTreeItems(new MailCategorizeTreeItem[] { selectTreeViewItem.Value });
         }
 
-        private void _chatCategorizeTreeViewItemCopyInfoMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _mailCategorizeTreeViewItemCopyInfoMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            var selectTreeViewItem = _treeView.SelectedItem as ChatCategorizeTreeViewItem;
+            var selectTreeViewItem = _treeView.SelectedItem as MailCategorizeTreeViewItem;
             if (selectTreeViewItem == null) return;
 
-            var chatTreeViewItems = new List<ChatTreeViewItem>();
+            var mailTreeViewItems = new List<MailTreeViewItem>();
 
             {
-                var categorizeChatTreeViewItems = new List<ChatCategorizeTreeViewItem>();
-                categorizeChatTreeViewItems.Add(selectTreeViewItem);
+                var categorizeMailTreeViewItems = new List<MailCategorizeTreeViewItem>();
+                categorizeMailTreeViewItems.Add(_treeViewItem);
 
-                for (int i = 0; i < categorizeChatTreeViewItems.Count; i++)
+                for (int i = 0; i < categorizeMailTreeViewItems.Count; i++)
                 {
-                    categorizeChatTreeViewItems.AddRange(categorizeChatTreeViewItems[i].Items.OfType<ChatCategorizeTreeViewItem>());
-                    chatTreeViewItems.AddRange(categorizeChatTreeViewItems[i].Items.OfType<ChatTreeViewItem>());
+                    categorizeMailTreeViewItems.AddRange(categorizeMailTreeViewItems[i].Items.OfType<MailCategorizeTreeViewItem>());
+                    mailTreeViewItems.AddRange(categorizeMailTreeViewItems[i].Items.OfType<MailTreeViewItem>());
                 }
             }
 
             var sb = new StringBuilder();
 
-            foreach (var item in chatTreeViewItems)
+            foreach (var item in mailTreeViewItems)
             {
-                sb.AppendLine(LairConverter.ToChatString(item.Value.Tag, null));
-                sb.AppendLine(MessageConverter.ToInfoMessage(item.Value.Tag, null));
+                sb.AppendLine(item.Value.TargetSignature);
             }
 
             Clipboard.SetText(sb.ToString());
         }
 
-        private void _chatCategorizeTreeViewItemPasteMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _mailCategorizeTreeViewItemPasteMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            var selectTreeViewItem = _treeView.SelectedItem as ChatCategorizeTreeViewItem;
+            var selectTreeViewItem = _treeView.SelectedItem as MailCategorizeTreeViewItem;
             if (selectTreeViewItem == null) return;
 
-            foreach (var item in Clipboard.GetChatCategorizeTreeItems())
+            foreach (var item in Clipboard.GetMailCategorizeTreeItems())
             {
                 selectTreeViewItem.Value.Children.Add(item);
             }
 
-            foreach (var item in Clipboard.GetChatTreeItems())
+            foreach (var item in Clipboard.GetMailTreeItems())
             {
-                if (selectTreeViewItem.Value.ChatTreeItems.Any(n => n.Tag == item.Tag)) continue;
+                if (selectTreeViewItem.Value.MailTreeItems.Any(n => n.TargetSignature == item.TargetSignature)) continue;
 
-                selectTreeViewItem.Value.ChatTreeItems.Add(item);
+                selectTreeViewItem.Value.MailTreeItems.Add(item);
             }
 
-            foreach (var item in Clipboard.GetChats())
+            var trustSignatures = new HashSet<string>(_sectionTreeViewItem.Value.CacheSectionProfiles.SelectMany(n => n.TrustSignatures));
+            trustSignatures.Remove(_sectionTreeViewItem.Value.UploadSignature);
+
+            foreach (var signature in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
             {
-                if (selectTreeViewItem.Value.ChatTreeItems.Any(n => n.Tag == item.Item1)) continue;
+                if (!Signature.HasSignature(signature)) continue;
+                if (!trustSignatures.Contains(signature)) continue;
+                if (selectTreeViewItem.Value.MailTreeItems.Any(n => n.TargetSignature == signature)) continue;
 
-                var chatTreeItem = new ChatTreeItem(item.Item1);
+                var mailTreeItem = new MailTreeItem();
+                mailTreeItem.TargetSignature = signature;
 
-                selectTreeViewItem.Value.ChatTreeItems.Add(chatTreeItem);
+                selectTreeViewItem.Value.MailTreeItems.Add(mailTreeItem);
             }
 
             selectTreeViewItem.Update();
@@ -822,110 +799,34 @@ namespace Lair.Windows
             this.Update_Cache();
         }
 
-        private void _chatCategorizeTreeViewItemTrustOnMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _mailCategorizeTreeViewItemSignatureListMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            var selectTreeViewItem = _treeView.SelectedItem as ChatCategorizeTreeViewItem;
+            var selectTreeViewItem = _treeView.SelectedItem as MailCategorizeTreeViewItem;
             if (selectTreeViewItem == null) return;
 
-            var chatTreeViewItems = new List<ChatTreeViewItem>();
+            var trustSignatures = new HashSet<string>(_sectionTreeViewItem.Value.CacheSectionProfiles.SelectMany(n => n.TrustSignatures));
+            trustSignatures.Remove(_sectionTreeViewItem.Value.UploadSignature);
 
-            var categorizeChatTreeViewItems = new List<ChatCategorizeTreeViewItem>();
-            categorizeChatTreeViewItems.Add(selectTreeViewItem);
-
-            for (int i = 0; i < categorizeChatTreeViewItems.Count; i++)
             {
-                categorizeChatTreeViewItems.AddRange(categorizeChatTreeViewItems[i].Items.OfType<ChatCategorizeTreeViewItem>());
-                chatTreeViewItems.AddRange(categorizeChatTreeViewItems[i].Items.OfType<ChatTreeViewItem>());
-            }
+                var mailCategorizeTreeItems = new List<MailCategorizeTreeItem>();
+                mailCategorizeTreeItems.Add(_treeViewItem.Value);
 
-            foreach (var item in chatTreeViewItems)
-            {
-                item.Value.IsTrustEnabled = true;
-                item.Update();
-            }
-
-            this.Update_Cache();
-        }
-
-        private void _chatCategorizeTreeViewItemTrustOffMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            var selectTreeViewItem = _treeView.SelectedItem as ChatCategorizeTreeViewItem;
-            if (selectTreeViewItem == null) return;
-
-            var chatTreeViewItems = new List<ChatTreeViewItem>();
-
-            var categorizeChatTreeViewItems = new List<ChatCategorizeTreeViewItem>();
-            categorizeChatTreeViewItems.Add(selectTreeViewItem);
-
-            for (int i = 0; i < categorizeChatTreeViewItems.Count; i++)
-            {
-                categorizeChatTreeViewItems.AddRange(categorizeChatTreeViewItems[i].Items.OfType<ChatCategorizeTreeViewItem>());
-                chatTreeViewItems.AddRange(categorizeChatTreeViewItems[i].Items.OfType<ChatTreeViewItem>());
-            }
-
-            foreach (var item in chatTreeViewItems)
-            {
-                item.Value.IsTrustEnabled = false;
-                item.Update();
-            }
-
-            this.Update_Cache();
-        }
-
-        private void _chatCategorizeTreeViewItemMarkAllMessagesReadMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            var selectTreeViewItem = _treeView.SelectedItem as ChatCategorizeTreeViewItem;
-            if (selectTreeViewItem == null) return;
-
-            var chatTreeViewItems = new List<ChatTreeViewItem>();
-
-            var categorizeChatTreeViewItems = new List<ChatCategorizeTreeViewItem>();
-            categorizeChatTreeViewItems.Add(selectTreeViewItem);
-
-            for (int i = 0; i < categorizeChatTreeViewItems.Count; i++)
-            {
-                categorizeChatTreeViewItems.AddRange(categorizeChatTreeViewItems[i].Items.OfType<ChatCategorizeTreeViewItem>());
-                chatTreeViewItems.AddRange(categorizeChatTreeViewItems[i].Items.OfType<ChatTreeViewItem>());
-            }
-
-            foreach (var item in chatTreeViewItems)
-            {
-                lock (item.Value.ThisLock)
+                for (int i = 0; i < mailCategorizeTreeItems.Count; i++)
                 {
-                    item.Value.ReadChatMessages.AddRange(item.Value.UnreadChatMessages);
-                    item.Value.UnreadChatMessages.Clear();
+                    mailCategorizeTreeItems.AddRange(mailCategorizeTreeItems[i].Children);
+                    trustSignatures.ExceptWith(mailCategorizeTreeItems[i].MailTreeItems.Select(n => n.TargetSignature));
                 }
             }
 
-            this.Update_Cache();
-        }
-
-        private void _chatCategorizeTreeViewItemChatListMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            var selectTreeViewItem = _treeView.SelectedItem as ChatCategorizeTreeViewItem;
-            if (selectTreeViewItem == null) return;
-
-            HashSet<Chat> chats = new HashSet<Chat>(_sectionTreeViewItem.Value.CacheSectionProfiles.SelectMany(n => n.Chats));
-
-            {
-                var chatCategorizeTreeItems = new List<ChatCategorizeTreeItem>();
-                chatCategorizeTreeItems.Add(_treeViewItem.Value);
-
-                for (int i = 0; i < chatCategorizeTreeItems.Count; i++)
-                {
-                    chatCategorizeTreeItems.AddRange(chatCategorizeTreeItems[i].Children);
-                    chats.ExceptWith(chatCategorizeTreeItems[i].ChatTreeItems.Select(n => n.Tag));
-                }
-            }
-
-            ChatListWindow window = new ChatListWindow(chats, _lairManager);
+            SignatureListWindow window = new SignatureListWindow(trustSignatures, _lairManager);
             window.Owner = _mainWindow;
 
-            window.ChatJoinEvent += (object sender2, Chat tag) =>
+            window.SignatureAddEvent += (object sender2, string targetSignature) =>
             {
-                var channelTreeItem = new ChatTreeItem(tag);
+                var mailTreeItem = new MailTreeItem();
+                mailTreeItem.TargetSignature = targetSignature;
 
-                selectTreeViewItem.Value.ChatTreeItems.Add(channelTreeItem);
+                selectTreeViewItem.Value.MailTreeItems.Add(mailTreeItem);
 
                 selectTreeViewItem.Update();
                 this.Update_Cache();
@@ -934,64 +835,63 @@ namespace Lair.Windows
             window.ShowDialog();
         }
 
-        private void _chatTreeItemTreeViewItemContextMenu_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        private void _mailTreeItemTreeViewItemContextMenu_ContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
 
         }
 
-        private void _chatTreeItemTreeViewItemDeleteMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _mailTreeItemTreeViewItemDeleteMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            var selectTreeViewItem = _treeView.SelectedItem as ChatTreeViewItem;
+            var selectTreeViewItem = _treeView.SelectedItem as MailTreeViewItem;
             if (selectTreeViewItem == null) return;
 
-            if (MessageBox.Show(_mainWindow, LanguagesManager.Instance.MainWindow_Delete_Message, "Chat", MessageBoxButton.OKCancel, MessageBoxImage.Information) != MessageBoxResult.OK) return;
+            if (MessageBox.Show(_mainWindow, LanguagesManager.Instance.MainWindow_Delete_Message, "Mail", MessageBoxButton.OKCancel, MessageBoxImage.Information) != MessageBoxResult.OK) return;
 
-            var searchTreeViewItem = _treeView.GetAncestors((TreeViewItem)_treeView.SelectedItem).OfType<ChatCategorizeTreeViewItem>().LastOrDefault() as ChatCategorizeTreeViewItem;
+            var searchTreeViewItem = _treeView.GetAncestors((TreeViewItem)_treeView.SelectedItem).OfType<MailCategorizeTreeViewItem>().LastOrDefault() as MailCategorizeTreeViewItem;
             if (searchTreeViewItem == null) return;
 
             searchTreeViewItem.IsSelected = true;
 
-            searchTreeViewItem.Value.ChatTreeItems.Remove(selectTreeViewItem.Value);
+            searchTreeViewItem.Value.MailTreeItems.Remove(selectTreeViewItem.Value);
             searchTreeViewItem.Update();
 
             this.Update();
         }
 
-        private void _chatTreeItemTreeViewItemCutMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _mailTreeItemTreeViewItemCutMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            var selectTreeViewItem = _treeView.SelectedItem as ChatTreeViewItem;
+            var selectTreeViewItem = _treeView.SelectedItem as MailTreeViewItem;
             if (selectTreeViewItem == null) return;
 
-            Clipboard.SetChatTreeItems(new ChatTreeItem[] { selectTreeViewItem.Value });
+            Clipboard.SetMailTreeItems(new MailTreeItem[] { selectTreeViewItem.Value });
 
-            var searchTreeViewItem = _treeView.GetAncestors((TreeViewItem)_treeView.SelectedItem).OfType<ChatCategorizeTreeViewItem>().LastOrDefault() as ChatCategorizeTreeViewItem;
+            var searchTreeViewItem = _treeView.GetAncestors((TreeViewItem)_treeView.SelectedItem).OfType<MailCategorizeTreeViewItem>().LastOrDefault() as MailCategorizeTreeViewItem;
             if (searchTreeViewItem == null) return;
 
             searchTreeViewItem.IsSelected = true;
 
-            searchTreeViewItem.Value.ChatTreeItems.Remove(selectTreeViewItem.Value);
+            searchTreeViewItem.Value.MailTreeItems.Remove(selectTreeViewItem.Value);
             searchTreeViewItem.Update();
 
             this.Update();
         }
 
-        private void _chatTreeItemTreeViewItemCopyMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _mailTreeItemTreeViewItemCopyMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            var selectTreeViewItem = _treeView.SelectedItem as ChatTreeViewItem;
+            var selectTreeViewItem = _treeView.SelectedItem as MailTreeViewItem;
             if (selectTreeViewItem == null) return;
 
-            Clipboard.SetChatTreeItems(new ChatTreeItem[] { selectTreeViewItem.Value });
+            Clipboard.SetMailTreeItems(new MailTreeItem[] { selectTreeViewItem.Value });
         }
 
-        private void _chatTreeItemTreeViewItemCopyInfoMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _mailTreeItemTreeViewItemCopyInfoMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            var selectTreeViewItem = _treeView.SelectedItem as ChatTreeViewItem;
+            var selectTreeViewItem = _treeView.SelectedItem as MailTreeViewItem;
             if (selectTreeViewItem == null) return;
 
             var sb = new StringBuilder();
 
-            sb.AppendLine(LairConverter.ToChatString(selectTreeViewItem.Value.Tag, null));
-            sb.AppendLine(MessageConverter.ToInfoMessage(selectTreeViewItem.Value.Tag, null));
+            sb.AppendLine(selectTreeViewItem.Value.TargetSignature);
 
             Clipboard.SetText(sb.ToString());
         }
@@ -1039,57 +939,16 @@ namespace Lair.Windows
 
         private void _listView_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            var selectTreeViewItem = _treeView.SelectedItem as ChatTreeViewItem;
+            var selectTreeViewItem = _treeView.SelectedItem as MailTreeViewItem;
             if (selectTreeViewItem == null) return;
 
-            if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
-            {
-                if (System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.LeftCtrl)
-                    || System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.RightCtrl))
-                {
-                    var index = _listView.GetCurrentIndex(e.GetPosition);
-                    if (index == -1) return;
-
-                    var listViewItemCollection = CollectionViewSource.GetDefaultView(_listView.ItemsSource).Cast<ChatMessageWrapper>().ToArray();
-                    var selectItem = listViewItemCollection[index];
-
-                    if (_listView.SelectedItems.Contains(selectItem))
-                    {
-                        _listView.SelectedItems.Remove(selectItem);
-                    }
-                    else
-                    {
-                        _listView.SelectedItems.Add(selectItem);
-                    }
-                }
-                else
-                {
-                    var index = _listView.GetCurrentIndex(e.GetPosition);
-                    if (index == -1) return;
-
-                    var listViewItemCollection = CollectionViewSource.GetDefaultView(_listView.ItemsSource).Cast<ChatMessageWrapper>().ToArray();
-                    var selectItem = listViewItemCollection[index];
-
-                    if (_listView.SelectedItems.Count != 1 || !_listView.SelectedItems.Contains(selectItem))
-                    {
-                        _listView.SelectedItems.Clear();
-                        _listView.SelectedItems.Add(selectItem);
-                    }
-                }
-            }
-            else if (e.RightButton == System.Windows.Input.MouseButtonState.Pressed)
+            if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed
+                || e.RightButton == System.Windows.Input.MouseButtonState.Pressed)
             {
                 var index = _listView.GetCurrentIndex(e.GetPosition);
                 if (index == -1) return;
 
-                var listViewItemCollection = CollectionViewSource.GetDefaultView(_listView.ItemsSource).Cast<ChatMessageWrapper>().ToArray();
-                var selectItem = listViewItemCollection[index];
-
-                if (!_listView.SelectedItems.Contains(selectItem))
-                {
-                    _listView.SelectedItems.Clear();
-                    _listView.SelectedItems.Add(selectItem);
-                }
+                _listView.SelectedIndex = index;
             }
         }
 
@@ -1128,13 +987,13 @@ namespace Lair.Windows
 
         private void _richTextBox_ContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
-            var selectTreeViewItem = _treeView.SelectedItem as ChatTreeViewItem;
+            var selectTreeViewItem = _treeView.SelectedItem as MailTreeViewItem;
             if (selectTreeViewItem == null) return;
 
             var richTextBox = sender as RichTextBox;
             if (richTextBox == null) return;
 
-            var selectItem = _listView.SelectedItem as ChatMessageWrapper;
+            var selectItem = _listView.SelectedItem as SectionMessageWrapper;
             if (selectItem == null) return;
 
             var list = new List<MenuItem>();
@@ -1171,23 +1030,26 @@ namespace Lair.Windows
 
         private void _richTextBoxResponsMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            var selectTreeViewItem = _treeView.SelectedItem as ChatTreeViewItem;
+            var selectTreeViewItem = _treeView.SelectedItem as MailTreeViewItem;
             if (selectTreeViewItem == null) return;
 
             var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == _sectionTreeViewItem.Value.UploadSignature);
             if (digitalSignature == null) return;
 
-            var responsMessages = _listView.SelectedItems.OfType<ChatMessageWrapper>().Select(n => n.Value).ToList();
+            var sectionProfile = _sectionTreeViewItem.Value.CacheSectionProfiles.FirstOrDefault(n => n.Signature == selectTreeViewItem.Value.TargetSignature);
+            if (sectionProfile == null || sectionProfile.ExchangePublicKey == null) return;
 
-            ChatMessageEditWindow window = new ChatMessageEditWindow(selectTreeViewItem.Value.Tag, "", responsMessages, digitalSignature, _lairManager);
+            var responsMessage = _listView.SelectedItem as SectionMessageWrapper;
+
+            SectionMessageEditWindow window = new SectionMessageEditWindow(_sectionTreeViewItem.Value.Tag, "", responsMessage.Value, sectionProfile.ExchangePublicKey, digitalSignature, _lairManager);
             window.Owner = _mainWindow;
 
             window.Closed += (object sender2, EventArgs e2) =>
             {
-                if (window.ChatMessage == null) return;
-                if (selectTreeViewItem.Value.UnreadChatMessages.Contains(window.ChatMessage)) return;
+                if (window.SectionMessage == null) return;
+                if (selectTreeViewItem.Value.SentSectionMessages.Contains(window.SectionMessage)) return;
 
-                selectTreeViewItem.Value.UnreadChatMessages.Add(window.ChatMessage);
+                selectTreeViewItem.Value.SentSectionMessages.Add(window.SectionMessage);
 
                 selectTreeViewItem.Update();
                 this.Update_Cache();
@@ -1198,7 +1060,7 @@ namespace Lair.Windows
 
         private void _richTextBoxTrustMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var item in _listView.SelectedItems.OfType<ChatMessageWrapper>())
+            foreach (var item in _listView.SelectedItems.OfType<SectionMessageWrapper>())
             {
                 if (_sectionTreeViewItem.Value.TrustSignatures.Contains(item.Value.Signature)) continue;
                 _sectionTreeViewItem.Value.TrustSignatures.Add(item.Value.Signature);
@@ -1209,57 +1071,26 @@ namespace Lair.Windows
 
         #region Tool
 
-        private void _trustToggleButton_Checked(object sender, RoutedEventArgs e)
-        {
-            var selectTreeViewItem = _treeView.SelectedItem as ChatTreeViewItem;
-            if (selectTreeViewItem == null) return;
-
-            selectTreeViewItem.Value.IsTrustEnabled = true;
-
-            selectTreeViewItem.Update();
-
-            this.Update_Cache();
-        }
-
-        private void _trustToggleButton_Unchecked(object sender, RoutedEventArgs e)
-        {
-            var selectTreeViewItem = _treeView.SelectedItem as ChatTreeViewItem;
-            if (selectTreeViewItem == null) return;
-
-            selectTreeViewItem.Value.IsTrustEnabled = false;
-
-            selectTreeViewItem.Update();
-
-            this.Update_Cache();
-        }
-
-        private void _topicUploadButton_Click(object sender, RoutedEventArgs e)
-        {
-            var selectTreeViewItem = _treeView.SelectedItem as ChatTreeViewItem;
-            if (selectTreeViewItem == null) return;
-
-            selectTreeViewItem.Update();
-
-            this.Update_Cache();
-        }
-
         private void _messageUploadButton_Click(object sender, RoutedEventArgs e)
         {
-            var selectTreeViewItem = _treeView.SelectedItem as ChatTreeViewItem;
+            var selectTreeViewItem = _treeView.SelectedItem as MailTreeViewItem;
             if (selectTreeViewItem == null) return;
 
             var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == _sectionTreeViewItem.Value.UploadSignature);
             if (digitalSignature == null) return;
 
-            ChatMessageEditWindow window = new ChatMessageEditWindow(selectTreeViewItem.Value.Tag, "", null, digitalSignature, _lairManager);
+            var sectionProfile = _sectionTreeViewItem.Value.CacheSectionProfiles.FirstOrDefault(n => n.Signature == selectTreeViewItem.Value.TargetSignature);
+            if (sectionProfile == null || sectionProfile.ExchangePublicKey == null) return;
+
+            SectionMessageEditWindow window = new SectionMessageEditWindow(_sectionTreeViewItem.Value.Tag, "", null, sectionProfile.ExchangePublicKey, digitalSignature, _lairManager);
             window.Owner = _mainWindow;
 
             window.Closed += (object sender2, EventArgs e2) =>
             {
-                if (window.ChatMessage == null) return;
-                if (selectTreeViewItem.Value.UnreadChatMessages.Contains(window.ChatMessage)) return;
+                if (window.SectionMessage == null) return;
+                if (selectTreeViewItem.Value.SentSectionMessages.Contains(window.SectionMessage)) return;
 
-                selectTreeViewItem.Value.UnreadChatMessages.Add(window.ChatMessage);
+                selectTreeViewItem.Value.SentSectionMessages.Add(window.SectionMessage);
 
                 selectTreeViewItem.Update();
                 this.Update_Cache();
@@ -1292,11 +1123,11 @@ namespace Lair.Windows
 
         private void Execute_New(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
         {
-            if (_treeView.SelectedItem is ChatCategorizeTreeViewItem)
+            if (_treeView.SelectedItem is MailCategorizeTreeViewItem)
             {
-                _chatCategorizeTreeViewItemNewCategoryMenuItem_Click(null, null);
+                _mailCategorizeTreeViewItemNewCategoryMenuItem_Click(null, null);
             }
-            else if (_treeView.SelectedItem is ChatTreeViewItem)
+            else if (_treeView.SelectedItem is MailTreeViewItem)
             {
 
             }
@@ -1304,47 +1135,47 @@ namespace Lair.Windows
 
         private void Execute_Delete(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
         {
-            if (_treeView.SelectedItem is ChatCategorizeTreeViewItem)
+            if (_treeView.SelectedItem is MailCategorizeTreeViewItem)
             {
-                _chatCategorizeTreeViewItemDeleteMenuItem_Click(null, null);
+                _mailCategorizeTreeViewItemDeleteMenuItem_Click(null, null);
             }
-            else if (_treeView.SelectedItem is ChatTreeViewItem)
+            else if (_treeView.SelectedItem is MailTreeViewItem)
             {
-                _chatTreeItemTreeViewItemDeleteMenuItem_Click(null, null);
+                _mailTreeItemTreeViewItemDeleteMenuItem_Click(null, null);
             }
         }
 
         private void Execute_Copy(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
         {
-            if (_treeView.SelectedItem is ChatCategorizeTreeViewItem)
+            if (_treeView.SelectedItem is MailCategorizeTreeViewItem)
             {
-                _chatCategorizeTreeViewItemCopyMenuItem_Click(null, null);
+                _mailCategorizeTreeViewItemCopyMenuItem_Click(null, null);
             }
-            else if (_treeView.SelectedItem is ChatTreeViewItem)
+            else if (_treeView.SelectedItem is MailTreeViewItem)
             {
-                _chatTreeItemTreeViewItemCopyMenuItem_Click(null, null);
+                _mailTreeItemTreeViewItemCopyMenuItem_Click(null, null);
             }
         }
 
         private void Execute_Cut(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
         {
-            if (_treeView.SelectedItem is ChatCategorizeTreeViewItem)
+            if (_treeView.SelectedItem is MailCategorizeTreeViewItem)
             {
-                _chatCategorizeTreeViewItemCutMenuItem_Click(null, null);
+                _mailCategorizeTreeViewItemCutMenuItem_Click(null, null);
             }
-            else if (_treeView.SelectedItem is ChatTreeViewItem)
+            else if (_treeView.SelectedItem is MailTreeViewItem)
             {
-                _chatTreeItemTreeViewItemCutMenuItem_Click(null, null);
+                _mailTreeItemTreeViewItemCutMenuItem_Click(null, null);
             }
         }
 
         private void Execute_Paste(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
         {
-            if (_treeView.SelectedItem is ChatCategorizeTreeViewItem)
+            if (_treeView.SelectedItem is MailCategorizeTreeViewItem)
             {
-                _chatCategorizeTreeViewItemPasteMenuItem_Click(null, null);
+                _mailCategorizeTreeViewItemPasteMenuItem_Click(null, null);
             }
-            else if (_treeView.SelectedItem is ChatTreeViewItem)
+            else if (_treeView.SelectedItem is MailTreeViewItem)
             {
 
             }
@@ -1356,7 +1187,7 @@ namespace Lair.Windows
             _searchTextBox.Focus();
         }
 
-        ~ChatControl()
+        ~MailControl()
         {
             this.Dispose(false);
         }
@@ -1383,11 +1214,11 @@ namespace Lair.Windows
         #endregion
     }
 
-    class ChatMessageWrapper : IEquatable<ChatMessageWrapper>
+    class SectionMessageWrapper : IEquatable<SectionMessageWrapper>
     {
         public bool IsNew { get; set; }
         public bool IsTrust { get; set; }
-        public ChatMessage Value { get; set; }
+        public SectionMessage Value { get; set; }
 
         public override int GetHashCode()
         {
@@ -1396,12 +1227,12 @@ namespace Lair.Windows
 
         public override bool Equals(object obj)
         {
-            if ((object)obj == null || !(obj is ChatMessageWrapper)) return false;
+            if ((object)obj == null || !(obj is SectionMessageWrapper)) return false;
 
-            return this.Equals((ChatMessageWrapper)obj);
+            return this.Equals((SectionMessageWrapper)obj);
         }
 
-        public bool Equals(ChatMessageWrapper other)
+        public bool Equals(SectionMessageWrapper other)
         {
             if ((object)other == null) return false;
             if (object.ReferenceEquals(this, other)) return true;

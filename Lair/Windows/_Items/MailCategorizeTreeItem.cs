@@ -8,66 +8,102 @@ using System.Xml;
 using Library;
 using Library.Net.Lair;
 using Library.Security;
-using Library.Io;
 using Library.Collections;
+using Library.Io;
 
 namespace Lair.Windows
 {
-    [DataContract(Name = "SignatureTreeItem", Namespace = "http://Lair/Windows")]
-    class SignatureTreeItem : ICloneable<SignatureTreeItem>, IThisLock
+    [DataContract(Name = "MailCategorizeTreeItem", Namespace = "http://Lair/Windows")]
+    class MailCategorizeTreeItem : ICloneable<MailCategorizeTreeItem>, IThisLock
     {
-        private SectionProfile _sectionProfile;
-        private LockedList<SignatureTreeItem> _children;
+        private string _name;
+        private LockedList<MailTreeItem> _chatTreeItems;
+        private LockedList<MailCategorizeTreeItem> _children;
+        private bool _isExpanded = true;
 
         private volatile object _thisLock;
         private static readonly object _initializeLock = new object();
 
-        public SignatureTreeItem(SectionProfile sectionProfile)
+        public MailCategorizeTreeItem()
         {
-            this.SectionProfile = sectionProfile;
+
         }
 
-        [DataMember(Name = "SectionProfile")]
-        public SectionProfile SectionProfile
+        [DataMember(Name = "Name")]
+        public string Name
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return _sectionProfile;
+                    return _name;
                 }
             }
-            private set
+            set
             {
                 lock (this.ThisLock)
                 {
-                    _sectionProfile = value;
+                    _name = value;
+                }
+            }
+        }
+
+        [DataMember(Name = "MailTreeItems")]
+        public LockedList<MailTreeItem> MailTreeItems
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    if (_chatTreeItems == null)
+                        _chatTreeItems = new LockedList<MailTreeItem>();
+
+                    return _chatTreeItems;
                 }
             }
         }
 
         [DataMember(Name = "Children")]
-        public LockedList<SignatureTreeItem> Children
+        public LockedList<MailCategorizeTreeItem> Children
         {
             get
             {
                 lock (this.ThisLock)
                 {
                     if (_children == null)
-                        _children = new LockedList<SignatureTreeItem>();
+                        _children = new LockedList<MailCategorizeTreeItem>();
 
                     return _children;
                 }
             }
         }
 
-        #region ICloneable<SignatureTreeItem>
+        [DataMember(Name = "IsExpanded")]
+        public bool IsExpanded
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return _isExpanded;
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    _isExpanded = value;
+                }
+            }
+        }
 
-        public SignatureTreeItem Clone()
+        #region ICloneable<MailCategorizeTreeItem>
+
+        public MailCategorizeTreeItem Clone()
         {
             lock (this.ThisLock)
             {
-                var ds = new DataContractSerializer(typeof(SignatureTreeItem));
+                var ds = new DataContractSerializer(typeof(MailCategorizeTreeItem));
 
                 using (BufferStream stream = new BufferStream(BufferManager.Instance))
                 {
@@ -81,7 +117,7 @@ namespace Lair.Windows
 
                     using (XmlDictionaryReader textDictionaryReader = XmlDictionaryReader.CreateBinaryReader(stream, XmlDictionaryReaderQuotas.Max))
                     {
-                        return (SignatureTreeItem)ds.ReadObject(textDictionaryReader);
+                        return (MailCategorizeTreeItem)ds.ReadObject(textDictionaryReader);
                     }
                 }
             }

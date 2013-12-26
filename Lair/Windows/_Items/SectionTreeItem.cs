@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -29,6 +29,7 @@ namespace Lair.Windows
         private LockedList<SectionProfile> _cacheSectionProfiles;
 
         private ChatCategorizeTreeItem _chatCategorizeTreeItem;
+        private MailCategorizeTreeItem _mailCategorizeTreeItem;
 
         private volatile object _thisLock;
         private static readonly object _initializeLock = new object();
@@ -215,6 +216,31 @@ namespace Lair.Windows
                 lock (this.ThisLock)
                 {
                     _chatCategorizeTreeItem = value;
+                }
+            }
+        }
+
+        [DataMember(Name = "MailCategorizeTreeItem")]
+        public MailCategorizeTreeItem MailCategorizeTreeItem
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    if (_mailCategorizeTreeItem == null)
+                    {
+                        _mailCategorizeTreeItem = new MailCategorizeTreeItem();
+                        _mailCategorizeTreeItem.Name = "Category";
+                    }
+
+                    return _mailCategorizeTreeItem;
+                }
+            }
+            private set
+            {
+                lock (this.ThisLock)
+                {
+                    _mailCategorizeTreeItem = value;
                 }
             }
         }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -19,6 +19,8 @@ namespace Lair
         private static LockedList<Windows.SectionTreeItem> _sectionTreeItemList = new LockedList<SectionTreeItem>();
         private static LockedList<Windows.ChatCategorizeTreeItem> _chatCategorizeTreeItemList = new LockedList<ChatCategorizeTreeItem>();
         private static LockedList<Windows.ChatTreeItem> _chatTreeItemList = new LockedList<ChatTreeItem>();
+        private static LockedList<Windows.MailCategorizeTreeItem> _mailCategorizeTreeItemList = new LockedList<MailCategorizeTreeItem>();
+        private static LockedList<Windows.MailTreeItem> _mailTreeItemList = new LockedList<MailTreeItem>();
 
         private static ClipboardWatcher _clipboardWatcher;
         private static ManualResetEvent _manualResetEvent = new ManualResetEvent(false);
@@ -40,6 +42,9 @@ namespace Lair
                     _chatCategorizeTreeItemList.Clear();
                     _chatTreeItemList.Clear();
 
+                    _mailCategorizeTreeItemList.Clear();
+                    _mailTreeItemList.Clear();
+
                     _manualResetEvent.Set();
                 }
             };
@@ -56,7 +61,10 @@ namespace Lair
 
                 _chatCategorizeTreeItemList.Clear();
                 _chatTreeItemList.Clear();
-                
+
+                _mailCategorizeTreeItemList.Clear();
+                _mailTreeItemList.Clear();
+
                 System.Windows.Clipboard.Clear();
             }
 
@@ -548,6 +556,58 @@ namespace Lair
                 Clipboard.Clear();
 
                 _chatTreeItemList.AddRange(chatTreeItems.Select(n => n.Clone()));
+            }
+        }
+
+        public static bool ContainsMailCategorizeTreeItems()
+        {
+            lock (_thisLock)
+            {
+                return _mailCategorizeTreeItemList.Count != 0;
+            }
+        }
+
+        public static IEnumerable<Windows.MailCategorizeTreeItem> GetMailCategorizeTreeItems()
+        {
+            lock (_thisLock)
+            {
+                return _mailCategorizeTreeItemList.Select(n => n.Clone()).ToArray();
+            }
+        }
+
+        public static void SetMailCategorizeTreeItems(IEnumerable<Windows.MailCategorizeTreeItem> mailCategorizeTreeItems)
+        {
+            lock (_thisLock)
+            {
+                Clipboard.Clear();
+
+                _mailCategorizeTreeItemList.AddRange(mailCategorizeTreeItems.Select(n => n.Clone()));
+            }
+        }
+
+        public static bool ContainsMailTreeItems()
+        {
+            lock (_thisLock)
+            {
+                return _mailTreeItemList.Count != 0;
+            }
+        }
+
+        public static IEnumerable<Windows.MailTreeItem> GetMailTreeItems()
+        {
+            lock (_thisLock)
+            {
+                return _mailTreeItemList.Select(n => n.Clone()).ToArray();
+            }
+        }
+
+        public static void SetMailTreeItems(IEnumerable<Windows.MailTreeItem> mailTreeItems)
+        {
+            lock (_thisLock)
+            {
+                Clipboard.Clear();
+
+                _mailTreeItemList.AddRange(mailTreeItems.Select(n => n.Clone()));
             }
         }
 

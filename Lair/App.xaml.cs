@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
@@ -322,23 +322,41 @@ namespace Lair
 
             // Colors
             {
+                App.LairColors = new LairColors();
+
                 if (!File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Colors.settings")))
                 {
+                    Type type = typeof(LairColors);
+
                     using (StreamWriter writer = new StreamWriter(Path.Combine(App.DirectoryPaths["Configuration"], "Colors.settings"), false, new UTF8Encoding(false)))
                     {
-                        writer.WriteLine(string.Format("Tree_Hit {0}", System.Windows.Media.Colors.LightPink));
+                        var list = type.GetProperties().ToList();
+                        list.Sort((x, y) => x.Name.CompareTo(y.Name));
+
+                        foreach (var property in list)
+                        {
+                            writer.WriteLine(string.Format("{0} {1}", property.Name, (Color)property.GetValue(App.LairColors, null)));
+                        }
                     }
                 }
 
-                App.LairColors = new LairColors();
-
-                using (StreamReader reader = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Colors.settings"), new UTF8Encoding(false)))
                 {
-                    var items = reader.ReadLine().Split(' ');
-                    var name = items[0];
-                    var value = items[1];
+                    Type type = typeof(LairColors);
 
-                    if (name == "Tree_Hit") App.LairColors.Tree_Hit = (Color)ColorConverter.ConvertFromString(value);
+                    using (StreamReader reader = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Colors.settings"), new UTF8Encoding(false)))
+                    {
+                        string line;
+
+                        while ((line = reader.ReadLine()) != null)
+                        {
+                            var items = line.Split(' ');
+                            var name = items[0].Trim();
+                            var value = items[1].Trim();
+
+                            var property = type.GetProperty(name);
+                            property.SetValue(App.LairColors, (Color)ColorConverter.ConvertFromString(value), null);
+                        }
+                    }
                 }
             }
 
@@ -624,17 +642,23 @@ namespace Lair
     {
         public LairColors()
         {
-            this.Tree_Hit = System.Windows.Media.Colors.LightPink;
+            this.Tree_Hit = Colors.LightPink;
+            this.Link = Colors.SkyBlue;
+            this.Link_New = Colors.LightPink;
+            this.Message = Colors.Black;
+            this.Message_New = Colors.LightPink;
+            this.Message_Trust = Colors.SkyBlue;
+            this.Message_Untrust = Colors.LightPink;
+            this.Message_Select = Colors.White;
         }
 
-        public System.Windows.Media.Color Tree_Hit { get; set; }
-
-        public Color Trust_On { get; set; }
-
-        public Color Trust_Off { get; set; }
-
-        public Color Link_New { get; set; }
-
+        public Color Tree_Hit { get; set; }
         public Color Link { get; set; }
+        public Color Link_New { get; set; }
+        public Color Message { get; set; }
+        public Color Message_New { get; set; }
+        public Color Message_Trust { get; set; }
+        public Color Message_Untrust { get; set; }
+        public Color Message_Select { get; set; }
     }
 }

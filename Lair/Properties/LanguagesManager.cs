@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -3218,68 +3218,302 @@ namespace Lair.Properties
         }
 
 
-        public string MessageEditWindow_Title
+        public string ChatMessageEditWindow_Title
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("MessageEditWindow_Title");
+                    return this.Translate("ChatMessageEditWindow_Title");
                 }
             }
         }
 
-        public string MessageEditWindow_Edit
+        public string ChatMessageEditWindow_Edit
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("MessageEditWindow_Edit");
+                    return this.Translate("ChatMessageEditWindow_Edit");
                 }
             }
         }
 
-        public string MessageEditWindow_Preview
+        public string ChatMessageEditWindow_Preview
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("MessageEditWindow_Preview");
+                    return this.Translate("ChatMessageEditWindow_Preview");
                 }
             }
         }
 
-        public string MessageEditWindow_Comment
+        public string ChatMessageEditWindow_Comment
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("MessageEditWindow_Comment");
+                    return this.Translate("ChatMessageEditWindow_Comment");
                 }
             }
         }
 
-        public string MessageEditWindow_Ok
+        public string ChatMessageEditWindow_Ok
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("MessageEditWindow_Ok");
+                    return this.Translate("ChatMessageEditWindow_Ok");
                 }
             }
         }
 
-        public string MessageEditWindow_Cancel
+        public string ChatMessageEditWindow_Cancel
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("MessageEditWindow_Cancel");
+                    return this.Translate("ChatMessageEditWindow_Cancel");
+                }
+            }
+        }
+
+
+        public string MailControl_NewCategory
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("MailControl_NewCategory");
+                }
+            }
+        }
+
+        public string MailControl_Edit
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("MailControl_Edit");
+                }
+            }
+        }
+
+        public string MailControl_Delete
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("MailControl_Delete");
+                }
+            }
+        }
+
+        public string MailControl_Cut
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("MailControl_Cut");
+                }
+            }
+        }
+
+        public string MailControl_Copy
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("MailControl_Copy");
+                }
+            }
+        }
+
+        public string MailControl_CopyInfo
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("MailControl_CopyInfo");
+                }
+            }
+        }
+
+        public string MailControl_Paste
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("MailControl_Paste");
+                }
+            }
+        }
+
+        public string MailControl_SignatureList
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("MailControl_SignatureList");
+                }
+            }
+        }
+
+        public string MailControl_Respons
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("MailControl_Respons");
+                }
+            }
+        }
+
+        public string MailControl_Message
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("MailControl_Message");
+                }
+            }
+        }
+
+
+        public string SignatureListWindow_Title
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SignatureListWindow_Title");
+                }
+            }
+        }
+
+        public string SignatureListWindow_Value
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SignatureListWindow_Value");
+                }
+            }
+        }
+
+        public string SignatureListWindow_Copy
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SignatureListWindow_Copy");
+                }
+            }
+        }
+
+        public string SignatureListWindow_Add
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SignatureListWindow_Add");
+                }
+            }
+        }
+
+        public string SignatureListWindow_Close
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SignatureListWindow_Close");
+                }
+            }
+        }
+
+
+        public string SectionMessageEditWindow_Title
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionMessageEditWindow_Title");
+                }
+            }
+        }
+
+        public string SectionMessageEditWindow_Edit
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionMessageEditWindow_Edit");
+                }
+            }
+        }
+
+        public string SectionMessageEditWindow_Preview
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionMessageEditWindow_Preview");
+                }
+            }
+        }
+
+        public string SectionMessageEditWindow_Comment
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionMessageEditWindow_Comment");
+                }
+            }
+        }
+
+        public string SectionMessageEditWindow_Ok
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionMessageEditWindow_Ok");
+                }
+            }
+        }
+
+        public string SectionMessageEditWindow_Cancel
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("SectionMessageEditWindow_Cancel");
                 }
             }
         }

@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Lair.Windows.SectionControl"
+<UserControl x:Class="Lair.Windows.SectionControl"
         x:ClassModifier="internal"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -81,7 +81,7 @@
                 </Style>
             </TreeView.Resources>
         </TreeView>
-        <TabControl Grid.Column="2" Name="tabControl1" Grid.RowSpan="2">
+        <TabControl Grid.Column="2" Name="_tabControl" Grid.RowSpan="2">
             <TabItem Header="{Binding Path=SectionControl_Chat, Source={StaticResource ResourcesInstance}}" >
                 <Grid Name="_chatGrid" />
             </TabItem>

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -116,10 +116,21 @@
     <Compile Include="Windows\Chat\ChatListWindow.xaml.cs">
       <DependentUpon>ChatListWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\Chat\MessageEditWindow.xaml.cs">
-      <DependentUpon>MessageEditWindow.xaml</DependentUpon>
+    <Compile Include="Windows\Chat\ChatMessageEditWindow.xaml.cs">
+      <DependentUpon>ChatMessageEditWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\Chat\RichTextBoxHelper.cs" />
+    <Compile Include="Windows\Mail\SignatureListWindow.xaml.cs">
+      <DependentUpon>SignatureListWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Mail\SectionMessageEditWindow.xaml.cs">
+      <DependentUpon>SectionMessageEditWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Mail\MailControl.xaml.cs">
+      <DependentUpon>MailControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\_Controls\MailCategorizeTreeViewItem.cs" />
+    <Compile Include="Windows\_Controls\MailTreeViewItem.cs" />
+    <Compile Include="Windows\_Controls\RichTextBoxHelper.cs" />
     <Compile Include="Windows\_Controls\ChatCategorizeTreeViewItem.cs" />
     <Compile Include="Windows\_Controls\ChatTreeViewItem.cs" />
     <Compile Include="Windows\_Items\ChatCategorizeTreeItem.cs" />
@@ -130,6 +141,8 @@
     <Compile Include="Windows\Section\TrustSignaturesPreviewWindow.xaml.cs">
       <DependentUpon>TrustSignaturesPreviewWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\_Items\MailCategorizeTreeItem.cs" />
+    <Compile Include="Windows\_Items\MailTreeItem.cs" />
     <Compile Include="Windows\_Items\SignatureTreeItem.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="MainWindowTabType.cs" />
@@ -183,11 +196,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\Chat\MessageEditWindow.xaml">
+    <Page Include="Windows\Chat\ChatMessageEditWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\ConnectionControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\Mail\SignatureListWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\Mail\SectionMessageEditWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\Mail\MailControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -312,13 +337,13 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Properties\Lair.license">
+    <Content Include="Properties\Lair.License">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="Properties\Lair.readme">
+    <Content Include="Properties\Lair.Readme">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="app.manifest">

@@ -15,14 +15,14 @@ using System.Windows.Input;
 
 namespace Lair.Windows
 {
-    class ChatCategorizeTreeViewItem : TreeViewItemEx
+    class MailCategorizeTreeViewItem : TreeViewItemEx
     {
-        private ChatCategorizeTreeItem _value;
+        private MailCategorizeTreeItem _value;
 
         private ObservableCollection<TreeViewItem> _listViewItemCollection = new ObservableCollection<TreeViewItem>();
         private TextBlock _header = new TextBlock();
 
-        public ChatCategorizeTreeViewItem(ChatCategorizeTreeItem value)
+        public MailCategorizeTreeViewItem(MailCategorizeTreeItem value)
             : base()
         {
             if (value == null) throw new ArgumentNullException("value");
@@ -64,7 +64,7 @@ namespace Lair.Windows
             _header.Text = this.Value.Name;
             base.IsExpanded = this.Value.IsExpanded;
 
-            foreach (var item in _listViewItemCollection.OfType<ChatCategorizeTreeViewItem>().ToArray())
+            foreach (var item in _listViewItemCollection.OfType<MailCategorizeTreeViewItem>().ToArray())
             {
                 if (!_value.Children.Any(n => object.ReferenceEquals(n, item.Value)))
                 {
@@ -74,28 +74,28 @@ namespace Lair.Windows
 
             foreach (var item in _value.Children)
             {
-                if (!_listViewItemCollection.OfType<ChatCategorizeTreeViewItem>().Any(n => object.ReferenceEquals(n.Value, item)))
+                if (!_listViewItemCollection.OfType<MailCategorizeTreeViewItem>().Any(n => object.ReferenceEquals(n.Value, item)))
                 {
-                    var treeViewItem = new ChatCategorizeTreeViewItem(item);
+                    var treeViewItem = new MailCategorizeTreeViewItem(item);
                     treeViewItem.Parent = this;
 
                     _listViewItemCollection.Add(treeViewItem);
                 }
             }
 
-            foreach (var item in _listViewItemCollection.OfType<ChatTreeViewItem>().ToArray())
+            foreach (var item in _listViewItemCollection.OfType<MailTreeViewItem>().ToArray())
             {
-                if (!_value.ChatTreeItems.Any(n => object.ReferenceEquals(n, item.Value)))
+                if (!_value.MailTreeItems.Any(n => object.ReferenceEquals(n, item.Value)))
                 {
                     _listViewItemCollection.Remove(item);
                 }
             }
 
-            foreach (var item in _value.ChatTreeItems)
+            foreach (var item in _value.MailTreeItems)
             {
-                if (!_listViewItemCollection.OfType<ChatTreeViewItem>().Any(n => object.ReferenceEquals(n.Value, item)))
+                if (!_listViewItemCollection.OfType<MailTreeViewItem>().Any(n => object.ReferenceEquals(n.Value, item)))
                 {
-                    var treeViewItem = new ChatTreeViewItem(item);
+                    var treeViewItem = new MailTreeViewItem(item);
                     treeViewItem.Parent = this;
 
                     _listViewItemCollection.Add(treeViewItem);
@@ -111,40 +111,40 @@ namespace Lair.Windows
 
             list.Sort((x, y) =>
             {
-                if (x is ChatCategorizeTreeViewItem)
+                if (x is MailCategorizeTreeViewItem)
                 {
-                    if (y is ChatCategorizeTreeViewItem)
+                    if (y is MailCategorizeTreeViewItem)
                     {
-                        var vx = ((ChatCategorizeTreeViewItem)x).Value;
-                        var vy = ((ChatCategorizeTreeViewItem)y).Value;
+                        var vx = ((MailCategorizeTreeViewItem)x).Value;
+                        var vy = ((MailCategorizeTreeViewItem)y).Value;
 
                         int c = vx.Name.CompareTo(vy.Name);
                         if (c != 0) return c;
-                        c = vx.ChatTreeItems.Count.CompareTo(vy.ChatTreeItems.Count);
+                        c = vx.MailTreeItems.Count.CompareTo(vy.MailTreeItems.Count);
                         if (c != 0) return c;
                         c = vx.GetHashCode().CompareTo(vy.GetHashCode());
                         if (c != 0) return c;
                     }
-                    else if (y is ChatTreeViewItem)
+                    else if (y is MailTreeViewItem)
                     {
                         return 1;
                     }
                 }
-                else if (x is ChatTreeViewItem)
+                else if (x is MailTreeViewItem)
                 {
-                    if (y is ChatTreeViewItem)
+                    if (y is MailTreeViewItem)
                     {
-                        var vx = ((ChatTreeViewItem)x).Value;
-                        var vy = ((ChatTreeViewItem)y).Value;
+                        var vx = ((MailTreeViewItem)x).Value;
+                        var vy = ((MailTreeViewItem)y).Value;
 
-                        int c = vx.Tag.Name.CompareTo(vy.Tag.Name);
+                        int c = vx.TargetSignature.CompareTo(vy.TargetSignature);
                         if (c != 0) return c;
-                        c = Collection.Compare(vx.Tag.Id, vy.Tag.Id);
+                        c = Collection.Compare(vx.TargetSignature, vy.TargetSignature);
                         if (c != 0) return c;
                         c = vx.GetHashCode().CompareTo(vy.GetHashCode());
                         if (c != 0) return c;
                     }
-                    else if (y is ChatCategorizeTreeViewItem)
+                    else if (y is MailCategorizeTreeViewItem)
                     {
                         return -1;
                     }
@@ -161,7 +161,7 @@ namespace Lair.Windows
             }
         }
 
-        public ChatCategorizeTreeItem Value
+        public MailCategorizeTreeItem Value
         {
             get
             {

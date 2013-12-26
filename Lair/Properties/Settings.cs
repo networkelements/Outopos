@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -125,11 +125,29 @@ namespace Lair.Properties
                 new Library.Configuration.SettingContent<double>() { Name = "ChatListWindow_GridViewColumn_Name_Width", Value = 120 },
                 new Library.Configuration.SettingContent<double>() { Name = "ChatListWindow_GridViewColumn_Id_Width", Value = 120 },
           
-                new Library.Configuration.SettingContent<double>() { Name = "MessageEditWindow_Top", Value = 120 },
-                new Library.Configuration.SettingContent<double>() { Name = "MessageEditWindow_Left", Value = 120 },
-                new Library.Configuration.SettingContent<double>() { Name = "MessageEditWindow_Height", Value = 500 },
-                new Library.Configuration.SettingContent<double>() { Name = "MessageEditWindow_Width", Value = 700 },
-                new Library.Configuration.SettingContent<WindowState>() { Name = "MessageEditWindow_WindowState", Value = WindowState.Normal },
+                new Library.Configuration.SettingContent<double>() { Name = "ChatMessageEditWindow_Top", Value = 120 },
+                new Library.Configuration.SettingContent<double>() { Name = "ChatMessageEditWindow_Left", Value = 120 },
+                new Library.Configuration.SettingContent<double>() { Name = "ChatMessageEditWindow_Height", Value = 500 },
+                new Library.Configuration.SettingContent<double>() { Name = "ChatMessageEditWindow_Width", Value = 700 },
+                new Library.Configuration.SettingContent<WindowState>() { Name = "ChatMessageEditWindow_WindowState", Value = WindowState.Normal },
+
+                new Library.Configuration.SettingContent<double>() { Name = "MailControl_Grid_ColumnDefinitions_Width", Value = 200 },
+             
+                new Library.Configuration.SettingContent<double>() { Name = "SignatureListWindow_Top", Value = 120 },
+                new Library.Configuration.SettingContent<double>() { Name = "SignatureListWindow_Left", Value = 120 },
+                new Library.Configuration.SettingContent<double>() { Name = "SignatureListWindow_Height", Value = 500 },
+                new Library.Configuration.SettingContent<double>() { Name = "SignatureListWindow_Width", Value = 700 },
+                new Library.Configuration.SettingContent<WindowState>() { Name = "SignatureListWindow_WindowState", Value = WindowState.Normal },
+                new Library.Configuration.SettingContent<string>() { Name = "SignatureListWindow_LastHeaderClicked", Value = "Name" },
+                new Library.Configuration.SettingContent<ListSortDirection>() { Name = "SignatureListWindow_ListSortDirection", Value = ListSortDirection.Descending },
+                new Library.Configuration.SettingContent<double>() { Name = "SignatureListWindow_GridViewColumn_Name_Width", Value = 120 },
+                new Library.Configuration.SettingContent<double>() { Name = "SignatureListWindow_GridViewColumn_Id_Width", Value = 120 },
+          
+                new Library.Configuration.SettingContent<double>() { Name = "SectionMessageEditWindow_Top", Value = 120 },
+                new Library.Configuration.SettingContent<double>() { Name = "SectionMessageEditWindow_Left", Value = 120 },
+                new Library.Configuration.SettingContent<double>() { Name = "SectionMessageEditWindow_Height", Value = 500 },
+                new Library.Configuration.SettingContent<double>() { Name = "SectionMessageEditWindow_Width", Value = 700 },
+                new Library.Configuration.SettingContent<WindowState>() { Name = "SectionMessageEditWindow_WindowState", Value = WindowState.Normal },
             })
         {
 
@@ -1817,92 +1835,365 @@ namespace Lair.Properties
         }
 
 
-        public double MessageEditWindow_Top
+        public double ChatMessageEditWindow_Top
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["MessageEditWindow_Top"];
+                   return (double)this["ChatMessageEditWindow_Top"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["MessageEditWindow_Top"] = value;
+                    this["ChatMessageEditWindow_Top"] = value;
                 }
             }
         }
 
-        public double MessageEditWindow_Left
+        public double ChatMessageEditWindow_Left
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["MessageEditWindow_Left"];
+                   return (double)this["ChatMessageEditWindow_Left"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["MessageEditWindow_Left"] = value;
+                    this["ChatMessageEditWindow_Left"] = value;
                 }
             }
         }
 
-        public double MessageEditWindow_Height
+        public double ChatMessageEditWindow_Height
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["MessageEditWindow_Height"];
+                   return (double)this["ChatMessageEditWindow_Height"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["MessageEditWindow_Height"] = value;
+                    this["ChatMessageEditWindow_Height"] = value;
                 }
             }
         }
 
-        public double MessageEditWindow_Width
+        public double ChatMessageEditWindow_Width
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["MessageEditWindow_Width"];
+                   return (double)this["ChatMessageEditWindow_Width"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["MessageEditWindow_Width"] = value;
+                    this["ChatMessageEditWindow_Width"] = value;
                 }
             }
         }
 
-        public WindowState MessageEditWindow_WindowState
+        public WindowState ChatMessageEditWindow_WindowState
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (WindowState)this["MessageEditWindow_WindowState"];
+                   return (WindowState)this["ChatMessageEditWindow_WindowState"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["MessageEditWindow_WindowState"] = value;
+                    this["ChatMessageEditWindow_WindowState"] = value;
+                }
+            }
+        }
+
+
+        public double MailControl_Grid_ColumnDefinitions_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["MailControl_Grid_ColumnDefinitions_Width"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["MailControl_Grid_ColumnDefinitions_Width"] = value;
+                }
+            }
+        }
+
+
+        public double SignatureListWindow_Top
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SignatureListWindow_Top"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SignatureListWindow_Top"] = value;
+                }
+            }
+        }
+
+        public double SignatureListWindow_Left
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SignatureListWindow_Left"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SignatureListWindow_Left"] = value;
+                }
+            }
+        }
+
+        public double SignatureListWindow_Height
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SignatureListWindow_Height"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SignatureListWindow_Height"] = value;
+                }
+            }
+        }
+
+        public double SignatureListWindow_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SignatureListWindow_Width"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SignatureListWindow_Width"] = value;
+                }
+            }
+        }
+
+        public WindowState SignatureListWindow_WindowState
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (WindowState)this["SignatureListWindow_WindowState"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SignatureListWindow_WindowState"] = value;
+                }
+            }
+        }
+
+        public string SignatureListWindow_LastHeaderClicked
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (string)this["SignatureListWindow_LastHeaderClicked"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SignatureListWindow_LastHeaderClicked"] = value;
+                }
+            }
+        }
+
+        public ListSortDirection SignatureListWindow_ListSortDirection
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (ListSortDirection)this["SignatureListWindow_ListSortDirection"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SignatureListWindow_ListSortDirection"] = value;
+                }
+            }
+        }
+
+        public double SignatureListWindow_GridViewColumn_Name_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SignatureListWindow_GridViewColumn_Name_Width"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SignatureListWindow_GridViewColumn_Name_Width"] = value;
+                }
+            }
+        }
+
+        public double SignatureListWindow_GridViewColumn_Id_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SignatureListWindow_GridViewColumn_Id_Width"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SignatureListWindow_GridViewColumn_Id_Width"] = value;
+                }
+            }
+        }
+
+
+        public double SectionMessageEditWindow_Top
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SectionMessageEditWindow_Top"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SectionMessageEditWindow_Top"] = value;
+                }
+            }
+        }
+
+        public double SectionMessageEditWindow_Left
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SectionMessageEditWindow_Left"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SectionMessageEditWindow_Left"] = value;
+                }
+            }
+        }
+
+        public double SectionMessageEditWindow_Height
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SectionMessageEditWindow_Height"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SectionMessageEditWindow_Height"] = value;
+                }
+            }
+        }
+
+        public double SectionMessageEditWindow_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["SectionMessageEditWindow_Width"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SectionMessageEditWindow_Width"] = value;
+                }
+            }
+        }
+
+        public WindowState SectionMessageEditWindow_WindowState
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (WindowState)this["SectionMessageEditWindow_WindowState"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["SectionMessageEditWindow_WindowState"] = value;
                 }
             }
         }

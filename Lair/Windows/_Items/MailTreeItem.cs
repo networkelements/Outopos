@@ -8,66 +8,98 @@ using System.Xml;
 using Library;
 using Library.Net.Lair;
 using Library.Security;
-using Library.Io;
 using Library.Collections;
+using Library.Io;
 
 namespace Lair.Windows
 {
-    [DataContract(Name = "SignatureTreeItem", Namespace = "http://Lair/Windows")]
-    class SignatureTreeItem : ICloneable<SignatureTreeItem>, IThisLock
+    [DataContract(Name = "MailTreeItem", Namespace = "http://Lair/Windows")]
+    class MailTreeItem : ICloneable<MailTreeItem>, IThisLock
     {
-        private SectionProfile _sectionProfile;
-        private LockedList<SignatureTreeItem> _children;
+        private string _targetSignature;
+        private LockedList<SectionMessage> _sentSectionMessages;
+        private LockedList<SectionMessage> _unreadSectionMessages;
+        private LockedList<SectionMessage> _readSectionMessages;
 
         private volatile object _thisLock;
         private static readonly object _initializeLock = new object();
 
-        public SignatureTreeItem(SectionProfile sectionProfile)
+        public MailTreeItem()
         {
-            this.SectionProfile = sectionProfile;
+
         }
 
-        [DataMember(Name = "SectionProfile")]
-        public SectionProfile SectionProfile
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return _sectionProfile;
-                }
-            }
-            private set
-            {
-                lock (this.ThisLock)
-                {
-                    _sectionProfile = value;
-                }
-            }
-        }
-
-        [DataMember(Name = "Children")]
-        public LockedList<SignatureTreeItem> Children
+        [DataMember(Name = "TargetSignature")]
+        public string TargetSignature
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    if (_children == null)
-                        _children = new LockedList<SignatureTreeItem>();
-
-                    return _children;
+                    return _targetSignature;
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    _targetSignature = value;
                 }
             }
         }
 
-        #region ICloneable<SignatureTreeItem>
+        [DataMember(Name = "SentSectionMessages")]
+        public LockedList<SectionMessage> SentSectionMessages
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    if (_sentSectionMessages == null)
+                        _sentSectionMessages = new LockedList<SectionMessage>();
 
-        public SignatureTreeItem Clone()
+                    return _sentSectionMessages;
+                }
+            }
+        }
+
+        [DataMember(Name = "UnreadSectionMessages")]
+        public LockedList<SectionMessage> UnreadSectionMessages
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    if (_unreadSectionMessages == null)
+                        _unreadSectionMessages = new LockedList<SectionMessage>();
+
+                    return _unreadSectionMessages;
+                }
+            }
+        }
+
+        [DataMember(Name = "ReadSectionMessages")]
+        public LockedList<SectionMessage> ReadSectionMessages
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    if (_readSectionMessages == null)
+                        _readSectionMessages = new LockedList<SectionMessage>();
+
+                    return _readSectionMessages;
+                }
+            }
+        }
+
+        #region ICloneable<MailTreeItem>
+
+        public MailTreeItem Clone()
         {
             lock (this.ThisLock)
             {
-                var ds = new DataContractSerializer(typeof(SignatureTreeItem));
+                var ds = new DataContractSerializer(typeof(MailTreeItem));
 
                 using (BufferStream stream = new BufferStream(BufferManager.Instance))
                 {
@@ -81,7 +113,7 @@ namespace Lair.Windows
 
                     using (XmlDictionaryReader textDictionaryReader = XmlDictionaryReader.CreateBinaryReader(stream, XmlDictionaryReaderQuotas.Max))
                     {
-                        return (SignatureTreeItem)ds.ReadObject(textDictionaryReader);
+                        return (MailTreeItem)ds.ReadObject(textDictionaryReader);
                     }
                 }
             }
