@@ -25,14 +25,16 @@ namespace Lair.Windows
         private Chat _chat;
         private List<ChatMessage> _responsMessages = new List<ChatMessage>();
         private DigitalSignature _digitalSignature;
+        private bool _isTrust;
         private LairManager _lairManager;
         private ChatMessage _chatMessage;
 
-        public ChatMessageEditWindow(Chat chat, string content, IEnumerable<ChatMessage> responsMessages, DigitalSignature digitalSignature, LairManager lairManager)
+        public ChatMessageEditWindow(Chat chat, string content, IEnumerable<ChatMessage> responsMessages, DigitalSignature digitalSignature, bool isTrust, LairManager lairManager)
         {
             _chat = chat;
             if (responsMessages != null) _responsMessages.AddRange(responsMessages);
             _digitalSignature = digitalSignature;
+            _isTrust = isTrust;
             _lairManager = lairManager;
 
             var digitalSignatureCollection = new List<object>();
@@ -101,7 +103,7 @@ namespace Lair.Windows
                     comment = comment.Substring(0, ChatMessage.MaxCommentLength);
                 }
 
-                RichTextBoxHelper.SetRichTextBox(_richTextBox, _chat, _digitalSignature.ToString(), DateTime.UtcNow, comment, _responsMessages.Select(n => new Anchor(n.Signature, n.CreationTime)), false);
+                RichTextBoxHelper.SetRichTextBox(_richTextBox, _chat, _digitalSignature.ToString(), DateTime.UtcNow, comment, _responsMessages.Select(n => new Anchor(n.Signature, n.CreationTime)), _isTrust);
 
                 _richTextBox.MaxHeight = double.PositiveInfinity;
             }

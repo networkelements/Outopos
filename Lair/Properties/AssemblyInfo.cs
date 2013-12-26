@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using System.Resources;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -14,4 +14,4 @@ using System.Windows;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: ThemeInfo(ResourceDictionaryLocation.None, ResourceDictionaryLocation.SourceAssembly)]
-[assembly: AssemblyVersion("0.0.0.3179")] // G98ZO+ASM6jzn7earzpTYlsj3kxl5KRW0ApONPUGLYRexaK/fvYFBNuLEb3EzqJkSGLtt7ReLs6CvGR07MlgJQ==
+[assembly: AssemblyVersion("0.0.0.3182")] // BPMqtmbUA/95n5abtbBbkAJqY4qH+Oz7NzFudNUp90YbvulMZCxZxqtMnMkhrRSnRE6hFlSfDSOXigI4OXvZtA==

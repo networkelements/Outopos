@@ -214,7 +214,7 @@ namespace Lair.Windows
                                 var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == _sectionTreeViewItem.Value.UploadSignature);
                                 var sectionProfile = _sectionTreeViewItem.Value.CacheSectionProfiles.FirstOrDefault(n => n.Signature == mailTreeViewItem.Value.TargetSignature);
 
-                                _messageUploadButton.IsEnabled = (digitalSignature != null && sectionProfile != null);
+                                _messageUploadButton.IsEnabled = (digitalSignature != null && sectionProfile != null && trustSignatures.Contains(digitalSignature.ToString()));
                             }
 
                             if (removeList.Count > 100)
@@ -1005,8 +1005,6 @@ namespace Lair.Windows
                 list.AddRange(list[i].Items.OfType<MenuItem>());
             }
 
-            var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == _sectionTreeViewItem.Value.UploadSignature);
-
             foreach (var item in list)
             {
                 if (item.Name == "_richTextBoxCopyMenuItem")
@@ -1015,7 +1013,14 @@ namespace Lair.Windows
                 }
                 else if (item.Name == "_richTextBoxResponsMenuItem")
                 {
-                    item.IsEnabled = (digitalSignature != null);
+                    var trustSignatures = new HashSet<string>();
+                    trustSignatures.Add(_sectionTreeViewItem.Value.LeaderSignature);
+                    trustSignatures.UnionWith(_sectionTreeViewItem.Value.CacheSectionProfiles.SelectMany(n => n.TrustSignatures));
+
+                    var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == _sectionTreeViewItem.Value.UploadSignature);
+                    var sectionProfile = _sectionTreeViewItem.Value.CacheSectionProfiles.FirstOrDefault(n => n.Signature == selectTreeViewItem.Value.TargetSignature);
+
+                    item.IsEnabled = (digitalSignature != null && sectionProfile != null && trustSignatures.Contains(digitalSignature.ToString()));
                 }
             }
         }

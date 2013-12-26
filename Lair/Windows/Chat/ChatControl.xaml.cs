@@ -1146,8 +1146,6 @@ namespace Lair.Windows
                 list.AddRange(list[i].Items.OfType<MenuItem>());
             }
 
-            var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == _sectionTreeViewItem.Value.UploadSignature);
-
             foreach (var item in list)
             {
                 if (item.Name == "_richTextBoxCopyMenuItem")
@@ -1156,6 +1154,8 @@ namespace Lair.Windows
                 }
                 else if (item.Name == "_richTextBoxResponsMenuItem")
                 {
+                    var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == _sectionTreeViewItem.Value.UploadSignature);
+
                     item.IsEnabled = (digitalSignature != null);
                 }
             }
@@ -1174,12 +1174,16 @@ namespace Lair.Windows
             var selectTreeViewItem = _treeView.SelectedItem as ChatTreeViewItem;
             if (selectTreeViewItem == null) return;
 
+            var trustSignatures = new HashSet<string>();
+            trustSignatures.Add(_sectionTreeViewItem.Value.LeaderSignature);
+            trustSignatures.UnionWith(_sectionTreeViewItem.Value.CacheSectionProfiles.SelectMany(n => n.TrustSignatures));
+
             var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == _sectionTreeViewItem.Value.UploadSignature);
             if (digitalSignature == null) return;
 
             var responsMessages = _listView.SelectedItems.OfType<ChatMessageWrapper>().Select(n => n.Value).ToList();
 
-            ChatMessageEditWindow window = new ChatMessageEditWindow(selectTreeViewItem.Value.Tag, "", responsMessages, digitalSignature, _lairManager);
+            ChatMessageEditWindow window = new ChatMessageEditWindow(selectTreeViewItem.Value.Tag, "", responsMessages, digitalSignature, trustSignatures.Contains(digitalSignature.ToString()), _lairManager);
             window.Owner = _mainWindow;
 
             window.Closed += (object sender2, EventArgs e2) =>
@@ -1248,10 +1252,14 @@ namespace Lair.Windows
             var selectTreeViewItem = _treeView.SelectedItem as ChatTreeViewItem;
             if (selectTreeViewItem == null) return;
 
+            var trustSignatures = new HashSet<string>();
+            trustSignatures.Add(_sectionTreeViewItem.Value.LeaderSignature);
+            trustSignatures.UnionWith(_sectionTreeViewItem.Value.CacheSectionProfiles.SelectMany(n => n.TrustSignatures));
+
             var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == _sectionTreeViewItem.Value.UploadSignature);
             if (digitalSignature == null) return;
 
-            ChatMessageEditWindow window = new ChatMessageEditWindow(selectTreeViewItem.Value.Tag, "", null, digitalSignature, _lairManager);
+            ChatMessageEditWindow window = new ChatMessageEditWindow(selectTreeViewItem.Value.Tag, "", null, digitalSignature, trustSignatures.Contains(digitalSignature.ToString()), _lairManager);
             window.Owner = _mainWindow;
 
             window.Closed += (object sender2, EventArgs e2) =>
