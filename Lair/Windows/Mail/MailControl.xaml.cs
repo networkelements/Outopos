@@ -325,6 +325,28 @@ namespace Lair.Windows
                                 }
                             }
 
+                            {
+                                var sortList = newList.ToList();
+
+                                sortList.Sort((x, y) =>
+                                {
+                                    int c = x.CreationTime.CompareTo(y.CreationTime);
+                                    if (c != 0) return c;
+                                    c = x.Signature.CompareTo(y.Signature);
+                                    if (c != 0) return c;
+
+                                    return x.GetHashCode().CompareTo(y.GetHashCode());
+                                });
+
+                                var tempList = sortList.Skip(sortList.Count - 1024).ToList();
+                                tempList.Reverse();
+
+                                sortList = tempList.ToList();
+
+                                newList.Clear();
+                                newList.UnionWith(sortList);
+                            }
+
                             lock (treeViewItem.Value.ThisLock)
                             {
                                 foreach (var item in oldList)

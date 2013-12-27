@@ -555,6 +555,17 @@ namespace Lair
             {
                 Clipboard.Clear();
 
+                {
+                    var sb = new StringBuilder();
+
+                    foreach (var item in chatTreeItems)
+                    {
+                        sb.AppendLine(LairConverter.ToChatString(item.Tag, null));
+                    }
+
+                    Clipboard.SetText(sb.ToString());
+                }
+
                 _chatTreeItemList.AddRange(chatTreeItems.Select(n => n.Clone()));
             }
         }

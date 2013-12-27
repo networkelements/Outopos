@@ -97,6 +97,27 @@ namespace Lair.Windows
             _messageUploadButton.IsEnabled = false;
 
             LanguagesManager.UsingLanguageChangedEvent += new UsingLanguageChangedEventHandler(this.LanguagesManager_UsingLanguageChangedEvent);
+
+            RichTextBoxHelper.ChatClickEvent += this.ChatClickEvent;
+        }
+
+        private void ChatClickEvent(object sender, Chat chat)
+        {
+            if (chat.Id == null || chat.Name == null) return;
+            if (this.Visibility != System.Windows.Visibility.Visible) return;
+
+            var selectTreeViewItem = _treeView.SelectedItem as ChatTreeViewItem;
+            if (selectTreeViewItem == null) return;
+
+            var parentTreeViewItem = selectTreeViewItem.Parent as ChatCategorizeTreeViewItem;
+            if (parentTreeViewItem == null) return;
+
+            if (parentTreeViewItem.Value.ChatTreeItems.Any(n => n.Tag == chat)) return;
+
+            var chatTreeItem = new ChatTreeItem(chat);
+            parentTreeViewItem.Value.ChatTreeItems.Add(chatTreeItem);
+
+            parentTreeViewItem.Update();
         }
 
         private void LanguagesManager_UsingLanguageChangedEvent(object sender)

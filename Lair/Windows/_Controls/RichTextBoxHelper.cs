@@ -20,10 +20,10 @@ using L = Library.Net.Lair;
 namespace Lair.Windows
 {
     delegate void LinkClickEventHandler(object sender, string link);
+    delegate void SeedClickEventHandler(object sender, A.Seed seed);
     delegate void SectionClickEventHandler(object sender, L.Section section, string leaderSignature);
     delegate void WikiClickEventHandler(object sender, Wiki wiki, string path);
     delegate void ChatClickEventHandler(object sender, Chat chat);
-    delegate void SeedClickEventHandler(object sender, A.Seed seed);
 
     delegate SectionMessageWrapper GetAnchorSectionMessageWrapperEventHandler(object sender, L.Section section, Anchor anchor);
     delegate ChatMessageWrapper GetAnchorChatMessageWrapperEventHandler(object sender, Chat chat, Anchor anchor);
@@ -34,6 +34,7 @@ namespace Lair.Windows
         public static event LinkClickEventHandler LinkClickEvent;
         public static event SeedClickEventHandler SeedClickEvent;
         public static event SectionClickEventHandler SectionClickEvent;
+        public static event WikiClickEventHandler WikiClickEvent;
         public static event ChatClickEventHandler ChatClickEvent;
         public static GetAnchorSectionMessageWrapperEventHandler GetAnchorSectionMessageWrapperEvent;
         public static GetAnchorChatMessageWrapperEventHandler GetAnchorChatMessageWrapperEvent;
@@ -349,6 +350,81 @@ namespace Lair.Windows
                             Run r = new Run();
                             r.Foreground = new SolidColorBrush(Color.FromRgb(0xCF, 0xCF, 0xCF));
                             r.Text = MessageConverter.ToInfoMessage(section, leaderSignature);
+
+                            p.Inlines.Add(r);
+                        }
+
+                        p.Inlines.Add(new LineBreak());
+                    }
+                    else if (rl.StartsWith("Wiki:"))
+                    {
+                        string path;
+
+                        var wiki = L.LairConverter.FromWikiString(rl, out path);
+                        if (wiki == null) throw new Exception();
+
+                        {
+                            var span = new Span();
+
+                            var rl1 = rl.Substring(0, 64);
+                            var rl2 = (64 < rl.Length) ? rl.Substring(64, Math.Min(rl.Length - 64, 16)) : "";
+                            var rl3 = (80 < rl.Length) ? rl.Substring(80) : "";
+
+                            Hyperlink l = new Hyperlink();
+                            l.Cursor = System.Windows.Input.Cursors.Hand;
+
+                            if (Settings.Instance.Global_WikiHistorys.Contains(wiki)) l.Foreground = new SolidColorBrush(App.LairColors.Link);
+                            else l.Foreground = new SolidColorBrush(App.LairColors.Link_New);
+
+                            l.PreviewMouseLeftButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
+                            {
+                                RichTextBoxHelper.WikiClickEvent(sender, wiki, path);
+
+                                if (Settings.Instance.Global_WikiHistorys.Contains(wiki)) l.Foreground = new SolidColorBrush(App.LairColors.Link);
+                            };
+                            l.PreviewMouseRightButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
+                            {
+                                richTextBox.Selection.Select(span.ContentStart, span.ContentEnd);
+                            };
+
+                            {
+                                Run r = new Run();
+                                r.Text = rl1;
+
+                                l.Inlines.Add(r);
+                            }
+
+                            if (!string.IsNullOrWhiteSpace(rl2))
+                            {
+                                Run r = new Run();
+                                r.Text = rl2;
+                                r.FontSize = 1;
+
+                                l.Inlines.Add(r);
+                            }
+
+                            span.Inlines.Add(l);
+
+                            if (!string.IsNullOrWhiteSpace(rl3))
+                            {
+                                Run r = new Run();
+                                r.Foreground = new SolidColorBrush(Color.FromRgb(0x33, 0x33, 0x33));
+                                r.Text = rl3;
+                                r.FontSize = 0.1;
+                                r.FontStretch = FontStretches.UltraCondensed;
+
+                                span.Inlines.Add(r);
+                            }
+
+                            p.Inlines.Add(span);
+                        }
+
+                        p.Inlines.Add(new LineBreak());
+
+                        {
+                            Run r = new Run();
+                            r.Foreground = new SolidColorBrush(Color.FromRgb(0xCF, 0xCF, 0xCF));
+                            r.Text = MessageConverter.ToInfoMessage(wiki, path);
 
                             p.Inlines.Add(r);
                         }
@@ -754,6 +830,81 @@ namespace Lair.Windows
                             Run r = new Run();
                             r.Foreground = new SolidColorBrush(Color.FromRgb(0xCF, 0xCF, 0xCF));
                             r.Text = MessageConverter.ToInfoMessage(section, leaderSignature);
+
+                            p.Inlines.Add(r);
+                        }
+
+                        p.Inlines.Add(new LineBreak());
+                    }
+                    else if (rl.StartsWith("Wiki:"))
+                    {
+                        string path;
+
+                        var wiki = L.LairConverter.FromWikiString(rl, out path);
+                        if (wiki == null) throw new Exception();
+
+                        {
+                            var span = new Span();
+
+                            var rl1 = rl.Substring(0, 64);
+                            var rl2 = (64 < rl.Length) ? rl.Substring(64, Math.Min(rl.Length - 64, 16)) : "";
+                            var rl3 = (80 < rl.Length) ? rl.Substring(80) : "";
+
+                            Hyperlink l = new Hyperlink();
+                            l.Cursor = System.Windows.Input.Cursors.Hand;
+
+                            if (Settings.Instance.Global_WikiHistorys.Contains(wiki)) l.Foreground = new SolidColorBrush(App.LairColors.Link);
+                            else l.Foreground = new SolidColorBrush(App.LairColors.Link_New);
+
+                            l.PreviewMouseLeftButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
+                            {
+                                RichTextBoxHelper.WikiClickEvent(sender, wiki, path);
+
+                                if (Settings.Instance.Global_WikiHistorys.Contains(wiki)) l.Foreground = new SolidColorBrush(App.LairColors.Link);
+                            };
+                            l.PreviewMouseRightButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
+                            {
+                                richTextBox.Selection.Select(span.ContentStart, span.ContentEnd);
+                            };
+
+                            {
+                                Run r = new Run();
+                                r.Text = rl1;
+
+                                l.Inlines.Add(r);
+                            }
+
+                            if (!string.IsNullOrWhiteSpace(rl2))
+                            {
+                                Run r = new Run();
+                                r.Text = rl2;
+                                r.FontSize = 1;
+
+                                l.Inlines.Add(r);
+                            }
+
+                            span.Inlines.Add(l);
+
+                            if (!string.IsNullOrWhiteSpace(rl3))
+                            {
+                                Run r = new Run();
+                                r.Foreground = new SolidColorBrush(Color.FromRgb(0x33, 0x33, 0x33));
+                                r.Text = rl3;
+                                r.FontSize = 0.1;
+                                r.FontStretch = FontStretches.UltraCondensed;
+
+                                span.Inlines.Add(r);
+                            }
+
+                            p.Inlines.Add(span);
+                        }
+
+                        p.Inlines.Add(new LineBreak());
+
+                        {
+                            Run r = new Run();
+                            r.Foreground = new SolidColorBrush(Color.FromRgb(0xCF, 0xCF, 0xCF));
+                            r.Text = MessageConverter.ToInfoMessage(wiki, path);
 
                             p.Inlines.Add(r);
                         }

@@ -27,7 +27,7 @@ using Library;
 using Library.Collections;
 using Library.Net.Lair;
 using Library.Security;
-using a = Library.Net.Lair;
+using A = Library.Net.Amoeba;
 
 namespace Lair.Windows
 {
@@ -95,11 +95,103 @@ namespace Lair.Windows
 
             _lairManager.GetLockCriteriaEvent = this.GetCriteria;
 
-            RichTextBoxHelper.GetMaxHeightEvent = GetMaxHeightEvent;
+            RichTextBoxHelper.LinkClickEvent += this.LinkClickEvent;
+            RichTextBoxHelper.SeedClickEvent += this.SeedClickEvent;
+            RichTextBoxHelper.SectionClickEvent += this.SectionClickEvent;
+            RichTextBoxHelper.WikiClickEvent += this.WikiClickEvent;
+
+            RichTextBoxHelper.GetMaxHeightEvent = this.GetMaxHeightEvent;
             RichTextBoxHelper.GetAnchorSectionMessageWrapperEvent = this.GetAnchorSectionMessageWrapperEvent;
             RichTextBoxHelper.GetAnchorChatMessageWrapperEvent = this.GetAnchorChatMessageWrapperEvent;
 
             this.Update();
+        }
+
+        private void LinkClickEvent(object sender, string link)
+        {
+            try
+            {
+                Process.Start(link);
+            }
+            catch (Exception)
+            {
+                return;
+            }
+
+            Settings.Instance.Global_UrlHistorys.Add(link);
+        }
+
+        private void SeedClickEvent(object sender, A.Seed seed)
+        {
+            if (string.IsNullOrWhiteSpace(Settings.Instance.Global_Amoeba_Path))
+            {
+                foreach (var p in Process.GetProcesses())
+                {
+                    try
+                    {
+                        var path = p.MainModule.FileName;
+
+                        if (Path.GetFileName(path) == "Amoeba.exe")
+                        {
+                            Settings.Instance.Global_Amoeba_Path = path;
+
+                            break;
+                        }
+                    }
+                    catch (Win32Exception)
+                    {
+
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                }
+            }
+
+            if (File.Exists(Settings.Instance.Global_Amoeba_Path))
+            {
+                try
+                {
+                    Process process = new Process();
+                    process.StartInfo.FileName = Settings.Instance.Global_Amoeba_Path;
+                    process.StartInfo.Arguments = string.Format("Download {0}", Library.Net.Amoeba.AmoebaConverter.ToSeedString(seed));
+                    process.StartInfo.WorkingDirectory = Path.GetDirectoryName(Settings.Instance.Global_Amoeba_Path);
+                    process.StartInfo.CreateNoWindow = true;
+                    process.StartInfo.UseShellExecute = false;
+                    process.Start();
+                }
+                catch (Exception)
+                {
+                    return;
+                }
+
+                Settings.Instance.Global_SeedHistorys.Add(seed);
+            }
+        }
+
+        private void SectionClickEvent(object sender, Section section, string leaderSignature)
+        {
+            if (section.Name == null || section.Id == null || leaderSignature == null) return;
+
+            var selectTreeViewItem = _treeView.SelectedItem as SectionTreeViewItem;
+            if (selectTreeViewItem == null) return;
+
+            var parentTreeViewItem = selectTreeViewItem.Parent as SectionCategorizeTreeViewItem;
+            if (parentTreeViewItem == null) return;
+
+            if (parentTreeViewItem.Value.SectionTreeItems.Any(n => n.Tag == section)) return;
+
+            var sectionTreeItem = new SectionTreeItem(section);
+            sectionTreeItem.LeaderSignature = leaderSignature;
+            parentTreeViewItem.Value.SectionTreeItems.Add(sectionTreeItem);
+
+            parentTreeViewItem.Update();
+        }
+
+        private void WikiClickEvent(object sender, Wiki wiki, string path)
+        {
+
         }
 
         private double GetMaxHeightEvent(object sender)
