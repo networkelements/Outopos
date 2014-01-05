@@ -1327,7 +1327,6 @@ namespace Lair.Windows
         private void Window_Closed(object sender, EventArgs e)
         {
             NativeMethods.SetThreadExecutionState(ExecutionState.Continuous);
-
             _notifyIcon.Visible = false;
 
             _isRun = false;

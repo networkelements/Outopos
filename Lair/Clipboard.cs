@@ -3,72 +3,66 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Interop;
+using System.Xml;
 using Lair.Windows;
 using Library;
 using Library.Collections;
+using Library.Io;
 using Library.Net.Lair;
 using A = Library.Net.Amoeba;
-using System.Threading;
 
 namespace Lair
 {
     static class Clipboard
     {
-        private static LockedList<Windows.SectionCategorizeTreeItem> _sectionCategorizeTreeItemList = new LockedList<SectionCategorizeTreeItem>();
-        private static LockedList<Windows.SectionTreeItem> _sectionTreeItemList = new LockedList<SectionTreeItem>();
-        private static LockedList<Windows.ChatCategorizeTreeItem> _chatCategorizeTreeItemList = new LockedList<ChatCategorizeTreeItem>();
-        private static LockedList<Windows.ChatTreeItem> _chatTreeItemList = new LockedList<ChatTreeItem>();
-        private static LockedList<Windows.MailCategorizeTreeItem> _mailCategorizeTreeItemList = new LockedList<MailCategorizeTreeItem>();
-        private static LockedList<Windows.MailTreeItem> _mailTreeItemList = new LockedList<MailTreeItem>();
-
-        private static ClipboardWatcher _clipboardWatcher;
-        private static ManualResetEvent _manualResetEvent = new ManualResetEvent(false);
-
         private static object _thisLock = new object();
 
-        static Clipboard()
+        private static Stream ToStream<T>(T item)
         {
-            _clipboardWatcher = new ClipboardWatcher();
-            // Clipboard呼び出しメソッドのスレッドから呼ばれる場合もあるし、そうでない場合もある。
-            // つまり、ちゃんと同期しないといけない。
-            _clipboardWatcher.DrawClipboard += (sender, e) =>
+            var ds = new DataContractSerializer(typeof(T));
+
+            MemoryStream stream = null;
+
+            try
             {
-                lock (_thisLock)
+                stream = new MemoryStream();
+
+                using (WrapperStream wrapperStream = new WrapperStream(stream, true))
+                using (XmlDictionaryWriter textDictionaryWriter = XmlDictionaryWriter.CreateTextWriter(wrapperStream, new UTF8Encoding(false)))
                 {
-                    _sectionCategorizeTreeItemList.Clear();
-                    _sectionTreeItemList.Clear();
-
-                    _chatCategorizeTreeItemList.Clear();
-                    _chatTreeItemList.Clear();
-
-                    _mailCategorizeTreeItemList.Clear();
-                    _mailTreeItemList.Clear();
-
-                    _manualResetEvent.Set();
+                    ds.WriteObject(textDictionaryWriter, item);
                 }
-            };
+            }
+            catch (Exception)
+            {
+                if (stream != null)
+                    stream.Dispose();
+            }
+
+            return stream;
+        }
+
+        private static T FromStream<T>(Stream stream)
+        {
+            var ds = new DataContractSerializer(typeof(T));
+
+            using (XmlDictionaryReader textDictionaryReader = XmlDictionaryReader.CreateTextReader(stream, XmlDictionaryReaderQuotas.Max))
+            {
+                return (T)ds.ReadObject(textDictionaryReader);
+            }
         }
 
         public static void Clear()
         {
             lock (_thisLock)
             {
-                _manualResetEvent.Reset();
-
-                _sectionCategorizeTreeItemList.Clear();
-                _sectionTreeItemList.Clear();
-
-                _chatCategorizeTreeItemList.Clear();
-                _chatTreeItemList.Clear();
-
-                _mailCategorizeTreeItemList.Clear();
-                _mailTreeItemList.Clear();
-
                 System.Windows.Clipboard.Clear();
             }
-
-            _manualResetEvent.WaitOne(1000);
         }
 
         public static bool ContainsPaths()
@@ -195,8 +189,6 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                Clipboard.Clear();
-
                 {
                     var sb = new StringBuilder();
 
@@ -254,8 +246,6 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                Clipboard.Clear();
-
                 {
                     var sb = new StringBuilder();
 
@@ -313,8 +303,6 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                Clipboard.Clear();
-
                 {
                     var sb = new StringBuilder();
 
@@ -372,8 +360,6 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                Clipboard.Clear();
-
                 {
                     var sb = new StringBuilder();
 
@@ -429,8 +415,6 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                Clipboard.Clear();
-
                 {
                     var sb = new StringBuilder();
 
@@ -448,7 +432,7 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                return _sectionCategorizeTreeItemList.Count != 0;
+                return System.Windows.Clipboard.ContainsData("Lair_SectionCategorizeTreeItems");
             }
         }
 
@@ -456,17 +440,30 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                return _sectionCategorizeTreeItemList.Select(n => n.Clone()).ToArray();
+                try
+                {
+                    using (Stream stream = (Stream)System.Windows.Clipboard.GetData("Lair_SectionCategorizeTreeItems"))
+                    {
+                        return Clipboard.FromStream<IEnumerable<Windows.SectionCategorizeTreeItem>>(stream);
+                    }
+                }
+                catch (Exception)
+                {
+
+                }
+
+                return new Windows.SectionCategorizeTreeItem[0];
             }
         }
 
-        public static void SetSectionCategorizeTreeItems(IEnumerable<Windows.SectionCategorizeTreeItem> sectionCategorizeTreeItems)
+        public static void SetSectionCategorizeTreeItems(IEnumerable<Windows.SectionCategorizeTreeItem> items)
         {
             lock (_thisLock)
             {
-                Clipboard.Clear();
+                System.Windows.DataObject dataObject = new System.Windows.DataObject();
+                dataObject.SetData("Lair_SectionCategorizeTreeItems", Clipboard.ToStream(items));
 
-                _sectionCategorizeTreeItemList.AddRange(sectionCategorizeTreeItems.Select(n => n.Clone()));
+                System.Windows.Clipboard.SetDataObject(dataObject);
             }
         }
 
@@ -474,7 +471,7 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                return _sectionTreeItemList.Count != 0;
+                return System.Windows.Clipboard.ContainsData("Lair_SectionTreeItems");
             }
         }
 
@@ -482,28 +479,42 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                return _sectionTreeItemList.Select(n => n.Clone()).ToArray();
+                try
+                {
+                    using (Stream stream = (Stream)System.Windows.Clipboard.GetData("Lair_SectionTreeItems"))
+                    {
+                        return Clipboard.FromStream<IEnumerable<Windows.SectionTreeItem>>(stream);
+                    }
+                }
+                catch (Exception)
+                {
+
+                }
+
+                return new Windows.SectionTreeItem[0];
             }
         }
 
-        public static void SetSectionTreeItems(IEnumerable<Windows.SectionTreeItem> sectionTreeItems)
+        public static void SetSectionTreeItems(IEnumerable<Windows.SectionTreeItem> items)
         {
             lock (_thisLock)
             {
-                Clipboard.Clear();
+                System.Windows.DataObject dataObject = new System.Windows.DataObject();
 
                 {
                     var sb = new StringBuilder();
 
-                    foreach (var item in sectionTreeItems)
+                    foreach (var item in items)
                     {
                         sb.AppendLine(LairConverter.ToSectionString(item.Tag, item.LeaderSignature));
                     }
 
                     Clipboard.SetText(sb.ToString());
                 }
+                
+                dataObject.SetData("Lair_SectionTreeItems", Clipboard.ToStream(items));
 
-                _sectionTreeItemList.AddRange(sectionTreeItems.Select(n => n.Clone()));
+                System.Windows.Clipboard.SetDataObject(dataObject);
             }
         }
 
@@ -511,7 +522,7 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                return _chatCategorizeTreeItemList.Count != 0;
+                return System.Windows.Clipboard.ContainsData("Lair_ChatCategorizeTreeItems");
             }
         }
 
@@ -519,17 +530,30 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                return _chatCategorizeTreeItemList.Select(n => n.Clone()).ToArray();
+                try
+                {
+                    using (Stream stream = (Stream)System.Windows.Clipboard.GetData("Lair_ChatCategorizeTreeItems"))
+                    {
+                        return Clipboard.FromStream<IEnumerable<Windows.ChatCategorizeTreeItem>>(stream);
+                    }
+                }
+                catch (Exception)
+                {
+
+                }
+
+                return new Windows.ChatCategorizeTreeItem[0];
             }
         }
 
-        public static void SetChatCategorizeTreeItems(IEnumerable<Windows.ChatCategorizeTreeItem> chatCategorizeTreeItems)
+        public static void SetChatCategorizeTreeItems(IEnumerable<Windows.ChatCategorizeTreeItem> items)
         {
             lock (_thisLock)
             {
-                Clipboard.Clear();
+                System.Windows.DataObject dataObject = new System.Windows.DataObject();
+                dataObject.SetData("Lair_ChatCategorizeTreeItems", Clipboard.ToStream(items));
 
-                _chatCategorizeTreeItemList.AddRange(chatCategorizeTreeItems.Select(n => n.Clone()));
+                System.Windows.Clipboard.SetDataObject(dataObject);
             }
         }
 
@@ -537,7 +561,7 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                return _chatTreeItemList.Count != 0;
+                return System.Windows.Clipboard.ContainsData("Lair_ChatTreeItems");
             }
         }
 
@@ -545,20 +569,32 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                return _chatTreeItemList.Select(n => n.Clone()).ToArray();
+                try
+                {
+                    using (Stream stream = (Stream)System.Windows.Clipboard.GetData("Lair_ChatTreeItems"))
+                    {
+                        return Clipboard.FromStream<IEnumerable<Windows.ChatTreeItem>>(stream);
+                    }
+                }
+                catch (Exception)
+                {
+
+                }
+
+                return new Windows.ChatTreeItem[0];
             }
         }
 
-        public static void SetChatTreeItems(IEnumerable<Windows.ChatTreeItem> chatTreeItems)
+        public static void SetChatTreeItems(IEnumerable<Windows.ChatTreeItem> items)
         {
             lock (_thisLock)
             {
-                Clipboard.Clear();
+                System.Windows.DataObject dataObject = new System.Windows.DataObject();
 
                 {
                     var sb = new StringBuilder();
 
-                    foreach (var item in chatTreeItems)
+                    foreach (var item in items)
                     {
                         sb.AppendLine(LairConverter.ToChatString(item.Tag, null));
                     }
@@ -566,7 +602,9 @@ namespace Lair
                     Clipboard.SetText(sb.ToString());
                 }
 
-                _chatTreeItemList.AddRange(chatTreeItems.Select(n => n.Clone()));
+                dataObject.SetData("Lair_ChatTreeItems", Clipboard.ToStream(items));
+
+                System.Windows.Clipboard.SetDataObject(dataObject);
             }
         }
 
@@ -574,7 +612,7 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                return _mailCategorizeTreeItemList.Count != 0;
+                return System.Windows.Clipboard.ContainsData("Lair_MailCategorizeTreeItems");
             }
         }
 
@@ -582,17 +620,30 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                return _mailCategorizeTreeItemList.Select(n => n.Clone()).ToArray();
+                try
+                {
+                    using (Stream stream = (Stream)System.Windows.Clipboard.GetData("Lair_MailCategorizeTreeItems"))
+                    {
+                        return Clipboard.FromStream<IEnumerable<Windows.MailCategorizeTreeItem>>(stream);
+                    }
+                }
+                catch (Exception)
+                {
+
+                }
+
+                return new Windows.MailCategorizeTreeItem[0];
             }
         }
 
-        public static void SetMailCategorizeTreeItems(IEnumerable<Windows.MailCategorizeTreeItem> mailCategorizeTreeItems)
+        public static void SetMailCategorizeTreeItems(IEnumerable<Windows.MailCategorizeTreeItem> items)
         {
             lock (_thisLock)
             {
-                Clipboard.Clear();
+                System.Windows.DataObject dataObject = new System.Windows.DataObject();
+                dataObject.SetData("Lair_MailCategorizeTreeItems", Clipboard.ToStream(items));
 
-                _mailCategorizeTreeItemList.AddRange(mailCategorizeTreeItems.Select(n => n.Clone()));
+                System.Windows.Clipboard.SetDataObject(dataObject);
             }
         }
 
@@ -600,7 +651,7 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                return _mailTreeItemList.Count != 0;
+                return System.Windows.Clipboard.ContainsData("Lair_MailTreeItems");
             }
         }
 
@@ -608,99 +659,30 @@ namespace Lair
         {
             lock (_thisLock)
             {
-                return _mailTreeItemList.Select(n => n.Clone()).ToArray();
+                try
+                {
+                    using (Stream stream = (Stream)System.Windows.Clipboard.GetData("Lair_MailTreeItems"))
+                    {
+                        return Clipboard.FromStream<IEnumerable<Windows.MailTreeItem>>(stream);
+                    }
+                }
+                catch (Exception)
+                {
+
+                }
+
+                return new Windows.MailTreeItem[0];
             }
         }
 
-        public static void SetMailTreeItems(IEnumerable<Windows.MailTreeItem> mailTreeItems)
+        public static void SetMailTreeItems(IEnumerable<Windows.MailTreeItem> items)
         {
             lock (_thisLock)
             {
-                Clipboard.Clear();
+                System.Windows.DataObject dataObject = new System.Windows.DataObject();
+                dataObject.SetData("Lair_MailTreeItems", Clipboard.ToStream(items));
 
-                _mailTreeItemList.AddRange(mailTreeItems.Select(n => n.Clone()));
-            }
-        }
-
-        public class ClipboardWatcher : IDisposable
-        {
-            private ClipboardWatcherForm _form;
-
-            public event EventHandler DrawClipboard;
-
-            public ClipboardWatcher()
-            {
-                _form = new ClipboardWatcherForm();
-                _form.StartWatch(this.OnDrawClipboard);
-            }
-
-            ~ClipboardWatcher()
-            {
-                this.Dispose();
-            }
-
-            private void OnDrawClipboard()
-            {
-                if (DrawClipboard != null)
-                {
-                    DrawClipboard(this, EventArgs.Empty);
-                }
-            }
-
-            public void Dispose()
-            {
-                _form.Dispose();
-            }
-
-            private class ClipboardWatcherForm : System.Windows.Forms.Form
-            {
-                [DllImport("user32.dll")]
-                private static extern IntPtr SetClipboardViewer(IntPtr hwnd);
-
-                [DllImport("user32.dll")]
-                private static extern bool ChangeClipboardChain(IntPtr hwnd, IntPtr hWndNext);
-
-                private const int WM_DRAWCLIPBOARD = 0x0308;
-                private const int WM_CHANGECBCHAIN = 0x030D;
-
-                private IntPtr _nextHandle;
-                private Action _drawClipboard;
-
-                public void StartWatch(Action drawClipboard)
-                {
-                    _drawClipboard = drawClipboard;
-                    _nextHandle = SetClipboardViewer(this.Handle);
-                }
-
-                protected override void WndProc(ref System.Windows.Forms.Message m)
-                {
-                    if (m.Msg == WM_DRAWCLIPBOARD)
-                    {
-                        _drawClipboard();
-                    }
-                    else if (m.Msg == WM_CHANGECBCHAIN)
-                    {
-                        if (m.WParam == _nextHandle)
-                        {
-                            _nextHandle = m.LParam;
-                        }
-                    }
-
-                    base.WndProc(ref m);
-                }
-
-                protected override void Dispose(bool disposing)
-                {
-                    try
-                    {
-                        ChangeClipboardChain(this.Handle, _nextHandle);
-                        base.Dispose(disposing);
-                    }
-                    catch (Exception)
-                    {
-
-                    }
-                }
+                System.Windows.Clipboard.SetDataObject(dataObject);
             }
         }
     }

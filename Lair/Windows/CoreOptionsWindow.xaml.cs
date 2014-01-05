@@ -496,12 +496,7 @@ namespace Lair.Windows
             var selectItems = _otherNodesListView.SelectedItems;
 
             _otherNodesCopyMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
-
-            {
-                var nodes = Clipboard.GetNodes();
-
-                _otherNodesPasteMenuItem.IsEnabled = (nodes.Count() > 0) ? true : false;
-            }
+            _otherNodesPasteMenuItem.IsEnabled = Clipboard.ContainsNodes();
         }
 
         private void _otherNodesCopyMenuItem_Click(object sender, RoutedEventArgs e)
