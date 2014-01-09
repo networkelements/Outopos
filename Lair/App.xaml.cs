@@ -35,7 +35,7 @@ namespace Lair
 
         public App()
         {
-            App.LairVersion = new Version(2, 0, 10);
+            App.LairVersion = new Version(2, 0, 11);
 
             Directory.SetCurrentDirectory(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
 
@@ -316,6 +316,31 @@ namespace Lair
             finally
             {
                 this.CheckProcess();
+            }
+
+            {
+                Version version;
+
+                using (StreamReader reader = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Amoeba.version"), new UTF8Encoding(false)))
+                {
+                    version = new Version(reader.ReadLine());
+                }
+
+                if (version < new Version(2, 0, 11))
+                {
+                    if (Directory.Exists(App.DirectoryPaths["Work"]))
+                    {
+                        try
+                        {
+                            Directory.Delete(App.DirectoryPaths["Work"], true);
+                            Directory.CreateDirectory(App.DirectoryPaths["Work"]);
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                    }
+                }
             }
 
             this.RunProcess();

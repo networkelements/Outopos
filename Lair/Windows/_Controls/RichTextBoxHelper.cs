@@ -208,7 +208,7 @@ namespace Lair.Windows
                 {
                     var rl = line.Trim();
 
-                    if (rl.StartsWith("Seed@"))
+                    if (rl.StartsWith("Seed:"))
                     {
                         var seed = A.AmoebaConverter.FromSeedString(rl);
                         if (seed == null || !seed.VerifyCertificate()) throw new Exception();
@@ -688,7 +688,7 @@ namespace Lair.Windows
                 {
                     var rl = line.Trim();
 
-                    if (rl.StartsWith("Seed@"))
+                    if (rl.StartsWith("Seed:"))
                     {
                         var seed = A.AmoebaConverter.FromSeedString(rl);
                         if (seed == null || !seed.VerifyCertificate()) throw new Exception();
