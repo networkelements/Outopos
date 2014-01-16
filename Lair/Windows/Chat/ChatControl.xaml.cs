@@ -501,7 +501,7 @@ namespace Lair.Windows
 
                         if (selectTreeViewItem != item)
                         {
-                            textBlock.Foreground = new SolidColorBrush(App.LairColors.Tree_Hit);
+                            textBlock.Foreground = new SolidColorBrush(App.Colors.Tree_Hit);
                         }
                         else
                         {

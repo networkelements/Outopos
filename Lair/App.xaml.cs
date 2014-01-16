@@ -29,7 +29,9 @@ namespace Lair
     {
         public static Version LairVersion { get; private set; }
         public static Dictionary<string, string> DirectoryPaths { get; private set; }
-        public static LairColors LairColors { get; private set; }
+
+        public static LairColors Colors { get; private set; }
+        public static string Cache_Path { get; private set; }
 
         private List<Process> _processList = new List<Process>();
 
@@ -318,26 +320,71 @@ namespace Lair
                 this.CheckProcess();
             }
 
+            if (File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Lair.version")))
             {
                 Version version;
 
-                using (StreamReader reader = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Amoeba.version"), new UTF8Encoding(false)))
+                using (StreamReader reader = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Lair.version"), new UTF8Encoding(false)))
                 {
                     version = new Version(reader.ReadLine());
                 }
 
                 if (version < new Version(2, 0, 11))
                 {
-                    if (Directory.Exists(App.DirectoryPaths["Work"]))
                     {
+                        var torWorkDirectoryPath = Path.Combine(App.DirectoryPaths["Work"], "Tor");
+
+                        if (Directory.Exists(torWorkDirectoryPath))
+                        {
+                            try
+                            {
+                                Directory.Delete(torWorkDirectoryPath, true);
+                            }
+                            catch (Exception)
+                            {
+
+                            }
+                        }
+                    }
+
+                    if (File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Cache.path")))
+                    {
+                        string cachePath;
+
+                        using (StreamReader reader = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Cache.path"), new UTF8Encoding(false)))
+                        {
+                            cachePath = reader.ReadLine();
+                        }
+
+                        using (StreamWriter writer = new StreamWriter(Path.Combine(App.DirectoryPaths["Configuration"], "Cache.settings"), false, new UTF8Encoding(false)))
+                        {
+                            writer.WriteLine(string.Format("{0} {1}", "Path", cachePath));
+                        }
+
                         try
                         {
-                            Directory.Delete(App.DirectoryPaths["Work"], true);
-                            Directory.CreateDirectory(App.DirectoryPaths["Work"]);
+                            File.Delete(Path.Combine(App.DirectoryPaths["Configuration"], "Cache.path"));
                         }
                         catch (Exception)
                         {
 
+                        }
+                    }
+
+                    {
+                        var oldPath = Path.Combine(App.DirectoryPaths["Configuration"], "Startup.settings");
+                        var newPath = Path.Combine(App.DirectoryPaths["Configuration"], "Startup.settings");
+
+                        if (File.Exists(oldPath))
+                        {
+                            try
+                            {
+                                File.Move(oldPath, newPath);
+                            }
+                            catch (Exception)
+                            {
+
+                            }
                         }
                     }
                 }
@@ -347,7 +394,7 @@ namespace Lair
 
             // Colors
             {
-                App.LairColors = new LairColors();
+                App.Colors = new LairColors();
 
                 if (!File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Colors.settings")))
                 {
@@ -360,7 +407,7 @@ namespace Lair
 
                         foreach (var property in list)
                         {
-                            writer.WriteLine(string.Format("{0} {1}", property.Name, (Color)property.GetValue(App.LairColors, null)));
+                            writer.WriteLine(string.Format("{0} {1}", property.Name, (Color)property.GetValue(App.Colors, null)));
                         }
                     }
                 }
@@ -379,7 +426,39 @@ namespace Lair
                             var value = items[1].Trim();
 
                             var property = type.GetProperty(name);
-                            property.SetValue(App.LairColors, (Color)ColorConverter.ConvertFromString(value), null);
+                            property.SetValue(App.Colors, (Color)ColorConverter.ConvertFromString(value), null);
+                        }
+                    }
+                }
+            }
+
+            // Cache
+            {
+                if (!File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Cache.settings")))
+                {
+                    var cachePath = Path.Combine(App.DirectoryPaths["Configuration"], "Cache.blocks");
+
+                    using (StreamWriter writer = new StreamWriter(Path.Combine(App.DirectoryPaths["Configuration"], "Cache.settings"), false, new UTF8Encoding(false)))
+                    {
+                        writer.WriteLine(string.Format("{0} {1}", "Path", cachePath));
+                    }
+                }
+
+                {
+                    using (StreamReader reader = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Cache.settings"), new UTF8Encoding(false)))
+                    {
+                        string line;
+
+                        while ((line = reader.ReadLine()) != null)
+                        {
+                            var items = line.Split(' ');
+                            var name = items[0].Trim();
+                            var value = items[1].Trim();
+
+                            if (name == "Path")
+                            {
+                                App.Cache_Path = value;
+                            }
                         }
                     }
                 }
@@ -390,11 +469,11 @@ namespace Lair
 
         private void CheckProcess()
         {
-            if (!File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Run.xml"))) return;
+            if (!File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Startup.settings"))) return;
 
             var runList = new List<RunItem>();
 
-            using (StreamReader r = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Run.xml"), new UTF8Encoding(false)))
+            using (StreamReader r = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Startup.settings"), new UTF8Encoding(false)))
             using (XmlTextReader xml = new XmlTextReader(r))
             {
                 while (xml.Read())
@@ -490,31 +569,9 @@ namespace Lair
 
         private void RunProcess()
         {
-            Version version = new Version();
-
-            if (File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Lair.version")))
+            if (!File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Startup.settings")))
             {
-                using (StreamReader reader = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Lair.version"), new UTF8Encoding(false)))
-                {
-                    version = new Version(reader.ReadLine());
-                }
-            }
-
-            if (version <= new Version(0, 1, 11))
-            {
-                try
-                {
-                    File.Delete(Path.Combine(App.DirectoryPaths["Configuration"], "Run.xml"));
-                }
-                catch (Exception)
-                {
-
-                }
-            }
-
-            if (!File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Run.xml")))
-            {
-                using (XmlTextWriter xml = new XmlTextWriter(Path.Combine(App.DirectoryPaths["Configuration"], "Run.xml"), new UTF8Encoding(false)))
+                using (XmlTextWriter xml = new XmlTextWriter(Path.Combine(App.DirectoryPaths["Configuration"], "Startup.settings"), new UTF8Encoding(false)))
                 {
                     xml.Formatting = Formatting.Indented;
                     xml.WriteStartDocument();
@@ -551,7 +608,7 @@ namespace Lair
 
             var runList = new List<RunItem>();
 
-            using (StreamReader r = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Run.xml"), new UTF8Encoding(false)))
+            using (StreamReader r = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Startup.settings"), new UTF8Encoding(false)))
             using (XmlTextReader xml = new XmlTextReader(r))
             {
                 while (xml.Read())

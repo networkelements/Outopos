@@ -661,15 +661,15 @@ namespace Lair.Windows
 
             if (isSelect.HasValue && isSelect.Value)
             {
-                color = App.LairColors.Message_Select;
+                color = App.Colors.Message_Select;
             }
             else if (wrapper.IsNew)
             {
-                color = App.LairColors.Message_New;
+                color = App.Colors.Message_New;
             }
             else
             {
-                color = App.LairColors.Message;
+                color = App.Colors.Message;
             }
 
             return new SolidColorBrush(color);
@@ -695,15 +695,15 @@ namespace Lair.Windows
 
             if (isSelect.HasValue && isSelect.Value)
             {
-                color = App.LairColors.Message_Select;
+                color = App.Colors.Message_Select;
             }
             else if (wrapper.IsNew)
             {
-                color = App.LairColors.Message_New;
+                color = App.Colors.Message_New;
             }
             else
             {
-                color = App.LairColors.Message;
+                color = App.Colors.Message;
             }
 
             return new SolidColorBrush(color);
