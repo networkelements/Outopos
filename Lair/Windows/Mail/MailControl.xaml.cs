@@ -1263,7 +1263,6 @@ namespace Lair.Windows
         {
             if ((object)other == null) return false;
             if (object.ReferenceEquals(this, other)) return true;
-            if (this.GetHashCode() != other.GetHashCode()) return false;
 
             if (this.IsNew != other.IsNew
                 || this.IsTrust != other.IsTrust

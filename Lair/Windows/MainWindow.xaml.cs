@@ -218,12 +218,12 @@ namespace Lair.Windows
                 Stopwatch backupStopwatch = new Stopwatch();
                 Stopwatch updateStopwatch = new Stopwatch();
                 Stopwatch uriUpdateStopwatch = new Stopwatch();
-                //Stopwatch GcStopwatch = new Stopwatch();
+                Stopwatch GcStopwatch = new Stopwatch();
                 spaceCheckStopwatch.Start();
                 backupStopwatch.Start();
                 updateStopwatch.Start();
                 uriUpdateStopwatch.Start();
-                //GcStopwatch.Start();
+                GcStopwatch.Start();
 
                 for (; ; )
                 {
@@ -397,21 +397,21 @@ namespace Lair.Windows
                         }
                     }
 
-                    //if (GcStopwatch.Elapsed > new TimeSpan(1, 0, 0))
-                    //{
-                    //    GcStopwatch.Restart();
+                    if (GcStopwatch.Elapsed > new TimeSpan(1, 0, 0))
+                    {
+                        GcStopwatch.Restart();
 
-                    //    try
-                    //    {
-                    //        System.GC.Collect();
-                    //        System.GC.WaitForPendingFinalizers();
-                    //        System.GC.Collect();
-                    //    }
-                    //    catch (Exception e)
-                    //    {
-                    //        Log.Warning(e);
-                    //    }
-                    //}
+                        try
+                        {
+                            System.GC.Collect();
+                            System.GC.WaitForPendingFinalizers();
+                            System.GC.Collect();
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Warning(e);
+                        }
+                    }
                 }
             }
             catch (Exception)
@@ -899,6 +899,12 @@ namespace Lair.Windows
 
                             Settings.Instance.SectionControl_SectionCategorizeTreeItem.SectionTreeItems.Add(sectionTreeItem);
                         }
+                    }
+
+                    if (version < new Version(2, 0, 10))
+                    {
+                        var count = Math.Min(_amoebaManager.ConnectionCountLimit, 25);
+                        _amoebaManager.ConnectionCountLimit = 25;
                     }
                 }
 
