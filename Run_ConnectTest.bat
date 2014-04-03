@@ -1,10 +1,10 @@
 set BATDIR=%~dp0
 cd %BATDIR%
 
-set target="Lair\bin\Debug\Core"
+set target="Outopos\bin\Debug\Core"
 
-md "Lair\bin\Test"
-rd /s /q "Lair\bin\Test\Core"
-xcopy %target% "Lair\bin\Test\Core" /c /s /e /q /h /i /k /r /y
+md "Outopos\bin\Test"
+rd /s /q "Outopos\bin\Test\Core"
+xcopy %target% "Outopos\bin\Test\Core" /c /s /e /q /h /i /k /r /y
 
-call "..\Library\Library.Tool\bin\Debug\Library.Tool.exe" "run" "Lair\bin\Test\Core\Lair.exe"  "Lair\bin\Test\Core"
+call "..\Library\Library.Tool\bin\Debug\Library.Tool.exe" "run" "Outopos\bin\Test\Core\Outopos.exe" "Outopos\bin\Test\Core"
