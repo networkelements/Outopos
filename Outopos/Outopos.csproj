@@ -68,7 +68,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ionic.Zip">
-      <HintPath>.\Ionic.Zip.dll</HintPath>
+      <HintPath>..\Assembly\Ionic.Zip.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
@@ -110,48 +110,34 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Windows\Chat\ChatControl.xaml.cs">
-      <DependentUpon>ChatControl.xaml</DependentUpon>
+    <Compile Include="Utilities\CatharsisManager.cs" />
+    <Compile Include="Utilities\Information\ContentConverter.cs" />
+    <Compile Include="Utilities\Information\Contents\ChatMessageContent.cs" />
+    <Compile Include="Utilities\Information\Contents\ChatTopicContent.cs" />
+    <Compile Include="Utilities\Information\Contents\SectionProfileContent.cs" />
+    <Compile Include="Utilities\Information\Contents\SectionMessageContent.cs" />
+    <Compile Include="Utilities\Information\Contents\WikiPageContent.cs" />
+    <Compile Include="Utilities\Information\Contents\_Interface\IHypertext.cs" />
+    <Compile Include="Utilities\EqualityComparer.cs" />
+    <Compile Include="Utilities\Ipv4AddressFilter.cs" />
+    <Compile Include="Windows\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\Chat\ChatListWindow.xaml.cs">
-      <DependentUpon>ChatListWindow.xaml</DependentUpon>
+    <Compile Include="Windows\ProgressWindow.xaml.cs">
+      <DependentUpon>ProgressWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\Chat\ChatMessageEditWindow.xaml.cs">
-      <DependentUpon>ChatMessageEditWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\Mail\SignatureListWindow.xaml.cs">
-      <DependentUpon>SignatureListWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\Mail\SectionMessageEditWindow.xaml.cs">
-      <DependentUpon>SectionMessageEditWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\Mail\MailControl.xaml.cs">
-      <DependentUpon>MailControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\_Controls\MailCategorizeTreeViewItem.cs" />
-    <Compile Include="Windows\_Controls\MailTreeViewItem.cs" />
+    <Compile Include="Windows\_Controls\ListBoxEx.cs" />
     <Compile Include="Windows\_Controls\RichTextBoxHelper.cs" />
     <Compile Include="Windows\_Controls\ChatCategorizeTreeViewItem.cs" />
     <Compile Include="Windows\_Controls\ChatTreeViewItem.cs" />
     <Compile Include="Windows\_Items\ChatCategorizeTreeItem.cs" />
     <Compile Include="Windows\_Items\ChatTreeItem.cs" />
-    <Compile Include="Windows\Section\NewSectionWindow.xaml.cs">
-      <DependentUpon>NewSectionWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\Section\TrustSignaturesPreviewWindow.xaml.cs">
-      <DependentUpon>TrustSignaturesPreviewWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\_Items\MailCategorizeTreeItem.cs" />
-    <Compile Include="Windows\_Items\MailTreeItem.cs" />
     <Compile Include="Windows\_Items\SignatureTreeItem.cs" />
-    <Compile Include="Extensions.cs" />
-    <Compile Include="MainWindowTabType.cs" />
-    <Compile Include="ObservableCollectionEx.cs" />
-    <Compile Include="OverlayNetworkManager.cs" />
-    <Compile Include="Tools\Sha512.cs" />
-    <Compile Include="NativeMethods.cs" />
-    <Compile Include="TransfarLimitManager.cs" />
-    <Compile Include="WindowPosition.cs" />
+    <Compile Include="Utilities\Extensions.cs" />
+    <Compile Include="Utilities\ObservableCollectionEx.cs" />
+    <Compile Include="Utilities\OverlayNetworkManager.cs" />
+    <Compile Include="Utilities\TransfarLimitManager.cs" />
+    <Compile Include="Utilities\WindowPosition.cs" />
     <Compile Include="Windows\ConnectionControl.xaml.cs">
       <DependentUpon>ConnectionControl.xaml</DependentUpon>
     </Compile>
@@ -160,12 +146,6 @@
     </Compile>
     <Compile Include="Windows\NameWindow.xaml.cs">
       <DependentUpon>NameWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\Section\SectionControl.xaml.cs">
-      <DependentUpon>SectionControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\Section\SectionTreeItemEditWindow.xaml.cs">
-      <DependentUpon>SectionTreeItemEditWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\ViewOptionsWindow.xaml.cs">
       <DependentUpon>ViewOptionsWindow.xaml</DependentUpon>
@@ -188,35 +168,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Windows\Chat\ChatControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\Chat\ChatListWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\Chat\ChatMessageEditWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Windows\ConnectionControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\Mail\SignatureListWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\Mail\SectionMessageEditWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\Mail\MailControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\Section\NewSectionWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -224,31 +176,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Themes\ExpressionDark.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\NameWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\Section\SectionControl.xaml">
+    <Page Include="Windows\ProgressWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\Section\SectionTreeItemEditWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\Section\TrustSignaturesPreviewWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\VersionInformationWindow.xaml">
       <SubType>Designer</SubType>
@@ -256,24 +198,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="Windows\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Page Include="Windows\ViewOptionsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Clipboard.cs" />
-    <Compile Include="MessageConverter.cs" />
+    <Compile Include="Utilities\Clipboard.cs" />
+    <Compile Include="Utilities\MessageConverter.cs" />
     <Compile Include="Properties\LanguagesManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\Settings.cs" />
-    <Compile Include="AutoBaseNodeSettingManager.cs" />
+    <Compile Include="Utilities\AutoBaseNodeSettingManager.cs" />
     <Compile Include="Windows\VersionInformationWindow.xaml.cs">
       <DependentUpon>VersionInformationWindow.xaml</DependentUpon>
     </Compile>
@@ -291,16 +229,16 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Polipo\libgnurx-0.dll">
+    <Content Include="Assembly\Polipo\libgnurx-0.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Polipo\polipo.exe">
+    <Content Include="Assembly\Polipo\polipo.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Tor\tor-resolve.exe">
+    <Content Include="Assembly\Tor\tor-resolve.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Tor\tor.exe">
+    <Content Include="Assembly\Tor\tor.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -337,22 +275,22 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Properties\Lair.License">
+    <Content Include="Properties\Outopos.License">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="Properties\Lair.Readme">
+    <Content Include="Properties\Outopos.Readme">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="app.manifest">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Polipo\polipo.conf">
+    <None Include="Assembly\Polipo\polipo.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Tor\torrc">
+    <None Include="Assembly\Tor\torrc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -360,6 +298,10 @@
     <ProjectReference Include="..\..\Library\Library.Collections\Library.Collections.csproj">
       <Project>{197C654F-2461-446A-B531-4A789F14BE19}</Project>
       <Name>Library.Collections</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Library.Compression\Library.Compression.csproj">
+      <Project>{51eccc57-56cb-44a0-9a43-db596f982fc8}</Project>
+      <Name>Library.Compression</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Library\Library.Configuration\Library.Configuration.csproj">
       <Project>{9AA70F88-4A83-4B3F-B494-7D37EA95766A}</Project>
@@ -370,16 +312,16 @@
       <Name>Library.Io</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Library\Library.Net.Amoeba\Library.Net.Amoeba.csproj">
-      <Project>{82230C99-6599-4130-AAC9-FC926ABC0724}</Project>
+      <Project>{82230c99-6599-4130-aac9-fc926abc0724}</Project>
       <Name>Library.Net.Amoeba</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Library\Library.Net.Caps\Library.Net.Caps.csproj">
-      <Project>{364FD425-45B7-41D5-A180-1CE912C7BA31}</Project>
-      <Name>Library.Net.Caps</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Library\Library.Net.Connections\Library.Net.Connections.csproj">
       <Project>{38994E3C-0699-4D6C-AD02-F9F657340347}</Project>
       <Name>Library.Net.Connections</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Library.Net.Outopos\Library.Net.Outopos.csproj">
+      <Project>{ae8fe1eb-0280-48ce-a26a-f58e3ffe6b5d}</Project>
+      <Name>Library.Net.Outopos</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Library\Library.Net.Upnp\Library.Net.Upnp.csproj">
       <Project>{7688AECF-92BD-4212-AAD8-6CD6D42BA6E3}</Project>

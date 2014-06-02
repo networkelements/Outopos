@@ -33,7 +33,7 @@ namespace Outopos.Properties
         static LanguagesManager()
         {
 #if DEBUG
-            string path = @"C:\Local\Project\Outopos\Outopos\bin\Debug\Core\Languages";
+            string path = @"C:\Local\Project\Alliance-Network\Outopos\Outopos\bin\Debug\Core\Languages";
 
             if (!Directory.Exists(path))
                 path = Path.Combine(Directory.GetCurrentDirectory(), "Languages");

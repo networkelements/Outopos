@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Configuration;
 using System.Data;
@@ -7,6 +8,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -25,19 +29,57 @@ namespace Outopos
     /// <summary>
     /// App.xaml の相互作用ロジック
     /// </summary>
-    public partial class App : Application
+    partial class App : Application
     {
         public static Version OutoposVersion { get; private set; }
         public static Dictionary<string, string> DirectoryPaths { get; private set; }
 
-        public static OutoposColors Colors { get; private set; }
-        public static string Cache_Path { get; private set; }
+        // Startup
+        private static List<Process> _processList = new List<Process>();
 
-        private List<Process> _processList = new List<Process>();
+        // Catharsis
+        public static CatharsisSettings Catharsis { get; private set; }
 
-        public App()
+        // Colors
+        public static ColorsSettings Colors { get; private set; }
+
+        // Cache
+        public static CacheSettings Cache { get; private set; }
+
+        App()
         {
-            App.OutoposVersion = new Version(2, 0, 11);
+            App.OutoposVersion = new Version(2, 0, 73);
+
+            {
+                var currentProcess = Process.GetCurrentProcess();
+
+                currentProcess.PriorityClass = ProcessPriorityClass.Idle;
+                currentProcess.SetMemoryPriority(3);
+            }
+
+            {
+                OperatingSystem osInfo = System.Environment.OSVersion;
+
+                // Windows Vista以上。
+                if (osInfo.Platform == PlatformID.Win32NT && osInfo.Version >= new Version(6, 0))
+                {
+                    // SHA512Cngをデフォルトで使うように設定する。
+                    CryptoConfig.AddAlgorithm(typeof(SHA512Cng),
+                        "SHA512",
+                        "SHA512Cng",
+                        "System.Security.Cryptography.SHA512",
+                        "System.Security.Cryptography.SHA512Cng");
+                }
+                else
+                {
+                    // SHA512Managedをデフォルトで使うように設定する。
+                    CryptoConfig.AddAlgorithm(typeof(SHA512Managed),
+                        "SHA512",
+                        "SHA512Managed",
+                        "System.Security.Cryptography.SHA512",
+                        "System.Security.Cryptography.SHA512Managed");
+                }
+            }
 
             Directory.SetCurrentDirectory(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
 
@@ -100,8 +142,7 @@ namespace Outopos
             {
                 try
                 {
-                    FileStream fs = new FileStream(path, FileMode.CreateNew);
-                    return fs;
+                    return new FileStream(path, FileMode.CreateNew);
                 }
                 catch (DirectoryNotFoundException)
                 {
@@ -126,8 +167,7 @@ namespace Outopos
                 {
                     try
                     {
-                        FileStream fs = new FileStream(text, FileMode.CreateNew);
-                        return fs;
+                        return new FileStream(text, FileMode.CreateNew);
                     }
                     catch (DirectoryNotFoundException)
                     {
@@ -160,64 +200,66 @@ namespace Outopos
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            // 多重起動防止
-            {
-                Process currentProcess = Process.GetCurrentProcess();
-
-                // 同一パスのプロセスが存在する場合、終了する。
-                foreach (Process p in Process.GetProcessesByName(currentProcess.ProcessName))
-                {
-                    if (p.Id == currentProcess.Id) continue;
-
-                    try
-                    {
-                        if (p.MainModule.FileName == Path.GetFullPath(Assembly.GetEntryAssembly().Location))
-                        {
-                            this.Shutdown();
-
-                            return;
-                        }
-                    }
-                    catch (Exception)
-                    {
-
-                    }
-                }
-
-                string updateInformationFilePath = Path.Combine(App.DirectoryPaths["Configuration"], "Outopos.update");
-
-                // アップデート中の場合、終了する。
-                if (File.Exists(updateInformationFilePath))
-                {
-                    using (FileStream stream = new FileStream(updateInformationFilePath, FileMode.Open))
-                    using (StreamReader reader = new StreamReader(stream, new UTF8Encoding(false)))
-                    {
-                        var updateExeFilePath = reader.ReadLine();
-
-                        foreach (var p in Process.GetProcessesByName(Path.GetFileNameWithoutExtension(updateExeFilePath)))
-                        {
-                            try
-                            {
-                                if (Path.GetFileName(p.MainModule.FileName) == updateExeFilePath)
-                                {
-                                    this.Shutdown();
-
-                                    return;
-                                }
-                            }
-                            catch (Exception)
-                            {
-
-                            }
-                        }
-                    }
-
-                    File.Delete(updateInformationFilePath);
-                }
-            }
-
             try
             {
+                // 多重起動防止
+                {
+                    Process currentProcess = Process.GetCurrentProcess();
+
+                    // 同一パスのプロセスが存在する場合、終了する。
+                    foreach (Process p in Process.GetProcessesByName(currentProcess.ProcessName))
+                    {
+                        if (p.Id == currentProcess.Id) continue;
+
+                        try
+                        {
+                            if (p.MainModule.FileName == Path.GetFullPath(Assembly.GetEntryAssembly().Location))
+                            {
+                                this.Shutdown();
+
+                                return;
+                            }
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                    }
+
+                    string updateInformationFilePath = Path.Combine(App.DirectoryPaths["Configuration"], "Outopos.update");
+
+                    // アップデート中の場合、終了する。
+                    if (File.Exists(updateInformationFilePath))
+                    {
+                        using (FileStream stream = new FileStream(updateInformationFilePath, FileMode.Open))
+                        using (StreamReader reader = new StreamReader(stream, new UTF8Encoding(false)))
+                        {
+                            var updateExeFilePath = reader.ReadLine();
+
+                            foreach (var p in Process.GetProcessesByName(Path.GetFileNameWithoutExtension(updateExeFilePath)))
+                            {
+                                try
+                                {
+                                    if (Path.GetFileName(p.MainModule.FileName) == updateExeFilePath)
+                                    {
+                                        this.Shutdown();
+
+                                        return;
+                                    }
+                                }
+                                catch (Exception)
+                                {
+
+                                }
+                            }
+                        }
+
+                        File.Delete(updateInformationFilePath);
+                    }
+                }
+
+                App.ShutdownProcesses();
+
                 // アップデート
                 if (Directory.Exists(App.DirectoryPaths["Update"]))
                 {
@@ -269,7 +311,6 @@ namespace Outopos
                             using (ZipFile zipfile = new ZipFile(zipFilePath))
                             {
                                 zipfile.ExtractExistingFile = ExtractExistingFileAction.OverwriteSilently;
-                                zipfile.UseUnicodeAsNecessary = true;
                                 zipfile.ExtractAll(tempCoreDirectoryPath);
                             }
                         }
@@ -314,56 +355,86 @@ namespace Outopos
                         return;
                     }
                 }
-            }
-            finally
-            {
-                this.CheckProcess();
-            }
 
-            if (File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Outopos.version")))
-            {
-                Version version;
-
-                using (StreamReader reader = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Outopos.version"), new UTF8Encoding(false)))
+                // バージョンアップ処理。
+                if (File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Outopos.version")))
                 {
-                    version = new Version(reader.ReadLine());
-                }
+                    Version version;
 
-                if (version < new Version(2, 0, 11))
-                {
+                    using (StreamReader reader = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Outopos.version"), new UTF8Encoding(false)))
                     {
-                        var torWorkDirectoryPath = Path.Combine(App.DirectoryPaths["Work"], "Tor");
+                        version = new Version(reader.ReadLine());
+                    }
 
-                        if (Directory.Exists(torWorkDirectoryPath))
+                    if (version < new Version(2, 0, 20))
+                    {
+                        if (File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Cache.path")))
                         {
+                            string cachePath;
+
+                            using (StreamReader reader = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Cache.path"), new UTF8Encoding(false)))
+                            {
+                                cachePath = reader.ReadLine();
+                            }
+
+                            using (StreamWriter writer = new StreamWriter(Path.Combine(App.DirectoryPaths["Configuration"], "Cache.settings"), false, new UTF8Encoding(false)))
+                            {
+                                writer.WriteLine(string.Format("{0} {1}", "Path", cachePath));
+                            }
+
                             try
                             {
-                                Directory.Delete(torWorkDirectoryPath, true);
+                                File.Delete(Path.Combine(App.DirectoryPaths["Configuration"], "Cache.path"));
                             }
                             catch (Exception)
                             {
 
                             }
                         }
+
+                        {
+                            var oldPath = Path.Combine(App.DirectoryPaths["Configuration"], "Run.xml");
+                            var newPath = Path.Combine(App.DirectoryPaths["Configuration"], "Startup.settings");
+
+                            if (File.Exists(oldPath))
+                            {
+                                try
+                                {
+                                    File.Move(oldPath, newPath);
+                                }
+                                catch (Exception)
+                                {
+
+                                }
+                            }
+                        }
                     }
 
-                    if (File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Cache.path")))
+                    if (version < new Version(2, 0, 28))
                     {
-                        string cachePath;
-
-                        using (StreamReader reader = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Cache.path"), new UTF8Encoding(false)))
                         {
-                            cachePath = reader.ReadLine();
-                        }
+                            var torWorkDirectoryPath = Path.Combine(App.DirectoryPaths["Work"], "Tor");
 
-                        using (StreamWriter writer = new StreamWriter(Path.Combine(App.DirectoryPaths["Configuration"], "Cache.settings"), false, new UTF8Encoding(false)))
-                        {
-                            writer.WriteLine(string.Format("{0} {1}", "Path", cachePath));
-                        }
+                            if (Directory.Exists(torWorkDirectoryPath))
+                            {
+                                try
+                                {
+                                    Directory.Delete(torWorkDirectoryPath, true);
+                                }
+                                catch (Exception)
+                                {
 
+                                }
+                            }
+                        }
+                    }
+
+                    if (version < new Version(2, 0, 52))
+                    {
                         try
                         {
-                            File.Delete(Path.Combine(App.DirectoryPaths["Configuration"], "Cache.path"));
+                            // Startup.settingsを初期化。
+                            File.Delete(Path.Combine(App.DirectoryPaths["Configuration"], "Startup.settings"));
                         }
                         catch (Exception)
                         {
@@ -371,103 +442,196 @@ namespace Outopos
                         }
                     }
 
+                    if (version < new Version(2, 0, 58))
                     {
-                        var oldPath = Path.Combine(App.DirectoryPaths["Configuration"], "Startup.settings");
-                        var newPath = Path.Combine(App.DirectoryPaths["Configuration"], "Startup.settings");
-
-                        if (File.Exists(oldPath))
+                        try
                         {
-                            try
-                            {
-                                File.Move(oldPath, newPath);
-                            }
-                            catch (Exception)
-                            {
+                            // Catharsis.settingsを初期化。
+                            File.Delete(Path.Combine(App.DirectoryPaths["Configuration"], "Catharsis.settings"));
+                        }
+                        catch (Exception)
+                        {
 
+                        }
+                    }
+
+                    if (version < new Version(2, 0, 61))
+                    {
+                        try
+                        {
+                            var oldPath = Path.Combine(App.DirectoryPaths["Configuration"], "Library/Net/Outopos/OutoposManager/ConnectionManager");
+                            var newPath = Path.Combine(App.DirectoryPaths["Configuration"], "Library/Net/Outopos/OutoposManager/ConnectionsManager");
+
+                            if (Directory.Exists(oldPath))
+                            {
+                                Directory.Move(oldPath, newPath);
                             }
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                    }
+
+                    if (version < new Version(2, 0, 72))
+                    {
+                        try
+                        {
+                            // Environment.settingsを削除。
+                            File.Delete(Path.Combine(App.DirectoryPaths["Configuration"], "Environment.settings"));
+                        }
+                        catch (Exception)
+                        {
+
                         }
                     }
                 }
+
+                App.StartupProcesses();
+
+                App.CatharsisSettings();
+                App.CacheSettings();
+                App.ColorsSettings();
+
+                this.StartupUri = new Uri("Windows/MainWindow.xaml", UriKind.Relative);
             }
-
-            this.RunProcess();
-
-            // Colors
+            catch (Exception ex)
             {
-                App.Colors = new OutoposColors();
+                MessageBox.Show(ex.Message);
 
-                if (!File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Colors.settings")))
-                {
-                    Type type = typeof(OutoposColors);
-
-                    using (StreamWriter writer = new StreamWriter(Path.Combine(App.DirectoryPaths["Configuration"], "Colors.settings"), false, new UTF8Encoding(false)))
-                    {
-                        var list = type.GetProperties().ToList();
-                        list.Sort((x, y) => x.Name.CompareTo(y.Name));
-
-                        foreach (var property in list)
-                        {
-                            writer.WriteLine(string.Format("{0} {1}", property.Name, (Color)property.GetValue(App.Colors, null)));
-                        }
-                    }
-                }
-
-                {
-                    Type type = typeof(OutoposColors);
-
-                    using (StreamReader reader = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Colors.settings"), new UTF8Encoding(false)))
-                    {
-                        string line;
-
-                        while ((line = reader.ReadLine()) != null)
-                        {
-                            var items = line.Split(' ');
-                            var name = items[0].Trim();
-                            var value = items[1].Trim();
-
-                            var property = type.GetProperty(name);
-                            property.SetValue(App.Colors, (Color)ColorConverter.ConvertFromString(value), null);
-                        }
-                    }
-                }
+                this.Shutdown();
             }
-
-            // Cache
-            {
-                if (!File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Cache.settings")))
-                {
-                    var cachePath = Path.Combine(App.DirectoryPaths["Configuration"], "Cache.blocks");
-
-                    using (StreamWriter writer = new StreamWriter(Path.Combine(App.DirectoryPaths["Configuration"], "Cache.settings"), false, new UTF8Encoding(false)))
-                    {
-                        writer.WriteLine(string.Format("{0} {1}", "Path", cachePath));
-                    }
-                }
-
-                {
-                    using (StreamReader reader = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Cache.settings"), new UTF8Encoding(false)))
-                    {
-                        string line;
-
-                        while ((line = reader.ReadLine()) != null)
-                        {
-                            var items = line.Split(' ');
-                            var name = items[0].Trim();
-                            var value = items[1].Trim();
-
-                            if (name == "Path")
-                            {
-                                App.Cache_Path = value;
-                            }
-                        }
-                    }
-                }
-            }
-
-            this.StartupUri = new Uri("Windows/MainWindow.xaml", UriKind.Relative);
         }
 
-        private void CheckProcess()
+        private static void StartupProcesses()
+        {
+            if (!File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Startup.settings")))
+            {
+                using (XmlTextWriter xml = new XmlTextWriter(Path.Combine(App.DirectoryPaths["Configuration"], "Startup.settings"), new UTF8Encoding(false)))
+                {
+                    xml.Formatting = Formatting.Indented;
+                    xml.WriteStartDocument();
+
+                    xml.WriteStartElement("Configuration");
+
+                    {
+                        xml.WriteStartElement("Process");
+
+                        xml.WriteElementString("Path", @"Assembly\Tor\tor.exe");
+                        xml.WriteElementString("Arguments", "-f torrc DataDirectory " + @"..\..\..\Work\Tor");
+                        xml.WriteElementString("WorkingDirectory", @"Assembly\Tor");
+
+                        xml.WriteEndElement(); //Process
+                    }
+
+                    {
+                        xml.WriteStartElement("Process");
+
+                        xml.WriteElementString("Path", @"Assembly\Polipo\polipo.exe");
+                        xml.WriteElementString("Arguments", "-c polipo.conf");
+                        xml.WriteElementString("WorkingDirectory", @"Assembly\Polipo");
+
+                        xml.WriteEndElement(); //Process
+                    }
+
+                    xml.WriteEndElement(); //Configuration
+
+                    xml.WriteEndDocument();
+                    xml.Flush();
+                }
+            }
+
+            var runList = new List<RunItem>();
+
+            using (StreamReader r = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Startup.settings"), new UTF8Encoding(false)))
+            using (XmlTextReader xml = new XmlTextReader(r))
+            {
+                while (xml.Read())
+                {
+                    if (xml.NodeType == XmlNodeType.Element)
+                    {
+                        if (xml.LocalName == "Process")
+                        {
+                            string path = null;
+                            string arguments = null;
+                            string workingDirectory = null;
+
+                            using (var xmlSubtree = xml.ReadSubtree())
+                            {
+                                while (xmlSubtree.Read())
+                                {
+                                    if (xmlSubtree.NodeType == XmlNodeType.Element)
+                                    {
+                                        if (xmlSubtree.LocalName == "Path")
+                                        {
+                                            try
+                                            {
+                                                path = xmlSubtree.ReadString();
+                                            }
+                                            catch (Exception)
+                                            {
+
+                                            }
+                                        }
+                                        else if (xml.LocalName == "Arguments")
+                                        {
+                                            try
+                                            {
+                                                arguments = xmlSubtree.ReadString();
+                                            }
+                                            catch (Exception)
+                                            {
+
+                                            }
+                                        }
+                                        else if (xmlSubtree.LocalName == "WorkingDirectory")
+                                        {
+                                            try
+                                            {
+                                                workingDirectory = xmlSubtree.ReadString();
+                                            }
+                                            catch (Exception)
+                                            {
+
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            runList.Add(new RunItem()
+                            {
+                                Path = path,
+                                Arguments = arguments,
+                                WorkingDirectory = workingDirectory
+                            });
+                        }
+                    }
+                }
+            }
+
+            Parallel.ForEach(runList, new ParallelOptions() { MaxDegreeOfParallelism = 8 }, item =>
+            {
+                try
+                {
+                    Process process = new Process();
+                    process.StartInfo.FileName = item.Path;
+                    process.StartInfo.Arguments = item.Arguments;
+                    process.StartInfo.WorkingDirectory = item.WorkingDirectory;
+                    process.StartInfo.CreateNoWindow = true;
+                    process.StartInfo.UseShellExecute = false;
+                    process.Start();
+
+                    _processList.Add(process);
+                }
+                catch (Exception)
+                {
+
+                }
+            });
+        }
+
+        private static void ShutdownProcesses()
         {
             if (!File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Startup.settings"))) return;
 
@@ -486,17 +650,17 @@ namespace Outopos
                             string arguments = null;
                             string workingDirectory = null;
 
-                            using (var xmlReader = xml.ReadSubtree())
+                            using (var xmlSubtree = xml.ReadSubtree())
                             {
-                                while (xmlReader.Read())
+                                while (xmlSubtree.Read())
                                 {
-                                    if (xmlReader.NodeType == XmlNodeType.Element)
+                                    if (xmlSubtree.NodeType == XmlNodeType.Element)
                                     {
-                                        if (xmlReader.LocalName == "Path")
+                                        if (xmlSubtree.LocalName == "Path")
                                         {
                                             try
                                             {
-                                                path = xmlReader.ReadString();
+                                                path = xmlSubtree.ReadString();
                                             }
                                             catch (Exception)
                                             {
@@ -507,18 +671,18 @@ namespace Outopos
                                         {
                                             try
                                             {
-                                                arguments = xmlReader.ReadString();
+                                                arguments = xmlSubtree.ReadString();
                                             }
                                             catch (Exception)
                                             {
 
                                             }
                                         }
-                                        else if (xmlReader.LocalName == "WorkingDirectory")
+                                        else if (xmlSubtree.LocalName == "WorkingDirectory")
                                         {
                                             try
                                             {
-                                                workingDirectory = xmlReader.ReadString();
+                                                workingDirectory = xmlSubtree.ReadString();
                                             }
                                             catch (Exception)
                                             {
@@ -567,11 +731,20 @@ namespace Outopos
             });
         }
 
-        private void RunProcess()
+        private class RunItem
         {
-            if (!File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Startup.settings")))
+            public string Path { get; set; }
+            public string Arguments { get; set; }
+            public string WorkingDirectory { get; set; }
+        }
+
+        private static void CatharsisSettings()
+        {
+            App.Catharsis = new CatharsisSettings();
+
+            if (!File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Catharsis.settings")))
             {
-                using (XmlTextWriter xml = new XmlTextWriter(Path.Combine(App.DirectoryPaths["Configuration"], "Startup.settings"), new UTF8Encoding(false)))
+                using (XmlTextWriter xml = new XmlTextWriter(Path.Combine(App.DirectoryPaths["Configuration"], "Catharsis.settings"), new UTF8Encoding(false)))
                 {
                     xml.Formatting = Formatting.Indented;
                     xml.WriteStartDocument();
@@ -579,24 +752,28 @@ namespace Outopos
                     xml.WriteStartElement("Configuration");
 
                     {
-                        var path = Path.Combine(App.DirectoryPaths["Work"], "Tor");
-                        Directory.CreateDirectory(path);
+                        xml.WriteStartElement("Ipv4AddressFilter");
 
-                        xml.WriteStartElement("Process");
-                        xml.WriteElementString("Path", @"Tor\tor.exe");
-                        xml.WriteElementString("Arguments", "-f torrc DataDirectory " + @"..\..\Work\Tor");
-                        xml.WriteElementString("WorkingDirectory", "Tor");
+                        {
+                            xml.WriteStartElement("Proxy");
 
-                        xml.WriteEndElement(); //Process
-                    }
+                            xml.WriteElementString("Uri", @"tcp:127.0.0.1:18118");
 
-                    {
-                        xml.WriteStartElement("Process");
-                        xml.WriteElementString("Path", @"Polipo\polipo.exe");
-                        xml.WriteElementString("Arguments", "-c polipo.conf");
-                        xml.WriteElementString("WorkingDirectory", "Polipo");
+                            xml.WriteEndElement(); //Proxy
+                        }
 
-                        xml.WriteEndElement(); //Process
+                        {
+                            xml.WriteStartElement("Targets");
+
+                            // https://www.iblocklist.com/lists.php
+                            // 政府系IP、反P2P系企業IPを選択的にブロック。
+                            xml.WriteComment(@"<Url>http://list.iblocklist.com/lists/bluetack/level-1</Url>");
+                            xml.WriteComment(@"<Url>http://list.iblocklist.com/lists/tbg/primary-threats</Url>");
+
+                            xml.WriteEndElement(); //Targets
+                        }
+
+                        xml.WriteEndElement(); //Ipv4AddressFilter
                     }
 
                     xml.WriteEndElement(); //Configuration
@@ -606,94 +783,170 @@ namespace Outopos
                 }
             }
 
-            var runList = new List<RunItem>();
+            List<Ipv4AddressFilter> ipv4AddressFilters = new List<Ipv4AddressFilter>();
 
-            using (StreamReader r = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Startup.settings"), new UTF8Encoding(false)))
+            using (StreamReader r = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Catharsis.settings"), new UTF8Encoding(false)))
             using (XmlTextReader xml = new XmlTextReader(r))
             {
                 while (xml.Read())
                 {
                     if (xml.NodeType == XmlNodeType.Element)
                     {
-                        if (xml.LocalName == "Process")
+                        if (xml.LocalName == "Ipv4AddressFilter")
                         {
-                            string path = null;
-                            string arguments = null;
-                            string workingDirectory = null;
+                            string proxyUri = null;
+                            List<string> urls = new List<string>();
 
-                            using (var xmlReader = xml.ReadSubtree())
+                            using (var xmlSubtree = xml.ReadSubtree())
                             {
-                                while (xmlReader.Read())
+                                while (xmlSubtree.Read())
                                 {
-                                    if (xmlReader.NodeType == XmlNodeType.Element)
+                                    if (xmlSubtree.NodeType == XmlNodeType.Element)
                                     {
-                                        if (xmlReader.LocalName == "Path")
+                                        if (xmlSubtree.LocalName == "Proxy")
                                         {
-                                            try
+                                            using (var xmlSubtree2 = xmlSubtree.ReadSubtree())
                                             {
-                                                path = xmlReader.ReadString();
-                                            }
-                                            catch (Exception)
-                                            {
+                                                while (xmlSubtree2.Read())
+                                                {
+                                                    if (xmlSubtree2.NodeType == XmlNodeType.Element)
+                                                    {
+                                                        if (xmlSubtree2.LocalName == "Uri")
+                                                        {
+                                                            try
+                                                            {
+                                                                proxyUri = xmlSubtree2.ReadString();
+                                                            }
+                                                            catch (Exception)
+                                                            {
 
+                                                            }
+                                                        }
+                                                    }
+                                                }
                                             }
                                         }
-                                        else if (xml.LocalName == "Arguments")
+                                        else if (xmlSubtree.LocalName == "Targets")
                                         {
-                                            try
+                                            using (var xmlSubtree2 = xmlSubtree.ReadSubtree())
                                             {
-                                                arguments = xmlReader.ReadString();
-                                            }
-                                            catch (Exception)
-                                            {
+                                                while (xmlSubtree2.Read())
+                                                {
+                                                    if (xmlSubtree2.NodeType == XmlNodeType.Element)
+                                                    {
+                                                        if (xmlSubtree2.LocalName == "Url")
+                                                        {
+                                                            try
+                                                            {
+                                                                urls.Add(xmlSubtree2.ReadString());
+                                                            }
+                                                            catch (Exception)
+                                                            {
 
-                                            }
-                                        }
-                                        else if (xmlReader.LocalName == "WorkingDirectory")
-                                        {
-                                            try
-                                            {
-                                                workingDirectory = xmlReader.ReadString();
-                                            }
-                                            catch (Exception)
-                                            {
-
+                                                            }
+                                                        }
+                                                    }
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
 
-                            runList.Add(new RunItem()
-                            {
-                                Path = path,
-                                Arguments = arguments,
-                                WorkingDirectory = workingDirectory
-                            });
+                            App.Catharsis.Ipv4AddressFilters.Add(new Ipv4AddressFilter(proxyUri, urls));
                         }
                     }
                 }
             }
+        }
 
-            Parallel.ForEach(runList, new ParallelOptions() { MaxDegreeOfParallelism = 8 }, item =>
+        private static void CacheSettings()
+        {
+            App.Cache = new CacheSettings();
+
+            // Initialize
             {
-                try
-                {
-                    Process process = new Process();
-                    process.StartInfo.FileName = item.Path;
-                    process.StartInfo.Arguments = item.Arguments;
-                    process.StartInfo.WorkingDirectory = item.WorkingDirectory;
-                    process.StartInfo.CreateNoWindow = true;
-                    process.StartInfo.UseShellExecute = false;
-                    process.Start();
+                App.Cache.Path = Path.Combine(App.DirectoryPaths["Configuration"], "Cache.blocks");
+            }
 
-                    _processList.Add(process);
-                }
-                catch (Exception)
+            if (!File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Cache.settings")))
+            {
+                using (StreamWriter writer = new StreamWriter(Path.Combine(App.DirectoryPaths["Configuration"], "Cache.settings"), false, new UTF8Encoding(false)))
                 {
-
+                    writer.WriteLine(string.Format("{0} {1}", "Path", App.Cache.Path));
                 }
-            });
+            }
+
+            {
+                using (StreamReader reader = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Cache.settings"), new UTF8Encoding(false)))
+                {
+                    string line;
+
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        var index = line.IndexOf(' ');
+                        var name = line.Substring(0, index);
+                        var value = line.Substring(index + 1);
+
+                        if (name == "Path")
+                        {
+                            App.Cache.Path = value;
+                        }
+                    }
+                }
+            }
+        }
+
+        private static void ColorsSettings()
+        {
+            App.Colors = new ColorsSettings();
+
+            // Initialize
+            {
+                App.Colors.Tree_Hit = System.Windows.Media.Colors.LightPink;
+                App.Colors.Link = System.Windows.Media.Colors.SkyBlue;
+                App.Colors.Link_New = System.Windows.Media.Colors.LightPink;
+                App.Colors.Message = System.Windows.Media.Colors.Black;
+                App.Colors.Message_New = System.Windows.Media.Colors.LightPink;
+                App.Colors.Message_Trust = System.Windows.Media.Colors.SkyBlue;
+                App.Colors.Message_Untrust = System.Windows.Media.Colors.LightPink;
+                App.Colors.Message_Select = System.Windows.Media.Colors.White;
+            }
+
+            if (!File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Colors.settings")))
+            {
+                Type type = typeof(ColorsSettings);
+
+                using (StreamWriter writer = new StreamWriter(Path.Combine(App.DirectoryPaths["Configuration"], "Colors.settings"), false, new UTF8Encoding(false)))
+                {
+                    var list = type.GetProperties().ToList();
+                    list.Sort((x, y) => x.Name.CompareTo(y.Name));
+
+                    foreach (var property in list)
+                    {
+                        writer.WriteLine(string.Format("{0} {1}", property.Name, (Color)property.GetValue(App.Colors, null)));
+                    }
+                }
+            }
+
+            {
+                Type type = typeof(ColorsSettings);
+
+                using (StreamReader reader = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Colors.settings"), new UTF8Encoding(false)))
+                {
+                    string line;
+
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        var index = line.IndexOf(' ');
+                        var name = line.Substring(0, index);
+                        var value = line.Substring(index + 1);
+
+                        var property = type.GetProperty(name);
+                        property.SetValue(App.Colors, (Color)ColorConverter.ConvertFromString(value), null);
+                    }
+                }
+            }
         }
 
         private void Application_Exit(object sender, ExitEventArgs e)
@@ -711,36 +964,38 @@ namespace Outopos
                 }
             });
         }
+    }
 
-        private class RunItem
+    class CatharsisSettings
+    {
+        private static List<Ipv4AddressFilter> _ipv4AddressFilters;
+
+        public List<Ipv4AddressFilter> Ipv4AddressFilters
         {
-            public string Path { get; set; }
-            public string Arguments { get; set; }
-            public string WorkingDirectory { get; set; }
+            get
+            {
+                if (_ipv4AddressFilters == null)
+                    _ipv4AddressFilters = new List<Ipv4AddressFilter>();
+
+                return _ipv4AddressFilters;
+            }
         }
     }
 
-    public class OutoposColors
+    class ColorsSettings
     {
-        public OutoposColors()
-        {
-            this.Tree_Hit = Colors.LightPink;
-            this.Link = Colors.SkyBlue;
-            this.Link_New = Colors.LightPink;
-            this.Message = Colors.Black;
-            this.Message_New = Colors.LightPink;
-            this.Message_Trust = Colors.SkyBlue;
-            this.Message_Untrust = Colors.LightPink;
-            this.Message_Select = Colors.White;
-        }
+        public System.Windows.Media.Color Tree_Hit { get; set; }
+        public System.Windows.Media.Color Link { get; set; }
+        public System.Windows.Media.Color Link_New { get; set; }
+        public System.Windows.Media.Color Message { get; set; }
+        public System.Windows.Media.Color Message_New { get; set; }
+        public System.Windows.Media.Color Message_Trust { get; set; }
+        public System.Windows.Media.Color Message_Untrust { get; set; }
+        public System.Windows.Media.Color Message_Select { get; set; }
+    }
 
-        public Color Tree_Hit { get; set; }
-        public Color Link { get; set; }
-        public Color Link_New { get; set; }
-        public Color Message { get; set; }
-        public Color Message_New { get; set; }
-        public Color Message_Trust { get; set; }
-        public Color Message_Untrust { get; set; }
-        public Color Message_Select { get; set; }
+    class CacheSettings
+    {
+        public string Path { get; set; }
     }
 }

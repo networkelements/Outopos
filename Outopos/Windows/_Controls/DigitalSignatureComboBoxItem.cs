@@ -1,14 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Xml;
-using Library;
-using Library.Net.Outopos;
-using Library.Security;
 using System.Windows.Controls;
+using Library.Security;
 
 namespace Outopos.Windows
 {

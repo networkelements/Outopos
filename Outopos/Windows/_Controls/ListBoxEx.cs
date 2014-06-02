@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace Outopos.Windows
 {
-    class ListViewEx : ListView
+    class ListBoxEx : ListBox
     {
         public new void SetSelectedItems(IEnumerable selectedItems)
         {

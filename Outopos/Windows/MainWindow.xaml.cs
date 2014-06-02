@@ -40,6 +40,14 @@ namespace Outopos.Windows
 {
     public delegate void DebugLog(string message);
 
+    public enum MainWindowTabType
+    {
+        Connection,
+        Section,
+        Mail,
+        Log,
+    }
+
     /// <summary>
     /// MainWindow.xaml の相互作用ロジック
     /// </summary>
@@ -70,6 +78,21 @@ namespace Outopos.Windows
         private string _cacheBlocksPath;
 
         private volatile MainWindowTabType _selectedTab;
+
+        [FlagsAttribute]
+        enum ExecutionState : uint
+        {
+            Null = 0,
+            SystemRequired = 1,
+            DisplayRequired = 2,
+            Continuous = 0x80000000,
+        }
+
+        static class NativeMethods
+        {
+            [DllImport("kernel32.dll")]
+            public extern static ExecutionState SetThreadExecutionState(ExecutionState esFlags);
+        }
 
         public MainWindow()
         {

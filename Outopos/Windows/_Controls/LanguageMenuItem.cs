@@ -1,13 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Xml;
-using Library;
-using Library.Net.Outopos;
-using Library.Security;
 using System.Windows.Controls;
 using Outopos.Properties;
 
@@ -19,7 +9,7 @@ namespace Outopos.Windows
 
         public LanguageMenuItem()
         {
-            LanguagesManager.UsingLanguageChangedEvent += new UsingLanguageChangedEventHandler(this.LanguagesManager_UsingLanguageChangedEvent);
+            LanguagesManager.UsingLanguageChangedEvent += this.LanguagesManager_UsingLanguageChangedEvent;
         }
 
         void LanguagesManager_UsingLanguageChangedEvent(object sender)

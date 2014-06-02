@@ -15,7 +15,7 @@ using Outopos.Properties;
 using Library;
 using Library.Net.Outopos;
 using A = Library.Net.Amoeba;
-using L = Library.Net.Outopos;
+using O = Library.Net.Outopos;
 
 namespace Outopos.Windows
 {

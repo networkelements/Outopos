@@ -281,15 +281,26 @@ namespace Outopos.Windows
                         using (FileStream stream = new FileStream(fileName, FileMode.Create))
                         using (Stream signatureStream = DigitalSignatureConverter.ToDigitalSignatureStream(signature))
                         {
-                            int i = -1;
-                            byte[] buffer = _bufferManager.TakeBuffer(1024);
+                            byte[] buffer = null;
 
-                            while ((i = signatureStream.Read(buffer, 0, buffer.Length)) > 0)
+                            try
                             {
-                                stream.Write(buffer, 0, i);
-                            }
+                                buffer = _bufferManager.TakeBuffer(1024 * 4);
 
-                            _bufferManager.ReturnBuffer(buffer);
+                                int i = -1;
+
+                                while ((i = signatureStream.Read(buffer, 0, buffer.Length)) > 0)
+                                {
+                                    stream.Write(buffer, 0, i);
+                                }
+                            }
+                            finally
+                            {
+                                if (buffer != null)
+                                {
+                                    _bufferManager.ReturnBuffer(buffer);
+                                }
+                            }
                         }
                     }
                     catch (Exception)
