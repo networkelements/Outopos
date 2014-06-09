@@ -14,8 +14,7 @@
         WindowState="{Binding Path=MainWindow_WindowState, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}"
         StateChanged="Window_StateChanged"
         Loaded="Window_Loaded"
-        Closing="Window_Closing"
-        Closed="Window_Closed">
+        Closing="Window_Closing">
     <Window.Resources>
         <DataTemplate x:Key="_logListBox_Template">
             <TextBlock Text="{Binding Mode=OneWay}" TextWrapping="Wrap"/>
@@ -43,6 +42,9 @@
                 <MenuItem Name="_updateBaseNodeMenuItem" Header="{Binding Path=MainWindow_UpdateBaseNode, Source={StaticResource ResourcesInstance}}" Click="_updateBaseNodeMenuItem_Click" />
                 <MenuItem Name="_coreOptionsMenuItem" Header="{Binding Path=MainWindow_CoreOptions, Source={StaticResource ResourcesInstance}}" Click="_coreOptionsMenuItem_Click" />
             </MenuItem>
+            <MenuItem Name="_cacheMenuItem" Header="{Binding Path=MainWindow_Cache, Source={StaticResource ResourcesInstance}}" SubmenuOpened="_cacheMenuItem_SubmenuOpened">
+                <MenuItem Name="_checkBlocksMenuItem" Header="{Binding Path=MainWindow_CheckBlocks, Source={StaticResource ResourcesInstance}}" Click="_checkBlocksMenuItem_Click" />
+            </MenuItem>
             <MenuItem Name="_viewMenuItem" Header="{Binding Path=MainWindow_View, Source={StaticResource ResourcesInstance}}">
                 <MenuItem Name="_languagesMenuItem" Header="{Binding Path=MainWindow_Languages, Source={StaticResource ResourcesInstance}}" />
                 <Separator />
@@ -60,15 +62,26 @@
         <TabControl Margin="0,28,0,0" Name="_tabControl" SelectionChanged="_tabControl_SelectionChanged">
             <TabItem Header="{Binding Path=MainWindow_Connection, Source={StaticResource ResourcesInstance}}" Name="_connectionTabItem" />
             <TabItem Header="{Binding Path=MainWindow_Section, Source={StaticResource ResourcesInstance}}" Name="_sectionTabItem" />
+            <TabItem Header="{Binding Path=MainWindow_Chat, Source={StaticResource ResourcesInstance}}" Name="_chatTabItem" />
+            <TabItem Header="{Binding Path=MainWindow_Wiki, Source={StaticResource ResourcesInstance}}" Name="_wikiTabItem" />
+            <TabItem Header="{Binding Path=MainWindow_Mail, Source={StaticResource ResourcesInstance}}" Name="_mailTabItem" />
             <TabItem Header="{Binding Path=MainWindow_Log, Source={StaticResource ResourcesInstance}}" Name="_logTabItem" >
-                <ListBox Name="_logListBox" SelectionMode="Extended" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible"
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="438*" />
+                        <RowDefinition Name="_logRowDefinition" Height="29" />
+                    </Grid.RowDefinitions>
+                    <local:ListBoxEx x:Name="_logListBox" SelectionMode="Extended" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible" Loaded="_logListBox_Loaded"
                             ItemTemplate="{StaticResource _logListBox_Template}" >
-                    <ListBox.ContextMenu>
-                        <ContextMenu Name="_logListBoxContextMenu" >
-                            <MenuItem Name="_logListBoxCopyMenuItem" Header="{Binding Path=MainWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_logListBoxCopyMenuItem_Click" />
-                        </ContextMenu>
-                    </ListBox.ContextMenu>
-                </ListBox>
+                        <ListBox.ContextMenu>
+                            <ContextMenu Name="_logListBoxContextMenu" >
+                                <MenuItem Name="_logListBoxCopyMenuItem" Header="{Binding Path=MainWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_logListBoxCopyMenuItem_Click" />
+                            </ContextMenu>
+                        </ListBox.ContextMenu>
+                    </local:ListBoxEx>
+                    <CheckBox x:Name="_debugCheckBox" Content="Debug" HorizontalAlignment="Left" Margin="10,5,0,0" Grid.Row="1" VerticalAlignment="Top" Width="70" IsChecked="False"/>
+                    <CheckBox x:Name="_logCheckBox" Content="Log" HorizontalAlignment="Left" Margin="85,5,0,0" Grid.Row="1" VerticalAlignment="Top" Width="70" IsChecked="True"/>
+                </Grid>
             </TabItem>
         </TabControl>
         <StatusBar Grid.Row="1" 

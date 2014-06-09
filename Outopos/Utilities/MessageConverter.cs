@@ -19,13 +19,13 @@ namespace Outopos
 {
     static class MessageConverter
     {
-        public static string ToSectionString(Section section)
+        public static string ToSectionString(Section tag)
         {
-            if (section.Name == null || section.Id == null) return null;
+            if (tag.Name == null || tag.Id == null) return null;
 
             try
             {
-                return section.Name + " - " + NetworkConverter.ToBase64UrlString(section.Id);
+                return tag.Name + " - " + NetworkConverter.ToBase64UrlString(tag.Id);
             }
             catch (Exception e)
             {
@@ -33,13 +33,13 @@ namespace Outopos
             }
         }
 
-        public static string ToWikiString(Wiki wiki)
+        public static string ToWikiString(Wiki tag)
         {
-            if (wiki.Name == null || wiki.Id == null) return null;
+            if (tag.Name == null || tag.Id == null) return null;
 
             try
             {
-                return wiki.Name + " - " + NetworkConverter.ToBase64UrlString(wiki.Id);
+                return tag.Name + " - " + NetworkConverter.ToBase64UrlString(tag.Id);
             }
             catch (Exception e)
             {
@@ -47,13 +47,70 @@ namespace Outopos
             }
         }
 
-        public static string ToChatString(Chat chat)
+        public static string ToChatString(Chat tag)
         {
-            if (chat.Name == null || chat.Id == null) return null;
+            if (tag.Name == null || tag.Id == null) return null;
 
             try
             {
-                return chat.Name + " - " + NetworkConverter.ToBase64UrlString(chat.Id);
+                return tag.Name + " - " + NetworkConverter.ToBase64UrlString(tag.Id);
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException("ArgumentException", e);
+            }
+        }
+
+        public static string ToInfoMessage(Section tag, string option)
+        {
+            try
+            {
+                StringBuilder builder = new StringBuilder();
+
+                if (!string.IsNullOrWhiteSpace(tag.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Tag_Name, tag.Name));
+                if (tag.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Tag_Id, NetworkConverter.ToBase64UrlString(tag.Id)));
+                if (!string.IsNullOrWhiteSpace(option)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Tag_Option, option));
+
+                if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
+                else return null;
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException("ArgumentException", e);
+            }
+        }
+
+        public static string ToInfoMessage(Wiki tag, string option)
+        {
+            try
+            {
+                StringBuilder builder = new StringBuilder();
+
+                if (!string.IsNullOrWhiteSpace(tag.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Tag_Name, tag.Name));
+                if (tag.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Tag_Id, NetworkConverter.ToBase64UrlString(tag.Id)));
+                if (!string.IsNullOrWhiteSpace(option)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Tag_Option, option));
+
+                if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
+                else return null;
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException("ArgumentException", e);
+            }
+        }
+
+        public static string ToInfoMessage(Chat tag, string option)
+        {
+            try
+            {
+                StringBuilder builder = new StringBuilder();
+
+                if (!string.IsNullOrWhiteSpace(tag.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Tag_Name, tag.Name));
+                if (tag.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Tag_Id, NetworkConverter.ToBase64UrlString(tag.Id)));
+                if (!string.IsNullOrWhiteSpace(option)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Tag_Option, option));
+
+                if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
+                else return null;
             }
             catch (Exception e)
             {
@@ -77,63 +134,6 @@ namespace Outopos
                 if (keywords.Count != 0) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Seed_Keywords, String.Join(", ", keywords)));
                 builder.AppendLine(string.Format("{0}: {1} UTC", LanguagesManager.Instance.Seed_CreationTime, seed.CreationTime.ToUniversalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
                 if (!string.IsNullOrWhiteSpace(seed.Comment)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Seed_Comment, seed.Comment));
-
-                if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
-                else return null;
-            }
-            catch (Exception e)
-            {
-                throw new ArgumentException("ArgumentException", e);
-            }
-        }
-
-        public static string ToInfoMessage(Section section, string option)
-        {
-            try
-            {
-                StringBuilder builder = new StringBuilder();
-
-                if (!string.IsNullOrWhiteSpace(section.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Section_Name, section.Name));
-                if (section.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Section_Id, NetworkConverter.ToBase64UrlString(section.Id)));
-                if (!string.IsNullOrWhiteSpace(option)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Section_Option, option));
-
-                if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
-                else return null;
-            }
-            catch (Exception e)
-            {
-                throw new ArgumentException("ArgumentException", e);
-            }
-        }
-
-        public static string ToInfoMessage(Wiki wiki, string option)
-        {
-            try
-            {
-                StringBuilder builder = new StringBuilder();
-
-                if (!string.IsNullOrWhiteSpace(wiki.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Wiki_Name, wiki.Name));
-                if (wiki.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Wiki_Id, NetworkConverter.ToBase64UrlString(wiki.Id)));
-                if (!string.IsNullOrWhiteSpace(option)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Wiki_Option, option));
-
-                if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
-                else return null;
-            }
-            catch (Exception e)
-            {
-                throw new ArgumentException("ArgumentException", e);
-            }
-        }
-
-        public static string ToInfoMessage(Chat chat, string option)
-        {
-            try
-            {
-                StringBuilder builder = new StringBuilder();
-
-                if (!string.IsNullOrWhiteSpace(chat.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Chat_Name, chat.Name));
-                if (chat.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Chat_Id, NetworkConverter.ToBase64UrlString(chat.Id)));
-                if (!string.IsNullOrWhiteSpace(option)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Chat_Option, option));
 
                 if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
                 else return null;

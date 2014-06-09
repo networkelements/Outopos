@@ -48,7 +48,7 @@ namespace Outopos
 
         App()
         {
-            App.OutoposVersion = new Version(2, 0, 73);
+            App.OutoposVersion = new Version(0, 0, 0);
 
             {
                 var currentProcess = Process.GetCurrentProcess();
@@ -365,126 +365,6 @@ namespace Outopos
                     {
                         version = new Version(reader.ReadLine());
                     }
-
-                    if (version < new Version(2, 0, 20))
-                    {
-                        if (File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Cache.path")))
-                        {
-                            string cachePath;
-
-                            using (StreamReader reader = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Cache.path"), new UTF8Encoding(false)))
-                            {
-                                cachePath = reader.ReadLine();
-                            }
-
-                            using (StreamWriter writer = new StreamWriter(Path.Combine(App.DirectoryPaths["Configuration"], "Cache.settings"), false, new UTF8Encoding(false)))
-                            {
-                                writer.WriteLine(string.Format("{0} {1}", "Path", cachePath));
-                            }
-
-                            try
-                            {
-                                File.Delete(Path.Combine(App.DirectoryPaths["Configuration"], "Cache.path"));
-                            }
-                            catch (Exception)
-                            {
-
-                            }
-                        }
-
-                        {
-                            var oldPath = Path.Combine(App.DirectoryPaths["Configuration"], "Run.xml");
-                            var newPath = Path.Combine(App.DirectoryPaths["Configuration"], "Startup.settings");
-
-                            if (File.Exists(oldPath))
-                            {
-                                try
-                                {
-                                    File.Move(oldPath, newPath);
-                                }
-                                catch (Exception)
-                                {
-
-                                }
-                            }
-                        }
-                    }
-
-                    if (version < new Version(2, 0, 28))
-                    {
-                        {
-                            var torWorkDirectoryPath = Path.Combine(App.DirectoryPaths["Work"], "Tor");
-
-                            if (Directory.Exists(torWorkDirectoryPath))
-                            {
-                                try
-                                {
-                                    Directory.Delete(torWorkDirectoryPath, true);
-                                }
-                                catch (Exception)
-                                {
-
-                                }
-                            }
-                        }
-                    }
-
-                    if (version < new Version(2, 0, 52))
-                    {
-                        try
-                        {
-                            // Startup.settingsを初期化。
-                            File.Delete(Path.Combine(App.DirectoryPaths["Configuration"], "Startup.settings"));
-                        }
-                        catch (Exception)
-                        {
-
-                        }
-                    }
-
-                    if (version < new Version(2, 0, 58))
-                    {
-                        try
-                        {
-                            // Catharsis.settingsを初期化。
-                            File.Delete(Path.Combine(App.DirectoryPaths["Configuration"], "Catharsis.settings"));
-                        }
-                        catch (Exception)
-                        {
-
-                        }
-                    }
-
-                    if (version < new Version(2, 0, 61))
-                    {
-                        try
-                        {
-                            var oldPath = Path.Combine(App.DirectoryPaths["Configuration"], "Library/Net/Outopos/OutoposManager/ConnectionManager");
-                            var newPath = Path.Combine(App.DirectoryPaths["Configuration"], "Library/Net/Outopos/OutoposManager/ConnectionsManager");
-
-                            if (Directory.Exists(oldPath))
-                            {
-                                Directory.Move(oldPath, newPath);
-                            }
-                        }
-                        catch (Exception)
-                        {
-
-                        }
-                    }
-
-                    if (version < new Version(2, 0, 72))
-                    {
-                        try
-                        {
-                            // Environment.settingsを削除。
-                            File.Delete(Path.Combine(App.DirectoryPaths["Configuration"], "Environment.settings"));
-                        }
-                        catch (Exception)
-                        {
-
-                        }
-                    }
                 }
 
                 App.StartupProcesses();
@@ -517,9 +397,9 @@ namespace Outopos
                     {
                         xml.WriteStartElement("Process");
 
-                        xml.WriteElementString("Path", @"Assembly\Tor\tor.exe");
+                        xml.WriteElementString("Path", @"Assemblies\Tor\tor.exe");
                         xml.WriteElementString("Arguments", "-f torrc DataDirectory " + @"..\..\..\Work\Tor");
-                        xml.WriteElementString("WorkingDirectory", @"Assembly\Tor");
+                        xml.WriteElementString("WorkingDirectory", @"Assemblies\Tor");
 
                         xml.WriteEndElement(); //Process
                     }
@@ -527,9 +407,9 @@ namespace Outopos
                     {
                         xml.WriteStartElement("Process");
 
-                        xml.WriteElementString("Path", @"Assembly\Polipo\polipo.exe");
+                        xml.WriteElementString("Path", @"Assemblies\Polipo\polipo.exe");
                         xml.WriteElementString("Arguments", "-c polipo.conf");
-                        xml.WriteElementString("WorkingDirectory", @"Assembly\Polipo");
+                        xml.WriteElementString("WorkingDirectory", @"Assemblies\Polipo");
 
                         xml.WriteEndElement(); //Process
                     }
@@ -770,6 +650,8 @@ namespace Outopos
                             xml.WriteComment(@"<Url>http://list.iblocklist.com/lists/bluetack/level-1</Url>");
                             xml.WriteComment(@"<Url>http://list.iblocklist.com/lists/tbg/primary-threats</Url>");
 
+                            xml.WriteElementString("Path", @"Catharsis_Ipv4.txt");
+
                             xml.WriteEndElement(); //Targets
                         }
 
@@ -796,6 +678,7 @@ namespace Outopos
                         {
                             string proxyUri = null;
                             List<string> urls = new List<string>();
+                            List<string> paths = new List<string>();
 
                             using (var xmlSubtree = xml.ReadSubtree())
                             {
@@ -845,6 +728,17 @@ namespace Outopos
 
                                                             }
                                                         }
+                                                        else if (xmlSubtree2.LocalName == "Path")
+                                                        {
+                                                            try
+                                                            {
+                                                                paths.Add(xmlSubtree2.ReadString());
+                                                            }
+                                                            catch (Exception)
+                                                            {
+
+                                                            }
+                                                        }
                                                     }
                                                 }
                                             }
@@ -853,7 +747,7 @@ namespace Outopos
                                 }
                             }
 
-                            App.Catharsis.Ipv4AddressFilters.Add(new Ipv4AddressFilter(proxyUri, urls));
+                            App.Catharsis.Ipv4AddressFilters.Add(new Ipv4AddressFilter(proxyUri, urls, paths));
                         }
                     }
                 }

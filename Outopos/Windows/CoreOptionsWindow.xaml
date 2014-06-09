@@ -66,7 +66,7 @@
                 <TreeViewItem Name="_otherNodesTreeViewItem" Header="{Binding Path=CoreOptionsWindow_OtherNodes, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
                 <TreeViewItem Name="_clientTreeViewItem" Header="{Binding Path=CoreOptionsWindow_Client, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
                 <TreeViewItem Name="_serverTreeViewItem" Header="{Binding Path=CoreOptionsWindow_Server, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
-                <TreeViewItem Name="_dataTreeViewItem" Header="{Binding Path=CoreOptionsWindow_Data, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
+                <TreeViewItem Name="_dataTreeViewItem" Header="{Binding Path=CoreOptionsWindow_Data, Source={StaticResource ResourcesInstance}}" />
                 <TreeViewItem Name="_bandwidthTreeViewItem" Header="{Binding Path=CoreOptionsWindow_Bandwidth, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
                 <TreeViewItem Name="_transferTreeViewItem" Header="{Binding Path=CoreOptionsWindow_Transfer, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
                 <TreeViewItem Name="_eventsTreeViewItem" Header="{Binding Path=CoreOptionsWindow_Events, Source={StaticResource ResourcesInstance}}" IsSelected="False" />
@@ -266,7 +266,7 @@
                 </GroupBox>
             </Grid>
         </Grid>
-        
+
         <Button Height="23" HorizontalAlignment="Right" Margin="0,0,93,12" Name="_okButton" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CoreOptionsWindow_Ok, Source={StaticResource ResourcesInstance}}" Click="_okButton_Click" IsDefault="True" />
         <Button Height="23" HorizontalAlignment="Right" Margin="0,0,12,12" Name="_cancelButton" VerticalAlignment="Bottom" Width="75" Content="{Binding Path=CoreOptionsWindow_Cancel, Source={StaticResource ResourcesInstance}}" Click="_cancelButton_Click" IsCancel="True" />
     </Grid>

@@ -29,7 +29,8 @@ namespace Outopos.Windows
     partial class ConnectionControl : UserControl
     {
         private MainWindow _mainWindow = (MainWindow)Application.Current.MainWindow;
-        private OutoposManager _amoebaManager;
+        private BufferManager _bufferManager;
+        private OutoposManager _outoposManager;
 
         private ObservableCollectionEx<OutoposInfomationListViewItem> _infomationListViewItemCollection = new ObservableCollectionEx<OutoposInfomationListViewItem>();
         private ObservableCollectionEx<ConnectionListViewItem> _listViewItemCollection = new ObservableCollectionEx<ConnectionListViewItem>();
@@ -37,13 +38,19 @@ namespace Outopos.Windows
         private Thread _showOutoposInfomationThread;
         private Thread _showConnectionInfomationwThread;
 
-        public ConnectionControl(OutoposManager amoebaManager)
+        public ConnectionControl(OutoposManager outoposManager, BufferManager bufferManager)
         {
-            _amoebaManager = amoebaManager;
+            _bufferManager = bufferManager;
+            _outoposManager = outoposManager;
 
             InitializeComponent();
 
             _listView.ItemsSource = _listViewItemCollection;
+
+#if DEBUG
+            _infomationListViewItemCollection.Add(new OutoposInfomationListViewItem() { Id = "ConnectionControl_BufferManagerSize" });
+            _infomationListViewItemCollection.Add(new OutoposInfomationListViewItem());
+#endif
 
             _infomationListViewItemCollection.Add(new OutoposInfomationListViewItem() { Id = "ConnectionControl_SentByteCount" });
             _infomationListViewItemCollection.Add(new OutoposInfomationListViewItem() { Id = "ConnectionControl_ReceivedByteCount" });
@@ -51,6 +58,7 @@ namespace Outopos.Windows
 
             _infomationListViewItemCollection.Add(new OutoposInfomationListViewItem() { Id = "ConnectionControl_CreateConnectionCount" });
             _infomationListViewItemCollection.Add(new OutoposInfomationListViewItem() { Id = "ConnectionControl_AcceptConnectionCount" });
+            _infomationListViewItemCollection.Add(new OutoposInfomationListViewItem() { Id = "ConnectionControl_BlockedConnectionCount" });
             _infomationListViewItemCollection.Add(new OutoposInfomationListViewItem());
 
             _infomationListViewItemCollection.Add(new OutoposInfomationListViewItem() { Id = "ConnectionControl_SurroundingNodeCount" });
@@ -103,17 +111,22 @@ namespace Outopos.Windows
             {
                 for (; ; )
                 {
-                    var information = _amoebaManager.Information;
-                    Dictionary<string, string> dic = new Dictionary<string, string>();
+                    var information = _outoposManager.Information;
+                    var dic = new SortedDictionary<string, string>();
 
-                    dic["ConnectionControl_SentByteCount"] = NetworkConverter.ToSizeString(_amoebaManager.SentByteCount);
-                    dic["ConnectionControl_ReceivedByteCount"] = NetworkConverter.ToSizeString(_amoebaManager.ReceivedByteCount);
+#if DEBUG
+                    dic["ConnectionControl_BufferManagerSize"] = NetworkConverter.ToSizeString(_bufferManager.Size);
+#endif
 
-                    dic["ConnectionControl_CreateConnectionCount"] = ((int)information["CreateConnectionCount"]).ToString();
-                    dic["ConnectionControl_AcceptConnectionCount"] = ((int)information["AcceptConnectionCount"]).ToString();
+                    dic["ConnectionControl_SentByteCount"] = NetworkConverter.ToSizeString(_outoposManager.SentByteCount);
+                    dic["ConnectionControl_ReceivedByteCount"] = NetworkConverter.ToSizeString(_outoposManager.ReceivedByteCount);
+
+                    dic["ConnectionControl_CreateConnectionCount"] = ((long)information["CreateConnectionCount"]).ToString();
+                    dic["ConnectionControl_AcceptConnectionCount"] = ((long)information["AcceptConnectionCount"]).ToString();
+                    dic["ConnectionControl_BlockedConnectionCount"] = ((long)information["BlockedConnectionCount"]).ToString();
 
                     dic["ConnectionControl_SurroundingNodeCount"] = ((int)information["SurroundingNodeCount"]).ToString();
-                    dic["ConnectionControl_RelayBlockCount"] = ((int)information["RelayBlockCount"]).ToString();
+                    dic["ConnectionControl_RelayBlockCount"] = ((long)information["RelayBlockCount"]).ToString();
 
                     dic["ConnectionControl_LockSpace"] = NetworkConverter.ToSizeString(((long)information["LockSpace"])).ToString();
                     dic["ConnectionControl_FreeSpace"] = NetworkConverter.ToSizeString(((long)information["FreeSpace"])).ToString();
@@ -123,19 +136,19 @@ namespace Outopos.Windows
                     dic["ConnectionControl_HeaderCount"] = ((int)information["HeaderCount"]).ToString();
                     dic["ConnectionControl_BlockCount"] = ((int)information["BlockCount"]).ToString();
 
-                    dic["ConnectionControl_PushNodeCount"] = ((int)information["PushNodeCount"]).ToString();
-                    dic["ConnectionControl_PushBlockLinkCount"] = ((int)information["PushBlockLinkCount"]).ToString();
-                    dic["ConnectionControl_PushBlockRequestCount"] = ((int)information["PushBlockRequestCount"]).ToString();
-                    dic["ConnectionControl_PushBlockCount"] = ((int)information["PushBlockCount"]).ToString();
-                    dic["ConnectionControl_PushHeaderRequestCount"] = ((int)information["PushHeaderRequestCount"]).ToString();
-                    dic["ConnectionControl_PushHeaderCount"] = ((int)information["PushHeaderCount"]).ToString();
+                    dic["ConnectionControl_PushNodeCount"] = ((long)information["PushNodeCount"]).ToString();
+                    dic["ConnectionControl_PushBlockLinkCount"] = ((long)information["PushBlockLinkCount"]).ToString();
+                    dic["ConnectionControl_PushBlockRequestCount"] = ((long)information["PushBlockRequestCount"]).ToString();
+                    dic["ConnectionControl_PushBlockCount"] = ((long)information["PushBlockCount"]).ToString();
+                    dic["ConnectionControl_PushHeaderRequestCount"] = ((long)information["PushHeaderRequestCount"]).ToString();
+                    dic["ConnectionControl_PushHeaderCount"] = ((long)information["PushHeaderCount"]).ToString();
 
-                    dic["ConnectionControl_PullNodeCount"] = ((int)information["PullNodeCount"]).ToString();
-                    dic["ConnectionControl_PullBlockLinkCount"] = ((int)information["PullBlockLinkCount"]).ToString();
-                    dic["ConnectionControl_PullBlockRequestCount"] = ((int)information["PullBlockRequestCount"]).ToString();
-                    dic["ConnectionControl_PullBlockCount"] = ((int)information["PullBlockCount"]).ToString();
-                    dic["ConnectionControl_PullHeaderRequestCount"] = ((int)information["PullHeaderRequestCount"]).ToString();
-                    dic["ConnectionControl_PullHeaderCount"] = ((int)information["PullHeaderCount"]).ToString();
+                    dic["ConnectionControl_PullNodeCount"] = ((long)information["PullNodeCount"]).ToString();
+                    dic["ConnectionControl_PullBlockLinkCount"] = ((long)information["PullBlockLinkCount"]).ToString();
+                    dic["ConnectionControl_PullBlockRequestCount"] = ((long)information["PullBlockRequestCount"]).ToString();
+                    dic["ConnectionControl_PullBlockCount"] = ((long)information["PullBlockCount"]).ToString();
+                    dic["ConnectionControl_PullHeaderRequestCount"] = ((long)information["PullHeaderRequestCount"]).ToString();
+                    dic["ConnectionControl_PullHeaderCount"] = ((long)information["PullHeaderCount"]).ToString();
 
                     this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                     {
@@ -163,15 +176,15 @@ namespace Outopos.Windows
                     Thread.Sleep(100);
                     if (_mainWindow.SelectedTab != MainWindowTabType.Connection) continue;
 
-                    var connectionInformation = _amoebaManager.ConnectionInformation.ToArray();
-                    Dictionary<int, Information> dic = new Dictionary<int, Information>();
+                    var connectionInformation = _outoposManager.ConnectionInformation.ToArray();
+                    SortedDictionary<int, Information> dic = new SortedDictionary<int, Information>();
 
                     foreach (var item in connectionInformation.ToArray())
                     {
                         dic[(int)item["Id"]] = item;
                     }
 
-                    Dictionary<int, ConnectionListViewItem> dic2 = new Dictionary<int, ConnectionListViewItem>();
+                    SortedDictionary<int, ConnectionListViewItem> dic2 = new SortedDictionary<int, ConnectionListViewItem>();
 
                     this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                     {
@@ -196,6 +209,7 @@ namespace Outopos.Windows
 
                     List<ConnectionListViewItem> newList = new List<ConnectionListViewItem>();
                     Dictionary<ConnectionListViewItem, Information> updateDic = new Dictionary<ConnectionListViewItem, Information>();
+
                     bool clearFlag = false;
                     var selectItems = new List<ConnectionListViewItem>();
 
@@ -236,7 +250,7 @@ namespace Outopos.Windows
 
                             if (item != null)
                             {
-                                if (!Collection.Equals(item.Information, information))
+                                if (!CollectionUtilities.Equals(item.Information, information))
                                 {
                                     updateDic[item] = information;
                                 }
@@ -279,7 +293,7 @@ namespace Outopos.Windows
                             _listView.SetSelectedItems(selectItems);
                         }
 
-                        if (sortFlag && _listViewItemCollection.Count < 3000) this.Sort();
+                        if (sortFlag) this.Sort();
                     }));
 
                     Thread.Sleep(1000 * 3);
@@ -319,7 +333,7 @@ namespace Outopos.Windows
 
         private void _listViewPasteMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            _amoebaManager.SetOtherNodes(Clipboard.GetNodes());
+            _outoposManager.SetOtherNodes(Clipboard.GetNodes());
         }
 
         #region Sort
@@ -384,7 +398,11 @@ namespace Outopos.Windows
         {
             _listView.Items.SortDescriptions.Clear();
 
-            if (sortBy == LanguagesManager.Instance.ConnectionControl_Uri)
+            if (sortBy == LanguagesManager.Instance.ConnectionControl_Direction)
+            {
+                _listView.Items.SortDescriptions.Add(new SortDescription("Direction", direction));
+            }
+            else if (sortBy == LanguagesManager.Instance.ConnectionControl_Uri)
             {
                 _listView.Items.SortDescriptions.Add(new SortDescription("Uri", direction));
             }
@@ -400,13 +418,27 @@ namespace Outopos.Windows
             {
                 _listView.Items.SortDescriptions.Add(new SortDescription("SentByteCount", direction));
             }
+
+            _listView.Items.SortDescriptions.Add(new SortDescription("Id", direction));
         }
 
         private IEnumerable<ConnectionListViewItem> Sort(IEnumerable<ConnectionListViewItem> collection, string sortBy, ListSortDirection direction)
         {
             List<ConnectionListViewItem> list = new List<ConnectionListViewItem>(collection);
 
-            if (sortBy == LanguagesManager.Instance.ConnectionControl_Uri)
+            if (sortBy == LanguagesManager.Instance.ConnectionControl_Direction)
+            {
+                list.Sort((x, y) =>
+                {
+                    int c = x.Direction.CompareTo(y.Direction);
+                    if (c != 0) return c;
+                    c = x.Id.CompareTo(y.Id);
+                    if (c != 0) return c;
+
+                    return 0;
+                });
+            }
+            else if (sortBy == LanguagesManager.Instance.ConnectionControl_Uri)
             {
                 list.Sort((x, y) =>
                 {
@@ -552,9 +584,10 @@ namespace Outopos.Windows
             private int _id;
             private Information _information;
             private string _uri;
-            private int _priority;
+            private long _priority;
             private long _receivedByteCount;
             private long _sentByteCount;
+            private ConnectDirection _direction;
 
             public ConnectionListViewItem(Information information)
             {
@@ -584,7 +617,7 @@ namespace Outopos.Windows
                     if (_information.Contains("Uri")) this.Uri = (string)_information["Uri"];
                     else this.Uri = null;
 
-                    if (_information.Contains("Priority")) this.Priority = (int)_information["Priority"];
+                    if (_information.Contains("Priority")) this.Priority = (long)_information["Priority"];
                     else this.Priority = 0;
 
                     if (_information.Contains("ReceivedByteCount")) this.ReceivedByteCount = (long)_information["ReceivedByteCount"];
@@ -592,6 +625,9 @@ namespace Outopos.Windows
 
                     if (_information.Contains("SentByteCount")) this.SentByteCount = (long)_information["SentByteCount"];
                     else this.SentByteCount = 0;
+
+                    if (_information.Contains("Direction")) this.Direction = (ConnectDirection)_information["Direction"];
+                    else this.Direction = 0;
                 }
             }
 
@@ -612,7 +648,7 @@ namespace Outopos.Windows
                 }
             }
 
-            public int Priority
+            public long Priority
             {
                 get
                 {
@@ -659,6 +695,23 @@ namespace Outopos.Windows
                         _sentByteCount = value;
 
                         this.NotifyPropertyChanged("SentByteCount");
+                    }
+                }
+            }
+
+            public ConnectDirection Direction
+            {
+                get
+                {
+                    return _direction;
+                }
+                set
+                {
+                    if (value != _direction)
+                    {
+                        _direction = value;
+
+                        this.NotifyPropertyChanged("Direction");
                     }
                 }
             }

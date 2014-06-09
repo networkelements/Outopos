@@ -8,17 +8,12 @@
   <Translate Key="Languages_English" Value="English" />
   <Translate Key="Languages_Japanese" Value="Japanese" />
 
-  <Translate Key="Section_Name" Value="Name" />
-  <Translate Key="Section_Id" Value="ID" />
-  <Translate Key="Section_Option" Value="Option" />
+  <Translate Key="ConnectDirection_In" Value="In" />
+  <Translate Key="ConnectDirection_Out" Value="Out" />
 
-  <Translate Key="Wiki_Name" Value="Name" />
-  <Translate Key="Wiki_Id" Value="ID" />
-  <Translate Key="Wiki_Option" Value="Option" />
-
-  <Translate Key="Chat_Name" Value="Name" />
-  <Translate Key="Chat_Id" Value="ID" />
-  <Translate Key="Chat_Option" Value="Option" />
+  <Translate Key="Tag_Name" Value="Name" />
+  <Translate Key="Tag_Id" Value="ID" />
+  <Translate Key="Tag_Option" Value="Option" />
 
   <Translate Key="Seed_Name" Value="Name" />
   <Translate Key="Seed_Signature" Value="Signature" />
@@ -29,6 +24,9 @@
 
   <Translate Key="MainWindow_Connection" Value="Connection" />
   <Translate Key="MainWindow_Section" Value="Section" />
+  <Translate Key="MainWindow_Chat" Value="Chat" />
+  <Translate Key="MainWindow_Wiki" Value="Wiki" />
+  <Translate Key="MainWindow_Mail" Value="Mail" />
   <Translate Key="MainWindow_Log" Value="Log" />
   <Translate Key="MainWindow_Core" Value="Core" />
   <Translate Key="MainWindow_StatesBar" Value="Connect: {0}" />
@@ -39,6 +37,7 @@
   <Translate Key="MainWindow_UpdateBaseNode" Value="Update Base Node Uri" />
   <Translate Key="MainWindow_CoreOptions" Value="Core options" />
   <Translate Key="MainWindow_Cache" Value="Cache" />
+  <Translate Key="MainWindow_CheckBlocks" Value="Check blocks" />
   <Translate Key="MainWindow_View" Value="View" />
   <Translate Key="MainWindow_Languages" Value="Languages" />
   <Translate Key="MainWindow_ViewOptions" Value="View options" />
@@ -51,7 +50,7 @@
   <Translate Key="MainWindow_ReceiveSpeed" Value="Receive:" />
   <Translate Key="MainWindow_DiskSpaceNotFound_Message" Value="Space of disk not found." />
   <Translate Key="MainWindow_CacheSpaceNotFound_Message" Value="Space of cache not found." />
-  <Translate Key="MainWindow_CheckInternalBlocks_Message" Value="Check internal blocks" />
+  <Translate Key="MainWindow_CheckBlocks_Message" Value="Check internal blocks" />
   <Translate Key="MainWindow_CheckExternalBlocks_Message" Value="Check external blocks" />
   <Translate Key="MainWindow_CheckBlocks_State" Value="Checked:{1} Bad:{0} Count:{2}" />
   <Translate Key="MainWindow_CheckUpdate_Message" Value="Do you want to update to &quot;{0}&quot;?" />
@@ -177,22 +176,28 @@
   <Translate Key="NameWindow_Ok" Value="Ok" />
   <Translate Key="NameWindow_Cancel" Value="Cancel" />
 
+  <Translate Key="ConnectionControl_Direction" Value="Direction" />
   <Translate Key="ConnectionControl_Uri" Value="Uri" />
   <Translate Key="ConnectionControl_Priority" Value="Priority" />
   <Translate Key="ConnectionControl_SentByteCount" Value="Sent byte count" />
   <Translate Key="ConnectionControl_ReceivedByteCount" Value="Received byte count" />
   <Translate Key="ConnectionControl_Name" Value="Name" />
   <Translate Key="ConnectionControl_Value" Value="Value" />
+  <Translate Key="ConnectionControl_BufferManagerSize" Value="BufferManager Size" />
   <Translate Key="ConnectionControl_CreateConnectionCount" Value="Create connection count" />
   <Translate Key="ConnectionControl_AcceptConnectionCount" Value="Accept connection count" />
+  <Translate Key="ConnectionControl_BlockedConnectionCount" Value="Blocked connection count" />
   <Translate Key="ConnectionControl_SurroundingNodeCount" Value="Surrounding node count" />
   <Translate Key="ConnectionControl_RelayBlockCount" Value="Relay block count" />
   <Translate Key="ConnectionControl_FreeSpace" Value="Free space" />
   <Translate Key="ConnectionControl_LockSpace" Value="Lock space" />
   <Translate Key="ConnectionControl_UsingSpace" Value="Using space" />
   <Translate Key="ConnectionControl_NodeCount" Value="Node count" />
-  <Translate Key="ConnectionControl_HeaderCount" Value="Header count" />
+  <Translate Key="ConnectionControl_SeedCount" Value="Seed count" />
   <Translate Key="ConnectionControl_BlockCount" Value="Block count" />
+  <Translate Key="ConnectionControl_DownloadCount" Value="Download count" />
+  <Translate Key="ConnectionControl_UploadCount" Value="Upload count" />
+  <Translate Key="ConnectionControl_ShareCount" Value="Share count" />
   <Translate Key="ConnectionControl_PushNodeCount" Value="PushNode count" />
   <Translate Key="ConnectionControl_PushBlockLinkCount" Value="PushBlockLink count" />
   <Translate Key="ConnectionControl_PushBlockRequestCount" Value="PushBlockRequest count" />
@@ -250,16 +255,16 @@
   <Translate Key="SectionTreeItemEditWindow_Ok" Value="Ok" />
   <Translate Key="SectionTreeItemEditWindow_Cancel" Value="Cancel" />
 
-  <Translate Key="TrustSignaturesPreviewWindow_Title" Value="Trust information" />
-  <Translate Key="TrustSignaturesPreviewWindow_Copy" Value="Copy" />
-  <Translate Key="TrustSignaturesPreviewWindow_Signature" Value="Signature" />
-  <Translate Key="TrustSignaturesPreviewWindow_Section" Value="Section" />
-  <Translate Key="TrustSignaturesPreviewWindow_Trust" Value="Trust" />
-  <Translate Key="TrustSignaturesPreviewWindow_Chat" Value="Chat" />
-  <Translate Key="TrustSignaturesPreviewWindow_Wiki" Value="Wiki" />
-  <Translate Key="TrustSignaturesPreviewWindow_Value" Value="Value" />
-  <Translate Key="TrustSignaturesPreviewWindow_Comment" Value="Comment" />
-  <Translate Key="TrustSignaturesPreviewWindow_Close" Value="Close" />
+  <Translate Key="TrustSignaturesPreview_Title" Value="Trust information" />
+  <Translate Key="TrustSignaturesPreview_Copy" Value="Copy" />
+  <Translate Key="TrustSignaturesPreview_Signature" Value="Signature" />
+  <Translate Key="TrustSignaturesPreview_Section" Value="Section" />
+  <Translate Key="TrustSignaturesPreview_Trust" Value="Trust" />
+  <Translate Key="TrustSignaturesPreview_Chat" Value="Chat" />
+  <Translate Key="TrustSignaturesPreview_Wiki" Value="Wiki" />
+  <Translate Key="TrustSignaturesPreview_Value" Value="Value" />
+  <Translate Key="TrustSignaturesPreview_Comment" Value="Comment" />
+  <Translate Key="TrustSignaturesPreview_Close" Value="Close" />
 
   <Translate Key="ChatControl_NewCategory" Value="New category" />
   <Translate Key="ChatControl_Edit" Value="Edit" />

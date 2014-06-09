@@ -20,24 +20,17 @@ namespace Outopos.Windows
         private string _leaderSignature;
         private string _uploadSignature;
 
-        private string _comment;
-        private Exchange _exchange;
-        private LockedList<string> _trustSignatures;
-        private LockedList<Wiki> _wikis;
-        private LockedList<Chat> _chats;
+        private LockedList<SectionProfileInfo> _trustSectionProfileInfos;
 
-        private LockedList<SectionProfile> _cacheSectionProfiles;
-
-        private ChatCategorizeTreeItem _chatCategorizeTreeItem;
-        private MailCategorizeTreeItem _mailCategorizeTreeItem;
+        private PersonalInformation _personalInformation;
 
         private volatile object _thisLock;
         private static readonly object _initializeLock = new object();
 
-        public SectionTreeItem(Section section)
+        public SectionTreeItem(Section tag)
         {
-            this.Tag = section;
-            this.Exchange = new Exchange(ExchangeAlgorithm.Rsa2048);
+            this.Tag = tag;
+            this.PersonalInformation = new PersonalInformation();
         }
 
         [DataMember(Name = "Tag")]
@@ -97,151 +90,31 @@ namespace Outopos.Windows
             }
         }
 
-        [DataMember(Name = "Comment")]
-        public string Comment
+        [DataMember(Name = "TrustSectionProfileInfos")]
+        public LockedList<SectionProfileInfo> TrustSectionProfileInfos
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return _comment;
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    _comment = value;
+                    if (_trustSectionProfileInfos == null)
+                        _trustSectionProfileInfos = new LockedList<SectionProfileInfo>();
+
+                    return _trustSectionProfileInfos;
                 }
             }
         }
 
-        [DataMember(Name = "Exchange")]
-        public Exchange Exchange
+        [DataMember(Name = "PersonalInformation")]
+        public PersonalInformation PersonalInformation
         {
             get
             {
-                lock (this.ThisLock)
-                {
-                    return _exchange;
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    _exchange = value;
-                }
-            }
-        }
-
-        [DataMember(Name = "TrustSignatures")]
-        public LockedList<string> TrustSignatures
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    if (_trustSignatures == null)
-                        _trustSignatures = new LockedList<string>();
-
-                    return _trustSignatures;
-                }
-            }
-        }
-
-        [DataMember(Name = "Wikis")]
-        public LockedList<Wiki> Wikis
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    if (_wikis == null)
-                        _wikis = new LockedList<Wiki>();
-
-                    return _wikis;
-                }
-            }
-        }
-
-        [DataMember(Name = "Chats")]
-        public LockedList<Chat> Chats
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    if (_chats == null)
-                        _chats = new LockedList<Chat>();
-
-                    return _chats;
-                }
-            }
-        }
-
-        [DataMember(Name = "CacheSectionProfiles")]
-        public LockedList<SectionProfile> CacheSectionProfiles
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    if (_cacheSectionProfiles == null)
-                        _cacheSectionProfiles = new LockedList<SectionProfile>();
-
-                    return _cacheSectionProfiles;
-                }
-            }
-        }
-
-        [DataMember(Name = "ChatCategorizeTreeItem")]
-        public ChatCategorizeTreeItem ChatCategorizeTreeItem
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    if (_chatCategorizeTreeItem == null)
-                    {
-                        _chatCategorizeTreeItem = new ChatCategorizeTreeItem();
-                        _chatCategorizeTreeItem.Name = "Category";
-                    }
-
-                    return _chatCategorizeTreeItem;
-                }
+                return _personalInformation;
             }
             private set
             {
-                lock (this.ThisLock)
-                {
-                    _chatCategorizeTreeItem = value;
-                }
-            }
-        }
-
-        [DataMember(Name = "MailCategorizeTreeItem")]
-        public MailCategorizeTreeItem MailCategorizeTreeItem
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    if (_mailCategorizeTreeItem == null)
-                    {
-                        _mailCategorizeTreeItem = new MailCategorizeTreeItem();
-                        _mailCategorizeTreeItem.Name = "Category";
-                    }
-
-                    return _mailCategorizeTreeItem;
-                }
-            }
-            private set
-            {
-                lock (this.ThisLock)
-                {
-                    _mailCategorizeTreeItem = value;
-                }
+                _personalInformation = value;
             }
         }
 
@@ -295,5 +168,63 @@ namespace Outopos.Windows
         }
 
         #endregion
+    }
+
+    [DataContract(Name = "PersonalInformation", Namespace = "http://Outopos/Windows")]
+    class PersonalInformation
+    {
+        private Exchange _exchange;
+        private SignatureCollection _trustSignatures;
+        private WikiCollection _wikis;
+        private ChatCollection _chats;
+
+        [DataMember(Name = "Exchange")]
+        public Exchange Exchange
+        {
+            get
+            {
+                return _exchange;
+            }
+            set
+            {
+                _exchange = value;
+            }
+        }
+
+        [DataMember(Name = "TrustSignatures")]
+        public SignatureCollection TrustSignatures
+        {
+            get
+            {
+                if (_trustSignatures == null)
+                    _trustSignatures = new SignatureCollection();
+
+                return _trustSignatures;
+            }
+        }
+
+        [DataMember(Name = "Wikis")]
+        public WikiCollection Wikis
+        {
+            get
+            {
+                if (_wikis == null)
+                    _wikis = new WikiCollection();
+
+                return _wikis;
+            }
+        }
+
+        [DataMember(Name = "Chats")]
+        public ChatCollection Chats
+        {
+            get
+            {
+                if (_chats == null)
+                    _chats = new ChatCollection();
+
+                return _chats;
+            }
+        }
     }
 }

@@ -139,7 +139,7 @@ namespace Outopos.Windows
 
                         int c = vx.Tag.Name.CompareTo(vy.Tag.Name);
                         if (c != 0) return c;
-                        c = Collection.Compare(vx.Tag.Id, vy.Tag.Id);
+                        c = CollectionUtilities.Compare(vx.Tag.Id, vy.Tag.Id);
                         if (c != 0) return c;
                         c = vx.GetHashCode().CompareTo(vy.GetHashCode());
                         if (c != 0) return c;

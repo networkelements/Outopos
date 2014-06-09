@@ -16,21 +16,19 @@ namespace Outopos.Windows
     [DataContract(Name = "ChatTreeItem", Namespace = "http://Outopos/Windows")]
     class ChatTreeItem : ICloneable<ChatTreeItem>, IThisLock
     {
-        private Tag _tag;
+        private Chat _tag;
 
         private bool _isTrustEnabled = true;
 
-        private bool _isNewTopic;
-        private ChatTopic _chatTopic;
-        private LockedList<ChatMessage> _unreadChatMessages;
-        private LockedList<ChatMessage> _readChatMessages;
+        private ChatTopicInfo _chatTopicInfo;
+        private LockedList<ChatMessageInfo> _chatMessageInfos;
 
         private volatile object _thisLock;
         private static readonly object _initializeLock = new object();
 
-        public ChatTreeItem(Chat chat)
+        public ChatTreeItem(Chat tag)
         {
-            this.Tag = chat;
+            this.Tag = tag;
         }
 
         [DataMember(Name = "Tag")]
@@ -71,70 +69,36 @@ namespace Outopos.Windows
             }
         }
 
-        [DataMember(Name = "IsNewTopic")]
-        public bool IsNewTopic
+        [DataMember(Name = "ChatTopicInfo")]
+        public ChatTopicInfo ChatTopicInfo
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return _isNewTopic;
+                    return _chatTopicInfo;
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    _isNewTopic = value;
+                    _chatTopicInfo = value;
                 }
             }
         }
 
-        [DataMember(Name = "ChatTopic")]
-        public ChatTopic ChatTopic
+        [DataMember(Name = "ChatMessageInfos")]
+        public LockedList<ChatMessageInfo> ChatMessageInfos
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return _chatTopic;
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    _chatTopic = value;
-                }
-            }
-        }
+                    if (_chatMessageInfos == null)
+                        _chatMessageInfos = new LockedList<ChatMessageInfo>();
 
-        [DataMember(Name = "UnreadChatMessages")]
-        public LockedList<ChatMessage> UnreadChatMessages
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    if (_unreadChatMessages == null)
-                        _unreadChatMessages = new LockedList<ChatMessage>();
-
-                    return _unreadChatMessages;
-                }
-            }
-        }
-
-        [DataMember(Name = "ReadChatMessages")]
-        public LockedList<ChatMessage> ReadChatMessages
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    if (_readChatMessages == null)
-                        _readChatMessages = new LockedList<ChatMessage>();
-
-                    return _readChatMessages;
+                    return _chatMessageInfos;
                 }
             }
         }

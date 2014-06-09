@@ -202,24 +202,24 @@ namespace Outopos
             }
         }
 
-        public static bool ContainsTags()
+        public static bool ContainsSections()
         {
             lock (_thisLock)
             {
                 foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    if (item.StartsWith("Tag:")) return true;
+                    if (item.StartsWith("Section:")) return true;
                 }
 
                 return false;
             }
         }
 
-        public static IEnumerable<Tuple<Tag, string>> GetTags()
+        public static IEnumerable<Tuple<Section, string>> GetSections()
         {
             lock (_thisLock)
             {
-                var list = new List<Tuple<Tag, string>>();
+                var list = new List<Tuple<Section, string>>();
 
                 foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
                 {
@@ -227,10 +227,10 @@ namespace Outopos
                     {
                         string option;
 
-                        var tag = OutoposConverter.FromTagString(item, out option);
+                        var tag = OutoposConverter.FromSectionString(item, out option);
                         if (tag == null) continue;
 
-                        list.Add(new Tuple<Tag, string>(tag, option));
+                        list.Add(new Tuple<Section, string>(tag, option));
                     }
                     catch (Exception)
                     {
@@ -242,7 +242,7 @@ namespace Outopos
             }
         }
 
-        public static void SetTags(IEnumerable<Tuple<Tag, string>> sections)
+        public static void SetSections(IEnumerable<Tuple<Section, string>> sections)
         {
             lock (_thisLock)
             {
@@ -251,7 +251,121 @@ namespace Outopos
 
                     foreach (var tuple in sections)
                     {
-                        sb.AppendLine(OutoposConverter.ToTagString(tuple.Item1, tuple.Item2));
+                        sb.AppendLine(OutoposConverter.ToSectionString(tuple.Item1, tuple.Item2));
+                    }
+
+                    Clipboard.SetText(sb.ToString());
+                }
+            }
+        }
+
+        public static bool ContainsWikis()
+        {
+            lock (_thisLock)
+            {
+                foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    if (item.StartsWith("Wiki:")) return true;
+                }
+
+                return false;
+            }
+        }
+
+        public static IEnumerable<Tuple<Wiki, string>> GetWikis()
+        {
+            lock (_thisLock)
+            {
+                var list = new List<Tuple<Wiki, string>>();
+
+                foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    try
+                    {
+                        string option;
+
+                        var tag = OutoposConverter.FromWikiString(item, out option);
+                        if (tag == null) continue;
+
+                        list.Add(new Tuple<Wiki, string>(tag, option));
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                }
+
+                return list;
+            }
+        }
+
+        public static void SetWikis(IEnumerable<Tuple<Wiki, string>> sections)
+        {
+            lock (_thisLock)
+            {
+                {
+                    var sb = new StringBuilder();
+
+                    foreach (var tuple in sections)
+                    {
+                        sb.AppendLine(OutoposConverter.ToWikiString(tuple.Item1, tuple.Item2));
+                    }
+
+                    Clipboard.SetText(sb.ToString());
+                }
+            }
+        }
+
+        public static bool ContainsChats()
+        {
+            lock (_thisLock)
+            {
+                foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    if (item.StartsWith("Chat:")) return true;
+                }
+
+                return false;
+            }
+        }
+
+        public static IEnumerable<Tuple<Chat, string>> GetChats()
+        {
+            lock (_thisLock)
+            {
+                var list = new List<Tuple<Chat, string>>();
+
+                foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    try
+                    {
+                        string option;
+
+                        var tag = OutoposConverter.FromChatString(item, out option);
+                        if (tag == null) continue;
+
+                        list.Add(new Tuple<Chat, string>(tag, option));
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                }
+
+                return list;
+            }
+        }
+
+        public static void SetChats(IEnumerable<Tuple<Chat, string>> sections)
+        {
+            lock (_thisLock)
+            {
+                {
+                    var sb = new StringBuilder();
+
+                    foreach (var tuple in sections)
+                    {
+                        sb.AppendLine(OutoposConverter.ToChatString(tuple.Item1, tuple.Item2));
                     }
 
                     Clipboard.SetText(sb.ToString());
@@ -392,7 +506,7 @@ namespace Outopos
 
                     foreach (var item in items)
                     {
-                        sb.AppendLine(OutoposConverter.ToTagString(item.Tag, item.LeaderSignature));
+                        sb.AppendLine(OutoposConverter.ToSectionString(item.Tag, item.LeaderSignature));
                     }
 
                     Clipboard.SetText(sb.ToString());

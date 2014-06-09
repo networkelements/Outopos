@@ -44,6 +44,7 @@
     <ErrorReport>none</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -53,6 +54,7 @@
     <ErrorReport>none</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <UseVSHostingProcess>false</UseVSHostingProcess>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Icons\Outopos.ico</ApplicationIcon>
@@ -68,7 +70,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ionic.Zip">
-      <HintPath>..\Assembly\Ionic.Zip.dll</HintPath>
+      <HintPath>..\Assemblies\Ionic.Zip.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
@@ -111,30 +113,37 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Utilities\CatharsisManager.cs" />
-    <Compile Include="Utilities\Information\ContentConverter.cs" />
-    <Compile Include="Utilities\Information\Contents\ChatMessageContent.cs" />
-    <Compile Include="Utilities\Information\Contents\ChatTopicContent.cs" />
-    <Compile Include="Utilities\Information\Contents\SectionProfileContent.cs" />
-    <Compile Include="Utilities\Information\Contents\SectionMessageContent.cs" />
-    <Compile Include="Utilities\Information\Contents\WikiPageContent.cs" />
-    <Compile Include="Utilities\Information\Contents\_Interface\IHypertext.cs" />
     <Compile Include="Utilities\EqualityComparer.cs" />
     <Compile Include="Utilities\Ipv4AddressFilter.cs" />
+    <Compile Include="Utilities\Information\ChatMessageInfo.cs" />
+    <Compile Include="Utilities\Information\ChatTopicInfo.cs" />
+    <Compile Include="Utilities\Information\SectionProfileInfo.cs" />
     <Compile Include="Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\ProgressWindow.xaml.cs">
       <DependentUpon>ProgressWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\Section\NewSectionWindow.xaml.cs">
+      <DependentUpon>NewSectionWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Section\SectionControl.xaml.cs">
+      <DependentUpon>SectionControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Section\SectionTreeItemEditWindow.xaml.cs">
+      <DependentUpon>SectionTreeItemEditWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Section\TrustSignaturesPreview.xaml.cs">
+      <DependentUpon>TrustSignaturesPreview.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\_Controls\ListBoxEx.cs" />
-    <Compile Include="Windows\_Controls\RichTextBoxHelper.cs" />
     <Compile Include="Windows\_Controls\ChatCategorizeTreeViewItem.cs" />
     <Compile Include="Windows\_Controls\ChatTreeViewItem.cs" />
     <Compile Include="Windows\_Items\ChatCategorizeTreeItem.cs" />
     <Compile Include="Windows\_Items\ChatTreeItem.cs" />
     <Compile Include="Windows\_Items\SignatureTreeItem.cs" />
     <Compile Include="Utilities\Extensions.cs" />
-    <Compile Include="Utilities\ObservableCollectionEx.cs" />
+    <Compile Include="Windows\_Controls\ObservableCollectionEx.cs" />
     <Compile Include="Utilities\OverlayNetworkManager.cs" />
     <Compile Include="Utilities\TransfarLimitManager.cs" />
     <Compile Include="Utilities\WindowPosition.cs" />
@@ -192,6 +201,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Windows\Section\NewSectionWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\Section\SectionControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\Section\SectionTreeItemEditWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\Section\TrustSignaturesPreview.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Windows\VersionInformationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -229,16 +254,16 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assembly\Polipo\libgnurx-0.dll">
+    <Content Include="Assemblies\Polipo\libgnurx-0.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assembly\Polipo\polipo.exe">
+    <Content Include="Assemblies\Polipo\polipo.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assembly\Tor\tor-resolve.exe">
+    <Content Include="Assemblies\Tor\tor-resolve.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assembly\Tor\tor.exe">
+    <Content Include="Assemblies\Tor\tor.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -287,10 +312,10 @@
     <None Include="app.manifest">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Assembly\Polipo\polipo.conf">
+    <None Include="Assemblies\Polipo\polipo.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Assembly\Tor\torrc">
+    <None Include="Assemblies\Tor\torrc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -318,6 +343,10 @@
     <ProjectReference Include="..\..\Library\Library.Net.Connections\Library.Net.Connections.csproj">
       <Project>{38994E3C-0699-4D6C-AD02-F9F657340347}</Project>
       <Name>Library.Net.Connections</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\Library.Net.I2p\Library.Net.I2p.csproj">
+      <Project>{24dc1835-cc3d-4d29-b922-199027ec551f}</Project>
+      <Name>Library.Net.I2p</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Library\Library.Net.Outopos\Library.Net.Outopos.csproj">
       <Project>{ae8fe1eb-0280-48ce-a26a-f58e3ffe6b5d}</Project>

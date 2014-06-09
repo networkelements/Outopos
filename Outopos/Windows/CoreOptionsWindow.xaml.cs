@@ -24,7 +24,7 @@ namespace Outopos.Windows
     /// </summary>
     partial class CoreOptionsWindow : Window
     {
-        private OutoposManager _amoebaManager;
+        private OutoposManager _outoposManager;
         private AutoBaseNodeSettingManager _autoBaseNodeSettingManager;
         private OverlayNetworkManager _overlayNetworkManager;
         private TransfarLimitManager _transferLimitManager;
@@ -36,9 +36,9 @@ namespace Outopos.Windows
         private ObservableCollectionEx<ConnectionFilter> _clientFilters;
         private ObservableCollectionEx<string> _serverListenUris;
 
-        public CoreOptionsWindow(OutoposManager amoebaManager, AutoBaseNodeSettingManager autoBaseNodeSettingManager, OverlayNetworkManager overlayNetworkManager, TransfarLimitManager transfarLimitManager, BufferManager bufferManager)
+        public CoreOptionsWindow(OutoposManager outoposManager, AutoBaseNodeSettingManager autoBaseNodeSettingManager, OverlayNetworkManager overlayNetworkManager, TransfarLimitManager transfarLimitManager, BufferManager bufferManager)
         {
-            _amoebaManager = amoebaManager;
+            _outoposManager = outoposManager;
             _autoBaseNodeSettingManager = autoBaseNodeSettingManager;
             _overlayNetworkManager = overlayNetworkManager;
             _transferLimitManager = transfarLimitManager;
@@ -83,30 +83,30 @@ namespace Outopos.Windows
 
             _bandwidthLimitComboBox.SelectedItem = Settings.Instance.CoreOptionsWindow_BandwidthLimit_Unit;
 
-            lock (_amoebaManager.ThisLock)
+            lock (_outoposManager.ThisLock)
             {
-                var baseNode = _amoebaManager.BaseNode;
+                var baseNode = _outoposManager.BaseNode;
 
                 _baseNode_Id = baseNode.Id;
                 _baseNode_Uris = new ObservableCollectionEx<string>(baseNode.Uris);
-                _otherNodes = new ObservableCollectionEx<Node>(_amoebaManager.OtherNodes);
-                _clientFilters = new ObservableCollectionEx<ConnectionFilter>(_amoebaManager.Filters.Select(n => n.Clone()));
-                _serverListenUris = new ObservableCollectionEx<string>(_amoebaManager.ListenUris);
+                _otherNodes = new ObservableCollectionEx<Node>(_outoposManager.OtherNodes);
+                _clientFilters = new ObservableCollectionEx<ConnectionFilter>(_outoposManager.Filters.Select(n => n.Clone()));
+                _serverListenUris = new ObservableCollectionEx<string>(_outoposManager.ListenUris);
 
                 try
                 {
-                    _dataCacheSizeTextBox.Text = NetworkConverter.ToSizeString(_amoebaManager.Size, Settings.Instance.CoreOptionsWindow_DataCacheSize_Unit);
+                    _dataCacheSizeTextBox.Text = NetworkConverter.ToSizeString(_outoposManager.Size, Settings.Instance.CoreOptionsWindow_DataCacheSize_Unit);
                 }
                 catch (Exception)
                 {
                     _dataCacheSizeTextBox.Text = "";
                 }
 
-                _bandwidthConnectionCountTextBox.Text = _amoebaManager.ConnectionCountLimit.ToString();
+                _bandwidthConnectionCountTextBox.Text = _outoposManager.ConnectionCountLimit.ToString();
 
                 try
                 {
-                    _bandwidthLimitTextBox.Text = NetworkConverter.ToSizeString(_amoebaManager.BandWidthLimit, Settings.Instance.CoreOptionsWindow_BandwidthLimit_Unit);
+                    _bandwidthLimitTextBox.Text = NetworkConverter.ToSizeString(_outoposManager.BandWidthLimit, Settings.Instance.CoreOptionsWindow_BandwidthLimit_Unit);
                 }
                 catch (Exception)
                 {
@@ -144,15 +144,10 @@ namespace Outopos.Windows
             }
         }
 
-        protected override void OnInitialized(EventArgs e)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             WindowPosition.Move(this);
 
-            base.OnInitialized(e);
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
             _baseNodeTreeViewItem.IsSelected = true;
         }
 
@@ -327,9 +322,13 @@ namespace Outopos.Windows
                 }
             }
 
-            var random = new RNGCryptoServiceProvider();
             byte[] buffer = new byte[64];
-            random.GetBytes(buffer);
+
+            using (var random = RandomNumberGenerator.Create())
+            {
+                random.GetBytes(buffer);
+            }
+
             _baseNode_Id = buffer;
 
             _baseNodeUpdate();
@@ -408,9 +407,13 @@ namespace Outopos.Windows
             if (!Regex.IsMatch(uri, @"^(.+?):(.+)$") || _baseNode_Uris.Any(n => n == uri)) return;
             _baseNode_Uris.Add(uri);
 
-            var random = new RNGCryptoServiceProvider();
             byte[] buffer = new byte[64];
-            random.GetBytes(buffer);
+
+            using (var random = RandomNumberGenerator.Create())
+            {
+                random.GetBytes(buffer);
+            }
+
             _baseNode_Id = buffer;
 
             _baseNodeUpdate();
@@ -430,9 +433,13 @@ namespace Outopos.Windows
 
             _baseNodeUrisListView.SelectedIndex = selectIndex;
 
-            var random = new RNGCryptoServiceProvider();
             byte[] buffer = new byte[64];
-            random.GetBytes(buffer);
+
+            using (var random = RandomNumberGenerator.Create())
+            {
+                random.GetBytes(buffer);
+            }
+
             _baseNode_Id = buffer;
 
             _baseNodeUpdate();
@@ -448,9 +455,13 @@ namespace Outopos.Windows
                 _baseNode_Uris.Remove(item);
             }
 
-            var random = new RNGCryptoServiceProvider();
             byte[] buffer = new byte[64];
-            random.GetBytes(buffer);
+
+            using (var random = RandomNumberGenerator.Create())
+            {
+                random.GetBytes(buffer);
+            }
+
             _baseNode_Id = buffer;
 
             _baseNodeUpdate();
@@ -1388,9 +1399,9 @@ namespace Outopos.Windows
 
             bool flag = false;
 
-            lock (_amoebaManager.ThisLock)
+            lock (_outoposManager.ThisLock)
             {
-                long size = (long)NetworkConverter.FromSizeString("1 GB");
+                long size = (long)NetworkConverter.FromSizeString("50 GB");
 
                 try
                 {
@@ -1402,33 +1413,33 @@ namespace Outopos.Windows
                 }
 
 #if !DEBUG
-                size = Math.Max((long)NetworkConverter.FromSizeString("1 GB"), size);
+                size = Math.Max((long)NetworkConverter.FromSizeString("50 GB"), size);
 #endif
 
-                if (_amoebaManager.Size != size)
+                if (_outoposManager.Size != size)
                 {
-                    if (((long)_amoebaManager.Information["UsingSpace"]) > size)
+                    if (((long)_outoposManager.Information["UsingSpace"]) > size)
                     {
                         if (MessageBox.Show(this, LanguagesManager.Instance.CoreOptionsWindow_CacheResize_Message, "Connections Settings", MessageBoxButton.OKCancel, MessageBoxImage.Information) == MessageBoxResult.OK)
                         {
-                            _amoebaManager.Resize(size);
+                            _outoposManager.Resize(size);
                         }
                     }
                     else
                     {
-                        _amoebaManager.Resize(size);
+                        _outoposManager.Resize(size);
                     }
                 }
 
-                if (!Collection.Equals(_amoebaManager.BaseNode.Uris, _baseNode_Uris))
+                if (!CollectionUtilities.Equals(_outoposManager.BaseNode.Uris, _baseNode_Uris))
                 {
-                    _amoebaManager.SetBaseNode(new Node(_baseNode_Id, _baseNode_Uris));
+                    _outoposManager.SetBaseNode(new Node(_baseNode_Id, _baseNode_Uris));
                 }
 
-                _amoebaManager.SetOtherNodes(_otherNodes.Where(n => n != null && n.Id != null && n.Uris.Count() != 0));
+                _outoposManager.SetOtherNodes(_otherNodes.Where(n => n != null && n.Id != null && n.Uris.Count() != 0));
 
                 int count = CoreOptionsWindow.GetStringToInt(_bandwidthConnectionCountTextBox.Text);
-                _amoebaManager.ConnectionCountLimit = Math.Max(Math.Min(count, 100), 25);
+                _outoposManager.ConnectionCountLimit = Math.Max(Math.Min(count, 256), 32);
 
                 int bandwidthLimit = (int)NetworkConverter.FromSizeString("0");
 
@@ -1441,15 +1452,15 @@ namespace Outopos.Windows
                     bandwidthLimit = int.MaxValue;
                 }
 
-                _amoebaManager.BandWidthLimit = bandwidthLimit;
+                _outoposManager.BandWidthLimit = bandwidthLimit;
 
-                _amoebaManager.Filters.Clear();
-                _amoebaManager.Filters.AddRange(_clientFilters.Select(n => n.Clone()));
+                _outoposManager.Filters.Clear();
+                _outoposManager.Filters.AddRange(_clientFilters.Select(n => n.Clone()));
 
-                if (!Collection.Equals(_amoebaManager.ListenUris, _serverListenUris))
+                if (!CollectionUtilities.Equals(_outoposManager.ListenUris, _serverListenUris))
                 {
-                    _amoebaManager.ListenUris.Clear();
-                    _amoebaManager.ListenUris.AddRange(_serverListenUris);
+                    _outoposManager.ListenUris.Clear();
+                    _outoposManager.ListenUris.AddRange(_serverListenUris);
 
                     flag = true;
                 }

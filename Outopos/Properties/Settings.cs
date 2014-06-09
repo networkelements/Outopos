@@ -103,15 +103,15 @@ namespace Outopos.Properties
                 new Library.Configuration.SettingContent<double>() { Name = "SectionTreeItemEditWindow_GridViewColumn_Wiki_Width", Value = 600 },
                 new Library.Configuration.SettingContent<double>() { Name = "SectionTreeItemEditWindow_GridViewColumn_Chat_Width", Value = 600 },
 
-                new Library.Configuration.SettingContent<double>() { Name = "TrustSignaturesPreviewWindow_Top", Value = 120 },
-                new Library.Configuration.SettingContent<double>() { Name = "TrustSignaturesPreviewWindow_Left", Value = 120 },
-                new Library.Configuration.SettingContent<double>() { Name = "TrustSignaturesPreviewWindow_Height", Value = 500 },
-                new Library.Configuration.SettingContent<double>() { Name = "TrustSignaturesPreviewWindow_Width", Value = 700 },
-                new Library.Configuration.SettingContent<WindowState>() { Name = "TrustSignaturesPreviewWindow_WindowState", Value = WindowState.Normal },
-                new Library.Configuration.SettingContent<double>() { Name = "TrustSignaturesPreviewWindow_Grid_ColumnDefinitions_Width", Value = 200 },
-                new Library.Configuration.SettingContent<double>() { Name = "TrustSignaturesPreviewWindow_GridViewColumn_TrustSignature_Width", Value = 600 },
-                new Library.Configuration.SettingContent<double>() { Name = "TrustSignaturesPreviewWindow_GridViewColumn_Wiki_Width", Value = 600 },
-                new Library.Configuration.SettingContent<double>() { Name = "TrustSignaturesPreviewWindow_GridViewColumn_Chat_Width", Value = 600 },
+                new Library.Configuration.SettingContent<double>() { Name = "TrustSignaturesPreview_Top", Value = 120 },
+                new Library.Configuration.SettingContent<double>() { Name = "TrustSignaturesPreview_Left", Value = 120 },
+                new Library.Configuration.SettingContent<double>() { Name = "TrustSignaturesPreview_Height", Value = 500 },
+                new Library.Configuration.SettingContent<double>() { Name = "TrustSignaturesPreview_Width", Value = 700 },
+                new Library.Configuration.SettingContent<WindowState>() { Name = "TrustSignaturesPreview_WindowState", Value = WindowState.Normal },
+                new Library.Configuration.SettingContent<double>() { Name = "TrustSignaturesPreview_Grid_ColumnDefinitions_Width", Value = 200 },
+                new Library.Configuration.SettingContent<double>() { Name = "TrustSignaturesPreview_GridViewColumn_TrustSignature_Width", Value = 600 },
+                new Library.Configuration.SettingContent<double>() { Name = "TrustSignaturesPreview_GridViewColumn_Wiki_Width", Value = 600 },
+                new Library.Configuration.SettingContent<double>() { Name = "TrustSignaturesPreview_GridViewColumn_Chat_Width", Value = 600 },
 
                 new Library.Configuration.SettingContent<double>() { Name = "ChatControl_Grid_ColumnDefinitions_Width", Value = 200 },
              
@@ -1490,164 +1490,164 @@ namespace Outopos.Properties
         }
 
 
-        public double TrustSignaturesPreviewWindow_Top
+        public double TrustSignaturesPreview_Top
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["TrustSignaturesPreviewWindow_Top"];
+                   return (double)this["TrustSignaturesPreview_Top"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["TrustSignaturesPreviewWindow_Top"] = value;
+                    this["TrustSignaturesPreview_Top"] = value;
                 }
             }
         }
 
-        public double TrustSignaturesPreviewWindow_Left
+        public double TrustSignaturesPreview_Left
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["TrustSignaturesPreviewWindow_Left"];
+                   return (double)this["TrustSignaturesPreview_Left"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["TrustSignaturesPreviewWindow_Left"] = value;
+                    this["TrustSignaturesPreview_Left"] = value;
                 }
             }
         }
 
-        public double TrustSignaturesPreviewWindow_Height
+        public double TrustSignaturesPreview_Height
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["TrustSignaturesPreviewWindow_Height"];
+                   return (double)this["TrustSignaturesPreview_Height"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["TrustSignaturesPreviewWindow_Height"] = value;
+                    this["TrustSignaturesPreview_Height"] = value;
                 }
             }
         }
 
-        public double TrustSignaturesPreviewWindow_Width
+        public double TrustSignaturesPreview_Width
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["TrustSignaturesPreviewWindow_Width"];
+                   return (double)this["TrustSignaturesPreview_Width"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["TrustSignaturesPreviewWindow_Width"] = value;
+                    this["TrustSignaturesPreview_Width"] = value;
                 }
             }
         }
 
-        public WindowState TrustSignaturesPreviewWindow_WindowState
+        public WindowState TrustSignaturesPreview_WindowState
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (WindowState)this["TrustSignaturesPreviewWindow_WindowState"];
+                   return (WindowState)this["TrustSignaturesPreview_WindowState"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["TrustSignaturesPreviewWindow_WindowState"] = value;
+                    this["TrustSignaturesPreview_WindowState"] = value;
                 }
             }
         }
 
-        public double TrustSignaturesPreviewWindow_Grid_ColumnDefinitions_Width
+        public double TrustSignaturesPreview_Grid_ColumnDefinitions_Width
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["TrustSignaturesPreviewWindow_Grid_ColumnDefinitions_Width"];
+                   return (double)this["TrustSignaturesPreview_Grid_ColumnDefinitions_Width"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["TrustSignaturesPreviewWindow_Grid_ColumnDefinitions_Width"] = value;
+                    this["TrustSignaturesPreview_Grid_ColumnDefinitions_Width"] = value;
                 }
             }
         }
 
-        public double TrustSignaturesPreviewWindow_GridViewColumn_TrustSignature_Width
+        public double TrustSignaturesPreview_GridViewColumn_TrustSignature_Width
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["TrustSignaturesPreviewWindow_GridViewColumn_TrustSignature_Width"];
+                   return (double)this["TrustSignaturesPreview_GridViewColumn_TrustSignature_Width"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["TrustSignaturesPreviewWindow_GridViewColumn_TrustSignature_Width"] = value;
+                    this["TrustSignaturesPreview_GridViewColumn_TrustSignature_Width"] = value;
                 }
             }
         }
 
-        public double TrustSignaturesPreviewWindow_GridViewColumn_Wiki_Width
+        public double TrustSignaturesPreview_GridViewColumn_Wiki_Width
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["TrustSignaturesPreviewWindow_GridViewColumn_Wiki_Width"];
+                   return (double)this["TrustSignaturesPreview_GridViewColumn_Wiki_Width"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["TrustSignaturesPreviewWindow_GridViewColumn_Wiki_Width"] = value;
+                    this["TrustSignaturesPreview_GridViewColumn_Wiki_Width"] = value;
                 }
             }
         }
 
-        public double TrustSignaturesPreviewWindow_GridViewColumn_Chat_Width
+        public double TrustSignaturesPreview_GridViewColumn_Chat_Width
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["TrustSignaturesPreviewWindow_GridViewColumn_Chat_Width"];
+                   return (double)this["TrustSignaturesPreview_GridViewColumn_Chat_Width"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["TrustSignaturesPreviewWindow_GridViewColumn_Chat_Width"] = value;
+                    this["TrustSignaturesPreview_GridViewColumn_Chat_Width"] = value;
                 }
             }
         }

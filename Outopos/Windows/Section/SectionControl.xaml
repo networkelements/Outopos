@@ -1,0 +1,73 @@
+<UserControl x:Class="Outopos.Windows.SectionControl"
+        x:ClassModifier="internal"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:prop="clr-namespace:Outopos.Properties"     
+        xmlns:local="clr-namespace:Outopos.Windows" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        mc:Ignorable="d" 
+        d:DesignHeight="600" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <ContextMenu x:Key="_sectionCategorizeTreeViewItemContextMenu">
+            <MenuItem Name="_sectionCategorizeTreeViewItemNewSectionMenuItem" Header="{Binding Path=SectionControl_NewSection, Source={StaticResource ResourcesInstance}}" Click="_sectionCategorizeTreeViewItemNewSectionMenuItem_Click"/>
+            <Separator />
+            <MenuItem Name="_sectionCategorizeTreeViewItemNewCategoryMenuItem" Header="{Binding Path=SectionControl_NewCategory, Source={StaticResource ResourcesInstance}}" Click="_sectionCategorizeTreeViewItemNewCategoryMenuItem_Click"/>
+            <MenuItem Name="_sectionCategorizeTreeViewItemDeleteMenuItem" Header="{Binding Path=SectionControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_sectionCategorizeTreeViewItemDeleteMenuItem_Click"/>
+            <Separator />
+            <MenuItem Name="_sectionCategorizeTreeViewItemCutMenuItem" Header="{Binding Path=SectionControl_Cut, Source={StaticResource ResourcesInstance}}" Click="_sectionCategorizeTreeViewItemCutMenuItem_Click" />
+            <MenuItem Name="_sectionCategorizeTreeViewItemCopyMenuItem" Header="{Binding Path=SectionControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_sectionCategorizeTreeViewItemCopyMenuItem_Click" />
+            <MenuItem Name="_sectionCategorizeTreeViewItemCopyInfoMenuItem" Header="{Binding Path=SectionControl_CopyInfo, Source={StaticResource ResourcesInstance}}" Click="_sectionCategorizeTreeViewItemCopyInfoMenuItem_Click" />
+            <MenuItem Name="_sectionCategorizeTreeViewItemPasteMenuItem" Header="{Binding Path=SectionControl_Paste, Source={StaticResource ResourcesInstance}}" Click="_sectionCategorizeTreeViewItemPasteMenuItem_Click" />
+        </ContextMenu>
+
+        <ContextMenu x:Key="_sectionTreeViewItemContextMenu">
+            <MenuItem Name="_sectionTreeViewItemEditMenuItem" Header="{Binding Path=SectionControl_Edit, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemEditMenuItem_Click"/>
+            <MenuItem Name="_sectionTreeViewItemDeleteMenuItem" Header="{Binding Path=SectionControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemDeleteMenuItem_Click"/>
+            <Separator />
+            <MenuItem Name="_sectionTreeViewItemCutMenuItem" Header="{Binding Path=SectionControl_Cut, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemCutMenuItem_Click" />
+            <MenuItem Name="_sectionTreeViewItemCopyMenuItem" Header="{Binding Path=SectionControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemCopyMenuItem_Click" />
+            <MenuItem Name="_sectionTreeViewItemCopyInfoMenuItem" Header="{Binding Path=SectionControl_CopyInfo, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemCopyInfoMenuItem_Click" />
+            <Separator />
+            <MenuItem Name="_sectionTreeViewItemTrustSignaturesPreviewMenuItem" Header="{Binding Path=SectionControl_TrustSignaturesPreview, Source={StaticResource ResourcesInstance}}" Click="_sectionTreeViewItemTrustSignaturesPreviewMenuItem_Click" />
+        </ContextMenu>
+    </UserControl.Resources>
+
+    <UserControl.CommandBindings>
+        <CommandBinding Command="New" Executed="Execute_New" />
+        <CommandBinding Command="Delete" Executed="Execute_Delete" />
+        <CommandBinding Command="Cut" Executed="Execute_Cut" />
+        <CommandBinding Command="Copy" Executed="Execute_Copy" />
+        <CommandBinding Command="Paste" Executed="Execute_Paste" />
+    </UserControl.CommandBindings>
+
+    <UserControl.InputBindings>
+        <KeyBinding Gesture="CTRL+N" Command="New" />
+        <KeyBinding Gesture="Delete" Command="Delete" />
+        <KeyBinding Gesture="CTRL+X" Command="Cut" />
+        <KeyBinding Gesture="CTRL+C" Command="Copy" />
+        <KeyBinding Gesture="CTRL+V" Command="Paste" />
+    </UserControl.InputBindings>
+
+    <Grid>
+        <TreeView Name="_treeView" AllowDrop="True"
+                  PreviewDragOver="_treeView_PreviewDragOver"
+                  PreviewMouseMove="_treeView_PreviewMouseMove" 
+                  PreviewDrop="_treeView_PreviewDrop" 
+                  PreviewMouseLeftButtonDown="_treeView_PreviewMouseLeftButtonDown" 
+                  SelectedItemChanged="_treeView_SelectedItemChanged"
+                VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
+            <TreeView.Resources>
+                <Style TargetType="{x:Type local:SectionCategorizeTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" >
+                    <Setter Property="ContextMenu" Value="{StaticResource _sectionCategorizeTreeViewItemContextMenu}" />
+                    <EventSetter Event="ContextMenuOpening" Handler="_sectionCategorizeTreeViewItemContextMenu_ContextMenuOpening" />
+                </Style>
+                <Style TargetType="{x:Type local:SectionTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" >
+                    <Setter Property="ContextMenu" Value="{StaticResource _sectionTreeViewItemContextMenu}" />
+                    <EventSetter Event="ContextMenuOpening" Handler="_sectionTreeViewItemContextMenu_ContextMenuOpening" />
+                </Style>
+            </TreeView.Resources>
+        </TreeView>
+    </Grid>
+</UserControl>

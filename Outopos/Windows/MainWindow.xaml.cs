@@ -11,39 +11,42 @@ using System.Net.Sockets;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+using System.Security.Permissions;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
+using System.Windows.Automation;
+using System.Windows.Automation.Peers;
+using System.Windows.Automation.Provider;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Threading;
 using Outopos.Properties;
 using Library;
+using Library.Collections;
 using Library.Io;
 using Library.Net.Outopos;
 using Library.Net.Connections;
 using Library.Net.Proxy;
 using Library.Net.Upnp;
 using Library.Security;
-using Library.Collections;
-using System.ComponentModel;
-using System.Windows.Input;
-using System.Windows.Automation.Peers;
-using System.Windows.Automation.Provider;
 
 namespace Outopos.Windows
 {
-    public delegate void DebugLog(string message);
+    delegate void DebugLog(string message);
 
-    public enum MainWindowTabType
+    enum MainWindowTabType
     {
         Connection,
         Section,
+        Chat,
+        Wiki,
         Mail,
         Log,
     }
@@ -54,10 +57,13 @@ namespace Outopos.Windows
     partial class MainWindow : Window
     {
         private BufferManager _bufferManager;
-        private OutoposManager _lairManager;
+        private OutoposManager _outoposManager;
         private AutoBaseNodeSettingManager _autoBaseNodeSettingManager;
         private OverlayNetworkManager _overlayNetworkManager;
         private TransfarLimitManager _transferLimitManager;
+        private CatharsisManager _catharsisManager;
+
+        private Random _random = new Random();
 
         private System.Windows.Forms.NotifyIcon _notifyIcon = new System.Windows.Forms.NotifyIcon();
         private WindowState _windowState;
@@ -65,17 +71,15 @@ namespace Outopos.Windows
         private Dictionary<string, string> _configrationDirectoryPaths = new Dictionary<string, string>();
         private string _logPath;
 
-        private bool _isRun = true;
+        private volatile bool _closed = false;
         private bool _autoStop;
 
-        private System.Timers.Timer _refreshTimer = new System.Timers.Timer();
         private Thread _timerThread;
-        private Thread _statusBarTimerThread;
+        private Thread _statusBarThread;
+        private Thread _trafficMonitorThread;
 
         private volatile bool _diskSpaceNotFoundException;
         private volatile bool _cacheSpaceNotFoundException;
-
-        private string _cacheBlocksPath;
 
         private volatile MainWindowTabType _selectedTab;
 
@@ -110,12 +114,11 @@ namespace Outopos.Windows
                 _configrationDirectoryPaths.Add("AutoBaseNodeSettingManager", Path.Combine(App.DirectoryPaths["Configuration"], @"Outopos/AutoBaseNodeSettingManager"));
                 _configrationDirectoryPaths.Add("OverlayNetworkManager", Path.Combine(App.DirectoryPaths["Configuration"], @"Outopos/OverlayNetworkManager"));
                 _configrationDirectoryPaths.Add("TransfarLimitManager", Path.Combine(App.DirectoryPaths["Configuration"], @"Outopos/TransfarLimitManager"));
+                _configrationDirectoryPaths.Add("CatharsisManager", Path.Combine(App.DirectoryPaths["Configuration"], @"Outopos/CatharsisManager"));
 
                 Settings.Instance.Load(_configrationDirectoryPaths["MainWindow"]);
 
                 InitializeComponent();
-
-                _windowState = this.WindowState;
 
                 this.Title = string.Format("Outopos {0}", App.OutoposVersion);
 
@@ -140,6 +143,8 @@ namespace Outopos.Windows
                 _notifyIcon.Visible = false;
                 _notifyIcon.Click += (object sender2, EventArgs e2) =>
                 {
+                    if (_closed) return;
+
                     try
                     {
                         this.Show();
@@ -154,24 +159,27 @@ namespace Outopos.Windows
                     }
                 };
 
-                _refreshTimer = new System.Timers.Timer();
-                _refreshTimer.Elapsed += _refreshTimer_Elapsed;
-                _refreshTimer.Interval = 1000;
-                _refreshTimer.AutoReset = true;
-                _refreshTimer.Start();
-
-                _timerThread = new Thread(this.Timer);
-                _timerThread.Priority = ThreadPriority.Highest;
+                _timerThread = new Thread(this.TimerThread);
+                _timerThread.Priority = ThreadPriority.Lowest;
                 _timerThread.Name = "MainWindow_TimerThread";
                 _timerThread.Start();
 
-                _statusBarTimerThread = new Thread(this.StatusBarTimer);
-                _statusBarTimerThread.Priority = ThreadPriority.Highest;
-                _statusBarTimerThread.Name = "MainWindow_StatusBarTimerThread";
-                _statusBarTimerThread.Start();
+                _statusBarThread = new Thread(this.StatusBarThread);
+                _statusBarThread.Priority = ThreadPriority.Highest;
+                _statusBarThread.Name = "MainWindow_StatusBarThread";
+                _statusBarThread.Start();
+
+                _trafficMonitorThread = new Thread(this.TrafficMonitorThread);
+                _trafficMonitorThread.Priority = ThreadPriority.Highest;
+                _trafficMonitorThread.Name = "MainWindow_TrafficMonitorThread";
+                _trafficMonitorThread.Start();
 
                 _transferLimitManager.StartEvent += _transferLimitManager_StartEvent;
                 _transferLimitManager.StopEvent += _transferLimitManager_StopEvent;
+
+#if !DEBUG
+                _logRowDefinition.Height = new GridLength(0);
+#endif
 
                 Debug.WriteLineIf(System.Runtime.GCSettings.IsServerGC, "GCSettings.IsServerGC");
 
@@ -238,34 +246,28 @@ namespace Outopos.Windows
             }
         }
 
-        private void Timer()
+        private void TimerThread()
         {
             try
             {
-                Stopwatch debugStopwatch = new Stopwatch();
                 Stopwatch spaceCheckStopwatch = new Stopwatch();
                 Stopwatch backupStopwatch = new Stopwatch();
                 Stopwatch updateStopwatch = new Stopwatch();
                 Stopwatch uriUpdateStopwatch = new Stopwatch();
-                Stopwatch gcStopwatch = new Stopwatch();
-                debugStopwatch.Start();
+                Stopwatch compactionStopwatch = new Stopwatch();
+                Stopwatch garbageCollectStopwatch = new Stopwatch();
+
                 spaceCheckStopwatch.Start();
                 backupStopwatch.Start();
                 updateStopwatch.Start();
                 uriUpdateStopwatch.Start();
-                gcStopwatch.Start();
+                compactionStopwatch.Start();
+                garbageCollectStopwatch.Start();
 
                 for (; ; )
                 {
                     Thread.Sleep(1000);
-                    if (!_isRun) return;
-
-                    if (debugStopwatch.Elapsed.TotalMinutes >= 1)
-                    {
-                        debugStopwatch.Restart();
-
-                        Debug.WriteLine(string.Format("----- ----- ----- BufferManager Size {0} ----- ----- -----", NetworkConverter.ToSizeString(_bufferManager.Size)));
-                    }
+                    if (_closed) return;
 
                     {
                         if (_diskSpaceNotFoundException || _cacheSpaceNotFoundException)
@@ -298,17 +300,17 @@ namespace Outopos.Windows
                             _overlayNetworkManager.Stop();
                         }
 
-                        if (_lairManager.State == ManagerState.Stop
+                        if (_outoposManager.State == ManagerState.Stop
                             && Settings.Instance.Global_IsStart)
                         {
-                            _lairManager.Start();
+                            _outoposManager.Start();
 
                             Log.Information("Start");
                         }
-                        else if (_lairManager.State == ManagerState.Start
+                        else if (_outoposManager.State == ManagerState.Start
                             && !Settings.Instance.Global_IsStart)
                         {
-                            _lairManager.Stop();
+                            _outoposManager.Stop();
 
                             Log.Information("Stop");
                         }
@@ -368,9 +370,9 @@ namespace Outopos.Windows
 
                         try
                         {
-                            if (!string.IsNullOrWhiteSpace(_cacheBlocksPath))
+                            if (!string.IsNullOrWhiteSpace(App.Cache.Path))
                             {
-                                DriveInfo drive = new DriveInfo(Path.GetDirectoryName(Path.GetFullPath(_cacheBlocksPath)));
+                                DriveInfo drive = new DriveInfo(Path.GetDirectoryName(Path.GetFullPath(App.Cache.Path)));
 
                                 if (drive.AvailableFreeSpace < NetworkConverter.FromSizeString("256MB"))
                                 {
@@ -390,10 +392,11 @@ namespace Outopos.Windows
 
                         try
                         {
+                            _catharsisManager.Save(_configrationDirectoryPaths["CatharsisManager"]);
                             _transferLimitManager.Save(_configrationDirectoryPaths["TransfarLimitManager"]);
                             _overlayNetworkManager.Save(_configrationDirectoryPaths["OverlayNetworkManager"]);
                             _autoBaseNodeSettingManager.Save(_configrationDirectoryPaths["AutoBaseNodeSettingManager"]);
-                            _lairManager.Save(_configrationDirectoryPaths["OutoposManager"]);
+                            _outoposManager.Save(_configrationDirectoryPaths["OutoposManager"]);
                             Settings.Instance.Save(_configrationDirectoryPaths["MainWindow"]);
                         }
                         catch (Exception e)
@@ -434,15 +437,27 @@ namespace Outopos.Windows
                         }
                     }
 
-                    if (gcStopwatch.Elapsed.TotalHours >= 1)
+                    if (compactionStopwatch.Elapsed.TotalMinutes >= 3)
                     {
-                        gcStopwatch.Restart();
+                        compactionStopwatch.Restart();
 
                         try
                         {
-                            System.GC.Collect();
-                            System.GC.WaitForPendingFinalizers();
-                            System.GC.Collect();
+                            this.Compaction();
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Warning(e);
+                        }
+                    }
+
+                    if (garbageCollectStopwatch.Elapsed.TotalSeconds >= 60)
+                    {
+                        garbageCollectStopwatch.Restart();
+
+                        try
+                        {
+                            this.GarbageCollect();
                         }
                         catch (Exception e)
                         {
@@ -457,23 +472,70 @@ namespace Outopos.Windows
             }
         }
 
-        private void StatusBarTimer()
+        private void Compaction()
+        {
+            // LargeObjectHeapCompactionModeの設定を試みる。(.net 4.5.1以上で可能)
+            try
+            {
+                var type = typeof(System.Runtime.GCSettings);
+                var property = type.GetProperty("LargeObjectHeapCompactionMode", BindingFlags.Static | BindingFlags.Public);
+
+                if (null != property)
+                {
+                    var Setter = property.GetSetMethod();
+                    Setter.Invoke(null, new object[] { /* GCLargeObjectHeapCompactionMode.CompactOnce */ 2 });
+
+                    Debug.WriteLine("Set GCLargeObjectHeapCompactionMode.CompactOnce");
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private void GarbageCollect()
+        {
+            try
+            {
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private void StatusBarThread()
         {
             try
             {
                 for (; ; )
                 {
                     Thread.Sleep(1000);
-                    if (!_isRun) return;
+                    if (_closed) return;
 
-                    var state = _lairManager.State;
-
+                    var state = _outoposManager.State;
                     this.Dispatcher.Invoke(DispatcherPriority.Send, new TimeSpan(0, 0, 1), new Action(() =>
                     {
                         try
                         {
-                            _sendSpeedTextBlock.Text = NetworkConverter.ToSizeString(_ci.SentByteCountList.ToArray().Sum(n => n) / 3) + "/s";
-                            _receiveSpeedTextBlock.Text = NetworkConverter.ToSizeString(_ci.ReceivedByteCountList.ToArray().Sum(n => n) / 3) + "/s";
+                            decimal sentAverageTraffic;
+
+                            lock (_sentInfomation.ThisLock)
+                            {
+                                sentAverageTraffic = _sentInfomation.AverageTrafficList.Sum() / _sentInfomation.AverageTrafficList.Length;
+                            }
+
+                            decimal receivedAverageTraffic;
+
+                            lock (_receivedInfomation.ThisLock)
+                            {
+                                receivedAverageTraffic = _receivedInfomation.AverageTrafficList.Sum() / _receivedInfomation.AverageTrafficList.Length;
+                            }
+
+                            _sendSpeedTextBlock.Text = NetworkConverter.ToSizeString(sentAverageTraffic) + "/s";
+                            _receiveSpeedTextBlock.Text = NetworkConverter.ToSizeString(receivedAverageTraffic) + "/s";
                         }
                         catch (Exception)
                         {
@@ -496,67 +558,92 @@ namespace Outopos.Windows
                     }));
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
+                Log.Error(e);
             }
         }
 
-        private ConnectionInformation _ci = new ConnectionInformation();
-        private bool _refreshTimer_Running;
+        private TrafficInformation _sentInfomation = new TrafficInformation();
+        private TrafficInformation _receivedInfomation = new TrafficInformation();
 
-        void _refreshTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        private void TrafficMonitorThread()
         {
-            if (_refreshTimer_Running) return;
-            _refreshTimer_Running = true;
-
             try
             {
-                var sentByteCount = _lairManager.SentByteCount;
-                var receivedByteCount = _lairManager.ReceivedByteCount;
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
 
-                _ci.SentByteCountList[_ci.Count] = sentByteCount - _ci.SentByteCount;
-                _ci.SentByteCount = sentByteCount;
-                _ci.ReceivedByteCountList[_ci.Count] = receivedByteCount - _ci.ReceivedByteCount;
-                _ci.ReceivedByteCount = receivedByteCount;
-                _ci.Count++;
+                while (!_closed)
+                {
+                    Thread.Sleep(((int)Math.Max(2, 1000 - sw.ElapsedMilliseconds)) / 2);
+                    if (sw.ElapsedMilliseconds < 1000) continue;
 
-                if (_ci.Count >= _ci.SentByteCountList.Count) _ci.Count = 0;
+                    var receivedByteCount = _outoposManager.ReceivedByteCount;
+                    var sentByteCount = _outoposManager.SentByteCount;
+
+                    lock (_sentInfomation.ThisLock)
+                    {
+                        _sentInfomation.AverageTrafficList[_sentInfomation.Round++]
+                            = ((decimal)(sentByteCount - _sentInfomation.PreviousTraffic)) * 1000 / sw.ElapsedMilliseconds;
+                        _sentInfomation.PreviousTraffic = sentByteCount;
+
+                        if (_sentInfomation.Round >= _sentInfomation.AverageTrafficList.Length)
+                        {
+                            _sentInfomation.Round = 0;
+                        }
+                    }
+
+                    lock (_receivedInfomation.ThisLock)
+                    {
+                        _receivedInfomation.AverageTrafficList[_receivedInfomation.Round++]
+                            = ((decimal)(receivedByteCount - _receivedInfomation.PreviousTraffic)) * 1000 / sw.ElapsedMilliseconds;
+                        _receivedInfomation.PreviousTraffic = receivedByteCount;
+
+                        if (_receivedInfomation.Round >= _receivedInfomation.AverageTrafficList.Length)
+                        {
+                            _receivedInfomation.Round = 0;
+                        }
+                    }
+
+                    sw.Restart();
+                }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
-            }
-            finally
-            {
-                _refreshTimer_Running = false;
+                Log.Error(e);
             }
         }
 
-        private class ConnectionInformation
+        private class TrafficInformation : IThisLock
         {
-            private LockedList<long> _sentByteCountList = new LockedList<long>(new long[3]);
-            private LockedList<long> _receivedByteCountList = new LockedList<long>(new long[3]);
+            private decimal[] _averageTrafficList = new decimal[3];
 
-            public long SentByteCount { get; set; }
-            public long ReceivedByteCount { get; set; }
-            public int Count { get; set; }
+            private readonly object _thisLock = new object();
 
-            public LockedList<long> SentByteCountList
+            public long PreviousTraffic { get; set; }
+
+            public int Round { get; set; }
+
+            public decimal[] AverageTrafficList
             {
                 get
                 {
-                    return _sentByteCountList;
+                    return _averageTrafficList;
                 }
             }
 
-            public LockedList<long> ReceivedByteCountList
+            #region IThisLock
+
+            public object ThisLock
             {
                 get
                 {
-                    return _receivedByteCountList;
+                    return _thisLock;
                 }
             }
+
+            #endregion
         }
 
         private static string GetMachineInfomation()
@@ -597,6 +684,10 @@ namespace Outopos.Windows
 
                         case 1:
                             osName = "Windows 7";
+                            break;
+
+                        case 2:
+                            osName = "Windows 8";
                             break;
                     }
                 }
@@ -688,19 +779,22 @@ namespace Outopos.Windows
                 {
                     this.Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new Action(() =>
                     {
-                        try
+                        if (_logCheckBox.IsChecked.Value)
                         {
-                            if (_logListBox.Items.Count > 100)
+                            try
                             {
-                                _logListBox.Items.RemoveAt(0);
+                                if (_logListBox.Items.Count > 100)
+                                {
+                                    _logListBox.Items.RemoveAt(0);
+                                }
+
+                                _logListBox.Items.Add(string.Format("{0} {1}:\t{2}", DateTime.Now.ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo), e.MessageLevel, e.Message));
+                                _logListBox.GoBottom();
                             }
+                            catch (Exception)
+                            {
 
-                            _logListBox.Items.Add(string.Format("{0} {1}:\t{2}", DateTime.Now.ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo), e.MessageLevel, e.Message));
-                            _logListBox.ScrollIntoView(_logListBox.Items[_logListBox.Items.Count - 1]);
-                        }
-                        catch (Exception)
-                        {
-
+                            }
                         }
                     }));
                 }
@@ -716,19 +810,22 @@ namespace Outopos.Windows
                 {
                     this.Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new Action(() =>
                     {
-                        try
+                        if (_debugCheckBox.IsChecked.Value)
                         {
-                            if (_logListBox.Items.Count > 100)
+                            try
                             {
-                                _logListBox.Items.RemoveAt(0);
+                                if (_logListBox.Items.Count > 100)
+                                {
+                                    _logListBox.Items.RemoveAt(0);
+                                }
+
+                                _logListBox.Items.Add(string.Format("{0} Debug:\t{1}", DateTime.Now.ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo), message));
+                                _logListBox.GoBottom();
                             }
+                            catch (Exception)
+                            {
 
-                            _logListBox.Items.Add(string.Format("{0} Debug:\t{1}", DateTime.Now.ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo), message));
-                            _logListBox.ScrollIntoView(_logListBox.Items[_logListBox.Items.Count - 1]);
-                        }
-                        catch (Exception)
-                        {
-
+                            }
                         }
                     }));
                 }
@@ -737,6 +834,11 @@ namespace Outopos.Windows
 
                 }
             }));
+        }
+
+        private void _logListBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            _logListBox.GoBottom();
         }
 
         private class MyTraceListener : TraceListener
@@ -761,15 +863,15 @@ namespace Outopos.Windows
 
         private void Setting_Languages()
         {
-            foreach (var item in LanguagesManager.Instance.Languages)
+            foreach (var language in LanguagesManager.Instance.Languages)
             {
-                var menuItem = new LanguageMenuItem() { IsCheckable = true, Value = item };
+                var menuItem = new LanguageMenuItem() { IsCheckable = true, Value = language };
 
                 menuItem.Click += (object sender, RoutedEventArgs e) =>
                 {
-                    foreach (var item3 in _languagesMenuItem.Items.Cast<LanguageMenuItem>())
+                    foreach (var item in _languagesMenuItem.Items.Cast<LanguageMenuItem>())
                     {
-                        item3.IsChecked = false;
+                        item.IsChecked = false;
                     }
 
                     menuItem.IsChecked = true;
@@ -784,8 +886,10 @@ namespace Outopos.Windows
                 _languagesMenuItem.Items.Add(menuItem);
             }
 
-            var menuItem2 = _languagesMenuItem.Items.Cast<LanguageMenuItem>().FirstOrDefault(n => n.Value == Settings.Instance.Global_UseLanguage);
-            if (menuItem2 != null) menuItem2.IsChecked = true;
+            {
+                var menuItem = _languagesMenuItem.Items.Cast<LanguageMenuItem>().FirstOrDefault(n => n.Value == Settings.Instance.Global_UseLanguage);
+                if (menuItem != null) menuItem.IsChecked = true;
+            }
         }
 
         private void Setting_Init()
@@ -795,25 +899,8 @@ namespace Outopos.Windows
             {
                 bool initFlag = false;
 
-                if (File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Cache.path")))
-                {
-                    using (StreamReader reader = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Cache.path"), new UTF8Encoding(false)))
-                    {
-                        _cacheBlocksPath = reader.ReadLine();
-                    }
-                }
-                else
-                {
-                    _cacheBlocksPath = Path.Combine(App.DirectoryPaths["Configuration"], "Cache.blocks");
-
-                    using (StreamWriter writer = new StreamWriter(Path.Combine(App.DirectoryPaths["Configuration"], "Cache.path"), false, new UTF8Encoding(false)))
-                    {
-                        writer.WriteLine(_cacheBlocksPath);
-                    }
-                }
-
-                _lairManager = new OutoposManager(_cacheBlocksPath, _bufferManager);
-                _lairManager.Load(_configrationDirectoryPaths["OutoposManager"]);
+                _outoposManager = new OutoposManager(Path.Combine(App.DirectoryPaths["Configuration"], "Cache.bitmap"), App.Cache.Path, _bufferManager);
+                _outoposManager.Load(_configrationDirectoryPaths["OutoposManager"]);
 
                 if (!File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Outopos.version")))
                 {
@@ -821,15 +908,18 @@ namespace Outopos.Windows
 
                     {
                         byte[] buffer = new byte[64];
-                        (new RNGCryptoServiceProvider()).GetBytes(buffer);
 
-                        _lairManager.SetBaseNode(new Node(buffer, null));
+                        using (var random = RandomNumberGenerator.Create())
+                        {
+                            random.GetBytes(buffer);
+                        }
+
+                        _outoposManager.SetBaseNode(new Node(buffer, null));
                     }
 
-                    Random random = new Random();
-                    _lairManager.ListenUris.Clear();
-                    _lairManager.ListenUris.Add(string.Format("tcp:{0}:{1}", IPAddress.Any.ToString(), random.Next(1024, 65536)));
-                    _lairManager.ListenUris.Add(string.Format("tcp:[{0}]:{1}", IPAddress.IPv6Any.ToString(), random.Next(1024, 65536)));
+                    _outoposManager.ListenUris.Clear();
+                    _outoposManager.ListenUris.Add(string.Format("tcp:{0}:{1}", IPAddress.Any.ToString(), _random.Next(1024, ushort.MaxValue + 1)));
+                    _outoposManager.ListenUris.Add(string.Format("tcp:[{0}]:{1}", IPAddress.IPv6Any.ToString(), _random.Next(1024, ushort.MaxValue + 1)));
 
                     var ipv4ConnectionFilter = new ConnectionFilter()
                     {
@@ -861,7 +951,7 @@ namespace Outopos.Windows
                     var torConnectionFilter = new ConnectionFilter()
                     {
                         ConnectionType = ConnectionType.Socks5Proxy,
-                        ProxyUri = "tcp:127.0.0.1:29050",
+                        ProxyUri = "tcp:127.0.0.1:19050",
                         UriCondition = new UriCondition()
                         {
                             Value = @"tor:.*",
@@ -877,29 +967,12 @@ namespace Outopos.Windows
                         },
                     };
 
-                    _lairManager.Filters.Clear();
-                    _lairManager.Filters.Add(ipv4ConnectionFilter);
-                    _lairManager.Filters.Add(ipv6ConnectionFilter);
-                    _lairManager.Filters.Add(tcpConnectionFilter);
-                    _lairManager.Filters.Add(torConnectionFilter);
-                    _lairManager.Filters.Add(i2pConnectionFilter);
-
-                    // デフォルトでセクションとチャンネルを設定
-                    {
-                        string chatOption;
-                        var chat = OutoposConverter.FromChatString("Chat:AAAAAEAA7EGVwK3U57z4eCziwKn6emKp8Q2N0fiPFDbvcBtA6ul4UUcemclKQGs0QfVDKE9nrcPCAlbuIIEkkQ6-EoLVQgAAAAUBU3RhcnQvk9wn", out chatOption);
-
-                        ChatTreeItem chatTreeItem = new ChatTreeItem(chat);
-
-                        string sectionOption;
-                        var section = OutoposConverter.FromSectionString("Section:AAAAAEAAfqnzk3Ro4Xt2xoRCns8xCNmqhhuv_ue2z-QdlEN6pfnyyUUR2A-031K2kCbdsvteDzN1vbICBwbu3p2dahO2ywAAABABQWxsaWFuY2UgTmV0d29ya9mG6sw,Lyrise@7seiSbhOCkls6gPxjJYjptxskzlSulgIe3dSfj1KxnJJ6eejKjuJ3R1Ec8yFuKpr4uNcwF7bFh5OrmxnY25y7A", out sectionOption);
-
-                        SectionTreeItem sectionTreeItem = new SectionTreeItem(section);
-                        sectionTreeItem.LeaderSignature = sectionOption;
-                        sectionTreeItem.ChatCategorizeTreeItem.ChatTreeItems.Add(chatTreeItem);
-
-                        Settings.Instance.SectionControl_SectionCategorizeTreeItem.SectionTreeItems.Add(sectionTreeItem);
-                    }
+                    _outoposManager.Filters.Clear();
+                    _outoposManager.Filters.Add(ipv4ConnectionFilter);
+                    _outoposManager.Filters.Add(ipv6ConnectionFilter);
+                    _outoposManager.Filters.Add(tcpConnectionFilter);
+                    _outoposManager.Filters.Add(torConnectionFilter);
+                    _outoposManager.Filters.Add(i2pConnectionFilter);
 
                     if (CultureInfo.CurrentUICulture.Name == "ja-JP")
                     {
@@ -917,32 +990,6 @@ namespace Outopos.Windows
                     using (StreamReader reader = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Outopos.version"), new UTF8Encoding(false)))
                     {
                         version = new Version(reader.ReadLine());
-                    }
-
-                    if (version < new Version(2, 0, 2))
-                    {
-                        // デフォルトでセクションとチャンネルを設定
-                        {
-                            string chatOption;
-                            var chat = OutoposConverter.FromChatString("Chat:AAAAAEAA7EGVwK3U57z4eCziwKn6emKp8Q2N0fiPFDbvcBtA6ul4UUcemclKQGs0QfVDKE9nrcPCAlbuIIEkkQ6-EoLVQgAAAAUBU3RhcnQvk9wn", out chatOption);
-
-                            ChatTreeItem chatTreeItem = new ChatTreeItem(chat);
-
-                            string sectionOption;
-                            var section = OutoposConverter.FromSectionString("Section:AAAAAEAAfqnzk3Ro4Xt2xoRCns8xCNmqhhuv_ue2z-QdlEN6pfnyyUUR2A-031K2kCbdsvteDzN1vbICBwbu3p2dahO2ywAAABABQWxsaWFuY2UgTmV0d29ya9mG6sw,Lyrise@7seiSbhOCkls6gPxjJYjptxskzlSulgIe3dSfj1KxnJJ6eejKjuJ3R1Ec8yFuKpr4uNcwF7bFh5OrmxnY25y7A", out sectionOption);
-
-                            SectionTreeItem sectionTreeItem = new SectionTreeItem(section);
-                            sectionTreeItem.LeaderSignature = sectionOption;
-                            sectionTreeItem.ChatCategorizeTreeItem.ChatTreeItems.Add(chatTreeItem);
-
-                            Settings.Instance.SectionControl_SectionCategorizeTreeItem.SectionTreeItems.Add(sectionTreeItem);
-                        }
-                    }
-
-                    if (version < new Version(2, 0, 10))
-                    {
-                        var count = Math.Min(_lairManager.ConnectionCountLimit, 25);
-                        _lairManager.ConnectionCountLimit = 25;
                     }
                 }
 
@@ -965,44 +1012,48 @@ namespace Outopos.Windows
                             buffer[i] = b;
                         }
 
-                        var baseNode = _lairManager.BaseNode;
+                        var baseNode = _outoposManager.BaseNode;
 
-                        _lairManager.SetBaseNode(new Node(buffer, baseNode.Uris));
+                        _outoposManager.SetBaseNode(new Node(buffer, baseNode.Uris));
                     }
                 }
 #endif
 
-                _autoBaseNodeSettingManager = new AutoBaseNodeSettingManager(_lairManager);
+                _autoBaseNodeSettingManager = new AutoBaseNodeSettingManager(_outoposManager);
                 _autoBaseNodeSettingManager.Load(_configrationDirectoryPaths["AutoBaseNodeSettingManager"]);
 
-                _overlayNetworkManager = new OverlayNetworkManager(_lairManager, _bufferManager);
+                _overlayNetworkManager = new OverlayNetworkManager(_outoposManager, _bufferManager);
                 _overlayNetworkManager.Load(_configrationDirectoryPaths["OverlayNetworkManager"]);
 
-                _transferLimitManager = new TransfarLimitManager(_lairManager);
+                _transferLimitManager = new TransfarLimitManager(_outoposManager);
                 _transferLimitManager.Load(_configrationDirectoryPaths["TransfarLimitManager"]);
                 _transferLimitManager.Start();
 
+                _catharsisManager = new CatharsisManager(_outoposManager, _bufferManager);
+                _catharsisManager.Load(_configrationDirectoryPaths["CatharsisManager"]);
+
                 if (initFlag)
                 {
+                    _catharsisManager.Save(_configrationDirectoryPaths["CatharsisManager"]);
                     _transferLimitManager.Save(_configrationDirectoryPaths["TransfarLimitManager"]);
                     _overlayNetworkManager.Save(_configrationDirectoryPaths["OverlayNetworkManager"]);
                     _autoBaseNodeSettingManager.Save(_configrationDirectoryPaths["AutoBaseNodeSettingManager"]);
-                    _lairManager.Save(_configrationDirectoryPaths["OutoposManager"]);
+                    _outoposManager.Save(_configrationDirectoryPaths["OutoposManager"]);
                     Settings.Instance.Save(_configrationDirectoryPaths["MainWindow"]);
                 }
 
                 {
-                    var amoebaPath = Path.Combine(App.DirectoryPaths["Configuration"], "Outopos");
+                    var outoposPath = Path.Combine(App.DirectoryPaths["Configuration"], "Outopos");
                     var libraryPath = Path.Combine(App.DirectoryPaths["Configuration"], "Library");
 
                     try
                     {
-                        if (Directory.Exists(amoebaPath))
+                        if (Directory.Exists(outoposPath))
                         {
-                            if (Directory.Exists(amoebaPath + ".old"))
-                                Directory.Delete(amoebaPath + ".old", true);
+                            if (Directory.Exists(outoposPath + ".old"))
+                                Directory.Delete(outoposPath + ".old", true);
 
-                            MainWindow.CopyDirectory(amoebaPath, amoebaPath + ".old");
+                            MainWindow.CopyDirectory(outoposPath, outoposPath + ".old");
                         }
 
                         if (Directory.Exists(libraryPath))
@@ -1016,35 +1067,6 @@ namespace Outopos.Windows
                     catch (Exception e2)
                     {
                         Log.Warning(e2);
-                    }
-                }
-
-                {
-                    if (string.IsNullOrWhiteSpace(Settings.Instance.Global_Amoeba_Path)
-                        || !File.Exists(Settings.Instance.Global_Amoeba_Path))
-                    {
-                        foreach (var p in Process.GetProcesses())
-                        {
-                            try
-                            {
-                                var path = p.MainModule.FileName;
-
-                                if (Path.GetFileName(path) == "Amoeba.exe")
-                                {
-                                    Settings.Instance.Global_Amoeba_Path = path;
-
-                                    break;
-                                }
-                            }
-                            catch (Win32Exception)
-                            {
-
-                            }
-                            catch (Exception)
-                            {
-
-                            }
-                        }
                     }
                 }
             }
@@ -1095,230 +1117,15 @@ namespace Outopos.Windows
 
         private void CheckUpdate(bool isLogFlag)
         {
-            lock (_updateLockObject)
-            {
-                try
-                {
-                    var url = Settings.Instance.Global_Update_Url;
-                    string line1;
-                    string line2;
-                    string line3;
 
-                    for (int i = 0; ; i++)
-                    {
-                        try
-                        {
-                            HttpWebRequest rq = (HttpWebRequest)HttpWebRequest.Create(url);
-                            rq.Method = "GET";
-                            rq.ContentType = "text/html; charset=UTF-8";
-                            rq.UserAgent = "";
-                            rq.ReadWriteTimeout = 1000 * 60;
-                            rq.Timeout = 1000 * 60;
-                            rq.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore);
-                            rq.KeepAlive = true;
-                            rq.Headers.Add(HttpRequestHeader.AcceptCharset, "utf-8");
-                            rq.Proxy = this.GetProxy();
-
-                            using (HttpWebResponse rs = (HttpWebResponse)rq.GetResponse())
-                            using (Stream stream = rs.GetResponseStream())
-                            using (StreamReader r = new StreamReader(stream))
-                            {
-                                line1 = r.ReadLine();
-                                line2 = r.ReadLine();
-                                line3 = r.ReadLine();
-                            }
-
-                            break;
-                        }
-                        catch (Exception e)
-                        {
-                            if (i < 10)
-                            {
-                                continue;
-                            }
-                            else
-                            {
-                                Log.Error(e);
-
-                                return;
-                            }
-                        }
-                    }
-
-                    Regex regex = new Regex(@"Outopos ((\d*)\.(\d*)\.(\d*)).*\.zip");
-                    var match = regex.Match(line1);
-
-                    if (match.Success)
-                    {
-                        var targetVersion = new Version(match.Groups[1].Value);
-
-                        if (targetVersion <= App.OutoposVersion)
-                        {
-                            if (isLogFlag)
-                            {
-                                Log.Information(string.Format("Check Update: {0}", LanguagesManager.Instance.MainWindow_LatestVersion_Message));
-                            }
-                        }
-                        else
-                        {
-                            if (!isLogFlag && targetVersion == _updateCancelVersion) return;
-
-                            {
-                                foreach (var path in Directory.GetFiles(App.DirectoryPaths["Update"]))
-                                {
-                                    string name = Path.GetFileName(path);
-
-                                    if (name.StartsWith("Outopos"))
-                                    {
-                                        var match2 = regex.Match(name);
-
-                                        if (match2.Success)
-                                        {
-                                            var tempVersion = new Version(match2.Groups[1].Value);
-
-                                            if (targetVersion <= tempVersion) return;
-                                        }
-                                    }
-                                }
-                            }
-
-                            Log.Information(string.Format("Check Update: {0}", line1));
-
-                            bool flag = true;
-
-                            if (Settings.Instance.Global_Update_Option != UpdateOption.AutoUpdate)
-                            {
-                                this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
-                                {
-                                    if (MessageBox.Show(
-                                        this,
-                                        string.Format(LanguagesManager.Instance.MainWindow_CheckUpdate_Message, line1),
-                                        "Update",
-                                        MessageBoxButton.OKCancel,
-                                        MessageBoxImage.Information) == MessageBoxResult.Cancel)
-                                    {
-                                        flag = false;
-                                    }
-                                }));
-                            }
-
-                            if (flag)
-                            {
-                                var path = string.Format(@"{0}\{1}", App.DirectoryPaths["Work"], System.Web.HttpUtility.UrlDecode(Path.GetFileName(line2)));
-                                this.GetFile(line2, path);
-
-                                var signPath = string.Format(@"{0}\{1}", App.DirectoryPaths["Work"], System.Web.HttpUtility.UrlDecode(Path.GetFileName(line3)));
-                                this.GetFile(line3, signPath);
-
-                                using (var stream = new FileStream(path, FileMode.Open))
-                                using (var signStream = new FileStream(signPath, FileMode.Open))
-                                {
-                                    Certificate certificate = DigitalSignatureConverter.FromCertificateStream(signStream);
-
-                                    if (Settings.Instance.Global_Update_Signature != certificate.ToString()) throw new Exception("Update DigitalSignature #1");
-                                    if (!DigitalSignature.VerifyFileCertificate(certificate, stream)) throw new Exception("Update DigitalSignature #2");
-                                }
-
-                                if (File.Exists(path))
-                                {
-                                    File.Move(path, Path.Combine(App.DirectoryPaths["Update"], Path.GetFileName(path)));
-                                }
-
-                                this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
-                                {
-                                    MessageBox.Show(
-                                        this,
-                                        LanguagesManager.Instance.MainWindow_Restart_Message,
-                                        "Update",
-                                        MessageBoxButton.OK,
-                                        MessageBoxImage.Information);
-                                }));
-                            }
-                            else
-                            {
-                                _updateCancelVersion = targetVersion;
-                            }
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e);
-                }
-            }
-        }
-
-        private void GetFile(string url, string path)
-        {
-            for (int i = 0; ; i++)
-            {
-                try
-                {
-                    HttpWebRequest rq = (HttpWebRequest)HttpWebRequest.Create(url);
-                    rq.Method = "GET";
-                    rq.ContentType = "text/html; charset=UTF-8";
-                    rq.UserAgent = "";
-                    rq.ReadWriteTimeout = 1000 * 60;
-                    rq.Timeout = 1000 * 60;
-                    rq.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore);
-                    rq.KeepAlive = true;
-                    rq.Headers.Add(HttpRequestHeader.AcceptCharset, "utf-8");
-                    rq.Proxy = this.GetProxy();
-
-                    using (HttpWebResponse rs = (HttpWebResponse)rq.GetResponse())
-                    {
-                        long size = 0;
-
-                        using (Stream inStream = rs.GetResponseStream())
-                        using (FileStream outStream = new FileStream(path, FileMode.Create))
-                        {
-                            byte[] buffer = new byte[1024 * 4];
-
-                            int length = 0;
-
-                            while (0 < (length = inStream.Read(buffer, 0, buffer.Length)))
-                            {
-                                outStream.Write(buffer, 0, length);
-                                size += length;
-                            }
-                        }
-
-                        if (size != rs.ContentLength)
-                        {
-                            try
-                            {
-                                File.Delete(path);
-                            }
-                            catch (Exception)
-                            {
-
-                            }
-
-                            continue;
-                        }
-                    }
-
-                    break;
-                }
-                catch (Exception e)
-                {
-                    if (i < 10)
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        Log.Error(e);
-
-                        return;
-                    }
-                }
-            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
+            WindowPosition.Move(this);
+
+            _windowState = this.WindowState;
+
             Thread.CurrentThread.Priority = ThreadPriority.Highest;
 
             TopRelativeDoubleConverter.GetDoubleEvent = (object state) =>
@@ -1331,12 +1138,12 @@ namespace Outopos.Windows
                 return this.PointToScreen(new Point(0, 0)).X;
             };
 
-            ConnectionControl connectionControl = new ConnectionControl(_lairManager);
+            ConnectionControl connectionControl = new ConnectionControl(_outoposManager, _bufferManager);
             connectionControl.Height = Double.NaN;
             connectionControl.Width = Double.NaN;
             _connectionTabItem.Content = connectionControl;
 
-            SectionControl sectionControl = new SectionControl(_lairManager, _bufferManager);
+            SectionControl sectionControl = new SectionControl(_outoposManager, _bufferManager);
             sectionControl.Height = Double.NaN;
             sectionControl.Width = Double.NaN;
             _sectionTabItem.Content = sectionControl;
@@ -1352,11 +1159,13 @@ namespace Outopos.Windows
                 _checkUpdateMenuItem_Click(null, null);
             }
 
-            WindowPosition.Move(this);
+            this.GarbageCollect();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            if (_closed) return;
+
             if (MessageBox.Show(
                 this,
                 LanguagesManager.Instance.MainWindow_Close_Message,
@@ -1365,27 +1174,36 @@ namespace Outopos.Windows
                 MessageBoxImage.Information) == MessageBoxResult.No)
             {
                 e.Cancel = true;
+
+                return;
             }
-        }
 
-        private void Window_Closed(object sender, EventArgs e)
-        {
-            NativeMethods.SetThreadExecutionState(ExecutionState.Continuous);
-            _notifyIcon.Visible = false;
+            _closed = true;
 
-            _isRun = false;
+            e.Cancel = true;
 
             var thread = new Thread(() =>
             {
                 try
                 {
-                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
+                    Settings.Instance.Save(_configrationDirectoryPaths["MainWindow"]);
+
+                    this.Dispatcher.BeginInvoke(DispatcherPriority.Send, new Action(() =>
+                    {
+                        this.WindowState = System.Windows.WindowState.Minimized;
+                    }));
 
                     _timerThread.Join();
                     _timerThread = null;
 
-                    _statusBarTimerThread.Join();
-                    _statusBarTimerThread = null;
+                    _statusBarThread.Join();
+                    _statusBarThread = null;
+
+                    _trafficMonitorThread.Join();
+                    _trafficMonitorThread = null;
+
+                    _catharsisManager.Save(_configrationDirectoryPaths["CatharsisManager"]);
+                    _catharsisManager.Dispose();
 
                     _transferLimitManager.Stop();
                     _transferLimitManager.Save(_configrationDirectoryPaths["TransfarLimitManager"]);
@@ -1399,11 +1217,17 @@ namespace Outopos.Windows
                     _overlayNetworkManager.Save(_configrationDirectoryPaths["OverlayNetworkManager"]);
                     _overlayNetworkManager.Dispose();
 
-                    _lairManager.Stop();
-                    _lairManager.Save(_configrationDirectoryPaths["OutoposManager"]);
-                    _lairManager.Dispose();
+                    _outoposManager.Stop();
+                    _outoposManager.Save(_configrationDirectoryPaths["OutoposManager"]);
+                    _outoposManager.Dispose();
 
-                    Settings.Instance.Save(_configrationDirectoryPaths["MainWindow"]);
+                    NativeMethods.SetThreadExecutionState(ExecutionState.Continuous);
+                    _notifyIcon.Visible = false;
+
+                    this.Dispatcher.BeginInvoke(DispatcherPriority.Send, new Action(() =>
+                    {
+                        this.Close();
+                    }));
                 }
                 catch (Exception ex)
                 {
@@ -1436,10 +1260,6 @@ namespace Outopos.Windows
             if (_tabControl.SelectedItem == _connectionTabItem)
             {
                 this.SelectedTab = MainWindowTabType.Connection;
-            }
-            else if (_tabControl.SelectedItem == _sectionTabItem)
-            {
-                this.SelectedTab = MainWindowTabType.Section;
             }
             else if (_tabControl.SelectedItem == _logTabItem)
             {
@@ -1517,7 +1337,7 @@ namespace Outopos.Windows
         private void _coreOptionsMenuItem_Click(object sender, RoutedEventArgs e)
         {
             CoreOptionsWindow window = new CoreOptionsWindow(
-                _lairManager,
+                _outoposManager,
                 _autoBaseNodeSettingManager,
                 _overlayNetworkManager,
                 _transferLimitManager,
@@ -1525,6 +1345,73 @@ namespace Outopos.Windows
 
             window.Owner = this;
             window.ShowDialog();
+        }
+
+        private void _cacheMenuItem_SubmenuOpened(object sender, RoutedEventArgs e)
+        {
+            _checkBlocksMenuItem.IsEnabled = _checkBlocksMenuItem_IsEnabled;
+        }
+
+        volatile bool _checkBlocksMenuItem_IsEnabled = true;
+
+        private void _checkBlocksMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (!_checkBlocksMenuItem_IsEnabled) return;
+            _checkBlocksMenuItem_IsEnabled = false;
+
+            var window = new ProgressWindow(true);
+            window.Owner = this;
+            window.Title = string.Format(LanguagesManager.Instance.ProgressWindow_Title, LanguagesManager.Instance.MainWindow_CheckBlocks_Message);
+            window.Message = string.Format(LanguagesManager.Instance.MainWindow_CheckBlocks_State, 0, 0, 0);
+            window.ButtonMessage = LanguagesManager.Instance.ProgressWindow_Cancel;
+
+            ThreadPool.QueueUserWorkItem((object wstate) =>
+            {
+                bool flag = false;
+
+                window.Closed += (object sender2, EventArgs e2) =>
+                {
+                    flag = true;
+                };
+
+                _outoposManager.ChecBlocks((object sender2, int badBlockCount, int checkedBlockCount, int blockCount, out bool isStop) =>
+                {
+                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
+                    {
+                        try
+                        {
+                            window.Value = 100 * ((double)checkedBlockCount / (double)blockCount);
+                            window.Message = string.Format(LanguagesManager.Instance.MainWindow_CheckBlocks_State, badBlockCount, checkedBlockCount, blockCount);
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                    }));
+
+                    isStop = flag;
+                });
+
+                this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
+                {
+                    try
+                    {
+                        window.ButtonMessage = LanguagesManager.Instance.ProgressWindow_Ok;
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                }));
+            });
+
+            window.Closed += (object sender2, EventArgs e2) =>
+            {
+                _checkBlocksMenuItem_IsEnabled = true;
+            };
+
+            window.Owner = this;
+            window.Show();
         }
 
         private void _viewOptionsMenuItem_Click(object sender, RoutedEventArgs e)

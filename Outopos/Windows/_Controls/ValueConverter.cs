@@ -23,7 +23,7 @@ using Library;
 using Library.Collections;
 using Library.Net.Outopos;
 using A = Library.Net.Amoeba;
-using l = Library.Net.Outopos;
+using O = Library.Net.Outopos;
 
 namespace Outopos.Windows
 {
@@ -373,12 +373,12 @@ namespace Outopos.Windows
         }
     }
 
-    [ValueConversion(typeof(l.Section), typeof(string))]
+    [ValueConversion(typeof(O.Section), typeof(string))]
     class SectionToStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var item = value as l.Section;
+            var item = value as O.Section;
             if (item == null) return null;
 
             return MessageConverter.ToSectionString(item);
@@ -647,69 +647,61 @@ namespace Outopos.Windows
         }
     }
 
-    class SectionMessageWrapperToBorderBrushConverter : IMultiValueConverter
+    //class ChatMessageWrapperToBorderBrushConverter : IMultiValueConverter
+    //{
+    //    public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+    //    {
+    //        var wrapper = values[0] as ChatMessageWrapper;
+    //        if (wrapper == null) return null;
+
+    //        var isSelect = values[1] as bool?;
+    //        if (isSelect == null) return null;
+
+    //        System.Windows.Media.Color color;
+
+    //        if (isSelect.HasValue && isSelect.Value)
+    //        {
+    //            color = App.Colors.Message_Select;
+    //        }
+    //        else if (wrapper.IsNew)
+    //        {
+    //            color = App.Colors.Message_New;
+    //        }
+    //        else
+    //        {
+    //            color = App.Colors.Message;
+    //        }
+
+    //        return new SolidColorBrush(color);
+    //    }
+
+    //    public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //}
+
+    [ValueConversion(typeof(ConnectDirection), typeof(string))]
+    class ConnectDirectionToStringConverter : IValueConverter
     {
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var wrapper = values[0] as SectionMessageWrapper;
-            if (wrapper == null) return null;
+            if (!(value is ConnectDirection)) return null;
+            var item = (ConnectDirection)value;
 
-            var isSelect = values[1] as bool?;
-            if (isSelect == null) return null;
-
-            System.Windows.Media.Color color;
-
-            if (isSelect.HasValue && isSelect.Value)
+            if (item == ConnectDirection.In)
             {
-                color = App.Colors.Message_Select;
+                return LanguagesManager.Instance.ConnectDirection_In;
             }
-            else if (wrapper.IsNew)
+            else if (item == ConnectDirection.Out)
             {
-                color = App.Colors.Message_New;
-            }
-            else
-            {
-                color = App.Colors.Message;
+                return LanguagesManager.Instance.ConnectDirection_Out;
             }
 
-            return new SolidColorBrush(color);
+            return "";
         }
 
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    class ChatMessageWrapperToBorderBrushConverter : IMultiValueConverter
-    {
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
-        {
-            var wrapper = values[0] as ChatMessageWrapper;
-            if (wrapper == null) return null;
-
-            var isSelect = values[1] as bool?;
-            if (isSelect == null) return null;
-
-            System.Windows.Media.Color color;
-
-            if (isSelect.HasValue && isSelect.Value)
-            {
-                color = App.Colors.Message_Select;
-            }
-            else if (wrapper.IsNew)
-            {
-                color = App.Colors.Message_New;
-            }
-            else
-            {
-                color = App.Colors.Message;
-            }
-
-            return new SolidColorBrush(color);
-        }
-
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }

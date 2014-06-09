@@ -40,11 +40,11 @@ namespace Outopos.Windows
         {
             if (!_value.IsTrustEnabled)
             {
-                _header.Text = string.Format("{0} ({1}){2} - {3}", this.Value.Tag.Name, this.Value.ReadChatMessages.Count + this.Value.UnreadChatMessages.Count, "!", NetworkConverter.ToBase64UrlString(this.Value.Tag.Id));
+                _header.Text = string.Format("{0} ({1}){2} - {3}", this.Value.Tag.Name, this.Value.ChatMessageInfos.Count, "!", NetworkConverter.ToBase64UrlString(this.Value.Tag.Id));
             }
             else
             {
-                _header.Text = string.Format("{0} ({1}) - {2}", this.Value.Tag.Name, this.Value.ReadChatMessages.Count + this.Value.UnreadChatMessages.Count, NetworkConverter.ToBase64UrlString(this.Value.Tag.Id));
+                _header.Text = string.Format("{0} ({1}) - {2}", this.Value.Tag.Name, this.Value.ChatMessageInfos.Count, NetworkConverter.ToBase64UrlString(this.Value.Tag.Id));
             }
         }
 

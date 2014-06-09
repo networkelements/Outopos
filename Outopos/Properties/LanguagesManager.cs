@@ -217,103 +217,58 @@ namespace Outopos.Properties
         }
 
 
-        public string Section_Name
+        public string ConnectDirection_In
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("Section_Name");
+                    return this.Translate("ConnectDirection_In");
                 }
             }
         }
 
-        public string Section_Id
+        public string ConnectDirection_Out
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("Section_Id");
-                }
-            }
-        }
-
-        public string Section_Option
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("Section_Option");
+                    return this.Translate("ConnectDirection_Out");
                 }
             }
         }
 
 
-        public string Wiki_Name
+        public string Tag_Name
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("Wiki_Name");
+                    return this.Translate("Tag_Name");
                 }
             }
         }
 
-        public string Wiki_Id
+        public string Tag_Id
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("Wiki_Id");
+                    return this.Translate("Tag_Id");
                 }
             }
         }
 
-        public string Wiki_Option
+        public string Tag_Option
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("Wiki_Option");
-                }
-            }
-        }
-
-
-        public string Chat_Name
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("Chat_Name");
-                }
-            }
-        }
-
-        public string Chat_Id
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("Chat_Id");
-                }
-            }
-        }
-
-        public string Chat_Option
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("Chat_Option");
+                    return this.Translate("Tag_Option");
                 }
             }
         }
@@ -404,6 +359,39 @@ namespace Outopos.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("MainWindow_Section");
+                }
+            }
+        }
+
+        public string MainWindow_Chat
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("MainWindow_Chat");
+                }
+            }
+        }
+
+        public string MainWindow_Wiki
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("MainWindow_Wiki");
+                }
+            }
+        }
+
+        public string MainWindow_Mail
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("MainWindow_Mail");
                 }
             }
         }
@@ -514,6 +502,17 @@ namespace Outopos.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("MainWindow_Cache");
+                }
+            }
+        }
+
+        public string MainWindow_CheckBlocks
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("MainWindow_CheckBlocks");
                 }
             }
         }
@@ -650,13 +649,13 @@ namespace Outopos.Properties
             }
         }
 
-        public string MainWindow_CheckInternalBlocks_Message
+        public string MainWindow_CheckBlocks_Message
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("MainWindow_CheckInternalBlocks_Message");
+                    return this.Translate("MainWindow_CheckBlocks_Message");
                 }
             }
         }
@@ -1946,6 +1945,17 @@ namespace Outopos.Properties
         }
 
 
+        public string ConnectionControl_Direction
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionControl_Direction");
+                }
+            }
+        }
+
         public string ConnectionControl_Uri
         {
             get
@@ -2012,6 +2022,17 @@ namespace Outopos.Properties
             }
         }
 
+        public string ConnectionControl_BufferManagerSize
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionControl_BufferManagerSize");
+                }
+            }
+        }
+
         public string ConnectionControl_CreateConnectionCount
         {
             get
@@ -2030,6 +2051,17 @@ namespace Outopos.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("ConnectionControl_AcceptConnectionCount");
+                }
+            }
+        }
+
+        public string ConnectionControl_BlockedConnectionCount
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionControl_BlockedConnectionCount");
                 }
             }
         }
@@ -2100,13 +2132,13 @@ namespace Outopos.Properties
             }
         }
 
-        public string ConnectionControl_HeaderCount
+        public string ConnectionControl_SeedCount
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ConnectionControl_HeaderCount");
+                    return this.Translate("ConnectionControl_SeedCount");
                 }
             }
         }
@@ -2118,6 +2150,39 @@ namespace Outopos.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("ConnectionControl_BlockCount");
+                }
+            }
+        }
+
+        public string ConnectionControl_DownloadCount
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionControl_DownloadCount");
+                }
+            }
+        }
+
+        public string ConnectionControl_UploadCount
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionControl_UploadCount");
+                }
+            }
+        }
+
+        public string ConnectionControl_ShareCount
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ConnectionControl_ShareCount");
                 }
             }
         }
@@ -2709,112 +2774,112 @@ namespace Outopos.Properties
         }
 
 
-        public string TrustSignaturesPreviewWindow_Title
+        public string TrustSignaturesPreview_Title
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("TrustSignaturesPreviewWindow_Title");
+                    return this.Translate("TrustSignaturesPreview_Title");
                 }
             }
         }
 
-        public string TrustSignaturesPreviewWindow_Copy
+        public string TrustSignaturesPreview_Copy
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("TrustSignaturesPreviewWindow_Copy");
+                    return this.Translate("TrustSignaturesPreview_Copy");
                 }
             }
         }
 
-        public string TrustSignaturesPreviewWindow_Signature
+        public string TrustSignaturesPreview_Signature
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("TrustSignaturesPreviewWindow_Signature");
+                    return this.Translate("TrustSignaturesPreview_Signature");
                 }
             }
         }
 
-        public string TrustSignaturesPreviewWindow_Section
+        public string TrustSignaturesPreview_Section
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("TrustSignaturesPreviewWindow_Section");
+                    return this.Translate("TrustSignaturesPreview_Section");
                 }
             }
         }
 
-        public string TrustSignaturesPreviewWindow_Trust
+        public string TrustSignaturesPreview_Trust
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("TrustSignaturesPreviewWindow_Trust");
+                    return this.Translate("TrustSignaturesPreview_Trust");
                 }
             }
         }
 
-        public string TrustSignaturesPreviewWindow_Chat
+        public string TrustSignaturesPreview_Chat
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("TrustSignaturesPreviewWindow_Chat");
+                    return this.Translate("TrustSignaturesPreview_Chat");
                 }
             }
         }
 
-        public string TrustSignaturesPreviewWindow_Wiki
+        public string TrustSignaturesPreview_Wiki
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("TrustSignaturesPreviewWindow_Wiki");
+                    return this.Translate("TrustSignaturesPreview_Wiki");
                 }
             }
         }
 
-        public string TrustSignaturesPreviewWindow_Value
+        public string TrustSignaturesPreview_Value
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("TrustSignaturesPreviewWindow_Value");
+                    return this.Translate("TrustSignaturesPreview_Value");
                 }
             }
         }
 
-        public string TrustSignaturesPreviewWindow_Comment
+        public string TrustSignaturesPreview_Comment
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("TrustSignaturesPreviewWindow_Comment");
+                    return this.Translate("TrustSignaturesPreview_Comment");
                 }
             }
         }
 
-        public string TrustSignaturesPreviewWindow_Close
+        public string TrustSignaturesPreview_Close
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("TrustSignaturesPreviewWindow_Close");
+                    return this.Translate("TrustSignaturesPreview_Close");
                 }
             }
         }
