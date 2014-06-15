@@ -42,6 +42,7 @@
   <Translate Key="MainWindow_Languages" Value="言語" />
   <Translate Key="MainWindow_ViewOptions" Value="表示設定" />
   <Translate Key="MainWindow_Help" Value="ヘルプ" />
+  <Translate Key="MainWindow_ViewHelp" Value="ヘルプの表示" />
   <Translate Key="MainWindow_ManualSite" Value="ドキュメント" />
   <Translate Key="MainWindow_DeveloperSite" Value="ソースコード" />
   <Translate Key="MainWindow_CheckUpdate" Value="更新チェック" />
@@ -232,28 +233,28 @@
   <Translate Key="NewSectionWindow_Ok" Value="Ok" />
   <Translate Key="NewSectionWindow_Cancel" Value="Cancel" />
 
-  <Translate Key="SectionTreeItemEditWindow_Title" Value="セクションの編集" />
-  <Translate Key="SectionTreeItemEditWindow_YourSignature" Value="Your signature" />
-  <Translate Key="SectionTreeItemEditWindow_Section" Value="セクション" />
-  <Translate Key="SectionTreeItemEditWindow_LeaderSignature" Value="リーダーのサイン" />
-  <Translate Key="SectionTreeItemEditWindow_YourProfile" Value="Your profile" />
-  <Translate Key="SectionTreeItemEditWindow_Trust" Value="Trust" />
-  <Translate Key="SectionTreeItemEditWindow_Signature" Value="Signature" />
-  <Translate Key="SectionTreeItemEditWindow_Chat" Value="Chat" />
-  <Translate Key="SectionTreeItemEditWindow_Wiki" Value="Wiki" />
-  <Translate Key="SectionTreeItemEditWindow_Value" Value="Value" />
-  <Translate Key="SectionTreeItemEditWindow_Comment" Value="Comment" />
-  <Translate Key="SectionTreeItemEditWindow_Up" Value="Up" />
-  <Translate Key="SectionTreeItemEditWindow_Down" Value="Down" />
-  <Translate Key="SectionTreeItemEditWindow_Add" Value="Add" />
-  <Translate Key="SectionTreeItemEditWindow_New" Value="New" />
-  <Translate Key="SectionTreeItemEditWindow_Edit" Value="Edit" />
-  <Translate Key="SectionTreeItemEditWindow_Delete" Value="Delete" />
-  <Translate Key="SectionTreeItemEditWindow_Cut" Value="Cut" />
-  <Translate Key="SectionTreeItemEditWindow_Copy" Value="コピー" />
-  <Translate Key="SectionTreeItemEditWindow_Paste" Value="Paste" />
-  <Translate Key="SectionTreeItemEditWindow_Ok" Value="Ok" />
-  <Translate Key="SectionTreeItemEditWindow_Cancel" Value="Cancel" />
+  <Translate Key="PersonalInformationEditWindow_Title" Value="セクションの編集" />
+  <Translate Key="PersonalInformationEditWindow_YourSignature" Value="Your signature" />
+  <Translate Key="PersonalInformationEditWindow_Section" Value="セクション" />
+  <Translate Key="PersonalInformationEditWindow_LeaderSignature" Value="リーダーのサイン" />
+  <Translate Key="PersonalInformationEditWindow_YourProfile" Value="Your profile" />
+  <Translate Key="PersonalInformationEditWindow_Trust" Value="Trust" />
+  <Translate Key="PersonalInformationEditWindow_Signature" Value="Signature" />
+  <Translate Key="PersonalInformationEditWindow_Chat" Value="Chat" />
+  <Translate Key="PersonalInformationEditWindow_Wiki" Value="Wiki" />
+  <Translate Key="PersonalInformationEditWindow_Value" Value="Value" />
+  <Translate Key="PersonalInformationEditWindow_Comment" Value="Comment" />
+  <Translate Key="PersonalInformationEditWindow_Up" Value="Up" />
+  <Translate Key="PersonalInformationEditWindow_Down" Value="Down" />
+  <Translate Key="PersonalInformationEditWindow_Add" Value="Add" />
+  <Translate Key="PersonalInformationEditWindow_New" Value="New" />
+  <Translate Key="PersonalInformationEditWindow_Edit" Value="Edit" />
+  <Translate Key="PersonalInformationEditWindow_Delete" Value="Delete" />
+  <Translate Key="PersonalInformationEditWindow_Cut" Value="Cut" />
+  <Translate Key="PersonalInformationEditWindow_Copy" Value="コピー" />
+  <Translate Key="PersonalInformationEditWindow_Paste" Value="Paste" />
+  <Translate Key="PersonalInformationEditWindow_Ok" Value="Ok" />
+  <Translate Key="PersonalInformationEditWindow_Cancel" Value="Cancel" />
 
   <Translate Key="TrustSignaturesPreview_Title" Value="Trust information" />
   <Translate Key="TrustSignaturesPreview_Copy" Value="Copy" />

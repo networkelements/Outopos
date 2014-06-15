@@ -19,20 +19,6 @@ namespace Outopos
 {
     static class MessageConverter
     {
-        public static string ToSectionString(Section tag)
-        {
-            if (tag.Name == null || tag.Id == null) return null;
-
-            try
-            {
-                return tag.Name + " - " + NetworkConverter.ToBase64UrlString(tag.Id);
-            }
-            catch (Exception e)
-            {
-                throw new ArgumentException("ArgumentException", e);
-            }
-        }
-
         public static string ToWikiString(Wiki tag)
         {
             if (tag.Name == null || tag.Id == null) return null;
@@ -54,25 +40,6 @@ namespace Outopos
             try
             {
                 return tag.Name + " - " + NetworkConverter.ToBase64UrlString(tag.Id);
-            }
-            catch (Exception e)
-            {
-                throw new ArgumentException("ArgumentException", e);
-            }
-        }
-
-        public static string ToInfoMessage(Section tag, string option)
-        {
-            try
-            {
-                StringBuilder builder = new StringBuilder();
-
-                if (!string.IsNullOrWhiteSpace(tag.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Tag_Name, tag.Name));
-                if (tag.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Tag_Id, NetworkConverter.ToBase64UrlString(tag.Id)));
-                if (!string.IsNullOrWhiteSpace(option)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Tag_Option, option));
-
-                if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
-                else return null;
             }
             catch (Exception e)
             {

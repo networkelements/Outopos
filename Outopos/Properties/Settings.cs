@@ -27,7 +27,6 @@ namespace Outopos.Properties
                 new Library.Configuration.SettingContent<string>() { Name = "Global_UseLanguage", Value = "English" },
                 new Library.Configuration.SettingContent<bool>() { Name = "Global_IsStart", Value = true },
                 new Library.Configuration.SettingContent<LockedHashSet<string>>() { Name = "Global_UrlHistorys", Value = new LockedHashSet<string>() },
-                new Library.Configuration.SettingContent<LockedHashSet<Section>>() { Name = "Global_SectionHistorys", Value = new LockedHashSet<Section>() },
                 new Library.Configuration.SettingContent<LockedHashSet<Wiki>>() { Name = "Global_WikiHistorys", Value = new LockedHashSet<Wiki>() },
                 new Library.Configuration.SettingContent<LockedHashSet<Chat>>() { Name = "Global_ChatHistorys", Value = new LockedHashSet<Chat>() },
                 new Library.Configuration.SettingContent<LockedHashSet<A.Seed>>() { Name = "Global_SeedHistorys", Value = new LockedHashSet<A.Seed>() },
@@ -91,17 +90,14 @@ namespace Outopos.Properties
                 new Library.Configuration.SettingContent<double>() { Name = "ConnectionControl_GridViewColumn_Name_Width", Value = -1 },
                 new Library.Configuration.SettingContent<double>() { Name = "ConnectionControl_GridViewColumn_Value_Width", Value = 100 },
    
-                new Library.Configuration.SettingContent<double>() { Name = "SectionControl_Grid_ColumnDefinitions_Width", Value = 200 },
-                new Library.Configuration.SettingContent<SectionCategorizeTreeItem>() { Name = "SectionControl_SectionCategorizeTreeItem", Value = new SectionCategorizeTreeItem(){ Name = "Category", IsExpanded = true } },
-
-                new Library.Configuration.SettingContent<double>() { Name = "SectionTreeItemEditWindow_Top", Value = 120 },
-                new Library.Configuration.SettingContent<double>() { Name = "SectionTreeItemEditWindow_Left", Value = 120 },
-                new Library.Configuration.SettingContent<double>() { Name = "SectionTreeItemEditWindow_Height", Value = 500 },
-                new Library.Configuration.SettingContent<double>() { Name = "SectionTreeItemEditWindow_Width", Value = 700 },
-                new Library.Configuration.SettingContent<WindowState>() { Name = "SectionTreeItemEditWindow_WindowState", Value = WindowState.Normal },
-                new Library.Configuration.SettingContent<double>() { Name = "SectionTreeItemEditWindow_GridViewColumn_TrustSignature_Width", Value = 600 },
-                new Library.Configuration.SettingContent<double>() { Name = "SectionTreeItemEditWindow_GridViewColumn_Wiki_Width", Value = 600 },
-                new Library.Configuration.SettingContent<double>() { Name = "SectionTreeItemEditWindow_GridViewColumn_Chat_Width", Value = 600 },
+                new Library.Configuration.SettingContent<double>() { Name = "PersonalInformationEditWindow_Top", Value = 120 },
+                new Library.Configuration.SettingContent<double>() { Name = "PersonalInformationEditWindow_Left", Value = 120 },
+                new Library.Configuration.SettingContent<double>() { Name = "PersonalInformationEditWindow_Height", Value = 500 },
+                new Library.Configuration.SettingContent<double>() { Name = "PersonalInformationEditWindow_Width", Value = 700 },
+                new Library.Configuration.SettingContent<WindowState>() { Name = "PersonalInformationEditWindow_WindowState", Value = WindowState.Normal },
+                new Library.Configuration.SettingContent<double>() { Name = "PersonalInformationEditWindow_GridViewColumn_TrustSignature_Width", Value = 600 },
+                new Library.Configuration.SettingContent<double>() { Name = "PersonalInformationEditWindow_GridViewColumn_Wiki_Width", Value = 600 },
+                new Library.Configuration.SettingContent<double>() { Name = "PersonalInformationEditWindow_GridViewColumn_Chat_Width", Value = 600 },
 
                 new Library.Configuration.SettingContent<double>() { Name = "TrustSignaturesPreview_Top", Value = 120 },
                 new Library.Configuration.SettingContent<double>() { Name = "TrustSignaturesPreview_Left", Value = 120 },
@@ -254,24 +250,6 @@ namespace Outopos.Properties
                 lock (this.ThisLock)
                 {
                     this["Global_UrlHistorys"] = value;
-                }
-            }
-        }
-
-        public LockedHashSet<Section> Global_SectionHistorys
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (LockedHashSet<Section>)this["Global_SectionHistorys"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["Global_SectionHistorys"] = value;
                 }
             }
         }
@@ -1308,183 +1286,146 @@ namespace Outopos.Properties
         }
 
 
-        public double SectionControl_Grid_ColumnDefinitions_Width
+        public double PersonalInformationEditWindow_Top
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["SectionControl_Grid_ColumnDefinitions_Width"];
+                   return (double)this["PersonalInformationEditWindow_Top"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["SectionControl_Grid_ColumnDefinitions_Width"] = value;
+                    this["PersonalInformationEditWindow_Top"] = value;
                 }
             }
         }
 
-        public SectionCategorizeTreeItem SectionControl_SectionCategorizeTreeItem
+        public double PersonalInformationEditWindow_Left
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (SectionCategorizeTreeItem)this["SectionControl_SectionCategorizeTreeItem"];
+                   return (double)this["PersonalInformationEditWindow_Left"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["SectionControl_SectionCategorizeTreeItem"] = value;
+                    this["PersonalInformationEditWindow_Left"] = value;
                 }
             }
         }
 
-
-        public double SectionTreeItemEditWindow_Top
+        public double PersonalInformationEditWindow_Height
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["SectionTreeItemEditWindow_Top"];
+                   return (double)this["PersonalInformationEditWindow_Height"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["SectionTreeItemEditWindow_Top"] = value;
+                    this["PersonalInformationEditWindow_Height"] = value;
                 }
             }
         }
 
-        public double SectionTreeItemEditWindow_Left
+        public double PersonalInformationEditWindow_Width
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["SectionTreeItemEditWindow_Left"];
+                   return (double)this["PersonalInformationEditWindow_Width"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["SectionTreeItemEditWindow_Left"] = value;
+                    this["PersonalInformationEditWindow_Width"] = value;
                 }
             }
         }
 
-        public double SectionTreeItemEditWindow_Height
+        public WindowState PersonalInformationEditWindow_WindowState
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["SectionTreeItemEditWindow_Height"];
+                   return (WindowState)this["PersonalInformationEditWindow_WindowState"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["SectionTreeItemEditWindow_Height"] = value;
+                    this["PersonalInformationEditWindow_WindowState"] = value;
                 }
             }
         }
 
-        public double SectionTreeItemEditWindow_Width
+        public double PersonalInformationEditWindow_GridViewColumn_TrustSignature_Width
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["SectionTreeItemEditWindow_Width"];
+                   return (double)this["PersonalInformationEditWindow_GridViewColumn_TrustSignature_Width"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["SectionTreeItemEditWindow_Width"] = value;
+                    this["PersonalInformationEditWindow_GridViewColumn_TrustSignature_Width"] = value;
                 }
             }
         }
 
-        public WindowState SectionTreeItemEditWindow_WindowState
+        public double PersonalInformationEditWindow_GridViewColumn_Wiki_Width
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (WindowState)this["SectionTreeItemEditWindow_WindowState"];
+                   return (double)this["PersonalInformationEditWindow_GridViewColumn_Wiki_Width"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["SectionTreeItemEditWindow_WindowState"] = value;
+                    this["PersonalInformationEditWindow_GridViewColumn_Wiki_Width"] = value;
                 }
             }
         }
 
-        public double SectionTreeItemEditWindow_GridViewColumn_TrustSignature_Width
+        public double PersonalInformationEditWindow_GridViewColumn_Chat_Width
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["SectionTreeItemEditWindow_GridViewColumn_TrustSignature_Width"];
+                   return (double)this["PersonalInformationEditWindow_GridViewColumn_Chat_Width"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["SectionTreeItemEditWindow_GridViewColumn_TrustSignature_Width"] = value;
-                }
-            }
-        }
-
-        public double SectionTreeItemEditWindow_GridViewColumn_Wiki_Width
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["SectionTreeItemEditWindow_GridViewColumn_Wiki_Width"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["SectionTreeItemEditWindow_GridViewColumn_Wiki_Width"] = value;
-                }
-            }
-        }
-
-        public double SectionTreeItemEditWindow_GridViewColumn_Chat_Width
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["SectionTreeItemEditWindow_GridViewColumn_Chat_Width"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["SectionTreeItemEditWindow_GridViewColumn_Chat_Width"] = value;
+                    this["PersonalInformationEditWindow_GridViewColumn_Chat_Width"] = value;
                 }
             }
         }

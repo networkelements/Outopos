@@ -7,13 +7,13 @@ using Library.Net.Outopos;
 
 namespace Outopos
 {
-    [DataContract(Name = "SectionProfileInfo", Namespace = "http://Outopos")]
-    class SectionProfileInfo
+    [DataContract(Name = "BroadcastProfileInfo", Namespace = "http://Outopos")]
+    class BroadcastProfileInfo
     {
         [DataMember(Name = "Header")]
-        public SectionProfileHeader Header { get; set; }
+        public BroadcastProfileHeader Header { get; set; }
 
         [DataMember(Name = "Content")]
-        public SectionProfileContent Content { get; set; }
+        public BroadcastProfileContent Content { get; set; }
     }
 }

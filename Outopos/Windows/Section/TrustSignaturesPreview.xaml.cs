@@ -54,13 +54,13 @@ namespace Outopos.Windows
             if (selectTreeViewItem == null) return;
 
             _trustSignatureListView.Items.Clear();
-            _trustSignatureListView.Items.AddRange(selectTreeViewItem.Value.SectionProfileInfo.Content.TrustSignatures);
+            _trustSignatureListView.Items.AddRange(selectTreeViewItem.Value.BroadcastProfileInfo.Content.TrustSignatures);
 
             _wikiListView.Items.Clear();
-            _wikiListView.Items.AddRange(selectTreeViewItem.Value.SectionProfileInfo.Content.Wikis);
+            _wikiListView.Items.AddRange(selectTreeViewItem.Value.BroadcastProfileInfo.Content.Wikis);
 
             _chatListView.Items.Clear();
-            _chatListView.Items.AddRange(selectTreeViewItem.Value.SectionProfileInfo.Content.Chats);
+            _chatListView.Items.AddRange(selectTreeViewItem.Value.BroadcastProfileInfo.Content.Chats);
         }
 
         private void _signatureTreeViewItemContextMenu_ContextMenuOpening(object sender, ContextMenuEventArgs e)
@@ -73,7 +73,7 @@ namespace Outopos.Windows
             var signatureTreeViewItem = _signatureTreeView.SelectedItem as SignatureTreeViewItem;
             if (signatureTreeViewItem == null) return;
 
-            Clipboard.SetText(signatureTreeViewItem.Value.SectionProfileInfo.Header.Certificate.ToString());
+            Clipboard.SetText(signatureTreeViewItem.Value.BroadcastProfileInfo.Header.Certificate.ToString());
         }
 
         #endregion

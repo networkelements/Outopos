@@ -373,23 +373,6 @@ namespace Outopos.Windows
         }
     }
 
-    [ValueConversion(typeof(O.Section), typeof(string))]
-    class SectionToStringConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            var item = value as O.Section;
-            if (item == null) return null;
-
-            return MessageConverter.ToSectionString(item);
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
     [ValueConversion(typeof(Wiki), typeof(string))]
     class WikiToStringConverter : IValueConverter
     {

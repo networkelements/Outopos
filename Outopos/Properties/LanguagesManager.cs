@@ -16,8 +16,8 @@ namespace Outopos.Properties
     {
         private static LanguagesManager _defaultInstance = new LanguagesManager();
         private static Dictionary<string, Dictionary<string, string>> _dic = new Dictionary<string, Dictionary<string, string>>();
-        private static string _usingLanguage;
-        private static ObjectDataProvider provider;
+        private static string _currentLanguage;
+        private static ObjectDataProvider _provider;
         private readonly object _thisLock = new object();
 
         public static UsingLanguageChangedEventHandler UsingLanguageChangedEvent;
@@ -52,7 +52,7 @@ namespace Outopos.Properties
 
             foreach (string path in Directory.GetFiles(directoryPath, "*", SearchOption.AllDirectories))
             {
-                Dictionary<string, string> dic = new Dictionary<string, string>();
+                var dic = new Dictionary<string, string>();
 
                 using (XmlTextReader xml = new XmlTextReader(path))
                 {
@@ -80,11 +80,11 @@ namespace Outopos.Properties
 
             if (CultureInfo.CurrentUICulture.Name == "ja-JP" && _dic.Keys.Any(n => n == "Japanese"))
             {
-                _usingLanguage = "Japanese";
+                _currentLanguage = "Japanese";
             }
             else if (_dic.Keys.Any(n => n == "English"))
             {
-                _usingLanguage = "English";
+                _currentLanguage = "English";
             }
         }
 
@@ -109,7 +109,7 @@ namespace Outopos.Properties
         {
             if (!_dic.ContainsKey(language)) throw new ArgumentException();
 
-            _usingLanguage = language;
+            _currentLanguage = language;
             LanguagesManager.ResourceProvider.Refresh();
 
             LanguagesManager.OnUsingLanguageChangedEvent();
@@ -122,14 +122,32 @@ namespace Outopos.Properties
         {
             get
             {
-                var list = _dic.Keys.ToList();
+                var dic = new Dictionary<string, string>();
 
-                list.Sort((x, y) =>
+                foreach (var path in _dic.Keys.ToList())
                 {
-                    return System.IO.Path.GetFileNameWithoutExtension(x).CompareTo(System.IO.Path.GetFileNameWithoutExtension(y));
+                    dic[System.IO.Path.GetFileNameWithoutExtension(path)] = path;
+                }
+
+                var pairs = dic.ToList();
+
+                pairs.Sort((x, y) =>
+                {
+                    return x.Key.CompareTo(y.Key);
                 });
 
-                return list.ToArray();
+                return pairs.Select(n => n.Value).ToArray();
+            }
+        }
+
+        /// <summary>
+        /// 現在使用している言語
+        /// </summary>
+        public string CurrentLanguage
+        {
+            get
+            {
+                return _currentLanguage;
             }
         }
 
@@ -139,23 +157,25 @@ namespace Outopos.Properties
             {
                 if (System.Windows.Application.Current != null)
                 {
-                    provider = (ObjectDataProvider)System.Windows.Application.Current.FindResource("ResourcesInstance");
+                    _provider = (ObjectDataProvider)System.Windows.Application.Current.FindResource("ResourcesInstance");
                 }
 
-                return provider;
+                return _provider;
             }
         }
 
-        public string Translate(string value)
+        public string Translate(string key)
         {
-            if (_usingLanguage != null && _dic[_usingLanguage].ContainsKey(value))
+            if (_currentLanguage == null) return null;
+
+            string result;
+
+            if (_dic[_currentLanguage].TryGetValue(key, out result))
             {
-                return _dic[_usingLanguage][value];
+                return result;
             }
-            else
-            {
-                return null;
-            }
+
+            return null;
         }
 
         #region Property
@@ -2531,244 +2551,244 @@ namespace Outopos.Properties
         }
 
 
-        public string SectionTreeItemEditWindow_Title
+        public string PersonalInformationEditWindow_Title
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionTreeItemEditWindow_Title");
+                    return this.Translate("PersonalInformationEditWindow_Title");
                 }
             }
         }
 
-        public string SectionTreeItemEditWindow_YourSignature
+        public string PersonalInformationEditWindow_YourSignature
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionTreeItemEditWindow_YourSignature");
+                    return this.Translate("PersonalInformationEditWindow_YourSignature");
                 }
             }
         }
 
-        public string SectionTreeItemEditWindow_Section
+        public string PersonalInformationEditWindow_Section
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionTreeItemEditWindow_Section");
+                    return this.Translate("PersonalInformationEditWindow_Section");
                 }
             }
         }
 
-        public string SectionTreeItemEditWindow_LeaderSignature
+        public string PersonalInformationEditWindow_LeaderSignature
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionTreeItemEditWindow_LeaderSignature");
+                    return this.Translate("PersonalInformationEditWindow_LeaderSignature");
                 }
             }
         }
 
-        public string SectionTreeItemEditWindow_YourProfile
+        public string PersonalInformationEditWindow_YourProfile
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionTreeItemEditWindow_YourProfile");
+                    return this.Translate("PersonalInformationEditWindow_YourProfile");
                 }
             }
         }
 
-        public string SectionTreeItemEditWindow_Trust
+        public string PersonalInformationEditWindow_Trust
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionTreeItemEditWindow_Trust");
+                    return this.Translate("PersonalInformationEditWindow_Trust");
                 }
             }
         }
 
-        public string SectionTreeItemEditWindow_Signature
+        public string PersonalInformationEditWindow_Signature
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionTreeItemEditWindow_Signature");
+                    return this.Translate("PersonalInformationEditWindow_Signature");
                 }
             }
         }
 
-        public string SectionTreeItemEditWindow_Chat
+        public string PersonalInformationEditWindow_Chat
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionTreeItemEditWindow_Chat");
+                    return this.Translate("PersonalInformationEditWindow_Chat");
                 }
             }
         }
 
-        public string SectionTreeItemEditWindow_Wiki
+        public string PersonalInformationEditWindow_Wiki
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionTreeItemEditWindow_Wiki");
+                    return this.Translate("PersonalInformationEditWindow_Wiki");
                 }
             }
         }
 
-        public string SectionTreeItemEditWindow_Value
+        public string PersonalInformationEditWindow_Value
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionTreeItemEditWindow_Value");
+                    return this.Translate("PersonalInformationEditWindow_Value");
                 }
             }
         }
 
-        public string SectionTreeItemEditWindow_Comment
+        public string PersonalInformationEditWindow_Comment
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionTreeItemEditWindow_Comment");
+                    return this.Translate("PersonalInformationEditWindow_Comment");
                 }
             }
         }
 
-        public string SectionTreeItemEditWindow_Up
+        public string PersonalInformationEditWindow_Up
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionTreeItemEditWindow_Up");
+                    return this.Translate("PersonalInformationEditWindow_Up");
                 }
             }
         }
 
-        public string SectionTreeItemEditWindow_Down
+        public string PersonalInformationEditWindow_Down
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionTreeItemEditWindow_Down");
+                    return this.Translate("PersonalInformationEditWindow_Down");
                 }
             }
         }
 
-        public string SectionTreeItemEditWindow_Add
+        public string PersonalInformationEditWindow_Add
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionTreeItemEditWindow_Add");
+                    return this.Translate("PersonalInformationEditWindow_Add");
                 }
             }
         }
 
-        public string SectionTreeItemEditWindow_New
+        public string PersonalInformationEditWindow_New
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionTreeItemEditWindow_New");
+                    return this.Translate("PersonalInformationEditWindow_New");
                 }
             }
         }
 
-        public string SectionTreeItemEditWindow_Edit
+        public string PersonalInformationEditWindow_Edit
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionTreeItemEditWindow_Edit");
+                    return this.Translate("PersonalInformationEditWindow_Edit");
                 }
             }
         }
 
-        public string SectionTreeItemEditWindow_Delete
+        public string PersonalInformationEditWindow_Delete
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionTreeItemEditWindow_Delete");
+                    return this.Translate("PersonalInformationEditWindow_Delete");
                 }
             }
         }
 
-        public string SectionTreeItemEditWindow_Cut
+        public string PersonalInformationEditWindow_Cut
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionTreeItemEditWindow_Cut");
+                    return this.Translate("PersonalInformationEditWindow_Cut");
                 }
             }
         }
 
-        public string SectionTreeItemEditWindow_Copy
+        public string PersonalInformationEditWindow_Copy
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionTreeItemEditWindow_Copy");
+                    return this.Translate("PersonalInformationEditWindow_Copy");
                 }
             }
         }
 
-        public string SectionTreeItemEditWindow_Paste
+        public string PersonalInformationEditWindow_Paste
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionTreeItemEditWindow_Paste");
+                    return this.Translate("PersonalInformationEditWindow_Paste");
                 }
             }
         }
 
-        public string SectionTreeItemEditWindow_Ok
+        public string PersonalInformationEditWindow_Ok
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionTreeItemEditWindow_Ok");
+                    return this.Translate("PersonalInformationEditWindow_Ok");
                 }
             }
         }
 
-        public string SectionTreeItemEditWindow_Cancel
+        public string PersonalInformationEditWindow_Cancel
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("SectionTreeItemEditWindow_Cancel");
+                    return this.Translate("PersonalInformationEditWindow_Cancel");
                 }
             }
         }

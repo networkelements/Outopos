@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,11 +20,11 @@ using Outopos.Properties;
 namespace Outopos.Windows
 {
     /// <summary>
-    /// Interaction logic for SectionTreeItemEditWindow.xaml
+    /// Interaction logic for PersonalInformationEditWindow.xaml
     /// </summary>
-    partial class SectionTreeItemEditWindow : Window
+    partial class PersonalInformationEditWindow : Window
     {
-        private SectionTreeItem _sectionTreeItem;
+        private PersonalInformation _personalInformation;
         private OutoposManager _outoposManager;
         private BufferManager _bufferManager;
 
@@ -32,9 +33,9 @@ namespace Outopos.Windows
         private ObservableCollectionEx<Wiki> _wikiCollection = new ObservableCollectionEx<Wiki>();
         private ObservableCollectionEx<Chat> _chatCollection = new ObservableCollectionEx<Chat>();
 
-        public SectionTreeItemEditWindow(SectionTreeItem sectionTreeItem, OutoposManager outoposManager, BufferManager bufferManager)
+        public PersonalInformationEditWindow(PersonalInformation personalInformation, OutoposManager outoposManager, BufferManager bufferManager)
         {
-            _sectionTreeItem = sectionTreeItem;
+            _personalInformation = personalInformation;
             _outoposManager = outoposManager;
             _bufferManager = bufferManager;
 
@@ -47,15 +48,12 @@ namespace Outopos.Windows
             _wikiTextBox.MaxLength = Wiki.MaxNameLength;
             _chatTextBox.MaxLength = Chat.MaxNameLength;
 
-            lock (_sectionTreeItem.ThisLock)
+            lock (_personalInformation.ThisLock)
             {
-                _tagTextBox.Text = MessageConverter.ToSectionString(_sectionTreeItem.Tag);
-                _sectionLeaderSignatureTextBox.Text = _sectionTreeItem.LeaderSignature;
-                _uploadSignature = _sectionTreeItem.UploadSignature;
-
-                _trustSignatureCollection.AddRange(_sectionTreeItem.PersonalInformation.TrustSignatures);
-                _wikiCollection.AddRange(_sectionTreeItem.PersonalInformation.Wikis);
-                _chatCollection.AddRange(_sectionTreeItem.PersonalInformation.Chats);
+                _uploadSignature = _personalInformation.UploadSignature;
+                _trustSignatureCollection.AddRange(_personalInformation.TrustSignatures);
+                _wikiCollection.AddRange(_personalInformation.Wikis);
+                _chatCollection.AddRange(_personalInformation.Chats);
             }
 
             _trustSignatureListView.ItemsSource = _trustSignatureCollection;
@@ -306,7 +304,11 @@ namespace Outopos.Windows
             if (_wikiTextBox.Text == "") return;
 
             byte[] id = new byte[64];
-            (new System.Security.Cryptography.RNGCryptoServiceProvider()).GetBytes(id);
+
+            using (var random = RandomNumberGenerator.Create())
+            {
+                random.GetBytes(id);
+            }
 
             var item = new Wiki(_wikiTextBox.Text, id);
 
@@ -487,7 +489,11 @@ namespace Outopos.Windows
             if (_chatTextBox.Text == "") return;
 
             byte[] id = new byte[64];
-            (new System.Security.Cryptography.RNGCryptoServiceProvider()).GetBytes(id);
+
+            using (var random = RandomNumberGenerator.Create())
+            {
+                random.GetBytes(id);
+            }
 
             var item = new Chat(_chatTextBox.Text, id);
 
@@ -521,43 +527,53 @@ namespace Outopos.Windows
 
             var uploadSignature = (digitalSignature == null) ? null : digitalSignature.ToString();
 
-            SectionProfileContent content = null;
+            BroadcastProfileContent content = null;
 
-            lock (_sectionTreeItem.ThisLock)
+            lock (_personalInformation.ThisLock)
             {
-                if (uploadSignature != _sectionTreeItem.UploadSignature)
+                if (uploadSignature != _personalInformation.UploadSignature)
                 {
-                    _sectionTreeItem.UploadSignature = uploadSignature;
+                    _personalInformation.UploadSignature = uploadSignature;
 
-                    if (!string.IsNullOrWhiteSpace(_sectionTreeItem.UploadSignature))
+                    if (!string.IsNullOrWhiteSpace(_personalInformation.UploadSignature))
                     {
-                        _sectionTreeItem.PersonalInformation.Exchange = new Exchange(ExchangeAlgorithm.Rsa2048);
+                        _personalInformation.OldExchanges.Add(_personalInformation.Exchange);
+                        _personalInformation.Exchange = new Exchange(ExchangeAlgorithm.Rsa2048);
                     }
                     else
                     {
-                        _sectionTreeItem.PersonalInformation.Exchange = null;
+                        _personalInformation.Exchange = null;
                     }
                 }
 
-                _sectionTreeItem.PersonalInformation.TrustSignatures.Clear();
-                _sectionTreeItem.PersonalInformation.TrustSignatures.AddRange(_trustSignatureCollection);
+                lock (_personalInformation.TrustSignatures.ThisLock)
+                {
+                    _personalInformation.TrustSignatures.Clear();
+                    _personalInformation.TrustSignatures.AddRange(_trustSignatureCollection);
+                }
 
-                _sectionTreeItem.PersonalInformation.Wikis.Clear();
-                _sectionTreeItem.PersonalInformation.Wikis.AddRange(_wikiCollection);
+                lock (_personalInformation.Wikis.ThisLock)
+                {
+                    _personalInformation.Wikis.Clear();
+                    _personalInformation.Wikis.AddRange(_wikiCollection);
+                }
 
-                _sectionTreeItem.PersonalInformation.Chats.Clear();
-                _sectionTreeItem.PersonalInformation.Chats.AddRange(_chatCollection);
+                lock (_personalInformation.Chats.ThisLock)
+                {
+                    _personalInformation.Chats.Clear();
+                    _personalInformation.Chats.AddRange(_chatCollection);
+                }
 
-                content = new SectionProfileContent(
-                    _sectionTreeItem.PersonalInformation.Exchange.GetExchangePublicKey(),
-                    _sectionTreeItem.PersonalInformation.TrustSignatures,
-                    _sectionTreeItem.PersonalInformation.Wikis,
-                    _sectionTreeItem.PersonalInformation.Chats);
+                content = new BroadcastProfileContent(
+                    _personalInformation.Exchange.GetExchangePublicKey(),
+                    _personalInformation.TrustSignatures,
+                    _personalInformation.Wikis,
+                    _personalInformation.Chats);
             }
 
             if (digitalSignature != null)
             {
-                _outoposManager.Upload(_sectionTreeItem.Tag, content, null, digitalSignature);
+                _outoposManager.Upload(content, null, digitalSignature);
             }
         }
 

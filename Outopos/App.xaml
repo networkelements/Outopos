@@ -40,7 +40,6 @@
             <local:ConnectionTypeToStringConverter x:Key="_connectionTypeToStringConverter"/>
             <local:TransferLimitTypeToStringConverter x:Key="_transferLimitTypeToStringConverter"/>
             <local:ConnectDirectionToStringConverter x:Key="_connectDirectionToStringConverter"/>
-            <local:SectionToStringConverter x:Key="_sectionToStringConverter"/>
             <local:WikiToStringConverter x:Key="_wikiToStringConverter"/>
             <local:ChatToStringConverter x:Key="_chatToStringConverter"/>
             

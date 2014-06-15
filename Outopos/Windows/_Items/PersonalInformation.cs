@@ -8,102 +8,129 @@ using System.Xml;
 using Library;
 using Library.Net.Outopos;
 using Library.Security;
-using Library.Collections;
 using Library.Io;
+using Library.Collections;
 
 namespace Outopos.Windows
 {
-    [DataContract(Name = "SectionCategorizeTreeItem", Namespace = "http://Outopos/Windows")]
-    class SectionCategorizeTreeItem : ICloneable<SectionCategorizeTreeItem>, IThisLock
+    [DataContract(Name = "PersonalInformation", Namespace = "http://Outopos/Windows")]
+    class PersonalInformation : ICloneable<PersonalInformation>, IThisLock
     {
-        private string _name;
-        private LockedList<SectionTreeItem> _tagTreeItems;
-        private LockedList<SectionCategorizeTreeItem> _children;
-        private bool _isExpanded = true;
+        private string _uploadSignature;
+        private Exchange _exchange;
+        private List<Exchange> _oldExchanges;
+        private SignatureCollection _trustSignatures;
+        private WikiCollection _wikis;
+        private ChatCollection _chats;
 
         private volatile object _thisLock;
         private static readonly object _initializeLock = new object();
 
-        public SectionCategorizeTreeItem()
-        {
-
-        }
-
-        [DataMember(Name = "Name")]
-        public string Name
+        [DataMember(Name = "UploadSignature")]
+        public string UploadSignature
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return _name;
+                    return _uploadSignature;
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    _name = value;
+                    _uploadSignature = value;
                 }
             }
         }
 
-        [DataMember(Name = "SectionTreeItems")]
-        public LockedList<SectionTreeItem> SectionTreeItems
+        [DataMember(Name = "Exchange")]
+        public Exchange Exchange
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    if (_tagTreeItems == null)
-                        _tagTreeItems = new LockedList<SectionTreeItem>();
-
-                    return _tagTreeItems;
-                }
-            }
-        }
-
-        [DataMember(Name = "Children")]
-        public LockedList<SectionCategorizeTreeItem> Children
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    if (_children == null)
-                        _children = new LockedList<SectionCategorizeTreeItem>();
-
-                    return _children;
-                }
-            }
-        }
-
-        [DataMember(Name = "IsExpanded")]
-        public bool IsExpanded
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return _isExpanded;
+                    return _exchange;
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    _isExpanded = value;
+                    _exchange = value;
                 }
             }
         }
 
-        #region ICloneable<SectionCategorizeTreeItem>
+        [DataMember(Name = "OldExchanges")]
+        public List<Exchange> OldExchanges
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    if (_oldExchanges == null)
+                        _oldExchanges = new List<Exchange>();
 
-        public SectionCategorizeTreeItem Clone()
+                    return _oldExchanges;
+                }
+            }
+        }
+
+        [DataMember(Name = "TrustSignatures")]
+        public SignatureCollection TrustSignatures
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    if (_trustSignatures == null)
+                        _trustSignatures = new SignatureCollection();
+
+                    return _trustSignatures;
+                }
+            }
+        }
+
+        [DataMember(Name = "Wikis")]
+        public WikiCollection Wikis
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    if (_wikis == null)
+                        _wikis = new WikiCollection();
+
+                    return _wikis;
+                }
+            }
+        }
+
+        [DataMember(Name = "Chats")]
+        public ChatCollection Chats
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    if (_chats == null)
+                        _chats = new ChatCollection();
+
+                    return _chats;
+                }
+            }
+        }
+
+        #region ICloneable<PersonalInformation>
+
+        public PersonalInformation Clone()
         {
             lock (this.ThisLock)
             {
-                var ds = new DataContractSerializer(typeof(SectionCategorizeTreeItem));
+                var ds = new DataContractSerializer(typeof(PersonalInformation));
 
                 using (BufferStream stream = new BufferStream(BufferManager.Instance))
                 {
@@ -117,7 +144,7 @@ namespace Outopos.Windows
 
                     using (XmlDictionaryReader xmlDictionaryReader = XmlDictionaryReader.CreateBinaryReader(stream, XmlDictionaryReaderQuotas.Max))
                     {
-                        return (SectionCategorizeTreeItem)ds.ReadObject(xmlDictionaryReader);
+                        return (PersonalInformation)ds.ReadObject(xmlDictionaryReader);
                     }
                 }
             }

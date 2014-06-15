@@ -117,21 +117,15 @@
     <Compile Include="Utilities\Ipv4AddressFilter.cs" />
     <Compile Include="Utilities\Information\ChatMessageInfo.cs" />
     <Compile Include="Utilities\Information\ChatTopicInfo.cs" />
-    <Compile Include="Utilities\Information\SectionProfileInfo.cs" />
+    <Compile Include="Utilities\Information\BroadcastProfileInfo.cs" />
     <Compile Include="Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\ProgressWindow.xaml.cs">
       <DependentUpon>ProgressWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\Section\NewSectionWindow.xaml.cs">
-      <DependentUpon>NewSectionWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\Section\SectionControl.xaml.cs">
-      <DependentUpon>SectionControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\Section\SectionTreeItemEditWindow.xaml.cs">
-      <DependentUpon>SectionTreeItemEditWindow.xaml</DependentUpon>
+    <Compile Include="Windows\Section\PersonalInformationEditWindow.xaml.cs">
+      <DependentUpon>PersonalInformationEditWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\Section\TrustSignaturesPreview.xaml.cs">
       <DependentUpon>TrustSignaturesPreview.xaml</DependentUpon>
@@ -162,14 +156,11 @@
     <Compile Include="Windows\_Controls\DigitalSignatureComboBoxItem.cs" />
     <Compile Include="Windows\_Controls\LanguageMenuItem.cs" />
     <Compile Include="Windows\_Controls\ListViewEx.cs" />
-    <Compile Include="Windows\_Controls\SectionTreeViewItem.cs" />
-    <Compile Include="Windows\_Controls\SectionCategorizeTreeViewItem.cs" />
     <Compile Include="Windows\_Controls\SignatureTreeViewItem.cs" />
     <Compile Include="Windows\_Controls\TreeViewItemEx.cs" />
     <Compile Include="Windows\_Controls\ValueConverter.cs" />
     <Compile Include="Windows\_Controls\VirtualizingStackPanelEx.cs" />
-    <Compile Include="Windows\_Items\SectionCategorizeTreeItem.cs" />
-    <Compile Include="Windows\_Items\SectionTreeItem.cs" />
+    <Compile Include="Windows\_Items\PersonalInformation.cs" />
     <Compile Include="Windows\_Items\UpdateOption.cs" />
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -201,15 +192,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\Section\NewSectionWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\Section\SectionControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\Section\SectionTreeItemEditWindow.xaml">
+    <Page Include="Windows\Section\PersonalInformationEditWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

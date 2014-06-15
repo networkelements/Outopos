@@ -16,19 +16,19 @@ namespace Outopos.Windows
     [DataContract(Name = "SignatureTreeItem", Namespace = "http://Outopos/Windows")]
     class SignatureTreeItem : ICloneable<SignatureTreeItem>, IThisLock
     {
-        private SectionProfileInfo _sectionProfileInfo;
+        private BroadcastProfileInfo _sectionProfileInfo;
         private LockedList<SignatureTreeItem> _children;
 
         private volatile object _thisLock;
         private static readonly object _initializeLock = new object();
 
-        public SignatureTreeItem(SectionProfileInfo sectionProfileInfo)
+        public SignatureTreeItem(BroadcastProfileInfo sectionProfileInfo)
         {
-            this.SectionProfileInfo = sectionProfileInfo;
+            this.BroadcastProfileInfo = sectionProfileInfo;
         }
 
-        [DataMember(Name = "SectionProfileInfo")]
-        public SectionProfileInfo SectionProfileInfo
+        [DataMember(Name = "BroadcastProfileInfo")]
+        public BroadcastProfileInfo BroadcastProfileInfo
         {
             get
             {

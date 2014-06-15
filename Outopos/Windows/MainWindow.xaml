@@ -51,6 +51,8 @@
                 <MenuItem Name="_viewOptionsMenuItem" Header="{Binding Path=MainWindow_ViewOptions, Source={StaticResource ResourcesInstance}}" Click="_viewOptionsMenuItem_Click" />
             </MenuItem>
             <MenuItem Name="_helpMenuItem" Header="{Binding Path=MainWindow_Help, Source={StaticResource ResourcesInstance}}" SubmenuOpened="_helpMenuItem_SubmenuOpened">
+                <MenuItem Name="_viewHelpMenuItem" Header="{Binding Path=MainWindow_ViewHelp, Source={StaticResource ResourcesInstance}}" Click="_viewHelpMenuItem_Click" />
+                <Separator />
                 <MenuItem Name="_manualSiteMenuItem" Header="{Binding Path=MainWindow_ManualSite, Source={StaticResource ResourcesInstance}}" Click="_manualSiteMenuItem_Click" />
                 <MenuItem Name="_developerSiteMenuItem" Header="{Binding Path=MainWindow_DeveloperSite, Source={StaticResource ResourcesInstance}}" Click="_developerSiteMenuItem_Click" />
                 <Separator />
@@ -61,7 +63,6 @@
         </Menu>
         <TabControl Margin="0,28,0,0" Name="_tabControl" SelectionChanged="_tabControl_SelectionChanged">
             <TabItem Header="{Binding Path=MainWindow_Connection, Source={StaticResource ResourcesInstance}}" Name="_connectionTabItem" />
-            <TabItem Header="{Binding Path=MainWindow_Section, Source={StaticResource ResourcesInstance}}" Name="_sectionTabItem" />
             <TabItem Header="{Binding Path=MainWindow_Chat, Source={StaticResource ResourcesInstance}}" Name="_chatTabItem" />
             <TabItem Header="{Binding Path=MainWindow_Wiki, Source={StaticResource ResourcesInstance}}" Name="_wikiTabItem" />
             <TabItem Header="{Binding Path=MainWindow_Mail, Source={StaticResource ResourcesInstance}}" Name="_mailTabItem" />

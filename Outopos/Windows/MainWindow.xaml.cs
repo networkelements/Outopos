@@ -44,7 +44,6 @@ namespace Outopos.Windows
     enum MainWindowTabType
     {
         Connection,
-        Section,
         Chat,
         Wiki,
         Mail,
@@ -1143,11 +1142,6 @@ namespace Outopos.Windows
             connectionControl.Width = Double.NaN;
             _connectionTabItem.Content = connectionControl;
 
-            SectionControl sectionControl = new SectionControl(_outoposManager, _bufferManager);
-            sectionControl.Height = Double.NaN;
-            sectionControl.Width = Double.NaN;
-            _sectionTabItem.Content = sectionControl;
-
             if (Settings.Instance.Global_IsStart)
             {
                 _startMenuItem_Click(null, null);
@@ -1424,6 +1418,22 @@ namespace Outopos.Windows
         private void _helpMenuItem_SubmenuOpened(object sender, RoutedEventArgs e)
         {
             _checkUpdateMenuItem.IsEnabled = _checkUpdateMenuItem_IsEnabled;
+        }
+
+        private void _viewHelpMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            string language = "en";
+
+            if (LanguagesManager.Instance.CurrentLanguage == "Japanese"
+                && Directory.Exists(Path.Combine(App.DirectoryPaths["Help"], "ja")))
+            {
+                language = "ja";
+            }
+
+            var path = Path.GetFullPath(Path.Combine(App.DirectoryPaths["Help"], language, "Index.html"));
+            if (!File.Exists(path)) return;
+
+            Process.Start(path);
         }
 
         private void _manualSiteMenuItem_Click(object sender, RoutedEventArgs e)
