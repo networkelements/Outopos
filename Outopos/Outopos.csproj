@@ -117,18 +117,21 @@
     <Compile Include="Utilities\Ipv4AddressFilter.cs" />
     <Compile Include="Utilities\Information\ChatMessageInfo.cs" />
     <Compile Include="Utilities\Information\ChatTopicInfo.cs" />
-    <Compile Include="Utilities\Information\BroadcastProfileInfo.cs" />
+    <Compile Include="Utilities\Information\ProfileInfo.cs" />
+    <Compile Include="Windows\TrustOptionsWindow.xaml.cs">
+      <DependentUpon>TrustOptionsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\ProgressWindow.xaml.cs">
       <DependentUpon>ProgressWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\Section\PersonalInformationEditWindow.xaml.cs">
-      <DependentUpon>PersonalInformationEditWindow.xaml</DependentUpon>
+    <Compile Include="Windows\ProfileOptionsWindow.xaml.cs">
+      <DependentUpon>ProfileOptionsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\Section\TrustSignaturesPreview.xaml.cs">
-      <DependentUpon>TrustSignaturesPreview.xaml</DependentUpon>
+    <Compile Include="Windows\TrustExplorerWindow.xaml.cs">
+      <DependentUpon>TrustExplorerWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\_Controls\ListBoxEx.cs" />
     <Compile Include="Windows\_Controls\ChatCategorizeTreeViewItem.cs" />
@@ -160,7 +163,7 @@
     <Compile Include="Windows\_Controls\TreeViewItemEx.cs" />
     <Compile Include="Windows\_Controls\ValueConverter.cs" />
     <Compile Include="Windows\_Controls\VirtualizingStackPanelEx.cs" />
-    <Compile Include="Windows\_Items\PersonalInformation.cs" />
+    <Compile Include="Windows\_Items\ProfileItem.cs" />
     <Compile Include="Windows\_Items\UpdateOption.cs" />
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -180,6 +183,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\TrustOptionsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Windows\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -192,11 +199,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\Section\PersonalInformationEditWindow.xaml">
+    <Page Include="Windows\ProfileOptionsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\Section\TrustSignaturesPreview.xaml">
+    <Page Include="Windows\TrustExplorerWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

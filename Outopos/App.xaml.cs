@@ -95,6 +95,7 @@ namespace Outopos
             App.DirectoryPaths["Core"] = @".\";
             App.DirectoryPaths["Icons"] = "Icons";
             App.DirectoryPaths["Languages"] = "Languages";
+            App.DirectoryPaths["Help"] = "Help";
 
             foreach (var item in App.DirectoryPaths.Values)
             {
@@ -261,98 +262,111 @@ namespace Outopos
                 App.ShutdownProcesses();
 
                 // アップデート
-                if (Directory.Exists(App.DirectoryPaths["Update"]))
                 {
-                Restart: ;
+                    var workDirectioryPath = App.DirectoryPaths["Work"];
 
-                    string zipFilePath = null;
-
+                    // 一時的に作成された"Library.Update.exe"を削除する。
+                    try
                     {
-                        Regex regex = new Regex(@"Outopos ((\d*)\.(\d*)\.(\d*)).*\.zip");
-                        Version version = App.OutoposVersion;
-
-                        foreach (var path in Directory.GetFiles(App.DirectoryPaths["Update"]))
-                        {
-                            string name = Path.GetFileName(path);
-
-                            if (name.StartsWith("Outopos"))
-                            {
-                                var match = regex.Match(name);
-
-                                if (match.Success)
-                                {
-                                    var tempVersion = new Version(match.Groups[1].Value);
-
-                                    if (version < tempVersion)
-                                    {
-                                        version = tempVersion;
-                                        zipFilePath = path;
-                                    }
-                                    else
-                                    {
-                                        if (File.Exists(path))
-                                            File.Delete(path);
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    if (zipFilePath != null)
-                    {
-                        string workDirectioryPath = App.DirectoryPaths["Work"];
-                        var tempCoreDirectoryPath = Path.Combine(workDirectioryPath, "Core");
-
-                        if (Directory.Exists(tempCoreDirectoryPath))
-                            Directory.Delete(tempCoreDirectoryPath, true);
-
-                        try
-                        {
-                            using (ZipFile zipfile = new ZipFile(zipFilePath))
-                            {
-                                zipfile.ExtractExistingFile = ExtractExistingFileAction.OverwriteSilently;
-                                zipfile.ExtractAll(tempCoreDirectoryPath);
-                            }
-                        }
-                        catch (Exception)
-                        {
-                            if (File.Exists(zipFilePath))
-                                File.Delete(zipFilePath);
-
-                            goto Restart;
-                        }
-
                         var tempUpdateExeFilePath = Path.Combine(workDirectioryPath, "Library.Update.exe");
 
                         if (File.Exists(tempUpdateExeFilePath))
                             File.Delete(tempUpdateExeFilePath);
+                    }
+                    catch (Exception)
+                    {
 
-                        File.Copy("Library.Update.exe", tempUpdateExeFilePath);
+                    }
 
-                        ProcessStartInfo startInfo = new ProcessStartInfo();
-                        startInfo.FileName = tempUpdateExeFilePath;
-                        startInfo.Arguments = string.Format("\"{0}\" \"{1}\" \"{2}\" \"{3}\" \"{4}\"",
-                            Process.GetCurrentProcess().Id,
-                            Path.Combine(tempCoreDirectoryPath, "Core"),
-                            Directory.GetCurrentDirectory(),
-                            Path.Combine(Directory.GetCurrentDirectory(), "Outopos.exe"),
-                            Path.GetFullPath(zipFilePath));
-                        startInfo.WorkingDirectory = Path.GetDirectoryName(tempUpdateExeFilePath);
+                    if (Directory.Exists(App.DirectoryPaths["Update"]))
+                    {
+                    Restart: ;
 
-                        var process = Process.Start(startInfo);
-                        process.WaitForInputIdle();
+                        string zipFilePath = null;
 
-                        string updateInformationFilePath = Path.Combine(App.DirectoryPaths["Configuration"], "Outopos.update");
-
-                        using (FileStream stream = new FileStream(updateInformationFilePath, FileMode.Create))
-                        using (StreamWriter writer = new StreamWriter(stream))
                         {
-                            writer.WriteLine(Path.GetFileName(tempUpdateExeFilePath));
+                            Regex regex = new Regex(@"Outopos ((\d*)\.(\d*)\.(\d*)).*\.zip");
+                            Version version = App.OutoposVersion;
+
+                            foreach (var path in Directory.GetFiles(App.DirectoryPaths["Update"]))
+                            {
+                                string name = Path.GetFileName(path);
+
+                                if (name.StartsWith("Outopos"))
+                                {
+                                    var match = regex.Match(name);
+
+                                    if (match.Success)
+                                    {
+                                        var tempVersion = new Version(match.Groups[1].Value);
+
+                                        if (version < tempVersion)
+                                        {
+                                            version = tempVersion;
+                                            zipFilePath = path;
+                                        }
+                                        else
+                                        {
+                                            if (File.Exists(path))
+                                                File.Delete(path);
+                                        }
+                                    }
+                                }
+                            }
                         }
 
-                        this.Shutdown();
+                        if (zipFilePath != null)
+                        {
+                            var tempCoreDirectoryPath = Path.Combine(workDirectioryPath, "Core");
 
-                        return;
+                            if (Directory.Exists(tempCoreDirectoryPath))
+                                Directory.Delete(tempCoreDirectoryPath, true);
+
+                            try
+                            {
+                                using (ZipFile zipfile = new ZipFile(zipFilePath))
+                                {
+                                    zipfile.ExtractExistingFile = ExtractExistingFileAction.OverwriteSilently;
+                                    zipfile.ExtractAll(tempCoreDirectoryPath);
+                                }
+                            }
+                            catch (Exception)
+                            {
+                                if (File.Exists(zipFilePath))
+                                    File.Delete(zipFilePath);
+
+                                goto Restart;
+                            }
+
+                            var tempUpdateExeFilePath = Path.Combine(workDirectioryPath, "Library.Update.exe");
+
+                            File.Copy("Library.Update.exe", tempUpdateExeFilePath);
+
+                            ProcessStartInfo startInfo = new ProcessStartInfo();
+                            startInfo.FileName = tempUpdateExeFilePath;
+                            startInfo.Arguments = string.Format("\"{0}\" \"{1}\" \"{2}\" \"{3}\" \"{4}\"",
+                                Process.GetCurrentProcess().Id,
+                                Path.Combine(tempCoreDirectoryPath, "Core"),
+                                Directory.GetCurrentDirectory(),
+                                Path.Combine(Directory.GetCurrentDirectory(), "Outopos.exe"),
+                                Path.GetFullPath(zipFilePath));
+                            startInfo.WorkingDirectory = Path.GetDirectoryName(tempUpdateExeFilePath);
+
+                            var process = Process.Start(startInfo);
+                            process.WaitForInputIdle();
+
+                            string updateInformationFilePath = Path.Combine(App.DirectoryPaths["Configuration"], "Outopos.update");
+
+                            using (FileStream stream = new FileStream(updateInformationFilePath, FileMode.Create))
+                            using (StreamWriter writer = new StreamWriter(stream))
+                            {
+                                writer.WriteLine(Path.GetFileName(tempUpdateExeFilePath));
+                            }
+
+                            this.Shutdown();
+
+                            return;
+                        }
                     }
                 }
 

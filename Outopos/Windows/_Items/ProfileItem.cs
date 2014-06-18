@@ -13,12 +13,12 @@ using Library.Collections;
 
 namespace Outopos.Windows
 {
-    [DataContract(Name = "PersonalInformation", Namespace = "http://Outopos/Windows")]
-    class PersonalInformation : ICloneable<PersonalInformation>, IThisLock
+    [DataContract(Name = "ProfileItem", Namespace = "http://Outopos/Windows")]
+    class ProfileItem : ICloneable<ProfileItem>, IThisLock
     {
         private string _uploadSignature;
         private Exchange _exchange;
-        private List<Exchange> _oldExchanges;
+        private LockedList<Exchange> _oldExchanges;
         private SignatureCollection _trustSignatures;
         private WikiCollection _wikis;
         private ChatCollection _chats;
@@ -65,14 +65,14 @@ namespace Outopos.Windows
         }
 
         [DataMember(Name = "OldExchanges")]
-        public List<Exchange> OldExchanges
+        public LockedList<Exchange> OldExchanges
         {
             get
             {
                 lock (this.ThisLock)
                 {
                     if (_oldExchanges == null)
-                        _oldExchanges = new List<Exchange>();
+                        _oldExchanges = new LockedList<Exchange>();
 
                     return _oldExchanges;
                 }
@@ -124,13 +124,13 @@ namespace Outopos.Windows
             }
         }
 
-        #region ICloneable<PersonalInformation>
+        #region ICloneable<ProfileItem>
 
-        public PersonalInformation Clone()
+        public ProfileItem Clone()
         {
             lock (this.ThisLock)
             {
-                var ds = new DataContractSerializer(typeof(PersonalInformation));
+                var ds = new DataContractSerializer(typeof(ProfileItem));
 
                 using (BufferStream stream = new BufferStream(BufferManager.Instance))
                 {
@@ -144,7 +144,7 @@ namespace Outopos.Windows
 
                     using (XmlDictionaryReader xmlDictionaryReader = XmlDictionaryReader.CreateBinaryReader(stream, XmlDictionaryReaderQuotas.Max))
                     {
-                        return (PersonalInformation)ds.ReadObject(xmlDictionaryReader);
+                        return (ProfileItem)ds.ReadObject(xmlDictionaryReader);
                     }
                 }
             }

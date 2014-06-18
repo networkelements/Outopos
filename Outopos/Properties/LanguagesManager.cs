@@ -372,17 +372,6 @@ namespace Outopos.Properties
             }
         }
 
-        public string MainWindow_Section
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("MainWindow_Section");
-                }
-            }
-        }
-
         public string MainWindow_Chat
         {
             get
@@ -493,6 +482,17 @@ namespace Outopos.Properties
             }
         }
 
+        public string MainWindow_ProfileOptions
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("MainWindow_ProfileOptions");
+                }
+            }
+        }
+
         public string MainWindow_UpdateBaseNode
         {
             get
@@ -515,24 +515,35 @@ namespace Outopos.Properties
             }
         }
 
-        public string MainWindow_Cache
+        public string MainWindow_Trust
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("MainWindow_Cache");
+                    return this.Translate("MainWindow_Trust");
                 }
             }
         }
 
-        public string MainWindow_CheckBlocks
+        public string MainWindow_TrustExplorer
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("MainWindow_CheckBlocks");
+                    return this.Translate("MainWindow_TrustExplorer");
+                }
+            }
+        }
+
+        public string MainWindow_TrustOptions
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("MainWindow_TrustOptions");
                 }
             }
         }
@@ -577,6 +588,17 @@ namespace Outopos.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("MainWindow_Help");
+                }
+            }
+        }
+
+        public string MainWindow_ViewHelp
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("MainWindow_ViewHelp");
                 }
             }
         }
@@ -775,6 +797,294 @@ namespace Outopos.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("MainWindow_Upload_Message");
+                }
+            }
+        }
+
+
+        public string TrustOptionsWindow_Title
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("TrustOptionsWindow_Title");
+                }
+            }
+        }
+
+        public string TrustOptionsWindow_Signature
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("TrustOptionsWindow_Signature");
+                }
+            }
+        }
+
+        public string TrustOptionsWindow_Delete
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("TrustOptionsWindow_Delete");
+                }
+            }
+        }
+
+        public string TrustOptionsWindow_Cut
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("TrustOptionsWindow_Cut");
+                }
+            }
+        }
+
+        public string TrustOptionsWindow_Copy
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("TrustOptionsWindow_Copy");
+                }
+            }
+        }
+
+        public string TrustOptionsWindow_Paste
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("TrustOptionsWindow_Paste");
+                }
+            }
+        }
+
+        public string TrustOptionsWindow_Ok
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("TrustOptionsWindow_Ok");
+                }
+            }
+        }
+
+        public string TrustOptionsWindow_Cancel
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("TrustOptionsWindow_Cancel");
+                }
+            }
+        }
+
+
+        public string ProfileOptionsWindow_Title
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ProfileOptionsWindow_Title");
+                }
+            }
+        }
+
+        public string ProfileOptionsWindow_YourSignature
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ProfileOptionsWindow_YourSignature");
+                }
+            }
+        }
+
+        public string ProfileOptionsWindow_Trust
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ProfileOptionsWindow_Trust");
+                }
+            }
+        }
+
+        public string ProfileOptionsWindow_Signature
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ProfileOptionsWindow_Signature");
+                }
+            }
+        }
+
+        public string ProfileOptionsWindow_Chat
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ProfileOptionsWindow_Chat");
+                }
+            }
+        }
+
+        public string ProfileOptionsWindow_Wiki
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ProfileOptionsWindow_Wiki");
+                }
+            }
+        }
+
+        public string ProfileOptionsWindow_Value
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ProfileOptionsWindow_Value");
+                }
+            }
+        }
+
+        public string ProfileOptionsWindow_Up
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ProfileOptionsWindow_Up");
+                }
+            }
+        }
+
+        public string ProfileOptionsWindow_Down
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ProfileOptionsWindow_Down");
+                }
+            }
+        }
+
+        public string ProfileOptionsWindow_Add
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ProfileOptionsWindow_Add");
+                }
+            }
+        }
+
+        public string ProfileOptionsWindow_New
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ProfileOptionsWindow_New");
+                }
+            }
+        }
+
+        public string ProfileOptionsWindow_Edit
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ProfileOptionsWindow_Edit");
+                }
+            }
+        }
+
+        public string ProfileOptionsWindow_Delete
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ProfileOptionsWindow_Delete");
+                }
+            }
+        }
+
+        public string ProfileOptionsWindow_Cut
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ProfileOptionsWindow_Cut");
+                }
+            }
+        }
+
+        public string ProfileOptionsWindow_Copy
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ProfileOptionsWindow_Copy");
+                }
+            }
+        }
+
+        public string ProfileOptionsWindow_Paste
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ProfileOptionsWindow_Paste");
+                }
+            }
+        }
+
+        public string ProfileOptionsWindow_Ok
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ProfileOptionsWindow_Ok");
+                }
+            }
+        }
+
+        public string ProfileOptionsWindow_Cancel
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ProfileOptionsWindow_Cancel");
                 }
             }
         }
@@ -1488,6 +1798,117 @@ namespace Outopos.Properties
         }
 
 
+        public string TrustExplorerWindow_Title
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("TrustExplorerWindow_Title");
+                }
+            }
+        }
+
+        public string TrustExplorerWindow_Copy
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("TrustExplorerWindow_Copy");
+                }
+            }
+        }
+
+        public string TrustExplorerWindow_Signature
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("TrustExplorerWindow_Signature");
+                }
+            }
+        }
+
+        public string TrustExplorerWindow_Section
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("TrustExplorerWindow_Section");
+                }
+            }
+        }
+
+        public string TrustExplorerWindow_Trust
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("TrustExplorerWindow_Trust");
+                }
+            }
+        }
+
+        public string TrustExplorerWindow_Chat
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("TrustExplorerWindow_Chat");
+                }
+            }
+        }
+
+        public string TrustExplorerWindow_Wiki
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("TrustExplorerWindow_Wiki");
+                }
+            }
+        }
+
+        public string TrustExplorerWindow_Value
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("TrustExplorerWindow_Value");
+                }
+            }
+        }
+
+        public string TrustExplorerWindow_Comment
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("TrustExplorerWindow_Comment");
+                }
+            }
+        }
+
+        public string TrustExplorerWindow_Close
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("TrustExplorerWindow_Close");
+                }
+            }
+        }
+
+
         public string ViewOptionsWindow_Title
         {
             get
@@ -2152,13 +2573,13 @@ namespace Outopos.Properties
             }
         }
 
-        public string ConnectionControl_SeedCount
+        public string ConnectionControl_HeaderCount
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ConnectionControl_SeedCount");
+                    return this.Translate("ConnectionControl_HeaderCount");
                 }
             }
         }
@@ -2357,549 +2778,6 @@ namespace Outopos.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("ConnectionControl_Paste");
-                }
-            }
-        }
-
-
-        public string SectionControl_NewSection
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SectionControl_NewSection");
-                }
-            }
-        }
-
-        public string SectionControl_NewCategory
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SectionControl_NewCategory");
-                }
-            }
-        }
-
-        public string SectionControl_Edit
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SectionControl_Edit");
-                }
-            }
-        }
-
-        public string SectionControl_Delete
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SectionControl_Delete");
-                }
-            }
-        }
-
-        public string SectionControl_Cut
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SectionControl_Cut");
-                }
-            }
-        }
-
-        public string SectionControl_Copy
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SectionControl_Copy");
-                }
-            }
-        }
-
-        public string SectionControl_CopyInfo
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SectionControl_CopyInfo");
-                }
-            }
-        }
-
-        public string SectionControl_Paste
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SectionControl_Paste");
-                }
-            }
-        }
-
-        public string SectionControl_TrustSignaturesPreview
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SectionControl_TrustSignaturesPreview");
-                }
-            }
-        }
-
-        public string SectionControl_Chat
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SectionControl_Chat");
-                }
-            }
-        }
-
-        public string SectionControl_Wiki
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SectionControl_Wiki");
-                }
-            }
-        }
-
-        public string SectionControl_Mail
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SectionControl_Mail");
-                }
-            }
-        }
-
-
-        public string NewSectionWindow_Title
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("NewSectionWindow_Title");
-                }
-            }
-        }
-
-        public string NewSectionWindow_SectionName
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("NewSectionWindow_SectionName");
-                }
-            }
-        }
-
-        public string NewSectionWindow_LeaderSignature
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("NewSectionWindow_LeaderSignature");
-                }
-            }
-        }
-
-        public string NewSectionWindow_Ok
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("NewSectionWindow_Ok");
-                }
-            }
-        }
-
-        public string NewSectionWindow_Cancel
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("NewSectionWindow_Cancel");
-                }
-            }
-        }
-
-
-        public string PersonalInformationEditWindow_Title
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("PersonalInformationEditWindow_Title");
-                }
-            }
-        }
-
-        public string PersonalInformationEditWindow_YourSignature
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("PersonalInformationEditWindow_YourSignature");
-                }
-            }
-        }
-
-        public string PersonalInformationEditWindow_Section
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("PersonalInformationEditWindow_Section");
-                }
-            }
-        }
-
-        public string PersonalInformationEditWindow_LeaderSignature
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("PersonalInformationEditWindow_LeaderSignature");
-                }
-            }
-        }
-
-        public string PersonalInformationEditWindow_YourProfile
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("PersonalInformationEditWindow_YourProfile");
-                }
-            }
-        }
-
-        public string PersonalInformationEditWindow_Trust
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("PersonalInformationEditWindow_Trust");
-                }
-            }
-        }
-
-        public string PersonalInformationEditWindow_Signature
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("PersonalInformationEditWindow_Signature");
-                }
-            }
-        }
-
-        public string PersonalInformationEditWindow_Chat
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("PersonalInformationEditWindow_Chat");
-                }
-            }
-        }
-
-        public string PersonalInformationEditWindow_Wiki
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("PersonalInformationEditWindow_Wiki");
-                }
-            }
-        }
-
-        public string PersonalInformationEditWindow_Value
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("PersonalInformationEditWindow_Value");
-                }
-            }
-        }
-
-        public string PersonalInformationEditWindow_Comment
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("PersonalInformationEditWindow_Comment");
-                }
-            }
-        }
-
-        public string PersonalInformationEditWindow_Up
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("PersonalInformationEditWindow_Up");
-                }
-            }
-        }
-
-        public string PersonalInformationEditWindow_Down
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("PersonalInformationEditWindow_Down");
-                }
-            }
-        }
-
-        public string PersonalInformationEditWindow_Add
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("PersonalInformationEditWindow_Add");
-                }
-            }
-        }
-
-        public string PersonalInformationEditWindow_New
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("PersonalInformationEditWindow_New");
-                }
-            }
-        }
-
-        public string PersonalInformationEditWindow_Edit
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("PersonalInformationEditWindow_Edit");
-                }
-            }
-        }
-
-        public string PersonalInformationEditWindow_Delete
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("PersonalInformationEditWindow_Delete");
-                }
-            }
-        }
-
-        public string PersonalInformationEditWindow_Cut
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("PersonalInformationEditWindow_Cut");
-                }
-            }
-        }
-
-        public string PersonalInformationEditWindow_Copy
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("PersonalInformationEditWindow_Copy");
-                }
-            }
-        }
-
-        public string PersonalInformationEditWindow_Paste
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("PersonalInformationEditWindow_Paste");
-                }
-            }
-        }
-
-        public string PersonalInformationEditWindow_Ok
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("PersonalInformationEditWindow_Ok");
-                }
-            }
-        }
-
-        public string PersonalInformationEditWindow_Cancel
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("PersonalInformationEditWindow_Cancel");
-                }
-            }
-        }
-
-
-        public string TrustSignaturesPreview_Title
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("TrustSignaturesPreview_Title");
-                }
-            }
-        }
-
-        public string TrustSignaturesPreview_Copy
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("TrustSignaturesPreview_Copy");
-                }
-            }
-        }
-
-        public string TrustSignaturesPreview_Signature
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("TrustSignaturesPreview_Signature");
-                }
-            }
-        }
-
-        public string TrustSignaturesPreview_Section
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("TrustSignaturesPreview_Section");
-                }
-            }
-        }
-
-        public string TrustSignaturesPreview_Trust
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("TrustSignaturesPreview_Trust");
-                }
-            }
-        }
-
-        public string TrustSignaturesPreview_Chat
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("TrustSignaturesPreview_Chat");
-                }
-            }
-        }
-
-        public string TrustSignaturesPreview_Wiki
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("TrustSignaturesPreview_Wiki");
-                }
-            }
-        }
-
-        public string TrustSignaturesPreview_Value
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("TrustSignaturesPreview_Value");
-                }
-            }
-        }
-
-        public string TrustSignaturesPreview_Comment
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("TrustSignaturesPreview_Comment");
-                }
-            }
-        }
-
-        public string TrustSignaturesPreview_Close
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("TrustSignaturesPreview_Close");
                 }
             }
         }
@@ -3476,129 +3354,6 @@ namespace Outopos.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("MailControl_Message");
-                }
-            }
-        }
-
-
-        public string SignatureListWindow_Title
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SignatureListWindow_Title");
-                }
-            }
-        }
-
-        public string SignatureListWindow_Value
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SignatureListWindow_Value");
-                }
-            }
-        }
-
-        public string SignatureListWindow_Copy
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SignatureListWindow_Copy");
-                }
-            }
-        }
-
-        public string SignatureListWindow_Add
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SignatureListWindow_Add");
-                }
-            }
-        }
-
-        public string SignatureListWindow_Close
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SignatureListWindow_Close");
-                }
-            }
-        }
-
-
-        public string SectionMessageEditWindow_Title
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SectionMessageEditWindow_Title");
-                }
-            }
-        }
-
-        public string SectionMessageEditWindow_Edit
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SectionMessageEditWindow_Edit");
-                }
-            }
-        }
-
-        public string SectionMessageEditWindow_Preview
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SectionMessageEditWindow_Preview");
-                }
-            }
-        }
-
-        public string SectionMessageEditWindow_Comment
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SectionMessageEditWindow_Comment");
-                }
-            }
-        }
-
-        public string SectionMessageEditWindow_Ok
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SectionMessageEditWindow_Ok");
-                }
-            }
-        }
-
-        public string SectionMessageEditWindow_Cancel
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("SectionMessageEditWindow_Cancel");
                 }
             }
         }

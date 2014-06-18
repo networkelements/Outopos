@@ -39,11 +39,15 @@
                 <MenuItem Name="_startMenuItem" Header="{Binding Path=MainWindow_Start, Source={StaticResource ResourcesInstance}}" Click="_startMenuItem_Click" />
                 <MenuItem Name="_stopMenuItem" Header="{Binding Path=MainWindow_Stop, Source={StaticResource ResourcesInstance}}" IsEnabled="False"  Click="_stopMenuItem_Click" />
                 <Separator />
+                <MenuItem Name="_profileOptionsMenuItem" Header="{Binding Path=MainWindow_ProfileOptions, Source={StaticResource ResourcesInstance}}" Click="_profileOptionsMenuItem_Click" />
+                <Separator />
                 <MenuItem Name="_updateBaseNodeMenuItem" Header="{Binding Path=MainWindow_UpdateBaseNode, Source={StaticResource ResourcesInstance}}" Click="_updateBaseNodeMenuItem_Click" />
                 <MenuItem Name="_coreOptionsMenuItem" Header="{Binding Path=MainWindow_CoreOptions, Source={StaticResource ResourcesInstance}}" Click="_coreOptionsMenuItem_Click" />
             </MenuItem>
-            <MenuItem Name="_cacheMenuItem" Header="{Binding Path=MainWindow_Cache, Source={StaticResource ResourcesInstance}}" SubmenuOpened="_cacheMenuItem_SubmenuOpened">
-                <MenuItem Name="_checkBlocksMenuItem" Header="{Binding Path=MainWindow_CheckBlocks, Source={StaticResource ResourcesInstance}}" Click="_checkBlocksMenuItem_Click" />
+            <MenuItem Name="_trustMenuItem" Header="{Binding Path=MainWindow_Trust, Source={StaticResource ResourcesInstance}}" >
+                <MenuItem Name="_trustExplorerMenuItem" Header="{Binding Path=MainWindow_TrustExplorer, Source={StaticResource ResourcesInstance}}" Click="_trustExplorerMenuItem_Click" />
+                <Separator />
+                <MenuItem Name="_trustOptionsMenuItem" Header="{Binding Path=MainWindow_TrustOptions, Source={StaticResource ResourcesInstance}}" Click="_trustOptionsMenuItem_Click" />
             </MenuItem>
             <MenuItem Name="_viewMenuItem" Header="{Binding Path=MainWindow_View, Source={StaticResource ResourcesInstance}}">
                 <MenuItem Name="_languagesMenuItem" Header="{Binding Path=MainWindow_Languages, Source={StaticResource ResourcesInstance}}" />
@@ -63,8 +67,8 @@
         </Menu>
         <TabControl Margin="0,28,0,0" Name="_tabControl" SelectionChanged="_tabControl_SelectionChanged">
             <TabItem Header="{Binding Path=MainWindow_Connection, Source={StaticResource ResourcesInstance}}" Name="_connectionTabItem" />
-            <TabItem Header="{Binding Path=MainWindow_Chat, Source={StaticResource ResourcesInstance}}" Name="_chatTabItem" />
             <TabItem Header="{Binding Path=MainWindow_Wiki, Source={StaticResource ResourcesInstance}}" Name="_wikiTabItem" />
+            <TabItem Header="{Binding Path=MainWindow_Chat, Source={StaticResource ResourcesInstance}}" Name="_chatTabItem" />
             <TabItem Header="{Binding Path=MainWindow_Mail, Source={StaticResource ResourcesInstance}}" Name="_mailTabItem" />
             <TabItem Header="{Binding Path=MainWindow_Log, Source={StaticResource ResourcesInstance}}" Name="_logTabItem" >
                 <Grid>

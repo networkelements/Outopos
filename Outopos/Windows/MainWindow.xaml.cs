@@ -36,6 +36,7 @@ using Library.Net.Connections;
 using Library.Net.Proxy;
 using Library.Net.Upnp;
 using Library.Security;
+using System.Runtime.CompilerServices;
 
 namespace Outopos.Windows
 {
@@ -74,6 +75,7 @@ namespace Outopos.Windows
         private bool _autoStop;
 
         private Thread _timerThread;
+        private Thread _watchThread;
         private Thread _statusBarThread;
         private Thread _trafficMonitorThread;
 
@@ -162,6 +164,11 @@ namespace Outopos.Windows
                 _timerThread.Priority = ThreadPriority.Lowest;
                 _timerThread.Name = "MainWindow_TimerThread";
                 _timerThread.Start();
+
+                _watchThread = new Thread(this.WatchThread);
+                _watchThread.Priority = ThreadPriority.Lowest;
+                _watchThread.Name = "MainWindow_WatchThread";
+                _watchThread.Start();
 
                 _statusBarThread = new Thread(this.StatusBarThread);
                 _statusBarThread.Priority = ThreadPriority.Highest;
@@ -502,6 +509,114 @@ namespace Outopos.Windows
             catch (Exception)
             {
 
+            }
+        }
+
+        private void WatchThread()
+        {
+            try
+            {
+                Stopwatch stopwatch = new Stopwatch();
+
+                for (; ; )
+                {
+                    Thread.Sleep(1000);
+                    if (_closed) return;
+
+                    if (!stopwatch.IsRunning || stopwatch.Elapsed.TotalSeconds >= 120)
+                    {
+                        stopwatch.Restart();
+
+                        // _profileInfoDic情報を更新。
+                        {
+                            var sumList = new List<ProfileInfo>();
+
+                            foreach (var leaderSignature in Settings.Instance.Global_TrustSignatures.ToArray())
+                            {
+                                var tempList = new List<ProfileInfo>();
+
+                                var checkedSignature = new HashSet<string>();
+
+                                {
+                                    var leaderInfo = this.GetProfileInfo(leaderSignature);
+                                    if (leaderInfo == null) continue;
+
+                                    tempList.Add(leaderInfo);
+                                    checkedSignature.Add(leaderInfo.Header.Certificate.ToString());
+                                }
+
+                                for (int i = 0; i < tempList.Count; i++)
+                                {
+                                    foreach (var trustSignature in tempList[i].Content.TrustSignatures)
+                                    {
+                                        if (checkedSignature.Contains(trustSignature)) continue;
+
+                                        var info = this.GetProfileInfo(trustSignature);
+                                        if (info == null) continue;
+
+                                        tempList.Add(info);
+                                        checkedSignature.Add(info.Header.Certificate.ToString());
+
+                                        if (tempList.Count > 1024 * 32) goto End;
+                                    }
+                                }
+
+                            End: ;
+
+                                sumList.AddRange(tempList);
+                            }
+
+                            lock (Settings.Instance.ThisLock)
+                            {
+                                lock (Settings.Instance.Global_ProfileInfos.ThisLock)
+                                {
+                                    Settings.Instance.Global_ProfileInfos.Clear();
+
+                                    foreach (var item in sumList)
+                                    {
+                                        Settings.Instance.Global_ProfileInfos[item.Header.Certificate.ToString()] = item;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Error(e);
+            }
+        }
+
+        private ProfileInfo GetProfileInfo(string signature)
+        {
+            {
+                var header = _outoposManager.GetProfileHeader(signature);
+                if (header == null) goto End;
+
+                var content = _outoposManager.GetContent(header);
+                if (content == null) goto End;
+
+                var info = new ProfileInfo()
+                {
+                    Header = header,
+                    Content = content,
+                };
+
+                return info;
+            }
+
+        End: ;
+
+            {
+                ProfileInfo info;
+
+                if (Settings.Instance.Global_ProfileInfos.TryGetValue(signature, out info))
+                {
+                    return info;
+                }
+
+                return null;
             }
         }
 
@@ -981,6 +1096,29 @@ namespace Outopos.Windows
                     {
                         Settings.Instance.Global_UseLanguage = "English";
                     }
+
+                    // ProfileItem
+                    {
+                        var digitalSignature = new DigitalSignature("Anonymous", DigitalSignatureAlgorithm.Rsa2048_Sha512);
+                        Settings.Instance.Global_DigitalSignatureCollection.Add(digitalSignature);
+
+                        var profileItem = new ProfileItem();
+                        profileItem.UploadSignature = digitalSignature.ToString();
+                        profileItem.Exchange = new Exchange(ExchangeAlgorithm.Rsa2048);
+
+                        Settings.Instance.Global_ProfileItem = profileItem;
+
+                        // Upload
+                        {
+                            var content = new ProfileContent(
+                                profileItem.Exchange.GetExchangePublicKey(),
+                                profileItem.TrustSignatures,
+                                profileItem.Wikis,
+                                profileItem.Chats);
+
+                            _outoposManager.Upload(content, TimeSpan.Zero, digitalSignature);
+                        }
+                    }
                 }
                 else
                 {
@@ -1291,6 +1429,17 @@ namespace Outopos.Windows
             Settings.Instance.Global_IsStart = false;
         }
 
+        private void _profileOptionsMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            ProfileOptionsWindow window = new ProfileOptionsWindow(
+                Settings.Instance.Global_ProfileItem,
+                _outoposManager,
+                _bufferManager);
+
+            window.Owner = this;
+            window.ShowDialog();
+        }
+
         volatile bool _updateBaseNodeMenuItem_IsEnabled = true;
 
         private void _updateBaseNodeMenuItem_Click(object sender, RoutedEventArgs e)
@@ -1341,71 +1490,73 @@ namespace Outopos.Windows
             window.ShowDialog();
         }
 
-        private void _cacheMenuItem_SubmenuOpened(object sender, RoutedEventArgs e)
+        private void _trustExplorerMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            _checkBlocksMenuItem.IsEnabled = _checkBlocksMenuItem_IsEnabled;
+            var signatureTreeItems = new List<SignatureTreeItem>();
+
+            foreach (var trustSignature in Settings.Instance.Global_TrustSignatures)
+            {
+                var item = this.GetSignatureTreeViewItem(trustSignature);
+                if (item == null) continue;
+
+                signatureTreeItems.Add(item);
+            }
+
+            TrustExplorerWindow window = new TrustExplorerWindow(signatureTreeItems);
+            window.Owner = this;
+            window.ShowDialog();
         }
 
-        volatile bool _checkBlocksMenuItem_IsEnabled = true;
-
-        private void _checkBlocksMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _trustOptionsMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            if (!_checkBlocksMenuItem_IsEnabled) return;
-            _checkBlocksMenuItem_IsEnabled = false;
-
-            var window = new ProgressWindow(true);
-            window.Owner = this;
-            window.Title = string.Format(LanguagesManager.Instance.ProgressWindow_Title, LanguagesManager.Instance.MainWindow_CheckBlocks_Message);
-            window.Message = string.Format(LanguagesManager.Instance.MainWindow_CheckBlocks_State, 0, 0, 0);
-            window.ButtonMessage = LanguagesManager.Instance.ProgressWindow_Cancel;
-
-            ThreadPool.QueueUserWorkItem((object wstate) =>
-            {
-                bool flag = false;
-
-                window.Closed += (object sender2, EventArgs e2) =>
-                {
-                    flag = true;
-                };
-
-                _outoposManager.ChecBlocks((object sender2, int badBlockCount, int checkedBlockCount, int blockCount, out bool isStop) =>
-                {
-                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
-                    {
-                        try
-                        {
-                            window.Value = 100 * ((double)checkedBlockCount / (double)blockCount);
-                            window.Message = string.Format(LanguagesManager.Instance.MainWindow_CheckBlocks_State, badBlockCount, checkedBlockCount, blockCount);
-                        }
-                        catch (Exception)
-                        {
-
-                        }
-                    }));
-
-                    isStop = flag;
-                });
-
-                this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
-                {
-                    try
-                    {
-                        window.ButtonMessage = LanguagesManager.Instance.ProgressWindow_Ok;
-                    }
-                    catch (Exception)
-                    {
-
-                    }
-                }));
-            });
-
-            window.Closed += (object sender2, EventArgs e2) =>
-            {
-                _checkBlocksMenuItem_IsEnabled = true;
-            };
+            TrustOptionsWindow window = new TrustOptionsWindow();
 
             window.Owner = this;
-            window.Show();
+            window.ShowDialog();
+        }
+
+        private SignatureTreeItem GetSignatureTreeViewItem(string leaderSignature)
+        {
+            List<SignatureTreeItem> workSignatureTreeItems = new List<SignatureTreeItem>();
+
+            HashSet<string> checkedSignatures = new HashSet<string>();
+
+            {
+                ProfileInfo leaderProfileInfo;
+                if (!Settings.Instance.Global_ProfileInfos.TryGetValue(leaderSignature, out leaderProfileInfo)) return null;
+
+                workSignatureTreeItems.Add(new SignatureTreeItem(leaderProfileInfo));
+                checkedSignatures.Add(leaderSignature);
+            }
+
+            List<SignatureTreeItem> checkedSignatureTreeItems = new List<SignatureTreeItem>();
+
+            for (int i = 0; workSignatureTreeItems.Count != 0 && i < 256; i++)
+            {
+                var sortList = workSignatureTreeItems.SelectMany(n => n.ProfileInfo.Content.TrustSignatures).ToList();
+                sortList.Sort((x, y) => x.CompareTo(y));
+
+                checkedSignatureTreeItems.AddRange(workSignatureTreeItems);
+                workSignatureTreeItems.Clear();
+
+                foreach (var trustSignature in sortList)
+                {
+                    if (checkedSignatures.Contains(trustSignature)) continue;
+
+                    ProfileInfo sectionProfileInfo;
+                    if (!Settings.Instance.Global_ProfileInfos.TryGetValue(trustSignature, out sectionProfileInfo)) continue;
+
+                    var tempItem = new SignatureTreeItem(sectionProfileInfo);
+                    workSignatureTreeItems.Add(tempItem);
+
+                    var targetItem = checkedSignatureTreeItems.FirstOrDefault(n => n.ProfileInfo.Content.TrustSignatures.Contains(trustSignature));
+                    targetItem.Children.Add(tempItem);
+
+                    checkedSignatures.Add(trustSignature);
+                }
+            }
+
+            return checkedSignatureTreeItems[0];
         }
 
         private void _viewOptionsMenuItem_Click(object sender, RoutedEventArgs e)

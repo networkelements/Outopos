@@ -20,22 +20,22 @@ using Outopos.Properties;
 namespace Outopos.Windows
 {
     /// <summary>
-    /// Interaction logic for PersonalInformationEditWindow.xaml
+    /// Interaction logic for ProfileOptionsWindow.xaml
     /// </summary>
-    partial class PersonalInformationEditWindow : Window
+    partial class ProfileOptionsWindow : Window
     {
-        private PersonalInformation _personalInformation;
+        private ProfileItem _profileItem;
         private OutoposManager _outoposManager;
         private BufferManager _bufferManager;
 
         private string _uploadSignature;
-        private ObservableCollectionEx<string> _trustSignatureCollection = new ObservableCollectionEx<string>();
+        private ObservableCollectionEx<string> _signatureCollection = new ObservableCollectionEx<string>();
         private ObservableCollectionEx<Wiki> _wikiCollection = new ObservableCollectionEx<Wiki>();
         private ObservableCollectionEx<Chat> _chatCollection = new ObservableCollectionEx<Chat>();
 
-        public PersonalInformationEditWindow(PersonalInformation personalInformation, OutoposManager outoposManager, BufferManager bufferManager)
+        public ProfileOptionsWindow(ProfileItem profileItem, OutoposManager outoposManager, BufferManager bufferManager)
         {
-            _personalInformation = personalInformation;
+            _profileItem = profileItem;
             _outoposManager = outoposManager;
             _bufferManager = bufferManager;
 
@@ -48,15 +48,15 @@ namespace Outopos.Windows
             _wikiTextBox.MaxLength = Wiki.MaxNameLength;
             _chatTextBox.MaxLength = Chat.MaxNameLength;
 
-            lock (_personalInformation.ThisLock)
+            lock (_profileItem.ThisLock)
             {
-                _uploadSignature = _personalInformation.UploadSignature;
-                _trustSignatureCollection.AddRange(_personalInformation.TrustSignatures);
-                _wikiCollection.AddRange(_personalInformation.Wikis);
-                _chatCollection.AddRange(_personalInformation.Chats);
+                _uploadSignature = _profileItem.UploadSignature;
+                _signatureCollection.AddRange(_profileItem.TrustSignatures);
+                _wikiCollection.AddRange(_profileItem.Wikis);
+                _chatCollection.AddRange(_profileItem.Chats);
             }
 
-            _trustSignatureListView.ItemsSource = _trustSignatureCollection;
+            _signatureListView.ItemsSource = _signatureCollection;
             _wikiListView.ItemsSource = _wikiCollection;
             _chatListView.ItemsSource = _chatCollection;
 
@@ -67,8 +67,8 @@ namespace Outopos.Windows
 
         private void Sort()
         {
-            _trustSignatureListView.Items.SortDescriptions.Clear();
-            _trustSignatureListView.Items.SortDescriptions.Add(new SortDescription(null, ListSortDirection.Ascending));
+            _signatureListView.Items.SortDescriptions.Clear();
+            _signatureListView.Items.SortDescriptions.Add(new SortDescription(null, ListSortDirection.Ascending));
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -86,15 +86,15 @@ namespace Outopos.Windows
             }
         }
 
-        #region _trustSignature
+        #region _signatureListView
 
-        private void _trustSignatureListView_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        private void _signatureListView_ContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
-            var selectItems = _trustSignatureListView.SelectedItems;
+            var selectItems = _signatureListView.SelectedItems;
 
-            _trustSignatureListViewDeleteMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
-            _trustSignatureListViewCutMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
-            _trustSignatureListViewCopyMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
+            _signatureListViewDeleteMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
+            _signatureListViewCutMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
+            _signatureListViewCopyMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
 
             {
                 bool flag = false;
@@ -105,29 +105,29 @@ namespace Outopos.Windows
                     flag = Signature.Check(line[0]);
                 }
 
-                _trustSignatureListViewPasteMenuItem.IsEnabled = flag;
+                _signatureListViewPasteMenuItem.IsEnabled = flag;
             }
         }
 
-        private void _trustSignatureListViewDeleteMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _signatureListViewDeleteMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var item in _trustSignatureListView.SelectedItems.OfType<string>().ToArray())
+            foreach (var item in _signatureListView.SelectedItems.OfType<string>().ToArray())
             {
-                _trustSignatureCollection.Remove(item);
+                _signatureCollection.Remove(item);
             }
         }
 
-        private void _trustSignatureListViewCutMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _signatureListViewCutMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            _trustSignatureListViewCopyMenuItem_Click(null, null);
-            _trustSignatureListViewDeleteMenuItem_Click(null, null);
+            _signatureListViewCopyMenuItem_Click(null, null);
+            _signatureListViewDeleteMenuItem_Click(null, null);
         }
 
-        private void _trustSignatureListViewCopyMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _signatureListViewCopyMenuItem_Click(object sender, RoutedEventArgs e)
         {
             var sb = new StringBuilder();
 
-            foreach (var item in _trustSignatureListView.SelectedItems.OfType<string>().ToArray())
+            foreach (var item in _signatureListView.SelectedItems.OfType<string>().ToArray())
             {
                 sb.AppendLine(item);
             }
@@ -135,14 +135,14 @@ namespace Outopos.Windows
             Clipboard.SetText(sb.ToString());
         }
 
-        private void _trustSignatureListViewPasteMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _signatureListViewPasteMenuItem_Click(object sender, RoutedEventArgs e)
         {
             foreach (var signature in Clipboard.GetText().Split('\r', '\n'))
             {
                 if (!Signature.Check(signature)) continue;
 
-                if (_trustSignatureCollection.Contains(signature)) continue;
-                _trustSignatureCollection.Add(signature);
+                if (_signatureCollection.Contains(signature)) continue;
+                _signatureCollection.Add(signature);
             }
         }
 
@@ -527,53 +527,54 @@ namespace Outopos.Windows
 
             var uploadSignature = (digitalSignature == null) ? null : digitalSignature.ToString();
 
-            BroadcastProfileContent content = null;
+            ProfileContent content = null;
 
-            lock (_personalInformation.ThisLock)
+            lock (_profileItem.ThisLock)
             {
-                if (uploadSignature != _personalInformation.UploadSignature)
+                if (uploadSignature != _profileItem.UploadSignature)
                 {
-                    _personalInformation.UploadSignature = uploadSignature;
+                    _profileItem.UploadSignature = uploadSignature;
 
-                    if (!string.IsNullOrWhiteSpace(_personalInformation.UploadSignature))
+                    if (!string.IsNullOrWhiteSpace(_profileItem.UploadSignature))
                     {
-                        _personalInformation.OldExchanges.Add(_personalInformation.Exchange);
-                        _personalInformation.Exchange = new Exchange(ExchangeAlgorithm.Rsa2048);
+                        _profileItem.Exchange = new Exchange(ExchangeAlgorithm.Rsa2048);
                     }
                     else
                     {
-                        _personalInformation.Exchange = null;
+                        _profileItem.Exchange = null;
                     }
+
+                    _profileItem.OldExchanges.Clear();
                 }
 
-                lock (_personalInformation.TrustSignatures.ThisLock)
+                lock (_profileItem.TrustSignatures.ThisLock)
                 {
-                    _personalInformation.TrustSignatures.Clear();
-                    _personalInformation.TrustSignatures.AddRange(_trustSignatureCollection);
+                    _profileItem.TrustSignatures.Clear();
+                    _profileItem.TrustSignatures.AddRange(_signatureCollection);
                 }
 
-                lock (_personalInformation.Wikis.ThisLock)
+                lock (_profileItem.Wikis.ThisLock)
                 {
-                    _personalInformation.Wikis.Clear();
-                    _personalInformation.Wikis.AddRange(_wikiCollection);
+                    _profileItem.Wikis.Clear();
+                    _profileItem.Wikis.AddRange(_wikiCollection);
                 }
 
-                lock (_personalInformation.Chats.ThisLock)
+                lock (_profileItem.Chats.ThisLock)
                 {
-                    _personalInformation.Chats.Clear();
-                    _personalInformation.Chats.AddRange(_chatCollection);
+                    _profileItem.Chats.Clear();
+                    _profileItem.Chats.AddRange(_chatCollection);
                 }
 
-                content = new BroadcastProfileContent(
-                    _personalInformation.Exchange.GetExchangePublicKey(),
-                    _personalInformation.TrustSignatures,
-                    _personalInformation.Wikis,
-                    _personalInformation.Chats);
+                content = new ProfileContent(
+                    _profileItem.Exchange.GetExchangePublicKey(),
+                    _profileItem.TrustSignatures,
+                    _profileItem.Wikis,
+                    _profileItem.Chats);
             }
 
             if (digitalSignature != null)
             {
-                _outoposManager.Upload(content, null, digitalSignature);
+                _outoposManager.Upload(content, TimeSpan.Zero, digitalSignature);
             }
         }
 

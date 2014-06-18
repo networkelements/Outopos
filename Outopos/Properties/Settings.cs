@@ -23,6 +23,9 @@ namespace Outopos.Properties
         Settings()
             : base(new List<Library.Configuration.ISettingContent>()
             {
+                new Library.Configuration.SettingContent<ProfileItem>() { Name = "Global_ProfileItem", Value = null },
+                new Library.Configuration.SettingContent<LockedList<string>>() { Name = "Global_TrustSignatures", Value = new LockedList<string>() },
+                new Library.Configuration.SettingContent<LockedHashDictionary<string, ProfileInfo>>() { Name = "Global_ProfileInfos", Value = new LockedHashDictionary<string, ProfileInfo>() },
                 new Library.Configuration.SettingContent<LockedList<DigitalSignature>>() { Name = "Global_DigitalSignatureCollection", Value = new LockedList<DigitalSignature>() },
                 new Library.Configuration.SettingContent<string>() { Name = "Global_UseLanguage", Value = "English" },
                 new Library.Configuration.SettingContent<bool>() { Name = "Global_IsStart", Value = true },
@@ -47,6 +50,22 @@ namespace Outopos.Properties
                 new Library.Configuration.SettingContent<double>() { Name = "MainWindow_Width", Value = 700 },
                 new Library.Configuration.SettingContent<WindowState>() { Name = "MainWindow_WindowState", Value = WindowState.Maximized },
 
+                new Library.Configuration.SettingContent<double>() { Name = "TrustOptionsWindow_Top", Value = 120 },
+                new Library.Configuration.SettingContent<double>() { Name = "TrustOptionsWindow_Left", Value = 120 },
+                new Library.Configuration.SettingContent<double>() { Name = "TrustOptionsWindow_Height", Value = 500 },
+                new Library.Configuration.SettingContent<double>() { Name = "TrustOptionsWindow_Width", Value = 700 },
+                new Library.Configuration.SettingContent<WindowState>() { Name = "TrustOptionsWindow_WindowState", Value = WindowState.Normal },
+                new Library.Configuration.SettingContent<double>() { Name = "TrustOptionsWindow_GridViewColumn_Signature_Width", Value = 600 },
+
+                new Library.Configuration.SettingContent<double>() { Name = "ProfileOptionsWindow_Top", Value = 120 },
+                new Library.Configuration.SettingContent<double>() { Name = "ProfileOptionsWindow_Left", Value = 120 },
+                new Library.Configuration.SettingContent<double>() { Name = "ProfileOptionsWindow_Height", Value = 500 },
+                new Library.Configuration.SettingContent<double>() { Name = "ProfileOptionsWindow_Width", Value = 700 },
+                new Library.Configuration.SettingContent<WindowState>() { Name = "ProfileOptionsWindow_WindowState", Value = WindowState.Normal },
+                new Library.Configuration.SettingContent<double>() { Name = "ProfileOptionsWindow_GridViewColumn_Signature_Width", Value = 600 },
+                new Library.Configuration.SettingContent<double>() { Name = "ProfileOptionsWindow_GridViewColumn_Wiki_Width", Value = 600 },
+                new Library.Configuration.SettingContent<double>() { Name = "ProfileOptionsWindow_GridViewColumn_Chat_Width", Value = 600 },
+
                 new Library.Configuration.SettingContent<double>() { Name = "CoreOptionsWindow_Top", Value = 120 },
                 new Library.Configuration.SettingContent<double>() { Name = "CoreOptionsWindow_Left", Value = 120 },
                 new Library.Configuration.SettingContent<double>() { Name = "CoreOptionsWindow_Height", Value = 500 },
@@ -62,6 +81,16 @@ namespace Outopos.Properties
                 new Library.Configuration.SettingContent<double>() { Name = "CoreOptionsWindow_Grid_ColumnDefinitions_Width", Value = 160 },
                 new Library.Configuration.SettingContent<string>() { Name = "CoreOptionsWindow_BandwidthLimit_Unit", Value = "Byte" },
                 new Library.Configuration.SettingContent<string>() { Name = "CoreOptionsWindow_DataCacheSize_Unit", Value = "GB" },
+
+                new Library.Configuration.SettingContent<double>() { Name = "TrustExplorerWindow_Top", Value = 120 },
+                new Library.Configuration.SettingContent<double>() { Name = "TrustExplorerWindow_Left", Value = 120 },
+                new Library.Configuration.SettingContent<double>() { Name = "TrustExplorerWindow_Height", Value = 500 },
+                new Library.Configuration.SettingContent<double>() { Name = "TrustExplorerWindow_Width", Value = 700 },
+                new Library.Configuration.SettingContent<WindowState>() { Name = "TrustExplorerWindow_WindowState", Value = WindowState.Normal },
+                new Library.Configuration.SettingContent<double>() { Name = "TrustExplorerWindow_Grid_ColumnDefinitions_Width", Value = 200 },
+                new Library.Configuration.SettingContent<double>() { Name = "TrustExplorerWindow_GridViewColumn_TrustSignature_Width", Value = 600 },
+                new Library.Configuration.SettingContent<double>() { Name = "TrustExplorerWindow_GridViewColumn_Wiki_Width", Value = 600 },
+                new Library.Configuration.SettingContent<double>() { Name = "TrustExplorerWindow_GridViewColumn_Chat_Width", Value = 600 },
 
                 new Library.Configuration.SettingContent<double>() { Name = "ViewOptionsWindow_Top", Value = 120 },
                 new Library.Configuration.SettingContent<double>() { Name = "ViewOptionsWindow_Left", Value = 120 },
@@ -82,33 +111,15 @@ namespace Outopos.Properties
 
                 new Library.Configuration.SettingContent<string>() { Name = "ConnectionControl_LastHeaderClicked", Value = "Uri" },
                 new Library.Configuration.SettingContent<ListSortDirection>() { Name = "ConnectionControl_ListSortDirection", Value = ListSortDirection.Ascending },
-                new Library.Configuration.SettingContent<double>() { Name = "ConnectionControl_Grid_ColumnDefinitions_Width", Value = -1 },
+                new Library.Configuration.SettingContent<double>() { Name = "ConnectionControl_Grid_ColumnDefinitions_Width", Value = double.NaN },
+                new Library.Configuration.SettingContent<double>() { Name = "ConnectionControl_GridViewColumn_Direction_Width", Value = 120 },
                 new Library.Configuration.SettingContent<double>() { Name = "ConnectionControl_GridViewColumn_Uri_Width", Value = 120 },
                 new Library.Configuration.SettingContent<double>() { Name = "ConnectionControl_GridViewColumn_Priority_Width", Value = 120 },
                 new Library.Configuration.SettingContent<double>() { Name = "ConnectionControl_GridViewColumn_ReceivedByteCount_Width", Value = 120 },
                 new Library.Configuration.SettingContent<double>() { Name = "ConnectionControl_GridViewColumn_SentByteCount_Width", Value = 120 },
-                new Library.Configuration.SettingContent<double>() { Name = "ConnectionControl_GridViewColumn_Name_Width", Value = -1 },
+                new Library.Configuration.SettingContent<double>() { Name = "ConnectionControl_GridViewColumn_Name_Width", Value = double.NaN },
                 new Library.Configuration.SettingContent<double>() { Name = "ConnectionControl_GridViewColumn_Value_Width", Value = 100 },
    
-                new Library.Configuration.SettingContent<double>() { Name = "PersonalInformationEditWindow_Top", Value = 120 },
-                new Library.Configuration.SettingContent<double>() { Name = "PersonalInformationEditWindow_Left", Value = 120 },
-                new Library.Configuration.SettingContent<double>() { Name = "PersonalInformationEditWindow_Height", Value = 500 },
-                new Library.Configuration.SettingContent<double>() { Name = "PersonalInformationEditWindow_Width", Value = 700 },
-                new Library.Configuration.SettingContent<WindowState>() { Name = "PersonalInformationEditWindow_WindowState", Value = WindowState.Normal },
-                new Library.Configuration.SettingContent<double>() { Name = "PersonalInformationEditWindow_GridViewColumn_TrustSignature_Width", Value = 600 },
-                new Library.Configuration.SettingContent<double>() { Name = "PersonalInformationEditWindow_GridViewColumn_Wiki_Width", Value = 600 },
-                new Library.Configuration.SettingContent<double>() { Name = "PersonalInformationEditWindow_GridViewColumn_Chat_Width", Value = 600 },
-
-                new Library.Configuration.SettingContent<double>() { Name = "TrustSignaturesPreview_Top", Value = 120 },
-                new Library.Configuration.SettingContent<double>() { Name = "TrustSignaturesPreview_Left", Value = 120 },
-                new Library.Configuration.SettingContent<double>() { Name = "TrustSignaturesPreview_Height", Value = 500 },
-                new Library.Configuration.SettingContent<double>() { Name = "TrustSignaturesPreview_Width", Value = 700 },
-                new Library.Configuration.SettingContent<WindowState>() { Name = "TrustSignaturesPreview_WindowState", Value = WindowState.Normal },
-                new Library.Configuration.SettingContent<double>() { Name = "TrustSignaturesPreview_Grid_ColumnDefinitions_Width", Value = 200 },
-                new Library.Configuration.SettingContent<double>() { Name = "TrustSignaturesPreview_GridViewColumn_TrustSignature_Width", Value = 600 },
-                new Library.Configuration.SettingContent<double>() { Name = "TrustSignaturesPreview_GridViewColumn_Wiki_Width", Value = 600 },
-                new Library.Configuration.SettingContent<double>() { Name = "TrustSignaturesPreview_GridViewColumn_Chat_Width", Value = 600 },
-
                 new Library.Configuration.SettingContent<double>() { Name = "ChatControl_Grid_ColumnDefinitions_Width", Value = 200 },
              
                 new Library.Configuration.SettingContent<double>() { Name = "ChatListWindow_Top", Value = 120 },
@@ -128,22 +139,6 @@ namespace Outopos.Properties
                 new Library.Configuration.SettingContent<WindowState>() { Name = "ChatMessageEditWindow_WindowState", Value = WindowState.Normal },
 
                 new Library.Configuration.SettingContent<double>() { Name = "MailControl_Grid_ColumnDefinitions_Width", Value = 200 },
-             
-                new Library.Configuration.SettingContent<double>() { Name = "SignatureListWindow_Top", Value = 120 },
-                new Library.Configuration.SettingContent<double>() { Name = "SignatureListWindow_Left", Value = 120 },
-                new Library.Configuration.SettingContent<double>() { Name = "SignatureListWindow_Height", Value = 500 },
-                new Library.Configuration.SettingContent<double>() { Name = "SignatureListWindow_Width", Value = 700 },
-                new Library.Configuration.SettingContent<WindowState>() { Name = "SignatureListWindow_WindowState", Value = WindowState.Normal },
-                new Library.Configuration.SettingContent<string>() { Name = "SignatureListWindow_LastHeaderClicked", Value = "Name" },
-                new Library.Configuration.SettingContent<ListSortDirection>() { Name = "SignatureListWindow_ListSortDirection", Value = ListSortDirection.Descending },
-                new Library.Configuration.SettingContent<double>() { Name = "SignatureListWindow_GridViewColumn_Name_Width", Value = 120 },
-                new Library.Configuration.SettingContent<double>() { Name = "SignatureListWindow_GridViewColumn_Id_Width", Value = 120 },
-          
-                new Library.Configuration.SettingContent<double>() { Name = "SectionMessageEditWindow_Top", Value = 120 },
-                new Library.Configuration.SettingContent<double>() { Name = "SectionMessageEditWindow_Left", Value = 120 },
-                new Library.Configuration.SettingContent<double>() { Name = "SectionMessageEditWindow_Height", Value = 500 },
-                new Library.Configuration.SettingContent<double>() { Name = "SectionMessageEditWindow_Width", Value = 700 },
-                new Library.Configuration.SettingContent<WindowState>() { Name = "SectionMessageEditWindow_WindowState", Value = WindowState.Normal },
             })
         {
 
@@ -181,6 +176,60 @@ namespace Outopos.Properties
         }
 
         #region Property
+
+        public ProfileItem Global_ProfileItem
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (ProfileItem)this["Global_ProfileItem"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["Global_ProfileItem"] = value;
+                }
+            }
+        }
+
+        public LockedList<string> Global_TrustSignatures
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (LockedList<string>)this["Global_TrustSignatures"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["Global_TrustSignatures"] = value;
+                }
+            }
+        }
+
+        public LockedHashDictionary<string, ProfileInfo> Global_ProfileInfos
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (LockedHashDictionary<string, ProfileInfo>)this["Global_ProfileInfos"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["Global_ProfileInfos"] = value;
+                }
+            }
+        }
 
         public LockedList<DigitalSignature> Global_DigitalSignatureCollection
         {
@@ -580,6 +629,260 @@ namespace Outopos.Properties
         }
 
 
+        public double TrustOptionsWindow_Top
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["TrustOptionsWindow_Top"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["TrustOptionsWindow_Top"] = value;
+                }
+            }
+        }
+
+        public double TrustOptionsWindow_Left
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["TrustOptionsWindow_Left"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["TrustOptionsWindow_Left"] = value;
+                }
+            }
+        }
+
+        public double TrustOptionsWindow_Height
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["TrustOptionsWindow_Height"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["TrustOptionsWindow_Height"] = value;
+                }
+            }
+        }
+
+        public double TrustOptionsWindow_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["TrustOptionsWindow_Width"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["TrustOptionsWindow_Width"] = value;
+                }
+            }
+        }
+
+        public WindowState TrustOptionsWindow_WindowState
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (WindowState)this["TrustOptionsWindow_WindowState"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["TrustOptionsWindow_WindowState"] = value;
+                }
+            }
+        }
+
+        public double TrustOptionsWindow_GridViewColumn_Signature_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["TrustOptionsWindow_GridViewColumn_Signature_Width"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["TrustOptionsWindow_GridViewColumn_Signature_Width"] = value;
+                }
+            }
+        }
+
+
+        public double ProfileOptionsWindow_Top
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ProfileOptionsWindow_Top"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ProfileOptionsWindow_Top"] = value;
+                }
+            }
+        }
+
+        public double ProfileOptionsWindow_Left
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ProfileOptionsWindow_Left"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ProfileOptionsWindow_Left"] = value;
+                }
+            }
+        }
+
+        public double ProfileOptionsWindow_Height
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ProfileOptionsWindow_Height"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ProfileOptionsWindow_Height"] = value;
+                }
+            }
+        }
+
+        public double ProfileOptionsWindow_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ProfileOptionsWindow_Width"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ProfileOptionsWindow_Width"] = value;
+                }
+            }
+        }
+
+        public WindowState ProfileOptionsWindow_WindowState
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (WindowState)this["ProfileOptionsWindow_WindowState"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ProfileOptionsWindow_WindowState"] = value;
+                }
+            }
+        }
+
+        public double ProfileOptionsWindow_GridViewColumn_Signature_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ProfileOptionsWindow_GridViewColumn_Signature_Width"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ProfileOptionsWindow_GridViewColumn_Signature_Width"] = value;
+                }
+            }
+        }
+
+        public double ProfileOptionsWindow_GridViewColumn_Wiki_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ProfileOptionsWindow_GridViewColumn_Wiki_Width"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ProfileOptionsWindow_GridViewColumn_Wiki_Width"] = value;
+                }
+            }
+        }
+
+        public double ProfileOptionsWindow_GridViewColumn_Chat_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ProfileOptionsWindow_GridViewColumn_Chat_Width"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ProfileOptionsWindow_GridViewColumn_Chat_Width"] = value;
+                }
+            }
+        }
+
+
         public double CoreOptionsWindow_Top
         {
             get
@@ -846,6 +1149,169 @@ namespace Outopos.Properties
                 lock (this.ThisLock)
                 {
                     this["CoreOptionsWindow_DataCacheSize_Unit"] = value;
+                }
+            }
+        }
+
+
+        public double TrustExplorerWindow_Top
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["TrustExplorerWindow_Top"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["TrustExplorerWindow_Top"] = value;
+                }
+            }
+        }
+
+        public double TrustExplorerWindow_Left
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["TrustExplorerWindow_Left"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["TrustExplorerWindow_Left"] = value;
+                }
+            }
+        }
+
+        public double TrustExplorerWindow_Height
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["TrustExplorerWindow_Height"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["TrustExplorerWindow_Height"] = value;
+                }
+            }
+        }
+
+        public double TrustExplorerWindow_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["TrustExplorerWindow_Width"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["TrustExplorerWindow_Width"] = value;
+                }
+            }
+        }
+
+        public WindowState TrustExplorerWindow_WindowState
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (WindowState)this["TrustExplorerWindow_WindowState"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["TrustExplorerWindow_WindowState"] = value;
+                }
+            }
+        }
+
+        public double TrustExplorerWindow_Grid_ColumnDefinitions_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["TrustExplorerWindow_Grid_ColumnDefinitions_Width"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["TrustExplorerWindow_Grid_ColumnDefinitions_Width"] = value;
+                }
+            }
+        }
+
+        public double TrustExplorerWindow_GridViewColumn_TrustSignature_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["TrustExplorerWindow_GridViewColumn_TrustSignature_Width"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["TrustExplorerWindow_GridViewColumn_TrustSignature_Width"] = value;
+                }
+            }
+        }
+
+        public double TrustExplorerWindow_GridViewColumn_Wiki_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["TrustExplorerWindow_GridViewColumn_Wiki_Width"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["TrustExplorerWindow_GridViewColumn_Wiki_Width"] = value;
+                }
+            }
+        }
+
+        public double TrustExplorerWindow_GridViewColumn_Chat_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["TrustExplorerWindow_GridViewColumn_Chat_Width"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["TrustExplorerWindow_GridViewColumn_Chat_Width"] = value;
                 }
             }
         }
@@ -1177,6 +1643,24 @@ namespace Outopos.Properties
             }
         }
 
+        public double ConnectionControl_GridViewColumn_Direction_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ConnectionControl_GridViewColumn_Direction_Width"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ConnectionControl_GridViewColumn_Direction_Width"] = value;
+                }
+            }
+        }
+
         public double ConnectionControl_GridViewColumn_Uri_Width
         {
             get
@@ -1281,314 +1765,6 @@ namespace Outopos.Properties
                 lock (this.ThisLock)
                 {
                     this["ConnectionControl_GridViewColumn_Value_Width"] = value;
-                }
-            }
-        }
-
-
-        public double PersonalInformationEditWindow_Top
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["PersonalInformationEditWindow_Top"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["PersonalInformationEditWindow_Top"] = value;
-                }
-            }
-        }
-
-        public double PersonalInformationEditWindow_Left
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["PersonalInformationEditWindow_Left"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["PersonalInformationEditWindow_Left"] = value;
-                }
-            }
-        }
-
-        public double PersonalInformationEditWindow_Height
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["PersonalInformationEditWindow_Height"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["PersonalInformationEditWindow_Height"] = value;
-                }
-            }
-        }
-
-        public double PersonalInformationEditWindow_Width
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["PersonalInformationEditWindow_Width"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["PersonalInformationEditWindow_Width"] = value;
-                }
-            }
-        }
-
-        public WindowState PersonalInformationEditWindow_WindowState
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (WindowState)this["PersonalInformationEditWindow_WindowState"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["PersonalInformationEditWindow_WindowState"] = value;
-                }
-            }
-        }
-
-        public double PersonalInformationEditWindow_GridViewColumn_TrustSignature_Width
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["PersonalInformationEditWindow_GridViewColumn_TrustSignature_Width"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["PersonalInformationEditWindow_GridViewColumn_TrustSignature_Width"] = value;
-                }
-            }
-        }
-
-        public double PersonalInformationEditWindow_GridViewColumn_Wiki_Width
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["PersonalInformationEditWindow_GridViewColumn_Wiki_Width"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["PersonalInformationEditWindow_GridViewColumn_Wiki_Width"] = value;
-                }
-            }
-        }
-
-        public double PersonalInformationEditWindow_GridViewColumn_Chat_Width
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["PersonalInformationEditWindow_GridViewColumn_Chat_Width"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["PersonalInformationEditWindow_GridViewColumn_Chat_Width"] = value;
-                }
-            }
-        }
-
-
-        public double TrustSignaturesPreview_Top
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["TrustSignaturesPreview_Top"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["TrustSignaturesPreview_Top"] = value;
-                }
-            }
-        }
-
-        public double TrustSignaturesPreview_Left
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["TrustSignaturesPreview_Left"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["TrustSignaturesPreview_Left"] = value;
-                }
-            }
-        }
-
-        public double TrustSignaturesPreview_Height
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["TrustSignaturesPreview_Height"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["TrustSignaturesPreview_Height"] = value;
-                }
-            }
-        }
-
-        public double TrustSignaturesPreview_Width
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["TrustSignaturesPreview_Width"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["TrustSignaturesPreview_Width"] = value;
-                }
-            }
-        }
-
-        public WindowState TrustSignaturesPreview_WindowState
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (WindowState)this["TrustSignaturesPreview_WindowState"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["TrustSignaturesPreview_WindowState"] = value;
-                }
-            }
-        }
-
-        public double TrustSignaturesPreview_Grid_ColumnDefinitions_Width
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["TrustSignaturesPreview_Grid_ColumnDefinitions_Width"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["TrustSignaturesPreview_Grid_ColumnDefinitions_Width"] = value;
-                }
-            }
-        }
-
-        public double TrustSignaturesPreview_GridViewColumn_TrustSignature_Width
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["TrustSignaturesPreview_GridViewColumn_TrustSignature_Width"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["TrustSignaturesPreview_GridViewColumn_TrustSignature_Width"] = value;
-                }
-            }
-        }
-
-        public double TrustSignaturesPreview_GridViewColumn_Wiki_Width
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["TrustSignaturesPreview_GridViewColumn_Wiki_Width"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["TrustSignaturesPreview_GridViewColumn_Wiki_Width"] = value;
-                }
-            }
-        }
-
-        public double TrustSignaturesPreview_GridViewColumn_Chat_Width
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["TrustSignaturesPreview_GridViewColumn_Chat_Width"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["TrustSignaturesPreview_GridViewColumn_Chat_Width"] = value;
                 }
             }
         }
@@ -1881,260 +2057,6 @@ namespace Outopos.Properties
                 lock (this.ThisLock)
                 {
                     this["MailControl_Grid_ColumnDefinitions_Width"] = value;
-                }
-            }
-        }
-
-
-        public double SignatureListWindow_Top
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["SignatureListWindow_Top"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["SignatureListWindow_Top"] = value;
-                }
-            }
-        }
-
-        public double SignatureListWindow_Left
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["SignatureListWindow_Left"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["SignatureListWindow_Left"] = value;
-                }
-            }
-        }
-
-        public double SignatureListWindow_Height
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["SignatureListWindow_Height"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["SignatureListWindow_Height"] = value;
-                }
-            }
-        }
-
-        public double SignatureListWindow_Width
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["SignatureListWindow_Width"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["SignatureListWindow_Width"] = value;
-                }
-            }
-        }
-
-        public WindowState SignatureListWindow_WindowState
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (WindowState)this["SignatureListWindow_WindowState"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["SignatureListWindow_WindowState"] = value;
-                }
-            }
-        }
-
-        public string SignatureListWindow_LastHeaderClicked
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (string)this["SignatureListWindow_LastHeaderClicked"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["SignatureListWindow_LastHeaderClicked"] = value;
-                }
-            }
-        }
-
-        public ListSortDirection SignatureListWindow_ListSortDirection
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (ListSortDirection)this["SignatureListWindow_ListSortDirection"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["SignatureListWindow_ListSortDirection"] = value;
-                }
-            }
-        }
-
-        public double SignatureListWindow_GridViewColumn_Name_Width
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["SignatureListWindow_GridViewColumn_Name_Width"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["SignatureListWindow_GridViewColumn_Name_Width"] = value;
-                }
-            }
-        }
-
-        public double SignatureListWindow_GridViewColumn_Id_Width
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["SignatureListWindow_GridViewColumn_Id_Width"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["SignatureListWindow_GridViewColumn_Id_Width"] = value;
-                }
-            }
-        }
-
-
-        public double SectionMessageEditWindow_Top
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["SectionMessageEditWindow_Top"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["SectionMessageEditWindow_Top"] = value;
-                }
-            }
-        }
-
-        public double SectionMessageEditWindow_Left
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["SectionMessageEditWindow_Left"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["SectionMessageEditWindow_Left"] = value;
-                }
-            }
-        }
-
-        public double SectionMessageEditWindow_Height
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["SectionMessageEditWindow_Height"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["SectionMessageEditWindow_Height"] = value;
-                }
-            }
-        }
-
-        public double SectionMessageEditWindow_Width
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (double)this["SectionMessageEditWindow_Width"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["SectionMessageEditWindow_Width"] = value;
-                }
-            }
-        }
-
-        public WindowState SectionMessageEditWindow_WindowState
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                   return (WindowState)this["SectionMessageEditWindow_WindowState"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["SectionMessageEditWindow_WindowState"] = value;
                 }
             }
         }

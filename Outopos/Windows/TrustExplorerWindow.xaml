@@ -1,4 +1,4 @@
-<Window x:Class="Outopos.Windows.TrustSignaturesPreview"
+<Window x:Class="Outopos.Windows.TrustExplorerWindow"
         x:ClassModifier="internal"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -7,17 +7,17 @@
         FontFamily="{Binding Path=FontFamily, Mode=OneWay, Source={StaticResource ResourcesInstance}, Converter={StaticResource _stringToFontFamilyConverter}}"
         FontSize="{Binding Path=FontSize, Mode=OneWay, Source={StaticResource ResourcesInstance}, Converter={StaticResource _stringToDoubleConverter}}"
         Background="{DynamicResource WindowBackgroundBrush}"
-        Title="{Binding Path=TrustSignaturesPreview_Title, Source={StaticResource ResourcesInstance}}"
-        Top="{Binding Path=TrustSignaturesPreview_Top, Mode=TwoWay, Source={x:Static prop:Settings.Instance}, Converter={StaticResource _topRelativeDoubleConverter}}"
-        Left="{Binding Path=TrustSignaturesPreview_Left, Mode=TwoWay, Source={x:Static prop:Settings.Instance}, Converter={StaticResource _leftRelativeDoubleConverter}}"
-        Height="{Binding Path=TrustSignaturesPreview_Height, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}"
-        Width="{Binding Path=TrustSignaturesPreview_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}"
-        WindowState="{Binding Path=TrustSignaturesPreview_WindowState, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}"
+        Title="{Binding Path=TrustExplorerWindow_Title, Source={StaticResource ResourcesInstance}}"
+        Top="{Binding Path=TrustExplorerWindow_Top, Mode=TwoWay, Source={x:Static prop:Settings.Instance}, Converter={StaticResource _topRelativeDoubleConverter}}"
+        Left="{Binding Path=TrustExplorerWindow_Left, Mode=TwoWay, Source={x:Static prop:Settings.Instance}, Converter={StaticResource _leftRelativeDoubleConverter}}"
+        Height="{Binding Path=TrustExplorerWindow_Height, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}"
+        Width="{Binding Path=TrustExplorerWindow_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}"
+        WindowState="{Binding Path=TrustExplorerWindow_WindowState, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}"
         Loaded="Window_Loaded">
 
     <Window.Resources>
         <ContextMenu x:Key="_signatureTreeViewItemContextMenu">
-            <MenuItem Name="_signatureTreeViewItemCopyMenuItem" Header="{Binding Path=TrustSignaturesPreview_Copy, Source={StaticResource ResourcesInstance}}" Click="_signatureTreeViewItemCopyMenuItem_Click" />
+            <MenuItem Name="_signatureTreeViewItemCopyMenuItem" Header="{Binding Path=TrustExplorerWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_signatureTreeViewItemCopyMenuItem_Click" />
         </ContextMenu>
 
         <DataTemplate x:Key="_myTemplate_String">
@@ -34,7 +34,7 @@
     <Grid>
         <Grid Margin="0,0,0,41">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="{Binding Path=TrustSignaturesPreview_Grid_ColumnDefinitions_Width, Mode=TwoWay, Converter={StaticResource _doubleToGridLengthConverter}, Source={x:Static prop:Settings.Instance}}" />
+                <ColumnDefinition Width="{Binding Path=TrustExplorerWindow_Grid_ColumnDefinitions_Width, Mode=TwoWay, Converter={StaticResource _doubleToGridLengthConverter}, Source={x:Static prop:Settings.Instance}}" />
                 <ColumnDefinition Width="4" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
@@ -51,51 +51,51 @@
             </TreeView>
 
             <TabControl Name="_tabControl"  Grid.Column="2">
-                <TabItem Name="_trustTabItem" Header="{Binding Path=TrustSignaturesPreview_Trust, Source={StaticResource ResourcesInstance}}">
+                <TabItem Name="_trustTabItem" Header="{Binding Path=TrustExplorerWindow_Trust, Source={StaticResource ResourcesInstance}}">
                     <local:ListViewEx x:Name="_trustSignatureListView" Grid.Column="2" ItemsSource="{Binding SelectedItem.TrustSignatures, ElementName=_uploadLinkListView}"
                                 ContextMenuOpening="_trustSignatureListView_ContextMenuOpening">
                         <ListView.ContextMenu>
                             <ContextMenu Name="_trustSignatureListViewContextMenu" >
-                                <MenuItem Name="_trustSignatureListViewCopyMenuItem" Header="{Binding Path=TrustSignaturesPreview_Copy, Source={StaticResource ResourcesInstance}}" Click="_trustSignatureListViewCopyMenuItem_Click"/>
+                                <MenuItem Name="_trustSignatureListViewCopyMenuItem" Header="{Binding Path=TrustExplorerWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_trustSignatureListViewCopyMenuItem_Click"/>
                             </ContextMenu>
                         </ListView.ContextMenu>
                         <ListView.View>
                             <GridView AllowsColumnReorder="False">
-                                <GridViewColumn x:Name="_trustSignatureGridViewColumn" Header="{Binding Path=TrustSignaturesPreview_Signature, Source={StaticResource ResourcesInstance}}" CellTemplate="{StaticResource _myTemplate_String}"
-                                        Width="{Binding Path=TrustSignaturesPreview_GridViewColumn_TrustSignature_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
+                                <GridViewColumn x:Name="_trustSignatureGridViewColumn" Header="{Binding Path=TrustExplorerWindow_Signature, Source={StaticResource ResourcesInstance}}" CellTemplate="{StaticResource _myTemplate_String}"
+                                        Width="{Binding Path=TrustExplorerWindow_GridViewColumn_TrustSignature_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
                             </GridView>
                         </ListView.View>
                     </local:ListViewEx>
                 </TabItem>
-                <TabItem Header="{Binding Path=TrustSignaturesPreview_Wiki, Source={StaticResource ResourcesInstance}}" Name="_wikiTabItem">
+                <TabItem Header="{Binding Path=TrustExplorerWindow_Wiki, Source={StaticResource ResourcesInstance}}" Name="_wikiTabItem">
                     <Grid FocusManager.FocusedElement="{Binding ElementName=_wikiTextBox}">
                         <local:ListViewEx x:Name="_wikiListView" ContextMenuOpening="_wikiListView_ContextMenuOpening">
                             <ListView.ContextMenu>
                                 <ContextMenu Name="_wikiListViewContextMenu" >
-                                    <MenuItem Name="_wikiListViewCopyMenuItem" Header="{Binding Path=TrustSignaturesPreview_Copy, Source={StaticResource ResourcesInstance}}" Click="_wikiListViewCopyMenuItem_Click"/>
+                                    <MenuItem Name="_wikiListViewCopyMenuItem" Header="{Binding Path=TrustExplorerWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_wikiListViewCopyMenuItem_Click"/>
                                 </ContextMenu>
                             </ListView.ContextMenu>
                             <ListView.View>
                                 <GridView AllowsColumnReorder="False">
-                                    <GridViewColumn Header="{Binding Path=TrustSignaturesPreview_Value, Source={StaticResource ResourcesInstance}}" CellTemplate="{StaticResource _myTemplate_Wiki}" 
-                                        Width="{Binding Path=TrustSignaturesPreview_GridViewColumn_Chat_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
+                                    <GridViewColumn Header="{Binding Path=TrustExplorerWindow_Value, Source={StaticResource ResourcesInstance}}" CellTemplate="{StaticResource _myTemplate_Wiki}" 
+                                        Width="{Binding Path=TrustExplorerWindow_GridViewColumn_Chat_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
                                 </GridView>
                             </ListView.View>
                         </local:ListViewEx>
                     </Grid>
                 </TabItem>
-                <TabItem Header="{Binding Path=TrustSignaturesPreview_Chat, Source={StaticResource ResourcesInstance}}" Name="_chatTabItem">
+                <TabItem Header="{Binding Path=TrustExplorerWindow_Chat, Source={StaticResource ResourcesInstance}}" Name="_chatTabItem">
                     <Grid FocusManager.FocusedElement="{Binding ElementName=_chatTextBox}">
                         <local:ListViewEx x:Name="_chatListView" ContextMenuOpening="_chatListView_ContextMenuOpening">
                             <ListView.ContextMenu>
                                 <ContextMenu Name="_chatListViewContextMenu" >
-                                    <MenuItem Name="_chatListViewCopyMenuItem" Header="{Binding Path=TrustSignaturesPreview_Copy, Source={StaticResource ResourcesInstance}}" Click="_chatListViewCopyMenuItem_Click"/>
+                                    <MenuItem Name="_chatListViewCopyMenuItem" Header="{Binding Path=TrustExplorerWindow_Copy, Source={StaticResource ResourcesInstance}}" Click="_chatListViewCopyMenuItem_Click"/>
                                 </ContextMenu>
                             </ListView.ContextMenu>
                             <ListView.View>
                                 <GridView AllowsColumnReorder="False">
-                                    <GridViewColumn Header="{Binding Path=TrustSignaturesPreview_Value, Source={StaticResource ResourcesInstance}}" CellTemplate="{StaticResource _myTemplate_Chat}" 
-                                        Width="{Binding Path=TrustSignaturesPreview_GridViewColumn_Chat_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
+                                    <GridViewColumn Header="{Binding Path=TrustExplorerWindow_Value, Source={StaticResource ResourcesInstance}}" CellTemplate="{StaticResource _myTemplate_Chat}" 
+                                        Width="{Binding Path=TrustExplorerWindow_GridViewColumn_Chat_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
                                 </GridView>
                             </ListView.View>
                         </local:ListViewEx>
@@ -103,6 +103,6 @@
                 </TabItem>
             </TabControl>
         </Grid>
-        <Button Content="{Binding Path=TrustSignaturesPreview_Close, Source={StaticResource ResourcesInstance}}" Height="23" HorizontalAlignment="Right" Margin="0,0,12,12" Name="_closeButton" VerticalAlignment="Bottom" Width="75" Click="_closeButton_Click" />
+        <Button Content="{Binding Path=TrustExplorerWindow_Close, Source={StaticResource ResourcesInstance}}" Height="23" HorizontalAlignment="Right" Margin="0,0,12,12" Name="_closeButton" VerticalAlignment="Bottom" Width="75" Click="_closeButton_Click" />
     </Grid>
 </Window>

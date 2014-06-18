@@ -15,28 +15,19 @@ using Library.Net.Outopos;
 namespace Outopos.Windows
 {
     /// <summary>
-    /// Interaction logic for TrustSignaturesPreview.xaml
+    /// Interaction logic for TrustExplorerWindow.xaml
     /// </summary>
-    partial class TrustSignaturesPreview : Window
+    partial class TrustExplorerWindow : Window
     {
-        SignatureTreeViewItem _treeViewItem;
-
-        public TrustSignaturesPreview(SignatureTreeItem signatureTreeItem)
+        public TrustExplorerWindow(IEnumerable<SignatureTreeItem> signatureTreeItems)
         {
             InitializeComponent();
 
-            if (signatureTreeItem != null)
+            if (signatureTreeItems != null)
             {
-                _treeViewItem = new SignatureTreeViewItem(signatureTreeItem);
-                _signatureTreeView.Items.Add(_treeViewItem);
-
-                try
+                foreach (var signatureTreeItem in signatureTreeItems)
                 {
-                    _treeViewItem.IsSelected = true;
-                }
-                catch (Exception)
-                {
-
+                    _signatureTreeView.Items.Add(new SignatureTreeViewItem(signatureTreeItem));
                 }
             }
         }
@@ -54,13 +45,13 @@ namespace Outopos.Windows
             if (selectTreeViewItem == null) return;
 
             _trustSignatureListView.Items.Clear();
-            _trustSignatureListView.Items.AddRange(selectTreeViewItem.Value.BroadcastProfileInfo.Content.TrustSignatures);
+            _trustSignatureListView.Items.AddRange(selectTreeViewItem.Value.ProfileInfo.Content.TrustSignatures);
 
             _wikiListView.Items.Clear();
-            _wikiListView.Items.AddRange(selectTreeViewItem.Value.BroadcastProfileInfo.Content.Wikis);
+            _wikiListView.Items.AddRange(selectTreeViewItem.Value.ProfileInfo.Content.Wikis);
 
             _chatListView.Items.Clear();
-            _chatListView.Items.AddRange(selectTreeViewItem.Value.BroadcastProfileInfo.Content.Chats);
+            _chatListView.Items.AddRange(selectTreeViewItem.Value.ProfileInfo.Content.Chats);
         }
 
         private void _signatureTreeViewItemContextMenu_ContextMenuOpening(object sender, ContextMenuEventArgs e)
@@ -73,7 +64,7 @@ namespace Outopos.Windows
             var signatureTreeViewItem = _signatureTreeView.SelectedItem as SignatureTreeViewItem;
             if (signatureTreeViewItem == null) return;
 
-            Clipboard.SetText(signatureTreeViewItem.Value.BroadcastProfileInfo.Header.Certificate.ToString());
+            Clipboard.SetText(signatureTreeViewItem.Value.ProfileInfo.Header.Certificate.ToString());
         }
 
         #endregion

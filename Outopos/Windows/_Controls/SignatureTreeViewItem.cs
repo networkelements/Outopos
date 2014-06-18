@@ -48,7 +48,7 @@ namespace Outopos.Windows
 
         public void Update()
         {
-            _header.Text = _value.BroadcastProfileInfo.Header.Certificate.ToString();
+            _header.Text = _value.ProfileInfo.Header.Certificate.ToString();
 
             foreach (var item in _listViewItemCollection.OfType<SignatureTreeViewItem>().ToArray())
             {
@@ -78,7 +78,7 @@ namespace Outopos.Windows
 
             list.Sort((x, y) =>
             {
-                int c = x.Value.BroadcastProfileInfo.Header.Certificate.ToString().CompareTo(y.Value.BroadcastProfileInfo.Header.Certificate.ToString());
+                int c = x.Value.ProfileInfo.Header.Certificate.ToString().CompareTo(y.Value.ProfileInfo.Header.Certificate.ToString());
                 if (c != 0) return c;
                 c = x.Hit.CompareTo(y.Hit);
                 if (c != 0) return c;
