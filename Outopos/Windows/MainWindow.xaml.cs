@@ -1072,7 +1072,7 @@ namespace Outopos.Windows
                     var torConnectionFilter = new ConnectionFilter()
                     {
                         ConnectionType = ConnectionType.Socks5Proxy,
-                        ProxyUri = "tcp:127.0.0.1:19050",
+                        ProxyUri = "tcp:127.0.0.1:29050",
                         UriCondition = new UriCondition()
                         {
                             Value = @"tor:.*",
@@ -1134,6 +1134,17 @@ namespace Outopos.Windows
                     using (StreamReader reader = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Outopos.version"), new UTF8Encoding(false)))
                     {
                         version = new Version(reader.ReadLine());
+                    }
+
+                    if (version < new Version(0, 0, 1))
+                    {
+                        foreach (var filter in _outoposManager.Filters)
+                        {
+                            if (filter.ProxyUri == "tcp:127.0.0.1:19050")
+                            {
+                                filter.ProxyUri = "tcp:127.0.0.1:29050";
+                            }
+                        }
                     }
                 }
 

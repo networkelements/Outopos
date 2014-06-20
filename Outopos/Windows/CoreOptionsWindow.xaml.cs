@@ -1401,7 +1401,7 @@ namespace Outopos.Windows
 
             lock (_outoposManager.ThisLock)
             {
-                long size = (long)NetworkConverter.FromSizeString("50 GB");
+                long size = (long)NetworkConverter.FromSizeString("2 GB");
 
                 try
                 {
@@ -1413,7 +1413,7 @@ namespace Outopos.Windows
                 }
 
 #if !DEBUG
-                size = Math.Max((long)NetworkConverter.FromSizeString("50 GB"), size);
+                size = Math.Max((long)NetworkConverter.FromSizeString("2 GB"), size);
 #endif
 
                 if (_outoposManager.Size != size)
