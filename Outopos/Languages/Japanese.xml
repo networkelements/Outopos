@@ -3,7 +3,7 @@
 
   <Translate Key="FontFamily" Value="Meiryo, Verdana" />
   <Translate Key="FontSize" Value="12" />
-  <Translate Key="DateTime_StringFormat" Value="yyyy/MM/dd&#x00A0;HH:mm:ss" />
+  <Translate Key="DateTime_StringFormat" Value="yyyy/MM/dd HH:mm:ss" />
 
   <Translate Key="Languages_English" Value="英語" />
   <Translate Key="Languages_Japanese" Value="日本語" />
@@ -277,7 +277,7 @@
   <Translate Key="ChatControl_NewMessageOnly" Value="新着のみ" />
   <Translate Key="ChatControl_Message" Value="メッセージ" />
   <Translate Key="ChatControl_Topic" Value="トピック" />
-  <Translate Key="ChatControl_OutoposNotFound_Message" Value="Outopos Not Found" />
+  <Translate Key="ChatControl_Upload" Value="Upload" />
   <Translate Key="ChatControl_MarkAllMessagesRead" Value="全てのメッセージを既読にする" />
   <Translate Key="ChatControl_MarkAllMessagesRead_Message" Value="全てのメッセージを既読にしますか？" />
   <Translate Key="ChatControl_ImportLockedMessages" Value="ロックされたメッセージのインポート" />
@@ -298,6 +298,16 @@
   <Translate Key="ChatMessageEditWindow_Comment" Value="Comment" />
   <Translate Key="ChatMessageEditWindow_Ok" Value="Ok" />
   <Translate Key="ChatMessageEditWindow_Cancel" Value="Cancel" />
+
+  <Translate Key="ChatTopicEditWindow_Title" Value="New topic" />
+  <Translate Key="ChatTopicEditWindow_Edit" Value="Edit" />
+  <Translate Key="ChatTopicEditWindow_Preview" Value="Preview" />
+  <Translate Key="ChatTopicEditWindow_Comment" Value="Comment" />
+  <Translate Key="ChatTopicEditWindow_Ok" Value="Ok" />
+  <Translate Key="ChatTopicEditWindow_Cancel" Value="Cancel" />
+
+  <Translate Key="ChatTopicPreviewWindow_Title" Value="Topic" />
+  <Translate Key="ChatTopicPreviewWindow_Close" Value="Close" />
 
   <Translate Key="MailControl_NewCategory" Value="New category" />
   <Translate Key="MailControl_Edit" Value="Edit" />

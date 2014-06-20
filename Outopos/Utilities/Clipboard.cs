@@ -228,22 +228,20 @@ namespace Outopos
             }
         }
 
-        public static IEnumerable<Tuple<Wiki, string>> GetWikis()
+        public static IEnumerable<Wiki> GetWikis()
         {
             lock (_thisLock)
             {
-                var list = new List<Tuple<Wiki, string>>();
+                var list = new List<Wiki>();
 
                 foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     try
                     {
-                        string option;
-
-                        var tag = OutoposConverter.FromWikiString(item, out option);
+                        var tag = OutoposConverter.FromWikiString(item);
                         if (tag == null) continue;
 
-                        list.Add(new Tuple<Wiki, string>(tag, option));
+                        list.Add(tag);
                     }
                     catch (Exception)
                     {
@@ -255,16 +253,16 @@ namespace Outopos
             }
         }
 
-        public static void SetWikis(IEnumerable<Tuple<Wiki, string>> sections)
+        public static void SetWikis(IEnumerable<Wiki> tags)
         {
             lock (_thisLock)
             {
                 {
                     var sb = new StringBuilder();
 
-                    foreach (var tuple in sections)
+                    foreach (var tag in tags)
                     {
-                        sb.AppendLine(OutoposConverter.ToWikiString(tuple.Item1, tuple.Item2));
+                        sb.AppendLine(OutoposConverter.ToWikiString(tag));
                     }
 
                     Clipboard.SetText(sb.ToString());
@@ -285,22 +283,20 @@ namespace Outopos
             }
         }
 
-        public static IEnumerable<Tuple<Chat, string>> GetChats()
+        public static IEnumerable<Chat> GetChats()
         {
             lock (_thisLock)
             {
-                var list = new List<Tuple<Chat, string>>();
+                var list = new List<Chat>();
 
                 foreach (var item in Clipboard.GetText().Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     try
                     {
-                        string option;
-
-                        var tag = OutoposConverter.FromChatString(item, out option);
+                        var tag = OutoposConverter.FromChatString(item);
                         if (tag == null) continue;
 
-                        list.Add(new Tuple<Chat, string>(tag, option));
+                        list.Add(tag);
                     }
                     catch (Exception)
                     {
@@ -312,16 +308,16 @@ namespace Outopos
             }
         }
 
-        public static void SetChats(IEnumerable<Tuple<Chat, string>> sections)
+        public static void SetChats(IEnumerable<Chat> tags)
         {
             lock (_thisLock)
             {
                 {
                     var sb = new StringBuilder();
 
-                    foreach (var tuple in sections)
+                    foreach (var tag in tags)
                     {
-                        sb.AppendLine(OutoposConverter.ToChatString(tuple.Item1, tuple.Item2));
+                        sb.AppendLine(OutoposConverter.ToChatString(tag));
                     }
 
                     Clipboard.SetText(sb.ToString());
@@ -381,6 +377,96 @@ namespace Outopos
 
                     Clipboard.SetText(sb.ToString());
                 }
+            }
+        }
+
+        public static bool ContainsChatCategorizeTreeItems()
+        {
+            lock (_thisLock)
+            {
+                return System.Windows.Clipboard.ContainsData("Outopos_ChatCategorizeTreeItems");
+            }
+        }
+
+        public static IEnumerable<Windows.ChatCategorizeTreeItem> GetChatCategorizeTreeItems()
+        {
+            lock (_thisLock)
+            {
+                try
+                {
+                    using (Stream stream = (Stream)System.Windows.Clipboard.GetData("Outopos_ChatCategorizeTreeItems"))
+                    {
+                        return Clipboard.FromStream<IEnumerable<Windows.ChatCategorizeTreeItem>>(stream);
+                    }
+                }
+                catch (Exception)
+                {
+
+                }
+
+                return new Windows.ChatCategorizeTreeItem[0];
+            }
+        }
+
+        public static void SetChatCategorizeTreeItems(IEnumerable<Windows.ChatCategorizeTreeItem> items)
+        {
+            lock (_thisLock)
+            {
+                System.Windows.DataObject dataObject = new System.Windows.DataObject();
+                dataObject.SetData("Outopos_ChatCategorizeTreeItems", Clipboard.ToStream(items));
+
+                System.Windows.Clipboard.SetDataObject(dataObject);
+            }
+        }
+
+        public static bool ContainsChatTreeItems()
+        {
+            lock (_thisLock)
+            {
+                return System.Windows.Clipboard.ContainsData("Outopos_ChatTreeItems");
+            }
+        }
+
+        public static IEnumerable<Windows.ChatTreeItem> GetChatTreeItems()
+        {
+            lock (_thisLock)
+            {
+                try
+                {
+                    using (Stream stream = (Stream)System.Windows.Clipboard.GetData("Outopos_ChatTreeItems"))
+                    {
+                        return Clipboard.FromStream<IEnumerable<Windows.ChatTreeItem>>(stream);
+                    }
+                }
+                catch (Exception)
+                {
+
+                }
+
+                return new Windows.ChatTreeItem[0];
+            }
+        }
+
+        public static void SetChatTreeItems(IEnumerable<Windows.ChatTreeItem> items)
+        {
+            lock (_thisLock)
+            {
+                System.Windows.DataObject dataObject = new System.Windows.DataObject();
+
+                {
+                    var sb = new StringBuilder();
+
+                    foreach (var item in items)
+                    {
+                        sb.AppendLine(OutoposConverter.ToChatString(item.Tag));
+                    }
+
+                    Clipboard.SetText(sb.ToString());
+                }
+
+                dataObject.SetData("Outopos_ChatTreeItems", Clipboard.ToStream(items));
+
+                System.Windows.Clipboard.SetDataObject(dataObject);
             }
         }
     }

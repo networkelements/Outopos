@@ -21,7 +21,7 @@ namespace Outopos.Windows
         private bool _isTrustEnabled = true;
 
         private ChatTopicInfo _chatTopicInfo;
-        private LockedList<ChatMessageInfo> _chatMessageInfos;
+        private LockedHashDictionary<ChatMessageInfo, ChatMessageState> _chatMessageInfos;
 
         private volatile object _thisLock;
         private static readonly object _initializeLock = new object();
@@ -89,14 +89,14 @@ namespace Outopos.Windows
         }
 
         [DataMember(Name = "ChatMessageInfos")]
-        public LockedList<ChatMessageInfo> ChatMessageInfos
+        public LockedHashDictionary<ChatMessageInfo, ChatMessageState> ChatMessageInfos
         {
             get
             {
                 lock (this.ThisLock)
                 {
                     if (_chatMessageInfos == null)
-                        _chatMessageInfos = new LockedList<ChatMessageInfo>();
+                        _chatMessageInfos = new LockedHashDictionary<ChatMessageInfo, ChatMessageState>();
 
                     return _chatMessageInfos;
                 }

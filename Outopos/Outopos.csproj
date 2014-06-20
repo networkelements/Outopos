@@ -118,6 +118,19 @@
     <Compile Include="Utilities\Information\ChatMessageInfo.cs" />
     <Compile Include="Utilities\Information\ChatTopicInfo.cs" />
     <Compile Include="Utilities\Information\ProfileInfo.cs" />
+    <Compile Include="Utilities\TrustUtilities.cs" />
+    <Compile Include="Windows\Chat\ChatControl.xaml.cs">
+      <DependentUpon>ChatControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Chat\ChatListWindow.xaml.cs">
+      <DependentUpon>ChatListWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Chat\ChatMessageEditWindow.xaml.cs">
+      <DependentUpon>ChatMessageEditWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Chat\ChatTopicEditWindow.xaml.cs">
+      <DependentUpon>ChatTopicEditWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\TrustOptionsWindow.xaml.cs">
       <DependentUpon>TrustOptionsWindow.xaml</DependentUpon>
     </Compile>
@@ -136,6 +149,7 @@
     <Compile Include="Windows\_Controls\ListBoxEx.cs" />
     <Compile Include="Windows\_Controls\ChatCategorizeTreeViewItem.cs" />
     <Compile Include="Windows\_Controls\ChatTreeViewItem.cs" />
+    <Compile Include="Windows\_Controls\RichTextBoxHelper.cs" />
     <Compile Include="Windows\_Items\ChatCategorizeTreeItem.cs" />
     <Compile Include="Windows\_Items\ChatTreeItem.cs" />
     <Compile Include="Windows\_Items\SignatureTreeItem.cs" />
@@ -171,6 +185,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Windows\Chat\ChatControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\Chat\ChatListWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\Chat\ChatMessageEditWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\Chat\ChatTopicEditWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Windows\ConnectionControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

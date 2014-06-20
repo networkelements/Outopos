@@ -3036,13 +3036,13 @@ namespace Outopos.Properties
             }
         }
 
-        public string ChatControl_OutoposNotFound_Message
+        public string ChatControl_Upload
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("ChatControl_OutoposNotFound_Message");
+                    return this.Translate("ChatControl_Upload");
                 }
             }
         }
@@ -3243,6 +3243,96 @@ namespace Outopos.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("ChatMessageEditWindow_Cancel");
+                }
+            }
+        }
+
+
+        public string ChatTopicEditWindow_Title
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatTopicEditWindow_Title");
+                }
+            }
+        }
+
+        public string ChatTopicEditWindow_Edit
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatTopicEditWindow_Edit");
+                }
+            }
+        }
+
+        public string ChatTopicEditWindow_Preview
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatTopicEditWindow_Preview");
+                }
+            }
+        }
+
+        public string ChatTopicEditWindow_Comment
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatTopicEditWindow_Comment");
+                }
+            }
+        }
+
+        public string ChatTopicEditWindow_Ok
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatTopicEditWindow_Ok");
+                }
+            }
+        }
+
+        public string ChatTopicEditWindow_Cancel
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatTopicEditWindow_Cancel");
+                }
+            }
+        }
+
+
+        public string ChatTopicPreviewWindow_Title
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatTopicPreviewWindow_Title");
+                }
+            }
+        }
+
+        public string ChatTopicPreviewWindow_Close
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatTopicPreviewWindow_Close");
                 }
             }
         }

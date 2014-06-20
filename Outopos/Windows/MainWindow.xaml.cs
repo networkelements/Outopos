@@ -9,6 +9,7 @@ using System.Management;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Security.Permissions;
@@ -27,16 +28,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Threading;
-using Outopos.Properties;
 using Library;
 using Library.Collections;
 using Library.Io;
-using Library.Net.Outopos;
 using Library.Net.Connections;
+using Library.Net.Outopos;
 using Library.Net.Proxy;
 using Library.Net.Upnp;
 using Library.Security;
-using System.Runtime.CompilerServices;
+using Outopos.Properties;
+using A = Library.Net.Amoeba;
+using O = Library.Net.Outopos;
 
 namespace Outopos.Windows
 {
@@ -527,7 +529,7 @@ namespace Outopos.Windows
                     {
                         stopwatch.Restart();
 
-                        // _profileInfoDic情報を更新。
+                        // Settings.Instance.Global_ProfileInfos情報を更新。
                         {
                             var sumList = new List<ProfileInfo>();
 
@@ -566,18 +568,17 @@ namespace Outopos.Windows
                                 sumList.AddRange(tempList);
                             }
 
-                            lock (Settings.Instance.ThisLock)
+                            lock (Settings.Instance.Global_Cache_ProfileInfos.ThisLock)
                             {
-                                lock (Settings.Instance.Global_ProfileInfos.ThisLock)
-                                {
-                                    Settings.Instance.Global_ProfileInfos.Clear();
+                                Settings.Instance.Global_Cache_ProfileInfos.Clear();
 
-                                    foreach (var item in sumList)
-                                    {
-                                        Settings.Instance.Global_ProfileInfos[item.Header.Certificate.ToString()] = item;
-                                    }
+                                foreach (var item in sumList)
+                                {
+                                    Settings.Instance.Global_Cache_ProfileInfos[item.Header.Certificate.ToString()] = item;
                                 }
                             }
+
+                            TrustUtilities.SetSignatures(Settings.Instance.Global_Cache_ProfileInfos.ToArray().Select(n => n.Key));
                         }
                     }
                 }
@@ -597,26 +598,16 @@ namespace Outopos.Windows
                 var content = _outoposManager.GetContent(header);
                 if (content == null) goto End;
 
-                var info = new ProfileInfo()
-                {
-                    Header = header,
-                    Content = content,
-                };
-
-                return info;
+                return new ProfileInfo(header, content);
             }
 
         End: ;
 
             {
                 ProfileInfo info;
+                if (!Settings.Instance.Global_Cache_ProfileInfos.TryGetValue(signature, out info)) return null;
 
-                if (Settings.Instance.Global_ProfileInfos.TryGetValue(signature, out info))
-                {
-                    return info;
-                }
-
-                return null;
+                return info;
             }
         }
 
@@ -1020,6 +1011,22 @@ namespace Outopos.Windows
                 {
                     initFlag = true;
 
+                    // デフォルトのTrustSignaturesの設定。
+                    {
+                        Settings.Instance.Global_TrustSignatures.Add("Alliance Network@oTSRA5izGGpg4yHCjN32g1avwua7V7d44qZsBkyvqXB3cqp8Sul8KDQGE-lLmhlMosJFA9rWujWS2D3zSniQdw");
+                    }
+
+                    // デフォルトのChatタグを設定。
+                    {
+                        var amoebaTag = OutoposConverter.FromChatString("Chat:AAAAAAYAQW1vZWJhAAAAQAHBilDLoC-nL1s5WTA0IdmtaKn_biFkguR4jch-5pDM0lDvfcgKMYeA_kZeYZnDVe-HiE2aLCIKPObaQTk8lpMbuMWiQA");
+                        var outoposTag = OutoposConverter.FromChatString("Chat:AAAAAAcAT3V0b3BvcwAAAEABS5GzqK7pa00CTgDarZIq29YrlEc8s1MiQ2FwaC7ENXuUtBGlV-Fzmr3ZvkpfHxP2xovcDrzp6whzVjh9RKey1jbaoGE");
+                        var testTag = OutoposConverter.FromChatString("Chat:AAAAAAQAVGVzdAAAAEABcKrxJnNgzGIdtqem0bRipsrbAip77uBxCiLWo1jYJccB69Wc8Klf5UABDYBRfSWMhf4aXXQDdP7owzq2DAGMzKqOa_E");
+
+                        Settings.Instance.ChatControl_ChatCategorizeTreeItem.ChatTreeItems.Add(new ChatTreeItem(amoebaTag));
+                        Settings.Instance.ChatControl_ChatCategorizeTreeItem.ChatTreeItems.Add(new ChatTreeItem(outoposTag));
+                        Settings.Instance.ChatControl_ChatCategorizeTreeItem.ChatTreeItems.Add(new ChatTreeItem(testTag));
+                    }
+
                     {
                         byte[] buffer = new byte[64];
 
@@ -1280,6 +1287,11 @@ namespace Outopos.Windows
             connectionControl.Width = Double.NaN;
             _connectionTabItem.Content = connectionControl;
 
+            ChatControl chatControl = new ChatControl(_outoposManager, _bufferManager);
+            chatControl.Height = Double.NaN;
+            chatControl.Width = Double.NaN;
+            _chatTabItem.Content = chatControl;
+
             if (Settings.Instance.Global_IsStart)
             {
                 _startMenuItem_Click(null, null);
@@ -1292,6 +1304,75 @@ namespace Outopos.Windows
             }
 
             this.GarbageCollect();
+
+            RichTextBoxHelper.SeedClickEvent += this.SeedClickEvent;
+            RichTextBoxHelper.LinkClickEvent += this.LinkClickEvent;
+
+            RichTextBoxHelper.GetMaxHeightEvent = this.GetMaxHeightEvent;
+        }
+
+        private void SeedClickEvent(object sender, A.Seed seed)
+        {
+            if (string.IsNullOrWhiteSpace(Settings.Instance.Global_Amoeba_Path))
+            {
+                foreach (var p in Process.GetProcesses())
+                {
+                    try
+                    {
+                        var path = p.MainModule.FileName;
+
+                        if (Path.GetFileName(path) == "Amoeba.exe")
+                        {
+                            Settings.Instance.Global_Amoeba_Path = path;
+
+                            break;
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                }
+            }
+
+            if (File.Exists(Settings.Instance.Global_Amoeba_Path))
+            {
+                try
+                {
+                    Process process = new Process();
+                    process.StartInfo.FileName = Settings.Instance.Global_Amoeba_Path;
+                    process.StartInfo.Arguments = string.Format("Download {0}", Library.Net.Amoeba.AmoebaConverter.ToSeedString(seed));
+                    process.StartInfo.WorkingDirectory = Path.GetDirectoryName(Settings.Instance.Global_Amoeba_Path);
+                    process.StartInfo.CreateNoWindow = true;
+                    process.StartInfo.UseShellExecute = false;
+                    process.Start();
+                }
+                catch (Exception)
+                {
+                    return;
+                }
+
+                Settings.Instance.Global_SeedHistorys.Add(seed);
+            }
+        }
+
+        private void LinkClickEvent(object sender, string link)
+        {
+            try
+            {
+                Process.Start(link);
+            }
+            catch (Exception)
+            {
+                return;
+            }
+
+            Settings.Instance.Global_UrlHistorys.Add(link);
+        }
+
+        private double GetMaxHeightEvent(object sender)
+        {
+            return _tabControl.ActualHeight;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -1523,7 +1604,7 @@ namespace Outopos.Windows
 
             {
                 ProfileInfo leaderProfileInfo;
-                if (!Settings.Instance.Global_ProfileInfos.TryGetValue(leaderSignature, out leaderProfileInfo)) return null;
+                if (!Settings.Instance.Global_Cache_ProfileInfos.TryGetValue(leaderSignature, out leaderProfileInfo)) return null;
 
                 workSignatureTreeItems.Add(new SignatureTreeItem(leaderProfileInfo));
                 checkedSignatures.Add(leaderSignature);
@@ -1543,10 +1624,10 @@ namespace Outopos.Windows
                 {
                     if (checkedSignatures.Contains(trustSignature)) continue;
 
-                    ProfileInfo sectionProfileInfo;
-                    if (!Settings.Instance.Global_ProfileInfos.TryGetValue(trustSignature, out sectionProfileInfo)) continue;
+                    ProfileInfo profileInfo;
+                    if (!Settings.Instance.Global_Cache_ProfileInfos.TryGetValue(trustSignature, out profileInfo)) continue;
 
-                    var tempItem = new SignatureTreeItem(sectionProfileInfo);
+                    var tempItem = new SignatureTreeItem(profileInfo);
                     workSignatureTreeItems.Add(tempItem);
 
                     var targetItem = checkedSignatureTreeItems.FirstOrDefault(n => n.ProfileInfo.Content.TrustSignatures.Contains(trustSignature));

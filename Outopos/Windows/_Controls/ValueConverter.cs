@@ -228,7 +228,7 @@ namespace Outopos.Windows
             var item = value as double?;
             if (item == null) return null;
 
-            if (item.Value < 0)
+            if (double.IsNaN(item.Value))
             {
                 return GridLength.Auto;
             }
@@ -243,9 +243,9 @@ namespace Outopos.Windows
             var item = value as GridLength?;
             if (item == null) return null;
 
-            if (GridLength.Auto == item.Value)
+            if (item.Value == GridLength.Auto)
             {
-                return -1;
+                return double.NaN;
             }
             else
             {
@@ -630,39 +630,39 @@ namespace Outopos.Windows
         }
     }
 
-    //class ChatMessageWrapperToBorderBrushConverter : IMultiValueConverter
-    //{
-    //    public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
-    //    {
-    //        var wrapper = values[0] as ChatMessageWrapper;
-    //        if (wrapper == null) return null;
+    class ChatMessageWrapperToBorderBrushConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            var wrapper = values[0] as ChatMessageWrapper;
+            if (wrapper == null) return null;
 
-    //        var isSelect = values[1] as bool?;
-    //        if (isSelect == null) return null;
+            var isSelect = values[1] as bool?;
+            if (isSelect == null) return null;
 
-    //        System.Windows.Media.Color color;
+            System.Windows.Media.Color color;
 
-    //        if (isSelect.HasValue && isSelect.Value)
-    //        {
-    //            color = App.Colors.Message_Select;
-    //        }
-    //        else if (wrapper.IsNew)
-    //        {
-    //            color = App.Colors.Message_New;
-    //        }
-    //        else
-    //        {
-    //            color = App.Colors.Message;
-    //        }
+            if (isSelect.HasValue && isSelect.Value)
+            {
+                color = App.Colors.Message_Select;
+            }
+            else if (wrapper.State.HasFlag(ChatMessageState.IsUnread))
+            {
+                color = App.Colors.Message_New;
+            }
+            else
+            {
+                color = App.Colors.Message;
+            }
 
-    //        return new SolidColorBrush(color);
-    //    }
+            return new SolidColorBrush(color);
+        }
 
-    //    public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
-    //}
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 
     [ValueConversion(typeof(ConnectDirection), typeof(string))]
     class ConnectDirectionToStringConverter : IValueConverter

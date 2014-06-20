@@ -47,7 +47,7 @@ namespace Outopos
             }
         }
 
-        public static string ToInfoMessage(Wiki tag, string option)
+        public static string ToInfoMessage(Wiki tag)
         {
             try
             {
@@ -55,7 +55,6 @@ namespace Outopos
 
                 if (!string.IsNullOrWhiteSpace(tag.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Tag_Name, tag.Name));
                 if (tag.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Tag_Id, NetworkConverter.ToBase64UrlString(tag.Id)));
-                if (!string.IsNullOrWhiteSpace(option)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Tag_Option, option));
 
                 if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
                 else return null;
@@ -66,7 +65,7 @@ namespace Outopos
             }
         }
 
-        public static string ToInfoMessage(Chat tag, string option)
+        public static string ToInfoMessage(Chat tag)
         {
             try
             {
@@ -74,7 +73,6 @@ namespace Outopos
 
                 if (!string.IsNullOrWhiteSpace(tag.Name)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Tag_Name, tag.Name));
                 if (tag.Id != null) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Tag_Id, NetworkConverter.ToBase64UrlString(tag.Id)));
-                if (!string.IsNullOrWhiteSpace(option)) builder.AppendLine(string.Format("{0}: {1}", LanguagesManager.Instance.Tag_Option, option));
 
                 if (builder.Length != 0) return builder.ToString().Remove(builder.Length - 2);
                 else return null;

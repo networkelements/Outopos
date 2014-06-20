@@ -107,7 +107,7 @@ namespace Outopos.Windows
 
             foreach (var item in _wikiListView.SelectedItems.OfType<Wiki>())
             {
-                sb.AppendLine(OutoposConverter.ToWikiString(item, null));
+                sb.AppendLine(OutoposConverter.ToWikiString(item));
             }
 
             Clipboard.SetText(sb.ToString());
@@ -130,7 +130,7 @@ namespace Outopos.Windows
 
             foreach (var item in _chatListView.SelectedItems.OfType<Chat>())
             {
-                sb.AppendLine(OutoposConverter.ToChatString(item, null));
+                sb.AppendLine(OutoposConverter.ToChatString(item));
             }
 
             Clipboard.SetText(sb.ToString());

@@ -25,7 +25,7 @@ namespace Outopos.Properties
             {
                 new Library.Configuration.SettingContent<ProfileItem>() { Name = "Global_ProfileItem", Value = null },
                 new Library.Configuration.SettingContent<LockedList<string>>() { Name = "Global_TrustSignatures", Value = new LockedList<string>() },
-                new Library.Configuration.SettingContent<LockedHashDictionary<string, ProfileInfo>>() { Name = "Global_ProfileInfos", Value = new LockedHashDictionary<string, ProfileInfo>() },
+                new Library.Configuration.SettingContent<LockedHashDictionary<string, ProfileInfo>>() { Name = "Global_Cache_ProfileInfos", Value = new LockedHashDictionary<string, ProfileInfo>() },
                 new Library.Configuration.SettingContent<LockedList<DigitalSignature>>() { Name = "Global_DigitalSignatureCollection", Value = new LockedList<DigitalSignature>() },
                 new Library.Configuration.SettingContent<string>() { Name = "Global_UseLanguage", Value = "English" },
                 new Library.Configuration.SettingContent<bool>() { Name = "Global_IsStart", Value = true },
@@ -73,7 +73,7 @@ namespace Outopos.Properties
                 new Library.Configuration.SettingContent<WindowState>() { Name = "CoreOptionsWindow_WindowState", Value = WindowState.Normal },
                 new Library.Configuration.SettingContent<double>() { Name = "CoreOptionsWindow_BaseNode_Uris_Uri_Width", Value = 400 },
                 new Library.Configuration.SettingContent<double>() { Name = "CoreOptionsWindow_OtherNodes_Node_Width", Value = 400 },
-                new Library.Configuration.SettingContent<double>() { Name = "CoreOptionsWindow_Client_Filters_GridViewColumn_ConnectionType_Width", Value = -1 },
+                new Library.Configuration.SettingContent<double>() { Name = "CoreOptionsWindow_Client_Filters_GridViewColumn_ConnectionType_Width", Value = double.NaN },
                 new Library.Configuration.SettingContent<double>() { Name = "CoreOptionsWindow_Client_Filters_GridViewColumn_ProxyUri_Width", Value = 200 },
                 new Library.Configuration.SettingContent<double>() { Name = "CoreOptionsWindow_Client_Filters_GridViewColumn_UriCondition_Width", Value = 200 },
                 new Library.Configuration.SettingContent<double>() { Name = "CoreOptionsWindow_Client_Filters_GridViewColumn_Option_Width", Value = 200 },
@@ -106,8 +106,8 @@ namespace Outopos.Properties
                 new Library.Configuration.SettingContent<double>() { Name = "VersionInformationWindow_Height", Value = 500 },
                 new Library.Configuration.SettingContent<double>() { Name = "VersionInformationWindow_Width", Value = 700 },
                 new Library.Configuration.SettingContent<WindowState>() { Name = "VersionInformationWindow_WindowState", Value = WindowState.Normal },
-                new Library.Configuration.SettingContent<double>() { Name = "VersionInformationWindow_GridViewColumn_FileName_Width", Value = -1 },
-                new Library.Configuration.SettingContent<double>() { Name = "VersionInformationWindow_GridViewColumn_Version_Width", Value = -1 },
+                new Library.Configuration.SettingContent<double>() { Name = "VersionInformationWindow_GridViewColumn_FileName_Width", Value = double.NaN },
+                new Library.Configuration.SettingContent<double>() { Name = "VersionInformationWindow_GridViewColumn_Version_Width", Value = double.NaN },
 
                 new Library.Configuration.SettingContent<string>() { Name = "ConnectionControl_LastHeaderClicked", Value = "Uri" },
                 new Library.Configuration.SettingContent<ListSortDirection>() { Name = "ConnectionControl_ListSortDirection", Value = ListSortDirection.Ascending },
@@ -121,6 +121,7 @@ namespace Outopos.Properties
                 new Library.Configuration.SettingContent<double>() { Name = "ConnectionControl_GridViewColumn_Value_Width", Value = 100 },
    
                 new Library.Configuration.SettingContent<double>() { Name = "ChatControl_Grid_ColumnDefinitions_Width", Value = 200 },
+                new Library.Configuration.SettingContent<ChatCategorizeTreeItem>() { Name = "ChatControl_ChatCategorizeTreeItem", Value = new ChatCategorizeTreeItem(){ Name = "Category", IsExpanded = true } },
              
                 new Library.Configuration.SettingContent<double>() { Name = "ChatListWindow_Top", Value = 120 },
                 new Library.Configuration.SettingContent<double>() { Name = "ChatListWindow_Left", Value = 120 },
@@ -137,6 +138,18 @@ namespace Outopos.Properties
                 new Library.Configuration.SettingContent<double>() { Name = "ChatMessageEditWindow_Height", Value = 500 },
                 new Library.Configuration.SettingContent<double>() { Name = "ChatMessageEditWindow_Width", Value = 700 },
                 new Library.Configuration.SettingContent<WindowState>() { Name = "ChatMessageEditWindow_WindowState", Value = WindowState.Normal },
+
+                new Library.Configuration.SettingContent<double>() { Name = "ChatTopicEditWindow_Top", Value = 120 },
+                new Library.Configuration.SettingContent<double>() { Name = "ChatTopicEditWindow_Left", Value = 120 },
+                new Library.Configuration.SettingContent<double>() { Name = "ChatTopicEditWindow_Height", Value = 500 },
+                new Library.Configuration.SettingContent<double>() { Name = "ChatTopicEditWindow_Width", Value = 700 },
+                new Library.Configuration.SettingContent<WindowState>() { Name = "ChatTopicEditWindow_WindowState", Value = WindowState.Normal },
+
+                new Library.Configuration.SettingContent<double>() { Name = "ChatTopicPreviewWindow_Top", Value = 120 },
+                new Library.Configuration.SettingContent<double>() { Name = "ChatTopicPreviewWindow_Left", Value = 120 },
+                new Library.Configuration.SettingContent<double>() { Name = "ChatTopicPreviewWindow_Height", Value = 500 },
+                new Library.Configuration.SettingContent<double>() { Name = "ChatTopicPreviewWindow_Width", Value = 700 },
+                new Library.Configuration.SettingContent<WindowState>() { Name = "ChatTopicPreviewWindow_WindowState", Value = WindowState.Normal },
 
                 new Library.Configuration.SettingContent<double>() { Name = "MailControl_Grid_ColumnDefinitions_Width", Value = 200 },
             })
@@ -213,20 +226,20 @@ namespace Outopos.Properties
             }
         }
 
-        public LockedHashDictionary<string, ProfileInfo> Global_ProfileInfos
+        public LockedHashDictionary<string, ProfileInfo> Global_Cache_ProfileInfos
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (LockedHashDictionary<string, ProfileInfo>)this["Global_ProfileInfos"];
+                   return (LockedHashDictionary<string, ProfileInfo>)this["Global_Cache_ProfileInfos"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["Global_ProfileInfos"] = value;
+                    this["Global_Cache_ProfileInfos"] = value;
                 }
             }
         }
@@ -1788,6 +1801,24 @@ namespace Outopos.Properties
             }
         }
 
+        public ChatCategorizeTreeItem ChatControl_ChatCategorizeTreeItem
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (ChatCategorizeTreeItem)this["ChatControl_ChatCategorizeTreeItem"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChatControl_ChatCategorizeTreeItem"] = value;
+                }
+            }
+        }
+
 
         public double ChatListWindow_Top
         {
@@ -2038,6 +2069,188 @@ namespace Outopos.Properties
                 lock (this.ThisLock)
                 {
                     this["ChatMessageEditWindow_WindowState"] = value;
+                }
+            }
+        }
+
+
+        public double ChatTopicEditWindow_Top
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChatTopicEditWindow_Top"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChatTopicEditWindow_Top"] = value;
+                }
+            }
+        }
+
+        public double ChatTopicEditWindow_Left
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChatTopicEditWindow_Left"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChatTopicEditWindow_Left"] = value;
+                }
+            }
+        }
+
+        public double ChatTopicEditWindow_Height
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChatTopicEditWindow_Height"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChatTopicEditWindow_Height"] = value;
+                }
+            }
+        }
+
+        public double ChatTopicEditWindow_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChatTopicEditWindow_Width"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChatTopicEditWindow_Width"] = value;
+                }
+            }
+        }
+
+        public WindowState ChatTopicEditWindow_WindowState
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (WindowState)this["ChatTopicEditWindow_WindowState"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChatTopicEditWindow_WindowState"] = value;
+                }
+            }
+        }
+
+
+        public double ChatTopicPreviewWindow_Top
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChatTopicPreviewWindow_Top"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChatTopicPreviewWindow_Top"] = value;
+                }
+            }
+        }
+
+        public double ChatTopicPreviewWindow_Left
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChatTopicPreviewWindow_Left"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChatTopicPreviewWindow_Left"] = value;
+                }
+            }
+        }
+
+        public double ChatTopicPreviewWindow_Height
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChatTopicPreviewWindow_Height"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChatTopicPreviewWindow_Height"] = value;
+                }
+            }
+        }
+
+        public double ChatTopicPreviewWindow_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (double)this["ChatTopicPreviewWindow_Width"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChatTopicPreviewWindow_Width"] = value;
+                }
+            }
+        }
+
+        public WindowState ChatTopicPreviewWindow_WindowState
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (WindowState)this["ChatTopicPreviewWindow_WindowState"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChatTopicPreviewWindow_WindowState"] = value;
                 }
             }
         }

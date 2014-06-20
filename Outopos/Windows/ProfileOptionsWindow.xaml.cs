@@ -249,7 +249,7 @@ namespace Outopos.Windows
 
             foreach (var item in _wikiListView.SelectedItems.OfType<Wiki>())
             {
-                sb.AppendLine(OutoposConverter.ToWikiString(item, null));
+                sb.AppendLine(OutoposConverter.ToWikiString(item));
             }
 
             Clipboard.SetText(sb.ToString());
@@ -257,12 +257,12 @@ namespace Outopos.Windows
 
         private void _wikiListViewPasteMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var tuple in Clipboard.GetWikis())
+            foreach (var tag in Clipboard.GetWikis())
             {
                 try
                 {
-                    if (_wikiCollection.Contains(tuple.Item1)) continue;
-                    _wikiCollection.Add(tuple.Item1);
+                    if (_wikiCollection.Contains(tag)) continue;
+                    _wikiCollection.Add(tag);
                 }
                 catch (Exception)
                 {
@@ -434,7 +434,7 @@ namespace Outopos.Windows
 
             foreach (var item in _chatListView.SelectedItems.OfType<Chat>())
             {
-                sb.AppendLine(OutoposConverter.ToChatString(item, null));
+                sb.AppendLine(OutoposConverter.ToChatString(item));
             }
 
             Clipboard.SetText(sb.ToString());
@@ -442,12 +442,12 @@ namespace Outopos.Windows
 
         private void _chatListViewPasteMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var tuple in Clipboard.GetChats())
+            foreach (var tag in Clipboard.GetChats())
             {
                 try
                 {
-                    if (_chatCollection.Contains(tuple.Item1)) continue;
-                    _chatCollection.Add(tuple.Item1);
+                    if (_chatCollection.Contains(tag)) continue;
+                    _chatCollection.Add(tag);
                 }
                 catch (Exception)
                 {
