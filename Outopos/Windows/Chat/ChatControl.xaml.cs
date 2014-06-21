@@ -559,7 +559,10 @@ namespace Outopos.Windows
 
                     headers.Sort((x, y) =>
                     {
-                        return y.CreationTime.CompareTo(x.CreationTime);
+                        int c = (now - x.CreationTime).TotalDays.CompareTo((now - y.CreationTime).TotalDays);
+                        if (c != 0) return c;
+
+                        return y.Coin.CompareTo(x.Coin);
                     });
 
                     int count = 0;
@@ -577,7 +580,7 @@ namespace Outopos.Windows
 
                         infos.Add(new ChatMessageInfo(header, content));
 
-                        if (++count >= 32) break;
+                        if (++count >= 256) break;
                     }
                 }
             }

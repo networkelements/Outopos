@@ -1272,7 +1272,225 @@ namespace Outopos.Windows
 
         private void CheckUpdate(bool isLogFlag)
         {
+            lock (_updateLockObject)
+            {
+                try
+                {
+                    var url = Settings.Instance.Global_Update_Url;
+                    string line1;
+                    string line2;
+                    string line3;
 
+                    for (int i = 0; ; i++)
+                    {
+                        try
+                        {
+                            HttpWebRequest rq = (HttpWebRequest)HttpWebRequest.Create(url);
+                            rq.Method = "GET";
+                            rq.ContentType = "text/html; charset=UTF-8";
+                            rq.UserAgent = "";
+                            rq.ReadWriteTimeout = 1000 * 60;
+                            rq.Timeout = 1000 * 60;
+                            rq.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore);
+                            rq.KeepAlive = true;
+                            rq.Headers.Add(HttpRequestHeader.AcceptCharset, "utf-8");
+                            rq.Proxy = this.GetProxy();
+
+                            using (HttpWebResponse rs = (HttpWebResponse)rq.GetResponse())
+                            using (Stream stream = rs.GetResponseStream())
+                            using (StreamReader r = new StreamReader(stream))
+                            {
+                                line1 = r.ReadLine();
+                                line2 = r.ReadLine();
+                                line3 = r.ReadLine();
+                            }
+
+                            break;
+                        }
+                        catch (Exception e)
+                        {
+                            if (i < 10)
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                Log.Error(e);
+
+                                return;
+                            }
+                        }
+                    }
+
+                    Regex regex = new Regex(@"Outopos ((\d*)\.(\d*)\.(\d*)).*\.zip");
+                    var match = regex.Match(line1);
+
+                    if (match.Success)
+                    {
+                        var targetVersion = new Version(match.Groups[1].Value);
+
+                        if (targetVersion <= App.OutoposVersion)
+                        {
+                            if (isLogFlag)
+                            {
+                                Log.Information(string.Format("Check Update: {0}", LanguagesManager.Instance.MainWindow_LatestVersion_Message));
+                            }
+                        }
+                        else
+                        {
+                            if (!isLogFlag && targetVersion == _updateCancelVersion) return;
+
+                            {
+                                foreach (var path in Directory.GetFiles(App.DirectoryPaths["Update"]))
+                                {
+                                    string name = Path.GetFileName(path);
+
+                                    if (name.StartsWith("Outopos"))
+                                    {
+                                        var match2 = regex.Match(name);
+
+                                        if (match2.Success)
+                                        {
+                                            var tempVersion = new Version(match2.Groups[1].Value);
+
+                                            if (targetVersion <= tempVersion) return;
+                                        }
+                                    }
+                                }
+                            }
+
+                            Log.Information(string.Format("Check Update: {0}", line1));
+
+                            bool flag = true;
+
+                            if (Settings.Instance.Global_Update_Option != UpdateOption.AutoUpdate)
+                            {
+                                this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
+                                {
+                                    if (MessageBox.Show(
+                                        this,
+                                        string.Format(LanguagesManager.Instance.MainWindow_CheckUpdate_Message, line1),
+                                        "Update",
+                                        MessageBoxButton.OKCancel,
+                                        MessageBoxImage.Information) == MessageBoxResult.Cancel)
+                                    {
+                                        flag = false;
+                                    }
+                                }));
+                            }
+
+                            if (flag)
+                            {
+                                var path = string.Format(@"{0}\{1}", App.DirectoryPaths["Work"], line1);
+                                this.GetFile(line2, path);
+
+                                var signaturePath = string.Format(@"{0}\{1}", App.DirectoryPaths["Work"], System.Web.HttpUtility.UrlDecode(Path.GetFileName(line3)));
+                                this.GetFile(line3, signaturePath);
+
+                                using (var stream = new FileStream(path, FileMode.Open))
+                                using (var signStream = new FileStream(signaturePath, FileMode.Open))
+                                {
+                                    Certificate certificate = CertificateConverter.FromCertificateStream(signStream);
+
+                                    if (Settings.Instance.Global_Update_Signature != certificate.ToString()) throw new Exception("Update DigitalSignature #1");
+                                    if (!DigitalSignature.VerifyFileCertificate(certificate, stream.Name, stream)) throw new Exception("Update DigitalSignature #2");
+                                }
+
+                                if (File.Exists(path))
+                                {
+                                    File.Move(path, Path.Combine(App.DirectoryPaths["Update"], Path.GetFileName(path)));
+                                }
+
+                                this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
+                                {
+                                    MessageBox.Show(
+                                        this,
+                                        LanguagesManager.Instance.MainWindow_Restart_Message,
+                                        "Update",
+                                        MessageBoxButton.OK,
+                                        MessageBoxImage.Information);
+                                }));
+                            }
+                            else
+                            {
+                                _updateCancelVersion = targetVersion;
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                }
+            }
+        }
+
+        private void GetFile(string url, string path)
+        {
+            for (int i = 0; ; i++)
+            {
+                try
+                {
+                    HttpWebRequest rq = (HttpWebRequest)HttpWebRequest.Create(url);
+                    rq.Method = "GET";
+                    rq.ContentType = "text/html; charset=UTF-8";
+                    rq.UserAgent = "";
+                    rq.ReadWriteTimeout = 1000 * 60 * 5;
+                    rq.Timeout = 1000 * 60 * 5;
+                    rq.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore);
+                    rq.KeepAlive = true;
+                    rq.Headers.Add(HttpRequestHeader.AcceptCharset, "utf-8");
+                    rq.Proxy = this.GetProxy();
+
+                    using (HttpWebResponse rs = (HttpWebResponse)rq.GetResponse())
+                    {
+                        long size = 0;
+
+                        using (Stream inStream = rs.GetResponseStream())
+                        using (FileStream outStream = new FileStream(path, FileMode.Create))
+                        {
+                            byte[] buffer = new byte[1024 * 4];
+
+                            int length = 0;
+
+                            while ((length = inStream.Read(buffer, 0, buffer.Length)) > 0)
+                            {
+                                outStream.Write(buffer, 0, length);
+                                size += length;
+                            }
+                        }
+
+                        if (rs.ContentLength != -1 && size != rs.ContentLength)
+                        {
+                            try
+                            {
+                                File.Delete(path);
+                            }
+                            catch (Exception)
+                            {
+
+                            }
+
+                            continue;
+                        }
+                    }
+
+                    break;
+                }
+                catch (Exception e)
+                {
+                    if (i < 10)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        Log.Error(e);
+
+                        return;
+                    }
+                }
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -1316,10 +1534,17 @@ namespace Outopos.Windows
 
             this.GarbageCollect();
 
+            RichTextBoxHelper.WikiClickEvent += this.WikiClickEvent;
+
             RichTextBoxHelper.SeedClickEvent += this.SeedClickEvent;
             RichTextBoxHelper.LinkClickEvent += this.LinkClickEvent;
 
             RichTextBoxHelper.GetMaxHeightEvent = this.GetMaxHeightEvent;
+        }
+
+        private void WikiClickEvent(object sender, Wiki wiki)
+        {
+
         }
 
         private void SeedClickEvent(object sender, A.Seed seed)

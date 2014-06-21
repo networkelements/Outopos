@@ -565,11 +565,14 @@ namespace Outopos.Windows
                     _profileItem.Chats.AddRange(_chatCollection);
                 }
 
-                content = new ProfileContent(
-                    _profileItem.Exchange.GetExchangePublicKey(),
-                    _profileItem.TrustSignatures,
-                    _profileItem.Wikis,
-                    _profileItem.Chats);
+                if (!string.IsNullOrWhiteSpace(_profileItem.UploadSignature))
+                {
+                    content = new ProfileContent(
+                        _profileItem.Exchange.GetExchangePublicKey(),
+                        _profileItem.TrustSignatures,
+                        _profileItem.Wikis,
+                        _profileItem.Chats);
+                }
             }
 
             if (digitalSignature != null)
