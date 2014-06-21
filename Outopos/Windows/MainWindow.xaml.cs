@@ -16,6 +16,7 @@ using System.Security.Permissions;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Automation;
 using System.Windows.Automation.Peers;
@@ -1530,6 +1531,23 @@ namespace Outopos.Windows
                || Settings.Instance.Global_Update_Option == UpdateOption.AutoUpdate)
             {
                 _checkUpdateMenuItem_Click(null, null);
+            }
+
+            // コイン数の下限を算出する。
+            {
+                TrustUtilities.SetLimit(Settings.Instance.Global_Cache_Limit);
+
+                Task.Factory.StartNew(() =>
+                {
+                    int sum = 0;
+
+                    for (int i = 0; i < 3; i++)
+                    {
+                        sum += Miner.GetSample(new TimeSpan(0, 0, 30));
+                    }
+
+                    Settings.Instance.Global_Cache_Limit = (sum / 3) + 1;
+                });
             }
 
             this.GarbageCollect();

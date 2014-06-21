@@ -26,6 +26,7 @@ namespace Outopos.Properties
                 new Library.Configuration.SettingContent<ProfileItem>() { Name = "Global_ProfileItem", Value = null },
                 new Library.Configuration.SettingContent<LockedList<string>>() { Name = "Global_TrustSignatures", Value = new LockedList<string>() },
                 new Library.Configuration.SettingContent<LockedHashDictionary<string, ProfileInfo>>() { Name = "Global_Cache_ProfileInfos", Value = new LockedHashDictionary<string, ProfileInfo>() },
+                new Library.Configuration.SettingContent<int>() { Name = "Global_Cache_Limit", Value = 16 },
                 new Library.Configuration.SettingContent<LockedList<DigitalSignature>>() { Name = "Global_DigitalSignatureCollection", Value = new LockedList<DigitalSignature>() },
                 new Library.Configuration.SettingContent<string>() { Name = "Global_UseLanguage", Value = "English" },
                 new Library.Configuration.SettingContent<bool>() { Name = "Global_IsStart", Value = true },
@@ -240,6 +241,24 @@ namespace Outopos.Properties
                 lock (this.ThisLock)
                 {
                     this["Global_Cache_ProfileInfos"] = value;
+                }
+            }
+        }
+
+        public int Global_Cache_Limit
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                   return (int)this["Global_Cache_Limit"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["Global_Cache_Limit"] = value;
                 }
             }
         }

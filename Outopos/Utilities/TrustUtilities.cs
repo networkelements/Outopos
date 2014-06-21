@@ -34,5 +34,17 @@ namespace Outopos
                 _trustSignatures.UnionWith(signatures);
             }
         }
+
+        private static int _limit;
+
+        public static int GetLimit()
+        {
+            return _limit;
+        }
+
+        public static void SetLimit(int limit)
+        {
+            _limit = limit;
+        }
     }
 }
