@@ -1534,6 +1534,7 @@ namespace Outopos.Windows
             }
 
             // コイン数の下限を算出する。
+            try
             {
                 TrustUtilities.SetLimit(Settings.Instance.Global_Cache_Limit);
 
@@ -1543,11 +1544,17 @@ namespace Outopos.Windows
 
                     for (int i = 0; i < 3; i++)
                     {
-                        sum += Miner.GetSample(new TimeSpan(0, 0, 30));
+                        sum += Miner.GetSample(new TimeSpan(0, 1, 0));
                     }
 
                     Settings.Instance.Global_Cache_Limit = (sum / 3) + 1;
+
+                    TrustUtilities.SetLimit(Settings.Instance.Global_Cache_Limit);
                 });
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex);
             }
 
             this.GarbageCollect();

@@ -283,8 +283,9 @@
                 </Style>
             </TreeView.Resources>
         </TreeView>
-        <TabControl Grid.Column="2">
-            <TabItem Header="{Binding ChatControl_Topic, Source={StaticResource ResourcesInstance}}">
+
+        <TabControl Grid.Column="2" Name="_tabControl" SelectionChanged="_tabControl_SelectionChanged">
+            <TabItem Name="_topicTabItem" Header="{Binding ChatControl_Topic, Source={StaticResource ResourcesInstance}}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="23" />
@@ -302,7 +303,7 @@
                     </local:RichTextBoxEx>
                 </Grid>
             </TabItem>
-            <TabItem Header="{Binding ChatControl_Message, Source={StaticResource ResourcesInstance}}">
+            <TabItem Name="_messageTabItem" Header="{Binding ChatControl_Message, Source={StaticResource ResourcesInstance}}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="23" />

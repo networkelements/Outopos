@@ -75,7 +75,7 @@ namespace Outopos.Windows
             base.OnInitialized(e);
         }
 
-        private void _richTextBox_PreviewMouseRightButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void _richTextBox_ContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
             e.Handled = true;
         }

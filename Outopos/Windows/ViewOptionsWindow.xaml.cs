@@ -71,6 +71,8 @@ namespace Outopos.Windows
             _signatureListView.ItemsSource = _signatureListViewItemCollection;
             _signatureListViewUpdate();
 
+            _amoebaPathTextBox.Text = Settings.Instance.Global_Amoeba_Path;
+            
             _fontMessageFontFamilyComboBoxItemCollection.AddRange(Fonts.SystemFontFamilies.Select(n => n.ToString()));
             _fontMessageFontFamilyComboBox.ItemsSource = _fontMessageFontFamilyComboBoxItemCollection;
             _fontMessageFontFamilyComboBox.SelectedItem = Settings.Instance.Global_Fonts_MessageFontFamily;

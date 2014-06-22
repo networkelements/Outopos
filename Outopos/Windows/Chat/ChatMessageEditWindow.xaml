@@ -177,7 +177,7 @@
                         </Style>
                     </Grid.Resources>
 
-                    <local:RichTextBoxEx Margin="6" x:Name="_richTextBox" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" PreviewMouseRightButtonDown="_richTextBox_PreviewMouseRightButtonDown" />
+                    <local:RichTextBoxEx Margin="6" x:Name="_richTextBox" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" ContextMenuOpening="_richTextBox_ContextMenuOpening" />
                 </Grid>
             </TabItem>
         </TabControl>

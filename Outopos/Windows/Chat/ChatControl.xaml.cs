@@ -293,15 +293,7 @@ namespace Outopos.Windows
                             var view = CollectionViewSource.GetDefaultView(_listView.ItemsSource);
                             view.Refresh();
 
-                            if (_listViewItemCollection.Count > 0)
-                            {
-                                _listView.GoBottom();
-
-                                _listView.UpdateLayout();
-                                var topItem = _listViewItemCollection.Where(n => n.State.HasFlag(ChatMessageState.IsUnread)).FirstOrDefault();
-                                if (topItem == null) topItem = _listViewItemCollection.LastOrDefault();
-                                if (topItem != null) _listView.ScrollIntoView(topItem);
-                            }
+                            this.Scroll();
 
                             layoutUpdated = _layoutUpdated;
 
@@ -312,17 +304,27 @@ namespace Outopos.Windows
 
                         this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                         {
-                            _listView.UpdateLayout();
-                            var topItem = _listViewItemCollection.Where(n => n.State.HasFlag(ChatMessageState.IsUnread)).FirstOrDefault();
-                            if (topItem == null) topItem = _listViewItemCollection.LastOrDefault();
-                            if (topItem != null) _listView.ScrollIntoView(topItem);
+                            this.Scroll();
                         }));
                     }
                 }
             }
             catch (Exception e)
             {
-                Log.Error(e);
+
+            }
+        }
+
+        private void Scroll()
+        {
+            if (_listViewItemCollection.Count > 0)
+            {
+                _listView.GoBottom();
+
+                _listView.UpdateLayout();
+                var topItem = _listViewItemCollection.Where(n => n.State.HasFlag(ChatMessageState.IsUnread)).FirstOrDefault();
+                if (topItem == null) topItem = _listViewItemCollection.LastOrDefault();
+                if (topItem != null) _listView.ScrollIntoView(topItem);
             }
         }
 
@@ -429,7 +431,7 @@ namespace Outopos.Windows
             }
             catch (Exception e)
             {
-                Log.Error(e);
+
             }
         }
 
@@ -560,7 +562,12 @@ namespace Outopos.Windows
 
                     headers.Sort((x, y) =>
                     {
-                        return y.Coin.CompareTo(x.Coin);
+                        int c = y.Coin.CompareTo(x.Coin);
+                        if (c != 0) return c;
+                        c = y.CreationTime.CompareTo(x.CreationTime);
+                        if (c != 0) return c;
+
+                        return CollectionUtilities.Compare(x.CreateHash(_hashAlgorithm), y.CreateHash(_hashAlgorithm));
                     });
 
                     int count = 0;
@@ -659,6 +666,18 @@ namespace Outopos.Windows
                 }
             }
         }
+
+        #region _tabControl
+
+        private void _tabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_tabControl.SelectedItem == _messageTabItem)
+            {
+                this.Scroll();
+            }
+        }
+
+        #endregion
 
         #region _treeView
 
