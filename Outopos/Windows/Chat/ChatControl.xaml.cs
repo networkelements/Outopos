@@ -98,6 +98,13 @@ namespace Outopos.Windows
 
             RichTextBoxHelper.ChatClickEvent += this.ChatClickEvent;
             RichTextBoxHelper.GetAnchorChatMessageWrapperEvent = this.GetAnchorChatMessageWrapperEvent;
+
+            RichTextBoxHelper.GetMaxHeightEvent = this.GetMaxHeightEvent;
+        }
+
+        private void LanguagesManager_UsingLanguageChangedEvent(object sender)
+        {
+            _listView.Items.Refresh();
         }
 
         private void ChatClickEvent(object sender, Chat chat)
@@ -137,9 +144,9 @@ namespace Outopos.Windows
             }
         }
 
-        private void LanguagesManager_UsingLanguageChangedEvent(object sender)
+        private double GetMaxHeightEvent(object sender)
         {
-            _listView.Items.Refresh();
+            return _listView.ActualHeight;
         }
 
         private void Search()
@@ -239,8 +246,6 @@ namespace Outopos.Windows
                             if (!oldList.Contains(item)) addList.Add(item);
                         }
 
-                        int layoutUpdated = 0;
-
                         this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                         {
                             if (chatTreeViewItem != _treeView.SelectedItem) return;
@@ -290,21 +295,9 @@ namespace Outopos.Windows
 
                             this.Sort();
 
-                            var view = CollectionViewSource.GetDefaultView(_listView.ItemsSource);
-                            view.Refresh();
-
                             this.Scroll();
-
-                            layoutUpdated = _layoutUpdated;
 
                             this.Update_TreeView_Color();
-                        }));
-
-                        while (_layoutUpdated == layoutUpdated) Thread.Sleep(100);
-
-                        this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
-                        {
-                            this.Scroll();
                         }));
                     }
                 }
@@ -321,7 +314,6 @@ namespace Outopos.Windows
             {
                 _listView.GoBottom();
 
-                _listView.UpdateLayout();
                 var topItem = _listViewItemCollection.Where(n => n.State.HasFlag(ChatMessageState.IsUnread)).FirstOrDefault();
                 if (topItem == null) topItem = _listViewItemCollection.LastOrDefault();
                 if (topItem != null) _listView.ScrollIntoView(topItem);
@@ -671,6 +663,8 @@ namespace Outopos.Windows
 
         private void _tabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (e.OriginalSource != _tabControl) return;
+
             if (_tabControl.SelectedItem == _messageTabItem)
             {
                 this.Scroll();
@@ -884,15 +878,18 @@ namespace Outopos.Windows
         private void _chatCategorizeTreeViewItemEditMenuItem_Click(object sender, RoutedEventArgs e)
         {
             var selectTreeViewItem = _treeView.SelectedItem as ChatCategorizeTreeViewItem;
-            if (selectTreeViewItem == null || selectTreeViewItem == _treeViewItem) return;
+            if (selectTreeViewItem == null) return;
 
-            if (MessageBox.Show(_mainWindow, LanguagesManager.Instance.MainWindow_Delete_Message, "Chat", MessageBoxButton.OKCancel, MessageBoxImage.Information) != MessageBoxResult.OK) return;
+            NameWindow window = new NameWindow(selectTreeViewItem.Value.Name);
+            window.Title = LanguagesManager.Instance.NameWindow_Title_Category;
+            window.Owner = _mainWindow;
 
-            var parent = (ChatCategorizeTreeViewItem)selectTreeViewItem.Parent;
+            if (window.ShowDialog() == true)
+            {
+                selectTreeViewItem.Value.Name = window.Text;
 
-            parent.IsSelected = true;
-            parent.Value.Children.Remove(selectTreeViewItem.Value);
-            parent.Update();
+                selectTreeViewItem.Update();
+            }
 
             this.Update();
         }
@@ -1316,7 +1313,7 @@ namespace Outopos.Windows
             var selectTreeViewItem = _treeView.SelectedItem as ChatTreeViewItem;
             if (selectTreeViewItem == null) return;
 
-            var richTextBox = sender as RichTextBox;
+            var richTextBox = sender as RichTextBoxEx;
             if (richTextBox == null) return;
 
             var selectItem = _listView.SelectedItem as ChatMessageWrapper;
@@ -1335,7 +1332,15 @@ namespace Outopos.Windows
             {
                 if (item.Name == "_richTextBoxCopyMenuItem")
                 {
-                    item.IsEnabled = !richTextBox.Selection.IsEmpty;
+                    var richTextBoxList = new List<RichTextBoxEx>();
+                    richTextBoxList.Add(richTextBox);
+
+                    for (int i = 0; i < richTextBoxList.Count; i++)
+                    {
+                        richTextBoxList.AddRange(richTextBoxList[i].Children);
+                    }
+
+                    item.IsEnabled = richTextBoxList.Any(n => !n.Selection.IsEmpty);
                 }
                 else if (item.Name == "_richTextBoxResponsMenuItem")
                 {
@@ -1348,10 +1353,25 @@ namespace Outopos.Windows
 
         private void _richTextBoxCopyMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            var richTextBox = ((e.Source as MenuItem).Parent as ContextMenu).PlacementTarget as RichTextBox;
+            var richTextBox = ((e.Source as MenuItem).Parent as ContextMenu).PlacementTarget as RichTextBoxEx;
             if (richTextBox == null) return;
 
-            Clipboard.SetText(richTextBox.Selection.Text.Replace("\u00A0", ""));
+            var richTextBoxList = new List<RichTextBoxEx>();
+            richTextBoxList.Add(richTextBox);
+
+            for (int i = 0; i < richTextBoxList.Count; i++)
+            {
+                richTextBoxList.AddRange(richTextBoxList[i].Children);
+            }
+
+            for (int i = 0; i < richTextBoxList.Count; i++)
+            {
+                if (richTextBoxList[i].Selection.IsEmpty) continue;
+
+                Clipboard.SetText(richTextBoxList[i].Selection.Text);
+
+                break;
+            }
         }
 
         private void _richTextBoxResponsMenuItem_Click(object sender, RoutedEventArgs e)

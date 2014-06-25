@@ -40,38 +40,6 @@ namespace Outopos.Windows
 
         private static Regex _urlRegex = new Regex(@"^(?<start>.*?)(?<url>http(s)?://(\S)+)(?<end>.*?)$", RegexOptions.Compiled | RegexOptions.Singleline);
 
-        private static bool CheckAlphanumeric(char value)
-        {
-            if (!('A' <= value && value <= 'Z')
-                && !('a' <= value && value <= 'z')
-                && !('0' <= value && value <= '9')) return false;
-
-            return true;
-        }
-
-        private static string GetNoBleakString(string value)
-        {
-            var list = new List<char>();
-
-            for (int i = 0; i < value.Length; i++)
-            {
-                var c = value[i];
-
-                if (!CheckAlphanumeric(c))
-                {
-                    if (list.Count == 0 || list[list.Count - 1] != '\u00A0') list.Add('\u00A0');
-                    list.Add(c);
-                    list.Add('\u00A0');
-                }
-                else
-                {
-                    list.Add(c);
-                }
-            }
-
-            return new string(list.ToArray());
-        }
-
         public static string MessageToString(DateTime creationTime, string signature, string comment)
         {
             StringBuilder stringBuilder = new StringBuilder();
@@ -147,7 +115,7 @@ namespace Outopos.Windows
 
                     try
                     {
-                        var richTextBox = (RichTextBox)obj;
+                        var richTextBox = (RichTextBoxEx)obj;
 
                         if (e.NewValue is ChatMessageWrapper)
                         {
@@ -155,6 +123,10 @@ namespace Outopos.Windows
                             if (chatMessageWrapper == null) return;
 
                             RichTextBoxHelper.SetRichTextBox(richTextBox, chatMessageWrapper.Info, chatMessageWrapper.IsTrust);
+
+                            var maxHeight = Math.Max(0, RichTextBoxHelper.GetMaxHeightEvent(richTextBox));
+
+                            richTextBox.MaxHeight = (maxHeight / 3) * 2;
                         }
                     }
                     catch (Exception ex)
@@ -164,26 +136,20 @@ namespace Outopos.Windows
                 }
             });
 
-        public static void SetRichTextBox(RichTextBox richTextBox, ChatTopicInfo info)
+        public static void SetRichTextBox(RichTextBoxEx richTextBox, ChatTopicInfo info)
         {
             RichTextBoxHelper.SetRichTextBox(richTextBox, info.Header.Tag, info.Header.Certificate.ToString(), info.Header.CreationTime, info.Content.Comment, null, true);
-
-            richTextBox.MaxHeight = double.PositiveInfinity;
         }
 
-        public static void SetRichTextBox(RichTextBox richTextBox, ChatMessageInfo info, bool isTrust)
+        public static void SetRichTextBox(RichTextBoxEx richTextBox, ChatMessageInfo info, bool isTrust)
         {
             RichTextBoxHelper.SetRichTextBox(richTextBox, info.Header.Tag, info.Header.Certificate.ToString(), info.Header.CreationTime, info.Content.Comment, info.Content.Anchors, isTrust);
         }
 
-        public static void SetRichTextBox(RichTextBox richTextBox, Chat tag, string signature, DateTime creationTime, string comment, IEnumerable<Anchor> anchors, bool isTrust)
+        public static void SetRichTextBox(RichTextBoxEx richTextBox, Chat tag, string signature, DateTime creationTime, string comment, IEnumerable<Anchor> anchors, bool isTrust)
         {
             richTextBox.FontFamily = new FontFamily(Settings.Instance.Global_Fonts_MessageFontFamily);
             richTextBox.FontSize = (double)new FontSizeConverter().ConvertFromString(Settings.Instance.Global_Fonts_MessageFontSize + "pt");
-
-            var maxHeight = Math.Max(0, RichTextBoxHelper.GetMaxHeightEvent(richTextBox));
-
-            richTextBox.MaxHeight = maxHeight / 2;
 
             var fd = new EnabledFlowDocument();
 
@@ -194,59 +160,20 @@ namespace Outopos.Windows
             p.LineHeight = richTextBox.FontSize + 2;
 
             {
-                {
-                    var text = creationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo) + " - ";
+                var span = new Span();
 
-                    var span = new Span();
+                span.Inlines.Add(string.Format("{0} - ",
+                    creationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo))
+                    .Replace(' ', '\u00A0'));
 
-                    foreach (var c in RichTextBoxHelper.GetNoBleakString(text))
-                    {
-                        if (c == '\u00A0')
-                        {
-                            var r = new Run();
-                            r.Text = c.ToString();
-                            r.FontSize = 0.1;
+                Run r = new Run();
+                if (isTrust) r.Foreground = new SolidColorBrush(App.Colors.Message_Trust);
+                else r.Foreground = new SolidColorBrush(App.Colors.Message_Untrust);
+                r.Text = signature;
 
-                            span.Inlines.Add(r);
-                        }
-                        else
-                        {
-                            span.Inlines.Add(c.ToString());
-                        }
-                    }
+                span.Inlines.Add(r);
 
-                    p.Inlines.Add(span);
-                }
-
-                {
-                    var span = new Span();
-
-                    if (isTrust) span.Foreground = new SolidColorBrush(App.Colors.Message_Trust);
-                    else span.Foreground = new SolidColorBrush(App.Colors.Message_Untrust);
-
-                    span.PreviewMouseRightButtonDown += (object sender, System.Windows.Input.MouseButtonEventArgs ex) =>
-                    {
-                        richTextBox.Selection.Select(span.ContentStart, span.ContentEnd);
-                    };
-
-                    foreach (var c in RichTextBoxHelper.GetNoBleakString(signature))
-                    {
-                        if (c == '\u00A0')
-                        {
-                            var r = new Run();
-                            r.Text = c.ToString();
-                            r.FontSize = 0.1;
-
-                            span.Inlines.Add(r);
-                        }
-                        else
-                        {
-                            span.Inlines.Add(c.ToString());
-                        }
-                    }
-
-                    p.Inlines.Add(span);
-                }
+                p.Inlines.Add(span);
             }
 
             p.Inlines.Add(new LineBreak());
@@ -543,8 +470,10 @@ namespace Outopos.Windows
 
                     if (wrapper != null)
                     {
-                        var targetRichTextBox = new RichTextBox();
+                        var targetRichTextBox = new RichTextBoxEx();
                         RichTextBoxHelper.SetRichTextBox(targetRichTextBox, wrapper.Info, wrapper.IsTrust);
+
+                        richTextBox.Children.Add(targetRichTextBox);
 
                         var grid = new Grid();
                         grid.Children.Add(targetRichTextBox);
@@ -554,8 +483,8 @@ namespace Outopos.Windows
                         {
                             var span = new Span();
 
-                            span.Inlines.Add(string.Format("{0}\u00A0-\u00A0",
-                            wrapper.Info.Header.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
+                            span.Inlines.Add(string.Format("{0} - ",
+                                wrapper.Info.Header.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
 
                             Run r = new Run();
                             if (wrapper.IsTrust) r.Foreground = new SolidColorBrush(App.Colors.Message_Trust);
@@ -658,18 +587,14 @@ namespace Outopos.Windows
 
     class RichTextBoxEx : RichTextBox
     {
-        protected override void OnPreviewKeyDown(KeyEventArgs e)
+        private List<RichTextBoxEx> _children = new List<RichTextBoxEx>();
+
+        public List<RichTextBoxEx> Children
         {
-            ModifierKeys modifiers = e.KeyboardDevice.Modifiers;
-
-            if (modifiers.HasFlag(ModifierKeys.Control) && e.Key == System.Windows.Input.Key.C)
+            get
             {
-                Clipboard.SetText(this.Selection.Text.Replace("\u00A0", ""));
-
-                e.Handled = true;
+                return _children;
             }
-
-            base.OnPreviewKeyDown(e);
         }
     }
 }

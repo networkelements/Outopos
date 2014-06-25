@@ -98,8 +98,6 @@ namespace Outopos.Windows
                     }
 
                     RichTextBoxHelper.SetRichTextBox(_richTextBox, _chat, _digitalSignature.ToString(), DateTime.UtcNow, comment, _anchors, _isTrust);
-
-                    _richTextBox.MaxHeight = double.PositiveInfinity;
                 }
             }
         }
@@ -126,7 +124,7 @@ namespace Outopos.Windows
             TimeSpan miningTime = TimeSpan.Zero;
             if (!_isTrust) miningTime = new TimeSpan(0, 10, 0);
 
-            _outoposManager.Upload(_chat, new ChatMessageContent(_commentTextBox.Text, _anchors), miningTime, _digitalSignature);
+            _outoposManager.Upload(_chat, new ChatMessageContent(_commentTextBox.Text, _anchors), 0, miningTime, _digitalSignature);
 
             this.Close();
         }

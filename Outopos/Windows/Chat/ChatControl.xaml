@@ -175,7 +175,7 @@
             </Setter>
         </Style>
 
-        <Style TargetType="{x:Type RichTextBox}">
+        <Style TargetType="{x:Type local:RichTextBoxEx}">
             <Setter Property="FocusVisualStyle" Value="{x:Null}" />
             <Setter Property="SnapsToDevicePixels" Value="True" />
             <Setter Property="UseLayoutRounding" Value="True" />
@@ -266,12 +266,13 @@
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.RowSpan="3" />
 
         <TreeView Name="_treeView" Grid.RowSpan="3" AllowDrop="True"
-                  PreviewDragOver="_treeView_PreviewDragOver"
-                  PreviewMouseMove="_treeView_PreviewMouseMove" 
-                  PreviewDrop="_treeView_PreviewDrop" 
-                  PreviewMouseLeftButtonDown="_treeView_PreviewMouseLeftButtonDown" 
-                  SelectedItemChanged="_treeView_SelectedItemChanged"
-                VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
+                    PreviewDragOver="_treeView_PreviewDragOver"
+                    PreviewMouseMove="_treeView_PreviewMouseMove" 
+                    PreviewDrop="_treeView_PreviewDrop" 
+                    PreviewMouseLeftButtonDown="_treeView_PreviewMouseLeftButtonDown" 
+                    SelectedItemChanged="_treeView_SelectedItemChanged"
+                    VirtualizingStackPanel.IsVirtualizing="True"
+                    VirtualizingStackPanel.VirtualizationMode="Recycling">
             <TreeView.Resources>
                 <Style TargetType="{x:Type local:ChatCategorizeTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" >
                     <Setter Property="ContextMenu" Value="{StaticResource _chatCategorizeTreeViewItemContextMenu}" />
@@ -316,13 +317,14 @@
                     <Button Content="{Binding ChatControl_Upload, Source={StaticResource ResourcesInstance}}" Height="23" HorizontalAlignment="Right" x:Name="_messageUploadButton" VerticalAlignment="Top" Width="75" Click="_messageUploadButton_Click" IsEnabled="False" />
 
                     <local:ListViewEx x:Name="_listView" Padding="0,1,0,0" Grid.Row="1" 
-                		ScrollViewer.VerticalScrollBarVisibility="Visible" 
-                		ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
-                		LayoutUpdated="_listView_LayoutUpdated"
-                		SizeChanged="_listView_SizeChanged" 
-                		PreviewKeyDown="_listView_PreviewKeyDown" 
-                		PreviewMouseDown="_listView_PreviewMouseDown"
-                		VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Standard">
+                		    ScrollViewer.VerticalScrollBarVisibility="Visible" 
+                		    ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                		    LayoutUpdated="_listView_LayoutUpdated"
+                		    SizeChanged="_listView_SizeChanged" 
+                		    PreviewKeyDown="_listView_PreviewKeyDown" 
+                		    PreviewMouseDown="_listView_PreviewMouseDown"
+                		    VirtualizingStackPanel.IsVirtualizing="True"
+                            VirtualizingStackPanel.VirtualizationMode="Standard">
                         <local:ListViewEx.ItemContainerStyle>
                             <Style TargetType="{x:Type ListViewItem}">
                                 <Setter Property="OverridesDefaultStyle" Value="True" />

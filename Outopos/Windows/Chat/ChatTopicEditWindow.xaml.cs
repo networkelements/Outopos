@@ -96,8 +96,6 @@ namespace Outopos.Windows
                     }
 
                     RichTextBoxHelper.SetRichTextBox(_richTextBox, _chat, _digitalSignature.ToString(), DateTime.UtcNow, comment, null, _isTrust);
-
-                    _richTextBox.MaxHeight = double.PositiveInfinity;
                 }
             }
         }
@@ -121,7 +119,7 @@ namespace Outopos.Windows
 
         private void _okButton_Click(object sender, RoutedEventArgs e)
         {
-            _outoposManager.Upload(_chat, new ChatTopicContent(_commentTextBox.Text), TimeSpan.Zero, _digitalSignature);
+            _outoposManager.Upload(_chat, new ChatTopicContent(_commentTextBox.Text), 0, TimeSpan.Zero, _digitalSignature);
 
             this.Close();
         }

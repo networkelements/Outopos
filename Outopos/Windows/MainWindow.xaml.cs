@@ -530,57 +530,7 @@ namespace Outopos.Windows
                     {
                         stopwatch.Restart();
 
-                        // Settings.Instance.Global_ProfileInfos情報を更新。
-                        {
-                            var sumList = new List<ProfileInfo>();
-
-                            foreach (var leaderSignature in Settings.Instance.Global_TrustSignatures.ToArray())
-                            {
-                                var tempList = new List<ProfileInfo>();
-
-                                var checkedSignature = new HashSet<string>();
-
-                                {
-                                    var leaderInfo = this.GetProfileInfo(leaderSignature);
-                                    if (leaderInfo == null) continue;
-
-                                    tempList.Add(leaderInfo);
-                                    checkedSignature.Add(leaderInfo.Header.Certificate.ToString());
-                                }
-
-                                for (int i = 0; i < tempList.Count; i++)
-                                {
-                                    foreach (var trustSignature in tempList[i].Content.TrustSignatures)
-                                    {
-                                        if (checkedSignature.Contains(trustSignature)) continue;
-
-                                        var info = this.GetProfileInfo(trustSignature);
-                                        if (info == null) continue;
-
-                                        tempList.Add(info);
-                                        checkedSignature.Add(info.Header.Certificate.ToString());
-
-                                        if (tempList.Count > 1024 * 32) goto End;
-                                    }
-                                }
-
-                            End: ;
-
-                                sumList.AddRange(tempList);
-                            }
-
-                            lock (Settings.Instance.Global_Cache_ProfileInfos.ThisLock)
-                            {
-                                Settings.Instance.Global_Cache_ProfileInfos.Clear();
-
-                                foreach (var item in sumList)
-                                {
-                                    Settings.Instance.Global_Cache_ProfileInfos[item.Header.Certificate.ToString()] = item;
-                                }
-                            }
-
-                            TrustUtilities.SetSignatures(Settings.Instance.Global_Cache_ProfileInfos.ToArray().Select(n => n.Key));
-                        }
+                        this.Refresh_ProfileInfos();
                     }
                 }
             }
@@ -588,6 +538,58 @@ namespace Outopos.Windows
             {
                 Log.Error(e);
             }
+        }
+
+        private void Refresh_ProfileInfos()
+        {
+            var sumList = new List<ProfileInfo>();
+
+            foreach (var leaderSignature in Settings.Instance.Global_TrustSignatures.ToArray())
+            {
+                var tempList = new List<ProfileInfo>();
+
+                var checkedSignature = new HashSet<string>();
+
+                {
+                    var leaderInfo = this.GetProfileInfo(leaderSignature);
+                    if (leaderInfo == null) continue;
+
+                    tempList.Add(leaderInfo);
+                    checkedSignature.Add(leaderInfo.Header.Certificate.ToString());
+                }
+
+                for (int i = 0; i < tempList.Count; i++)
+                {
+                    foreach (var trustSignature in tempList[i].Content.TrustSignatures)
+                    {
+                        if (checkedSignature.Contains(trustSignature)) continue;
+
+                        var info = this.GetProfileInfo(trustSignature);
+                        if (info == null) continue;
+
+                        tempList.Add(info);
+                        checkedSignature.Add(info.Header.Certificate.ToString());
+
+                        if (tempList.Count > 1024 * 32) goto End;
+                    }
+                }
+
+            End: ;
+
+                sumList.AddRange(tempList);
+            }
+
+            lock (Settings.Instance.Global_Cache_ProfileInfos.ThisLock)
+            {
+                Settings.Instance.Global_Cache_ProfileInfos.Clear();
+
+                foreach (var item in sumList)
+                {
+                    Settings.Instance.Global_Cache_ProfileInfos[item.Header.Certificate.ToString()] = item;
+                }
+            }
+
+            TrustUtilities.SetSignatures(Settings.Instance.Global_Cache_ProfileInfos.ToArray().Select(n => n.Key));
         }
 
         private ProfileInfo GetProfileInfo(string signature)
@@ -1124,7 +1126,7 @@ namespace Outopos.Windows
                                 profileItem.Wikis,
                                 profileItem.Chats);
 
-                            _outoposManager.Upload(content, TimeSpan.Zero, digitalSignature);
+                            _outoposManager.Upload(content, 0, TimeSpan.Zero, digitalSignature);
                         }
                     }
                 }
@@ -1225,7 +1227,108 @@ namespace Outopos.Windows
                         Log.Warning(e2);
                     }
                 }
+
+                {
+                    this.Refresh_ProfileInfos();
+                }
+
+                {
+                    // コイン数の下限を算出する。
+                    try
+                    {
+                        TrustUtilities.SetLimit(Settings.Instance.Global_Cache_Limit);
+
+                        Task.Factory.StartNew(() =>
+                        {
+                            int sum = 0;
+
+                            for (int i = 0; i < 3; i++)
+                            {
+                                sum += Miner.Sample(new TimeSpan(0, 1, 0));
+                            }
+
+                            Settings.Instance.Global_Cache_Limit = (sum / 3) + 1;
+
+                            TrustUtilities.SetLimit(Settings.Instance.Global_Cache_Limit);
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex);
+                    }
+                }
+
+                {
+                    RichTextBoxHelper.WikiClickEvent += this.WikiClickEvent;
+
+                    RichTextBoxHelper.SeedClickEvent += this.SeedClickEvent;
+                    RichTextBoxHelper.LinkClickEvent += this.LinkClickEvent;
+                }
             }
+        }
+
+        private void WikiClickEvent(object sender, Wiki wiki)
+        {
+
+        }
+
+        private void SeedClickEvent(object sender, A.Seed seed)
+        {
+            if (string.IsNullOrWhiteSpace(Settings.Instance.Global_Amoeba_Path))
+            {
+                foreach (var p in Process.GetProcesses())
+                {
+                    try
+                    {
+                        var path = p.MainModule.FileName;
+
+                        if (Path.GetFileName(path) == "Amoeba.exe")
+                        {
+                            Settings.Instance.Global_Amoeba_Path = path;
+
+                            break;
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                }
+            }
+
+            if (File.Exists(Settings.Instance.Global_Amoeba_Path))
+            {
+                try
+                {
+                    Process process = new Process();
+                    process.StartInfo.FileName = Settings.Instance.Global_Amoeba_Path;
+                    process.StartInfo.Arguments = string.Format("Download {0}", Library.Net.Amoeba.AmoebaConverter.ToSeedString(seed));
+                    process.StartInfo.WorkingDirectory = Path.GetDirectoryName(Settings.Instance.Global_Amoeba_Path);
+                    process.StartInfo.CreateNoWindow = true;
+                    process.StartInfo.UseShellExecute = false;
+                    process.Start();
+                }
+                catch (Exception)
+                {
+                    return;
+                }
+
+                Settings.Instance.Global_SeedHistorys.Add(seed);
+            }
+        }
+
+        private void LinkClickEvent(object sender, string link)
+        {
+            try
+            {
+                Process.Start(link);
+            }
+            catch (Exception)
+            {
+                return;
+            }
+
+            Settings.Instance.Global_UrlHistorys.Add(link);
         }
 
         private WebProxy GetProxy()
@@ -1533,107 +1636,7 @@ namespace Outopos.Windows
                 _checkUpdateMenuItem_Click(null, null);
             }
 
-            // コイン数の下限を算出する。
-            try
-            {
-                TrustUtilities.SetLimit(Settings.Instance.Global_Cache_Limit);
-
-                Task.Factory.StartNew(() =>
-                {
-                    int sum = 0;
-
-                    for (int i = 0; i < 3; i++)
-                    {
-                        sum += Miner.GetSample(new TimeSpan(0, 1, 0));
-                    }
-
-                    Settings.Instance.Global_Cache_Limit = (sum / 3) + 1;
-
-                    TrustUtilities.SetLimit(Settings.Instance.Global_Cache_Limit);
-                });
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex);
-            }
-
             this.GarbageCollect();
-
-            RichTextBoxHelper.WikiClickEvent += this.WikiClickEvent;
-
-            RichTextBoxHelper.SeedClickEvent += this.SeedClickEvent;
-            RichTextBoxHelper.LinkClickEvent += this.LinkClickEvent;
-
-            RichTextBoxHelper.GetMaxHeightEvent = this.GetMaxHeightEvent;
-        }
-
-        private void WikiClickEvent(object sender, Wiki wiki)
-        {
-
-        }
-
-        private void SeedClickEvent(object sender, A.Seed seed)
-        {
-            if (string.IsNullOrWhiteSpace(Settings.Instance.Global_Amoeba_Path))
-            {
-                foreach (var p in Process.GetProcesses())
-                {
-                    try
-                    {
-                        var path = p.MainModule.FileName;
-
-                        if (Path.GetFileName(path) == "Amoeba.exe")
-                        {
-                            Settings.Instance.Global_Amoeba_Path = path;
-
-                            break;
-                        }
-                    }
-                    catch (Exception)
-                    {
-
-                    }
-                }
-            }
-
-            if (File.Exists(Settings.Instance.Global_Amoeba_Path))
-            {
-                try
-                {
-                    Process process = new Process();
-                    process.StartInfo.FileName = Settings.Instance.Global_Amoeba_Path;
-                    process.StartInfo.Arguments = string.Format("Download {0}", Library.Net.Amoeba.AmoebaConverter.ToSeedString(seed));
-                    process.StartInfo.WorkingDirectory = Path.GetDirectoryName(Settings.Instance.Global_Amoeba_Path);
-                    process.StartInfo.CreateNoWindow = true;
-                    process.StartInfo.UseShellExecute = false;
-                    process.Start();
-                }
-                catch (Exception)
-                {
-                    return;
-                }
-
-                Settings.Instance.Global_SeedHistorys.Add(seed);
-            }
-        }
-
-        private void LinkClickEvent(object sender, string link)
-        {
-            try
-            {
-                Process.Start(link);
-            }
-            catch (Exception)
-            {
-                return;
-            }
-
-            Settings.Instance.Global_UrlHistorys.Add(link);
-        }
-
-        private double GetMaxHeightEvent(object sender)
-        {
-            return _tabControl.ActualHeight;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
