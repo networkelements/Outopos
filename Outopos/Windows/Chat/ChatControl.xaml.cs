@@ -136,7 +136,7 @@ namespace Outopos.Windows
                 var pair = selectTreeViewItem.Value.ChatMessageInfos
                     .First(n => n.Key.Header.VerifyHash(anchor.Hash, anchor.HashAlgorithm));
 
-                return new ChatMessageWrapper(pair.Key, pair.Value, TrustUtilities.ContainSignature(pair.Key.Header.Certificate.ToString()));
+                return new ChatMessageWrapper(pair.Key, pair.Value, Trust.ContainSignature(pair.Key.Header.Certificate.ToString()));
             }
             catch (Exception)
             {
@@ -192,7 +192,7 @@ namespace Outopos.Windows
                             chatTopicInfo = chatTreeViewItem.Value.ChatTopicInfo;
 
                             newList.UnionWith(chatTreeViewItem.Value.ChatMessageInfos
-                                .Select(n => new ChatMessageWrapper(n.Key, n.Value, TrustUtilities.ContainSignature(n.Key.Header.Certificate.ToString()))));
+                                .Select(n => new ChatMessageWrapper(n.Key, n.Value, Trust.ContainSignature(n.Key.Header.Certificate.ToString()))));
 
                             foreach (var pair in chatTreeViewItem.Value.ChatMessageInfos.ToArray())
                             {
@@ -264,7 +264,7 @@ namespace Outopos.Windows
                                 _trustToggleButton.IsEnabled = true;
                                 _trustToggleButton.IsChecked = chatTreeViewItem.Value.IsTrustEnabled;
 
-                                _topicUploadButton.IsEnabled = TrustUtilities.ContainSignature(Settings.Instance.Global_ProfileItem.UploadSignature);
+                                _topicUploadButton.IsEnabled = Trust.ContainSignature(Settings.Instance.Global_ProfileItem.UploadSignature);
 
                                 var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == Settings.Instance.Global_ProfileItem.UploadSignature);
 
@@ -302,7 +302,7 @@ namespace Outopos.Windows
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
 
             }
@@ -421,7 +421,7 @@ namespace Outopos.Windows
                     _autoResetEvent.WaitOne(1000 * 30);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
 
             }
@@ -445,7 +445,7 @@ namespace Outopos.Windows
 
                     foreach (var header in CollectionUtilities.Unite(cachedInfos.Select(n => n.Header), _outoposManager.GetChatTopicHeaders(chat)))
                     {
-                        if (!TrustUtilities.ContainSignature(header.Certificate.ToString())) continue;
+                        if (!Trust.ContainSignature(header.Certificate.ToString())) continue;
 
                         hashSet.Add(header);
                     }
@@ -500,7 +500,7 @@ namespace Outopos.Windows
                         foreach (var header in CollectionUtilities.Unite(cachedInfos.Select(n => n.Header), _outoposManager.GetChatMessageHeaders(chat)))
                         {
                             if ((now - header.CreationTime).TotalDays > 64) continue;
-                            if (!TrustUtilities.ContainSignature(header.Certificate.ToString())) continue;
+                            if (!Trust.ContainSignature(header.Certificate.ToString())) continue;
 
                             hashSet.Add(header);
                         }
@@ -542,9 +542,9 @@ namespace Outopos.Windows
 
                         foreach (var header in CollectionUtilities.Unite(cachedInfos.Select(n => n.Header), _outoposManager.GetChatMessageHeaders(chat)))
                         {
-                            if (header.Coin <= TrustUtilities.GetLimit()) continue;
+                            if (header.Coin <= (Trust.GetLimit() - 2)) continue;
                             if ((now - header.CreationTime).TotalDays > 7) continue;
-                            if (TrustUtilities.ContainSignature(header.Certificate.ToString())) continue;
+                            if (Trust.ContainSignature(header.Certificate.ToString())) continue;
 
                             hashSet.Add(header);
                         }
@@ -1389,7 +1389,7 @@ namespace Outopos.Windows
                 "",
                 anchors,
                 digitalSignature,
-                TrustUtilities.ContainSignature(digitalSignature.ToString()),
+                Trust.ContainSignature(digitalSignature.ToString()),
                 _outoposManager);
 
             window.Owner = _mainWindow;
@@ -1432,7 +1432,7 @@ namespace Outopos.Windows
             var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == Settings.Instance.Global_ProfileItem.UploadSignature);
             if (digitalSignature == null) return;
 
-            if (TrustUtilities.ContainSignature(digitalSignature.ToString()))
+            if (Trust.ContainSignature(digitalSignature.ToString()))
             {
                 string comment = "";
 
@@ -1467,7 +1467,7 @@ namespace Outopos.Windows
                 "",
                 null,
                 digitalSignature,
-                TrustUtilities.ContainSignature(digitalSignature.ToString()),
+                Trust.ContainSignature(digitalSignature.ToString()),
                 _outoposManager);
 
             window.Owner = _mainWindow;

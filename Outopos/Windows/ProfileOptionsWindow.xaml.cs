@@ -577,7 +577,7 @@ namespace Outopos.Windows
 
             if (digitalSignature != null)
             {
-                _outoposManager.Upload(content,0, TimeSpan.Zero, digitalSignature);
+                _outoposManager.Upload(content, -1, new TimeSpan(0, 10, 0), digitalSignature);
             }
         }
 

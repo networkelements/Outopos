@@ -6,7 +6,7 @@ using Library.Collections;
 
 namespace Outopos
 {
-    static class TrustUtilities
+    static class Trust
     {
         private static LockedHashSet<string> _trustSignatures = new LockedHashSet<string>();
 

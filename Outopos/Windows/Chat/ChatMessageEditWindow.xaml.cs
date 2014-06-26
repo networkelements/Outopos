@@ -121,10 +121,7 @@ namespace Outopos.Windows
 
         private void _okButton_Click(object sender, RoutedEventArgs e)
         {
-            TimeSpan miningTime = TimeSpan.Zero;
-            if (!_isTrust) miningTime = new TimeSpan(0, 10, 0);
-
-            _outoposManager.Upload(_chat, new ChatMessageContent(_commentTextBox.Text, _anchors), 0, miningTime, _digitalSignature);
+            _outoposManager.Upload(_chat, new ChatMessageContent(_commentTextBox.Text, _anchors), (Trust.GetLimit() + 1), new TimeSpan(1, 0, 0), _digitalSignature);
 
             this.Close();
         }

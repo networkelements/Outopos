@@ -118,7 +118,7 @@
     <Compile Include="Utilities\Information\ChatMessageInfo.cs" />
     <Compile Include="Utilities\Information\ChatTopicInfo.cs" />
     <Compile Include="Utilities\Information\ProfileInfo.cs" />
-    <Compile Include="Utilities\TrustUtilities.cs" />
+    <Compile Include="Utilities\Trust.cs" />
     <Compile Include="Windows\Chat\ChatControl.xaml.cs">
       <DependentUpon>ChatControl.xaml</DependentUpon>
     </Compile>

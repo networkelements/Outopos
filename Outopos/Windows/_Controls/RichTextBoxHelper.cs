@@ -179,7 +179,10 @@ namespace Outopos.Windows
             p.Inlines.Add(new LineBreak());
             p.Inlines.Add(new LineBreak());
 
-            foreach (var line in comment.Trim('\r', '\n').Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None))
+            foreach (var line in comment
+                .Trim('\r', '\n')
+                .Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None)
+                .Take(128))
             {
                 try
                 {

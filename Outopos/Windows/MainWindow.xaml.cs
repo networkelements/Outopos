@@ -542,6 +542,7 @@ namespace Outopos.Windows
 
         private void Refresh_ProfileInfos()
         {
+            var superstructure = new List<ProfileInfo>();
             var sumList = new List<ProfileInfo>();
 
             foreach (var leaderSignature in Settings.Instance.Global_TrustSignatures.ToArray())
@@ -576,20 +577,41 @@ namespace Outopos.Windows
 
             End: ;
 
+                superstructure.AddRange(tempList.Take(32));
                 sumList.AddRange(tempList);
             }
 
-            lock (Settings.Instance.Global_Cache_ProfileInfos.ThisLock)
+            lock (Settings.Instance.ThisLock)
             {
-                Settings.Instance.Global_Cache_ProfileInfos.Clear();
-
-                foreach (var item in sumList)
+                lock (Settings.Instance.Global_Cache_ProfileInfos.ThisLock)
                 {
-                    Settings.Instance.Global_Cache_ProfileInfos[item.Header.Certificate.ToString()] = item;
+                    Settings.Instance.Global_Cache_ProfileInfos.Clear();
+
+                    foreach (var item in sumList)
+                    {
+                        Settings.Instance.Global_Cache_ProfileInfos[item.Header.Certificate.ToString()] = item;
+                    }
                 }
             }
 
-            TrustUtilities.SetSignatures(Settings.Instance.Global_Cache_ProfileInfos.ToArray().Select(n => n.Key));
+            {
+                Trust.SetSignatures(sumList.Select(n => n.Header.Certificate.ToString()));
+            }
+
+            {
+                int sum = 0;
+                int count = 0;
+
+                foreach (var info in superstructure)
+                {
+                    if (info.Header.Coin == 0) continue;
+                    sum += info.Header.Coin;
+                    count++;
+                }
+
+                if (count == 0) Trust.SetLimit(24);
+                else Trust.SetLimit(sum / count);
+            }
         }
 
         private ProfileInfo GetProfileInfo(string signature)
@@ -1230,32 +1252,6 @@ namespace Outopos.Windows
 
                 {
                     this.Refresh_ProfileInfos();
-                }
-
-                {
-                    // コイン数の下限を算出する。
-                    try
-                    {
-                        TrustUtilities.SetLimit(Settings.Instance.Global_Cache_Limit);
-
-                        Task.Factory.StartNew(() =>
-                        {
-                            int sum = 0;
-
-                            for (int i = 0; i < 3; i++)
-                            {
-                                sum += Miner.Sample(new TimeSpan(0, 1, 0));
-                            }
-
-                            Settings.Instance.Global_Cache_Limit = (sum / 3) + 1;
-
-                            TrustUtilities.SetLimit(Settings.Instance.Global_Cache_Limit);
-                        });
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error(ex);
-                    }
                 }
 
                 {
