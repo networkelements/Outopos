@@ -282,17 +282,6 @@ namespace Outopos.Properties
             }
         }
 
-        public string Tag_Option
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("Tag_Option");
-                }
-            }
-        }
-
 
         public string Seed_Name
         {

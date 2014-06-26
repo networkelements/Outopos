@@ -121,7 +121,7 @@ namespace Outopos.Windows
 
         private void _okButton_Click(object sender, RoutedEventArgs e)
         {
-            _outoposManager.Upload(_chat, new ChatMessageContent(_commentTextBox.Text, _anchors), (Trust.GetLimit() + 1), new TimeSpan(1, 0, 0), _digitalSignature);
+            _outoposManager.Upload(_chat, new ChatMessageContent(_commentTextBox.Text, _anchors), (Trust.GetLimit() - 1), new TimeSpan(0, 30, 0), _digitalSignature);
 
             this.Close();
         }

@@ -13,7 +13,6 @@
 
   <Translate Key="Tag_Name" Value="Name" />
   <Translate Key="Tag_Id" Value="ID" />
-  <Translate Key="Tag_Option" Value="Option" />
 
   <Translate Key="Seed_Name" Value="Name" />
   <Translate Key="Seed_Signature" Value="Signature" />
