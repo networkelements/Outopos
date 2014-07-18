@@ -95,7 +95,6 @@ namespace Outopos
             App.DirectoryPaths["Core"] = @".\";
             App.DirectoryPaths["Icons"] = "Icons";
             App.DirectoryPaths["Languages"] = "Languages";
-            App.DirectoryPaths["Help"] = "Help";
 
             foreach (var item in App.DirectoryPaths.Values)
             {
@@ -317,17 +316,17 @@ namespace Outopos
 
                         if (zipFilePath != null)
                         {
-                            var tempCoreDirectoryPath = Path.Combine(workDirectioryPath, "Core");
+                            var tempUpdateDirectoryPath = Path.Combine(workDirectioryPath, "Update");
 
-                            if (Directory.Exists(tempCoreDirectoryPath))
-                                Directory.Delete(tempCoreDirectoryPath, true);
+                            if (Directory.Exists(tempUpdateDirectoryPath))
+                                Directory.Delete(tempUpdateDirectoryPath, true);
 
                             try
                             {
                                 using (ZipFile zipfile = new ZipFile(zipFilePath))
                                 {
                                     zipfile.ExtractExistingFile = ExtractExistingFileAction.OverwriteSilently;
-                                    zipfile.ExtractAll(tempCoreDirectoryPath);
+                                    zipfile.ExtractAll(tempUpdateDirectoryPath);
                                 }
                             }
                             catch (Exception)
@@ -346,7 +345,7 @@ namespace Outopos
                             startInfo.FileName = tempUpdateExeFilePath;
                             startInfo.Arguments = string.Format("\"{0}\" \"{1}\" \"{2}\" \"{3}\" \"{4}\"",
                                 Process.GetCurrentProcess().Id,
-                                Path.Combine(tempCoreDirectoryPath, "Core"),
+                                Path.Combine(tempUpdateDirectoryPath, "Core"),
                                 Directory.GetCurrentDirectory(),
                                 Path.Combine(Directory.GetCurrentDirectory(), "Outopos.exe"),
                                 Path.GetFullPath(zipFilePath));
