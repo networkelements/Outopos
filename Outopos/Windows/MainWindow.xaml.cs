@@ -446,20 +446,6 @@ namespace Outopos.Windows
                         }
                     }
 
-                    if (compactionStopwatch.Elapsed.TotalMinutes >= 3)
-                    {
-                        compactionStopwatch.Restart();
-
-                        try
-                        {
-                            this.Compaction();
-                        }
-                        catch (Exception e)
-                        {
-                            Log.Warning(e);
-                        }
-                    }
-
                     if (garbageCollectStopwatch.Elapsed.TotalSeconds >= 60)
                     {
                         garbageCollectStopwatch.Restart();
@@ -481,7 +467,7 @@ namespace Outopos.Windows
             }
         }
 
-        private void Compaction()
+        private void GarbageCollect()
         {
             // LargeObjectHeapCompactionModeの設定を試みる。(.net 4.5.1以上で可能)
             try
@@ -501,13 +487,12 @@ namespace Outopos.Windows
             {
 
             }
-        }
 
-        private void GarbageCollect()
-        {
             try
             {
-                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                GC.Collect();
             }
             catch (Exception)
             {
@@ -604,8 +589,8 @@ namespace Outopos.Windows
 
                 foreach (var info in superstructure)
                 {
-                    if (info.Header.Coin == 0) continue;
-                    sum += info.Header.Coin;
+                    if (info.Header.Cost == 0) continue;
+                    sum += info.Header.Cost;
                     count++;
                 }
 
@@ -1178,26 +1163,23 @@ namespace Outopos.Windows
                     writer.WriteLine(App.OutoposVersion.ToString());
                 }
 
-#if DEBUG
-                if (File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Debug_NodeId.txt")))
+                // Node.txtにあるノード情報を追加する。
+                if (File.Exists(Path.Combine(App.DirectoryPaths["Core"], "Nodes.txt")))
                 {
-                    using (StreamReader reader = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Debug_NodeId.txt"), new UTF8Encoding(false)))
+                    var list = new List<Node>();
+
+                    using (StreamReader reader = new StreamReader(Path.Combine(App.DirectoryPaths["Core"], "Nodes.txt"), new UTF8Encoding(false)))
                     {
-                        byte[] buffer = new byte[64];
+                        string line;
 
-                        byte b = byte.Parse(reader.ReadLine());
-
-                        for (int i = 0; i < 64; i++)
+                        while ((line = reader.ReadLine()) != null)
                         {
-                            buffer[i] = b;
+                            list.Add(OutoposConverter.FromNodeString(line));
                         }
-
-                        var baseNode = _outoposManager.BaseNode;
-
-                        _outoposManager.SetBaseNode(new Node(buffer, baseNode.Uris));
                     }
+
+                    _outoposManager.SetOtherNodes(list);
                 }
-#endif
 
                 _autoBaseNodeSettingManager = new AutoBaseNodeSettingManager(_outoposManager);
                 _autoBaseNodeSettingManager.Load(_configrationDirectoryPaths["AutoBaseNodeSettingManager"]);

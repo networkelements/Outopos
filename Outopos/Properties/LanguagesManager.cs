@@ -236,6 +236,50 @@ namespace Outopos.Properties
             }
         }
 
+        public string Languages_Chinese_Traditional
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("Languages_Chinese_Traditional");
+                }
+            }
+        }
+
+        public string Languages_Chinese_Simplified
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("Languages_Chinese_Simplified");
+                }
+            }
+        }
+
+        public string Languages_Ukrainian
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("Languages_Ukrainian");
+                }
+            }
+        }
+
+        public string Languages_Russian
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("Languages_Russian");
+                }
+            }
+        }
+
 
         public string ConnectDirection_In
         {

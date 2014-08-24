@@ -48,13 +48,13 @@ namespace Outopos
 
         App()
         {
-            App.OutoposVersion = new Version(0, 0, 8);
+            App.OutoposVersion = new Version(0, 0, 9);
 
             {
                 var currentProcess = Process.GetCurrentProcess();
 
-                currentProcess.PriorityClass = ProcessPriorityClass.Idle;
-                currentProcess.SetMemoryPriority(3);
+                currentProcess.PriorityClass = ProcessPriorityClass.BelowNormal;
+                currentProcess.SetMemoryPriority(4);
             }
 
             {
@@ -150,7 +150,7 @@ namespace Outopos
                 }
                 catch (IOException)
                 {
-                    throw;
+
                 }
             }
 

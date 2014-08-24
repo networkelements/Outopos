@@ -542,7 +542,7 @@ namespace Outopos.Windows
 
                         foreach (var header in CollectionUtilities.Unite(cachedInfos.Select(n => n.Header), _outoposManager.GetChatMessageHeaders(chat)))
                         {
-                            if (header.Coin <= (Trust.GetLimit() - 2)) continue;
+                            if (header.Cost <= (Trust.GetLimit() - 2)) continue;
                             if ((now - header.CreationTime).TotalDays > 7) continue;
                             if (Trust.ContainSignature(header.Certificate.ToString())) continue;
 
@@ -554,7 +554,7 @@ namespace Outopos.Windows
 
                     headers.Sort((x, y) =>
                     {
-                        int c = y.Coin.CompareTo(x.Coin);
+                        int c = y.Cost.CompareTo(x.Cost);
                         if (c != 0) return c;
                         c = y.CreationTime.CompareTo(x.CreationTime);
                         if (c != 0) return c;

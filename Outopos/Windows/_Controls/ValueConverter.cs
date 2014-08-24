@@ -689,4 +689,30 @@ namespace Outopos.Windows
             throw new NotImplementedException();
         }
     }
+
+    [ValueConversion(typeof(ConnectDirection), typeof(FlowDocumentScrollViewer))]
+    class ConnectDirectionToFlowDocumentScrollViewerConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (!(value is ConnectDirection)) return null;
+            var item = (ConnectDirection)value;
+
+            if (item == ConnectDirection.In)
+            {
+                return LanguagesManager.Instance.ConnectDirection_In;
+            }
+            else if (item == ConnectDirection.Out)
+            {
+                return LanguagesManager.Instance.ConnectDirection_Out;
+            }
+
+            return "";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
