@@ -112,7 +112,7 @@ namespace Outopos.Windows
                 for (; ; )
                 {
                     var information = _outoposManager.Information;
-                    var dic = new SortedDictionary<string, string>();
+                    var dic = new Dictionary<string, string>();
 
 #if DEBUG
                     dic["ConnectionControl_BufferManagerSize"] = NetworkConverter.ToSizeString(_bufferManager.Size);
@@ -177,14 +177,14 @@ namespace Outopos.Windows
                     if (_mainWindow.SelectedTab != MainWindowTabType.Connection) continue;
 
                     var connectionInformation = _outoposManager.ConnectionInformation.ToArray();
-                    SortedDictionary<int, Information> dic = new SortedDictionary<int, Information>();
+                    Dictionary<int, Information> dic = new Dictionary<int, Information>();
 
                     foreach (var item in connectionInformation.ToArray())
                     {
                         dic[(int)item["Id"]] = item;
                     }
 
-                    SortedDictionary<int, ConnectionListViewItem> dic2 = new SortedDictionary<int, ConnectionListViewItem>();
+                    Dictionary<int, ConnectionListViewItem> dic2 = new Dictionary<int, ConnectionListViewItem>();
 
                     this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                     {

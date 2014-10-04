@@ -13,6 +13,20 @@ using Library.Io;
 
 namespace Outopos.Windows
 {
+    [Flags]
+    [DataContract(Name = "ChatMessageState", Namespace = "http://Outopos")]
+    enum ChatMessageState
+    {
+        [EnumMember(Value = "None")]
+        None = 0,
+
+        [EnumMember(Value = "IsUnread")]
+        IsUnread = 0x01,
+
+        [EnumMember(Value = "IsLocked")]
+        IsLocked = 0x02,
+    }
+
     [DataContract(Name = "ChatTreeItem", Namespace = "http://Outopos/Windows")]
     class ChatTreeItem : ICloneable<ChatTreeItem>, IThisLock
     {
@@ -20,8 +34,8 @@ namespace Outopos.Windows
 
         private bool _isTrustEnabled = true;
 
-        private ChatTopicInfo _chatTopicInfo;
-        private LockedHashDictionary<ChatMessageInfo, ChatMessageState> _chatMessageInfos;
+        private ChatTopic _chatTopic;
+        private LockedHashDictionary<ChatMessage, ChatMessageState> _chatMessages;
 
         private volatile object _thisLock;
         private static readonly object _initializeLock = new object();
@@ -69,36 +83,36 @@ namespace Outopos.Windows
             }
         }
 
-        [DataMember(Name = "ChatTopicInfo")]
-        public ChatTopicInfo ChatTopicInfo
+        [DataMember(Name = "ChatTopic")]
+        public ChatTopic ChatTopic
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return _chatTopicInfo;
+                    return _chatTopic;
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    _chatTopicInfo = value;
+                    _chatTopic = value;
                 }
             }
         }
 
-        [DataMember(Name = "ChatMessageInfos")]
-        public LockedHashDictionary<ChatMessageInfo, ChatMessageState> ChatMessageInfos
+        [DataMember(Name = "ChatMessages")]
+        public LockedHashDictionary<ChatMessage, ChatMessageState> ChatMessages
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    if (_chatMessageInfos == null)
-                        _chatMessageInfos = new LockedHashDictionary<ChatMessageInfo, ChatMessageState>();
+                    if (_chatMessages == null)
+                        _chatMessages = new LockedHashDictionary<ChatMessage, ChatMessageState>();
 
-                    return _chatMessageInfos;
+                    return _chatMessages;
                 }
             }
         }

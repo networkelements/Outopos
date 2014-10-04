@@ -115,9 +115,6 @@
     <Compile Include="Utilities\CatharsisManager.cs" />
     <Compile Include="Utilities\EqualityComparer.cs" />
     <Compile Include="Utilities\Ipv4AddressFilter.cs" />
-    <Compile Include="Utilities\Information\ChatMessageInfo.cs" />
-    <Compile Include="Utilities\Information\ChatTopicInfo.cs" />
-    <Compile Include="Utilities\Information\ProfileInfo.cs" />
     <Compile Include="Utilities\Trust.cs" />
     <Compile Include="Windows\Chat\ChatControl.xaml.cs">
       <DependentUpon>ChatControl.xaml</DependentUpon>
@@ -262,7 +259,7 @@
     <Content Include="Languages\Chinese_Simplified.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Nodes.txt">
+    <Content Include="Settings\Nodes.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Languages\Chinese_Traditional.xml">

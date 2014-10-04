@@ -95,6 +95,7 @@ namespace Outopos
             App.DirectoryPaths["Core"] = @".\";
             App.DirectoryPaths["Icons"] = "Icons";
             App.DirectoryPaths["Languages"] = "Languages";
+            App.DirectoryPaths["Settings"] = "Settings";
 
             foreach (var item in App.DirectoryPaths.Values)
             {
