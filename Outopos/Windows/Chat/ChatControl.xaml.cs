@@ -53,7 +53,7 @@ namespace Outopos.Windows
         private ChatCategorizeTreeViewItem _treeViewItem;
         private ObservableCollection<ChatMessageWrapper> _listViewItemCollection = new ObservableCollection<ChatMessageWrapper>();
 
-        private const HashAlgorithm _hashAlgorithm = HashAlgorithm.Sha512;
+        private const HashAlgorithm _hashAlgorithm = HashAlgorithm.Sha256;
 
         public ChatControl(OutoposManager outoposManager, BufferManager bufferManager)
         {
@@ -91,7 +91,6 @@ namespace Outopos.Windows
 
             _searchRowDefinition.Height = new GridLength(0);
 
-            _topicUploadButton.IsEnabled = false;
             _messageUploadButton.IsEnabled = false;
 
             LanguagesManager.UsingLanguageChangedEvent += new UsingLanguageChangedEventHandler(this.LanguagesManager_UsingLanguageChangedEvent);
@@ -133,10 +132,10 @@ namespace Outopos.Windows
 
             try
             {
-                var pair = selectTreeViewItem.Value.ChatMessageInfos
-                    .First(n => n.Key.Header.VerifyHash(anchor.Hash, anchor.HashAlgorithm));
+                var pair = selectTreeViewItem.Value.ChatMessages
+                    .First(n => n.Key.VerifyHash(anchor.Hash, anchor.HashAlgorithm));
 
-                return new ChatMessageWrapper(pair.Key, pair.Value, Trust.ContainSignature(pair.Key.Header.Certificate.ToString()));
+                return new ChatMessageWrapper(pair.Key, pair.Value, Trust.ContainSignature(pair.Key.Certificate.ToString()));
             }
             catch (Exception)
             {
@@ -173,7 +172,6 @@ namespace Outopos.Windows
                             _refresh = false;
 
                             _trustToggleButton.IsEnabled = false;
-                            _topicUploadButton.IsEnabled = false;
                             _messageUploadButton.IsEnabled = false;
 
                             _listViewItemCollection.Clear();
@@ -183,20 +181,16 @@ namespace Outopos.Windows
                     {
                         ChatTreeViewItem chatTreeViewItem = (ChatTreeViewItem)tempTreeViewItem;
 
-                        ChatTopicInfo chatTopicInfo = null;
-
                         var newList = new HashSet<ChatMessageWrapper>();
 
                         lock (chatTreeViewItem.Value.ThisLock)
                         {
-                            chatTopicInfo = chatTreeViewItem.Value.ChatTopicInfo;
+                            newList.UnionWith(chatTreeViewItem.Value.ChatMessages
+                                .Select(n => new ChatMessageWrapper(n.Key, n.Value, Trust.ContainSignature(n.Key.Certificate.ToString()))));
 
-                            newList.UnionWith(chatTreeViewItem.Value.ChatMessageInfos
-                                .Select(n => new ChatMessageWrapper(n.Key, n.Value, Trust.ContainSignature(n.Key.Header.Certificate.ToString()))));
-
-                            foreach (var pair in chatTreeViewItem.Value.ChatMessageInfos.ToArray())
+                            foreach (var pair in chatTreeViewItem.Value.ChatMessages.ToArray())
                             {
-                                chatTreeViewItem.Value.ChatMessageInfos[pair.Key] = (pair.Value & ~ChatMessageState.IsUnread);
+                                chatTreeViewItem.Value.ChatMessages[pair.Key] = (pair.Value & ~ChatMessageState.IsUnread);
                             }
                         }
 
@@ -215,7 +209,7 @@ namespace Outopos.Windows
 
                                 foreach (var item in newList)
                                 {
-                                    var text = RichTextBoxHelper.MessageToString(item.Info.Header.CreationTime, item.Info.Header.Certificate.ToString(), item.Info.Content.Comment).ToLower();
+                                    var text = RichTextBoxHelper.MessageToString(item.Message.CreationTime, item.Message.Certificate.ToString(), item.Message.Comment).ToLower();
                                     if (!words.All(n => text.Contains(n))) continue;
 
                                     list.Add(item);
@@ -251,20 +245,9 @@ namespace Outopos.Windows
                             if (chatTreeViewItem != _treeView.SelectedItem) return;
                             _refresh = false;
 
-                            if (chatTopicInfo != null)
-                            {
-                                RichTextBoxHelper.SetRichTextBox(_chatTopicRichTextBox, chatTopicInfo);
-                            }
-                            else
-                            {
-                                _chatTopicRichTextBox.Document = new FlowDocument();
-                            }
-
                             {
                                 _trustToggleButton.IsEnabled = true;
                                 _trustToggleButton.IsChecked = chatTreeViewItem.Value.IsTrustEnabled;
-
-                                _topicUploadButton.IsEnabled = Trust.ContainSignature(Settings.Instance.Global_ProfileItem.UploadSignature);
 
                                 var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == Settings.Instance.Global_ProfileItem.UploadSignature);
 
@@ -344,37 +327,15 @@ namespace Outopos.Windows
                     {
                         bool isUpdate = false;
 
-                        // ChatTopic
-                        {
-                            lock (treeViewItem.Value.ThisLock)
-                            {
-                                var oldInfo = treeViewItem.Value.ChatTopicInfo;
-                                ChatTopicInfo newInfo;
-
-                                {
-                                    var infos = new List<ChatTopicInfo>();
-                                    if (oldInfo != null) infos.Add(oldInfo);
-
-                                    newInfo = this.GetChatTopicInfo(treeViewItem.Value.Tag, infos);
-                                }
-
-                                if (oldInfo != newInfo)
-                                {
-                                    treeViewItem.Value.ChatTopicInfo = newInfo;
-                                    isUpdate |= true;
-                                }
-                            }
-                        }
-
                         // ChatMessage
                         {
-                            var oldList = new List<ChatMessageInfo>();
-                            var newList = new List<ChatMessageInfo>();
+                            var oldList = new List<ChatMessage>();
+                            var newList = new List<ChatMessage>();
 
                             lock (treeViewItem.Value.ThisLock)
                             {
                                 oldList.AddRange(treeViewItem.Value.ChatMessageInfos.Keys);
-                                newList.AddRange(this.GetChatMessageInfos(treeViewItem.Value.Tag, oldList, treeViewItem.Value.IsTrustEnabled));
+                                newList.AddRange(this.GetChatMessages(treeViewItem.Value.Tag, oldList, treeViewItem.Value.IsTrustEnabled));
 
                                 foreach (var item in oldList)
                                 {
@@ -427,63 +388,14 @@ namespace Outopos.Windows
             }
         }
 
-        private ChatTopicInfo GetChatTopicInfo(Chat chat, IEnumerable<ChatTopicInfo> cachedInfos)
-        {
-            var caches = new Dictionary<ChatTopicHeader, ChatTopicContent>();
-
-            foreach (var info in cachedInfos)
-            {
-                caches.Add(info.Header, info.Content);
-            }
-
-            // Trust
-            {
-                var headers = new List<ChatTopicHeader>();
-
-                {
-                    var hashSet = new HashSet<ChatTopicHeader>();
-
-                    foreach (var header in CollectionUtilities.Unite(cachedInfos.Select(n => n.Header), _outoposManager.GetChatTopicHeaders(chat)))
-                    {
-                        if (!Trust.ContainSignature(header.Certificate.ToString())) continue;
-
-                        hashSet.Add(header);
-                    }
-
-                    headers.AddRange(hashSet);
-                }
-
-                headers.Sort((x, y) =>
-                {
-                    return y.CreationTime.CompareTo(x.CreationTime);
-                });
-
-                foreach (var header in headers)
-                {
-                    ChatTopicContent content;
-
-                    if (!caches.TryGetValue(header, out content))
-                    {
-                        content = _outoposManager.GetContent(header);
-                    }
-
-                    if (content == null) continue;
-
-                    return new ChatTopicInfo(header, content);
-                }
-            }
-
-            return null;
-        }
-
-        private IEnumerable<ChatMessageInfo> GetChatMessageInfos(Chat chat, IEnumerable<ChatMessageInfo> cachedInfos, bool trust)
+        private IEnumerable<ChatMessage> GetChatMessages(Chat chat, IEnumerable<ChatMessage> cachedChatMessages, bool trust)
         {
             var infos = new HashSet<ChatMessageInfo>();
 
             {
                 var caches = new Dictionary<ChatMessageHeader, ChatMessageContent>();
 
-                foreach (var info in cachedInfos)
+                foreach (var info in cachedChatMessages)
                 {
                     caches.Add(info.Header, info.Content);
                 }
@@ -497,7 +409,7 @@ namespace Outopos.Windows
                     {
                         var hashSet = new HashSet<ChatMessageHeader>();
 
-                        foreach (var header in CollectionUtilities.Unite(cachedInfos.Select(n => n.Header), _outoposManager.GetChatMessageHeaders(chat)))
+                        foreach (var header in CollectionUtilities.Unite(cachedChatMessages.Select(n => n.Header), _outoposManager.GetChatMessageHeaders(chat)))
                         {
                             if ((now - header.CreationTime).TotalDays > 64) continue;
                             if (!Trust.ContainSignature(header.Certificate.ToString())) continue;
@@ -540,7 +452,7 @@ namespace Outopos.Windows
                     {
                         var hashSet = new HashSet<ChatMessageHeader>();
 
-                        foreach (var header in CollectionUtilities.Unite(cachedInfos.Select(n => n.Header), _outoposManager.GetChatMessageHeaders(chat)))
+                        foreach (var header in CollectionUtilities.Unite(cachedChatMessages.Select(n => n.Header), _outoposManager.GetChatMessageHeaders(chat)))
                         {
                             if (header.Cost <= (Trust.GetLimit() - 2)) continue;
                             if ((now - header.CreationTime).TotalDays > 7) continue;
@@ -620,7 +532,7 @@ namespace Outopos.Windows
                 var hitItems = new HashSet<TreeViewItem>();
 
                 foreach (var item in items.OfType<ChatTreeViewItem>()
-                    .Where(n => n.Value.ChatMessageInfos.Any(m => m.Value.HasFlag(ChatMessageState.IsUnread))))
+                    .Where(n => n.Value.ChatMessages.Any(m => m.Value.HasFlag(ChatMessageState.IsUnread))))
                 {
                     hitItems.UnionWith(_treeView.GetAncestors(item));
                 }
@@ -628,6 +540,9 @@ namespace Outopos.Windows
                 foreach (var item in items)
                 {
                     var textBlock = (TextBlock)item.Header;
+
+                    textBlock.ClearValue(TextBlock.FontWeightProperty);
+                    textBlock.ClearValue(TextBlock.ForegroundProperty);
 
                     if (hitItems.Contains(item))
                     {
@@ -637,41 +552,10 @@ namespace Outopos.Windows
                         {
                             textBlock.Foreground = new SolidColorBrush(App.Colors.Tree_Hit);
                         }
-                        else
-                        {
-                            textBlock.Foreground = new SolidColorBrush(Color.FromRgb(0x00, 0x00, 0x00));
-                        }
-                    }
-                    else
-                    {
-                        textBlock.FontWeight = FontWeights.Normal;
-
-                        if (selectTreeViewItem != item)
-                        {
-                            textBlock.Foreground = new SolidColorBrush(Color.FromRgb(0xFF, 0xFF, 0xFF));
-                        }
-                        else
-                        {
-                            textBlock.Foreground = new SolidColorBrush(Color.FromRgb(0x00, 0x00, 0x00));
-                        }
                     }
                 }
             }
         }
-
-        #region _tabControl
-
-        private void _tabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (e.OriginalSource != _tabControl) return;
-
-            if (_tabControl.SelectedItem == _messageTabItem)
-            {
-                this.Scroll();
-            }
-        }
-
-        #endregion
 
         #region _treeView
 
@@ -1064,9 +948,9 @@ namespace Outopos.Windows
             {
                 lock (item.Value.ThisLock)
                 {
-                    foreach (var pair in item.Value.ChatMessageInfos.ToArray())
+                    foreach (var pair in item.Value.ChatMessages.ToArray())
                     {
-                        item.Value.ChatMessageInfos[pair.Key] = pair.Value & ~ChatMessageState.IsUnread;
+                        item.Value.ChatMessages[pair.Key] = pair.Value & ~ChatMessageState.IsUnread;
                     }
                 }
             }
@@ -1079,7 +963,7 @@ namespace Outopos.Windows
             var selectTreeViewItem = _treeView.SelectedItem as ChatCategorizeTreeViewItem;
             if (selectTreeViewItem == null) return;
 
-            HashSet<Chat> chats = new HashSet<Chat>(Settings.Instance.Global_Cache_ProfileInfos.ToArray().SelectMany(n => n.Value.Content.Chats));
+            HashSet<Chat> chats = new HashSet<Chat>(Settings.Instance.Global_Cache_Profiles.ToArray().SelectMany(n => n.Value.Chats));
 
             {
                 var chatCategorizeTreeItems = new List<ChatCategorizeTreeItem>();
@@ -1277,9 +1161,9 @@ namespace Outopos.Windows
 
             list.Sort((x, y) =>
             {
-                int c = x.Info.Header.CreationTime.CompareTo(y.Info.Header.CreationTime);
+                int c = x.Message.CreationTime.CompareTo(y.Message.CreationTime);
                 if (c != 0) return c;
-                c = x.Info.Header.Certificate.ToString().CompareTo(y.Info.Header.Certificate.ToString());
+                c = x.Message.Certificate.ToString().CompareTo(y.Message.Certificate.ToString());
                 if (c != 0) return c;
                 c = x.GetHashCode().CompareTo(y.GetHashCode());
                 if (c != 0) return c;
@@ -1293,15 +1177,6 @@ namespace Outopos.Windows
 
                 if (i != o) _listViewItemCollection.Move(o, i);
             }
-        }
-
-        #endregion
-
-        #region _chatTopicRichText
-
-        private void _chatTopicRichTextBoxCopyMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            Clipboard.SetText(_chatTopicRichTextBox.Selection.Text.Replace("\u00A0", ""));
         }
 
         #endregion
@@ -1382,7 +1257,7 @@ namespace Outopos.Windows
             var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == Settings.Instance.Global_ProfileItem.UploadSignature);
             if (digitalSignature == null) return;
 
-            var anchors = _listView.SelectedItems.OfType<ChatMessageWrapper>().Select(n => new Anchor(n.Info.Header.CreateHash(_hashAlgorithm), _hashAlgorithm)).ToList();
+            var anchors = _listView.SelectedItems.OfType<ChatMessageWrapper>().Select(n => new Anchor(n.Message.CreateHash(_hashAlgorithm), _hashAlgorithm)).ToList();
 
             ChatMessageEditWindow window = new ChatMessageEditWindow(
                 selectTreeViewItem.Value.Tag,
@@ -1401,7 +1276,7 @@ namespace Outopos.Windows
         {
             foreach (var item in _listView.SelectedItems.OfType<ChatMessageWrapper>())
             {
-                var signature = item.Info.Header.Certificate.ToString();
+                var signature = item.Message.Certificate.ToString();
 
                 if (Settings.Instance.Global_ProfileItem.TrustSignatures.Contains(signature)) continue;
                 Settings.Instance.Global_ProfileItem.TrustSignatures.Add(signature);
@@ -1422,36 +1297,6 @@ namespace Outopos.Windows
             selectTreeViewItem.Update();
 
             this.Update_Cache();
-        }
-
-        private void _topicUploadButton_Click(object sender, RoutedEventArgs e)
-        {
-            var selectTreeViewItem = _treeView.SelectedItem as ChatTreeViewItem;
-            if (selectTreeViewItem == null) return;
-
-            var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == Settings.Instance.Global_ProfileItem.UploadSignature);
-            if (digitalSignature == null) return;
-
-            if (Trust.ContainSignature(digitalSignature.ToString()))
-            {
-                string comment = "";
-
-                if (selectTreeViewItem.Value.ChatTopicInfo != null)
-                {
-                    comment = selectTreeViewItem.Value.ChatTopicInfo.Content.Comment;
-                }
-
-                ChatTopicEditWindow window = new ChatTopicEditWindow(
-                    selectTreeViewItem.Value.Tag,
-                    comment,
-                    digitalSignature,
-                    true,
-                    _outoposManager);
-
-                window.Owner = _mainWindow;
-
-                window.Show();
-            }
         }
 
         private void _messageUploadButton_Click(object sender, RoutedEventArgs e)
@@ -1566,21 +1411,21 @@ namespace Outopos.Windows
 
     class ChatMessageWrapper : IEquatable<ChatMessageWrapper>
     {
-        public ChatMessageWrapper(ChatMessageInfo info, ChatMessageState state, bool isTrust)
+        public ChatMessageWrapper(ChatMessage message, ChatMessageState state, bool isTrust)
         {
-            this.Info = info;
+            this.Message = message;
             this.State = state;
             this.IsTrust = isTrust;
         }
 
-        public ChatMessageInfo Info { get; private set; }
+        public ChatMessage Message { get; private set; }
         public ChatMessageState State { get; private set; }
         public bool IsTrust { get; private set; }
 
         public override int GetHashCode()
         {
-            if (this.Info == null) return 0;
-            else return this.Info.GetHashCode();
+            if (this.Message == null) return 0;
+            else return this.Message.GetHashCode();
         }
 
         public override bool Equals(object obj)
@@ -1595,7 +1440,7 @@ namespace Outopos.Windows
             if ((object)other == null) return false;
             if (object.ReferenceEquals(this, other)) return true;
 
-            if (this.Info != other.Info
+            if (this.Message != other.Message
                 || this.State != other.State
                 || this.IsTrust != other.IsTrust)
             {

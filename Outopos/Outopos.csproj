@@ -125,9 +125,6 @@
     <Compile Include="Windows\Chat\ChatMessageEditWindow.xaml.cs">
       <DependentUpon>ChatMessageEditWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\Chat\ChatTopicEditWindow.xaml.cs">
-      <DependentUpon>ChatTopicEditWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Windows\TrustOptionsWindow.xaml.cs">
       <DependentUpon>TrustOptionsWindow.xaml</DependentUpon>
     </Compile>
@@ -188,10 +185,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\Chat\ChatMessageEditWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\Chat\ChatTopicEditWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -1116,7 +1116,7 @@ namespace Outopos.Windows
 
                     // ProfileItem
                     {
-                        var digitalSignature = new DigitalSignature("Anonymous", DigitalSignatureAlgorithm.Rsa2048_Sha512);
+                        var digitalSignature = new DigitalSignature("Anonymous", DigitalSignatureAlgorithm.Rsa2048_Sha256);
                         Settings.Instance.Global_DigitalSignatureCollection.Add(digitalSignature);
 
                         var profileItem = new ProfileItem();

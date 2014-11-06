@@ -279,13 +279,11 @@
   <Translate Key="ChatControl_FilterSignature" Value="Filter signature" />
   <Translate Key="ChatControl_NewMessageOnly" Value="Only" />
   <Translate Key="ChatControl_Message" Value="Message" />
-  <Translate Key="ChatControl_Topic" Value="Topic" />
   <Translate Key="ChatControl_Upload" Value="Upload" />
   <Translate Key="ChatControl_MarkAllMessagesRead" Value="Mark all messages read" />
   <Translate Key="ChatControl_MarkAllMessagesRead_Message" Value="Do you want to mark all messages read?" />
   <Translate Key="ChatControl_ImportLockedMessages" Value="Import locked messages" />
   <Translate Key="ChatControl_ExportLockedMessages" Value="Export locked messages" />
-  <Translate Key="ChatControl_TopicUpload" Value="New Topic" />
 
   <Translate Key="ChatListWindow_Title" Value="Chat list" />
   <Translate Key="ChatListWindow_Name" Value="Name" />
@@ -301,13 +299,6 @@
   <Translate Key="ChatMessageEditWindow_Comment" Value="Comment" />
   <Translate Key="ChatMessageEditWindow_Ok" Value="Ok" />
   <Translate Key="ChatMessageEditWindow_Cancel" Value="Cancel" />
-
-  <Translate Key="ChatTopicEditWindow_Title" Value="New topic" />
-  <Translate Key="ChatTopicEditWindow_Edit" Value="Edit" />
-  <Translate Key="ChatTopicEditWindow_Preview" Value="Preview" />
-  <Translate Key="ChatTopicEditWindow_Comment" Value="Comment" />
-  <Translate Key="ChatTopicEditWindow_Ok" Value="Ok" />
-  <Translate Key="ChatTopicEditWindow_Cancel" Value="Cancel" />
 
   <Translate Key="ChatTopicPreviewWindow_Title" Value="Topic" />
   <Translate Key="ChatTopicPreviewWindow_Close" Value="Close" />

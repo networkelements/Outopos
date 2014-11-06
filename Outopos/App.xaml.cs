@@ -48,7 +48,7 @@ namespace Outopos
 
         App()
         {
-            App.OutoposVersion = new Version(0, 0, 9);
+            App.OutoposVersion = new Version(1, 0, 0);
 
             {
                 var currentProcess = Process.GetCurrentProcess();
@@ -63,21 +63,21 @@ namespace Outopos
                 // Windows Vista以上。
                 if (osInfo.Platform == PlatformID.Win32NT && osInfo.Version >= new Version(6, 0))
                 {
-                    // SHA512Cngをデフォルトで使うように設定する。
-                    CryptoConfig.AddAlgorithm(typeof(SHA512Cng),
-                        "SHA512",
-                        "SHA512Cng",
-                        "System.Security.Cryptography.SHA512",
-                        "System.Security.Cryptography.SHA512Cng");
+                    // SHA256Cngをデフォルトで使うように設定する。
+                    CryptoConfig.AddAlgorithm(typeof(SHA256Cng),
+                        "SHA256",
+                        "SHA256Cng",
+                        "System.Security.Cryptography.SHA256",
+                        "System.Security.Cryptography.SHA256Cng");
                 }
                 else
                 {
-                    // SHA512Managedをデフォルトで使うように設定する。
-                    CryptoConfig.AddAlgorithm(typeof(SHA512Managed),
-                        "SHA512",
-                        "SHA512Managed",
-                        "System.Security.Cryptography.SHA512",
-                        "System.Security.Cryptography.SHA512Managed");
+                    // SHA256Managedをデフォルトで使うように設定する。
+                    CryptoConfig.AddAlgorithm(typeof(SHA256Managed),
+                        "SHA256",
+                        "SHA256Managed",
+                        "System.Security.Cryptography.SHA256",
+                        "System.Security.Cryptography.SHA256Managed");
                 }
             }
 
@@ -378,6 +378,11 @@ namespace Outopos
                     using (StreamReader reader = new StreamReader(Path.Combine(App.DirectoryPaths["Configuration"], "Outopos.version"), new UTF8Encoding(false)))
                     {
                         version = new Version(reader.ReadLine());
+                    }
+
+                    if (version < new Version(1, 0, 0))
+                    {
+                        throw new NotSupportedException("Not supported configuration.");
                     }
                 }
 

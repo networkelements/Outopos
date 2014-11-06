@@ -279,7 +279,6 @@
   <Translate Key="ChatControl_FilterSignature" Value="过滤签名" />
   <Translate Key="ChatControl_NewMessageOnly" Value="仅" />
   <Translate Key="ChatControl_Message" Value="消息" />
-  <Translate Key="ChatControl_Topic" Value="主题" />
   <Translate Key="ChatControl_Upload" Value="上传" />
   <Translate Key="ChatControl_MarkAllMessagesRead" Value="所有标记消息已读" />
   <Translate Key="ChatControl_MarkAllMessagesRead_Message" Value="你确定要所有标记消息已读？" />

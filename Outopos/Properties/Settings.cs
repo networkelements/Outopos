@@ -25,7 +25,7 @@ namespace Outopos.Properties
             {
                 new Library.Configuration.SettingContent<ProfileItem>() { Name = "Global_ProfileItem", Value = null },
                 new Library.Configuration.SettingContent<LockedList<string>>() { Name = "Global_TrustSignatures", Value = new LockedList<string>() },
-                new Library.Configuration.SettingContent<LockedHashDictionary<string, ProfileInfo>>() { Name = "Global_Cache_ProfileInfos", Value = new LockedHashDictionary<string, ProfileInfo>() },
+                new Library.Configuration.SettingContent<LockedHashDictionary<string, Profile>>() { Name = "Global_Cache_Profiles", Value = new LockedHashDictionary<string, Profile>() },
                 new Library.Configuration.SettingContent<int>() { Name = "Global_Cache_Limit", Value = 16 },
                 new Library.Configuration.SettingContent<LockedList<DigitalSignature>>() { Name = "Global_DigitalSignatureCollection", Value = new LockedList<DigitalSignature>() },
                 new Library.Configuration.SettingContent<string>() { Name = "Global_UseLanguage", Value = "English" },
@@ -39,7 +39,7 @@ namespace Outopos.Properties
                 new Library.Configuration.SettingContent<bool>() { Name = "Global_I2p_SamBridge_IsEnabled", Value = true },
                 new Library.Configuration.SettingContent<string>() { Name = "Global_Update_Url", Value = "http://lyrise.web.fc2.com/update/Outopos" },
                 new Library.Configuration.SettingContent<string>() { Name = "Global_Update_ProxyUri", Value = "tcp:127.0.0.1:28118" },
-                new Library.Configuration.SettingContent<string>() { Name = "Global_Update_Signature", Value = "Lyrise@7seiSbhOCkls6gPxjJYjptxskzlSulgIe3dSfj1KxnJJ6eejKjuJ3R1Ec8yFuKpr4uNcwF7bFh5OrmxnY25y7A" },
+                new Library.Configuration.SettingContent<string>() { Name = "Global_Update_Signature", Value = "Lyrise@OTAhpWvmegu50LT-p5dZ16og7U6bdpO4z5TInZxGsCs" },
                 new Library.Configuration.SettingContent<UpdateOption>() { Name = "Global_Update_Option", Value = UpdateOption.AutoCheck },
                 new Library.Configuration.SettingContent<string>() { Name = "Global_Amoeba_Path", Value = "" },
                 new Library.Configuration.SettingContent<string>() { Name = "Global_Fonts_MessageFontFamily", Value = "MS PGothic" },
@@ -140,18 +140,6 @@ namespace Outopos.Properties
                 new Library.Configuration.SettingContent<double>() { Name = "ChatMessageEditWindow_Width", Value = 700 },
                 new Library.Configuration.SettingContent<WindowState>() { Name = "ChatMessageEditWindow_WindowState", Value = WindowState.Normal },
 
-                new Library.Configuration.SettingContent<double>() { Name = "ChatTopicEditWindow_Top", Value = 120 },
-                new Library.Configuration.SettingContent<double>() { Name = "ChatTopicEditWindow_Left", Value = 120 },
-                new Library.Configuration.SettingContent<double>() { Name = "ChatTopicEditWindow_Height", Value = 500 },
-                new Library.Configuration.SettingContent<double>() { Name = "ChatTopicEditWindow_Width", Value = 700 },
-                new Library.Configuration.SettingContent<WindowState>() { Name = "ChatTopicEditWindow_WindowState", Value = WindowState.Normal },
-
-                new Library.Configuration.SettingContent<double>() { Name = "ChatTopicPreviewWindow_Top", Value = 120 },
-                new Library.Configuration.SettingContent<double>() { Name = "ChatTopicPreviewWindow_Left", Value = 120 },
-                new Library.Configuration.SettingContent<double>() { Name = "ChatTopicPreviewWindow_Height", Value = 500 },
-                new Library.Configuration.SettingContent<double>() { Name = "ChatTopicPreviewWindow_Width", Value = 700 },
-                new Library.Configuration.SettingContent<WindowState>() { Name = "ChatTopicPreviewWindow_WindowState", Value = WindowState.Normal },
-
                 new Library.Configuration.SettingContent<double>() { Name = "MailControl_Grid_ColumnDefinitions_Width", Value = 200 },
             })
         {
@@ -197,7 +185,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (ProfileItem)this["Global_ProfileItem"];
+                    return (ProfileItem)this["Global_ProfileItem"];
                 }
             }
             set
@@ -215,7 +203,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (LockedList<string>)this["Global_TrustSignatures"];
+                    return (LockedList<string>)this["Global_TrustSignatures"];
                 }
             }
             set
@@ -227,20 +215,20 @@ namespace Outopos.Properties
             }
         }
 
-        public LockedHashDictionary<string, ProfileInfo> Global_Cache_ProfileInfos
+        public LockedHashDictionary<string, Profile> Global_Cache_Profiles
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                   return (LockedHashDictionary<string, ProfileInfo>)this["Global_Cache_ProfileInfos"];
+                    return (LockedHashDictionary<string, Profile>)this["Global_Cache_Profiles"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["Global_Cache_ProfileInfos"] = value;
+                    this["Global_Cache_Profiles"] = value;
                 }
             }
         }
@@ -251,7 +239,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (int)this["Global_Cache_Limit"];
+                    return (int)this["Global_Cache_Limit"];
                 }
             }
             set
@@ -269,7 +257,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (LockedList<DigitalSignature>)this["Global_DigitalSignatureCollection"];
+                    return (LockedList<DigitalSignature>)this["Global_DigitalSignatureCollection"];
                 }
             }
             set
@@ -287,7 +275,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (string)this["Global_UseLanguage"];
+                    return (string)this["Global_UseLanguage"];
                 }
             }
             set
@@ -305,7 +293,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (bool)this["Global_IsStart"];
+                    return (bool)this["Global_IsStart"];
                 }
             }
             set
@@ -323,7 +311,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (LockedHashSet<string>)this["Global_UrlHistorys"];
+                    return (LockedHashSet<string>)this["Global_UrlHistorys"];
                 }
             }
             set
@@ -341,7 +329,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (LockedHashSet<Wiki>)this["Global_WikiHistorys"];
+                    return (LockedHashSet<Wiki>)this["Global_WikiHistorys"];
                 }
             }
             set
@@ -359,7 +347,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (LockedHashSet<Chat>)this["Global_ChatHistorys"];
+                    return (LockedHashSet<Chat>)this["Global_ChatHistorys"];
                 }
             }
             set
@@ -377,7 +365,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (LockedHashSet<A.Seed>)this["Global_SeedHistorys"];
+                    return (LockedHashSet<A.Seed>)this["Global_SeedHistorys"];
                 }
             }
             set
@@ -395,7 +383,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (bool)this["Global_UrlClearHistory_IsEnabled"];
+                    return (bool)this["Global_UrlClearHistory_IsEnabled"];
                 }
             }
             set
@@ -413,7 +401,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (bool)this["Global_AutoBaseNodeSetting_IsEnabled"];
+                    return (bool)this["Global_AutoBaseNodeSetting_IsEnabled"];
                 }
             }
             set
@@ -431,7 +419,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (bool)this["Global_I2p_SamBridge_IsEnabled"];
+                    return (bool)this["Global_I2p_SamBridge_IsEnabled"];
                 }
             }
             set
@@ -449,7 +437,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (string)this["Global_Update_Url"];
+                    return (string)this["Global_Update_Url"];
                 }
             }
             set
@@ -467,7 +455,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (string)this["Global_Update_ProxyUri"];
+                    return (string)this["Global_Update_ProxyUri"];
                 }
             }
             set
@@ -485,7 +473,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (string)this["Global_Update_Signature"];
+                    return (string)this["Global_Update_Signature"];
                 }
             }
             set
@@ -503,7 +491,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (UpdateOption)this["Global_Update_Option"];
+                    return (UpdateOption)this["Global_Update_Option"];
                 }
             }
             set
@@ -521,7 +509,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (string)this["Global_Amoeba_Path"];
+                    return (string)this["Global_Amoeba_Path"];
                 }
             }
             set
@@ -539,7 +527,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (string)this["Global_Fonts_MessageFontFamily"];
+                    return (string)this["Global_Fonts_MessageFontFamily"];
                 }
             }
             set
@@ -557,7 +545,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["Global_Fonts_MessageFontSize"];
+                    return (double)this["Global_Fonts_MessageFontSize"];
                 }
             }
             set
@@ -576,7 +564,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["MainWindow_Top"];
+                    return (double)this["MainWindow_Top"];
                 }
             }
             set
@@ -594,7 +582,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["MainWindow_Left"];
+                    return (double)this["MainWindow_Left"];
                 }
             }
             set
@@ -612,7 +600,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["MainWindow_Height"];
+                    return (double)this["MainWindow_Height"];
                 }
             }
             set
@@ -630,7 +618,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["MainWindow_Width"];
+                    return (double)this["MainWindow_Width"];
                 }
             }
             set
@@ -648,7 +636,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (WindowState)this["MainWindow_WindowState"];
+                    return (WindowState)this["MainWindow_WindowState"];
                 }
             }
             set
@@ -667,7 +655,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["TrustOptionsWindow_Top"];
+                    return (double)this["TrustOptionsWindow_Top"];
                 }
             }
             set
@@ -685,7 +673,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["TrustOptionsWindow_Left"];
+                    return (double)this["TrustOptionsWindow_Left"];
                 }
             }
             set
@@ -703,7 +691,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["TrustOptionsWindow_Height"];
+                    return (double)this["TrustOptionsWindow_Height"];
                 }
             }
             set
@@ -721,7 +709,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["TrustOptionsWindow_Width"];
+                    return (double)this["TrustOptionsWindow_Width"];
                 }
             }
             set
@@ -739,7 +727,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (WindowState)this["TrustOptionsWindow_WindowState"];
+                    return (WindowState)this["TrustOptionsWindow_WindowState"];
                 }
             }
             set
@@ -757,7 +745,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["TrustOptionsWindow_GridViewColumn_Signature_Width"];
+                    return (double)this["TrustOptionsWindow_GridViewColumn_Signature_Width"];
                 }
             }
             set
@@ -776,7 +764,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ProfileOptionsWindow_Top"];
+                    return (double)this["ProfileOptionsWindow_Top"];
                 }
             }
             set
@@ -794,7 +782,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ProfileOptionsWindow_Left"];
+                    return (double)this["ProfileOptionsWindow_Left"];
                 }
             }
             set
@@ -812,7 +800,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ProfileOptionsWindow_Height"];
+                    return (double)this["ProfileOptionsWindow_Height"];
                 }
             }
             set
@@ -830,7 +818,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ProfileOptionsWindow_Width"];
+                    return (double)this["ProfileOptionsWindow_Width"];
                 }
             }
             set
@@ -848,7 +836,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (WindowState)this["ProfileOptionsWindow_WindowState"];
+                    return (WindowState)this["ProfileOptionsWindow_WindowState"];
                 }
             }
             set
@@ -866,7 +854,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ProfileOptionsWindow_GridViewColumn_Signature_Width"];
+                    return (double)this["ProfileOptionsWindow_GridViewColumn_Signature_Width"];
                 }
             }
             set
@@ -884,7 +872,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ProfileOptionsWindow_GridViewColumn_Wiki_Width"];
+                    return (double)this["ProfileOptionsWindow_GridViewColumn_Wiki_Width"];
                 }
             }
             set
@@ -902,7 +890,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ProfileOptionsWindow_GridViewColumn_Chat_Width"];
+                    return (double)this["ProfileOptionsWindow_GridViewColumn_Chat_Width"];
                 }
             }
             set
@@ -921,7 +909,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["CoreOptionsWindow_Top"];
+                    return (double)this["CoreOptionsWindow_Top"];
                 }
             }
             set
@@ -939,7 +927,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["CoreOptionsWindow_Left"];
+                    return (double)this["CoreOptionsWindow_Left"];
                 }
             }
             set
@@ -957,7 +945,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["CoreOptionsWindow_Height"];
+                    return (double)this["CoreOptionsWindow_Height"];
                 }
             }
             set
@@ -975,7 +963,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["CoreOptionsWindow_Width"];
+                    return (double)this["CoreOptionsWindow_Width"];
                 }
             }
             set
@@ -993,7 +981,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (WindowState)this["CoreOptionsWindow_WindowState"];
+                    return (WindowState)this["CoreOptionsWindow_WindowState"];
                 }
             }
             set
@@ -1011,7 +999,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["CoreOptionsWindow_BaseNode_Uris_Uri_Width"];
+                    return (double)this["CoreOptionsWindow_BaseNode_Uris_Uri_Width"];
                 }
             }
             set
@@ -1029,7 +1017,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["CoreOptionsWindow_OtherNodes_Node_Width"];
+                    return (double)this["CoreOptionsWindow_OtherNodes_Node_Width"];
                 }
             }
             set
@@ -1047,7 +1035,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["CoreOptionsWindow_Client_Filters_GridViewColumn_ConnectionType_Width"];
+                    return (double)this["CoreOptionsWindow_Client_Filters_GridViewColumn_ConnectionType_Width"];
                 }
             }
             set
@@ -1065,7 +1053,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["CoreOptionsWindow_Client_Filters_GridViewColumn_ProxyUri_Width"];
+                    return (double)this["CoreOptionsWindow_Client_Filters_GridViewColumn_ProxyUri_Width"];
                 }
             }
             set
@@ -1083,7 +1071,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["CoreOptionsWindow_Client_Filters_GridViewColumn_UriCondition_Width"];
+                    return (double)this["CoreOptionsWindow_Client_Filters_GridViewColumn_UriCondition_Width"];
                 }
             }
             set
@@ -1101,7 +1089,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["CoreOptionsWindow_Client_Filters_GridViewColumn_Option_Width"];
+                    return (double)this["CoreOptionsWindow_Client_Filters_GridViewColumn_Option_Width"];
                 }
             }
             set
@@ -1119,7 +1107,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["CoreOptionsWindow_Server_ListenUris_GridViewColumn_Uri_Width"];
+                    return (double)this["CoreOptionsWindow_Server_ListenUris_GridViewColumn_Uri_Width"];
                 }
             }
             set
@@ -1137,7 +1125,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["CoreOptionsWindow_Grid_ColumnDefinitions_Width"];
+                    return (double)this["CoreOptionsWindow_Grid_ColumnDefinitions_Width"];
                 }
             }
             set
@@ -1155,7 +1143,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (string)this["CoreOptionsWindow_BandwidthLimit_Unit"];
+                    return (string)this["CoreOptionsWindow_BandwidthLimit_Unit"];
                 }
             }
             set
@@ -1173,7 +1161,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (string)this["CoreOptionsWindow_DataCacheSize_Unit"];
+                    return (string)this["CoreOptionsWindow_DataCacheSize_Unit"];
                 }
             }
             set
@@ -1192,7 +1180,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["TrustExplorerWindow_Top"];
+                    return (double)this["TrustExplorerWindow_Top"];
                 }
             }
             set
@@ -1210,7 +1198,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["TrustExplorerWindow_Left"];
+                    return (double)this["TrustExplorerWindow_Left"];
                 }
             }
             set
@@ -1228,7 +1216,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["TrustExplorerWindow_Height"];
+                    return (double)this["TrustExplorerWindow_Height"];
                 }
             }
             set
@@ -1246,7 +1234,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["TrustExplorerWindow_Width"];
+                    return (double)this["TrustExplorerWindow_Width"];
                 }
             }
             set
@@ -1264,7 +1252,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (WindowState)this["TrustExplorerWindow_WindowState"];
+                    return (WindowState)this["TrustExplorerWindow_WindowState"];
                 }
             }
             set
@@ -1282,7 +1270,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["TrustExplorerWindow_Grid_ColumnDefinitions_Width"];
+                    return (double)this["TrustExplorerWindow_Grid_ColumnDefinitions_Width"];
                 }
             }
             set
@@ -1300,7 +1288,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["TrustExplorerWindow_GridViewColumn_TrustSignature_Width"];
+                    return (double)this["TrustExplorerWindow_GridViewColumn_TrustSignature_Width"];
                 }
             }
             set
@@ -1318,7 +1306,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["TrustExplorerWindow_GridViewColumn_Wiki_Width"];
+                    return (double)this["TrustExplorerWindow_GridViewColumn_Wiki_Width"];
                 }
             }
             set
@@ -1336,7 +1324,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["TrustExplorerWindow_GridViewColumn_Chat_Width"];
+                    return (double)this["TrustExplorerWindow_GridViewColumn_Chat_Width"];
                 }
             }
             set
@@ -1355,7 +1343,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ViewOptionsWindow_Top"];
+                    return (double)this["ViewOptionsWindow_Top"];
                 }
             }
             set
@@ -1373,7 +1361,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ViewOptionsWindow_Left"];
+                    return (double)this["ViewOptionsWindow_Left"];
                 }
             }
             set
@@ -1391,7 +1379,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ViewOptionsWindow_Height"];
+                    return (double)this["ViewOptionsWindow_Height"];
                 }
             }
             set
@@ -1409,7 +1397,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ViewOptionsWindow_Width"];
+                    return (double)this["ViewOptionsWindow_Width"];
                 }
             }
             set
@@ -1427,7 +1415,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (WindowState)this["ViewOptionsWindow_WindowState"];
+                    return (WindowState)this["ViewOptionsWindow_WindowState"];
                 }
             }
             set
@@ -1445,7 +1433,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ViewOptionsWindow_Signature_GridViewColumn_Value_Width"];
+                    return (double)this["ViewOptionsWindow_Signature_GridViewColumn_Value_Width"];
                 }
             }
             set
@@ -1463,7 +1451,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ViewOptionsWindow_Keyword_GridViewColumn_Value_Width"];
+                    return (double)this["ViewOptionsWindow_Keyword_GridViewColumn_Value_Width"];
                 }
             }
             set
@@ -1481,7 +1469,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ViewOptionsWindow_Grid_ColumnDefinitions_Width"];
+                    return (double)this["ViewOptionsWindow_Grid_ColumnDefinitions_Width"];
                 }
             }
             set
@@ -1500,7 +1488,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["VersionInformationWindow_Top"];
+                    return (double)this["VersionInformationWindow_Top"];
                 }
             }
             set
@@ -1518,7 +1506,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["VersionInformationWindow_Left"];
+                    return (double)this["VersionInformationWindow_Left"];
                 }
             }
             set
@@ -1536,7 +1524,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["VersionInformationWindow_Height"];
+                    return (double)this["VersionInformationWindow_Height"];
                 }
             }
             set
@@ -1554,7 +1542,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["VersionInformationWindow_Width"];
+                    return (double)this["VersionInformationWindow_Width"];
                 }
             }
             set
@@ -1572,7 +1560,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (WindowState)this["VersionInformationWindow_WindowState"];
+                    return (WindowState)this["VersionInformationWindow_WindowState"];
                 }
             }
             set
@@ -1590,7 +1578,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["VersionInformationWindow_GridViewColumn_FileName_Width"];
+                    return (double)this["VersionInformationWindow_GridViewColumn_FileName_Width"];
                 }
             }
             set
@@ -1608,7 +1596,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["VersionInformationWindow_GridViewColumn_Version_Width"];
+                    return (double)this["VersionInformationWindow_GridViewColumn_Version_Width"];
                 }
             }
             set
@@ -1627,7 +1615,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (string)this["ConnectionControl_LastHeaderClicked"];
+                    return (string)this["ConnectionControl_LastHeaderClicked"];
                 }
             }
             set
@@ -1645,7 +1633,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (ListSortDirection)this["ConnectionControl_ListSortDirection"];
+                    return (ListSortDirection)this["ConnectionControl_ListSortDirection"];
                 }
             }
             set
@@ -1663,7 +1651,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ConnectionControl_Grid_ColumnDefinitions_Width"];
+                    return (double)this["ConnectionControl_Grid_ColumnDefinitions_Width"];
                 }
             }
             set
@@ -1681,7 +1669,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ConnectionControl_GridViewColumn_Direction_Width"];
+                    return (double)this["ConnectionControl_GridViewColumn_Direction_Width"];
                 }
             }
             set
@@ -1699,7 +1687,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ConnectionControl_GridViewColumn_Uri_Width"];
+                    return (double)this["ConnectionControl_GridViewColumn_Uri_Width"];
                 }
             }
             set
@@ -1717,7 +1705,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ConnectionControl_GridViewColumn_Priority_Width"];
+                    return (double)this["ConnectionControl_GridViewColumn_Priority_Width"];
                 }
             }
             set
@@ -1735,7 +1723,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ConnectionControl_GridViewColumn_ReceivedByteCount_Width"];
+                    return (double)this["ConnectionControl_GridViewColumn_ReceivedByteCount_Width"];
                 }
             }
             set
@@ -1753,7 +1741,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ConnectionControl_GridViewColumn_SentByteCount_Width"];
+                    return (double)this["ConnectionControl_GridViewColumn_SentByteCount_Width"];
                 }
             }
             set
@@ -1771,7 +1759,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ConnectionControl_GridViewColumn_Name_Width"];
+                    return (double)this["ConnectionControl_GridViewColumn_Name_Width"];
                 }
             }
             set
@@ -1789,7 +1777,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ConnectionControl_GridViewColumn_Value_Width"];
+                    return (double)this["ConnectionControl_GridViewColumn_Value_Width"];
                 }
             }
             set
@@ -1808,7 +1796,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ChatControl_Grid_ColumnDefinitions_Width"];
+                    return (double)this["ChatControl_Grid_ColumnDefinitions_Width"];
                 }
             }
             set
@@ -1826,7 +1814,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (ChatCategorizeTreeItem)this["ChatControl_ChatCategorizeTreeItem"];
+                    return (ChatCategorizeTreeItem)this["ChatControl_ChatCategorizeTreeItem"];
                 }
             }
             set
@@ -1845,7 +1833,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ChatListWindow_Top"];
+                    return (double)this["ChatListWindow_Top"];
                 }
             }
             set
@@ -1863,7 +1851,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ChatListWindow_Left"];
+                    return (double)this["ChatListWindow_Left"];
                 }
             }
             set
@@ -1881,7 +1869,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ChatListWindow_Height"];
+                    return (double)this["ChatListWindow_Height"];
                 }
             }
             set
@@ -1899,7 +1887,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ChatListWindow_Width"];
+                    return (double)this["ChatListWindow_Width"];
                 }
             }
             set
@@ -1917,7 +1905,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (WindowState)this["ChatListWindow_WindowState"];
+                    return (WindowState)this["ChatListWindow_WindowState"];
                 }
             }
             set
@@ -1935,7 +1923,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (string)this["ChatListWindow_LastHeaderClicked"];
+                    return (string)this["ChatListWindow_LastHeaderClicked"];
                 }
             }
             set
@@ -1953,7 +1941,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (ListSortDirection)this["ChatListWindow_ListSortDirection"];
+                    return (ListSortDirection)this["ChatListWindow_ListSortDirection"];
                 }
             }
             set
@@ -1971,7 +1959,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ChatListWindow_GridViewColumn_Name_Width"];
+                    return (double)this["ChatListWindow_GridViewColumn_Name_Width"];
                 }
             }
             set
@@ -1989,7 +1977,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ChatListWindow_GridViewColumn_Id_Width"];
+                    return (double)this["ChatListWindow_GridViewColumn_Id_Width"];
                 }
             }
             set
@@ -2008,7 +1996,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ChatMessageEditWindow_Top"];
+                    return (double)this["ChatMessageEditWindow_Top"];
                 }
             }
             set
@@ -2026,7 +2014,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ChatMessageEditWindow_Left"];
+                    return (double)this["ChatMessageEditWindow_Left"];
                 }
             }
             set
@@ -2044,7 +2032,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ChatMessageEditWindow_Height"];
+                    return (double)this["ChatMessageEditWindow_Height"];
                 }
             }
             set
@@ -2062,7 +2050,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ChatMessageEditWindow_Width"];
+                    return (double)this["ChatMessageEditWindow_Width"];
                 }
             }
             set
@@ -2080,7 +2068,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (WindowState)this["ChatMessageEditWindow_WindowState"];
+                    return (WindowState)this["ChatMessageEditWindow_WindowState"];
                 }
             }
             set
@@ -2099,7 +2087,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ChatTopicEditWindow_Top"];
+                    return (double)this["ChatTopicEditWindow_Top"];
                 }
             }
             set
@@ -2117,7 +2105,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ChatTopicEditWindow_Left"];
+                    return (double)this["ChatTopicEditWindow_Left"];
                 }
             }
             set
@@ -2135,7 +2123,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ChatTopicEditWindow_Height"];
+                    return (double)this["ChatTopicEditWindow_Height"];
                 }
             }
             set
@@ -2153,7 +2141,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ChatTopicEditWindow_Width"];
+                    return (double)this["ChatTopicEditWindow_Width"];
                 }
             }
             set
@@ -2171,7 +2159,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (WindowState)this["ChatTopicEditWindow_WindowState"];
+                    return (WindowState)this["ChatTopicEditWindow_WindowState"];
                 }
             }
             set
@@ -2190,7 +2178,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ChatTopicPreviewWindow_Top"];
+                    return (double)this["ChatTopicPreviewWindow_Top"];
                 }
             }
             set
@@ -2208,7 +2196,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ChatTopicPreviewWindow_Left"];
+                    return (double)this["ChatTopicPreviewWindow_Left"];
                 }
             }
             set
@@ -2226,7 +2214,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ChatTopicPreviewWindow_Height"];
+                    return (double)this["ChatTopicPreviewWindow_Height"];
                 }
             }
             set
@@ -2244,7 +2232,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["ChatTopicPreviewWindow_Width"];
+                    return (double)this["ChatTopicPreviewWindow_Width"];
                 }
             }
             set
@@ -2262,7 +2250,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (WindowState)this["ChatTopicPreviewWindow_WindowState"];
+                    return (WindowState)this["ChatTopicPreviewWindow_WindowState"];
                 }
             }
             set
@@ -2281,7 +2269,7 @@ namespace Outopos.Properties
             {
                 lock (this.ThisLock)
                 {
-                   return (double)this["MailControl_Grid_ColumnDefinitions_Width"];
+                    return (double)this["MailControl_Grid_ColumnDefinitions_Width"];
                 }
             }
             set

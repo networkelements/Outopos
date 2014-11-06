@@ -5,6 +5,8 @@ using Outopos.Properties;
 using Library.Collections;
 using Library.Net.Outopos;
 using Library;
+using System.Linq;
+using System.Text;
 
 namespace Outopos.Windows
 {
@@ -38,13 +40,23 @@ namespace Outopos.Windows
 
         public void Update()
         {
-            if (!_value.IsTrustEnabled)
+            var sb = new StringBuilder();
+
             {
-                _header.Text = string.Format("{0} ({1}){2} - {3}", this.Value.Tag.Name, this.Value.ChatMessageInfos.Count, "!", NetworkConverter.ToBase64UrlString(this.Value.Tag.Id));
+                sb.Append(this.Value.Tag.Name);
             }
-            else
+
+            sb.Append(' ');
+
             {
-                _header.Text = string.Format("{0} ({1}) - {2}", this.Value.Tag.Name, this.Value.ChatMessageInfos.Count, NetworkConverter.ToBase64UrlString(this.Value.Tag.Id));
+                sb.Append(string.Format("({0})", this.Value.ChatMessages.Count(n => n.Value.HasFlag(ChatMessageState.IsUnread))));
+                if (!_value.IsTrustEnabled) sb.Append('!');
+            }
+
+            sb.Append(" - ");
+
+            {
+                sb.Append(NetworkConverter.ToBase64UrlString(this.Value.Tag.Id));
             }
         }
 

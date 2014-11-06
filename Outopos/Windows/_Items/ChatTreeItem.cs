@@ -34,7 +34,6 @@ namespace Outopos.Windows
 
         private bool _isTrustEnabled = true;
 
-        private ChatTopic _chatTopic;
         private LockedHashDictionary<ChatMessage, ChatMessageState> _chatMessages;
 
         private volatile object _thisLock;
@@ -79,25 +78,6 @@ namespace Outopos.Windows
                 lock (this.ThisLock)
                 {
                     _isTrustEnabled = value;
-                }
-            }
-        }
-
-        [DataMember(Name = "ChatTopic")]
-        public ChatTopic ChatTopic
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return _chatTopic;
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    _chatTopic = value;
                 }
             }
         }

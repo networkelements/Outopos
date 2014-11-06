@@ -9,14 +9,14 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
-using Outopos.Properties;
 using Library;
 using Library.Net.Outopos;
+using Outopos.Properties;
 using A = Library.Net.Amoeba;
 using O = Library.Net.Outopos;
-using System.Windows.Input;
 
 namespace Outopos.Windows
 {
@@ -40,17 +40,17 @@ namespace Outopos.Windows
 
         private static Regex _urlRegex = new Regex(@"^(?<start>.*?)(?<url>http(s)?://(\S)+)(?<end>.*?)$", RegexOptions.Compiled | RegexOptions.Singleline);
 
-        public static string MessageToString(DateTime creationTime, string signature, string comment)
+        public static string ChatMessageToString(ChatMessage chatMessage)
         {
             StringBuilder stringBuilder = new StringBuilder();
 
             stringBuilder.AppendLine(string.Format("{0} - {1}",
-                creationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo),
-                signature));
+                chatMessage.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo),
+                chatMessage.Certificate.ToString()));
 
             stringBuilder.AppendLine();
 
-            foreach (var line in comment.Trim('\r', '\n').Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None))
+            foreach (var line in chatMessage.Comment.Trim('\r', '\n').Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None))
             {
                 try
                 {
@@ -122,7 +122,7 @@ namespace Outopos.Windows
                             var chatMessageWrapper = e.NewValue as ChatMessageWrapper;
                             if (chatMessageWrapper == null) return;
 
-                            RichTextBoxHelper.SetRichTextBox(richTextBox, chatMessageWrapper.Info, chatMessageWrapper.IsTrust);
+                            RichTextBoxHelper.SetRichTextBox(richTextBox, chatMessageWrapper.Message, chatMessageWrapper.IsTrust);
 
                             var maxHeight = Math.Max(0, RichTextBoxHelper.GetMaxHeightEvent(richTextBox));
 
@@ -135,16 +135,6 @@ namespace Outopos.Windows
                     }
                 }
             });
-
-        public static void SetRichTextBox(RichTextBoxEx richTextBox, ChatTopicInfo info)
-        {
-            RichTextBoxHelper.SetRichTextBox(richTextBox, info.Header.Tag, info.Header.Certificate.ToString(), info.Header.CreationTime, info.Content.Comment, null, true);
-        }
-
-        public static void SetRichTextBox(RichTextBoxEx richTextBox, ChatMessageInfo info, bool isTrust)
-        {
-            RichTextBoxHelper.SetRichTextBox(richTextBox, info.Header.Tag, info.Header.Certificate.ToString(), info.Header.CreationTime, info.Content.Comment, info.Content.Anchors, isTrust);
-        }
 
         public static void SetRichTextBox(RichTextBoxEx richTextBox, Chat tag, string signature, DateTime creationTime, string comment, IEnumerable<Anchor> anchors, bool isTrust)
         {
@@ -474,7 +464,7 @@ namespace Outopos.Windows
                     if (wrapper != null)
                     {
                         var targetRichTextBox = new RichTextBoxEx();
-                        RichTextBoxHelper.SetRichTextBox(targetRichTextBox, wrapper.Info, wrapper.IsTrust);
+                        RichTextBoxHelper.SetRichTextBox(targetRichTextBox, wrapper.Message, wrapper.IsTrust);
 
                         richTextBox.Children.Add(targetRichTextBox);
 
@@ -487,12 +477,12 @@ namespace Outopos.Windows
                             var span = new Span();
 
                             span.Inlines.Add(string.Format("{0} - ",
-                                wrapper.Info.Header.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
+                                wrapper.Message.Header.CreationTime.ToLocalTime().ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo)));
 
                             Run r = new Run();
                             if (wrapper.IsTrust) r.Foreground = new SolidColorBrush(App.Colors.Message_Trust);
                             else r.Foreground = new SolidColorBrush(App.Colors.Message_Untrust);
-                            r.Text = wrapper.Info.Header.Certificate.ToString();
+                            r.Text = wrapper.Message.Header.Certificate.ToString();
 
                             span.Inlines.Add(r);
 

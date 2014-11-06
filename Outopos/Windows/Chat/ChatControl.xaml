@@ -285,90 +285,69 @@
             </TreeView.Resources>
         </TreeView>
 
-        <TabControl Grid.Column="2" Name="_tabControl" SelectionChanged="_tabControl_SelectionChanged">
-            <TabItem Name="_topicTabItem" Header="{Binding ChatControl_Topic, Source={StaticResource ResourcesInstance}}">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="23" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="23" />
+                <RowDefinition Height="*" />
+                <RowDefinition x:Name="_searchRowDefinition" Height="24" />
+            </Grid.RowDefinitions>
 
-                    <Button Content="{Binding ChatControl_Upload, Source={StaticResource ResourcesInstance}}" Height="23" HorizontalAlignment="Right" x:Name="_topicUploadButton" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="_topicUploadButton_Click" Margin="0,0,6,0" />
+            <ToggleButton Content="{Binding ChatControl_Trust, Source={StaticResource ResourcesInstance}}" Height="23" HorizontalAlignment="Left" Margin="6,0,0,0" x:Name="_trustToggleButton" VerticalAlignment="Top" Width="90" Click="_trustToggleButton_Click" />
 
-                    <local:RichTextBoxEx x:Name="_chatTopicRichTextBox" Grid.Row="1" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="6">
-                        <RichTextBox.ContextMenu>
-                            <ContextMenu Name="_chatTopicRichTextBoxContextMenu" FontFamily="{Binding Path=FontFamily, Mode=OneWay, Source={StaticResource ResourcesInstance}, Converter={StaticResource _stringToFontFamilyConverter}}" FontSize="{Binding Path=FontSize, Mode=OneWay, Source={StaticResource ResourcesInstance}, Converter={StaticResource _stringToDoubleConverter}}">
-                                <MenuItem Name="_chatTopicRichTextBoxCopyMenuItem" Header="{Binding Path=ChatControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_chatTopicRichTextBoxCopyMenuItem_Click" />
-                            </ContextMenu>
-                        </RichTextBox.ContextMenu>
-                    </local:RichTextBoxEx>
-                </Grid>
-            </TabItem>
-            <TabItem Name="_messageTabItem" Header="{Binding ChatControl_Message, Source={StaticResource ResourcesInstance}}">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="23" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition x:Name="_searchRowDefinition" Height="24" />
-                    </Grid.RowDefinitions>
+            <Button Content="{Binding ChatControl_Upload, Source={StaticResource ResourcesInstance}}" Height="23" HorizontalAlignment="Right" x:Name="_messageUploadButton" VerticalAlignment="Top" Width="75" Click="_messageUploadButton_Click" IsEnabled="False" Margin="0,0,6,0" />
 
-                    <ToggleButton Content="{Binding ChatControl_Trust, Source={StaticResource ResourcesInstance}}" Height="23" HorizontalAlignment="Left" Margin="6,0,0,0" x:Name="_trustToggleButton" VerticalAlignment="Top" Width="90" Click="_trustToggleButton_Click" />
+            <local:ListViewEx x:Name="_listView" Padding="0,1,0,0" Grid.Row="1" 
+                	ScrollViewer.VerticalScrollBarVisibility="Visible" 
+                	ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                	LayoutUpdated="_listView_LayoutUpdated"
+                	SizeChanged="_listView_SizeChanged" 
+                	PreviewKeyDown="_listView_PreviewKeyDown" 
+                	PreviewMouseDown="_listView_PreviewMouseDown"
+                	VirtualizingStackPanel.IsVirtualizing="True"
+                    VirtualizingStackPanel.VirtualizationMode="Standard">
+                <local:ListViewEx.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <Setter Property="OverridesDefaultStyle" Value="True" />
+                        <Setter Property="BorderBrush" Value="Transparent" />
+                        <Setter Property="BorderThickness" Value="1" />
+                        <Setter Property="Margin" Value="0" />
+                        <Setter Property="VerticalAlignment" Value="Stretch" />
+                        <Setter Property="HorizontalAlignment" Value="Stretch" />
+                        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                    <Border SnapsToDevicePixels="true" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="2" x:Name="border">
+                                        <Grid Margin="0,3,0,0">
+                                            <GridViewRowPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Margin="0,2,0,2" VerticalAlignment="Stretch" />
+                                        </Grid>
+                                    </Border>
+                                    <!--<ControlTemplate.Triggers>
+                                        <Trigger Property="IsKeyboardFocusWithin" Value="true">
+                                            <Setter Property="IsSelected" Value="true" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>-->
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </local:ListViewEx.ItemContainerStyle>
+                <local:ListViewEx.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <local:VirtualizingStackPanelEx CanHorizontallyScroll="False" Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </local:ListViewEx.ItemsPanel>
+                <local:ListViewEx.View>
+                    <GridView AllowsColumnReorder="False" ColumnHeaderContainerStyle="{StaticResource _headerStyle}">
+                        <GridViewColumn x:Name="_gridViewColumn" Header="Value" CellTemplate="{StaticResource _myTemplate_ListView}" />
+                    </GridView>
+                </local:ListViewEx.View>
+            </local:ListViewEx>
 
-                    <Button Content="{Binding ChatControl_Upload, Source={StaticResource ResourcesInstance}}" Height="23" HorizontalAlignment="Right" x:Name="_messageUploadButton" VerticalAlignment="Top" Width="75" Click="_messageUploadButton_Click" IsEnabled="False" Margin="0,0,6,0" />
-
-                    <local:ListViewEx x:Name="_listView" Padding="0,1,0,0" Grid.Row="1" 
-                		    ScrollViewer.VerticalScrollBarVisibility="Visible" 
-                		    ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
-                		    LayoutUpdated="_listView_LayoutUpdated"
-                		    SizeChanged="_listView_SizeChanged" 
-                		    PreviewKeyDown="_listView_PreviewKeyDown" 
-                		    PreviewMouseDown="_listView_PreviewMouseDown"
-                		    VirtualizingStackPanel.IsVirtualizing="True"
-                            VirtualizingStackPanel.VirtualizationMode="Standard">
-                        <local:ListViewEx.ItemContainerStyle>
-                            <Style TargetType="{x:Type ListViewItem}">
-                                <Setter Property="OverridesDefaultStyle" Value="True" />
-                                <Setter Property="BorderBrush" Value="Transparent" />
-                                <Setter Property="BorderThickness" Value="1" />
-                                <Setter Property="Margin" Value="0" />
-                                <Setter Property="VerticalAlignment" Value="Stretch" />
-                                <Setter Property="HorizontalAlignment" Value="Stretch" />
-                                <Setter Property="VerticalContentAlignment" Value="Stretch" />
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                            <Border SnapsToDevicePixels="true" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="2" x:Name="border">
-                                                <Grid Margin="0,3,0,0">
-                                                    <GridViewRowPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Margin="0,2,0,2" VerticalAlignment="Stretch" />
-                                                </Grid>
-                                            </Border>
-                                            <!--<ControlTemplate.Triggers>
-                                                <Trigger Property="IsKeyboardFocusWithin" Value="true">
-                                                    <Setter Property="IsSelected" Value="true" />
-                                                </Trigger>
-                                            </ControlTemplate.Triggers>-->
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </local:ListViewEx.ItemContainerStyle>
-                        <local:ListViewEx.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <local:VirtualizingStackPanelEx CanHorizontallyScroll="False" Orientation="Vertical" />
-                            </ItemsPanelTemplate>
-                        </local:ListViewEx.ItemsPanel>
-                        <local:ListViewEx.View>
-                            <GridView AllowsColumnReorder="False" ColumnHeaderContainerStyle="{StaticResource _headerStyle}">
-                                <GridViewColumn x:Name="_gridViewColumn" Header="Value" CellTemplate="{StaticResource _myTemplate_ListView}" />
-                            </GridView>
-                        </local:ListViewEx.View>
-                    </local:ListViewEx>
-
-                    <TextBox Grid.Row="2" Margin="25,0,0,0" x:Name="_searchTextBox" KeyDown="_searchTextBox_KeyDown" />
-                    <Button Content="×" Grid.Row="2" Height="16" HorizontalAlignment="Left" Margin="4,4,0,0" x:Name="_searchCloseButton" VerticalAlignment="Top" Width="16" Padding="0,-2,0,0" Click="_searchCloseButton_Click" />
-                </Grid>
-            </TabItem>
-        </TabControl>
+            <TextBox Grid.Row="2" Margin="25,0,0,0" x:Name="_searchTextBox" KeyDown="_searchTextBox_KeyDown" />
+            <Button Content="×" Grid.Row="2" Height="16" HorizontalAlignment="Left" Margin="4,4,0,0" x:Name="_searchCloseButton" VerticalAlignment="Top" Width="16" Padding="0,-2,0,0" Click="_searchCloseButton_Click" />
+        </Grid>
+        
     </Grid>
 </UserControl>
