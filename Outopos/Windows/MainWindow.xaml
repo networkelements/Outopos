@@ -39,24 +39,14 @@
                 <MenuItem Name="_startMenuItem" Header="{Binding Path=MainWindow_Start, Source={StaticResource ResourcesInstance}}" Click="_startMenuItem_Click" />
                 <MenuItem Name="_stopMenuItem" Header="{Binding Path=MainWindow_Stop, Source={StaticResource ResourcesInstance}}" IsEnabled="False"  Click="_stopMenuItem_Click" />
                 <Separator />
-                <MenuItem Name="_profileOptionsMenuItem" Header="{Binding Path=MainWindow_ProfileOptions, Source={StaticResource ResourcesInstance}}" Click="_profileOptionsMenuItem_Click" />
-                <Separator />
                 <MenuItem Name="_updateBaseNodeMenuItem" Header="{Binding Path=MainWindow_UpdateBaseNode, Source={StaticResource ResourcesInstance}}" Click="_updateBaseNodeMenuItem_Click" />
-                <MenuItem Name="_coreOptionsMenuItem" Header="{Binding Path=MainWindow_CoreOptions, Source={StaticResource ResourcesInstance}}" Click="_coreOptionsMenuItem_Click" />
             </MenuItem>
-            <MenuItem Name="_trustMenuItem" Header="{Binding Path=MainWindow_Trust, Source={StaticResource ResourcesInstance}}" >
-                <MenuItem Name="_trustExplorerMenuItem" Header="{Binding Path=MainWindow_TrustExplorer, Source={StaticResource ResourcesInstance}}" Click="_trustExplorerMenuItem_Click" />
-                <Separator />
-                <MenuItem Name="_trustOptionsMenuItem" Header="{Binding Path=MainWindow_TrustOptions, Source={StaticResource ResourcesInstance}}" Click="_trustOptionsMenuItem_Click" />
-            </MenuItem>
-            <MenuItem Name="_viewMenuItem" Header="{Binding Path=MainWindow_View, Source={StaticResource ResourcesInstance}}">
+            <MenuItem Name="_toolsMenuItem" Header="{Binding Path=MainWindow_Tools, Source={StaticResource ResourcesInstance}}">
                 <MenuItem Name="_languagesMenuItem" Header="{Binding Path=MainWindow_Languages, Source={StaticResource ResourcesInstance}}" />
                 <Separator />
-                <MenuItem Name="_viewOptionsMenuItem" Header="{Binding Path=MainWindow_ViewOptions, Source={StaticResource ResourcesInstance}}" Click="_viewOptionsMenuItem_Click" />
+                <MenuItem Name="_optionsMenuItem" Header="{Binding Path=MainWindow_Options, Source={StaticResource ResourcesInstance}}" Click="_optionsMenuItem_Click" />
             </MenuItem>
             <MenuItem Name="_helpMenuItem" Header="{Binding Path=MainWindow_Help, Source={StaticResource ResourcesInstance}}" SubmenuOpened="_helpMenuItem_SubmenuOpened">
-                <MenuItem Name="_viewHelpMenuItem" Header="{Binding Path=MainWindow_ViewHelp, Source={StaticResource ResourcesInstance}}" Click="_viewHelpMenuItem_Click" />
-                <Separator />
                 <MenuItem Name="_manualSiteMenuItem" Header="{Binding Path=MainWindow_ManualSite, Source={StaticResource ResourcesInstance}}" Click="_manualSiteMenuItem_Click" />
                 <MenuItem Name="_developerSiteMenuItem" Header="{Binding Path=MainWindow_DeveloperSite, Source={StaticResource ResourcesInstance}}" Click="_developerSiteMenuItem_Click" />
                 <Separator />

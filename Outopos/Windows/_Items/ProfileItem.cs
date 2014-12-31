@@ -17,6 +17,7 @@ namespace Outopos.Windows
     class ProfileItem : ICloneable<ProfileItem>, IThisLock
     {
         private string _uploadSignature;
+        private int _cost;
         private Exchange _exchange;
         private LockedList<Exchange> _oldExchanges;
         private SignatureCollection _trustSignatures;
@@ -42,6 +43,25 @@ namespace Outopos.Windows
                 lock (this.ThisLock)
                 {
                     _uploadSignature = value;
+                }
+            }
+        }
+
+        [DataMember(Name = "Cost")]
+        public int Cost
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return _cost;
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    _cost = value;
                 }
             }
         }

@@ -20,9 +20,7 @@
             <Style TargetType="{x:Type local:ListViewEx}" BasedOn="{StaticResource {x:Type ListView}}" />
             <Style TargetType="{x:Type local:DigitalSignatureComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}" />
             <Style TargetType="{x:Type local:LanguageMenuItem}" BasedOn="{StaticResource {x:Type MenuItem}}" />
-            <Style TargetType="{x:Type local:RichTextBoxEx}" BasedOn="{StaticResource {x:Type RichTextBox}}" />
 
-            <local:ObjectToImageConverter x:Key="_objectToImageConverter"/>
             <local:BoolToVisibilityConverter x:Key="_boolToVisibilityConverter"/>
             <local:StringRegularizationConverter x:Key="_stringRegularizationConverter"/>
             <local:DoubleToGridLengthConverter x:Key="_doubleToGridLengthConverter"/>
@@ -43,7 +41,6 @@
             <local:ConnectDirectionToStringConverter x:Key="_connectDirectionToStringConverter"/>
             <local:WikiToStringConverter x:Key="_wikiToStringConverter"/>
             <local:ChatToStringConverter x:Key="_chatToStringConverter"/>
-            <local:ChatMessageWrapperToBorderBrushConverter x:Key="_chatMessageWrapperToBorderBrushConverter"/>
             <local:BytesToBase64StringConverter x:Key="_bytesToBase64StringConverter"/>
             
         </ResourceDictionary>

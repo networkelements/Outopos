@@ -632,7 +632,7 @@ namespace Outopos
 
             public override int GetHashCode()
             {
-                return this.Min.GetHashCode();
+                return this.Min.GetHashCode() ^ this.Max.GetHashCode();
             }
 
             public override bool Equals(object obj)

@@ -66,85 +66,76 @@
   <Translate Key="MainWindow_TransferLimit_Message" Value="Ліміт передачі" />
   <Translate Key="MainWindow_Upload_Message" Value="Ви хочете завантажити (upload)?" />
 
-  <Translate Key="TrustOptionsWindow_Title" Value="Опції довіри" />
-  <Translate Key="TrustOptionsWindow_Signature" Value="Підпис" />
-  <Translate Key="TrustOptionsWindow_Delete" Value="Видалення" />
-  <Translate Key="TrustOptionsWindow_Cut" Value="Вирізати" />
-  <Translate Key="TrustOptionsWindow_Copy" Value="Копіювати" />
-  <Translate Key="TrustOptionsWindow_Paste" Value="Вставити" />
-  <Translate Key="TrustOptionsWindow_Ok" Value="ОК" />
-  <Translate Key="TrustOptionsWindow_Cancel" Value="Закрити" />
-
-  <Translate Key="ProfileOptionsWindow_Title" Value="Опції профілю" />
-  <Translate Key="ProfileOptionsWindow_YourSignature" Value="Ваш підпис" />
-  <Translate Key="ProfileOptionsWindow_Trust" Value="Довіра" />
-  <Translate Key="ProfileOptionsWindow_Signature" Value="Підпис" />
-  <Translate Key="ProfileOptionsWindow_Chat" Value="Чат" />
-  <Translate Key="ProfileOptionsWindow_Wiki" Value="Вікі" />
-  <Translate Key="ProfileOptionsWindow_Value" Value="Значення" />
-  <Translate Key="ProfileOptionsWindow_Up" Value="↑Вгору" />
-  <Translate Key="ProfileOptionsWindow_Down" Value="↓Вниз" />
-  <Translate Key="ProfileOptionsWindow_Add" Value="Додати" />
-  <Translate Key="ProfileOptionsWindow_New" Value="Новий" />
-  <Translate Key="ProfileOptionsWindow_Edit" Value="Редагувати" />
-  <Translate Key="ProfileOptionsWindow_Delete" Value="Видалити" />
-  <Translate Key="ProfileOptionsWindow_Cut" Value="Вирізати" />
-  <Translate Key="ProfileOptionsWindow_Copy" Value="Копіювати" />
-  <Translate Key="ProfileOptionsWindow_Paste" Value="Вставити" />
-  <Translate Key="ProfileOptionsWindow_Ok" Value="ОК" />
-  <Translate Key="ProfileOptionsWindow_Cancel" Value="Закрити" />
-
-  <Translate Key="CoreOptionsWindow_Title" Value="Основні параметри" />
-  <Translate Key="CoreOptionsWindow_BaseNode" Value="Базовий вузол" />
-  <Translate Key="CoreOptionsWindow_Node" Value="Вузол" />
-  <Translate Key="CoreOptionsWindow_Uris" Value="Адреси" />
-  <Translate Key="CoreOptionsWindow_Uri" Value="Список адрес" />
-  <Translate Key="CoreOptionsWindow_OtherNodes" Value="Інші вузли" />
-  <Translate Key="CoreOptionsWindow_Nodes" Value="Вузли" />
-  <Translate Key="CoreOptionsWindow_Client" Value="Клієнт" />
-  <Translate Key="CoreOptionsWindow_Filters" Value="Фільтри" />
-  <Translate Key="CoreOptionsWindow_ConnectionType" Value="Тип з&#x0027;єднання" />
-  <Translate Key="CoreOptionsWindow_ProxyUri" Value="Адреса проксі" />
-  <Translate Key="CoreOptionsWindow_UriCondition" Value="Uri condition" />
-  <Translate Key="CoreOptionsWindow_Option" Value="Параметри" />
-  <Translate Key="CoreOptionsWindow_Type" Value="Тип" />
-  <Translate Key="CoreOptionsWindow_Host" Value="Хост" />
-  <Translate Key="CoreOptionsWindow_Server" Value="Сервер" />
-  <Translate Key="CoreOptionsWindow_ListenUris" Value="Локальні адреси для серверу" />
-  <Translate Key="CoreOptionsWindow_Data" Value="Кеш" />
-  <Translate Key="CoreOptionsWindow_Bandwidth" Value="Пропускна здатність" />
-  <Translate Key="CoreOptionsWindow_BandwidthLimit" Value="Обмеження (*/s) [0 Byte: unlimited]" />
-  <Translate Key="CoreOptionsWindow_Transfer" Value="Передача" />
-  <Translate Key="CoreOptionsWindow_TransferLimitType" Value="Limit type" />
-  <Translate Key="CoreOptionsWindow_TransferLimitSpan" Value="Limit span (day)" />
-  <Translate Key="CoreOptionsWindow_TransferLimitSize" Value="Limit size" />
-  <Translate Key="CoreOptionsWindow_TransferInformation" Value="Transfer information" />
-  <Translate Key="CoreOptionsWindow_Downloaded" Value="Скачано" />
-  <Translate Key="CoreOptionsWindow_Uploaded" Value="Завантажено" />
-  <Translate Key="CoreOptionsWindow_Total" Value="Всього" />
-  <Translate Key="CoreOptionsWindow_Reset" Value="Скинути (Reset)" />
-  <Translate Key="CoreOptionsWindow_ConnectionCount" Value="Максимальна кількість підключень" />
-  <Translate Key="CoreOptionsWindow_DownloadDirectory" Value="Каталог для завантажень" />
-  <Translate Key="CoreOptionsWindow_CacheSize" Value="Об&#x0027;єм кешу" />
-  <Translate Key="CoreOptionsWindow_Events" Value="Події" />
-  <Translate Key="CoreOptionsWindow_Events_Connection" Value="Підключення" />
-  <Translate Key="CoreOptionsWindow_Events_OpenPortAndGetIpAddress" Value="Відкрити порт та відправити IP-адресу" />
-  <Translate Key="CoreOptionsWindow_Events_UseI2p" Value="Використовувати I2P." />
-  <Translate Key="CoreOptionsWindow_Events_UseI2p_SamBridgeUri" Value="Sam bridge uri:" />
-  <Translate Key="CoreOptionsWindow_Tor" Value="Tor" />
-  <Translate Key="CoreOptionsWindow_Ipv4" Value="Ipv4" />
-  <Translate Key="CoreOptionsWindow_Ipv6" Value="Ipv6" />
-  <Translate Key="CoreOptionsWindow_Up" Value="↑Вверх" />
-  <Translate Key="CoreOptionsWindow_Down" Value="↓Вниз" />
-  <Translate Key="CoreOptionsWindow_Add" Value="Додати" />
-  <Translate Key="CoreOptionsWindow_Edit" Value="Редагувати" />
-  <Translate Key="CoreOptionsWindow_Delete" Value="Видалити" />
-  <Translate Key="CoreOptionsWindow_Ok" Value="ОК" />
-  <Translate Key="CoreOptionsWindow_Cancel" Value="Закрити" />
-  <Translate Key="CoreOptionsWindow_Cut" Value="Вирізати" />
-  <Translate Key="CoreOptionsWindow_Copy" Value="Копіювати" />
-  <Translate Key="CoreOptionsWindow_Paste" Value="Вставити" />
-  <Translate Key="CoreOptionsWindow_CacheResize_Message" Value="Resizing of cache will delete important block. Would that be all right?" />
+  <Translate Key="OptionsWindow_Title" Value="Options" />
+  <Translate Key="OptionsWindow_Core" Value="Core" />
+  <Translate Key="OptionsWindow_View" Value="View" />
+  <Translate Key="OptionsWindow_BaseNode" Value="Base node" />
+  <Translate Key="OptionsWindow_Node" Value="Node" />
+  <Translate Key="OptionsWindow_Uris" Value="Uris" />
+  <Translate Key="OptionsWindow_Uri" Value="Uri" />
+  <Translate Key="OptionsWindow_OtherNodes" Value="Other nodes" />
+  <Translate Key="OptionsWindow_Nodes" Value="Nodes" />
+  <Translate Key="OptionsWindow_Client" Value="Client" />
+  <Translate Key="OptionsWindow_Filters" Value="Filters" />
+  <Translate Key="OptionsWindow_ConnectionType" Value="Connection type" />
+  <Translate Key="OptionsWindow_ProxyUri" Value="Proxy uri" />
+  <Translate Key="OptionsWindow_UriCondition" Value="Uri condition" />
+  <Translate Key="OptionsWindow_Option" Value="Option" />
+  <Translate Key="OptionsWindow_Type" Value="Type" />
+  <Translate Key="OptionsWindow_Host" Value="Host" />
+  <Translate Key="OptionsWindow_Server" Value="Server" />
+  <Translate Key="OptionsWindow_ListenUris" Value="Listen uris" />
+  <Translate Key="OptionsWindow_Data" Value="Data" />
+  <Translate Key="OptionsWindow_Bandwidth" Value="Bandwidth" />
+  <Translate Key="OptionsWindow_BandwidthLimit" Value="Bandwidth limit (*/s) [0 Byte: unlimited]" />
+  <Translate Key="OptionsWindow_Transfer" Value="Transfer" />
+  <Translate Key="OptionsWindow_TransferLimitType" Value="Limit type" />
+  <Translate Key="OptionsWindow_TransferLimitSpan" Value="Limit span (day)" />
+  <Translate Key="OptionsWindow_TransferLimitSize" Value="Limit size" />
+  <Translate Key="OptionsWindow_TransferInformation" Value="Transfer information" />
+  <Translate Key="OptionsWindow_Downloaded" Value="Downloaded" />
+  <Translate Key="OptionsWindow_Uploaded" Value="Uploaded" />
+  <Translate Key="OptionsWindow_Total" Value="Total" />
+  <Translate Key="OptionsWindow_Reset" Value="Reset" />
+  <Translate Key="OptionsWindow_ConnectionCount" Value="Connection count" />
+  <Translate Key="OptionsWindow_DownloadDirectory" Value="Download directory" />
+  <Translate Key="OptionsWindow_DownloadDirectory_Description" Value="Download directory" />
+  <Translate Key="OptionsWindow_CacheSize" Value="Cache size" />
+  <Translate Key="OptionsWindow_Events" Value="Events" />
+  <Translate Key="OptionsWindow_Events_Connection" Value="Connection" />
+  <Translate Key="OptionsWindow_Events_OpenPortAndGetIpAddress" Value="Open port and get IP address." />
+  <Translate Key="OptionsWindow_Events_UseI2p" Value="Use I2P." />
+  <Translate Key="OptionsWindow_Events_UseI2p_SamBridgeUri" Value="Sam bridge uri:" />
+  <Translate Key="OptionsWindow_Tor" Value="Tor" />
+  <Translate Key="OptionsWindow_Ipv4" Value="Ipv4" />
+  <Translate Key="OptionsWindow_Ipv6" Value="Ipv6" />
+  <Translate Key="OptionsWindow_Update" Value="Update" />
+  <Translate Key="OptionsWindow_UpdateUrl" Value="Update url" />
+  <Translate Key="OptionsWindow_Signature" Value="Signature" />
+  <Translate Key="OptionsWindow_Signatures" Value="Signatures" />
+  <Translate Key="OptionsWindow_Keywords" Value="Keywords" />
+  <Translate Key="OptionsWindow_Box" Value="Box" />
+  <Translate Key="OptionsWindow_RelateBoxFile" Value="Box file is related." />
+  <Translate Key="OptionsWindow_OpenBox" Value="Open a box file that downloaded." />
+  <Translate Key="OptionsWindow_ExtractTo" Value="Extract to path" />
+  <Translate Key="OptionsWindow_UpdateOption" Value="Update option" />
+  <Translate Key="OptionsWindow_None" Value="None" />
+  <Translate Key="OptionsWindow_AutoCheck" Value="Auto check" />
+  <Translate Key="OptionsWindow_AutoUpdate" Value="Auto update" />
+  <Translate Key="OptionsWindow_Value" Value="Value" />
+  <Translate Key="OptionsWindow_Import" Value="Import" />
+  <Translate Key="OptionsWindow_Export" Value="Export" />
+  <Translate Key="OptionsWindow_Up" Value="Up" />
+  <Translate Key="OptionsWindow_Down" Value="Down" />
+  <Translate Key="OptionsWindow_Add" Value="Add" />
+  <Translate Key="OptionsWindow_Edit" Value="Edit" />
+  <Translate Key="OptionsWindow_Delete" Value="Delete" />
+  <Translate Key="OptionsWindow_Ok" Value="Ok" />
+  <Translate Key="OptionsWindow_Cancel" Value="Cancel" />
+  <Translate Key="OptionsWindow_Cut" Value="Cut" />
+  <Translate Key="OptionsWindow_Copy" Value="Copy" />
+  <Translate Key="OptionsWindow_Paste" Value="Paste" />
+  <Translate Key="OptionsWindow_CacheResize_Message" Value="Resizing of cache will delete important block. Would that be all right?" />
 
   <Translate Key="ConnectionType_None" Value="None" />
   <Translate Key="ConnectionType_Tcp" Value="Tcp" />
@@ -279,13 +270,11 @@
   <Translate Key="ChatControl_FilterSignature" Value="Filter signature" />
   <Translate Key="ChatControl_NewMessageOnly" Value="Only" />
   <Translate Key="ChatControl_Message" Value="Повідомлення" />
-  <Translate Key="ChatControl_Topic" Value="Теми" />
   <Translate Key="ChatControl_Upload" Value="Відправити" />
   <Translate Key="ChatControl_MarkAllMessagesRead" Value="Відмітити всі повідомлення прочитаними" />
   <Translate Key="ChatControl_MarkAllMessagesRead_Message" Value="Ви хочете відмітити всі повідомлення прочитаними?" />
   <Translate Key="ChatControl_ImportLockedMessages" Value="Import locked messages" />
   <Translate Key="ChatControl_ExportLockedMessages" Value="Export locked messages" />
-  <Translate Key="ChatControl_TopicUpload" Value="Нова тема" />
 
   <Translate Key="ChatListWindow_Title" Value="Список чатів" />
   <Translate Key="ChatListWindow_Name" Value="Назва" />
@@ -301,13 +290,6 @@
   <Translate Key="ChatMessageEditWindow_Comment" Value="Коментар" />
   <Translate Key="ChatMessageEditWindow_Ok" Value="Відправити" />
   <Translate Key="ChatMessageEditWindow_Cancel" Value="Закрити" />
-
-  <Translate Key="ChatTopicEditWindow_Title" Value="Нова тема" />
-  <Translate Key="ChatTopicEditWindow_Edit" Value="Редагувати" />
-  <Translate Key="ChatTopicEditWindow_Preview" Value="Перегляд" />
-  <Translate Key="ChatTopicEditWindow_Comment" Value="Коментар" />
-  <Translate Key="ChatTopicEditWindow_Ok" Value="ОК" />
-  <Translate Key="ChatTopicEditWindow_Cancel" Value="Закрити" />
 
   <Translate Key="ChatTopicPreviewWindow_Title" Value="Тема" />
   <Translate Key="ChatTopicPreviewWindow_Close" Value="Закрити" />

@@ -66,85 +66,76 @@
   <Translate Key="MainWindow_TransferLimit_Message" Value="傳輸限制" />
   <Translate Key="MainWindow_Upload_Message" Value="確定要上傳嗎？" />
 
-  <Translate Key="TrustOptionsWindow_Title" Value="信任選項" />
-  <Translate Key="TrustOptionsWindow_Signature" Value="簽名" />
-  <Translate Key="TrustOptionsWindow_Delete" Value="刪除" />
-  <Translate Key="TrustOptionsWindow_Cut" Value="剪下" />
-  <Translate Key="TrustOptionsWindow_Copy" Value="複製" />
-  <Translate Key="TrustOptionsWindow_Paste" Value="貼上" />
-  <Translate Key="TrustOptionsWindow_Ok" Value="確定" />
-  <Translate Key="TrustOptionsWindow_Cancel" Value="取消" />
-
-  <Translate Key="ProfileOptionsWindow_Title" Value="使用者選項" />
-  <Translate Key="ProfileOptionsWindow_YourSignature" Value="你的簽名" />
-  <Translate Key="ProfileOptionsWindow_Trust" Value="信任" />
-  <Translate Key="ProfileOptionsWindow_Signature" Value="簽名" />
-  <Translate Key="ProfileOptionsWindow_Chat" Value="聊天" />
-  <Translate Key="ProfileOptionsWindow_Wiki" Value="Wiki" />
-  <Translate Key="ProfileOptionsWindow_Value" Value="值" />
-  <Translate Key="ProfileOptionsWindow_Up" Value="上移" />
-  <Translate Key="ProfileOptionsWindow_Down" Value="下移" />
-  <Translate Key="ProfileOptionsWindow_Add" Value="新增" />
-  <Translate Key="ProfileOptionsWindow_New" Value="新增" />
-  <Translate Key="ProfileOptionsWindow_Edit" Value="編輯" />
-  <Translate Key="ProfileOptionsWindow_Delete" Value="刪除" />
-  <Translate Key="ProfileOptionsWindow_Cut" Value="剪下" />
-  <Translate Key="ProfileOptionsWindow_Copy" Value="複製" />
-  <Translate Key="ProfileOptionsWindow_Paste" Value="貼上" />
-  <Translate Key="ProfileOptionsWindow_Ok" Value="確定" />
-  <Translate Key="ProfileOptionsWindow_Cancel" Value="取消" />
-
-  <Translate Key="CoreOptionsWindow_Title" Value="核心選項" />
-  <Translate Key="CoreOptionsWindow_BaseNode" Value="基本節點" />
-  <Translate Key="CoreOptionsWindow_Node" Value="節點" />
-  <Translate Key="CoreOptionsWindow_Uris" Value="位址" />
-  <Translate Key="CoreOptionsWindow_Uri" Value="位址" />
-  <Translate Key="CoreOptionsWindow_OtherNodes" Value="其他節點" />
-  <Translate Key="CoreOptionsWindow_Nodes" Value="節點" />
-  <Translate Key="CoreOptionsWindow_Client" Value="用戶" />
-  <Translate Key="CoreOptionsWindow_Filters" Value="過濾器" />
-  <Translate Key="CoreOptionsWindow_ConnectionType" Value="連線類型" />
-  <Translate Key="CoreOptionsWindow_ProxyUri" Value="代理伺服器位址" />
-  <Translate Key="CoreOptionsWindow_UriCondition" Value="位址條件" />
-  <Translate Key="CoreOptionsWindow_Option" Value="選項" />
-  <Translate Key="CoreOptionsWindow_Type" Value="類型" />
-  <Translate Key="CoreOptionsWindow_Host" Value="主機" />
-  <Translate Key="CoreOptionsWindow_Server" Value="伺服器" />
-  <Translate Key="CoreOptionsWindow_ListenUris" Value="接聽網址" />
-  <Translate Key="CoreOptionsWindow_Data" Value="資料" />
-  <Translate Key="CoreOptionsWindow_Bandwidth" Value="頻寬" />
-  <Translate Key="CoreOptionsWindow_BandwidthLimit" Value="頻寬限制 (*/s) [0 Byte: 不限制]" />
-  <Translate Key="CoreOptionsWindow_Transfer" Value="傳送" />
-  <Translate Key="CoreOptionsWindow_TransferLimitType" Value="限制類型" />
-  <Translate Key="CoreOptionsWindow_TransferLimitSpan" Value="限制合併 (日)" />
-  <Translate Key="CoreOptionsWindow_TransferLimitSize" Value="限制大小" />
-  <Translate Key="CoreOptionsWindow_TransferInformation" Value="傳輸資訊" />
-  <Translate Key="CoreOptionsWindow_Downloaded" Value="已下載" />
-  <Translate Key="CoreOptionsWindow_Uploaded" Value="已上傳" />
-  <Translate Key="CoreOptionsWindow_Total" Value="總計" />
-  <Translate Key="CoreOptionsWindow_Reset" Value="重設" />
-  <Translate Key="CoreOptionsWindow_ConnectionCount" Value="總計連線" />
-  <Translate Key="CoreOptionsWindow_DownloadDirectory" Value="下載目錄" />
-  <Translate Key="CoreOptionsWindow_CacheSize" Value="暫存大小" />
-  <Translate Key="CoreOptionsWindow_Events" Value="事件" />
-  <Translate Key="CoreOptionsWindow_Events_Connection" Value="連線" />
-  <Translate Key="CoreOptionsWindow_Events_OpenPortAndGetIpAddress" Value="開啟通訊埠並取得 IP 位址。" />
-  <Translate Key="CoreOptionsWindow_Events_UseI2p" Value="使用 I2P。" />
-  <Translate Key="CoreOptionsWindow_Events_UseI2p_SamBridgeUri" Value="Sam bridge 位址:" />
-  <Translate Key="CoreOptionsWindow_Tor" Value="Tor" />
-  <Translate Key="CoreOptionsWindow_Ipv4" Value="Ipv4" />
-  <Translate Key="CoreOptionsWindow_Ipv6" Value="Ipv6" />
-  <Translate Key="CoreOptionsWindow_Up" Value="上移" />
-  <Translate Key="CoreOptionsWindow_Down" Value="下移" />
-  <Translate Key="CoreOptionsWindow_Add" Value="新增" />
-  <Translate Key="CoreOptionsWindow_Edit" Value="編輯" />
-  <Translate Key="CoreOptionsWindow_Delete" Value="刪除" />
-  <Translate Key="CoreOptionsWindow_Ok" Value="確定" />
-  <Translate Key="CoreOptionsWindow_Cancel" Value="取消" />
-  <Translate Key="CoreOptionsWindow_Cut" Value="剪下" />
-  <Translate Key="CoreOptionsWindow_Copy" Value="複製" />
-  <Translate Key="CoreOptionsWindow_Paste" Value="貼上" />
-  <Translate Key="CoreOptionsWindow_CacheResize_Message" Value="重整暫存大小將會刪除重要的區塊。確定沒有問題？" />
+  <Translate Key="OptionsWindow_Title" Value="Options" />
+  <Translate Key="OptionsWindow_Core" Value="Core" />
+  <Translate Key="OptionsWindow_View" Value="View" />
+  <Translate Key="OptionsWindow_BaseNode" Value="Base node" />
+  <Translate Key="OptionsWindow_Node" Value="Node" />
+  <Translate Key="OptionsWindow_Uris" Value="Uris" />
+  <Translate Key="OptionsWindow_Uri" Value="Uri" />
+  <Translate Key="OptionsWindow_OtherNodes" Value="Other nodes" />
+  <Translate Key="OptionsWindow_Nodes" Value="Nodes" />
+  <Translate Key="OptionsWindow_Client" Value="Client" />
+  <Translate Key="OptionsWindow_Filters" Value="Filters" />
+  <Translate Key="OptionsWindow_ConnectionType" Value="Connection type" />
+  <Translate Key="OptionsWindow_ProxyUri" Value="Proxy uri" />
+  <Translate Key="OptionsWindow_UriCondition" Value="Uri condition" />
+  <Translate Key="OptionsWindow_Option" Value="Option" />
+  <Translate Key="OptionsWindow_Type" Value="Type" />
+  <Translate Key="OptionsWindow_Host" Value="Host" />
+  <Translate Key="OptionsWindow_Server" Value="Server" />
+  <Translate Key="OptionsWindow_ListenUris" Value="Listen uris" />
+  <Translate Key="OptionsWindow_Data" Value="Data" />
+  <Translate Key="OptionsWindow_Bandwidth" Value="Bandwidth" />
+  <Translate Key="OptionsWindow_BandwidthLimit" Value="Bandwidth limit (*/s) [0 Byte: unlimited]" />
+  <Translate Key="OptionsWindow_Transfer" Value="Transfer" />
+  <Translate Key="OptionsWindow_TransferLimitType" Value="Limit type" />
+  <Translate Key="OptionsWindow_TransferLimitSpan" Value="Limit span (day)" />
+  <Translate Key="OptionsWindow_TransferLimitSize" Value="Limit size" />
+  <Translate Key="OptionsWindow_TransferInformation" Value="Transfer information" />
+  <Translate Key="OptionsWindow_Downloaded" Value="Downloaded" />
+  <Translate Key="OptionsWindow_Uploaded" Value="Uploaded" />
+  <Translate Key="OptionsWindow_Total" Value="Total" />
+  <Translate Key="OptionsWindow_Reset" Value="Reset" />
+  <Translate Key="OptionsWindow_ConnectionCount" Value="Connection count" />
+  <Translate Key="OptionsWindow_DownloadDirectory" Value="Download directory" />
+  <Translate Key="OptionsWindow_DownloadDirectory_Description" Value="Download directory" />
+  <Translate Key="OptionsWindow_CacheSize" Value="Cache size" />
+  <Translate Key="OptionsWindow_Events" Value="Events" />
+  <Translate Key="OptionsWindow_Events_Connection" Value="Connection" />
+  <Translate Key="OptionsWindow_Events_OpenPortAndGetIpAddress" Value="Open port and get IP address." />
+  <Translate Key="OptionsWindow_Events_UseI2p" Value="Use I2P." />
+  <Translate Key="OptionsWindow_Events_UseI2p_SamBridgeUri" Value="Sam bridge uri:" />
+  <Translate Key="OptionsWindow_Tor" Value="Tor" />
+  <Translate Key="OptionsWindow_Ipv4" Value="Ipv4" />
+  <Translate Key="OptionsWindow_Ipv6" Value="Ipv6" />
+  <Translate Key="OptionsWindow_Update" Value="Update" />
+  <Translate Key="OptionsWindow_UpdateUrl" Value="Update url" />
+  <Translate Key="OptionsWindow_Signature" Value="Signature" />
+  <Translate Key="OptionsWindow_Signatures" Value="Signatures" />
+  <Translate Key="OptionsWindow_Keywords" Value="Keywords" />
+  <Translate Key="OptionsWindow_Box" Value="Box" />
+  <Translate Key="OptionsWindow_RelateBoxFile" Value="Box file is related." />
+  <Translate Key="OptionsWindow_OpenBox" Value="Open a box file that downloaded." />
+  <Translate Key="OptionsWindow_ExtractTo" Value="Extract to path" />
+  <Translate Key="OptionsWindow_UpdateOption" Value="Update option" />
+  <Translate Key="OptionsWindow_None" Value="None" />
+  <Translate Key="OptionsWindow_AutoCheck" Value="Auto check" />
+  <Translate Key="OptionsWindow_AutoUpdate" Value="Auto update" />
+  <Translate Key="OptionsWindow_Value" Value="Value" />
+  <Translate Key="OptionsWindow_Import" Value="Import" />
+  <Translate Key="OptionsWindow_Export" Value="Export" />
+  <Translate Key="OptionsWindow_Up" Value="Up" />
+  <Translate Key="OptionsWindow_Down" Value="Down" />
+  <Translate Key="OptionsWindow_Add" Value="Add" />
+  <Translate Key="OptionsWindow_Edit" Value="Edit" />
+  <Translate Key="OptionsWindow_Delete" Value="Delete" />
+  <Translate Key="OptionsWindow_Ok" Value="Ok" />
+  <Translate Key="OptionsWindow_Cancel" Value="Cancel" />
+  <Translate Key="OptionsWindow_Cut" Value="Cut" />
+  <Translate Key="OptionsWindow_Copy" Value="Copy" />
+  <Translate Key="OptionsWindow_Paste" Value="Paste" />
+  <Translate Key="OptionsWindow_CacheResize_Message" Value="Resizing of cache will delete important block. Would that be all right?" />
 
   <Translate Key="ConnectionType_None" Value="無" />
   <Translate Key="ConnectionType_Tcp" Value="Tcp" />
@@ -279,13 +270,11 @@
   <Translate Key="ChatControl_FilterSignature" Value="過濾簽名" />
   <Translate Key="ChatControl_NewMessageOnly" Value="僅" />
   <Translate Key="ChatControl_Message" Value="訊息" />
-  <Translate Key="ChatControl_Topic" Value="主題" />
   <Translate Key="ChatControl_Upload" Value="上傳" />
   <Translate Key="ChatControl_MarkAllMessagesRead" Value="所有標記訊息已讀" />
   <Translate Key="ChatControl_MarkAllMessagesRead_Message" Value="你確定要所有標記訊息已讀？" />
   <Translate Key="ChatControl_ImportLockedMessages" Value="匯入已鎖定訊息" />
   <Translate Key="ChatControl_ExportLockedMessages" Value="匯出已鎖定訊息" />
-  <Translate Key="ChatControl_TopicUpload" Value="新主題" />
 
   <Translate Key="ChatListWindow_Title" Value="聊天列表" />
   <Translate Key="ChatListWindow_Name" Value="名稱" />
@@ -301,13 +290,6 @@
   <Translate Key="ChatMessageEditWindow_Comment" Value="評論" />
   <Translate Key="ChatMessageEditWindow_Ok" Value="確定" />
   <Translate Key="ChatMessageEditWindow_Cancel" Value="取消" />
-
-  <Translate Key="ChatTopicEditWindow_Title" Value="新增主題" />
-  <Translate Key="ChatTopicEditWindow_Edit" Value="編輯" />
-  <Translate Key="ChatTopicEditWindow_Preview" Value="預覽" />
-  <Translate Key="ChatTopicEditWindow_Comment" Value="評論" />
-  <Translate Key="ChatTopicEditWindow_Ok" Value="確定" />
-  <Translate Key="ChatTopicEditWindow_Cancel" Value="取消" />
 
   <Translate Key="ChatTopicPreviewWindow_Title" Value="主題" />
   <Translate Key="ChatTopicPreviewWindow_Close" Value="關閉" />
