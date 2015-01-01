@@ -142,7 +142,7 @@ namespace Outopos.Windows
                     var bitmap = new BitmapImage();
 
                     bitmap.BeginInit();
-                    bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"Buttons\world.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
+                    bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"Buttons\Wiki.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
                     bitmap.EndInit();
                     if (bitmap.CanFreeze) bitmap.Freeze();
 
@@ -157,7 +157,7 @@ namespace Outopos.Windows
                     var bitmap = new BitmapImage();
 
                     bitmap.BeginInit();
-                    bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"Buttons\multiple.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
+                    bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"Buttons\Chat.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
                     bitmap.EndInit();
                     if (bitmap.CanFreeze) bitmap.Freeze();
 
@@ -172,7 +172,7 @@ namespace Outopos.Windows
                     var bitmap = new BitmapImage();
 
                     bitmap.BeginInit();
-                    bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"Buttons\mail.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
+                    bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"Buttons\Mail.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
                     bitmap.EndInit();
                     if (bitmap.CanFreeze) bitmap.Freeze();
 
@@ -187,7 +187,7 @@ namespace Outopos.Windows
                     var bitmap = new BitmapImage();
 
                     bitmap.BeginInit();
-                    bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"Buttons\settings.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
+                    bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"Buttons\Settings.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
                     bitmap.EndInit();
                     if (bitmap.CanFreeze) bitmap.Freeze();
 
