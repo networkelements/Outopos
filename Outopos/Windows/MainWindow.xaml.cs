@@ -137,12 +137,72 @@ namespace Outopos.Windows
                     this.Icon = icon;
                 }
 
+                // Wiki
+                {
+                    var bitmap = new BitmapImage();
+
+                    bitmap.BeginInit();
+                    bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"Buttons\world.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
+                    bitmap.EndInit();
+                    if (bitmap.CanFreeze) bitmap.Freeze();
+
+                    var stackPanel = new StackPanel();
+                    stackPanel.Children.Add(new Image() { Source = bitmap, Height = 64, Width = 64 });
+
+                    _wikiRadioButton.Content = stackPanel;
+                }
+
+                // Chat
+                {
+                    var bitmap = new BitmapImage();
+
+                    bitmap.BeginInit();
+                    bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"Buttons\multiple.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
+                    bitmap.EndInit();
+                    if (bitmap.CanFreeze) bitmap.Freeze();
+
+                    var stackPanel = new StackPanel();
+                    stackPanel.Children.Add(new Image() { Source = bitmap, Height = 64, Width = 64 });
+
+                    _chatRadioButton.Content = stackPanel;
+                }
+
+                // Mail
+                {
+                    var bitmap = new BitmapImage();
+
+                    bitmap.BeginInit();
+                    bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"Buttons\mail.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
+                    bitmap.EndInit();
+                    if (bitmap.CanFreeze) bitmap.Freeze();
+
+                    var stackPanel = new StackPanel();
+                    stackPanel.Children.Add(new Image() { Source = bitmap, Height = 64, Width = 64 });
+
+                    _mailRadioButton.Content = stackPanel;
+                }
+
+                // Settings
+                {
+                    var bitmap = new BitmapImage();
+
+                    bitmap.BeginInit();
+                    bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"Buttons\settings.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
+                    bitmap.EndInit();
+                    if (bitmap.CanFreeze) bitmap.Freeze();
+
+                    var stackPanel = new StackPanel();
+                    stackPanel.Children.Add(new Image() { Source = bitmap, Height = 64, Width = 64 });
+
+                    _settingsRadioButton.Content = stackPanel;
+                }
+
                 System.Drawing.Icon myIcon = new System.Drawing.Icon(Path.Combine(App.DirectoryPaths["Icons"], "Outopos.ico"));
                 _notifyIcon.Icon = new System.Drawing.Icon(myIcon, new System.Drawing.Size(16, 16));
                 _notifyIcon.Visible = true;
 
                 this.Setting_Init();
-                this.Setting_Languages();
+                //this.Setting_Languages();
 
                 _notifyIcon.Visible = false;
                 _notifyIcon.Click += (object sender2, EventArgs e2) =>
@@ -183,9 +243,6 @@ namespace Outopos.Windows
                 _trafficMonitorThread.Name = "MainWindow_TrafficMonitorThread";
                 _trafficMonitorThread.Start();
 
-                _transferLimitManager.StartEvent += _transferLimitManager_StartEvent;
-                _transferLimitManager.StopEvent += _transferLimitManager_StopEvent;
-
 #if !DEBUG
                 _logRowDefinition.Height = new GridLength(0);
 #endif
@@ -213,27 +270,6 @@ namespace Outopos.Windows
             {
                 _selectedTab = value;
             }
-        }
-
-        void _transferLimitManager_StartEvent(object sender, EventArgs e)
-        {
-            if (_autoStop && !Settings.Instance.Global_IsStart)
-            {
-                this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
-                {
-                    _startMenuItem_Click(sender, null);
-                }));
-            }
-        }
-
-        void _transferLimitManager_StopEvent(object sender, EventArgs e)
-        {
-            Log.Information(LanguagesManager.Instance.MainWindow_TransferLimit_Message);
-
-            this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
-            {
-                _stopMenuItem_Click(sender, null);
-            }));
         }
 
         public static void CopyDirectory(string sourceDirectoryPath, string destDirectoryPath)
@@ -279,14 +315,6 @@ namespace Outopos.Windows
                     if (_closed) return;
 
                     {
-                        if (_diskSpaceNotFoundException || _cacheSpaceNotFoundException)
-                        {
-                            this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
-                            {
-                                _stopMenuItem_Click(null, null);
-                            }));
-                        }
-
                         if (_autoBaseNodeSettingManager.State == ManagerState.Stop
                             && (Settings.Instance.Global_IsStart && Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled))
                         {
@@ -541,7 +569,7 @@ namespace Outopos.Windows
                     searchSignatures.Add(leaderSignature);
 
                     var leaderProfile = _outoposManager.GetProfile(leaderSignature);
-                    if (leaderProfile == null) continue;
+                    if (leaderProfile == null && !Settings.Instance.Global_Profiles.TryGetValue(leaderSignature, out leaderProfile)) continue;
 
                     tempList.Add(leaderProfile);
                     checkedSignature.Add(leaderProfile.Certificate.ToString());
@@ -557,7 +585,7 @@ namespace Outopos.Windows
                         searchSignatures.Add(trustSignature);
 
                         var tempProfile = _outoposManager.GetProfile(trustSignature);
-                        if (tempProfile == null) continue;
+                        if (tempProfile == null && !Settings.Instance.Global_Profiles.TryGetValue(trustSignature, out tempProfile)) continue;
 
                         tempList.Add(tempProfile);
                         checkedSignature.Add(tempProfile.Certificate.ToString());
@@ -586,6 +614,7 @@ namespace Outopos.Windows
                 }
             }
 
+            if (higherProfiles.Count > 0)
             {
                 int sum = 0;
                 int count = 0;
@@ -870,71 +899,7 @@ namespace Outopos.Windows
                     if (Settings.Instance.Global_IsStart)
                         _cacheSpaceNotFoundException = true;
                 }
-
-                try
-                {
-                    this.Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new Action(() =>
-                    {
-                        if (_logCheckBox.IsChecked.Value)
-                        {
-                            try
-                            {
-                                if (_logListBox.Items.Count > 100)
-                                {
-                                    _logListBox.Items.RemoveAt(0);
-                                }
-
-                                _logListBox.Items.Add(string.Format("{0} {1}:\t{2}", DateTime.Now.ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo), e.MessageLevel, e.Message));
-                                _logListBox.GoBottom();
-                            }
-                            catch (Exception)
-                            {
-
-                            }
-                        }
-                    }));
-                }
-                catch (Exception)
-                {
-
-                }
             };
-
-            Debug.Listeners.Add(new MyTraceListener((string message) =>
-            {
-                try
-                {
-                    this.Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new Action(() =>
-                    {
-                        if (_debugCheckBox.IsChecked.Value)
-                        {
-                            try
-                            {
-                                if (_logListBox.Items.Count > 100)
-                                {
-                                    _logListBox.Items.RemoveAt(0);
-                                }
-
-                                _logListBox.Items.Add(string.Format("{0} Debug:\t{1}", DateTime.Now.ToString(LanguagesManager.Instance.DateTime_StringFormat, System.Globalization.DateTimeFormatInfo.InvariantInfo), message));
-                                _logListBox.GoBottom();
-                            }
-                            catch (Exception)
-                            {
-
-                            }
-                        }
-                    }));
-                }
-                catch (Exception)
-                {
-
-                }
-            }));
-        }
-
-        private void _logListBox_Loaded(object sender, RoutedEventArgs e)
-        {
-            _logListBox.GoBottom();
         }
 
         private class MyTraceListener : TraceListener
@@ -957,36 +922,36 @@ namespace Outopos.Windows
             }
         }
 
-        private void Setting_Languages()
-        {
-            foreach (var language in LanguagesManager.Instance.Languages)
-            {
-                var menuItem = new LanguageMenuItem() { IsCheckable = true, Value = language };
+        //private void Setting_Languages()
+        //{
+        //    foreach (var language in LanguagesManager.Instance.Languages)
+        //    {
+        //        var menuItem = new LanguageMenuItem() { IsCheckable = true, Value = language };
 
-                menuItem.Click += (object sender, RoutedEventArgs e) =>
-                {
-                    foreach (var item in _languagesMenuItem.Items.Cast<LanguageMenuItem>())
-                    {
-                        item.IsChecked = false;
-                    }
+        //        menuItem.Click += (object sender, RoutedEventArgs e) =>
+        //        {
+        //            foreach (var item in _languagesMenuItem.Items.Cast<LanguageMenuItem>())
+        //            {
+        //                item.IsChecked = false;
+        //            }
 
-                    menuItem.IsChecked = true;
-                };
+        //            menuItem.IsChecked = true;
+        //        };
 
-                menuItem.Checked += (object sender, RoutedEventArgs e) =>
-                {
-                    Settings.Instance.Global_UseLanguage = (string)menuItem.Value;
-                    LanguagesManager.ChangeLanguage((string)menuItem.Value);
-                };
+        //        menuItem.Checked += (object sender, RoutedEventArgs e) =>
+        //        {
+        //            Settings.Instance.Global_UseLanguage = (string)menuItem.Value;
+        //            LanguagesManager.ChangeLanguage((string)menuItem.Value);
+        //        };
 
-                _languagesMenuItem.Items.Add(menuItem);
-            }
+        //        _languagesMenuItem.Items.Add(menuItem);
+        //    }
 
-            {
-                var menuItem = _languagesMenuItem.Items.Cast<LanguageMenuItem>().FirstOrDefault(n => n.Value == Settings.Instance.Global_UseLanguage);
-                if (menuItem != null) menuItem.IsChecked = true;
-            }
-        }
+        //    {
+        //        var menuItem = _languagesMenuItem.Items.Cast<LanguageMenuItem>().FirstOrDefault(n => n.Value == Settings.Instance.Global_UseLanguage);
+        //        if (menuItem != null) menuItem.IsChecked = true;
+        //    }
+        //}
 
         private void Setting_Init()
         {
@@ -1009,17 +974,17 @@ namespace Outopos.Windows
 
                     // デフォルトのChatタグを設定。
                     {
-                        var amoebaTag = OutoposConverter.FromChatString("Chat:AAAAAAYAQW1vZWJhAAAAQAHBilDLoC-nL1s5WTA0IdmtaKn_biFkguR4jch-5pDM0lDvfcgKMYeA_kZeYZnDVe-HiE2aLCIKPObaQTk8lpMbuMWiQA");
-                        var outoposTag = OutoposConverter.FromChatString("Chat:AAAAAAcAT3V0b3BvcwAAAEABS5GzqK7pa00CTgDarZIq29YrlEc8s1MiQ2FwaC7ENXuUtBGlV-Fzmr3ZvkpfHxP2xovcDrzp6whzVjh9RKey1jbaoGE");
-                        var testTag = OutoposConverter.FromChatString("Chat:AAAAAAQAVGVzdAAAAEABcKrxJnNgzGIdtqem0bRipsrbAip77uBxCiLWo1jYJccB69Wc8Klf5UABDYBRfSWMhf4aXXQDdP7owzq2DAGMzKqOa_E");
+                        //var amoebaTag = OutoposConverter.FromChatString("Chat:AAAAAAYAQW1vZWJhAAAAQAHBilDLoC-nL1s5WTA0IdmtaKn_biFkguR4jch-5pDM0lDvfcgKMYeA_kZeYZnDVe-HiE2aLCIKPObaQTk8lpMbuMWiQA");
+                        //var outoposTag = OutoposConverter.FromChatString("Chat:AAAAAAcAT3V0b3BvcwAAAEABS5GzqK7pa00CTgDarZIq29YrlEc8s1MiQ2FwaC7ENXuUtBGlV-Fzmr3ZvkpfHxP2xovcDrzp6whzVjh9RKey1jbaoGE");
+                        //var testTag = OutoposConverter.FromChatString("Chat:AAAAAAQAVGVzdAAAAEABcKrxJnNgzGIdtqem0bRipsrbAip77uBxCiLWo1jYJccB69Wc8Klf5UABDYBRfSWMhf4aXXQDdP7owzq2DAGMzKqOa_E");
 
-                        Settings.Instance.ChatControl_ChatCategorizeTreeItem.ChatTreeItems.Add(new ChatTreeItem(amoebaTag));
-                        Settings.Instance.ChatControl_ChatCategorizeTreeItem.ChatTreeItems.Add(new ChatTreeItem(outoposTag));
-                        Settings.Instance.ChatControl_ChatCategorizeTreeItem.ChatTreeItems.Add(new ChatTreeItem(testTag));
+                        //Settings.Instance.ChatControl_ChatCategorizeTreeItem.ChatTreeItems.Add(new ChatTreeItem(amoebaTag));
+                        //Settings.Instance.ChatControl_ChatCategorizeTreeItem.ChatTreeItems.Add(new ChatTreeItem(outoposTag));
+                        //Settings.Instance.ChatControl_ChatCategorizeTreeItem.ChatTreeItems.Add(new ChatTreeItem(testTag));
                     }
 
                     {
-                        byte[] buffer = new byte[64];
+                        byte[] buffer = new byte[32];
 
                         using (var random = RandomNumberGenerator.Create())
                         {
@@ -1569,16 +1534,6 @@ namespace Outopos.Windows
                 return this.PointToScreen(new Point(0, 0)).X;
             };
 
-            ConnectionControl connectionControl = new ConnectionControl(_outoposManager, _bufferManager);
-            connectionControl.Height = Double.NaN;
-            connectionControl.Width = Double.NaN;
-            _connectionTabItem.Content = connectionControl;
-
-            if (Settings.Instance.Global_IsStart)
-            {
-                _startMenuItem_Click(null, null);
-            }
-
             if (Settings.Instance.Global_Update_Option == UpdateOption.AutoCheck
                || Settings.Instance.Global_Update_Option == UpdateOption.AutoUpdate)
             {
@@ -1679,26 +1634,6 @@ namespace Outopos.Windows
             }
         }
 
-        private void _tabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (e.OriginalSource != _tabControl) return;
-
-            if (_tabControl.SelectedItem == _connectionTabItem)
-            {
-                this.SelectedTab = MainWindowTabType.Connection;
-            }
-            else if (_tabControl.SelectedItem == _logTabItem)
-            {
-                this.SelectedTab = MainWindowTabType.Log;
-            }
-            else
-            {
-                this.SelectedTab = 0;
-            }
-
-            this.Title = string.Format("Outopos {0}", App.OutoposVersion);
-        }
-
         private SignatureTreeItem GetSignatureTreeViewItem(string leaderSignature)
         {
             List<SignatureTreeItem> workSignatureTreeItems = new List<SignatureTreeItem>();
@@ -1741,30 +1676,6 @@ namespace Outopos.Windows
             }
 
             return checkedSignatureTreeItems[0];
-        }
-
-        private void _coreMenuItem_SubmenuOpened(object sender, RoutedEventArgs e)
-        {
-            _updateBaseNodeMenuItem.IsEnabled = Settings.Instance.Global_IsStart && _updateBaseNodeMenuItem_IsEnabled
-                && (Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled || Settings.Instance.Global_I2p_SamBridge_IsEnabled);
-        }
-
-        private void _startMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            _startMenuItem.IsEnabled = false;
-            _stopMenuItem.IsEnabled = true;
-
-            Settings.Instance.Global_IsStart = true;
-        }
-
-        private void _stopMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender != null) _autoStop = (sender.GetType() == typeof(TransfarLimitManager));
-
-            _startMenuItem.IsEnabled = true;
-            _stopMenuItem.IsEnabled = false;
-
-            Settings.Instance.Global_IsStart = false;
         }
 
         volatile bool _updateBaseNodeMenuItem_IsEnabled = true;
@@ -1817,11 +1728,6 @@ namespace Outopos.Windows
             window.ShowDialog();
         }
 
-        private void _helpMenuItem_SubmenuOpened(object sender, RoutedEventArgs e)
-        {
-            _checkUpdateMenuItem.IsEnabled = _checkUpdateMenuItem_IsEnabled;
-        }
-
         private void _manualSiteMenuItem_Click(object sender, RoutedEventArgs e)
         {
             Process.Start("http://lyrise.web.fc2.com/index.html");
@@ -1865,24 +1771,9 @@ namespace Outopos.Windows
             window.ShowDialog();
         }
 
-        private void _logListBoxCopyMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            StringBuilder sb = new StringBuilder();
-
-            foreach (var line in _logListBox.SelectedItems.Cast<string>())
-            {
-                sb.AppendLine(line);
-            }
-
-            Clipboard.SetText(sb.ToString().TrimEnd('\n', '\r'));
-        }
-
         private void Execute_Copy(object sender, ExecutedRoutedEventArgs e)
         {
-            if (_logTabItem.IsSelected)
-            {
-                _logListBoxCopyMenuItem_Click(null, null);
-            }
+
         }
     }
 }
