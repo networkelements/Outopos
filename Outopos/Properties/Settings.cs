@@ -50,6 +50,8 @@ namespace Outopos.Properties
                 new Library.Configuration.SettingContent<double>() { Name = "MainWindow_Width", Value = 700 },
                 new Library.Configuration.SettingContent<WindowState>() { Name = "MainWindow_WindowState", Value = WindowState.Maximized },
                 
+                new Library.Configuration.SettingContent<double>() { Name = "WikiControl_Search_Grid_ColumnDefinitions_Width", Value = 200 },
+
                 new Library.Configuration.SettingContent<double>() { Name = "OptionsWindow_Top", Value = 120 },
                 new Library.Configuration.SettingContent<double>() { Name = "OptionsWindow_Left", Value = 120 },
                 new Library.Configuration.SettingContent<double>() { Name = "OptionsWindow_Height", Value = 500 },
@@ -593,6 +595,25 @@ namespace Outopos.Properties
                 lock (this.ThisLock)
                 {
                     this["MainWindow_WindowState"] = value;
+                }
+            }
+        }
+
+
+        public double WikiControl_Search_Grid_ColumnDefinitions_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return (double)this["WikiControl_Search_Grid_ColumnDefinitions_Width"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["WikiControl_Search_Grid_ColumnDefinitions_Width"] = value;
                 }
             }
         }

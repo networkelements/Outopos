@@ -121,11 +121,15 @@
     <Compile Include="Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\WikiControl.xaml.cs">
+      <DependentUpon>WikiControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\_Controls\ListBoxEx.cs" />
     <Compile Include="Windows\_Controls\ChatCategorizeTreeViewItem.cs" />
     <Compile Include="Windows\_Controls\ChatTreeViewItem.cs" />
     <Compile Include="Windows\_Items\ChatCategorizeTreeItem.cs" />
     <Compile Include="Windows\_Items\ChatTreeItem.cs" />
+    <Compile Include="Windows\_Items\ConnectionState.cs" />
     <Compile Include="Windows\_Items\SignatureTreeItem.cs" />
     <Compile Include="Utilities\Extensions.cs" />
     <Compile Include="Windows\_Controls\ObservableCollectionEx.cs" />
@@ -171,6 +175,10 @@
       <Generator>MSBuild:Compile</Generator>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\WikiControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

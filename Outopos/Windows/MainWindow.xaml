@@ -4,6 +4,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:prop="clr-namespace:Outopos.Properties"     
         xmlns:local="clr-namespace:Outopos.Windows" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        mc:Ignorable="d" 
         FontFamily="{Binding Path=FontFamily, Mode=OneWay, Source={StaticResource ResourcesInstance}, Converter={StaticResource _stringToFontFamilyConverter}}"
         FontSize="{Binding Path=FontSize, Mode=OneWay, Source={StaticResource ResourcesInstance}, Converter={StaticResource _stringToDoubleConverter}}"
         Background="{DynamicResource WindowBackgroundBrush}"
@@ -16,6 +19,7 @@
         Loaded="Window_Loaded"
         Closing="Window_Closing">
     <Window.Resources>
+        
         <DataTemplate x:Key="_logListBox_Template">
             <TextBlock Text="{Binding Mode=OneWay}" TextWrapping="Wrap"/>
         </DataTemplate>
@@ -124,23 +128,25 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="438*" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="23" />
         </Grid.RowDefinitions>
 
-        <Grid HorizontalAlignment="Left" Height="446" VerticalAlignment="Top" Width="92">
-            <RadioButton x:Name="_wikiRadioButton" Style="{StaticResource _radioButtonStyle}" Content="Wiki" HorizontalAlignment="Left" VerticalAlignment="Top" Height="80" Width="80" Margin="6,6,0,0" RenderTransformOrigin="-0.375,0.488"/>
+        <Grid HorizontalAlignment="Left" Width="92">
+            <RadioButton x:Name="_wikiRadioButton" Style="{StaticResource _radioButtonStyle}" Content="Wiki" HorizontalAlignment="Left" VerticalAlignment="Top" Height="80" Width="80" Margin="6,6,0,0" IsChecked="True"/>
             <RadioButton x:Name="_chatRadioButton" Style="{StaticResource _radioButtonStyle}" Content="Chat" HorizontalAlignment="Left" VerticalAlignment="Top" Height="80" Width="80" Margin="6,91,0,0"/>
             <RadioButton x:Name="_mailRadioButton" Style="{StaticResource _radioButtonStyle}" Content="Mail" HorizontalAlignment="Left" VerticalAlignment="Top" Height="80" Width="80" Margin="6,176,0,0"/>
             <RadioButton x:Name="_settingsRadioButton" Style="{StaticResource _radioButtonStyle}" Content="Settings" HorizontalAlignment="Left" VerticalAlignment="Top" Height="80" Width="80" Margin="6,261,0,0"/>
         </Grid>
+
+        <ContentControl Name="_wikiContentControl" Visibility="{Binding ElementName=_wikiRadioButton, Path=IsChecked, Converter={StaticResource _boolToVisibilityConverter}}" Margin="92,6,6,6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
 
         <StatusBar Grid.Row="1" 
                     FontFamily="{Binding Path=FontFamily, Mode=OneWay, Source={StaticResource ResourcesInstance}, Converter={StaticResource _stringToFontFamilyConverter}}"
                     FontSize="{Binding Path=FontSize, Mode=OneWay, Source={StaticResource ResourcesInstance}, Converter={StaticResource _stringToDoubleConverter}}" >
             <StatusBarItem>
                 <Grid>
-                    <TextBlock Name="_stateTextBlock" Margin="6,0,0,0" />
+                    <Image Name="_stateImage" Margin="6,0,6,0" Width="16" Height="16" />
                 </Grid>
             </StatusBarItem>
             <StatusBarItem HorizontalContentAlignment="Right">

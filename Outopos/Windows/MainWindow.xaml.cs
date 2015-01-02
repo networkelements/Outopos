@@ -291,6 +291,43 @@ namespace Outopos.Windows
             }
         }
 
+        private void SetConnectionState(ConnectionState state)
+        {
+            if (state == ConnectionState.Red)
+            {
+                var bitmap = new BitmapImage();
+
+                bitmap.BeginInit();
+                bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"States\Red.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
+                bitmap.EndInit();
+                if (bitmap.CanFreeze) bitmap.Freeze();
+
+                _stateImage.Source = bitmap;
+            }
+            else if (state == ConnectionState.Yello)
+            {
+                var bitmap = new BitmapImage();
+
+                bitmap.BeginInit();
+                bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"States\Yello.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
+                bitmap.EndInit();
+                if (bitmap.CanFreeze) bitmap.Freeze();
+
+                _stateImage.Source = bitmap;
+            }
+            else if (state == ConnectionState.Green)
+            {
+                var bitmap = new BitmapImage();
+
+                bitmap.BeginInit();
+                bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"States\Green.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
+                bitmap.EndInit();
+                if (bitmap.CanFreeze) bitmap.Freeze();
+
+                _stateImage.Source = bitmap;
+            }
+        }
+
         private void TimerThread()
         {
             try
@@ -661,20 +698,6 @@ namespace Outopos.Windows
 
                             _sendSpeedTextBlock.Text = NetworkConverter.ToSizeString(sentAverageTraffic) + "/s";
                             _receiveSpeedTextBlock.Text = NetworkConverter.ToSizeString(receivedAverageTraffic) + "/s";
-                        }
-                        catch (Exception)
-                        {
-
-                        }
-
-                        try
-                        {
-                            string coreText = null;
-
-                            if (state == ManagerState.Start) coreText = LanguagesManager.Instance.MainWindow_Running;
-                            else coreText = LanguagesManager.Instance.MainWindow_Stopping;
-
-                            _stateTextBlock.Text = string.Format(LanguagesManager.Instance.MainWindow_StatesBar, coreText);
                         }
                         catch (Exception)
                         {
@@ -1534,11 +1557,18 @@ namespace Outopos.Windows
                 return this.PointToScreen(new Point(0, 0)).X;
             };
 
+            WikiControl wikiControl = new WikiControl();
+            wikiControl.Height = Double.NaN;
+            wikiControl.Width = Double.NaN;
+            _wikiContentControl.Content = wikiControl;
+
             if (Settings.Instance.Global_Update_Option == UpdateOption.AutoCheck
                || Settings.Instance.Global_Update_Option == UpdateOption.AutoUpdate)
             {
                 _checkUpdateMenuItem_Click(null, null);
             }
+
+            this.SetConnectionState(ConnectionState.Red);
 
             this.GarbageCollect();
         }
