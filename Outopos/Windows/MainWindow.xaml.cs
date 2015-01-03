@@ -182,6 +182,21 @@ namespace Outopos.Windows
                     _mailRadioButton.Content = stackPanel;
                 }
 
+                // Search
+                {
+                    var bitmap = new BitmapImage();
+
+                    bitmap.BeginInit();
+                    bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"Buttons\Search.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
+                    bitmap.EndInit();
+                    if (bitmap.CanFreeze) bitmap.Freeze();
+
+                    var stackPanel = new StackPanel();
+                    stackPanel.Children.Add(new Image() { Source = bitmap, Height = 64, Width = 64 });
+
+                    _searchRadioButton.Content = stackPanel;
+                }
+
                 // Settings
                 {
                     var bitmap = new BitmapImage();
@@ -666,6 +681,8 @@ namespace Outopos.Windows
             }
 
             _outoposManager.SetSearchSignatures(searchSignatures);
+
+            Trust.SetSignatures(searchSignatures);
         }
 
         private void StatusBarThread()
@@ -1557,10 +1574,10 @@ namespace Outopos.Windows
                 return this.PointToScreen(new Point(0, 0)).X;
             };
 
-            WikiControl wikiControl = new WikiControl();
-            wikiControl.Height = Double.NaN;
-            wikiControl.Width = Double.NaN;
-            _wikiContentControl.Content = wikiControl;
+            ChatControl chatControl = new ChatControl(_outoposManager, _bufferManager);
+            chatControl.Height = Double.NaN;
+            chatControl.Width = Double.NaN;
+            _chatContentControl.Content = chatControl;
 
             if (Settings.Instance.Global_Update_Option == UpdateOption.AutoCheck
                || Settings.Instance.Global_Update_Option == UpdateOption.AutoUpdate)

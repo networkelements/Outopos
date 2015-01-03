@@ -42,7 +42,8 @@
             <local:WikiToStringConverter x:Key="_wikiToStringConverter"/>
             <local:ChatToStringConverter x:Key="_chatToStringConverter"/>
             <local:BytesToBase64StringConverter x:Key="_bytesToBase64StringConverter"/>
-            
+            <local:ChatMessageWrapperToBorderBrushConverter x:Key="_chatMessageWrapperToBorderBrushConverter"/>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -115,18 +115,26 @@
     <Compile Include="Utilities\CatharsisManager.cs" />
     <Compile Include="Utilities\EqualityComparer.cs" />
     <Compile Include="Utilities\Ipv4AddressFilter.cs" />
+    <Compile Include="Utilities\Trust.cs" />
+    <Compile Include="Windows\Chat\ChatControl.xaml.cs">
+      <DependentUpon>ChatControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Chat\ChatListWindow.xaml.cs">
+      <DependentUpon>ChatListWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Chat\ChatMessageEditWindow.xaml.cs">
+      <DependentUpon>ChatMessageEditWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\OptionsWindow.xaml.cs">
       <DependentUpon>OptionsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\WikiControl.xaml.cs">
-      <DependentUpon>WikiControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Windows\_Controls\ListBoxEx.cs" />
     <Compile Include="Windows\_Controls\ChatCategorizeTreeViewItem.cs" />
     <Compile Include="Windows\_Controls\ChatTreeViewItem.cs" />
+    <Compile Include="Windows\_Controls\RichTextBoxHelper.cs" />
     <Compile Include="Windows\_Items\ChatCategorizeTreeItem.cs" />
     <Compile Include="Windows\_Items\ChatTreeItem.cs" />
     <Compile Include="Windows\_Items\ConnectionState.cs" />
@@ -158,6 +166,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\Chat\ChatControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\Chat\ChatListWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\Chat\ChatMessageEditWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Windows\OptionsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -175,10 +195,6 @@
       <Generator>MSBuild:Compile</Generator>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\WikiControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -200,6 +216,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icons\Buttons\Mail.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\Buttons\Search.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icons\Buttons\Settings.png">

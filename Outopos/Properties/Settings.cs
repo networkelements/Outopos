@@ -50,7 +50,8 @@ namespace Outopos.Properties
                 new Library.Configuration.SettingContent<double>() { Name = "MainWindow_Width", Value = 700 },
                 new Library.Configuration.SettingContent<WindowState>() { Name = "MainWindow_WindowState", Value = WindowState.Maximized },
                 
-                new Library.Configuration.SettingContent<double>() { Name = "WikiControl_Search_Grid_ColumnDefinitions_Width", Value = 200 },
+                new Library.Configuration.SettingContent<double>() { Name = "ChatControl_Search_Grid_ColumnDefinitions_Width", Value = 200 },
+                new Library.Configuration.SettingContent<double>() { Name = "ChatControl_TreeView_Grid_ColumnDefinitions_Width", Value = 200 },
 
                 new Library.Configuration.SettingContent<double>() { Name = "OptionsWindow_Top", Value = 120 },
                 new Library.Configuration.SettingContent<double>() { Name = "OptionsWindow_Left", Value = 120 },
@@ -600,20 +601,38 @@ namespace Outopos.Properties
         }
 
 
-        public double WikiControl_Search_Grid_ColumnDefinitions_Width
+        public double ChatControl_Search_Grid_ColumnDefinitions_Width
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return (double)this["WikiControl_Search_Grid_ColumnDefinitions_Width"];
+                    return (double)this["ChatControl_Search_Grid_ColumnDefinitions_Width"];
                 }
             }
             set
             {
                 lock (this.ThisLock)
                 {
-                    this["WikiControl_Search_Grid_ColumnDefinitions_Width"] = value;
+                    this["ChatControl_Search_Grid_ColumnDefinitions_Width"] = value;
+                }
+            }
+        }
+
+        public double ChatControl_TreeView_Grid_ColumnDefinitions_Width
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return (double)this["ChatControl_TreeView_Grid_ColumnDefinitions_Width"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["ChatControl_TreeView_Grid_ColumnDefinitions_Width"] = value;
                 }
             }
         }

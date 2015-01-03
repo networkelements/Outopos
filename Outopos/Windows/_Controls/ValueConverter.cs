@@ -565,4 +565,38 @@ namespace Outopos.Windows
             throw new NotImplementedException();
         }
     }
+
+    class ChatMessageWrapperToBorderBrushConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            var wrapper = values[0] as ChatMessageWrapper;
+            if (wrapper == null) return null;
+
+            var isSelect = values[1] as bool?;
+            if (isSelect == null) return null;
+
+            System.Windows.Media.Color color;
+
+            if (isSelect.HasValue && isSelect.Value)
+            {
+                color = App.Colors.Message_Select;
+            }
+            else if (wrapper.State.HasFlag(ChatMessageState.IsUnread))
+            {
+                color = App.Colors.Message_New;
+            }
+            else
+            {
+                color = App.Colors.Message;
+            }
+
+            return new SolidColorBrush(color);
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

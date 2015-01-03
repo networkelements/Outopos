@@ -63,16 +63,6 @@
                             <Border x:Name="Border" Padding="{TemplateBinding Padding}" BorderBrush="Transparent" CornerRadius="3,3,3,3" />
                             <Border x:Name="CheckedBorder" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" Background="{DynamicResource GlyphBrush}" BorderBrush="{DynamicResource NormalBorderBrush}" CornerRadius="3,3,3,3" Opacity="0" />
                             <Border x:Name="HoverBorder" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" BorderBrush="{DynamicResource NormalBorderBrush}" CornerRadius="3,3,3,3" Opacity="0" Background="{DynamicResource GlyphBrush}" />
-                            <!--<Rectangle Opacity="1" Stroke="{x:Null}" RadiusX="3" RadiusY="3" Margin="2,2,2,2" VerticalAlignment="Stretch" Height="Auto" x:Name="Shine">
-                                <Rectangle.Fill>
-                                    <LinearGradientBrush EndPoint="0.5,0.971" StartPoint="0.5,0.042">
-                                        <GradientStop Color="#26FFFFFF" Offset="0" />
-                                        <GradientStop Color="#00FFFFFF" Offset="1" />
-                                        <GradientStop Color="#26FFFFFF" Offset="0.467" />
-                                        <GradientStop Color="#00FFFFFF" Offset="0.475" />
-                                    </LinearGradientBrush>
-                                </Rectangle.Fill>
-                            </Rectangle>-->
 
                             <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" RecognizesAccessKey="True" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="4,4,4,4" />
                         </Grid>
@@ -136,17 +126,22 @@
             <RadioButton x:Name="_wikiRadioButton" Style="{StaticResource _radioButtonStyle}" Content="Wiki" HorizontalAlignment="Left" VerticalAlignment="Top" Height="80" Width="80" Margin="6,6,0,0" IsChecked="True"/>
             <RadioButton x:Name="_chatRadioButton" Style="{StaticResource _radioButtonStyle}" Content="Chat" HorizontalAlignment="Left" VerticalAlignment="Top" Height="80" Width="80" Margin="6,91,0,0"/>
             <RadioButton x:Name="_mailRadioButton" Style="{StaticResource _radioButtonStyle}" Content="Mail" HorizontalAlignment="Left" VerticalAlignment="Top" Height="80" Width="80" Margin="6,176,0,0"/>
-            <RadioButton x:Name="_settingsRadioButton" Style="{StaticResource _radioButtonStyle}" Content="Settings" HorizontalAlignment="Left" VerticalAlignment="Top" Height="80" Width="80" Margin="6,261,0,0"/>
+            <RadioButton x:Name="_searchRadioButton" Style="{StaticResource _radioButtonStyle}" Content="Search" HorizontalAlignment="Left" VerticalAlignment="Top" Height="80" Width="80" Margin="6,261,0,0"/>
+            <RadioButton x:Name="_settingsRadioButton" Style="{StaticResource _radioButtonStyle}" Content="Settings" HorizontalAlignment="Left" VerticalAlignment="Top" Height="80" Width="80" Margin="6,346,0,0"/>
         </Grid>
 
         <ContentControl Name="_wikiContentControl" Visibility="{Binding ElementName=_wikiRadioButton, Path=IsChecked, Converter={StaticResource _boolToVisibilityConverter}}" Margin="92,6,6,6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+        <ContentControl Name="_chatContentControl" Visibility="{Binding ElementName=_chatRadioButton, Path=IsChecked, Converter={StaticResource _boolToVisibilityConverter}}" Margin="92,6,6,6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+        <ContentControl Name="_mailContentControl" Visibility="{Binding ElementName=_mailRadioButton, Path=IsChecked, Converter={StaticResource _boolToVisibilityConverter}}" Margin="92,6,6,6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+        <ContentControl Name="_searchContentControl" Visibility="{Binding ElementName=_searchRadioButton, Path=IsChecked, Converter={StaticResource _boolToVisibilityConverter}}" Margin="92,6,6,6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+        <ContentControl Name="_settingsContentControl" Visibility="{Binding ElementName=_settingsRadioButton, Path=IsChecked, Converter={StaticResource _boolToVisibilityConverter}}" Margin="92,6,6,6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
 
         <StatusBar Grid.Row="1" 
                     FontFamily="{Binding Path=FontFamily, Mode=OneWay, Source={StaticResource ResourcesInstance}, Converter={StaticResource _stringToFontFamilyConverter}}"
                     FontSize="{Binding Path=FontSize, Mode=OneWay, Source={StaticResource ResourcesInstance}, Converter={StaticResource _stringToDoubleConverter}}" >
             <StatusBarItem>
                 <Grid>
-                    <Image Name="_stateImage" Margin="6,0,6,0" Width="16" Height="16" />
+                    <Image Name="_stateImage" Margin="3,0,3,0" Width="16" Height="16" />
                 </Grid>
             </StatusBarItem>
             <StatusBarItem HorizontalContentAlignment="Right">
