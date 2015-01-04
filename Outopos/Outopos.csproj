@@ -221,7 +221,7 @@
     <Content Include="Icons\Buttons\Search.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Icons\Buttons\Settings.png">
+    <Content Include="Icons\Buttons\Options.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icons\Buttons\Wiki.png">

@@ -197,19 +197,19 @@ namespace Outopos.Windows
                     _searchRadioButton.Content = stackPanel;
                 }
 
-                // Settings
+                // Options
                 {
                     var bitmap = new BitmapImage();
 
                     bitmap.BeginInit();
-                    bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"Buttons\Settings.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
+                    bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"Buttons\Options.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
                     bitmap.EndInit();
                     if (bitmap.CanFreeze) bitmap.Freeze();
 
                     var stackPanel = new StackPanel();
                     stackPanel.Children.Add(new Image() { Source = bitmap, Height = 64, Width = 64 });
 
-                    _settingsRadioButton.Content = stackPanel;
+                    _optionsRadioButton.Content = stackPanel;
                 }
 
                 System.Drawing.Icon myIcon = new System.Drawing.Icon(Path.Combine(App.DirectoryPaths["Icons"], "Outopos.ico"));
@@ -713,8 +713,8 @@ namespace Outopos.Windows
                                 receivedAverageTraffic = _receivedInfomation.AverageTrafficList.Sum() / _receivedInfomation.AverageTrafficList.Length;
                             }
 
-                            _sendSpeedTextBlock.Text = NetworkConverter.ToSizeString(sentAverageTraffic) + "/s";
-                            _receiveSpeedTextBlock.Text = NetworkConverter.ToSizeString(receivedAverageTraffic) + "/s";
+                            _sendingSpeedTextBlock.Text = NetworkConverter.ToSizeString(sentAverageTraffic) + "/s";
+                            _receivingSpeedTextBlock.Text = NetworkConverter.ToSizeString(receivedAverageTraffic) + "/s";
                         }
                         catch (Exception)
                         {

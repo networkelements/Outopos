@@ -680,24 +680,24 @@ namespace Outopos.Properties
             }
         }
 
-        public string MainWindow_SendSpeed
+        public string MainWindow_SendingSpeed
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("MainWindow_SendSpeed");
+                    return this.Translate("MainWindow_SendingSpeed");
                 }
             }
         }
 
-        public string MainWindow_ReceiveSpeed
+        public string MainWindow_ReceivingSpeed
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("MainWindow_ReceiveSpeed");
+                    return this.Translate("MainWindow_ReceivingSpeed");
                 }
             }
         }
