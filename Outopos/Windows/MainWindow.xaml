@@ -33,7 +33,7 @@
             <RowDefinition Height="23" />
         </Grid.RowDefinitions>
 
-        <Grid HorizontalAlignment="Left" Width="92">
+        <Grid HorizontalAlignment="Left" Width="52">
             <Grid.Resources>
 
                 <Style x:Key="_radioButtonStyle" TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type ToggleButton}}">
@@ -213,19 +213,20 @@
                 </Style>       
             </Grid.Resources>
 
-            <RadioButton x:Name="_wikiRadioButton" Style="{StaticResource _radioButtonStyle}" Content="Wiki" HorizontalAlignment="Left" VerticalAlignment="Top" Height="80" Width="80" Margin="6,6,0,0" IsChecked="True"/>
-            <RadioButton x:Name="_chatRadioButton" Style="{StaticResource _radioButtonStyle}" Content="Chat" HorizontalAlignment="Left" VerticalAlignment="Top" Height="80" Width="80" Margin="6,91,0,0"/>
-            <RadioButton x:Name="_mailRadioButton" Style="{StaticResource _radioButtonStyle}" Content="Mail" HorizontalAlignment="Left" VerticalAlignment="Top" Height="80" Width="80" Margin="6,176,0,0"/>
-            <RadioButton x:Name="_searchRadioButton" Style="{StaticResource _radioButtonStyle}" Content="Search" HorizontalAlignment="Left" VerticalAlignment="Top" Height="80" Width="80" Margin="6,261,0,0"/>
-            
-            <Button x:Name="_optionsRadioButton" Style="{StaticResource _buttonStyle}" Content="Options" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="80" Width="80" Margin="6,0,0,6"/>
+            <RadioButton x:Name="_wikiRadioButton" Style="{StaticResource _radioButtonStyle}" Content="Wiki" HorizontalAlignment="Left" VerticalAlignment="Top" Height="40" Width="40" Margin="6,6,0,0" IsChecked="True"/>
+            <RadioButton x:Name="_chatRadioButton" Style="{StaticResource _radioButtonStyle}" Content="Chat" HorizontalAlignment="Left" VerticalAlignment="Top" Height="40" Width="40" Margin="6,51,0,0"/>
+            <RadioButton x:Name="_mailRadioButton" Style="{StaticResource _radioButtonStyle}" Content="Mail" HorizontalAlignment="Left" VerticalAlignment="Top" Height="40" Width="40" Margin="6,96,0,0"/>
+            <RadioButton x:Name="_searchRadioButton" Style="{StaticResource _radioButtonStyle}" Content="Search" HorizontalAlignment="Left" VerticalAlignment="Top" Height="40" Width="40" Margin="6,141,0,0"/>            
+            <Button x:Name="_optionsRadioButton" Style="{StaticResource _buttonStyle}" Content="Options" HorizontalAlignment="Left" VerticalAlignment="Top" Height="40" Width="40" Margin="6,186,0,0"/>
         </Grid>
 
-        <ContentControl Name="_wikiContentControl" Visibility="{Binding ElementName=_wikiRadioButton, Path=IsChecked, Converter={StaticResource _boolToVisibilityConverter}}" Margin="92,6,6,6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-        <ContentControl Name="_chatContentControl" Visibility="{Binding ElementName=_chatRadioButton, Path=IsChecked, Converter={StaticResource _boolToVisibilityConverter}}" Margin="92,6,6,6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-        <ContentControl Name="_mailContentControl" Visibility="{Binding ElementName=_mailRadioButton, Path=IsChecked, Converter={StaticResource _boolToVisibilityConverter}}" Margin="92,6,6,6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-        <ContentControl Name="_searchContentControl" Visibility="{Binding ElementName=_searchRadioButton, Path=IsChecked, Converter={StaticResource _boolToVisibilityConverter}}" Margin="92,6,6,6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-        <ContentControl Name="_settingsContentControl" Visibility="{Binding IsChecked, Converter={StaticResource _boolToVisibilityConverter}, ElementName=_optionsRadioButton}" Margin="92,6,6,6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+        <Grid Margin="52,6,6,6">          
+            <ContentControl Name="_wikiContentControl" Visibility="{Binding ElementName=_wikiRadioButton, Path=IsChecked, Converter={StaticResource _boolToVisibilityConverter}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+            <ContentControl Name="_chatContentControl" Visibility="{Binding ElementName=_chatRadioButton, Path=IsChecked, Converter={StaticResource _boolToVisibilityConverter}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+            <ContentControl Name="_mailContentControl" Visibility="{Binding ElementName=_mailRadioButton, Path=IsChecked, Converter={StaticResource _boolToVisibilityConverter}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+            <ContentControl Name="_searchContentControl" Visibility="{Binding ElementName=_searchRadioButton, Path=IsChecked, Converter={StaticResource _boolToVisibilityConverter}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+            <ContentControl Name="_settingsContentControl" Visibility="{Binding IsChecked, Converter={StaticResource _boolToVisibilityConverter}, ElementName=_optionsRadioButton}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+        </Grid>
 
         <StatusBar Grid.Row="1" 
                     FontFamily="{Binding Path=FontFamily, Mode=OneWay, Source={StaticResource ResourcesInstance}, Converter={StaticResource _stringToFontFamilyConverter}}"

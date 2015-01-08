@@ -25,81 +25,69 @@
         <KeyBinding Gesture="CTRL+V" Command="Paste" />
     </UserControl.InputBindings>
 
-    <Grid>
+    <Grid Grid.ColumnSpan="3" Grid.Row="2">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="{Binding Path=ChatControl_CategorizeTreeViewArea_Grid_ColumnDefinitions_Width, Mode=TwoWay, Converter={StaticResource _doubleToGridLengthConverter}, Source={x:Static prop:Settings.Instance}}" />
             <ColumnDefinition Width="4"/>
-            <ColumnDefinition Width="{Binding Path=ChatControl_Search_Grid_ColumnDefinitions_Width, Mode=TwoWay, Converter={StaticResource _doubleToGridLengthConverter}, Source={x:Static prop:Settings.Instance}}" />
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="23"/>
-            <RowDefinition Height="4"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
 
-        <TextBox Name="_uriTextBox" />
-        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
-        <TextBox Name="_searchTextBox" Grid.Column="2" KeyDown="_searchTextBox_KeyDown" />
+        <TreeView Name="_treeView" Grid.RowSpan="3" AllowDrop="True"
+                PreviewDragOver="_treeView_PreviewDragOver"
+                PreviewMouseMove="_treeView_PreviewMouseMove" 
+                PreviewDrop="_treeView_PreviewDrop" 
+                PreviewMouseLeftButtonDown="_treeView_PreviewMouseLeftButtonDown" 
+                SelectedItemChanged="_treeView_SelectedItemChanged"
+                VirtualizingStackPanel.IsVirtualizing="True"
+                VirtualizingStackPanel.VirtualizationMode="Recycling">
+            <TreeView.Resources>
+                <ContextMenu x:Key="_chatCategorizeTreeViewItemContextMenu">
+                    <MenuItem Name="_chatCategorizeTreeViewItemNewCategoryMenuItem" Header="{Binding Path=ChatControl_NewCategory, Source={StaticResource ResourcesInstance}}" Click="_chatCategorizeTreeViewItemNewCategoryMenuItem_Click"/>
+                    <MenuItem Name="_chatCategorizeTreeViewItemEditMenuItem" Header="{Binding Path=ChatControl_Edit, Source={StaticResource ResourcesInstance}}" Click="_chatCategorizeTreeViewItemEditMenuItem_Click"/>
+                    <MenuItem Name="_chatCategorizeTreeViewItemDeleteMenuItem" Header="{Binding Path=ChatControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_chatCategorizeTreeViewItemDeleteMenuItem_Click"/>
+                    <Separator />
+                    <MenuItem Name="_chatCategorizeTreeViewItemCutMenuItem" Header="{Binding Path=ChatControl_Cut, Source={StaticResource ResourcesInstance}}" Click="_chatCategorizeTreeViewItemCutMenuItem_Click" />
+                    <MenuItem Name="_chatCategorizeTreeViewItemCopyMenuItem" Header="{Binding Path=ChatControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_chatCategorizeTreeViewItemCopyMenuItem_Click" />
+                    <MenuItem Name="_chatCategorizeTreeViewItemCopyInfoMenuItem" Header="{Binding Path=ChatControl_CopyInfo, Source={StaticResource ResourcesInstance}}" Click="_chatCategorizeTreeViewItemCopyInfoMenuItem_Click" />
+                    <MenuItem Name="_chatCategorizeTreeViewItemPasteMenuItem" Header="{Binding Path=ChatControl_Paste, Source={StaticResource ResourcesInstance}}" Click="_chatCategorizeTreeViewItemPasteMenuItem_Click" />
+                    <Separator />
+                    <MenuItem Name="_chatCategorizeTreeViewItemTrustOnMenuItem" Header="{Binding Path=ChatControl_Trust_On, Source={StaticResource ResourcesInstance}}" Click="_chatCategorizeTreeViewItemTrustOnMenuItem_Click" />
+                    <MenuItem Name="_chatCategorizeTreeViewItemTrustOffMenuItem" Header="{Binding Path=ChatControl_Trust_Off, Source={StaticResource ResourcesInstance}}" Click="_chatCategorizeTreeViewItemTrustOffMenuItem_Click" />
+                    <Separator />
+                    <MenuItem Name="_chatCategorizeTreeViewItemMarkAllMessagesReadMenuItem" Header="{Binding Path=ChatControl_MarkAllMessagesRead, Source={StaticResource ResourcesInstance}}" Click="_chatCategorizeTreeViewItemMarkAllMessagesReadMenuItem_Click" />
+                    <Separator />
+                    <MenuItem Name="_chatCategorizeTreeViewItemChatListMenuItem" Header="{Binding Path=ChatControl_ChatList, Source={StaticResource ResourcesInstance}}" Click="_chatCategorizeTreeViewItemChatListMenuItem_Click"/>
+                </ContextMenu>
 
-        <Grid Grid.ColumnSpan="3" Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="{Binding Path=ChatControl_TreeView_Grid_ColumnDefinitions_Width, Mode=TwoWay, Converter={StaticResource _doubleToGridLengthConverter}, Source={x:Static prop:Settings.Instance}}" />
-                <ColumnDefinition Width="4"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+                <ContextMenu x:Key="_chatTreeItemTreeViewItemContextMenu">
+                    <MenuItem Name="_chatTreeItemTreeViewItemDeleteMenuItem" Header="{Binding Path=ChatControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_chatTreeItemTreeViewItemDeleteMenuItem_Click"/>
+                    <Separator />
+                    <MenuItem Name="_chatTreeItemTreeViewItemCutMenuItem" Header="{Binding Path=ChatControl_Cut, Source={StaticResource ResourcesInstance}}" Click="_chatTreeItemTreeViewItemCutMenuItem_Click" />
+                    <MenuItem Name="_chatTreeItemTreeViewItemCopyMenuItem" Header="{Binding Path=ChatControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_chatTreeItemTreeViewItemCopyMenuItem_Click" />
+                    <MenuItem Name="_chatTreeItemTreeViewItemCopyInfoMenuItem" Header="{Binding Path=ChatControl_CopyInfo, Source={StaticResource ResourcesInstance}}" Click="_chatTreeItemTreeViewItemCopyInfoMenuItem_Click" />
+                </ContextMenu>
 
-            <TreeView Name="_treeView" Grid.RowSpan="3" AllowDrop="True"
-                    PreviewDragOver="_treeView_PreviewDragOver"
-                    PreviewMouseMove="_treeView_PreviewMouseMove" 
-                    PreviewDrop="_treeView_PreviewDrop" 
-                    PreviewMouseLeftButtonDown="_treeView_PreviewMouseLeftButtonDown" 
-                    SelectedItemChanged="_treeView_SelectedItemChanged"
-                    VirtualizingStackPanel.IsVirtualizing="True"
-                    VirtualizingStackPanel.VirtualizationMode="Recycling">
-                <TreeView.Resources>
-                    <ContextMenu x:Key="_chatCategorizeTreeViewItemContextMenu">
-                        <MenuItem Name="_chatCategorizeTreeViewItemNewCategoryMenuItem" Header="{Binding Path=ChatControl_NewCategory, Source={StaticResource ResourcesInstance}}" Click="_chatCategorizeTreeViewItemNewCategoryMenuItem_Click"/>
-                        <MenuItem Name="_chatCategorizeTreeViewItemEditMenuItem" Header="{Binding Path=ChatControl_Edit, Source={StaticResource ResourcesInstance}}" Click="_chatCategorizeTreeViewItemEditMenuItem_Click"/>
-                        <MenuItem Name="_chatCategorizeTreeViewItemDeleteMenuItem" Header="{Binding Path=ChatControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_chatCategorizeTreeViewItemDeleteMenuItem_Click"/>
-                        <Separator />
-                        <MenuItem Name="_chatCategorizeTreeViewItemCutMenuItem" Header="{Binding Path=ChatControl_Cut, Source={StaticResource ResourcesInstance}}" Click="_chatCategorizeTreeViewItemCutMenuItem_Click" />
-                        <MenuItem Name="_chatCategorizeTreeViewItemCopyMenuItem" Header="{Binding Path=ChatControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_chatCategorizeTreeViewItemCopyMenuItem_Click" />
-                        <MenuItem Name="_chatCategorizeTreeViewItemCopyInfoMenuItem" Header="{Binding Path=ChatControl_CopyInfo, Source={StaticResource ResourcesInstance}}" Click="_chatCategorizeTreeViewItemCopyInfoMenuItem_Click" />
-                        <MenuItem Name="_chatCategorizeTreeViewItemPasteMenuItem" Header="{Binding Path=ChatControl_Paste, Source={StaticResource ResourcesInstance}}" Click="_chatCategorizeTreeViewItemPasteMenuItem_Click" />
-                        <Separator />
-                        <MenuItem Name="_chatCategorizeTreeViewItemTrustOnMenuItem" Header="{Binding Path=ChatControl_Trust_On, Source={StaticResource ResourcesInstance}}" Click="_chatCategorizeTreeViewItemTrustOnMenuItem_Click" />
-                        <MenuItem Name="_chatCategorizeTreeViewItemTrustOffMenuItem" Header="{Binding Path=ChatControl_Trust_Off, Source={StaticResource ResourcesInstance}}" Click="_chatCategorizeTreeViewItemTrustOffMenuItem_Click" />
-                        <Separator />
-                        <MenuItem Name="_chatCategorizeTreeViewItemMarkAllMessagesReadMenuItem" Header="{Binding Path=ChatControl_MarkAllMessagesRead, Source={StaticResource ResourcesInstance}}" Click="_chatCategorizeTreeViewItemMarkAllMessagesReadMenuItem_Click" />
-                        <Separator />
-                        <MenuItem Name="_chatCategorizeTreeViewItemChatListMenuItem" Header="{Binding Path=ChatControl_ChatList, Source={StaticResource ResourcesInstance}}" Click="_chatCategorizeTreeViewItemChatListMenuItem_Click"/>
-                    </ContextMenu>
+                <Style TargetType="{x:Type local:ChatCategorizeTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" >
+                    <Setter Property="ContextMenu" Value="{StaticResource _chatCategorizeTreeViewItemContextMenu}" />
+                    <EventSetter Event="ContextMenuOpening" Handler="_chatCategorizeTreeViewItemContextMenu_ContextMenuOpening" />
+                </Style>
+                <Style TargetType="{x:Type local:ChatTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" >
+                    <Setter Property="ContextMenu" Value="{StaticResource _chatTreeItemTreeViewItemContextMenu}" />
+                    <EventSetter Event="ContextMenuOpening" Handler="_chatTreeItemTreeViewItemContextMenu_ContextMenuOpening" />
+                </Style>
+            </TreeView.Resources>
+        </TreeView>
 
-                    <ContextMenu x:Key="_chatTreeItemTreeViewItemContextMenu">
-                        <MenuItem Name="_chatTreeItemTreeViewItemDeleteMenuItem" Header="{Binding Path=ChatControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_chatTreeItemTreeViewItemDeleteMenuItem_Click"/>
-                        <Separator />
-                        <MenuItem Name="_chatTreeItemTreeViewItemCutMenuItem" Header="{Binding Path=ChatControl_Cut, Source={StaticResource ResourcesInstance}}" Click="_chatTreeItemTreeViewItemCutMenuItem_Click" />
-                        <MenuItem Name="_chatTreeItemTreeViewItemCopyMenuItem" Header="{Binding Path=ChatControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_chatTreeItemTreeViewItemCopyMenuItem_Click" />
-                        <MenuItem Name="_chatTreeItemTreeViewItemCopyInfoMenuItem" Header="{Binding Path=ChatControl_CopyInfo, Source={StaticResource ResourcesInstance}}" Click="_chatTreeItemTreeViewItemCopyInfoMenuItem_Click" />
-                    </ContextMenu>
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.RowSpan="3"/>
 
-                    <Style TargetType="{x:Type local:ChatCategorizeTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" >
-                        <Setter Property="ContextMenu" Value="{StaticResource _chatCategorizeTreeViewItemContextMenu}" />
-                        <EventSetter Event="ContextMenuOpening" Handler="_chatCategorizeTreeViewItemContextMenu_ContextMenuOpening" />
-                    </Style>
-                    <Style TargetType="{x:Type local:ChatTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" >
-                        <Setter Property="ContextMenu" Value="{StaticResource _chatTreeItemTreeViewItemContextMenu}" />
-                        <EventSetter Event="ContextMenuOpening" Handler="_chatTreeItemTreeViewItemContextMenu_ContextMenuOpening" />
-                    </Style>
-                </TreeView.Resources>
-            </TreeView>
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="4"/>
+                <RowDefinition Height="{Binding Path=ChatControl_ContributionArea_Grid_ColumnDefinitions_Width, Mode=TwoWay, Converter={StaticResource _doubleToGridLengthConverter}, Source={x:Static prop:Settings.Instance}}"/>
+            </Grid.RowDefinitions>
 
-            <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch"/>
-
-            <ToggleButton x:Name="_trustToggleButton" Content="Trust" Grid.Column="2" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top" Width="40" Height="40"/>
-            <Button x:Name="_messageUploadButton" Content="Up" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Top" Width="40" Height="40" Margin="0"/>
-
-            <ListBox Name="_listBox" Grid.Column="2" Margin="0,44,0,0" >
+            <ListBox x:Name="_listBox">
                 <ListBox.Resources>
                     <Style TargetType="{x:Type Expander}">
                         <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
@@ -114,7 +102,7 @@
                                 <ControlTemplate TargetType="{x:Type Expander}">
                                     <Border x:Name="Border" Opacity="1" BorderBrush="Black" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="2,2,2,2" Background="{TemplateBinding Background}">
                                         <DockPanel x:Name="dockPanel">
-                                            <ToggleButton FontFamily="{TemplateBinding FontFamily}" FontSize="{TemplateBinding FontSize}" FontStretch="{TemplateBinding FontStretch}" FontStyle="{TemplateBinding FontStyle}" FontWeight="{TemplateBinding FontWeight}" Foreground="{TemplateBinding Foreground}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Padding="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" FocusVisualStyle="{StaticResource ExpanderHeaderFocusVisual}" Margin="1,1,1,0" MinHeight="0" MinWidth="0" x:Name="HeaderSite" Style="{StaticResource ExpanderDownHeaderStyle}" Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}" IsChecked="{Binding Path=IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" DockPanel.Dock="Top" />
+                                            <ToggleButton FontFamily="{TemplateBinding FontFamily}" FontSize="{TemplateBinding FontSize}" FontStretch="{TemplateBinding FontStretch}" FontStyle="{TemplateBinding FontStyle}" FontWeight="{TemplateBinding FontWeight}" Foreground="{TemplateBinding Foreground}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Padding="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" FocusVisualStyle="{StaticResource ExpanderHeaderFocusVisual}" Margin="1,1,1,0" MinHeight="0" MinWidth="0" x:Name="HeaderSite" Style="{StaticResource ExpanderDownHeaderStyle}" Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}" IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" DockPanel.Dock="Top" />
                                             <Border Visibility="Collapsed" BorderThickness="1,0,1,1" CornerRadius="3,3,3,3" x:Name="border" Margin="1,1,1,1">
                                                 <ContentPresenter Focusable="false" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="1,1,1,1" x:Name="ExpandSite" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" DockPanel.Dock="Bottom" />
                                             </Border>
@@ -228,12 +216,12 @@
                         </Setter>
                     </Style>
 
-                    <ContextMenu x:Key="_richTextBoxContextMenu" FontFamily="{Binding Path=FontFamily, Mode=OneWay, Source={StaticResource ResourcesInstance}, Converter={StaticResource _stringToFontFamilyConverter}}" FontSize="{Binding Path=FontSize, Mode=OneWay, Source={StaticResource ResourcesInstance}, Converter={StaticResource _stringToDoubleConverter}}">
-                        <MenuItem Name="_richTextBoxCopyMenuItem" Header="{Binding Path=ChatControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxCopyMenuItem_Click" />
+                    <ContextMenu x:Key="_richTextBoxContextMenu" FontFamily="{Binding FontFamily, Converter={StaticResource _stringToFontFamilyConverter}, Mode=OneWay, Source={StaticResource ResourcesInstance}}" FontSize="{Binding FontSize, Converter={StaticResource _stringToDoubleConverter}, Mode=OneWay, Source={StaticResource ResourcesInstance}}">
+                        <MenuItem x:Name="_richTextBoxCopyMenuItem" Header="{Binding ChatControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxCopyMenuItem_Click" />
                         <Separator />
-                        <MenuItem Name="_richTextBoxResponsMenuItem" Header="{Binding Path=ChatControl_Respons, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxResponsMenuItem_Click" />
+                        <MenuItem x:Name="_richTextBoxResponsMenuItem" Header="{Binding ChatControl_Respons, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxResponsMenuItem_Click" />
                         <Separator />
-                        <MenuItem Name="_richTextBoxTrustMenuItem" Header="{Binding Path=ChatControl_Trust, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxTrustMenuItem_Click"/>
+                        <MenuItem x:Name="_richTextBoxTrustMenuItem" Header="{Binding ChatControl_Trust, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxTrustMenuItem_Click"/>
                     </ContextMenu>
 
                     <Style TargetType="{x:Type local:RichTextBoxEx}">
@@ -260,8 +248,8 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid>
-                            <local:RichTextBoxEx x:Name="_richTextBox" local:RichTextBoxHelper.DocumentMessage="{Binding Mode=OneWay}" Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType=Grid}}" ContextMenuOpening="_richTextBox_ContextMenuOpening">
-                                <RichTextBox.Style>
+                            <local:RichTextBoxEx x:Name="_richTextBox" local:RichTextBoxHelper.DocumentMessage="{Binding Mode=OneWay}" Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type Grid}}}" ContextMenuOpening="_richTextBox_ContextMenuOpening">
+                                <local:RichTextBoxEx.Style>
                                     <Style TargetType="{x:Type RichTextBox}">
                                         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                                         <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -272,7 +260,7 @@
                                             <Setter.Value>
                                                 <ControlTemplate TargetType="{x:Type RichTextBox}">
                                                     <Grid>
-                                                        <Border x:Name="Border" Opacity="1" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="2,2,2,2" Background="{TemplateBinding Background}">
+                                                        <Border x:Name="Border" Margin="3,3,3,0" Opacity="1" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="2,2,2,2" Background="{TemplateBinding Background}">
                                                             <Grid>
                                                                 <Border BorderThickness="1">
                                                                     <ScrollViewer Margin="0" x:Name="PART_ContentHost" Style="{DynamicResource NuclearScrollViewer}" />
@@ -288,18 +276,48 @@
                                         <Setter Property="BorderBrush" Value="#FF000000"/>
                                         <Setter Property="ContextMenu" Value="{StaticResource _richTextBoxContextMenu}" />
                                     </Style>
-                                </RichTextBox.Style>
-                                <RichTextBox.BorderBrush>
+                                </local:RichTextBoxEx.Style>
+                                <local:RichTextBoxEx.BorderBrush>
                                     <MultiBinding Converter="{StaticResource _chatMessageWrapperToBorderBrushConverter}">
                                         <Binding Mode="OneWay" />
-                                        <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}" Path="IsSelected" />
+                                        <Binding RelativeSource="{RelativeSource AncestorType={x:Type ListBoxItem}, Mode=FindAncestor}" Path="IsSelected" />
                                     </MultiBinding>
-                                </RichTextBox.BorderBrush>
+                                </local:RichTextBoxEx.BorderBrush>
                             </local:RichTextBoxEx>
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
+                <ItemsControl.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        <Setter Property="OverridesDefaultStyle" Value="True" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ContentControl}">
+                                    <ContentPresenter />
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
             </ListBox>
+
+            <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" />
+
+            <TabControl Grid.Row="2">
+                <TabItem Header="{Binding Path=ChatControl_Edit, Source={StaticResource ResourcesInstance}}">
+                    <Grid >
+                        <TextBox x:Name="_messageTextBox" Margin="6,6,6,34" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" AutoWordSelection="True" />
+                        <Button x:Name="_messageUploadButton" Content="{Binding Path=ChatControl_Upload, Source={StaticResource ResourcesInstance}}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="75" Height="23" Margin="0,0,6,6" Click="_messageUploadButton_Click"/>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="{Binding Path=ChatControl_Preview, Source={StaticResource ResourcesInstance}}">
+                    <Grid>
+                        <RichTextBox x:Name="_previewRichTextBox" Margin="6" IsReadOnly="True" VerticalScrollBarVisibility="Auto" />
+                    </Grid>
+                </TabItem>
+            </TabControl>
+
         </Grid>
     </Grid>
 </UserControl>

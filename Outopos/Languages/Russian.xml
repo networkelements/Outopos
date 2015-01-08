@@ -66,6 +66,35 @@
   <Translate Key="MainWindow_TransferLimit_Message" Value="Лимит передачи" />
   <Translate Key="MainWindow_Upload_Message" Value="Вы хотите загрузить (upload)?" />
 
+  <Translate Key="ChatControl_NewCategory" Value="Новая категория" />
+  <Translate Key="ChatControl_Edit" Value="Редактирование" />
+  <Translate Key="ChatControl_Delete" Value="Удалить" />
+  <Translate Key="ChatControl_Cut" Value="Вырезать" />
+  <Translate Key="ChatControl_Copy" Value="Копировать" />
+  <Translate Key="ChatControl_CopyInfo" Value="Скопировать информацию" />
+  <Translate Key="ChatControl_Paste" Value="Вставить" />
+  <Translate Key="ChatControl_ChatList" Value="Список чатов" />
+  <Translate Key="ChatControl_Respons" Value="Ответить" />
+  <Translate Key="ChatControl_Trust" Value="Доверие" />
+  <Translate Key="ChatControl_Trust_On" Value="Включить доверие" />
+  <Translate Key="ChatControl_Trust_Off" Value="Выключить доверие" />
+  <Translate Key="ChatControl_Lock" Value="Lock" />
+  <Translate Key="ChatControl_LockThis" Value="Lock this" />
+  <Translate Key="ChatControl_UnlockThis" Value="Unlock this" />
+  <Translate Key="ChatControl_LockAll" Value="Lock all" />
+  <Translate Key="ChatControl_UnlockAll" Value="Unlock all" />
+  <Translate Key="ChatControl_Filter" Value="Filter" />
+  <Translate Key="ChatControl_FilterWord" Value="Filter word" />
+  <Translate Key="ChatControl_FilterSignature" Value="Filter signature" />
+  <Translate Key="ChatControl_NewMessageOnly" Value="Only" />
+  <Translate Key="ChatControl_Message" Value="Сообщения" />
+  <Translate Key="ChatControl_Upload" Value="Отправить" />
+  <Translate Key="ChatControl_MarkAllMessagesRead" Value="Відмітити всі повідомлення прочитаними" />
+  <Translate Key="ChatControl_MarkAllMessagesRead_Message" Value="Ви хочете відмітити всі повідомлення прочитаними?" />
+  <Translate Key="ChatControl_ImportLockedMessages" Value="Import locked messages" />
+  <Translate Key="ChatControl_ExportLockedMessages" Value="Export locked messages" />
+  <Translate Key="ChatControl_Preview" Value="Preview" />
+
   <Translate Key="OptionsWindow_Title" Value="Options" />
   <Translate Key="OptionsWindow_Core" Value="Core" />
   <Translate Key="OptionsWindow_View" Value="View" />
@@ -247,34 +276,6 @@
   <Translate Key="ConnectionControl_PullHeaderCount" Value="PullHeader count" />
   <Translate Key="ConnectionControl_Copy" Value="Копировать" />
   <Translate Key="ConnectionControl_Paste" Value="Вставить" />
-
-  <Translate Key="ChatControl_NewCategory" Value="Новая категория" />
-  <Translate Key="ChatControl_Edit" Value="Редактирование" />
-  <Translate Key="ChatControl_Delete" Value="Удалить" />
-  <Translate Key="ChatControl_Cut" Value="Вырезать" />
-  <Translate Key="ChatControl_Copy" Value="Копировать" />
-  <Translate Key="ChatControl_CopyInfo" Value="Скопировать информацию" />
-  <Translate Key="ChatControl_Paste" Value="Вставить" />
-  <Translate Key="ChatControl_ChatList" Value="Список чатов" />
-  <Translate Key="ChatControl_Respons" Value="Ответить" />
-  <Translate Key="ChatControl_Trust" Value="Доверие" />
-  <Translate Key="ChatControl_Trust_On" Value="Включить доверие" />
-  <Translate Key="ChatControl_Trust_Off" Value="Выключить доверие" />
-  <Translate Key="ChatControl_Lock" Value="Lock" />
-  <Translate Key="ChatControl_LockThis" Value="Lock this" />
-  <Translate Key="ChatControl_UnlockThis" Value="Unlock this" />
-  <Translate Key="ChatControl_LockAll" Value="Lock all" />
-  <Translate Key="ChatControl_UnlockAll" Value="Unlock all" />
-  <Translate Key="ChatControl_Filter" Value="Filter" />
-  <Translate Key="ChatControl_FilterWord" Value="Filter word" />
-  <Translate Key="ChatControl_FilterSignature" Value="Filter signature" />
-  <Translate Key="ChatControl_NewMessageOnly" Value="Only" />
-  <Translate Key="ChatControl_Message" Value="Сообщения" />
-  <Translate Key="ChatControl_Upload" Value="Отправить" />
-  <Translate Key="ChatControl_MarkAllMessagesRead" Value="Відмітити всі повідомлення прочитаними" />
-  <Translate Key="ChatControl_MarkAllMessagesRead_Message" Value="Ви хочете відмітити всі повідомлення прочитаними?" />
-  <Translate Key="ChatControl_ImportLockedMessages" Value="Import locked messages" />
-  <Translate Key="ChatControl_ExportLockedMessages" Value="Export locked messages" />
 
   <Translate Key="ChatListWindow_Title" Value="Список чатов" />
   <Translate Key="ChatListWindow_Name" Value="Название" />

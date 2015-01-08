@@ -66,6 +66,35 @@
   <Translate Key="MainWindow_TransferLimit_Message" Value="転送量制限を越えたので停止しました。" />
   <Translate Key="MainWindow_Upload_Message" Value="アップロードしますか？" />
 
+  <Translate Key="ChatControl_NewCategory" Value="New category" />
+  <Translate Key="ChatControl_Edit" Value="編集" />
+  <Translate Key="ChatControl_Delete" Value="削除" />
+  <Translate Key="ChatControl_Cut" Value="切り取り" />
+  <Translate Key="ChatControl_Copy" Value="コピー" />
+  <Translate Key="ChatControl_CopyInfo" Value="コピー (詳細情報)" />
+  <Translate Key="ChatControl_Paste" Value="貼り付け" />
+  <Translate Key="ChatControl_ChatList" Value="チャンネルリスト" />
+  <Translate Key="ChatControl_Respons" Value="返信" />
+  <Translate Key="ChatControl_Trust" Value="トラスト" />
+  <Translate Key="ChatControl_Trust_On" Value="トラスト有効" />
+  <Translate Key="ChatControl_Trust_Off" Value="トラスト無効" />
+  <Translate Key="ChatControl_Lock" Value="ロック" />
+  <Translate Key="ChatControl_LockThis" Value="このメッセージをロック" />
+  <Translate Key="ChatControl_UnlockThis" Value="このメッセージのロックを解除" />
+  <Translate Key="ChatControl_LockAll" Value="すべてのメッセージをロック" />
+  <Translate Key="ChatControl_UnlockAll" Value="すべてのメッセージのロックを解除" />
+  <Translate Key="ChatControl_Filter" Value="フィルタ" />
+  <Translate Key="ChatControl_FilterWord" Value="この単語でフィルタ" />
+  <Translate Key="ChatControl_FilterSignature" Value="このサインでフィルタ" />
+  <Translate Key="ChatControl_NewMessageOnly" Value="新着のみ" />
+  <Translate Key="ChatControl_Message" Value="メッセージ" />
+  <Translate Key="ChatControl_Upload" Value="Upload" />
+  <Translate Key="ChatControl_MarkAllMessagesRead" Value="全てのメッセージを既読にする" />
+  <Translate Key="ChatControl_MarkAllMessagesRead_Message" Value="全てのメッセージを既読にしますか？" />
+  <Translate Key="ChatControl_ImportLockedMessages" Value="ロックされたメッセージのインポート" />
+  <Translate Key="ChatControl_ExportLockedMessages" Value="ロックされたメッセージのエクスポート" />
+  <Translate Key="ChatControl_Preview" Value="Preview" />
+
   <Translate Key="OptionsWindow_Title" Value="Options" />
   <Translate Key="OptionsWindow_Core" Value="Core" />
   <Translate Key="OptionsWindow_View" Value="View" />
@@ -247,34 +276,6 @@
   <Translate Key="ConnectionControl_PullHeaderCount" Value="PullHeader count" />
   <Translate Key="ConnectionControl_Copy" Value="コピー" />
   <Translate Key="ConnectionControl_Paste" Value="貼り付け" />
-
-  <Translate Key="ChatControl_NewCategory" Value="New category" />
-  <Translate Key="ChatControl_Edit" Value="編集" />
-  <Translate Key="ChatControl_Delete" Value="削除" />
-  <Translate Key="ChatControl_Cut" Value="切り取り" />
-  <Translate Key="ChatControl_Copy" Value="コピー" />
-  <Translate Key="ChatControl_CopyInfo" Value="コピー (詳細情報)" />
-  <Translate Key="ChatControl_Paste" Value="貼り付け" />
-  <Translate Key="ChatControl_ChatList" Value="チャンネルリスト" />
-  <Translate Key="ChatControl_Respons" Value="返信" />
-  <Translate Key="ChatControl_Trust" Value="トラスト" />
-  <Translate Key="ChatControl_Trust_On" Value="トラスト有効" />
-  <Translate Key="ChatControl_Trust_Off" Value="トラスト無効" />
-  <Translate Key="ChatControl_Lock" Value="ロック" />
-  <Translate Key="ChatControl_LockThis" Value="このメッセージをロック" />
-  <Translate Key="ChatControl_UnlockThis" Value="このメッセージのロックを解除" />
-  <Translate Key="ChatControl_LockAll" Value="すべてのメッセージをロック" />
-  <Translate Key="ChatControl_UnlockAll" Value="すべてのメッセージのロックを解除" />
-  <Translate Key="ChatControl_Filter" Value="フィルタ" />
-  <Translate Key="ChatControl_FilterWord" Value="この単語でフィルタ" />
-  <Translate Key="ChatControl_FilterSignature" Value="このサインでフィルタ" />
-  <Translate Key="ChatControl_NewMessageOnly" Value="新着のみ" />
-  <Translate Key="ChatControl_Message" Value="メッセージ" />
-  <Translate Key="ChatControl_Upload" Value="Upload" />
-  <Translate Key="ChatControl_MarkAllMessagesRead" Value="全てのメッセージを既読にする" />
-  <Translate Key="ChatControl_MarkAllMessagesRead_Message" Value="全てのメッセージを既読にしますか？" />
-  <Translate Key="ChatControl_ImportLockedMessages" Value="ロックされたメッセージのインポート" />
-  <Translate Key="ChatControl_ExportLockedMessages" Value="ロックされたメッセージのエクスポート" />
 
   <Translate Key="ChatListWindow_Title" Value="Chat list" />
   <Translate Key="ChatListWindow_Name" Value="Name" />

@@ -58,6 +58,8 @@ namespace Outopos.Windows
             {
                 sb.Append(NetworkConverter.ToBase64UrlString(this.Value.Tag.Id));
             }
+
+            _header.Text = sb.ToString();
         }
 
         public ChatTreeItem Value

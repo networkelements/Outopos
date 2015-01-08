@@ -835,6 +835,315 @@ namespace Outopos.Properties
         }
 
 
+        public string ChatControl_NewCategory
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatControl_NewCategory");
+                }
+            }
+        }
+
+        public string ChatControl_Edit
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatControl_Edit");
+                }
+            }
+        }
+
+        public string ChatControl_Delete
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatControl_Delete");
+                }
+            }
+        }
+
+        public string ChatControl_Cut
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatControl_Cut");
+                }
+            }
+        }
+
+        public string ChatControl_Copy
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatControl_Copy");
+                }
+            }
+        }
+
+        public string ChatControl_CopyInfo
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatControl_CopyInfo");
+                }
+            }
+        }
+
+        public string ChatControl_Paste
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatControl_Paste");
+                }
+            }
+        }
+
+        public string ChatControl_ChatList
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatControl_ChatList");
+                }
+            }
+        }
+
+        public string ChatControl_Respons
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatControl_Respons");
+                }
+            }
+        }
+
+        public string ChatControl_Trust
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatControl_Trust");
+                }
+            }
+        }
+
+        public string ChatControl_Trust_On
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatControl_Trust_On");
+                }
+            }
+        }
+
+        public string ChatControl_Trust_Off
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatControl_Trust_Off");
+                }
+            }
+        }
+
+        public string ChatControl_Lock
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatControl_Lock");
+                }
+            }
+        }
+
+        public string ChatControl_LockThis
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatControl_LockThis");
+                }
+            }
+        }
+
+        public string ChatControl_UnlockThis
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatControl_UnlockThis");
+                }
+            }
+        }
+
+        public string ChatControl_LockAll
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatControl_LockAll");
+                }
+            }
+        }
+
+        public string ChatControl_UnlockAll
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatControl_UnlockAll");
+                }
+            }
+        }
+
+        public string ChatControl_Filter
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatControl_Filter");
+                }
+            }
+        }
+
+        public string ChatControl_FilterWord
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatControl_FilterWord");
+                }
+            }
+        }
+
+        public string ChatControl_FilterSignature
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatControl_FilterSignature");
+                }
+            }
+        }
+
+        public string ChatControl_NewMessageOnly
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatControl_NewMessageOnly");
+                }
+            }
+        }
+
+        public string ChatControl_Message
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatControl_Message");
+                }
+            }
+        }
+
+        public string ChatControl_Upload
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatControl_Upload");
+                }
+            }
+        }
+
+        public string ChatControl_MarkAllMessagesRead
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatControl_MarkAllMessagesRead");
+                }
+            }
+        }
+
+        public string ChatControl_MarkAllMessagesRead_Message
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatControl_MarkAllMessagesRead_Message");
+                }
+            }
+        }
+
+        public string ChatControl_ImportLockedMessages
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatControl_ImportLockedMessages");
+                }
+            }
+        }
+
+        public string ChatControl_ExportLockedMessages
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatControl_ExportLockedMessages");
+                }
+            }
+        }
+
+        public string ChatControl_Preview
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatControl_Preview");
+                }
+            }
+        }
+
+
         public string OptionsWindow_Title
         {
             get
@@ -2732,304 +3041,6 @@ namespace Outopos.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("ConnectionControl_Paste");
-                }
-            }
-        }
-
-
-        public string ChatControl_NewCategory
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChatControl_NewCategory");
-                }
-            }
-        }
-
-        public string ChatControl_Edit
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChatControl_Edit");
-                }
-            }
-        }
-
-        public string ChatControl_Delete
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChatControl_Delete");
-                }
-            }
-        }
-
-        public string ChatControl_Cut
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChatControl_Cut");
-                }
-            }
-        }
-
-        public string ChatControl_Copy
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChatControl_Copy");
-                }
-            }
-        }
-
-        public string ChatControl_CopyInfo
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChatControl_CopyInfo");
-                }
-            }
-        }
-
-        public string ChatControl_Paste
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChatControl_Paste");
-                }
-            }
-        }
-
-        public string ChatControl_ChatList
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChatControl_ChatList");
-                }
-            }
-        }
-
-        public string ChatControl_Respons
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChatControl_Respons");
-                }
-            }
-        }
-
-        public string ChatControl_Trust
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChatControl_Trust");
-                }
-            }
-        }
-
-        public string ChatControl_Trust_On
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChatControl_Trust_On");
-                }
-            }
-        }
-
-        public string ChatControl_Trust_Off
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChatControl_Trust_Off");
-                }
-            }
-        }
-
-        public string ChatControl_Lock
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChatControl_Lock");
-                }
-            }
-        }
-
-        public string ChatControl_LockThis
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChatControl_LockThis");
-                }
-            }
-        }
-
-        public string ChatControl_UnlockThis
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChatControl_UnlockThis");
-                }
-            }
-        }
-
-        public string ChatControl_LockAll
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChatControl_LockAll");
-                }
-            }
-        }
-
-        public string ChatControl_UnlockAll
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChatControl_UnlockAll");
-                }
-            }
-        }
-
-        public string ChatControl_Filter
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChatControl_Filter");
-                }
-            }
-        }
-
-        public string ChatControl_FilterWord
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChatControl_FilterWord");
-                }
-            }
-        }
-
-        public string ChatControl_FilterSignature
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChatControl_FilterSignature");
-                }
-            }
-        }
-
-        public string ChatControl_NewMessageOnly
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChatControl_NewMessageOnly");
-                }
-            }
-        }
-
-        public string ChatControl_Message
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChatControl_Message");
-                }
-            }
-        }
-
-        public string ChatControl_Upload
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChatControl_Upload");
-                }
-            }
-        }
-
-        public string ChatControl_MarkAllMessagesRead
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChatControl_MarkAllMessagesRead");
-                }
-            }
-        }
-
-        public string ChatControl_MarkAllMessagesRead_Message
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChatControl_MarkAllMessagesRead_Message");
-                }
-            }
-        }
-
-        public string ChatControl_ImportLockedMessages
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChatControl_ImportLockedMessages");
-                }
-            }
-        }
-
-        public string ChatControl_ExportLockedMessages
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChatControl_ExportLockedMessages");
                 }
             }
         }

@@ -66,6 +66,35 @@
   <Translate Key="MainWindow_TransferLimit_Message" Value="传输限制" />
   <Translate Key="MainWindow_Upload_Message" Value="确定要上传吗？" />
 
+  <Translate Key="ChatControl_NewCategory" Value="新增分类" />
+  <Translate Key="ChatControl_Edit" Value="编辑" />
+  <Translate Key="ChatControl_Delete" Value="删除" />
+  <Translate Key="ChatControl_Cut" Value="剪切" />
+  <Translate Key="ChatControl_Copy" Value="复制" />
+  <Translate Key="ChatControl_CopyInfo" Value="复制信息" />
+  <Translate Key="ChatControl_Paste" Value="粘贴" />
+  <Translate Key="ChatControl_ChatList" Value="聊天列表" />
+  <Translate Key="ChatControl_Respons" Value="回复" />
+  <Translate Key="ChatControl_Trust" Value="信任" />
+  <Translate Key="ChatControl_Trust_On" Value="启用信任" />
+  <Translate Key="ChatControl_Trust_Off" Value="关闭信任" />
+  <Translate Key="ChatControl_Lock" Value="锁定" />
+  <Translate Key="ChatControl_LockThis" Value="锁定" />
+  <Translate Key="ChatControl_UnlockThis" Value="解除锁定" />
+  <Translate Key="ChatControl_LockAll" Value="全部锁定" />
+  <Translate Key="ChatControl_UnlockAll" Value="全部解除锁定" />
+  <Translate Key="ChatControl_Filter" Value="过滤器" />
+  <Translate Key="ChatControl_FilterWord" Value="过滤文字" />
+  <Translate Key="ChatControl_FilterSignature" Value="过滤签名" />
+  <Translate Key="ChatControl_NewMessageOnly" Value="仅" />
+  <Translate Key="ChatControl_Message" Value="消息" />
+  <Translate Key="ChatControl_Upload" Value="上传" />
+  <Translate Key="ChatControl_MarkAllMessagesRead" Value="所有标记消息已读" />
+  <Translate Key="ChatControl_MarkAllMessagesRead_Message" Value="你确定要所有标记消息已读？" />
+  <Translate Key="ChatControl_ImportLockedMessages" Value="导入已锁定消息" />
+  <Translate Key="ChatControl_ExportLockedMessages" Value="导出已锁定消息" />
+  <Translate Key="ChatControl_Preview" Value="Preview" />
+
   <Translate Key="OptionsWindow_Title" Value="Options" />
   <Translate Key="OptionsWindow_Core" Value="Core" />
   <Translate Key="OptionsWindow_View" Value="View" />
@@ -247,34 +276,6 @@
   <Translate Key="ConnectionControl_PullHeaderCount" Value="总计 PullHeader 数" />
   <Translate Key="ConnectionControl_Copy" Value="复制" />
   <Translate Key="ConnectionControl_Paste" Value="粘贴" />
-
-  <Translate Key="ChatControl_NewCategory" Value="新增分类" />
-  <Translate Key="ChatControl_Edit" Value="编辑" />
-  <Translate Key="ChatControl_Delete" Value="删除" />
-  <Translate Key="ChatControl_Cut" Value="剪切" />
-  <Translate Key="ChatControl_Copy" Value="复制" />
-  <Translate Key="ChatControl_CopyInfo" Value="复制信息" />
-  <Translate Key="ChatControl_Paste" Value="粘贴" />
-  <Translate Key="ChatControl_ChatList" Value="聊天列表" />
-  <Translate Key="ChatControl_Respons" Value="回复" />
-  <Translate Key="ChatControl_Trust" Value="信任" />
-  <Translate Key="ChatControl_Trust_On" Value="启用信任" />
-  <Translate Key="ChatControl_Trust_Off" Value="关闭信任" />
-  <Translate Key="ChatControl_Lock" Value="锁定" />
-  <Translate Key="ChatControl_LockThis" Value="锁定" />
-  <Translate Key="ChatControl_UnlockThis" Value="解除锁定" />
-  <Translate Key="ChatControl_LockAll" Value="全部锁定" />
-  <Translate Key="ChatControl_UnlockAll" Value="全部解除锁定" />
-  <Translate Key="ChatControl_Filter" Value="过滤器" />
-  <Translate Key="ChatControl_FilterWord" Value="过滤文字" />
-  <Translate Key="ChatControl_FilterSignature" Value="过滤签名" />
-  <Translate Key="ChatControl_NewMessageOnly" Value="仅" />
-  <Translate Key="ChatControl_Message" Value="消息" />
-  <Translate Key="ChatControl_Upload" Value="上传" />
-  <Translate Key="ChatControl_MarkAllMessagesRead" Value="所有标记消息已读" />
-  <Translate Key="ChatControl_MarkAllMessagesRead_Message" Value="你确定要所有标记消息已读？" />
-  <Translate Key="ChatControl_ImportLockedMessages" Value="导入已锁定消息" />
-  <Translate Key="ChatControl_ExportLockedMessages" Value="导出已锁定消息" />
 
   <Translate Key="ChatListWindow_Title" Value="聊天列表" />
   <Translate Key="ChatListWindow_Name" Value="名称" />

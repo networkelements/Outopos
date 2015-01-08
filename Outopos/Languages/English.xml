@@ -66,6 +66,35 @@
   <Translate Key="MainWindow_TransferLimit_Message" Value="Transfer limit" />
   <Translate Key="MainWindow_Upload_Message" Value="Do you want to upload?" />
 
+  <Translate Key="ChatControl_NewCategory" Value="New category" />
+  <Translate Key="ChatControl_Edit" Value="Edit" />
+  <Translate Key="ChatControl_Delete" Value="Delete" />
+  <Translate Key="ChatControl_Cut" Value="Cut" />
+  <Translate Key="ChatControl_Copy" Value="Copy" />
+  <Translate Key="ChatControl_CopyInfo" Value="Copy info" />
+  <Translate Key="ChatControl_Paste" Value="Paste" />
+  <Translate Key="ChatControl_ChatList" Value="Chat list" />
+  <Translate Key="ChatControl_Respons" Value="Respons" />
+  <Translate Key="ChatControl_Trust" Value="Trust" />
+  <Translate Key="ChatControl_Trust_On" Value="Trust On" />
+  <Translate Key="ChatControl_Trust_Off" Value="Trust Off" />
+  <Translate Key="ChatControl_Lock" Value="Lock" />
+  <Translate Key="ChatControl_LockThis" Value="Lock this" />
+  <Translate Key="ChatControl_UnlockThis" Value="Unlock this" />
+  <Translate Key="ChatControl_LockAll" Value="Lock all" />
+  <Translate Key="ChatControl_UnlockAll" Value="Unlock all" />
+  <Translate Key="ChatControl_Filter" Value="Filter" />
+  <Translate Key="ChatControl_FilterWord" Value="Filter word" />
+  <Translate Key="ChatControl_FilterSignature" Value="Filter signature" />
+  <Translate Key="ChatControl_NewMessageOnly" Value="Only" />
+  <Translate Key="ChatControl_Message" Value="Message" />
+  <Translate Key="ChatControl_Upload" Value="Upload" />
+  <Translate Key="ChatControl_MarkAllMessagesRead" Value="Mark all messages read" />
+  <Translate Key="ChatControl_MarkAllMessagesRead_Message" Value="Do you want to mark all messages read?" />
+  <Translate Key="ChatControl_ImportLockedMessages" Value="Import locked messages" />
+  <Translate Key="ChatControl_ExportLockedMessages" Value="Export locked messages" />
+  <Translate Key="ChatControl_Preview" Value="Preview" />
+
   <Translate Key="OptionsWindow_Title" Value="Options" />
   <Translate Key="OptionsWindow_Core" Value="Core" />
   <Translate Key="OptionsWindow_View" Value="View" />
@@ -247,34 +276,6 @@
   <Translate Key="ConnectionControl_PullHeaderCount" Value="PullHeader count" />
   <Translate Key="ConnectionControl_Copy" Value="Copy" />
   <Translate Key="ConnectionControl_Paste" Value="Paste" />
-
-  <Translate Key="ChatControl_NewCategory" Value="New category" />
-  <Translate Key="ChatControl_Edit" Value="Edit" />
-  <Translate Key="ChatControl_Delete" Value="Delete" />
-  <Translate Key="ChatControl_Cut" Value="Cut" />
-  <Translate Key="ChatControl_Copy" Value="Copy" />
-  <Translate Key="ChatControl_CopyInfo" Value="Copy info" />
-  <Translate Key="ChatControl_Paste" Value="Paste" />
-  <Translate Key="ChatControl_ChatList" Value="Chat list" />
-  <Translate Key="ChatControl_Respons" Value="Respons" />
-  <Translate Key="ChatControl_Trust" Value="Trust" />
-  <Translate Key="ChatControl_Trust_On" Value="Trust On" />
-  <Translate Key="ChatControl_Trust_Off" Value="Trust Off" />
-  <Translate Key="ChatControl_Lock" Value="Lock" />
-  <Translate Key="ChatControl_LockThis" Value="Lock this" />
-  <Translate Key="ChatControl_UnlockThis" Value="Unlock this" />
-  <Translate Key="ChatControl_LockAll" Value="Lock all" />
-  <Translate Key="ChatControl_UnlockAll" Value="Unlock all" />
-  <Translate Key="ChatControl_Filter" Value="Filter" />
-  <Translate Key="ChatControl_FilterWord" Value="Filter word" />
-  <Translate Key="ChatControl_FilterSignature" Value="Filter signature" />
-  <Translate Key="ChatControl_NewMessageOnly" Value="Only" />
-  <Translate Key="ChatControl_Message" Value="Message" />
-  <Translate Key="ChatControl_Upload" Value="Upload" />
-  <Translate Key="ChatControl_MarkAllMessagesRead" Value="Mark all messages read" />
-  <Translate Key="ChatControl_MarkAllMessagesRead_Message" Value="Do you want to mark all messages read?" />
-  <Translate Key="ChatControl_ImportLockedMessages" Value="Import locked messages" />
-  <Translate Key="ChatControl_ExportLockedMessages" Value="Export locked messages" />
 
   <Translate Key="ChatListWindow_Title" Value="Chat list" />
   <Translate Key="ChatListWindow_Name" Value="Name" />

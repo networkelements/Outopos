@@ -147,7 +147,7 @@ namespace Outopos.Windows
                     if (bitmap.CanFreeze) bitmap.Freeze();
 
                     var stackPanel = new StackPanel();
-                    stackPanel.Children.Add(new Image() { Source = bitmap, Height = 64, Width = 64 });
+                    stackPanel.Children.Add(new Image() { Source = bitmap, Height = 32, Width = 32 });
 
                     _wikiRadioButton.Content = stackPanel;
                 }
@@ -162,7 +162,7 @@ namespace Outopos.Windows
                     if (bitmap.CanFreeze) bitmap.Freeze();
 
                     var stackPanel = new StackPanel();
-                    stackPanel.Children.Add(new Image() { Source = bitmap, Height = 64, Width = 64 });
+                    stackPanel.Children.Add(new Image() { Source = bitmap, Height = 32, Width = 32 });
 
                     _chatRadioButton.Content = stackPanel;
                 }
@@ -177,7 +177,7 @@ namespace Outopos.Windows
                     if (bitmap.CanFreeze) bitmap.Freeze();
 
                     var stackPanel = new StackPanel();
-                    stackPanel.Children.Add(new Image() { Source = bitmap, Height = 64, Width = 64 });
+                    stackPanel.Children.Add(new Image() { Source = bitmap, Height = 32, Width = 32 });
 
                     _mailRadioButton.Content = stackPanel;
                 }
@@ -192,7 +192,7 @@ namespace Outopos.Windows
                     if (bitmap.CanFreeze) bitmap.Freeze();
 
                     var stackPanel = new StackPanel();
-                    stackPanel.Children.Add(new Image() { Source = bitmap, Height = 64, Width = 64 });
+                    stackPanel.Children.Add(new Image() { Source = bitmap, Height = 32, Width = 32 });
 
                     _searchRadioButton.Content = stackPanel;
                 }
@@ -207,7 +207,7 @@ namespace Outopos.Windows
                     if (bitmap.CanFreeze) bitmap.Freeze();
 
                     var stackPanel = new StackPanel();
-                    stackPanel.Children.Add(new Image() { Source = bitmap, Height = 64, Width = 64 });
+                    stackPanel.Children.Add(new Image() { Source = bitmap, Height = 32, Width = 32 });
 
                     _optionsRadioButton.Content = stackPanel;
                 }
@@ -1014,13 +1014,13 @@ namespace Outopos.Windows
 
                     // デフォルトのChatタグを設定。
                     {
-                        //var amoebaTag = OutoposConverter.FromChatString("Chat:AAAAAAYAQW1vZWJhAAAAQAHBilDLoC-nL1s5WTA0IdmtaKn_biFkguR4jch-5pDM0lDvfcgKMYeA_kZeYZnDVe-HiE2aLCIKPObaQTk8lpMbuMWiQA");
-                        //var outoposTag = OutoposConverter.FromChatString("Chat:AAAAAAcAT3V0b3BvcwAAAEABS5GzqK7pa00CTgDarZIq29YrlEc8s1MiQ2FwaC7ENXuUtBGlV-Fzmr3ZvkpfHxP2xovcDrzp6whzVjh9RKey1jbaoGE");
-                        //var testTag = OutoposConverter.FromChatString("Chat:AAAAAAQAVGVzdAAAAEABcKrxJnNgzGIdtqem0bRipsrbAip77uBxCiLWo1jYJccB69Wc8Klf5UABDYBRfSWMhf4aXXQDdP7owzq2DAGMzKqOa_E");
+                        var amoebaTag = OutoposConverter.FromChatString("Chat:AAAAAAAGQW1vZWJhAQAAACCrzcPHuDlkIdAKPyrMvdoRizFo3IOOSlWhQhPTKBIOiWRXEcU");
+                        var outoposTag = OutoposConverter.FromChatString("Chat:AAAAAAAHT3V0b3BvcwEAAAAgr9B65c-3yJS95GHleeXi3TekYOtScR4VzJRpz7AoQ294gS26");
+                        var testTag = OutoposConverter.FromChatString("Chat:AAAAAAAEVGVzdAEAAAAgye1mG24NVcdu5Vb2UZXwrnT_kwhXUNWONT0W0m5IAyplJHYb");
 
-                        //Settings.Instance.ChatControl_ChatCategorizeTreeItem.ChatTreeItems.Add(new ChatTreeItem(amoebaTag));
-                        //Settings.Instance.ChatControl_ChatCategorizeTreeItem.ChatTreeItems.Add(new ChatTreeItem(outoposTag));
-                        //Settings.Instance.ChatControl_ChatCategorizeTreeItem.ChatTreeItems.Add(new ChatTreeItem(testTag));
+                        Settings.Instance.ChatControl_ChatCategorizeTreeItem.ChatTreeItems.Add(new ChatTreeItem(amoebaTag));
+                        Settings.Instance.ChatControl_ChatCategorizeTreeItem.ChatTreeItems.Add(new ChatTreeItem(outoposTag));
+                        Settings.Instance.ChatControl_ChatCategorizeTreeItem.ChatTreeItems.Add(new ChatTreeItem(testTag));
                     }
 
                     {
@@ -1101,29 +1101,47 @@ namespace Outopos.Windows
                     }
 
                     // ProfileItem
-                    Task.Factory.StartNew(new Action(() =>
                     {
                         var digitalSignature = new DigitalSignature("Anonymous", DigitalSignatureAlgorithm.Rsa2048_Sha256);
                         Settings.Instance.Global_DigitalSignatureCollection.Add(digitalSignature);
 
                         var profileItem = new ProfileItem();
-                        profileItem.UploadSignature = digitalSignature.ToString();
-                        profileItem.Cost = Miner.Sample(new TimeSpan(0, 3, 0));
-                        profileItem.Exchange = new Exchange(ExchangeAlgorithm.Rsa2048);
-
                         Settings.Instance.Global_ProfileItem = profileItem;
 
-                        // Upload
                         {
-                            _outoposManager.UploadProfile(profileItem.Cost,
-                                profileItem.Exchange.GetExchangePublicKey(),
-                                profileItem.TrustSignatures,
-                                profileItem.DeleteSignatures,
-                                profileItem.Wikis,
-                                profileItem.Chats,
-                                digitalSignature);
+                            profileItem.UploadSignature = digitalSignature.ToString();
+                            profileItem.Exchange = new Exchange(ExchangeAlgorithm.Rsa2048);
+
+                            // Upload
+                            {
+                                _outoposManager.UploadProfile(profileItem.Cost,
+                                    profileItem.Exchange.GetExchangePublicKey(),
+                                    profileItem.TrustSignatures,
+                                    profileItem.DeleteSignatures,
+                                    profileItem.Wikis,
+                                    profileItem.Chats,
+                                    digitalSignature);
+                            }
                         }
-                    }));
+
+                        ThreadPool.QueueUserWorkItem((object wstate) =>
+                        {
+                            Thread.CurrentThread.IsBackground = true;
+
+                            profileItem.Cost = Miner.Sample(new TimeSpan(0, 3, 0));
+
+                            // Upload
+                            {
+                                _outoposManager.UploadProfile(profileItem.Cost,
+                                    profileItem.Exchange.GetExchangePublicKey(),
+                                    profileItem.TrustSignatures,
+                                    profileItem.DeleteSignatures,
+                                    profileItem.Wikis,
+                                    profileItem.Chats,
+                                    digitalSignature);
+                            }
+                        });
+                    }
                 }
                 else
                 {
