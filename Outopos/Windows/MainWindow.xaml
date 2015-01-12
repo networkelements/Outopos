@@ -138,9 +138,9 @@
                 <Style x:Key="_radioButtonStyle" TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type ToggleButton}}">
                     <Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}" />
                     <Setter Property="Background" Value="{StaticResource ButtonNormalBackground}" />
+                    <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
                     <Setter Property="BorderBrush" Value="{StaticResource ButtonNormalBorder}" />
                     <Setter Property="BorderThickness" Value="1" />
-                    <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
                     <Setter Property="HorizontalContentAlignment" Value="Center" />
                     <Setter Property="VerticalContentAlignment" Value="Center" />
                     <Setter Property="Padding" Value="1" />
@@ -216,12 +216,13 @@
 
                 <Style x:Key="_buttonStyle" TargetType="{x:Type Button}" BasedOn="{x:Null}">
                     <Setter Property="OverridesDefaultStyle" Value="True" />
-                    <Setter Property="FocusVisualStyle" Value="{DynamicResource GlyphBrush}" />
-                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}" />
+                    <Setter Property="Background" Value="{StaticResource ButtonNormalBackground}" />
                     <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+                    <Setter Property="BorderBrush" Value="{StaticResource ButtonNormalBorder}" />
+                    <Setter Property="BorderThickness" Value="1" />
                     <Setter Property="VerticalContentAlignment" Value="Center" />
                     <Setter Property="HorizontalContentAlignment" Value="Center" />
-                    <Setter Property="BorderThickness" Value="1" />
                     <Setter Property="SnapsToDevicePixels" Value="True" />
                     <Setter Property="Template">
                         <Setter.Value>

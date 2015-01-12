@@ -57,6 +57,10 @@ namespace Outopos.Windows
         {
             _treeView.Items.Clear();
 
+            _trustSignatureListView.Items.Clear();
+            _wikiListView.Items.Clear();
+            _chatListView.Items.Clear();
+
             foreach (var leaderSignature in Settings.Instance.Global_ProfileItem.TrustSignatures)
             {
                 var item = this.GetSignatureTreeViewItem(leaderSignature);

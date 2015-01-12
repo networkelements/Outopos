@@ -414,7 +414,7 @@ namespace Outopos.Windows
             }
 
             var sortedList = chatMessages.ToList();
-            sortedList.Sort((x, y) => x.CreationTime.CompareTo(y.CreationTime));
+            sortedList.Sort((x, y) => y.CreationTime.CompareTo(x.CreationTime));
 
             return sortedList.Take(1024);
         }
@@ -1158,7 +1158,7 @@ namespace Outopos.Windows
 
             list.Sort((x, y) =>
             {
-                int c = x.ChatMessage.CreationTime.CompareTo(y.ChatMessage.CreationTime);
+                int c = y.ChatMessage.CreationTime.CompareTo(x.ChatMessage.CreationTime);
                 if (c != 0) return c;
                 c = x.ChatMessage.Certificate.ToString().CompareTo(y.ChatMessage.Certificate.ToString());
                 if (c != 0) return c;
