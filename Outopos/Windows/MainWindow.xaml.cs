@@ -74,15 +74,11 @@ namespace Outopos.Windows
         private string _logPath;
 
         private volatile bool _closed = false;
-        private bool _autoStop;
 
         private Thread _timerThread;
         private Thread _watchThread;
         private Thread _statusBarThread;
         private Thread _trafficMonitorThread;
-
-        private volatile bool _diskSpaceNotFoundException;
-        private volatile bool _cacheSpaceNotFoundException;
 
         private volatile MainWindowTabType _selectedTab;
 
@@ -384,119 +380,23 @@ namespace Outopos.Windows
                     if (_closed) return;
 
                     {
-                        if (_diskSpaceNotFoundException || _cacheSpaceNotFoundException)
-                        {
-                            this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
-                            {
-                                //_stopMenuItem_Click(null, null);
-                            }));
-                        }
-
                         if (_autoBaseNodeSettingManager.State == ManagerState.Stop
-                            && (Settings.Instance.Global_IsStart && Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled))
+                            && Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled)
                         {
                             _autoBaseNodeSettingManager.Start();
                         }
-                        else if (_autoBaseNodeSettingManager.State == ManagerState.Start
-                            && (!Settings.Instance.Global_IsStart || !Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled))
-                        {
-                            _autoBaseNodeSettingManager.Stop();
-                        }
 
                         if (_overlayNetworkManager.State == ManagerState.Stop
-                            && (Settings.Instance.Global_IsStart && Settings.Instance.Global_I2p_SamBridge_IsEnabled))
+                            && Settings.Instance.Global_I2p_SamBridge_IsEnabled)
                         {
                             _overlayNetworkManager.Start();
                         }
-                        else if (_overlayNetworkManager.State == ManagerState.Start
-                            && (!Settings.Instance.Global_IsStart || !Settings.Instance.Global_I2p_SamBridge_IsEnabled))
-                        {
-                            _overlayNetworkManager.Stop();
-                        }
 
-                        if (_outoposManager.State == ManagerState.Stop
-                            && Settings.Instance.Global_IsStart)
+                        if (_outoposManager.State == ManagerState.Stop)
                         {
                             _outoposManager.Start();
 
                             Log.Information("Start");
-                        }
-                        else if (_outoposManager.State == ManagerState.Start
-                            && !Settings.Instance.Global_IsStart)
-                        {
-                            _outoposManager.Stop();
-
-                            Log.Information("Stop");
-                        }
-
-                        if (_diskSpaceNotFoundException)
-                        {
-                            Log.Warning(LanguagesManager.Instance.MainWindow_DiskSpaceNotFound_Message);
-
-                            this.Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new Action(() =>
-                            {
-                                MessageBox.Show(
-                                    this,
-                                    LanguagesManager.Instance.MainWindow_DiskSpaceNotFound_Message,
-                                    "Warning",
-                                    MessageBoxButton.OK,
-                                    MessageBoxImage.Warning);
-                            }));
-
-                            _diskSpaceNotFoundException = false;
-                        }
-
-                        if (_cacheSpaceNotFoundException)
-                        {
-                            Log.Warning(LanguagesManager.Instance.MainWindow_CacheSpaceNotFound_Message);
-
-                            this.Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new Action(() =>
-                            {
-                                MessageBox.Show(
-                                    this,
-                                    LanguagesManager.Instance.MainWindow_CacheSpaceNotFound_Message,
-                                    "Warning",
-                                    MessageBoxButton.OK,
-                                    MessageBoxImage.Warning);
-                            }));
-
-                            _cacheSpaceNotFoundException = false;
-                        }
-                    }
-
-                    if (Settings.Instance.Global_IsStart && spaceCheckStopwatch.Elapsed.TotalMinutes >= 1)
-                    {
-                        spaceCheckStopwatch.Restart();
-
-                        try
-                        {
-                            DriveInfo drive = new DriveInfo(Directory.GetCurrentDirectory());
-
-                            if (drive.AvailableFreeSpace < NetworkConverter.FromSizeString("256MB"))
-                            {
-                                _diskSpaceNotFoundException = true;
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            Log.Warning(e);
-                        }
-
-                        try
-                        {
-                            if (!string.IsNullOrWhiteSpace(App.Cache.Path))
-                            {
-                                DriveInfo drive = new DriveInfo(Path.GetDirectoryName(Path.GetFullPath(App.Cache.Path)));
-
-                                if (drive.AvailableFreeSpace < NetworkConverter.FromSizeString("256MB"))
-                                {
-                                    _diskSpaceNotFoundException = true;
-                                }
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            Log.Warning(e);
                         }
                     }
 
@@ -978,15 +878,6 @@ namespace Outopos.Windows
                     {
 
                     }
-                }
-            };
-
-            Log.LogEvent += (object sender, LogEventArgs e) =>
-            {
-                if (e.Exception != null && e.Exception.GetType().ToString() == "Library.Net.Outopos.SpaceNotFoundException")
-                {
-                    if (Settings.Instance.Global_IsStart)
-                        _cacheSpaceNotFoundException = true;
                 }
             };
         }

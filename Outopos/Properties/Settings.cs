@@ -32,7 +32,6 @@ namespace Outopos.Properties
                 new Library.Configuration.SettingContent<LockedHashSet<Chat>>() { Name = "Global_ChatHistorys", Value = new LockedHashSet<Chat>() },
                 new Library.Configuration.SettingContent<LockedHashSet<A.Seed>>() { Name = "Global_SeedHistorys", Value = new LockedHashSet<A.Seed>() },
                 new Library.Configuration.SettingContent<string>() { Name = "Global_UseLanguage", Value = "English" },
-                new Library.Configuration.SettingContent<bool>() { Name = "Global_IsStart", Value = true },
                 new Library.Configuration.SettingContent<bool>() { Name = "Global_AutoBaseNodeSetting_IsEnabled", Value = true },
                 new Library.Configuration.SettingContent<bool>() { Name = "Global_I2p_SamBridge_IsEnabled", Value = true },
                 new Library.Configuration.SettingContent<string>() { Name = "Global_Update_Url", Value = "http://lyrise.web.fc2.com/update/Outopos" },
@@ -298,24 +297,6 @@ namespace Outopos.Properties
                 lock (this.ThisLock)
                 {
                     this["Global_UseLanguage"] = value;
-                }
-            }
-        }
-
-        public bool Global_IsStart
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return (bool)this["Global_IsStart"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["Global_IsStart"] = value;
                 }
             }
         }
