@@ -115,9 +115,9 @@ namespace Outopos.Windows
         {
             var selectItems = _listView.SelectedItems;
 
-            _listViewCopyMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
-            _listViewCopyInfoMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
-            _listViewJoinMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
+            _listViewCopyMenuItem.IsEnabled = (selectItems != null && selectItems.Count > 0);
+            _listViewCopyInfoMenuItem.IsEnabled = (selectItems != null && selectItems.Count > 0);
+            _listViewJoinMenuItem.IsEnabled = (selectItems != null && selectItems.Count > 0);
         }
 
         private void _listViewCopyMenuItem_Click(object sender, RoutedEventArgs e)

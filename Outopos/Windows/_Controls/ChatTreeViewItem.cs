@@ -49,7 +49,7 @@ namespace Outopos.Windows
             sb.Append(' ');
 
             {
-                sb.Append(string.Format("({0})", this.Value.ChatMessages.Count(n => n.Value.HasFlag(ChatMessageState.IsUnread))));
+                sb.Append(string.Format("({0})", this.Value.ChatMessages.Count));
                 if (!_value.IsTrustEnabled) sb.Append('!');
             }
 

@@ -28,7 +28,6 @@ namespace Outopos.Windows
         private OutoposManager _outoposManager;
         private AutoBaseNodeSettingManager _autoBaseNodeSettingManager;
         private OverlayNetworkManager _overlayNetworkManager;
-        private TransfarLimitManager _transferLimitManager;
         private BufferManager _bufferManager;
 
         private byte[] _baseNode_Id;
@@ -37,15 +36,15 @@ namespace Outopos.Windows
         private ObservableCollectionEx<ConnectionFilter> _clientFilters;
         private ObservableCollectionEx<string> _serverListenUris;
 
+        private ObservableCollectionEx<LanguageComboBoxItem> _languageComboBoxItemCollection;
         private ObservableCollectionEx<SignatureListViewItem> _signatureListViewItemCollection;
         private List<string> _fontMessageFontFamilyComboBoxItemCollection = new List<string>();
 
-        public OptionsWindow(OutoposManager outoposManager, AutoBaseNodeSettingManager autoBaseNodeSettingManager, OverlayNetworkManager overlayNetworkManager, TransfarLimitManager transfarLimitManager, BufferManager bufferManager)
+        public OptionsWindow(OutoposManager outoposManager, AutoBaseNodeSettingManager autoBaseNodeSettingManager, OverlayNetworkManager overlayNetworkManager, BufferManager bufferManager)
         {
             _outoposManager = outoposManager;
             _autoBaseNodeSettingManager = autoBaseNodeSettingManager;
             _overlayNetworkManager = overlayNetworkManager;
-            _transferLimitManager = transfarLimitManager;
             _bufferManager = bufferManager;
 
             InitializeComponent();
@@ -68,11 +67,6 @@ namespace Outopos.Windows
                 _clientFiltersConnectionTypeComboBox.Items.Add(item);
             }
 
-            foreach (var item in Enum.GetValues(typeof(TransferLimitType)).Cast<TransferLimitType>())
-            {
-                _transferLimitTypeComboBox.Items.Add(item);
-            }
-
             foreach (var u in new string[] { "Byte", "KB", "MB", "GB", "TB" })
             {
                 _dataCacheSizeComboBox.Items.Add(u);
@@ -86,13 +80,6 @@ namespace Outopos.Windows
             }
 
             _bandwidthLimitComboBox.SelectedItem = Settings.Instance.OptionsWindow_BandwidthLimit_Unit;
-
-            foreach (var u in new string[] { "Byte", "KB", "MB", "GB", })
-            {
-                _transferLimitSizeComboBox.Items.Add(u);
-            }
-
-            _transferLimitSizeComboBox.SelectedItem = Settings.Instance.OptionsWindow_TransferLimit_Unit;
 
             lock (_outoposManager.ThisLock)
             {
@@ -117,7 +104,7 @@ namespace Outopos.Windows
 
                 try
                 {
-                    _bandwidthLimitTextBox.Text = NetworkConverter.ToSizeString(_outoposManager.BandWidthLimit, Settings.Instance.OptionsWindow_BandwidthLimit_Unit);
+                    _bandwidthLimitTextBox.Text = NetworkConverter.ToSizeString(_outoposManager.BandwidthLimit, Settings.Instance.OptionsWindow_BandwidthLimit_Unit);
                 }
                 catch (Exception)
                 {
@@ -134,25 +121,6 @@ namespace Outopos.Windows
             _otherNodesUpdate();
             _clientFiltersListViewUpdate();
             _serverListenUrisUpdate();
-
-            lock (_transferLimitManager.ThisLock)
-            {
-                _transferLimitTypeComboBox.SelectedItem = _transferLimitManager.TransferLimit.Type;
-                _transferLimitSpanTextBox.Text = _transferLimitManager.TransferLimit.Span.ToString();
-
-                try
-                {
-                    _transferLimitSizeTextBox.Text = NetworkConverter.ToSizeString(_transferLimitManager.TransferLimit.Size, Settings.Instance.OptionsWindow_TransferLimit_Unit);
-                }
-                catch (Exception)
-                {
-                    _transferLimitSizeTextBox.Text = "";
-                }
-
-                _transferInfoUploadedLabel.Content = NetworkConverter.ToSizeString(_transferLimitManager.TotalUploadSize);
-                _transferInfoDownloadedLabel.Content = NetworkConverter.ToSizeString(_transferLimitManager.TotalDownloadSize);
-                _transferInfoTotalLabel.Content = NetworkConverter.ToSizeString(_transferLimitManager.TotalUploadSize + _transferLimitManager.TotalDownloadSize);
-            }
 
             _eventOpenPortAndGetIpAddressCheckBox.IsChecked = Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled;
             _eventUseI2pCheckBox.IsChecked = Settings.Instance.Global_I2p_SamBridge_IsEnabled;
@@ -179,7 +147,11 @@ namespace Outopos.Windows
                 _updateOptionAutoUpdateRadioButton.IsChecked = true;
             }
 
-            _signatureListViewItemCollection = new ObservableCollectionEx<SignatureListViewItem>(Settings.Instance.Global_DigitalSignatureCollection.Select(n => new SignatureListViewItem(n.Clone())));
+            _languageComboBoxItemCollection = new ObservableCollectionEx<LanguageComboBoxItem>(LanguagesManager.Instance.Languages.Select(n => new LanguageComboBoxItem(n)));
+            _languageComboBox.ItemsSource = _languageComboBoxItemCollection;
+            _languagesComboBoxUpdate();
+
+            _signatureListViewItemCollection = new ObservableCollectionEx<SignatureListViewItem>(Settings.Instance.Global_DigitalSignatureCollection.Select(n => new SignatureListViewItem(n)));
             _signatureListView.ItemsSource = _signatureListViewItemCollection;
             _signatureListViewUpdate();
 
@@ -188,8 +160,6 @@ namespace Outopos.Windows
             _fontMessageFontFamilyComboBox.SelectedItem = Settings.Instance.Global_Fonts_MessageFontFamily;
 
             _fontMessageFontSizeTextBox.Text = Settings.Instance.Global_Fonts_MessageFontSize.ToString();
-
-            _outoposPathTextBox.Text = Settings.Instance.Global_Amoeba_Path;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -316,9 +286,9 @@ namespace Outopos.Windows
         {
             var selectItems = _baseNodeUrisListView.SelectedItems;
 
-            _baseNodeUrisListViewDeleteMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
-            _baseNodeUrisListViewCopyMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
-            _baseNodeUrisListViewCutMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
+            _baseNodeUrisListViewDeleteMenuItem.IsEnabled = (selectItems != null && selectItems.Count > 0);
+            _baseNodeUrisListViewCopyMenuItem.IsEnabled = (selectItems != null && selectItems.Count > 0);
+            _baseNodeUrisListViewCutMenuItem.IsEnabled = (selectItems != null && selectItems.Count > 0);
 
             {
                 var line = Clipboard.GetText().Split('\r', '\n');
@@ -554,7 +524,7 @@ namespace Outopos.Windows
         {
             var selectItems = _otherNodesListView.SelectedItems;
 
-            _otherNodesCopyMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
+            _otherNodesCopyMenuItem.IsEnabled = (selectItems != null && selectItems.Count > 0);
             _otherNodesPasteMenuItem.IsEnabled = Clipboard.ContainsNodes();
         }
 
@@ -730,9 +700,9 @@ namespace Outopos.Windows
         {
             var selectItems = _clientFiltersListView.SelectedItems;
 
-            _clientFiltersListViewDeleteMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
-            _clientFiltersListViewCopyMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
-            _clientFiltersListViewCutMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
+            _clientFiltersListViewDeleteMenuItem.IsEnabled = (selectItems != null && selectItems.Count > 0);
+            _clientFiltersListViewCopyMenuItem.IsEnabled = (selectItems != null && selectItems.Count > 0);
+            _clientFiltersListViewCutMenuItem.IsEnabled = (selectItems != null && selectItems.Count > 0);
 
             {
                 var line = Clipboard.GetText().Split('\r', '\n');
@@ -1132,9 +1102,9 @@ namespace Outopos.Windows
         {
             var selectItems = _serverListenUrisListView.SelectedItems;
 
-            _serverListenUrisListViewDeleteMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
-            _serverListenUrisListViewCopyMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
-            _serverListenUrisListViewCutMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
+            _serverListenUrisListViewDeleteMenuItem.IsEnabled = (selectItems != null && selectItems.Count > 0);
+            _serverListenUrisListViewCopyMenuItem.IsEnabled = (selectItems != null && selectItems.Count > 0);
+            _serverListenUrisListViewCutMenuItem.IsEnabled = (selectItems != null && selectItems.Count > 0);
 
             {
                 var line = Clipboard.GetText().Split('\r', '\n');
@@ -1404,82 +1374,7 @@ namespace Outopos.Windows
 
         #endregion
 
-        #region Transfer
-
-        private void _transferLimitTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            _transferLimitSpanTextBox.IsEnabled = (TransferLimitType)_transferLimitTypeComboBox.SelectedItem != TransferLimitType.None;
-            _transferLimitSizeTextBox.IsEnabled = (TransferLimitType)_transferLimitTypeComboBox.SelectedItem != TransferLimitType.None;
-            _transferLimitSizeComboBox.IsEnabled = (TransferLimitType)_transferLimitTypeComboBox.SelectedItem != TransferLimitType.None;
-        }
-
-        private void _transferLimitSpanTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(_transferLimitSpanTextBox.Text)) return;
-
-            StringBuilder builder = new StringBuilder("");
-
-            foreach (var item in _transferLimitSpanTextBox.Text)
-            {
-                if (Regex.IsMatch(item.ToString(), "[0-9]"))
-                {
-                    builder.Append(item.ToString());
-                }
-            }
-
-            var value = builder.ToString();
-            if (_transferLimitSpanTextBox.Text != value) _transferLimitSpanTextBox.Text = value;
-        }
-
-        private void _transferLimitSizeTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(_transferLimitSizeTextBox.Text)) return;
-
-            StringBuilder builder = new StringBuilder("");
-
-            foreach (var item in _transferLimitSizeTextBox.Text)
-            {
-                if (Regex.IsMatch(item.ToString(), @"[0-9\.]"))
-                {
-                    builder.Append(item.ToString());
-                }
-            }
-
-            var value = builder.ToString();
-            if (_transferLimitSizeTextBox.Text != value) _transferLimitSizeTextBox.Text = value;
-        }
-
-        private void _transferLimitSizeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (e.AddedItems.Count != 1 || e.RemovedItems.Count != 1) return;
-
-            var newItem = (string)e.AddedItems[0];
-            var oldItem = (string)e.RemovedItems[0];
-
-            try
-            {
-                var size = (long)NetworkConverter.FromSizeString(_transferLimitSizeTextBox.Text + oldItem);
-                _transferLimitSizeTextBox.Text = NetworkConverter.ToSizeString(size, newItem);
-            }
-            catch (Exception)
-            {
-                var size = long.MaxValue;
-                _transferLimitSizeTextBox.Text = NetworkConverter.ToSizeString(size, newItem);
-            }
-        }
-
-        private void _resetButton_Click(object sender, RoutedEventArgs e)
-        {
-            _transferLimitManager.Reset();
-
-            _transferInfoUploadedLabel.Content = NetworkConverter.ToSizeString(_transferLimitManager.TotalUploadSize);
-            _transferInfoDownloadedLabel.Content = NetworkConverter.ToSizeString(_transferLimitManager.TotalDownloadSize);
-            _transferInfoTotalLabel.Content = NetworkConverter.ToSizeString(_transferLimitManager.TotalUploadSize + _transferLimitManager.TotalDownloadSize);
-        }
-
-        #endregion
-
-        #region Signature
+        #region Signatures
 
         private void _signatureTextBox_KeyDown(object sender, KeyEventArgs e)
         {
@@ -1580,7 +1475,7 @@ namespace Outopos.Windows
         {
             var selectItems = _signatureListView.SelectedItems;
 
-            _signatureListViewDeleteMenuItem.IsEnabled = (selectItems == null) ? false : (selectItems.Count > 0);
+            _signatureListViewDeleteMenuItem.IsEnabled = (selectItems != null && selectItems.Count > 0);
         }
 
         private void _signatureListViewCopyMenuItem_Click(object sender, RoutedEventArgs e)
@@ -1744,7 +1639,17 @@ namespace Outopos.Windows
 
         #endregion
 
-        #region Font
+        #region Languages
+
+        private void _languagesComboBoxUpdate()
+        {
+            var selectItem = _languageComboBox.Items.Cast<LanguageComboBoxItem>().FirstOrDefault(n => n.Value == Settings.Instance.Global_UseLanguage);
+            _languageComboBox.SelectedItem = selectItem;
+        }
+
+        #endregion
+
+        #region Fonts
 
         private static double GetStringToDouble(string value)
         {
@@ -1797,7 +1702,7 @@ namespace Outopos.Windows
 
         #region Amoeba
 
-        private void _outoposPathTextBox_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void _amoebaPathTextBox_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             using (System.Windows.Forms.OpenFileDialog dialog = new System.Windows.Forms.OpenFileDialog())
             {
@@ -1808,8 +1713,8 @@ namespace Outopos.Windows
 
                 try
                 {
-                    dialog.InitialDirectory = Path.GetDirectoryName(_outoposPathTextBox.Text);
-                    dialog.FileName = Path.GetFileName(_outoposPathTextBox.Text);
+                    dialog.InitialDirectory = Path.GetDirectoryName(_amoebaPathTextBox.Text);
+                    dialog.FileName = Path.GetFileName(_amoebaPathTextBox.Text);
                 }
                 catch (Exception)
                 {
@@ -1818,7 +1723,7 @@ namespace Outopos.Windows
 
                 if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    _outoposPathTextBox.Text = dialog.FileName;
+                    _amoebaPathTextBox.Text = dialog.FileName;
                 }
             }
         }
@@ -1833,7 +1738,7 @@ namespace Outopos.Windows
 
             lock (_outoposManager.ThisLock)
             {
-                long size = (long)NetworkConverter.FromSizeString("8 GB");
+                long size = (long)NetworkConverter.FromSizeString("50 GB");
 
                 try
                 {
@@ -1845,7 +1750,7 @@ namespace Outopos.Windows
                 }
 
 #if !DEBUG
-                size = Math.Max((long)NetworkConverter.FromSizeString("8 GB"), size);
+                size = Math.Max((long)NetworkConverter.FromSizeString("50 GB"), size);
 #endif
 
                 if (_outoposManager.Size != size)
@@ -1884,7 +1789,7 @@ namespace Outopos.Windows
                     bandwidthLimit = int.MaxValue;
                 }
 
-                _outoposManager.BandWidthLimit = bandwidthLimit;
+                _outoposManager.BandwidthLimit = bandwidthLimit;
 
                 _outoposManager.Filters.Clear();
                 _outoposManager.Filters.AddRange(_clientFilters.Select(n => n.Clone()));
@@ -1895,30 +1800,6 @@ namespace Outopos.Windows
                     _outoposManager.ListenUris.AddRange(_serverListenUris);
 
                     flag = true;
-                }
-            }
-
-            lock (_transferLimitManager.ThisLock)
-            {
-                lock (_transferLimitManager.TransferLimit.ThisLock)
-                {
-                    _transferLimitManager.TransferLimit.Type = (TransferLimitType)_transferLimitTypeComboBox.SelectedItem;
-
-                    int day = OptionsWindow.GetStringToInt(_transferLimitSpanTextBox.Text);
-                    _transferLimitManager.TransferLimit.Span = Math.Max(Math.Min(day, 31), 1);
-
-                    long size = (long)NetworkConverter.FromSizeString("32 GB");
-
-                    try
-                    {
-                        size = (long)NetworkConverter.FromSizeString(_transferLimitSizeTextBox.Text + (string)_transferLimitSizeComboBox.SelectedItem);
-                    }
-                    catch (Exception)
-                    {
-                        size = long.MaxValue;
-                    }
-
-                    _transferLimitManager.TransferLimit.Size = size;
                 }
             }
 
@@ -1944,21 +1825,29 @@ namespace Outopos.Windows
             Settings.Instance.Global_DigitalSignatureCollection.Clear();
             Settings.Instance.Global_DigitalSignatureCollection.AddRange(_signatureListViewItemCollection.Select(n => n.Value));
 
-            Settings.Instance.Global_Update_Url = _updateUrlTextBox.Text;
-            Settings.Instance.Global_Update_ProxyUri = _updateProxyUriTextBox.Text;
-            if (Signature.Check(_updateSignatureTextBox.Text)) Settings.Instance.Global_Update_Signature = _updateSignatureTextBox.Text;
+            {
+                Settings.Instance.Global_Update_Url = _updateUrlTextBox.Text;
+                Settings.Instance.Global_Update_ProxyUri = _updateProxyUriTextBox.Text;
+                if (Signature.Check(_updateSignatureTextBox.Text)) Settings.Instance.Global_Update_Signature = _updateSignatureTextBox.Text;
 
-            if (_updateOptionNoneRadioButton.IsChecked.Value)
-            {
-                Settings.Instance.Global_Update_Option = UpdateOption.None;
+                if (_updateOptionNoneRadioButton.IsChecked.Value)
+                {
+                    Settings.Instance.Global_Update_Option = UpdateOption.None;
+                }
+                else if (_updateOptionAutoCheckRadioButton.IsChecked.Value)
+                {
+                    Settings.Instance.Global_Update_Option = UpdateOption.AutoCheck;
+                }
+                else if (_updateOptionAutoUpdateRadioButton.IsChecked.Value)
+                {
+                    Settings.Instance.Global_Update_Option = UpdateOption.AutoUpdate;
+                }
             }
-            else if (_updateOptionAutoCheckRadioButton.IsChecked.Value)
+
             {
-                Settings.Instance.Global_Update_Option = UpdateOption.AutoCheck;
-            }
-            else if (_updateOptionAutoUpdateRadioButton.IsChecked.Value)
-            {
-                Settings.Instance.Global_Update_Option = UpdateOption.AutoUpdate;
+                var selectItem = _languageComboBox.SelectedItem as LanguageComboBoxItem;
+                Settings.Instance.Global_UseLanguage = selectItem.Value;
+                LanguagesManager.ChangeLanguage(selectItem.Value);
             }
 
             Settings.Instance.Global_Fonts_MessageFontFamily = (string)_fontMessageFontFamilyComboBox.SelectedItem;
@@ -1966,12 +1855,50 @@ namespace Outopos.Windows
             double messageFontSize = OptionsWindow.GetStringToDouble(_fontMessageFontSizeTextBox.Text);
             Settings.Instance.Global_Fonts_MessageFontSize = Math.Max(Math.Min(messageFontSize, 100), 1);
 
-            Settings.Instance.Global_Amoeba_Path = _outoposPathTextBox.Text;
+            Settings.Instance.Global_Amoeba_Path = _amoebaPathTextBox.Text;
         }
 
         private void _cancelButton_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = false;
+        }
+
+        private class LanguageComboBoxItem
+        {
+            private string _value;
+            private string _text;
+
+            public LanguageComboBoxItem(string value)
+            {
+                this.Value = value;
+            }
+
+            public void Update()
+            {
+                _text = LanguagesManager.Instance.Translate("Languages_" + _value) ?? _value;
+            }
+
+            public string Value
+            {
+                get
+                {
+                    return _value;
+                }
+                set
+                {
+                    _value = value;
+
+                    this.Update();
+                }
+            }
+
+            public string Text
+            {
+                get
+                {
+                    return _text;
+                }
+            }
         }
 
         private class SignatureListViewItem

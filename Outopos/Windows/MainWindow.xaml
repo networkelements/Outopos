@@ -1,4 +1,4 @@
-<Window x:Class="Outopos.Windows.MainWindow"
+﻿<Window x:Class="Outopos.Windows.MainWindow"
         x:ClassModifier="internal"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -18,15 +18,114 @@
         StateChanged="Window_StateChanged"
         Loaded="Window_Loaded"
         Closing="Window_Closing">
+    <Window.Resources>
 
-    <Window.CommandBindings>
-        <CommandBinding Command="Copy" Executed="Execute_Copy" />
-    </Window.CommandBindings>
+        <Style x:Key="_buttonStyle" TargetType="{x:Type Button}" BasedOn="{x:Null}">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="FocusVisualStyle" Value="{DynamicResource GlyphBrush}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <ControlTemplate.Resources>
+                            <Storyboard x:Key="HoverOn">
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HoverBorder" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="0.5" />
+                                </DoubleAnimationUsingKeyFrames>
 
-    <Window.InputBindings>
-        <KeyBinding Gesture="CTRL+C" Command="Copy" />
-    </Window.InputBindings>
+                            </Storyboard>
+                            <Storyboard x:Key="HoverOff">
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HoverBorder" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0" />
+                                </DoubleAnimationUsingKeyFrames>
 
+                            </Storyboard>
+                            <Storyboard x:Key="PressedOn">
+
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="PressedBorder" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="0.5" />
+                                </DoubleAnimationUsingKeyFrames>
+
+                            </Storyboard>
+                            <Storyboard x:Key="PressedOff">
+
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="PressedBorder" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0" />
+                                </DoubleAnimationUsingKeyFrames>
+
+                            </Storyboard>
+                            <Storyboard x:Key="FocusedOn">
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="FocusVisualElement" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="0.5" />
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+                            <Storyboard x:Key="FocussedOff">
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="FocusVisualElement" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0" />
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+
+                        </ControlTemplate.Resources>
+                        <Grid x:Name="Grid">
+                            <Border x:Name="HoverBorder" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" BorderBrush="{DynamicResource NormalBorderBrush}" CornerRadius="3,3,3,3" Opacity="0" Background="{DynamicResource GlyphBrush}" />
+                            <Border x:Name="PressedBorder" Opacity="0" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3" Background="{StaticResource GlyphBrush}" />
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" RecognizesAccessKey="True" />
+                            <Border x:Name="FocusVisualElement" IsHitTestVisible="false" BorderThickness="1" CornerRadius="3,3,3,3" Margin="1,1,1,1" Opacity="0" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsKeyboardFocused" Value="true">
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard Storyboard="{StaticResource FocussedOff}" x:Name="FocussedOff_BeginStoryboard" />
+                                </Trigger.ExitActions>
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard Storyboard="{StaticResource FocusedOn}" x:Name="FocusedOn_BeginStoryboard" />
+                                </Trigger.EnterActions>
+
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard Storyboard="{StaticResource HoverOff}" x:Name="HoverOff_BeginStoryboard" />
+                                </Trigger.ExitActions>
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard Storyboard="{StaticResource HoverOn}" />
+                                </Trigger.EnterActions>
+
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard Storyboard="{StaticResource PressedOff}" />
+                                </Trigger.ExitActions>
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard Storyboard="{StaticResource PressedOn}" />
+                                </Trigger.EnterActions>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="true" />
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Opacity" TargetName="Grid" Value="0.5" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="ButtonBase.Click">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="ContextMenu.IsOpen">
+                                <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True"/>
+                            </BooleanAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Style.Triggers>
+        </Style>
+
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -47,7 +146,7 @@
                     <Setter Property="Padding" Value="1" />
                     <Setter Property="Template">
                         <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type ToggleButton}">
+                            <ControlTemplate TargetType="{x:Type RadioButton}">
                                 <ControlTemplate.Resources>
                                     <Storyboard x:Key="HoverOn">
                                         <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HoverBorder" Storyboard.TargetProperty="(UIElement.Opacity)">
@@ -98,9 +197,6 @@
                                         </Trigger.EnterActions>
                                     </Trigger>
                                     <Trigger Property="IsEnabled" Value="false">
-                                        <!--<Setter Property="Foreground" Value="#ADADAD" />-->
-                                        <Setter Property="Background" TargetName="Border" Value="{DynamicResource DisabledBackgroundBrush}"/>
-                                        <Setter Property="BorderBrush" TargetName="Border" Value="{DynamicResource DisabledBorderBrush}"/>
                                         <Setter Property="Opacity" TargetName="grid" Value="0.5"/>
                                     </Trigger>
                                 </ControlTemplate.Triggers>
@@ -210,22 +306,24 @@
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
-                </Style>       
+                </Style>
+
             </Grid.Resources>
 
-            <RadioButton x:Name="_wikiRadioButton" Style="{StaticResource _radioButtonStyle}" Content="Wiki" HorizontalAlignment="Left" VerticalAlignment="Top" Height="40" Width="40" Margin="6,6,0,0" IsChecked="True"/>
-            <RadioButton x:Name="_chatRadioButton" Style="{StaticResource _radioButtonStyle}" Content="Chat" HorizontalAlignment="Left" VerticalAlignment="Top" Height="40" Width="40" Margin="6,51,0,0"/>
-            <RadioButton x:Name="_mailRadioButton" Style="{StaticResource _radioButtonStyle}" Content="Mail" HorizontalAlignment="Left" VerticalAlignment="Top" Height="40" Width="40" Margin="6,96,0,0"/>
-            <RadioButton x:Name="_searchRadioButton" Style="{StaticResource _radioButtonStyle}" Content="Search" HorizontalAlignment="Left" VerticalAlignment="Top" Height="40" Width="40" Margin="6,141,0,0"/>            
-            <Button x:Name="_optionsRadioButton" Style="{StaticResource _buttonStyle}" Content="Options" HorizontalAlignment="Left" VerticalAlignment="Top" Height="40" Width="40" Margin="6,186,0,0"/>
+            <RadioButton x:Name="_worldRadioButton" Style="{StaticResource _radioButtonStyle}" Content="World" HorizontalAlignment="Left" VerticalAlignment="Top" Height="40" Width="40" Margin="6,6,0,0" IsChecked="True" ToolTip="World" Click="_worldRadioButton_Click"/>
+            <RadioButton x:Name="_wikiRadioButton" Style="{StaticResource _radioButtonStyle}" Content="Wiki" HorizontalAlignment="Left" VerticalAlignment="Top" Height="40" Width="40" Margin="6,52,0,0" ToolTip="Wiki"/>
+            <RadioButton x:Name="_chatRadioButton" Style="{StaticResource _radioButtonStyle}" Content="Chat" HorizontalAlignment="Left" VerticalAlignment="Top" Height="40" Width="40" Margin="6,98,0,0" ToolTip="Chat"/>
+            <RadioButton x:Name="_mailRadioButton" Style="{StaticResource _radioButtonStyle}" Content="Mail" HorizontalAlignment="Left" VerticalAlignment="Top" Height="40" Width="40" Margin="6,144,0,0" ToolTip="Mail"/>
+
+            <Button x:Name="_profileButton" Style="{StaticResource _buttonStyle}" Content="Profile" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="40" Width="40" Margin="6,0,0,52" ToolTip="Profile" Click="_profileButton_Click"/>
+            <Button x:Name="_optionsButton" Style="{StaticResource _buttonStyle}" Content="Options" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="40" Width="40" Margin="6,0,0,6" ToolTip="Options" Click="_optionsButton_Click"/>
         </Grid>
 
-        <Grid Margin="52,6,6,6">          
+        <Grid Margin="52,6,6,6">
+            <ContentControl Name="_trustContentControl" Visibility="{Binding ElementName=_worldRadioButton, Path=IsChecked, Converter={StaticResource _boolToVisibilityConverter}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
             <ContentControl Name="_wikiContentControl" Visibility="{Binding ElementName=_wikiRadioButton, Path=IsChecked, Converter={StaticResource _boolToVisibilityConverter}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
             <ContentControl Name="_chatContentControl" Visibility="{Binding ElementName=_chatRadioButton, Path=IsChecked, Converter={StaticResource _boolToVisibilityConverter}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
             <ContentControl Name="_mailContentControl" Visibility="{Binding ElementName=_mailRadioButton, Path=IsChecked, Converter={StaticResource _boolToVisibilityConverter}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-            <ContentControl Name="_searchContentControl" Visibility="{Binding ElementName=_searchRadioButton, Path=IsChecked, Converter={StaticResource _boolToVisibilityConverter}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-            <ContentControl Name="_settingsContentControl" Visibility="{Binding IsChecked, Converter={StaticResource _boolToVisibilityConverter}, ElementName=_optionsRadioButton}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
         </Grid>
 
         <StatusBar Grid.Row="1" 

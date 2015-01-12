@@ -63,7 +63,6 @@ namespace Outopos.Windows
         private OutoposManager _outoposManager;
         private AutoBaseNodeSettingManager _autoBaseNodeSettingManager;
         private OverlayNetworkManager _overlayNetworkManager;
-        private TransfarLimitManager _transferLimitManager;
         private CatharsisManager _catharsisManager;
 
         private Random _random = new Random();
@@ -137,19 +136,28 @@ namespace Outopos.Windows
                     this.Icon = icon;
                 }
 
+                // World
+                {
+                    var bitmap = new BitmapImage();
+
+                    bitmap.BeginInit();
+                    bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"Tabs\World.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
+                    bitmap.EndInit();
+                    if (bitmap.CanFreeze) bitmap.Freeze();
+
+                    _worldRadioButton.Content = new Image() { Source = bitmap, Height = 32, Width = 32 };
+                }
+
                 // Wiki
                 {
                     var bitmap = new BitmapImage();
 
                     bitmap.BeginInit();
-                    bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"Buttons\Wiki.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
+                    bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"Tabs\Wiki.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
                     bitmap.EndInit();
                     if (bitmap.CanFreeze) bitmap.Freeze();
 
-                    var stackPanel = new StackPanel();
-                    stackPanel.Children.Add(new Image() { Source = bitmap, Height = 32, Width = 32 });
-
-                    _wikiRadioButton.Content = stackPanel;
+                    _wikiRadioButton.Content = new Image() { Source = bitmap, Height = 32, Width = 32 };
                 }
 
                 // Chat
@@ -157,14 +165,11 @@ namespace Outopos.Windows
                     var bitmap = new BitmapImage();
 
                     bitmap.BeginInit();
-                    bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"Buttons\Chat.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
+                    bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"Tabs\Chat.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
                     bitmap.EndInit();
                     if (bitmap.CanFreeze) bitmap.Freeze();
 
-                    var stackPanel = new StackPanel();
-                    stackPanel.Children.Add(new Image() { Source = bitmap, Height = 32, Width = 32 });
-
-                    _chatRadioButton.Content = stackPanel;
+                    _chatRadioButton.Content = new Image() { Source = bitmap, Height = 32, Width = 32 };
                 }
 
                 // Mail
@@ -172,29 +177,23 @@ namespace Outopos.Windows
                     var bitmap = new BitmapImage();
 
                     bitmap.BeginInit();
-                    bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"Buttons\Mail.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
+                    bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"Tabs\Mail.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
                     bitmap.EndInit();
                     if (bitmap.CanFreeze) bitmap.Freeze();
 
-                    var stackPanel = new StackPanel();
-                    stackPanel.Children.Add(new Image() { Source = bitmap, Height = 32, Width = 32 });
-
-                    _mailRadioButton.Content = stackPanel;
+                    _mailRadioButton.Content = new Image() { Source = bitmap, Height = 32, Width = 32 };
                 }
 
-                // Search
+                // Profile
                 {
                     var bitmap = new BitmapImage();
 
                     bitmap.BeginInit();
-                    bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"Buttons\Search.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
+                    bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"Tabs\Profile.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
                     bitmap.EndInit();
                     if (bitmap.CanFreeze) bitmap.Freeze();
 
-                    var stackPanel = new StackPanel();
-                    stackPanel.Children.Add(new Image() { Source = bitmap, Height = 32, Width = 32 });
-
-                    _searchRadioButton.Content = stackPanel;
+                    _profileButton.Content = new Image() { Source = bitmap, Height = 32, Width = 32 };
                 }
 
                 // Options
@@ -202,14 +201,11 @@ namespace Outopos.Windows
                     var bitmap = new BitmapImage();
 
                     bitmap.BeginInit();
-                    bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"Buttons\Options.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
+                    bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"Tabs\Options.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
                     bitmap.EndInit();
                     if (bitmap.CanFreeze) bitmap.Freeze();
 
-                    var stackPanel = new StackPanel();
-                    stackPanel.Children.Add(new Image() { Source = bitmap, Height = 32, Width = 32 });
-
-                    _optionsRadioButton.Content = stackPanel;
+                    _optionsButton.Content = new Image() { Source = bitmap, Height = 32, Width = 32 };
                 }
 
                 System.Drawing.Icon myIcon = new System.Drawing.Icon(Path.Combine(App.DirectoryPaths["Icons"], "Outopos.ico"));
@@ -217,7 +213,6 @@ namespace Outopos.Windows
                 _notifyIcon.Visible = true;
 
                 this.Setting_Init();
-                //this.Setting_Languages();
 
                 _notifyIcon.Visible = false;
                 _notifyIcon.Click += (object sender2, EventArgs e2) =>
@@ -310,37 +305,59 @@ namespace Outopos.Windows
         {
             if (state == ConnectionState.Red)
             {
-                var bitmap = new BitmapImage();
-
-                bitmap.BeginInit();
-                bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"States\Red.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
-                bitmap.EndInit();
-                if (bitmap.CanFreeze) bitmap.Freeze();
-
-                _stateImage.Source = bitmap;
+                _stateImage.Source = StatesIconManager.Red;
             }
             else if (state == ConnectionState.Yello)
             {
-                var bitmap = new BitmapImage();
-
-                bitmap.BeginInit();
-                bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"States\Yello.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
-                bitmap.EndInit();
-                if (bitmap.CanFreeze) bitmap.Freeze();
-
-                _stateImage.Source = bitmap;
+                _stateImage.Source = StatesIconManager.Yello;
             }
             else if (state == ConnectionState.Green)
             {
-                var bitmap = new BitmapImage();
-
-                bitmap.BeginInit();
-                bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"States\Green.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
-                bitmap.EndInit();
-                if (bitmap.CanFreeze) bitmap.Freeze();
-
-                _stateImage.Source = bitmap;
+                _stateImage.Source = StatesIconManager.Green;
             }
+        }
+
+        private static class StatesIconManager
+        {
+            static StatesIconManager()
+            {
+                {
+                    var bitmap = new BitmapImage();
+
+                    bitmap.BeginInit();
+                    bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"States\Red.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
+                    bitmap.EndInit();
+                    if (bitmap.CanFreeze) bitmap.Freeze();
+
+                    StatesIconManager.Red = bitmap;
+                }
+
+                {
+                    var bitmap = new BitmapImage();
+
+                    bitmap.BeginInit();
+                    bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"States\Yello.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
+                    bitmap.EndInit();
+                    if (bitmap.CanFreeze) bitmap.Freeze();
+
+                    StatesIconManager.Yello = bitmap;
+                }
+
+                {
+                    var bitmap = new BitmapImage();
+
+                    bitmap.BeginInit();
+                    bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"States\Green.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
+                    bitmap.EndInit();
+                    if (bitmap.CanFreeze) bitmap.Freeze();
+
+                    StatesIconManager.Green = bitmap;
+                }
+            }
+
+            public static ImageSource Red { get; private set; }
+            public static ImageSource Yello { get; private set; }
+            public static ImageSource Green { get; private set; }
         }
 
         private void TimerThread()
@@ -367,6 +384,14 @@ namespace Outopos.Windows
                     if (_closed) return;
 
                     {
+                        if (_diskSpaceNotFoundException || _cacheSpaceNotFoundException)
+                        {
+                            this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
+                            {
+                                //_stopMenuItem_Click(null, null);
+                            }));
+                        }
+
                         if (_autoBaseNodeSettingManager.State == ManagerState.Stop
                             && (Settings.Instance.Global_IsStart && Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled))
                         {
@@ -482,7 +507,6 @@ namespace Outopos.Windows
                         try
                         {
                             _catharsisManager.Save(_configrationDirectoryPaths["CatharsisManager"]);
-                            _transferLimitManager.Save(_configrationDirectoryPaths["TransfarLimitManager"]);
                             _overlayNetworkManager.Save(_configrationDirectoryPaths["OverlayNetworkManager"]);
                             _autoBaseNodeSettingManager.Save(_configrationDirectoryPaths["AutoBaseNodeSettingManager"]);
                             _outoposManager.Save(_configrationDirectoryPaths["OutoposManager"]);
@@ -503,7 +527,7 @@ namespace Outopos.Windows
                             if (Settings.Instance.Global_Update_Option == UpdateOption.AutoCheck
                                || Settings.Instance.Global_Update_Option == UpdateOption.AutoUpdate)
                             {
-                                _checkUpdateMenuItem_Click(null, null);
+                                this.CheckUpdate(false);
                             }
                         }
                         catch (Exception e)
@@ -611,7 +635,7 @@ namespace Outopos.Windows
             var generalProfiles = new List<Profile>();
             var searchSignatures = new SignatureCollection();
 
-            foreach (var leaderSignature in Settings.Instance.Global_TrustSignatures.ToArray())
+            foreach (var leaderSignature in Settings.Instance.Global_ProfileItem.TrustSignatures.ToArray())
             {
                 var tempList = new List<Profile>();
 
@@ -715,6 +739,31 @@ namespace Outopos.Windows
 
                             _sendingSpeedTextBlock.Text = NetworkConverter.ToSizeString(sentAverageTraffic) + "/s";
                             _receivingSpeedTextBlock.Text = NetworkConverter.ToSizeString(receivedAverageTraffic) + "/s";
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+
+                        try
+                        {
+                            if (_outoposManager.State == ManagerState.Stop)
+                            {
+                                this.SetConnectionState(ConnectionState.Red);
+                            }
+                            else if (_outoposManager.State == ManagerState.Start)
+                            {
+                                var surroundingNodeCount = (int)_outoposManager.Information["SurroundingNodeCount"];
+
+                                if (surroundingNodeCount <= 3)
+                                {
+                                    this.SetConnectionState(ConnectionState.Yello);
+                                }
+                                else
+                                {
+                                    this.SetConnectionState(ConnectionState.Green);
+                                }
+                            }
                         }
                         catch (Exception)
                         {
@@ -942,57 +991,6 @@ namespace Outopos.Windows
             };
         }
 
-        private class MyTraceListener : TraceListener
-        {
-            private DebugLog _debugLog;
-
-            public MyTraceListener(DebugLog debugLog)
-            {
-                _debugLog = debugLog;
-            }
-
-            public override void Write(string message)
-            {
-                this.WriteLine(message);
-            }
-
-            public override void WriteLine(string message)
-            {
-                _debugLog(message);
-            }
-        }
-
-        //private void Setting_Languages()
-        //{
-        //    foreach (var language in LanguagesManager.Instance.Languages)
-        //    {
-        //        var menuItem = new LanguageMenuItem() { IsCheckable = true, Value = language };
-
-        //        menuItem.Click += (object sender, RoutedEventArgs e) =>
-        //        {
-        //            foreach (var item in _languagesMenuItem.Items.Cast<LanguageMenuItem>())
-        //            {
-        //                item.IsChecked = false;
-        //            }
-
-        //            menuItem.IsChecked = true;
-        //        };
-
-        //        menuItem.Checked += (object sender, RoutedEventArgs e) =>
-        //        {
-        //            Settings.Instance.Global_UseLanguage = (string)menuItem.Value;
-        //            LanguagesManager.ChangeLanguage((string)menuItem.Value);
-        //        };
-
-        //        _languagesMenuItem.Items.Add(menuItem);
-        //    }
-
-        //    {
-        //        var menuItem = _languagesMenuItem.Items.Cast<LanguageMenuItem>().FirstOrDefault(n => n.Value == Settings.Instance.Global_UseLanguage);
-        //        if (menuItem != null) menuItem.IsChecked = true;
-        //    }
-        //}
-
         private void Setting_Init()
         {
             NativeMethods.SetThreadExecutionState(ExecutionState.SystemRequired | ExecutionState.Continuous);
@@ -1006,11 +1004,6 @@ namespace Outopos.Windows
                 if (!File.Exists(Path.Combine(App.DirectoryPaths["Configuration"], "Outopos.version")))
                 {
                     initFlag = true;
-
-                    // デフォルトのTrustSignaturesの設定。
-                    {
-                        Settings.Instance.Global_TrustSignatures.Add("Lyrise@OTAhpWvmegu50LT-p5dZ16og7U6bdpO4z5TInZxGsCs");
-                    }
 
                     // デフォルトのChatタグを設定。
                     {
@@ -1111,6 +1104,7 @@ namespace Outopos.Windows
                         {
                             profileItem.UploadSignature = digitalSignature.ToString();
                             profileItem.Exchange = new Exchange(ExchangeAlgorithm.Rsa2048);
+                            profileItem.TrustSignatures.Add("Lyrise@OTAhpWvmegu50LT-p5dZ16og7U6bdpO4z5TInZxGsCs");
 
                             // Upload
                             {
@@ -1123,24 +1117,6 @@ namespace Outopos.Windows
                                     digitalSignature);
                             }
                         }
-
-                        ThreadPool.QueueUserWorkItem((object wstate) =>
-                        {
-                            Thread.CurrentThread.IsBackground = true;
-
-                            profileItem.Cost = Miner.Sample(new TimeSpan(0, 3, 0));
-
-                            // Upload
-                            {
-                                _outoposManager.UploadProfile(profileItem.Cost,
-                                    profileItem.Exchange.GetExchangePublicKey(),
-                                    profileItem.TrustSignatures,
-                                    profileItem.DeleteSignatures,
-                                    profileItem.Wikis,
-                                    profileItem.Chats,
-                                    digitalSignature);
-                            }
-                        });
                     }
                 }
                 else
@@ -1193,17 +1169,12 @@ namespace Outopos.Windows
                 _overlayNetworkManager = new OverlayNetworkManager(_outoposManager, _bufferManager);
                 _overlayNetworkManager.Load(_configrationDirectoryPaths["OverlayNetworkManager"]);
 
-                _transferLimitManager = new TransfarLimitManager(_outoposManager);
-                _transferLimitManager.Load(_configrationDirectoryPaths["TransfarLimitManager"]);
-                _transferLimitManager.Start();
-
                 _catharsisManager = new CatharsisManager(_outoposManager, _bufferManager);
                 _catharsisManager.Load(_configrationDirectoryPaths["CatharsisManager"]);
 
                 if (initFlag)
                 {
                     _catharsisManager.Save(_configrationDirectoryPaths["CatharsisManager"]);
-                    _transferLimitManager.Save(_configrationDirectoryPaths["TransfarLimitManager"]);
                     _overlayNetworkManager.Save(_configrationDirectoryPaths["OverlayNetworkManager"]);
                     _autoBaseNodeSettingManager.Save(_configrationDirectoryPaths["AutoBaseNodeSettingManager"]);
                     _outoposManager.Save(_configrationDirectoryPaths["OutoposManager"]);
@@ -1235,6 +1206,21 @@ namespace Outopos.Windows
                     catch (Exception e2)
                     {
                         Log.Warning(e2);
+                    }
+                }
+
+                // コストを算出する。
+                {
+                    var profileItem = Settings.Instance.Global_ProfileItem;
+
+                    if (profileItem.Cost == 0)
+                    {
+                        ThreadPool.QueueUserWorkItem((object wstate) =>
+                        {
+                            Thread.CurrentThread.IsBackground = true;
+
+                            profileItem.Cost = Miner.Sample(new TimeSpan(0, 3, 0));
+                        });
                     }
                 }
 
@@ -1348,153 +1334,163 @@ namespace Outopos.Windows
             return null;
         }
 
+        private volatile bool _checkUpdate_IsRunning = false;
+
         private object _updateLockObject = new object();
         private Version _updateCancelVersion;
 
         private void CheckUpdate(bool isLogFlag)
         {
-            lock (_updateLockObject)
+            if (_checkUpdate_IsRunning) return;
+            _checkUpdate_IsRunning = true;
+
+            ThreadPool.QueueUserWorkItem((object state) =>
             {
+                Thread.CurrentThread.IsBackground = true;
+
                 try
                 {
-                    var url = Settings.Instance.Global_Update_Url;
-                    string line1;
-                    string line2;
-                    string line3;
-
-                    for (int i = 0; ; i++)
+                    lock (_updateLockObject)
                     {
-                        try
-                        {
-                            HttpWebRequest rq = (HttpWebRequest)HttpWebRequest.Create(url);
-                            rq.Method = "GET";
-                            rq.ContentType = "text/html; charset=UTF-8";
-                            rq.UserAgent = "";
-                            rq.ReadWriteTimeout = 1000 * 60;
-                            rq.Timeout = 1000 * 60;
-                            rq.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore);
-                            rq.KeepAlive = true;
-                            rq.Headers.Add(HttpRequestHeader.AcceptCharset, "utf-8");
-                            rq.Proxy = this.GetProxy();
+                        var url = Settings.Instance.Global_Update_Url;
+                        string line1;
+                        string line2;
+                        string line3;
 
-                            using (HttpWebResponse rs = (HttpWebResponse)rq.GetResponse())
-                            using (Stream stream = rs.GetResponseStream())
-                            using (StreamReader r = new StreamReader(stream))
+                        for (int i = 0; ; i++)
+                        {
+                            try
                             {
-                                line1 = r.ReadLine();
-                                line2 = r.ReadLine();
-                                line3 = r.ReadLine();
+                                HttpWebRequest rq = (HttpWebRequest)HttpWebRequest.Create(url);
+                                rq.Method = "GET";
+                                rq.ContentType = "text/html; charset=UTF-8";
+                                rq.UserAgent = "";
+                                rq.ReadWriteTimeout = 1000 * 60;
+                                rq.Timeout = 1000 * 60;
+                                rq.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore);
+                                rq.KeepAlive = true;
+                                rq.Headers.Add(HttpRequestHeader.AcceptCharset, "utf-8");
+                                rq.Proxy = this.GetProxy();
+
+                                using (HttpWebResponse rs = (HttpWebResponse)rq.GetResponse())
+                                using (Stream stream = rs.GetResponseStream())
+                                using (StreamReader r = new StreamReader(stream))
+                                {
+                                    line1 = r.ReadLine();
+                                    line2 = r.ReadLine();
+                                    line3 = r.ReadLine();
+                                }
+
+                                break;
                             }
-
-                            break;
-                        }
-                        catch (Exception e)
-                        {
-                            if (i < 10)
+                            catch (Exception e)
                             {
-                                continue;
+                                if (i < 10)
+                                {
+                                    continue;
+                                }
+                                else
+                                {
+                                    Log.Error(e);
+
+                                    return;
+                                }
+                            }
+                        }
+
+                        Regex regex = new Regex(@"Outopos ((\d*)\.(\d*)\.(\d*)).*\.zip");
+                        var match = regex.Match(line1);
+
+                        if (match.Success)
+                        {
+                            var targetVersion = new Version(match.Groups[1].Value);
+
+                            if (targetVersion <= App.OutoposVersion)
+                            {
+                                if (isLogFlag)
+                                {
+                                    Log.Information(string.Format("Check Update: {0}", LanguagesManager.Instance.MainWindow_LatestVersion_Message));
+                                }
                             }
                             else
                             {
-                                Log.Error(e);
+                                if (!isLogFlag && targetVersion == _updateCancelVersion) return;
 
-                                return;
-                            }
-                        }
-                    }
-
-                    Regex regex = new Regex(@"Outopos ((\d*)\.(\d*)\.(\d*)).*\.zip");
-                    var match = regex.Match(line1);
-
-                    if (match.Success)
-                    {
-                        var targetVersion = new Version(match.Groups[1].Value);
-
-                        if (targetVersion <= App.OutoposVersion)
-                        {
-                            if (isLogFlag)
-                            {
-                                Log.Information(string.Format("Check Update: {0}", LanguagesManager.Instance.MainWindow_LatestVersion_Message));
-                            }
-                        }
-                        else
-                        {
-                            if (!isLogFlag && targetVersion == _updateCancelVersion) return;
-
-                            {
-                                foreach (var path in Directory.GetFiles(App.DirectoryPaths["Update"]))
                                 {
-                                    string name = Path.GetFileName(path);
-
-                                    if (name.StartsWith("Outopos"))
+                                    foreach (var path in Directory.GetFiles(App.DirectoryPaths["Update"]))
                                     {
-                                        var match2 = regex.Match(name);
+                                        string name = Path.GetFileName(path);
 
-                                        if (match2.Success)
+                                        if (name.StartsWith("Outopos"))
                                         {
-                                            var tempVersion = new Version(match2.Groups[1].Value);
+                                            var match2 = regex.Match(name);
 
-                                            if (targetVersion <= tempVersion) return;
+                                            if (match2.Success)
+                                            {
+                                                var tempVersion = new Version(match2.Groups[1].Value);
+
+                                                if (targetVersion <= tempVersion) return;
+                                            }
                                         }
                                     }
                                 }
-                            }
 
-                            Log.Information(string.Format("Check Update: {0}", line1));
+                                Log.Information(string.Format("Check Update: {0}", line1));
 
-                            bool flag = true;
+                                bool flag = true;
 
-                            if (Settings.Instance.Global_Update_Option != UpdateOption.AutoUpdate)
-                            {
-                                this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
+                                if (Settings.Instance.Global_Update_Option != UpdateOption.AutoUpdate)
                                 {
-                                    if (MessageBox.Show(
-                                        this,
-                                        string.Format(LanguagesManager.Instance.MainWindow_CheckUpdate_Message, line1),
-                                        "Update",
-                                        MessageBoxButton.OKCancel,
-                                        MessageBoxImage.Information) == MessageBoxResult.Cancel)
+                                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                                     {
-                                        flag = false;
+                                        if (MessageBox.Show(
+                                            this,
+                                            string.Format(LanguagesManager.Instance.MainWindow_CheckUpdate_Message, line1),
+                                            "Update",
+                                            MessageBoxButton.OKCancel,
+                                            MessageBoxImage.Information) == MessageBoxResult.Cancel)
+                                        {
+                                            flag = false;
+                                        }
+                                    }));
+                                }
+
+                                if (flag)
+                                {
+                                    var path = string.Format(@"{0}\{1}", App.DirectoryPaths["Work"], line1);
+                                    this.GetFile(line2, path);
+
+                                    var signaturePath = string.Format(@"{0}\{1}", App.DirectoryPaths["Work"], System.Web.HttpUtility.UrlDecode(Path.GetFileName(line3)));
+                                    this.GetFile(line3, signaturePath);
+
+                                    using (var stream = new FileStream(path, FileMode.Open))
+                                    using (var signStream = new FileStream(signaturePath, FileMode.Open))
+                                    {
+                                        Certificate certificate = CertificateConverter.FromCertificateStream(signStream);
+
+                                        if (Settings.Instance.Global_Update_Signature != certificate.ToString()) throw new Exception("Update DigitalSignature #1");
+                                        if (!DigitalSignature.VerifyFileCertificate(certificate, stream.Name, stream)) throw new Exception("Update DigitalSignature #2");
                                     }
-                                }));
-                            }
 
-                            if (flag)
-                            {
-                                var path = string.Format(@"{0}\{1}", App.DirectoryPaths["Work"], line1);
-                                this.GetFile(line2, path);
+                                    if (File.Exists(path))
+                                    {
+                                        File.Move(path, Path.Combine(App.DirectoryPaths["Update"], Path.GetFileName(path)));
+                                    }
 
-                                var signaturePath = string.Format(@"{0}\{1}", App.DirectoryPaths["Work"], System.Web.HttpUtility.UrlDecode(Path.GetFileName(line3)));
-                                this.GetFile(line3, signaturePath);
-
-                                using (var stream = new FileStream(path, FileMode.Open))
-                                using (var signStream = new FileStream(signaturePath, FileMode.Open))
-                                {
-                                    Certificate certificate = CertificateConverter.FromCertificateStream(signStream);
-
-                                    if (Settings.Instance.Global_Update_Signature != certificate.ToString()) throw new Exception("Update DigitalSignature #1");
-                                    if (!DigitalSignature.VerifyFileCertificate(certificate, stream.Name, stream)) throw new Exception("Update DigitalSignature #2");
+                                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
+                                    {
+                                        MessageBox.Show(
+                                            this,
+                                            LanguagesManager.Instance.MainWindow_Restart_Message,
+                                            "Update",
+                                            MessageBoxButton.OK,
+                                            MessageBoxImage.Information);
+                                    }));
                                 }
-
-                                if (File.Exists(path))
+                                else
                                 {
-                                    File.Move(path, Path.Combine(App.DirectoryPaths["Update"], Path.GetFileName(path)));
+                                    _updateCancelVersion = targetVersion;
                                 }
-
-                                this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
-                                {
-                                    MessageBox.Show(
-                                        this,
-                                        LanguagesManager.Instance.MainWindow_Restart_Message,
-                                        "Update",
-                                        MessageBoxButton.OK,
-                                        MessageBoxImage.Information);
-                                }));
-                            }
-                            else
-                            {
-                                _updateCancelVersion = targetVersion;
                             }
                         }
                     }
@@ -1503,7 +1499,11 @@ namespace Outopos.Windows
                 {
                     Log.Error(e);
                 }
-            }
+                finally
+                {
+                    _checkUpdate_IsRunning = false;
+                }
+            });
         }
 
         private void GetFile(string url, string path)
@@ -1592,6 +1592,11 @@ namespace Outopos.Windows
                 return this.PointToScreen(new Point(0, 0)).X;
             };
 
+            TrustControl trustControl = new TrustControl(_outoposManager, _bufferManager);
+            trustControl.Height = Double.NaN;
+            trustControl.Width = Double.NaN;
+            _trustContentControl.Content = trustControl;
+
             ChatControl chatControl = new ChatControl(_outoposManager, _bufferManager);
             chatControl.Height = Double.NaN;
             chatControl.Width = Double.NaN;
@@ -1600,7 +1605,7 @@ namespace Outopos.Windows
             if (Settings.Instance.Global_Update_Option == UpdateOption.AutoCheck
                || Settings.Instance.Global_Update_Option == UpdateOption.AutoUpdate)
             {
-                _checkUpdateMenuItem_Click(null, null);
+                this.CheckUpdate(false);
             }
 
             this.SetConnectionState(ConnectionState.Red);
@@ -1651,10 +1656,6 @@ namespace Outopos.Windows
                     _catharsisManager.Save(_configrationDirectoryPaths["CatharsisManager"]);
                     _catharsisManager.Dispose();
 
-                    _transferLimitManager.Stop();
-                    _transferLimitManager.Save(_configrationDirectoryPaths["TransfarLimitManager"]);
-                    _transferLimitManager.Dispose();
-
                     _autoBaseNodeSettingManager.Stop();
                     _autoBaseNodeSettingManager.Save(_configrationDirectoryPaths["AutoBaseNodeSettingManager"]);
                     _autoBaseNodeSettingManager.Dispose();
@@ -1699,146 +1700,35 @@ namespace Outopos.Windows
             }
         }
 
-        private SignatureTreeItem GetSignatureTreeViewItem(string leaderSignature)
+        private void _worldRadioButton_Click(object sender, RoutedEventArgs e)
         {
-            List<SignatureTreeItem> workSignatureTreeItems = new List<SignatureTreeItem>();
+            var trustControl = _trustContentControl.Content as TrustControl;
+            if (trustControl == null) return;
 
-            HashSet<string> checkedSignatures = new HashSet<string>();
-
-            {
-                Profile leaderProfile;
-                if (!Settings.Instance.Global_Profiles.TryGetValue(leaderSignature, out leaderProfile)) return null;
-
-                workSignatureTreeItems.Add(new SignatureTreeItem(leaderProfile));
-                checkedSignatures.Add(leaderSignature);
-            }
-
-            List<SignatureTreeItem> checkedSignatureTreeItems = new List<SignatureTreeItem>();
-
-            for (int i = 0; workSignatureTreeItems.Count != 0 && i < 256; i++)
-            {
-                var sortList = workSignatureTreeItems.SelectMany(n => n.Profile.TrustSignatures).ToList();
-                sortList.Sort((x, y) => x.CompareTo(y));
-
-                checkedSignatureTreeItems.AddRange(workSignatureTreeItems);
-                workSignatureTreeItems.Clear();
-
-                foreach (var trustSignature in sortList)
-                {
-                    if (checkedSignatures.Contains(trustSignature)) continue;
-
-                    Profile tempProfile;
-                    if (!Settings.Instance.Global_Profiles.TryGetValue(trustSignature, out tempProfile)) continue;
-
-                    var tempItem = new SignatureTreeItem(tempProfile);
-                    workSignatureTreeItems.Add(tempItem);
-
-                    var targetItem = checkedSignatureTreeItems.FirstOrDefault(n => n.Profile.TrustSignatures.Contains(trustSignature));
-                    targetItem.Children.Add(tempItem);
-
-                    checkedSignatures.Add(trustSignature);
-                }
-            }
-
-            return checkedSignatureTreeItems[0];
+            trustControl.Update();
         }
 
-        volatile bool _updateBaseNodeMenuItem_IsEnabled = true;
-
-        private void _updateBaseNodeMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _profileButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!_updateBaseNodeMenuItem_IsEnabled) return;
-            _updateBaseNodeMenuItem_IsEnabled = false;
-
-            ThreadPool.QueueUserWorkItem((object state) =>
-            {
-                Thread.CurrentThread.IsBackground = true;
-
-                try
-                {
-#if DEBUG
-                    Stopwatch sw = new Stopwatch();
-                    sw.Start();
-#endif
-
-                    _autoBaseNodeSettingManager.Update();
-                    _overlayNetworkManager.Restart();
-
-#if DEBUG
-                    sw.Stop();
-                    Debug.WriteLine(sw.Elapsed.ToString());
-#endif
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex);
-                }
-                finally
-                {
-                    _updateBaseNodeMenuItem_IsEnabled = true;
-                }
-            });
-        }
-
-        private void _optionsMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            OptionsWindow window = new OptionsWindow(
+            ProfileWindow window = new ProfileWindow(
+                Settings.Instance.Global_ProfileItem,
                 _outoposManager,
-                _autoBaseNodeSettingManager,
-                _overlayNetworkManager,
-                _transferLimitManager,
                 _bufferManager);
 
             window.Owner = this;
             window.ShowDialog();
         }
 
-        private void _manualSiteMenuItem_Click(object sender, RoutedEventArgs e)
+        private void _optionsButton_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start("http://lyrise.web.fc2.com/index.html");
-        }
+            OptionsWindow window = new OptionsWindow(
+                _outoposManager,
+                _autoBaseNodeSettingManager,
+                _overlayNetworkManager,
+                _bufferManager);
 
-        private void _developerSiteMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            Process.Start("https://github.com/Alliance-Network");
-        }
-
-        volatile bool _checkUpdateMenuItem_IsEnabled = true;
-
-        private void _checkUpdateMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            if (!_checkUpdateMenuItem_IsEnabled) return;
-            _checkUpdateMenuItem_IsEnabled = false;
-
-            ThreadPool.QueueUserWorkItem((object state) =>
-            {
-                Thread.CurrentThread.IsBackground = true;
-
-                try
-                {
-                    this.CheckUpdate(sender != null);
-                }
-                catch (Exception)
-                {
-
-                }
-                finally
-                {
-                    _checkUpdateMenuItem_IsEnabled = true;
-                }
-            });
-        }
-
-        private void _versionInformationMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            VersionInformationWindow window = new VersionInformationWindow();
             window.Owner = this;
             window.ShowDialog();
-        }
-
-        private void Execute_Copy(object sender, ExecutedRoutedEventArgs e)
-        {
-
         }
     }
 }

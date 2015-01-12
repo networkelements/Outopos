@@ -131,6 +131,12 @@
     <Compile Include="Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\ProfileWindow.xaml.cs">
+      <DependentUpon>ProfileWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Trust\TrustControl.xaml.cs">
+      <DependentUpon>TrustControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\_Controls\ListBoxEx.cs" />
     <Compile Include="Windows\_Controls\ChatCategorizeTreeViewItem.cs" />
     <Compile Include="Windows\_Controls\ChatTreeViewItem.cs" />
@@ -142,7 +148,6 @@
     <Compile Include="Utilities\Extensions.cs" />
     <Compile Include="Windows\_Controls\ObservableCollectionEx.cs" />
     <Compile Include="Utilities\OverlayNetworkManager.cs" />
-    <Compile Include="Utilities\TransfarLimitManager.cs" />
     <Compile Include="Utilities\WindowPosition.cs" />
     <Compile Include="Windows\NameWindow.xaml.cs">
       <DependentUpon>NameWindow.xaml</DependentUpon>
@@ -190,9 +195,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\VersionInformationWindow.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Windows\ProfileWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\Trust\TrustControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -206,25 +213,16 @@
     </Compile>
     <Compile Include="Properties\Settings.cs" />
     <Compile Include="Utilities\AutoBaseNodeSettingManager.cs" />
-    <Compile Include="Windows\VersionInformationWindow.xaml.cs">
-      <DependentUpon>VersionInformationWindow.xaml</DependentUpon>
-    </Compile>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Icons\Buttons\Chat.png">
+    <Content Include="Icons\Tabs\Chat.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Icons\Buttons\Mail.png">
+    <Content Include="Icons\Tabs\Mail.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Icons\Buttons\Search.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Icons\Buttons\Options.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Icons\Buttons\Wiki.png">
+    <Content Include="Icons\Tabs\Options.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icons\States\Green.png">
@@ -237,6 +235,27 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icons\States\Yello.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\Tabs\Profile.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\Tabs\Wiki.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\Tabs\World.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\Tools\NewMessage.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\Tools\ReplyMessage.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\Tools\Settings.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\Tools\Trust.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Languages\Chinese_Simplified.xml">

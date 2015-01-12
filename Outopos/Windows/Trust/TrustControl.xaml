@@ -1,0 +1,218 @@
+﻿<UserControl x:Class="Outopos.Windows.TrustControl"
+        x:ClassModifier="internal"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:prop="clr-namespace:Outopos.Properties"     
+        xmlns:local="clr-namespace:Outopos.Windows" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        mc:Ignorable="d" 
+        d:DesignHeight="500" d:DesignWidth="800">
+
+    <UserControl.Resources>
+
+        <Style x:Key="_buttonStyle" TargetType="{x:Type Button}" BasedOn="{x:Null}">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="FocusVisualStyle" Value="{DynamicResource GlyphBrush}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <ControlTemplate.Resources>
+                            <Storyboard x:Key="HoverOn">
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HoverBorder" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="0.5" />
+                                </DoubleAnimationUsingKeyFrames>
+
+                            </Storyboard>
+                            <Storyboard x:Key="HoverOff">
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HoverBorder" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0" />
+                                </DoubleAnimationUsingKeyFrames>
+
+                            </Storyboard>
+                            <Storyboard x:Key="PressedOn">
+
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="PressedBorder" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="0.5" />
+                                </DoubleAnimationUsingKeyFrames>
+
+                            </Storyboard>
+                            <Storyboard x:Key="PressedOff">
+
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="PressedBorder" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0" />
+                                </DoubleAnimationUsingKeyFrames>
+
+                            </Storyboard>
+                            <Storyboard x:Key="FocusedOn">
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="FocusVisualElement" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="0.5" />
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+                            <Storyboard x:Key="FocussedOff">
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="FocusVisualElement" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0" />
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+
+                        </ControlTemplate.Resources>
+                        <Grid x:Name="Grid">
+                            <Border x:Name="HoverBorder" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" BorderBrush="{DynamicResource NormalBorderBrush}" CornerRadius="3,3,3,3" Opacity="0" Background="{DynamicResource GlyphBrush}" />
+                            <Border x:Name="PressedBorder" Opacity="0" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3" Background="{StaticResource GlyphBrush}" />
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" RecognizesAccessKey="True" />
+                            <Border x:Name="FocusVisualElement" IsHitTestVisible="false" BorderThickness="1" CornerRadius="3,3,3,3" Margin="1,1,1,1" Opacity="0" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsKeyboardFocused" Value="true">
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard Storyboard="{StaticResource FocussedOff}" x:Name="FocussedOff_BeginStoryboard" />
+                                </Trigger.ExitActions>
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard Storyboard="{StaticResource FocusedOn}" x:Name="FocusedOn_BeginStoryboard" />
+                                </Trigger.EnterActions>
+
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard Storyboard="{StaticResource HoverOff}" x:Name="HoverOff_BeginStoryboard" />
+                                </Trigger.ExitActions>
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard Storyboard="{StaticResource HoverOn}" />
+                                </Trigger.EnterActions>
+
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard Storyboard="{StaticResource PressedOff}" />
+                                </Trigger.ExitActions>
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard Storyboard="{StaticResource PressedOn}" />
+                                </Trigger.EnterActions>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="true" />
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Opacity" TargetName="Grid" Value="0.5" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </UserControl.Resources>
+    
+    <UserControl.CommandBindings>
+        <CommandBinding Command="New" Executed="Execute_New" />
+        <CommandBinding Command="Delete" Executed="Execute_Delete" />
+        <CommandBinding Command="Cut" Executed="Execute_Cut" />
+        <CommandBinding Command="Copy" Executed="Execute_Copy" />
+        <CommandBinding Command="Paste" Executed="Execute_Paste" />
+    </UserControl.CommandBindings>
+
+    <UserControl.InputBindings>
+        <KeyBinding Gesture="CTRL+N" Command="New" />
+        <KeyBinding Gesture="Delete" Command="Delete" />
+        <KeyBinding Gesture="CTRL+X" Command="Cut" />
+        <KeyBinding Gesture="CTRL+C" Command="Copy" />
+        <KeyBinding Gesture="CTRL+V" Command="Paste" />
+    </UserControl.InputBindings>
+
+    <Grid Grid.ColumnSpan="3" Grid.Row="2">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="{Binding Path=TrustControl_Grid_ColumnDefinitions_Width, Mode=TwoWay, Converter={StaticResource _doubleToGridLengthConverter}, Source={x:Static prop:Settings.Instance}}" />
+            <ColumnDefinition Width="4"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
+        <TreeView Name="_treeView" 
+                SelectedItemChanged="_treeView_SelectedItemChanged"
+                VirtualizingStackPanel.IsVirtualizing="True"
+                VirtualizingStackPanel.VirtualizationMode="Recycling">
+            <TreeView.Resources>
+                <ContextMenu x:Key="_treeViewItemContextMenu">
+                    <MenuItem Name="_treeViewItemCopyMenuItem" Header="{Binding Path=TrustControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_treeViewItemCopyMenuItem_Click" />
+                </ContextMenu>
+                <Style TargetType="{x:Type local:SignatureTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" >
+                    <Setter Property="ContextMenu" Value="{StaticResource _treeViewItemContextMenu}" />
+                    <EventSetter Event="ContextMenuOpening" Handler="_treeViewItemContextMenu_ContextMenuOpening" />
+                </Style>
+            </TreeView.Resources>
+        </TreeView>
+
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.RowSpan="3"/>
+
+        <TabControl Grid.Column="2">
+            <TabItem Header="{Binding Path=TrustControl_Trust, Source={StaticResource ResourcesInstance}}">
+                <local:ListViewEx x:Name="_trustSignatureListView" Grid.Column="2"
+                        ContextMenuOpening="_trustSignatureListView_ContextMenuOpening">
+                    <ListView.Resources>
+                        <DataTemplate x:Key="_myTemplate_String">
+                            <TextBlock Text="{Binding Mode=OneWay}" />
+                        </DataTemplate>
+                    </ListView.Resources>
+                    <ListView.ContextMenu>
+                        <ContextMenu Name="_trustSignatureListViewContextMenu" >
+                            <MenuItem Name="_trustSignatureListViewCopyMenuItem" Header="{Binding Path=TrustControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_trustSignatureListViewCopyMenuItem_Click"/>
+                        </ContextMenu>
+                    </ListView.ContextMenu>
+                    <ListView.View>
+                        <GridView AllowsColumnReorder="False">
+                            <GridViewColumn Header="{Binding Path=TrustControl_Signature, Source={StaticResource ResourcesInstance}}" CellTemplate="{StaticResource _myTemplate_String}"
+                                    Width="{Binding Path=TrustControl_GridViewColumn_TrustSignature_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
+                        </GridView>
+                    </ListView.View>
+                </local:ListViewEx>
+            </TabItem>
+            <TabItem Header="{Binding Path=TrustControl_Wiki, Source={StaticResource ResourcesInstance}}">
+                <Grid FocusManager.FocusedElement="{Binding ElementName=_wikiTextBox}">
+                    <local:ListViewEx x:Name="_wikiListView" ContextMenuOpening="_wikiListView_ContextMenuOpening">
+                        <ListView.Resources>
+                            <DataTemplate x:Key="_myTemplate_Wiki">
+                                <TextBlock Text="{Binding Mode=OneWay, Converter={StaticResource _wikiToStringConverter}}" />
+                            </DataTemplate>
+                        </ListView.Resources>
+                        <ListView.ContextMenu>
+                            <ContextMenu Name="_wikiListViewContextMenu" >
+                                <MenuItem Name="_wikiListViewCopyMenuItem" Header="{Binding Path=TrustControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_wikiListViewCopyMenuItem_Click"/>
+                            </ContextMenu>
+                        </ListView.ContextMenu>
+                        <ListView.View>
+                            <GridView AllowsColumnReorder="False">
+                                <GridViewColumn Header="{Binding Path=TrustControl_Value, Source={StaticResource ResourcesInstance}}" CellTemplate="{StaticResource _myTemplate_Wiki}" 
+                                        Width="{Binding Path=TrustControl_GridViewColumn_Chat_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
+                            </GridView>
+                        </ListView.View>
+                    </local:ListViewEx>
+                </Grid>
+            </TabItem>
+            <TabItem Header="{Binding Path=TrustControl_Chat, Source={StaticResource ResourcesInstance}}">
+                <Grid>
+                    <local:ListViewEx x:Name="_chatListView" ContextMenuOpening="_chatListView_ContextMenuOpening">
+                        <ListView.Resources>
+                            <DataTemplate x:Key="_myTemplate_Chat">
+                                <TextBlock Text="{Binding Mode=OneWay, Converter={StaticResource _chatToStringConverter}}" />
+                            </DataTemplate>
+                        </ListView.Resources>
+                        <ListView.ContextMenu>
+                            <ContextMenu Name="_chatListViewContextMenu" >
+                                <MenuItem Name="_chatListViewCopyMenuItem" Header="{Binding Path=TrustControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_chatListViewCopyMenuItem_Click"/>
+                            </ContextMenu>
+                        </ListView.ContextMenu>
+                        <ListView.View>
+                            <GridView AllowsColumnReorder="False">
+                                <GridViewColumn Header="{Binding Path=TrustControl_Value, Source={StaticResource ResourcesInstance}}" CellTemplate="{StaticResource _myTemplate_Chat}" 
+                                        Width="{Binding Path=TrustControl_GridViewColumn_Chat_Width, Mode=TwoWay, Source={x:Static prop:Settings.Instance}}" />
+                            </GridView>
+                        </ListView.View>
+                    </local:ListViewEx>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

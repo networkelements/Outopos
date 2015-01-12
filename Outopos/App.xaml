@@ -36,12 +36,10 @@
             <local:DateTimeToStringConverter x:Key="_dateTimeToStringConverter"/>
             <local:StringToFontFamilyConverter x:Key="_stringToFontFamilyConverter"/>
             <local:StringToDoubleConverter x:Key="_stringToDoubleConverter"/>
-            <local:ConnectionTypeToStringConverter x:Key="_connectionTypeToStringConverter"/>
-            <local:TransferLimitTypeToStringConverter x:Key="_transferLimitTypeToStringConverter"/>
-            <local:ConnectDirectionToStringConverter x:Key="_connectDirectionToStringConverter"/>
             <local:WikiToStringConverter x:Key="_wikiToStringConverter"/>
             <local:ChatToStringConverter x:Key="_chatToStringConverter"/>
             <local:BytesToBase64StringConverter x:Key="_bytesToBase64StringConverter"/>
+            <local:ConnectionTypeToStringConverter x:Key="_connectionTypeToStringConverter"/>
             <local:ChatMessageWrapperToBorderBrushConverter x:Key="_chatMessageWrapperToBorderBrushConverter"/>
 
         </ResourceDictionary>

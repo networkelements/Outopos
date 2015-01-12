@@ -64,6 +64,42 @@ namespace Outopos.Windows
 
             InitializeComponent();
 
+            // ReplyMessage
+            {
+                var bitmap = new BitmapImage();
+
+                bitmap.BeginInit();
+                bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"Tools\ReplyMessage.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
+                bitmap.EndInit();
+                if (bitmap.CanFreeze) bitmap.Freeze();
+
+                _replyMessageButton.Content = new Image() { Source = bitmap, Height = 32, Width = 32 };
+            }
+
+            // NewMessage
+            {
+                var bitmap = new BitmapImage();
+
+                bitmap.BeginInit();
+                bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"Tools\NewMessage.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
+                bitmap.EndInit();
+                if (bitmap.CanFreeze) bitmap.Freeze();
+
+                _newMessageButton.Content = new Image() { Source = bitmap, Height = 32, Width = 32 };
+            }
+
+            // Trust
+            {
+                var bitmap = new BitmapImage();
+
+                bitmap.BeginInit();
+                bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"Tools\Trust.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
+                bitmap.EndInit();
+                if (bitmap.CanFreeze) bitmap.Freeze();
+
+                _trustToggleButton.Content = new Image() { Source = bitmap, Height = 32, Width = 32 };
+            }
+
             _treeView.Items.Add(_treeViewItem);
 
             try
@@ -89,7 +125,8 @@ namespace Outopos.Windows
             _cacheThread.Name = "ChatControl_CacheThread";
             _cacheThread.Start();
 
-            _messageUploadButton.IsEnabled = false;
+            _newMessageButton.IsEnabled = false;
+            _replyMessageButton.IsEnabled = false;
 
             LanguagesManager.UsingLanguageChangedEvent += new UsingLanguageChangedEventHandler(this.LanguagesManager_UsingLanguageChangedEvent);
 
@@ -169,7 +206,10 @@ namespace Outopos.Windows
                             if (tempTreeViewItem != _treeView.SelectedItem) return;
                             _refresh = false;
 
-                            _messageUploadButton.IsEnabled = false;
+                            _newMessageButton.IsEnabled = false;
+                            _replyMessageButton.IsEnabled = false;
+                            _trustToggleButton.IsEnabled = false;
+                            _trustToggleButton.IsChecked = false;
 
                             _listBoxItemCollection.Clear();
                         }));
@@ -219,7 +259,10 @@ namespace Outopos.Windows
                             {
                                 var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == Settings.Instance.Global_ProfileItem.UploadSignature);
 
-                                _messageUploadButton.IsEnabled = (digitalSignature != null);
+                                _newMessageButton.IsEnabled = (digitalSignature != null);
+
+                                _trustToggleButton.IsEnabled = true;
+                                _trustToggleButton.IsChecked = chatTreeViewItem.Value.IsTrustEnabled;
                             }
 
                             if (removeList.Count > 100)
@@ -636,7 +679,6 @@ namespace Outopos.Windows
             if (selectTreeViewItem == null) return;
 
             NameWindow window = new NameWindow();
-            window.Title = LanguagesManager.Instance.NameWindow_Title_Category;
             window.Owner = _mainWindow;
 
             if (window.ShowDialog() == true)
@@ -655,7 +697,6 @@ namespace Outopos.Windows
             if (selectTreeViewItem == null) return;
 
             NameWindow window = new NameWindow(selectTreeViewItem.Value.Name);
-            window.Title = LanguagesManager.Instance.NameWindow_Title_Category;
             window.Owner = _mainWindow;
 
             if (window.ShowDialog() == true)
@@ -732,6 +773,7 @@ namespace Outopos.Windows
             {
                 sb.AppendLine(OutoposConverter.ToChatString(item.Value.Tag));
                 sb.AppendLine(MessageConverter.ToInfoMessage(item.Value.Tag));
+                sb.AppendLine();
             }
 
             Clipboard.SetText(sb.ToString());
@@ -946,25 +988,71 @@ namespace Outopos.Windows
 
         #endregion
 
-        #region Search
+        #region Tools
 
-        private void _searchTextBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void _newMessageButton_Click(object sender, RoutedEventArgs e)
         {
-            if (e.Key == System.Windows.Input.Key.Enter)
-            {
-                this.Update();
-            }
+            var selectTreeViewItem = _treeView.SelectedItem as ChatTreeViewItem;
+            if (selectTreeViewItem == null) return;
+
+            var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == Settings.Instance.Global_ProfileItem.UploadSignature);
+            if (digitalSignature == null) return;
+
+            ChatMessageEditWindow window = new ChatMessageEditWindow(
+                selectTreeViewItem.Value.Tag,
+                "",
+                null,
+                digitalSignature,
+                Trust.ContainSignature(digitalSignature.ToString()),
+                _outoposManager);
+
+            window.Owner = _mainWindow;
+
+            window.Show();
+        }
+
+        private void _replyMessageButton_Click(object sender, RoutedEventArgs e)
+        {
+            var selectTreeViewItem = _treeView.SelectedItem as ChatTreeViewItem;
+            if (selectTreeViewItem == null) return;
+
+            var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == Settings.Instance.Global_ProfileItem.UploadSignature);
+            if (digitalSignature == null) return;
+
+            var anchors = _listBox.SelectedItems.OfType<ChatMessageWrapper>().Select(n => new Anchor(n.ChatMessage.CreateHash(_hashAlgorithm), _hashAlgorithm)).ToList();
+
+            ChatMessageEditWindow window = new ChatMessageEditWindow(
+                selectTreeViewItem.Value.Tag,
+                "",
+                anchors,
+                digitalSignature,
+                Trust.ContainSignature(digitalSignature.ToString()),
+                _outoposManager);
+
+            window.Owner = _mainWindow;
+
+            window.Show();
+        }
+
+        private void _trustToggleButton_Click(object sender, RoutedEventArgs e)
+        {
+            var selectTreeViewItem = _treeView.SelectedItem as ChatTreeViewItem;
+            if (selectTreeViewItem == null) return;
+
+            selectTreeViewItem.Value.IsTrustEnabled = _trustToggleButton.IsChecked.Value;
+
+            selectTreeViewItem.Update();
+
+            this.Update_Cache();
         }
 
         #endregion
 
         #region _listBox
 
-        private volatile int _layoutUpdated;
-
-        private void _listBox_LayoutUpdated(object sender, EventArgs e)
+        private void _listBox_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            _layoutUpdated++;
+            _listBox.Items.Refresh();
         }
 
         private void _listBox_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
@@ -1040,6 +1128,23 @@ namespace Outopos.Windows
                     _listBox.SelectedItems.Clear();
                     _listBox.SelectedItems.Add(selectItem);
                 }
+            }
+        }
+
+        private void _listBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var selectTreeViewItem = _treeView.SelectedItem as ChatTreeViewItem;
+            if (selectTreeViewItem == null) return;
+
+            if (_listBox.SelectedItems.Count != 0)
+            {
+                var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == Settings.Instance.Global_ProfileItem.UploadSignature);
+
+                _replyMessageButton.IsEnabled = (digitalSignature != null);
+            }
+            else
+            {
+                _replyMessageButton.IsEnabled = false;
             }
         }
 
@@ -1177,22 +1282,6 @@ namespace Outopos.Windows
 
         #endregion
 
-        private void _messageUploadButton_Click(object sender, RoutedEventArgs e)
-        {
-            var selectTreeViewItem = _treeView.SelectedItem as ChatTreeViewItem;
-            if (selectTreeViewItem == null) return;
-
-            var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == Settings.Instance.Global_ProfileItem.UploadSignature);
-            if (digitalSignature == null) return;
-
-            int limit;
-
-            if (!selectTreeViewItem.Value.IsTrustEnabled) limit = (Settings.Instance.Global_Limit - 1);
-            else limit = 0;
-
-            _outoposManager.UploadChatMessage(selectTreeViewItem.Value.Tag, _messageTextBox.Text, null, limit, new TimeSpan(0, 30, 0), digitalSignature);
-        }
-        
         private void Execute_New(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
         {
             if (_treeView.SelectedItem is ChatCategorizeTreeViewItem)

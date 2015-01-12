@@ -12,9 +12,6 @@
   <Translate Key="Languages_Ukrainian" Value="Українська (Ukrainian)" />
   <Translate Key="Languages_Russian" Value="Російська (Russian)" />
 
-  <Translate Key="ConnectDirection_In" Value="Вхідне" />
-  <Translate Key="ConnectDirection_Out" Value="Вихідне" />
-
   <Translate Key="Tag_Name" Value="Назва" />
   <Translate Key="Tag_Id" Value="Номер" />
 
@@ -25,46 +22,28 @@
   <Translate Key="Seed_CreationTime" Value="Час створення" />
   <Translate Key="Seed_Comment" Value="Коментар" />
 
-  <Translate Key="MainWindow_Connection" Value="Підключення" />
-  <Translate Key="MainWindow_Chat" Value="Чат" />
-  <Translate Key="MainWindow_Wiki" Value="Вікі" />
-  <Translate Key="MainWindow_Mail" Value="Пошта" />
-  <Translate Key="MainWindow_Log" Value="Журнал" />
-  <Translate Key="MainWindow_Core" Value="Головна" />
-  <Translate Key="MainWindow_StatesBar" Value="Статус: {0}" />
-  <Translate Key="MainWindow_Running" Value="Запущено" />
-  <Translate Key="MainWindow_Stopping" Value="Зупинено" />
-  <Translate Key="MainWindow_Start" Value="Запуск" />
-  <Translate Key="MainWindow_Stop" Value="Зупининка" />
-  <Translate Key="MainWindow_ProfileOptions" Value="Опції профілю" />
-  <Translate Key="MainWindow_UpdateBaseNode" Value="Обновити базову ноду" />
-  <Translate Key="MainWindow_CoreOptions" Value="Основні параметри" />
-  <Translate Key="MainWindow_Trust" Value="Довіра" />
-  <Translate Key="MainWindow_TrustExplorer" Value="Список довіри" />
-  <Translate Key="MainWindow_TrustOptions" Value="Опції довіри" />
-  <Translate Key="MainWindow_View" Value="Вид" />
   <Translate Key="MainWindow_Languages" Value="Обрати мову" />
-  <Translate Key="MainWindow_ViewOptions" Value="Опції" />
   <Translate Key="MainWindow_Help" Value="Довідка" />
-  <Translate Key="MainWindow_ViewHelp" Value="Переглянути довідку" />
   <Translate Key="MainWindow_ManualSite" Value="Документація" />
   <Translate Key="MainWindow_DeveloperSite" Value="Вихідний код" />
   <Translate Key="MainWindow_CheckUpdate" Value="Перевірити оновлення" />
   <Translate Key="MainWindow_VersionInformation" Value="Інформація про версію" />
   <Translate Key="MainWindow_SendingSpeed" Value="Швидкість відправки:" />
   <Translate Key="MainWindow_ReceivingSpeed" Value="Швидкість прийняття:" />
-  <Translate Key="MainWindow_DiskSpaceNotFound_Message" Value="На диску немає місця." />
-  <Translate Key="MainWindow_CacheSpaceNotFound_Message" Value="На диску немає місця для кешу" />
-  <Translate Key="MainWindow_CheckBlocks_Message" Value="Перевірити внутрішні блоки" />
-  <Translate Key="MainWindow_CheckExternalBlocks_Message" Value="Перевірити зовнішні блоки" />
-  <Translate Key="MainWindow_CheckBlocks_State" Value="Перевірено:{1} поганий:{0} кількість:{2}" />
+  <Translate Key="MainWindow_DiskSpaceNotFound_Message" Value="Space of disk not found." />
+  <Translate Key="MainWindow_CacheSpaceNotFound_Message" Value="Space of cache not found." />
   <Translate Key="MainWindow_CheckUpdate_Message" Value="Хочете оновити до версії &quot;{0}&quot;?" />
   <Translate Key="MainWindow_LatestVersion_Message" Value="Це остання версія." />
   <Translate Key="MainWindow_Restart_Message" Value="Оновлення було завершено. Будь ласка, перезавантажте програму" />
   <Translate Key="MainWindow_Close_Message" Value="Ви хочете вийти?" />
   <Translate Key="MainWindow_Delete_Message" Value="Ви впевнені, що хочете видалити?" />
-  <Translate Key="MainWindow_TransferLimit_Message" Value="Ліміт передачі" />
-  <Translate Key="MainWindow_Upload_Message" Value="Ви хочете завантажити (upload)?" />
+
+  <Translate Key="TrustControl_Trust" Value="Довіра" />
+  <Translate Key="TrustControl_Chat" Value="Чат" />
+  <Translate Key="TrustControl_Wiki" Value="Вікі" />
+  <Translate Key="TrustControl_Signature" Value="Підпис" />
+  <Translate Key="TrustControl_Value" Value="Value" />
+  <Translate Key="TrustControl_Copy" Value="Копіювати" />
 
   <Translate Key="ChatControl_NewCategory" Value="Нова категорія" />
   <Translate Key="ChatControl_Edit" Value="Редагування" />
@@ -88,16 +67,60 @@
   <Translate Key="ChatControl_FilterSignature" Value="Filter signature" />
   <Translate Key="ChatControl_NewMessageOnly" Value="Only" />
   <Translate Key="ChatControl_Message" Value="Повідомлення" />
-  <Translate Key="ChatControl_Upload" Value="Відправити" />
+  <Translate Key="ChatControl_Send" Value="Send" />
   <Translate Key="ChatControl_MarkAllMessagesRead" Value="Відмітити всі повідомлення прочитаними" />
   <Translate Key="ChatControl_MarkAllMessagesRead_Message" Value="Ви хочете відмітити всі повідомлення прочитаними?" />
   <Translate Key="ChatControl_ImportLockedMessages" Value="Import locked messages" />
   <Translate Key="ChatControl_ExportLockedMessages" Value="Export locked messages" />
   <Translate Key="ChatControl_Preview" Value="Preview" />
 
+  <Translate Key="ChatMessageEditWindow_Title" Value="Нове повідомлення" />
+  <Translate Key="ChatMessageEditWindow_Edit" Value="Редагувати" />
+  <Translate Key="ChatMessageEditWindow_Preview" Value="Перегляд" />
+  <Translate Key="ChatMessageEditWindow_Comment" Value="Коментар" />
+  <Translate Key="ChatMessageEditWindow_Ok" Value="Відправити" />
+  <Translate Key="ChatMessageEditWindow_Cancel" Value="Закрити" />
+
+  <Translate Key="ChatListWindow_Title" Value="Список чатів" />
+  <Translate Key="ChatListWindow_Name" Value="Назва" />
+  <Translate Key="ChatListWindow_Id" Value="Номер" />
+  <Translate Key="ChatListWindow_Copy" Value="Копіювати" />
+  <Translate Key="ChatListWindow_CopyInfo" Value="Копіювати інформацію" />
+  <Translate Key="ChatListWindow_Join" Value="Приєднатися" />
+  <Translate Key="ChatListWindow_Close" Value="Закрити" />
+
+  <Translate Key="MailControl_NewCategory" Value="Нова категорія" />
+  <Translate Key="MailControl_Edit" Value="Редагувати" />
+  <Translate Key="MailControl_Delete" Value="Видалити" />
+  <Translate Key="MailControl_Cut" Value="Вирізати" />
+  <Translate Key="MailControl_Copy" Value="Копіювати" />
+  <Translate Key="MailControl_CopyInfo" Value="Копіювати інформацію" />
+  <Translate Key="MailControl_Paste" Value="Вставити" />
+  <Translate Key="MailControl_SignatureList" Value="Список підписів" />
+  <Translate Key="MailControl_Respons" Value="Відповісти" />
+  <Translate Key="MailControl_Message" Value="Повідомлення" />
+
+  <Translate Key="ProfileWindow_Title" Value="Profile options" />
+  <Translate Key="ProfileWindow_YourSignature" Value="Your signature" />
+  <Translate Key="ProfileWindow_Trust" Value="Trust" />
+  <Translate Key="ProfileWindow_Signature" Value="Signature" />
+  <Translate Key="ProfileWindow_Chat" Value="Chat" />
+  <Translate Key="ProfileWindow_Wiki" Value="Wiki" />
+  <Translate Key="ProfileWindow_Value" Value="Value" />
+  <Translate Key="ProfileWindow_Up" Value="Up" />
+  <Translate Key="ProfileWindow_Down" Value="Down" />
+  <Translate Key="ProfileWindow_Add" Value="Add" />
+  <Translate Key="ProfileWindow_New" Value="New" />
+  <Translate Key="ProfileWindow_Edit" Value="Edit" />
+  <Translate Key="ProfileWindow_Delete" Value="Delete" />
+  <Translate Key="ProfileWindow_Cut" Value="Cut" />
+  <Translate Key="ProfileWindow_Copy" Value="Copy" />
+  <Translate Key="ProfileWindow_Paste" Value="Paste" />
+  <Translate Key="ProfileWindow_Ok" Value="Ok" />
+  <Translate Key="ProfileWindow_Cancel" Value="Cancel" />
+
   <Translate Key="OptionsWindow_Title" Value="Options" />
   <Translate Key="OptionsWindow_Core" Value="Core" />
-  <Translate Key="OptionsWindow_View" Value="View" />
   <Translate Key="OptionsWindow_BaseNode" Value="Base node" />
   <Translate Key="OptionsWindow_Node" Value="Node" />
   <Translate Key="OptionsWindow_Uris" Value="Uris" />
@@ -138,15 +161,18 @@
   <Translate Key="OptionsWindow_Tor" Value="Tor" />
   <Translate Key="OptionsWindow_Ipv4" Value="Ipv4" />
   <Translate Key="OptionsWindow_Ipv6" Value="Ipv6" />
+  <Translate Key="OptionsWindow_View" Value="View" />
+  <Translate Key="OptionsWindow_Languages" Value="Languages" />
+  <Translate Key="OptionsWindow_UseLanguage" Value="Use language." />
   <Translate Key="OptionsWindow_Update" Value="Update" />
   <Translate Key="OptionsWindow_UpdateUrl" Value="Update url" />
   <Translate Key="OptionsWindow_Signature" Value="Signature" />
   <Translate Key="OptionsWindow_Signatures" Value="Signatures" />
-  <Translate Key="OptionsWindow_Keywords" Value="Keywords" />
-  <Translate Key="OptionsWindow_Box" Value="Box" />
-  <Translate Key="OptionsWindow_RelateBoxFile" Value="Box file is related." />
-  <Translate Key="OptionsWindow_OpenBox" Value="Open a box file that downloaded." />
-  <Translate Key="OptionsWindow_ExtractTo" Value="Extract to path" />
+  <Translate Key="OptionsWindow_Amoeba" Value="Amoeba" />
+  <Translate Key="OptionsWindow_AmoebaPath" Value="Amoeba path" />
+  <Translate Key="OptionsWindow_Fonts" Value="Fonts" />
+  <Translate Key="OptionsWindow_MessageFontFamily" Value="Message font family" />
+  <Translate Key="OptionsWindow_MessageFontSize" Value="Message font size (pt)" />
   <Translate Key="OptionsWindow_UpdateOption" Value="Update option" />
   <Translate Key="OptionsWindow_None" Value="None" />
   <Translate Key="OptionsWindow_AutoCheck" Value="Auto check" />
@@ -168,66 +194,10 @@
 
   <Translate Key="ConnectionType_None" Value="None" />
   <Translate Key="ConnectionType_Tcp" Value="Tcp" />
-  <Translate Key="ConnectionType_Socks4Proxy" Value="Socks4 проксі" />
-  <Translate Key="ConnectionType_Socks4aProxy" Value="Socks4a проксі" />
-  <Translate Key="ConnectionType_Socks5Proxy" Value="Socks5 проксі" />
-  <Translate Key="ConnectionType_HttpProxy" Value="Http проксі" />
-
-  <Translate Key="TransferLimitType_None" Value="None" />
-  <Translate Key="TransferLimitType_Downloads" Value="Скачування" />
-  <Translate Key="TransferLimitType_Uploads" Value="Завантаження" />
-  <Translate Key="TransferLimitType_Total" Value="Всього" />
-
-  <Translate Key="ProgressWindow_Title" Value="Статистика прогресу" />
-  <Translate Key="ProgressWindow_Cancel" Value="Закрити" />
-  <Translate Key="ProgressWindow_Ok" Value="ОК" />
-
-  <Translate Key="TrustExplorerWindow_Title" Value="Список довірених цифрових підписів" />
-  <Translate Key="TrustExplorerWindow_Copy" Value="Копіювати" />
-  <Translate Key="TrustExplorerWindow_Signature" Value="Підпис" />
-  <Translate Key="TrustExplorerWindow_Section" Value="Розділ" />
-  <Translate Key="TrustExplorerWindow_Trust" Value="Довіра" />
-  <Translate Key="TrustExplorerWindow_Chat" Value="Чат" />
-  <Translate Key="TrustExplorerWindow_Wiki" Value="Вікі" />
-  <Translate Key="TrustExplorerWindow_Value" Value="Значення" />
-  <Translate Key="TrustExplorerWindow_Comment" Value="Коментар" />
-  <Translate Key="TrustExplorerWindow_Close" Value="Закрити" />
-
-  <Translate Key="ViewOptionsWindow_Title" Value="Опції" />
-  <Translate Key="ViewOptionsWindow_Update" Value="Обновити" />
-  <Translate Key="ViewOptionsWindow_UpdateUrl" Value="Адреса для обновлення" />
-  <Translate Key="ViewOptionsWindow_ProxyUri" Value="Адреса для проксі" />
-  <Translate Key="ViewOptionsWindow_Signature" Value="Підпис" />
-  <Translate Key="ViewOptionsWindow_Signatures" Value="Ваші підписи" />
-  <Translate Key="ViewOptionsWindow_Keywords" Value="Ключові слова" />
-  <Translate Key="ViewOptionsWindow_UpdateOption" Value="Оновити опції" />
-  <Translate Key="ViewOptionsWindow_None" Value="None" />
-  <Translate Key="ViewOptionsWindow_AutoCheck" Value="Автоматична перевірка" />
-  <Translate Key="ViewOptionsWindow_AutoUpdate" Value="Автоматичне оновлення" />
-  <Translate Key="ViewOptionsWindow_Amoeba" Value="Amoeba" />
-  <Translate Key="ViewOptionsWindow_AmoebaPath" Value="Amoeba path" />
-  <Translate Key="ViewOptionsWindow_Fonts" Value="Шрифти" />
-  <Translate Key="ViewOptionsWindow_MessageFontFamily" Value="Message font family" />
-  <Translate Key="ViewOptionsWindow_MessageFontSize" Value="Message font size (pt)" />
-  <Translate Key="ViewOptionsWindow_Value" Value="Значення" />
-  <Translate Key="ViewOptionsWindow_Import" Value="Імпорт" />
-  <Translate Key="ViewOptionsWindow_Export" Value="Експорт" />
-  <Translate Key="ViewOptionsWindow_Up" Value="↑Вверх" />
-  <Translate Key="ViewOptionsWindow_Down" Value="↓Вниз" />
-  <Translate Key="ViewOptionsWindow_Add" Value="Додати" />
-  <Translate Key="ViewOptionsWindow_Edit" Value="Редагувати" />
-  <Translate Key="ViewOptionsWindow_Delete" Value="Видалити" />
-  <Translate Key="ViewOptionsWindow_Ok" Value="ОК" />
-  <Translate Key="ViewOptionsWindow_Cancel" Value="Закрити" />
-  <Translate Key="ViewOptionsWindow_Cut" Value="Вирізати" />
-  <Translate Key="ViewOptionsWindow_Copy" Value="Копіювати" />
-  <Translate Key="ViewOptionsWindow_Paste" Value="Вставити" />
-
-  <Translate Key="VersionInformationWindow_Title" Value="Інформація про версію" />
-  <Translate Key="VersionInformationWindow_FileName" Value="Назва файлу" />
-  <Translate Key="VersionInformationWindow_Version" Value="Версія" />
-  <Translate Key="VersionInformationWindow_License" Value="Ліцензія" />
-  <Translate Key="VersionInformationWindow_Close" Value="Закрити" />
+  <Translate Key="ConnectionType_Socks4Proxy" Value="Socks4 proxy" />
+  <Translate Key="ConnectionType_Socks4aProxy" Value="Socks4a proxy" />
+  <Translate Key="ConnectionType_Socks5Proxy" Value="Socks5 proxy" />
+  <Translate Key="ConnectionType_HttpProxy" Value="Http proxy" />
 
   <Translate Key="SignatureWindow_Title" Value="Signature setting" />
   <Translate Key="SignatureWindow_Signature" Value="Підпис" />
@@ -235,75 +205,8 @@
   <Translate Key="SignatureWindow_Cancel" Value="Закрити" />
 
   <Translate Key="NameWindow_Title" Value="Name setting" />
-  <Translate Key="NameWindow_Title_Category" Value="Назва категорії" />
   <Translate Key="NameWindow_Name" Value="Назва" />
   <Translate Key="NameWindow_Ok" Value="ОК" />
   <Translate Key="NameWindow_Cancel" Value="Закрити" />
-
-  <Translate Key="ConnectionControl_Direction" Value="Підключення" />
-  <Translate Key="ConnectionControl_Uri" Value="Адреса" />
-  <Translate Key="ConnectionControl_Priority" Value="Пріоритет" />
-  <Translate Key="ConnectionControl_SentByteCount" Value="Відравлено" />
-  <Translate Key="ConnectionControl_ReceivedByteCount" Value="Прийнято" />
-  <Translate Key="ConnectionControl_Name" Value="Назва" />
-  <Translate Key="ConnectionControl_Value" Value="Значення" />
-  <Translate Key="ConnectionControl_BufferManagerSize" Value="Розмір буфера" />
-  <Translate Key="ConnectionControl_CreateConnectionCount" Value="Створено підключень" />
-  <Translate Key="ConnectionControl_AcceptConnectionCount" Value="Прийнято підключень" />
-  <Translate Key="ConnectionControl_BlockedConnectionCount" Value="Заблоковано підключень" />
-  <Translate Key="ConnectionControl_SurroundingNodeCount" Value="Найближчих вузлів" />
-  <Translate Key="ConnectionControl_RelayBlockCount" Value="Relay block count" />
-  <Translate Key="ConnectionControl_FreeSpace" Value="Вільного місця" />
-  <Translate Key="ConnectionControl_LockSpace" Value="Заблоковано місця" />
-  <Translate Key="ConnectionControl_UsingSpace" Value="Зайнято місця" />
-  <Translate Key="ConnectionControl_NodeCount" Value="Вузлів" />
-  <Translate Key="ConnectionControl_HeaderCount" Value="Заголовків" />
-  <Translate Key="ConnectionControl_BlockCount" Value="Блоків" />
-  <Translate Key="ConnectionControl_DownloadCount" Value="Download Count" />
-  <Translate Key="ConnectionControl_UploadCount" Value="Upload Count" />
-  <Translate Key="ConnectionControl_ShareCount" Value="Share count" />
-  <Translate Key="ConnectionControl_PushNodeCount" Value="PushNode count" />
-  <Translate Key="ConnectionControl_PushBlockLinkCount" Value="PushBlockLink count" />
-  <Translate Key="ConnectionControl_PushBlockRequestCount" Value="PushBlockRequest count" />
-  <Translate Key="ConnectionControl_PushBlockCount" Value="PushBlock count" />
-  <Translate Key="ConnectionControl_PushHeaderRequestCount" Value="PushHeaderRequest count" />
-  <Translate Key="ConnectionControl_PushHeaderCount" Value="PushHeader count" />
-  <Translate Key="ConnectionControl_PullNodeCount" Value="PullNode count" />
-  <Translate Key="ConnectionControl_PullBlockLinkCount" Value="PullBlocksLink count" />
-  <Translate Key="ConnectionControl_PullBlockRequestCount" Value="PullBlockRequest count" />
-  <Translate Key="ConnectionControl_PullBlockCount" Value="PullBlock count" />
-  <Translate Key="ConnectionControl_PullHeaderRequestCount" Value="PullHeaderRequest count" />
-  <Translate Key="ConnectionControl_PullHeaderCount" Value="PullHeader count" />
-  <Translate Key="ConnectionControl_Copy" Value="Копіювати" />
-  <Translate Key="ConnectionControl_Paste" Value="Вставити" />
-
-  <Translate Key="ChatListWindow_Title" Value="Список чатів" />
-  <Translate Key="ChatListWindow_Name" Value="Назва" />
-  <Translate Key="ChatListWindow_Id" Value="Номер" />
-  <Translate Key="ChatListWindow_Copy" Value="Копіювати" />
-  <Translate Key="ChatListWindow_CopyInfo" Value="Копіювати інформацію" />
-  <Translate Key="ChatListWindow_Join" Value="Приєднатися" />
-  <Translate Key="ChatListWindow_Close" Value="Закрити" />
-
-  <Translate Key="ChatMessageEditWindow_Title" Value="Нове повідомлення" />
-  <Translate Key="ChatMessageEditWindow_Edit" Value="Редагувати" />
-  <Translate Key="ChatMessageEditWindow_Preview" Value="Перегляд" />
-  <Translate Key="ChatMessageEditWindow_Comment" Value="Коментар" />
-  <Translate Key="ChatMessageEditWindow_Ok" Value="Відправити" />
-  <Translate Key="ChatMessageEditWindow_Cancel" Value="Закрити" />
-
-  <Translate Key="ChatTopicPreviewWindow_Title" Value="Тема" />
-  <Translate Key="ChatTopicPreviewWindow_Close" Value="Закрити" />
-
-  <Translate Key="MailControl_NewCategory" Value="Нова категорія" />
-  <Translate Key="MailControl_Edit" Value="Редагувати" />
-  <Translate Key="MailControl_Delete" Value="Видалити" />
-  <Translate Key="MailControl_Cut" Value="Вирізати" />
-  <Translate Key="MailControl_Copy" Value="Копіювати" />
-  <Translate Key="MailControl_CopyInfo" Value="Копіювати інформацію" />
-  <Translate Key="MailControl_Paste" Value="Вставити" />
-  <Translate Key="MailControl_SignatureList" Value="Список підписів" />
-  <Translate Key="MailControl_Respons" Value="Відповісти" />
-  <Translate Key="MailControl_Message" Value="Повідомлення" />
 
 </Configuration>

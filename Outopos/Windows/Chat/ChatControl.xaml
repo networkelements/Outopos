@@ -8,6 +8,183 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         mc:Ignorable="d" 
         d:DesignHeight="500" d:DesignWidth="800">
+    
+    <UserControl.Resources>
+
+        <Style x:Key="_toggleButtonStyle" TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource {x:Type ToggleButton}}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}" />
+            <Setter Property="Background" Value="{StaticResource ButtonNormalBackground}" />
+            <Setter Property="BorderBrush" Value="{StaticResource ButtonNormalBorder}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Padding" Value="1" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <ControlTemplate.Resources>
+                            <Storyboard x:Key="HoverOn">
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HoverBorder" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="0.5"/>
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+                            <Storyboard x:Key="HoverOff">
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HoverBorder" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+                            <Storyboard x:Key="CheckedOn">
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="CheckedBorder" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="0.5"/>
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+                            <Storyboard x:Key="CheckedOff">
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="CheckedBorder" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </ControlTemplate.Resources>
+                        <Grid x:Name="grid">
+
+                            <Border x:Name="Border" Padding="{TemplateBinding Padding}" BorderBrush="Transparent" CornerRadius="3,3,3,3" />
+                            <Border x:Name="CheckedBorder" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" Background="{DynamicResource GlyphBrush}" BorderBrush="{DynamicResource NormalBorderBrush}" CornerRadius="3,3,3,3" Opacity="0" />
+                            <Border x:Name="HoverBorder" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" BorderBrush="{DynamicResource NormalBorderBrush}" CornerRadius="3,3,3,3" Opacity="0" Background="{DynamicResource GlyphBrush}" />
+
+                            <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" RecognizesAccessKey="True" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="4,4,4,4" />
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard Storyboard="{StaticResource HoverOff}" x:Name="HoverOff_BeginStoryboard"/>
+                                </Trigger.ExitActions>
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard Storyboard="{StaticResource HoverOn}"/>
+                                </Trigger.EnterActions>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="true"/>
+                            <Trigger Property="IsChecked" Value="true">
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard Storyboard="{StaticResource CheckedOff}" x:Name="CheckedOff_BeginStoryboard"/>
+                                </Trigger.ExitActions>
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard Storyboard="{StaticResource CheckedOn}" x:Name="CheckedOn_BeginStoryboard"/>
+                                </Trigger.EnterActions>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Opacity" TargetName="grid" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Foreground">
+                        <Setter.Value>
+                            <SolidColorBrush Color="{DynamicResource BlackColor}" />
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
+        <Style x:Key="_buttonStyle" TargetType="{x:Type Button}" BasedOn="{x:Null}">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="FocusVisualStyle" Value="{DynamicResource GlyphBrush}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <ControlTemplate.Resources>
+                            <Storyboard x:Key="HoverOn">
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HoverBorder" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="0.5" />
+                                </DoubleAnimationUsingKeyFrames>
+
+                            </Storyboard>
+                            <Storyboard x:Key="HoverOff">
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HoverBorder" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0" />
+                                </DoubleAnimationUsingKeyFrames>
+
+                            </Storyboard>
+                            <Storyboard x:Key="PressedOn">
+
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="PressedBorder" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="0.5" />
+                                </DoubleAnimationUsingKeyFrames>
+
+                            </Storyboard>
+                            <Storyboard x:Key="PressedOff">
+
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="PressedBorder" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0" />
+                                </DoubleAnimationUsingKeyFrames>
+
+                            </Storyboard>
+                            <Storyboard x:Key="FocusedOn">
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="FocusVisualElement" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="0.5" />
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+                            <Storyboard x:Key="FocussedOff">
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="FocusVisualElement" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0" />
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+
+                        </ControlTemplate.Resources>
+                        <Grid x:Name="Grid">
+                            <Border x:Name="HoverBorder" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" BorderBrush="{DynamicResource NormalBorderBrush}" CornerRadius="3,3,3,3" Opacity="0" Background="{DynamicResource GlyphBrush}" />
+                            <Border x:Name="PressedBorder" Opacity="0" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3" Background="{StaticResource GlyphBrush}" />
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" RecognizesAccessKey="True" />
+                            <Border x:Name="FocusVisualElement" IsHitTestVisible="false" BorderThickness="1" CornerRadius="3,3,3,3" Margin="1,1,1,1" Opacity="0" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsKeyboardFocused" Value="true">
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard Storyboard="{StaticResource FocussedOff}" x:Name="FocussedOff_BeginStoryboard" />
+                                </Trigger.ExitActions>
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard Storyboard="{StaticResource FocusedOn}" x:Name="FocusedOn_BeginStoryboard" />
+                                </Trigger.EnterActions>
+
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard Storyboard="{StaticResource HoverOff}" x:Name="HoverOff_BeginStoryboard" />
+                                </Trigger.ExitActions>
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard Storyboard="{StaticResource HoverOn}" />
+                                </Trigger.EnterActions>
+
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard Storyboard="{StaticResource PressedOff}" />
+                                </Trigger.ExitActions>
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard Storyboard="{StaticResource PressedOn}" />
+                                </Trigger.EnterActions>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="true" />
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Opacity" TargetName="Grid" Value="0.5" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+    </UserControl.Resources>
 
     <UserControl.CommandBindings>
         <CommandBinding Command="New" Executed="Execute_New" />
@@ -27,7 +204,7 @@
 
     <Grid Grid.ColumnSpan="3" Grid.Row="2">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="{Binding Path=ChatControl_CategorizeTreeViewArea_Grid_ColumnDefinitions_Width, Mode=TwoWay, Converter={StaticResource _doubleToGridLengthConverter}, Source={x:Static prop:Settings.Instance}}" />
+            <ColumnDefinition Width="{Binding Path=ChatControl_Grid_ColumnDefinitions_Width, Mode=TwoWay, Converter={StaticResource _doubleToGridLengthConverter}, Source={x:Static prop:Settings.Instance}}" />
             <ColumnDefinition Width="4"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
@@ -58,6 +235,10 @@
                     <Separator />
                     <MenuItem Name="_chatCategorizeTreeViewItemChatListMenuItem" Header="{Binding Path=ChatControl_ChatList, Source={StaticResource ResourcesInstance}}" Click="_chatCategorizeTreeViewItemChatListMenuItem_Click"/>
                 </ContextMenu>
+                <Style TargetType="{x:Type local:ChatCategorizeTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" >
+                    <Setter Property="ContextMenu" Value="{StaticResource _chatCategorizeTreeViewItemContextMenu}" />
+                    <EventSetter Event="ContextMenuOpening" Handler="_chatCategorizeTreeViewItemContextMenu_ContextMenuOpening" />
+                </Style>
 
                 <ContextMenu x:Key="_chatTreeItemTreeViewItemContextMenu">
                     <MenuItem Name="_chatTreeItemTreeViewItemDeleteMenuItem" Header="{Binding Path=ChatControl_Delete, Source={StaticResource ResourcesInstance}}" Click="_chatTreeItemTreeViewItemDeleteMenuItem_Click"/>
@@ -66,11 +247,6 @@
                     <MenuItem Name="_chatTreeItemTreeViewItemCopyMenuItem" Header="{Binding Path=ChatControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_chatTreeItemTreeViewItemCopyMenuItem_Click" />
                     <MenuItem Name="_chatTreeItemTreeViewItemCopyInfoMenuItem" Header="{Binding Path=ChatControl_CopyInfo, Source={StaticResource ResourcesInstance}}" Click="_chatTreeItemTreeViewItemCopyInfoMenuItem_Click" />
                 </ContextMenu>
-
-                <Style TargetType="{x:Type local:ChatCategorizeTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" >
-                    <Setter Property="ContextMenu" Value="{StaticResource _chatCategorizeTreeViewItemContextMenu}" />
-                    <EventSetter Event="ContextMenuOpening" Handler="_chatCategorizeTreeViewItemContextMenu_ContextMenuOpening" />
-                </Style>
                 <Style TargetType="{x:Type local:ChatTreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}" >
                     <Setter Property="ContextMenu" Value="{StaticResource _chatTreeItemTreeViewItemContextMenu}" />
                     <EventSetter Event="ContextMenuOpening" Handler="_chatTreeItemTreeViewItemContextMenu_ContextMenuOpening" />
@@ -80,244 +256,233 @@
 
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.RowSpan="3"/>
 
-        <Grid Grid.Column="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="4"/>
-                <RowDefinition Height="{Binding Path=ChatControl_ContributionArea_Grid_ColumnDefinitions_Width, Mode=TwoWay, Converter={StaticResource _doubleToGridLengthConverter}, Source={x:Static prop:Settings.Instance}}"/>
-            </Grid.RowDefinitions>
-
-            <ListBox x:Name="_listBox">
-                <ListBox.Resources>
-                    <Style TargetType="{x:Type Expander}">
-                        <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
-                        <Setter Property="Background" Value="Transparent" />
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                        <Setter Property="VerticalContentAlignment" Value="Stretch" />
-                        <Setter Property="BorderBrush" Value="Transparent" />
-                        <Setter Property="BorderThickness" Value="1" />
-                        <Setter Property="SnapsToDevicePixels" Value="True" />
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type Expander}">
-                                    <Border x:Name="Border" Opacity="1" BorderBrush="Black" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="2,2,2,2" Background="{TemplateBinding Background}">
-                                        <DockPanel x:Name="dockPanel">
-                                            <ToggleButton FontFamily="{TemplateBinding FontFamily}" FontSize="{TemplateBinding FontSize}" FontStretch="{TemplateBinding FontStretch}" FontStyle="{TemplateBinding FontStyle}" FontWeight="{TemplateBinding FontWeight}" Foreground="{TemplateBinding Foreground}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Padding="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" FocusVisualStyle="{StaticResource ExpanderHeaderFocusVisual}" Margin="1,1,1,0" MinHeight="0" MinWidth="0" x:Name="HeaderSite" Style="{StaticResource ExpanderDownHeaderStyle}" Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}" IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" DockPanel.Dock="Top" />
-                                            <Border Visibility="Collapsed" BorderThickness="1,0,1,1" CornerRadius="3,3,3,3" x:Name="border" Margin="1,1,1,1">
-                                                <ContentPresenter Focusable="false" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="1,1,1,1" x:Name="ExpandSite" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" DockPanel.Dock="Bottom" />
-                                            </Border>
-                                        </DockPanel>
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsExpanded" Value="true">
-                                            <Setter Property="Visibility" TargetName="border" Value="Visible" />
-                                        </Trigger>
-                                        <Trigger Property="ExpandDirection" Value="Down" />
-                                        <Trigger Property="ExpandDirection" Value="Right">
-                                            <Setter Property="DockPanel.Dock" TargetName="ExpandSite" Value="Right" />
-                                            <Setter Property="DockPanel.Dock" TargetName="HeaderSite" Value="Left" />
-                                            <Setter Property="Style" TargetName="HeaderSite" Value="{StaticResource ExpanderRightHeaderStyle}" />
-                                        </Trigger>
-                                        <Trigger Property="ExpandDirection" Value="Up">
-                                            <Setter Property="DockPanel.Dock" TargetName="ExpandSite" Value="Top" />
-                                            <Setter Property="DockPanel.Dock" TargetName="HeaderSite" Value="Bottom" />
-                                            <Setter Property="Style" TargetName="HeaderSite" Value="{StaticResource ExpanderUpHeaderStyle}" />
-                                        </Trigger>
-                                        <Trigger Property="ExpandDirection" Value="Left">
-                                            <Setter Property="DockPanel.Dock" TargetName="ExpandSite" Value="Left" />
-                                            <Setter Property="DockPanel.Dock" TargetName="HeaderSite" Value="Right" />
-                                            <Setter Property="Style" TargetName="HeaderSite" Value="{StaticResource ExpanderLeftHeaderStyle}" />
-                                        </Trigger>
-                                        <Trigger Property="IsEnabled" Value="false">
-                                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-
-                    <Style x:Key="ExpanderDownHeaderStyle" TargetType="{x:Type ToggleButton}">
-                        <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
-                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type ToggleButton}">
-                                    <ControlTemplate.Resources>
-                                        <Storyboard x:Key="HoverOn">
-                                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HoverRectangle" Storyboard.TargetProperty="(UIElement.Opacity)">
-                                                <SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="1"/>
-                                            </DoubleAnimationUsingKeyFrames>
-                                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HoverShineRectangle" Storyboard.TargetProperty="(UIElement.Opacity)">
-                                                <SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="1"/>
-                                            </DoubleAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                        <Storyboard x:Key="HoverOff">
-                                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HoverShineRectangle" Storyboard.TargetProperty="(UIElement.Opacity)">
-                                                <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
-                                            </DoubleAnimationUsingKeyFrames>
-                                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HoverRectangle" Storyboard.TargetProperty="(UIElement.Opacity)">
-                                                <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
-                                            </DoubleAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                        <Storyboard x:Key="PressedOn">
-                                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="PressedRectangle" Storyboard.TargetProperty="(UIElement.Opacity)">
-                                                <SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="1"/>
-                                            </DoubleAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                        <Storyboard x:Key="PressedOff">
-                                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="PressedRectangle" Storyboard.TargetProperty="(UIElement.Opacity)">
-                                                <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
-                                            </DoubleAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </ControlTemplate.Resources>
-                                    <Border Padding="{TemplateBinding Padding}" Background="Transparent"  BorderBrush="{DynamicResource NormalBorderBrush}" BorderThickness="1,1,1,1" CornerRadius="2,2,2,2">
-                                        <Grid SnapsToDevicePixels="False" Background="Transparent">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="19" />
-                                                <ColumnDefinition Width="*" />
-                                            </Grid.ColumnDefinitions>
-                                            <Rectangle Margin="2,2,2,2" x:Name="Rectangle" Fill="{DynamicResource NormalBrush}" Stroke="{DynamicResource NormalBorderBrush}" StrokeThickness="1" RadiusX="1" RadiusY="1" />
-                                            <Rectangle Margin="2,2,2,2" x:Name="ShineRectangle" Fill="{DynamicResource ShineBrush}" Stroke="{DynamicResource NormalBorderBrush}" StrokeThickness="1" RadiusX="1" RadiusY="1" />
-                                            <Rectangle Margin="2,2,2,2" x:Name="HoverRectangle" Fill="{DynamicResource HoverBrush}" Stroke="{DynamicResource NormalBorderBrush}" StrokeThickness="1" RadiusX="1" RadiusY="1" Opacity="0" />
-                                            <Rectangle Margin="2,2,2,2" x:Name="HoverShineRectangle" Fill="{DynamicResource HoverShineBrush}" Stroke="{DynamicResource NormalBorderBrush}" StrokeThickness="1" RadiusX="1" RadiusY="1" Opacity="0" />
-                                            <Rectangle Margin="2,2,2,2" x:Name="PressedRectangle" Fill="{DynamicResource PressedBrush}" Stroke="{DynamicResource PressedBorderBrush}" StrokeThickness="1" RadiusX="1" RadiusY="1" Opacity="0" />
-                                            <Path HorizontalAlignment="Center" x:Name="Up_Arrow" VerticalAlignment="Center" Fill="{DynamicResource GlyphBrush}" Data="M 0 0 L 4 4 L 8 0 Z" />
-                                            <Path Visibility="Collapsed" HorizontalAlignment="Center" x:Name="Down_Arrow" VerticalAlignment="Center" Fill="{DynamicResource GlyphBrush}" Data="M 0 4 L 4 0 L 8 4 Z" />
-                                            <ContentPresenter SnapsToDevicePixels="True" HorizontalAlignment="Left" Margin="4,2,0,2" VerticalAlignment="Center" Grid.Column="1" RecognizesAccessKey="True" />
-                                        </Grid>
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsChecked" Value="true">
-                                            <Setter Property="Visibility" TargetName="Down_Arrow" Value="Visible" />
-                                            <Setter Property="Visibility" TargetName="Up_Arrow" Value="Collapsed" />
-
-                                        </Trigger>
-                                        <Trigger Property="IsMouseOver" Value="true">
-                                            <Trigger.ExitActions>
-                                                <BeginStoryboard Storyboard="{StaticResource HoverOff}" x:Name="HoverOff_BeginStoryboard"/>
-                                            </Trigger.ExitActions>
-                                            <Trigger.EnterActions>
-                                                <BeginStoryboard Storyboard="{StaticResource HoverOn}"/>
-                                            </Trigger.EnterActions>
-
-                                        </Trigger>
-                                        <Trigger Property="IsPressed" Value="true">
-                                            <Trigger.ExitActions>
-                                                <BeginStoryboard Storyboard="{StaticResource PressedOff}" x:Name="PressedOff_BeginStoryboard"/>
-                                            </Trigger.ExitActions>
-                                            <Trigger.EnterActions>
-                                                <BeginStoryboard Storyboard="{StaticResource PressedOn}" x:Name="PressedOn_BeginStoryboard"/>
-                                            </Trigger.EnterActions>
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-
-                    <ContextMenu x:Key="_richTextBoxContextMenu" FontFamily="{Binding FontFamily, Converter={StaticResource _stringToFontFamilyConverter}, Mode=OneWay, Source={StaticResource ResourcesInstance}}" FontSize="{Binding FontSize, Converter={StaticResource _stringToDoubleConverter}, Mode=OneWay, Source={StaticResource ResourcesInstance}}">
-                        <MenuItem x:Name="_richTextBoxCopyMenuItem" Header="{Binding ChatControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxCopyMenuItem_Click" />
-                        <Separator />
-                        <MenuItem x:Name="_richTextBoxResponsMenuItem" Header="{Binding ChatControl_Respons, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxResponsMenuItem_Click" />
-                        <Separator />
-                        <MenuItem x:Name="_richTextBoxTrustMenuItem" Header="{Binding ChatControl_Trust, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxTrustMenuItem_Click"/>
-                    </ContextMenu>
-
-                    <Style TargetType="{x:Type local:RichTextBoxEx}">
-                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                        <Setter Property="SnapsToDevicePixels" Value="True" />
-                        <Setter Property="UseLayoutRounding" Value="True" />
-                        <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
-                        <Setter Property="IsReadOnly" Value="True" />
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type RichTextBox}">
-                                    <Grid Background="{TemplateBinding Background}">
-                                        <ScrollViewer Margin="0" x:Name="PART_ContentHost" Style="{DynamicResource NuclearScrollViewer}" />
-                                    </Grid>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                        <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
-                        <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}"/>
-                        <Setter Property="BorderBrush" Value="#FF000000"/>
-                        <Setter Property="ContextMenu" Value="{StaticResource _richTextBoxContextMenu}" />
-                    </Style>
-                </ListBox.Resources>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <local:RichTextBoxEx x:Name="_richTextBox" local:RichTextBoxHelper.DocumentMessage="{Binding Mode=OneWay}" Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type Grid}}}" ContextMenuOpening="_richTextBox_ContextMenuOpening">
-                                <local:RichTextBoxEx.Style>
-                                    <Style TargetType="{x:Type RichTextBox}">
+        <Button x:Name="_newMessageButton" Style="{StaticResource _buttonStyle}" Content="New" Grid.Column="2" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" Width="40" Height="40" Click="_newMessageButton_Click" ToolTip="New"/>
+        <Button x:Name="_replyMessageButton" Style="{StaticResource _buttonStyle}" Content="Reply" Grid.Column="2" HorizontalAlignment="Left" Margin="52,6,0,0" VerticalAlignment="Top" Width="40" Height="40" Click="_replyMessageButton_Click" ToolTip="Reply"/>
+        <ToggleButton x:Name="_trustToggleButton" Style="{StaticResource _toggleButtonStyle}" Content="Trust" Grid.Column="2" HorizontalAlignment="Right" Margin="0,6,6,0" Width="40" Height="40" VerticalAlignment="Top" Click="_trustToggleButton_Click" ToolTip="Trust"/>
+        
+        <ListBox x:Name="_listBox" 
+        	SelectionMode="Extended"
+        	ScrollViewer.VerticalScrollBarVisibility="Visible" 
+        	ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+        	SizeChanged="_listBox_SizeChanged" 
+        	PreviewKeyDown="_listBox_PreviewKeyDown" 
+        	PreviewMouseDown="_listBox_PreviewMouseDown"
+            SelectionChanged="_listBox_SelectionChanged"
+        	VirtualizingStackPanel.IsVirtualizing="True"
+        	VirtualizingStackPanel.VirtualizationMode="Standard" Grid.Column="2" Margin="0,52,0,0">
+            <ListBox.Resources>
+                <Style TargetType="{x:Type Expander}">
+                    <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="BorderThickness" Value="1" />
+                    <Setter Property="SnapsToDevicePixels" Value="True" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Expander}">
+                                <ControlTemplate.Resources>
+                                    <Style x:Key="ExpanderDownHeaderStyle" TargetType="{x:Type ToggleButton}">
+                                        <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
                                         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                                        <Setter Property="SnapsToDevicePixels" Value="True" />
-                                        <Setter Property="UseLayoutRounding" Value="True" />
-                                        <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
-                                        <Setter Property="IsReadOnly" Value="True" />
                                         <Setter Property="Template">
                                             <Setter.Value>
-                                                <ControlTemplate TargetType="{x:Type RichTextBox}">
-                                                    <Grid>
-                                                        <Border x:Name="Border" Margin="3,3,3,0" Opacity="1" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="2,2,2,2" Background="{TemplateBinding Background}">
-                                                            <Grid>
-                                                                <Border BorderThickness="1">
-                                                                    <ScrollViewer Margin="0" x:Name="PART_ContentHost" Style="{DynamicResource NuclearScrollViewer}" />
-                                                                </Border>
-                                                            </Grid>
-                                                        </Border>
-                                                    </Grid>
+                                                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                                    <ControlTemplate.Resources>
+                                                        <Storyboard x:Key="HoverOn">
+                                                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HoverRectangle" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                                                <SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="1"/>
+                                                            </DoubleAnimationUsingKeyFrames>
+                                                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HoverShineRectangle" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                                                <SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="1"/>
+                                                            </DoubleAnimationUsingKeyFrames>
+                                                        </Storyboard>
+                                                        <Storyboard x:Key="HoverOff">
+                                                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HoverShineRectangle" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                                                <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
+                                                            </DoubleAnimationUsingKeyFrames>
+                                                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HoverRectangle" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                                                <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
+                                                            </DoubleAnimationUsingKeyFrames>
+                                                        </Storyboard>
+                                                        <Storyboard x:Key="PressedOn">
+                                                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="PressedRectangle" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                                                <SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="1"/>
+                                                            </DoubleAnimationUsingKeyFrames>
+                                                        </Storyboard>
+                                                        <Storyboard x:Key="PressedOff">
+                                                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="PressedRectangle" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                                                <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
+                                                            </DoubleAnimationUsingKeyFrames>
+                                                        </Storyboard>
+                                                    </ControlTemplate.Resources>
+                                                    <Border Padding="{TemplateBinding Padding}" Background="Transparent"  BorderBrush="{DynamicResource NormalBorderBrush}" BorderThickness="1,1,1,1" CornerRadius="2,2,2,2">
+                                                        <Grid SnapsToDevicePixels="False" Background="Transparent">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="19" />
+                                                                <ColumnDefinition Width="*" />
+                                                            </Grid.ColumnDefinitions>
+                                                            <Rectangle Margin="2,2,2,2" x:Name="Rectangle" Fill="{DynamicResource NormalBrush}" Stroke="{DynamicResource NormalBorderBrush}" StrokeThickness="1" RadiusX="1" RadiusY="1" />
+                                                            <Rectangle Margin="2,2,2,2" x:Name="ShineRectangle" Fill="{DynamicResource ShineBrush}" Stroke="{DynamicResource NormalBorderBrush}" StrokeThickness="1" RadiusX="1" RadiusY="1" />
+                                                            <Rectangle Margin="2,2,2,2" x:Name="HoverRectangle" Fill="{DynamicResource HoverBrush}" Stroke="{DynamicResource NormalBorderBrush}" StrokeThickness="1" RadiusX="1" RadiusY="1" Opacity="0" />
+                                                            <Rectangle Margin="2,2,2,2" x:Name="HoverShineRectangle" Fill="{DynamicResource HoverShineBrush}" Stroke="{DynamicResource NormalBorderBrush}" StrokeThickness="1" RadiusX="1" RadiusY="1" Opacity="0" />
+                                                            <Rectangle Margin="2,2,2,2" x:Name="PressedRectangle" Fill="{DynamicResource PressedBrush}" Stroke="{DynamicResource PressedBorderBrush}" StrokeThickness="1" RadiusX="1" RadiusY="1" Opacity="0" />
+                                                            <Path HorizontalAlignment="Center" x:Name="Up_Arrow" VerticalAlignment="Center" Fill="{DynamicResource GlyphBrush}" Data="M 0 0 L 4 4 L 8 0 Z" />
+                                                            <Path Visibility="Collapsed" HorizontalAlignment="Center" x:Name="Down_Arrow" VerticalAlignment="Center" Fill="{DynamicResource GlyphBrush}" Data="M 0 4 L 4 0 L 8 4 Z" />
+                                                            <ContentPresenter SnapsToDevicePixels="True" HorizontalAlignment="Left" Margin="4,2,0,2" VerticalAlignment="Center" Grid.Column="1" RecognizesAccessKey="True" />
+                                                        </Grid>
+                                                    </Border>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsChecked" Value="true">
+                                                            <Setter Property="Visibility" TargetName="Down_Arrow" Value="Visible" />
+                                                            <Setter Property="Visibility" TargetName="Up_Arrow" Value="Collapsed" />
+
+                                                        </Trigger>
+                                                        <Trigger Property="IsMouseOver" Value="true">
+                                                            <Trigger.ExitActions>
+                                                                <BeginStoryboard Storyboard="{StaticResource HoverOff}" x:Name="HoverOff_BeginStoryboard"/>
+                                                            </Trigger.ExitActions>
+                                                            <Trigger.EnterActions>
+                                                                <BeginStoryboard Storyboard="{StaticResource HoverOn}"/>
+                                                            </Trigger.EnterActions>
+
+                                                        </Trigger>
+                                                        <Trigger Property="IsPressed" Value="true">
+                                                            <Trigger.ExitActions>
+                                                                <BeginStoryboard Storyboard="{StaticResource PressedOff}" x:Name="PressedOff_BeginStoryboard"/>
+                                                            </Trigger.ExitActions>
+                                                            <Trigger.EnterActions>
+                                                                <BeginStoryboard Storyboard="{StaticResource PressedOn}" x:Name="PressedOn_BeginStoryboard"/>
+                                                            </Trigger.EnterActions>
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
                                                 </ControlTemplate>
                                             </Setter.Value>
                                         </Setter>
-                                        <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
-                                        <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}"/>
-                                        <Setter Property="BorderBrush" Value="#FF000000"/>
-                                        <Setter Property="ContextMenu" Value="{StaticResource _richTextBoxContextMenu}" />
                                     </Style>
-                                </local:RichTextBoxEx.Style>
-                                <local:RichTextBoxEx.BorderBrush>
-                                    <MultiBinding Converter="{StaticResource _chatMessageWrapperToBorderBrushConverter}">
-                                        <Binding Mode="OneWay" />
-                                        <Binding RelativeSource="{RelativeSource AncestorType={x:Type ListBoxItem}, Mode=FindAncestor}" Path="IsSelected" />
-                                    </MultiBinding>
-                                </local:RichTextBoxEx.BorderBrush>
-                            </local:RichTextBoxEx>
-                        </Grid>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-                <ItemsControl.ItemContainerStyle>
-                    <Style TargetType="ListBoxItem">
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                        <Setter Property="OverridesDefaultStyle" Value="True" />
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type ContentControl}">
-                                    <ContentPresenter />
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </ItemsControl.ItemContainerStyle>
-            </ListBox>
+                                </ControlTemplate.Resources>
+                                <Border x:Name="Border" Opacity="1" BorderBrush="Black" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="2,2,2,2" Background="{TemplateBinding Background}">
+                                    <DockPanel x:Name="dockPanel">
+                                        <ToggleButton FontFamily="{TemplateBinding FontFamily}" FontSize="{TemplateBinding FontSize}" FontStretch="{TemplateBinding FontStretch}" FontStyle="{TemplateBinding FontStyle}" FontWeight="{TemplateBinding FontWeight}" Foreground="{TemplateBinding Foreground}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Padding="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" FocusVisualStyle="{StaticResource ExpanderHeaderFocusVisual}" Margin="1,1,1,0" MinHeight="0" MinWidth="0" x:Name="HeaderSite" Style="{StaticResource ExpanderDownHeaderStyle}" Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}" IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" DockPanel.Dock="Top" />
+                                        <Border Visibility="Collapsed" BorderThickness="1,0,1,1" CornerRadius="3,3,3,3" x:Name="border" Margin="1,1,1,1">
+                                            <ContentPresenter Focusable="false" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="1,1,1,1" x:Name="ExpandSite" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" DockPanel.Dock="Bottom" />
+                                        </Border>
+                                    </DockPanel>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsExpanded" Value="true">
+                                        <Setter Property="Visibility" TargetName="border" Value="Visible" />
+                                    </Trigger>
+                                    <Trigger Property="ExpandDirection" Value="Down" />
+                                    <Trigger Property="ExpandDirection" Value="Right">
+                                        <Setter Property="DockPanel.Dock" TargetName="ExpandSite" Value="Right" />
+                                        <Setter Property="DockPanel.Dock" TargetName="HeaderSite" Value="Left" />
+                                        <Setter Property="Style" TargetName="HeaderSite" Value="{StaticResource ExpanderRightHeaderStyle}" />
+                                    </Trigger>
+                                    <Trigger Property="ExpandDirection" Value="Up">
+                                        <Setter Property="DockPanel.Dock" TargetName="ExpandSite" Value="Top" />
+                                        <Setter Property="DockPanel.Dock" TargetName="HeaderSite" Value="Bottom" />
+                                        <Setter Property="Style" TargetName="HeaderSite" Value="{StaticResource ExpanderUpHeaderStyle}" />
+                                    </Trigger>
+                                    <Trigger Property="ExpandDirection" Value="Left">
+                                        <Setter Property="DockPanel.Dock" TargetName="ExpandSite" Value="Left" />
+                                        <Setter Property="DockPanel.Dock" TargetName="HeaderSite" Value="Right" />
+                                        <Setter Property="Style" TargetName="HeaderSite" Value="{StaticResource ExpanderLeftHeaderStyle}" />
+                                    </Trigger>
+                                    <Trigger Property="IsEnabled" Value="false">
+                                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
 
-            <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" />
+                <ContextMenu x:Key="_richTextBoxContextMenu" FontFamily="{Binding FontFamily, Converter={StaticResource _stringToFontFamilyConverter}, Mode=OneWay, Source={StaticResource ResourcesInstance}}" FontSize="{Binding FontSize, Converter={StaticResource _stringToDoubleConverter}, Mode=OneWay, Source={StaticResource ResourcesInstance}}">
+                    <MenuItem x:Name="_richTextBoxCopyMenuItem" Header="{Binding ChatControl_Copy, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxCopyMenuItem_Click" />
+                    <Separator />
+                    <MenuItem x:Name="_richTextBoxResponsMenuItem" Header="{Binding ChatControl_Respons, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxResponsMenuItem_Click" />
+                    <Separator />
+                    <MenuItem x:Name="_richTextBoxTrustMenuItem" Header="{Binding ChatControl_Trust, Source={StaticResource ResourcesInstance}}" Click="_richTextBoxTrustMenuItem_Click"/>
+                </ContextMenu>
 
-            <TabControl Grid.Row="2">
-                <TabItem Header="{Binding Path=ChatControl_Edit, Source={StaticResource ResourcesInstance}}">
-                    <Grid >
-                        <TextBox x:Name="_messageTextBox" Margin="6,6,6,34" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" AutoWordSelection="True" />
-                        <Button x:Name="_messageUploadButton" Content="{Binding Path=ChatControl_Upload, Source={StaticResource ResourcesInstance}}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="75" Height="23" Margin="0,0,6,6" Click="_messageUploadButton_Click"/>
-                    </Grid>
-                </TabItem>
-                <TabItem Header="{Binding Path=ChatControl_Preview, Source={StaticResource ResourcesInstance}}">
+                <Style TargetType="{x:Type local:RichTextBoxEx}">
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    <Setter Property="SnapsToDevicePixels" Value="True" />
+                    <Setter Property="UseLayoutRounding" Value="True" />
+                    <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+                    <Setter Property="IsReadOnly" Value="True" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type RichTextBox}">
+                                <Grid Background="{TemplateBinding Background}">
+                                    <ScrollViewer Margin="0" x:Name="PART_ContentHost" Style="{DynamicResource NuclearScrollViewer}" />
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+                    <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}"/>
+                    <Setter Property="BorderBrush" Value="#FF000000"/>
+                    <Setter Property="ContextMenu" Value="{StaticResource _richTextBoxContextMenu}" />
+                </Style>
+            </ListBox.Resources>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
                     <Grid>
-                        <RichTextBox x:Name="_previewRichTextBox" Margin="6" IsReadOnly="True" VerticalScrollBarVisibility="Auto" />
+                        <local:RichTextBoxEx x:Name="_richTextBox" local:RichTextBoxHelper.DocumentMessage="{Binding Mode=OneWay}" Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type Grid}}}" ContextMenuOpening="_richTextBox_ContextMenuOpening">
+                            <local:RichTextBoxEx.Style>
+                                <Style TargetType="{x:Type local:RichTextBoxEx}">
+                                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                                    <Setter Property="SnapsToDevicePixels" Value="True" />
+                                    <Setter Property="UseLayoutRounding" Value="True" />
+                                    <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+                                    <Setter Property="IsReadOnly" Value="True" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type RichTextBox}">
+                                                <Grid>
+                                                    <Border x:Name="Border" Margin="3,3,3,0" Opacity="1" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="2,2,2,2" Background="{TemplateBinding Background}">
+                                                        <Grid>
+                                                            <Border BorderThickness="1">
+                                                                <ScrollViewer Margin="0" x:Name="PART_ContentHost" Style="{DynamicResource NuclearScrollViewer}" />
+                                                            </Border>
+                                                        </Grid>
+                                                    </Border>
+                                                </Grid>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+                                    <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}"/>
+                                    <Setter Property="BorderBrush" Value="#FF000000"/>
+                                    <Setter Property="ContextMenu" Value="{StaticResource _richTextBoxContextMenu}" />
+                                </Style>
+                            </local:RichTextBoxEx.Style>
+                            <local:RichTextBoxEx.BorderBrush>
+                                <MultiBinding Converter="{StaticResource _chatMessageWrapperToBorderBrushConverter}">
+                                    <Binding Mode="OneWay" />
+                                    <Binding RelativeSource="{RelativeSource AncestorType={x:Type ListBoxItem}, Mode=FindAncestor}" Path="IsSelected" />
+                                </MultiBinding>
+                            </local:RichTextBoxEx.BorderBrush>
+                        </local:RichTextBoxEx>
                     </Grid>
-                </TabItem>
-            </TabControl>
-
-        </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="OverridesDefaultStyle" Value="True" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                <ContentPresenter />
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
+        </ListBox>
     </Grid>
 </UserControl>
