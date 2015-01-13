@@ -571,7 +571,6 @@ namespace Outopos.Windows
                     _profileItem.Cost,
                     _profileItem.Exchange.GetExchangePublicKey(),
                     _profileItem.TrustSignatures,
-                    _profileItem.DeleteSignatures,
                     _profileItem.Wikis, 
                     _profileItem.Chats, 
                     digitalSignature);

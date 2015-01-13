@@ -549,7 +549,6 @@ namespace Outopos.Windows
 
                     tempList.Add(leaderProfile);
                     checkedSignature.Add(leaderProfile.Certificate.ToString());
-                    checkedSignature.UnionWith(leaderProfile.DeleteSignatures);
                 }
 
                 for (int i = 0; i < tempList.Count; i++)
@@ -565,7 +564,6 @@ namespace Outopos.Windows
 
                         tempList.Add(tempProfile);
                         checkedSignature.Add(tempProfile.Certificate.ToString());
-                        checkedSignature.UnionWith(tempProfile.DeleteSignatures);
 
                         if (tempList.Count > 1024 * 32) goto End;
                     }
@@ -1002,7 +1000,6 @@ namespace Outopos.Windows
                                 _outoposManager.UploadProfile(profileItem.Cost,
                                     profileItem.Exchange.GetExchangePublicKey(),
                                     profileItem.TrustSignatures,
-                                    profileItem.DeleteSignatures,
                                     profileItem.Wikis,
                                     profileItem.Chats,
                                     digitalSignature);

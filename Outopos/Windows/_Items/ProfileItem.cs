@@ -21,7 +21,6 @@ namespace Outopos.Windows
         private Exchange _exchange;
         private LockedList<Exchange> _oldExchanges;
         private SignatureCollection _trustSignatures;
-        private SignatureCollection _deleteSignatures;
         private WikiCollection _wikis;
         private ChatCollection _chats;
 
@@ -111,21 +110,6 @@ namespace Outopos.Windows
                         _trustSignatures = new SignatureCollection();
 
                     return _trustSignatures;
-                }
-            }
-        }
-
-        [DataMember(Name = "DeleteSignatures")]
-        public SignatureCollection DeleteSignatures
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    if (_deleteSignatures == null)
-                        _deleteSignatures = new SignatureCollection();
-
-                    return _deleteSignatures;
                 }
             }
         }
