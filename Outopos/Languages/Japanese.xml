@@ -22,12 +22,12 @@
   <Translate Key="Seed_CreationTime" Value="作成日" />
   <Translate Key="Seed_Comment" Value="コメント" />
 
-  <Translate Key="MainWindow_Languages" Value="言語" />
-  <Translate Key="MainWindow_Help" Value="ヘルプ" />
-  <Translate Key="MainWindow_ManualSite" Value="ドキュメント" />
-  <Translate Key="MainWindow_DeveloperSite" Value="ソースコード" />
-  <Translate Key="MainWindow_CheckUpdate" Value="更新チェック" />
-  <Translate Key="MainWindow_VersionInformation" Value="バージョン情報" />
+  <Translate Key="MainWindow_World" Value="World" />
+  <Translate Key="MainWindow_Wiki" Value="Wiki" />
+  <Translate Key="MainWindow_Chat" Value="Chat" />
+  <Translate Key="MainWindow_Mail" Value="Mail" />
+  <Translate Key="MainWindow_Profile" Value="Profile" />
+  <Translate Key="MainWindow_Options" Value="Options" />
   <Translate Key="MainWindow_SendingSpeed" Value="送信:" />
   <Translate Key="MainWindow_ReceivingSpeed" Value="受信:" />
   <Translate Key="MainWindow_DiskSpaceNotFound_Message" Value="Space of disk not found." />
@@ -45,6 +45,9 @@
   <Translate Key="TrustControl_Value" Value="Value" />
   <Translate Key="TrustControl_Copy" Value="Copy" />
 
+  <Translate Key="ChatControl_NewMessage" Value="New message" />
+  <Translate Key="ChatControl_ReplyMessage" Value="Reply message" />
+  <Translate Key="ChatControl_Trust" Value="トラスト" />
   <Translate Key="ChatControl_NewCategory" Value="New category" />
   <Translate Key="ChatControl_Edit" Value="編集" />
   <Translate Key="ChatControl_Delete" Value="削除" />
@@ -54,7 +57,6 @@
   <Translate Key="ChatControl_Paste" Value="貼り付け" />
   <Translate Key="ChatControl_ChatList" Value="チャンネルリスト" />
   <Translate Key="ChatControl_Respons" Value="返信" />
-  <Translate Key="ChatControl_Trust" Value="トラスト" />
   <Translate Key="ChatControl_Trust_On" Value="トラスト有効" />
   <Translate Key="ChatControl_Trust_Off" Value="トラスト無効" />
   <Translate Key="ChatControl_Lock" Value="ロック" />
@@ -65,9 +67,6 @@
   <Translate Key="ChatControl_Filter" Value="フィルタ" />
   <Translate Key="ChatControl_FilterWord" Value="この単語でフィルタ" />
   <Translate Key="ChatControl_FilterSignature" Value="このサインでフィルタ" />
-  <Translate Key="ChatControl_NewMessageOnly" Value="新着のみ" />
-  <Translate Key="ChatControl_Message" Value="メッセージ" />
-  <Translate Key="ChatControl_Send" Value="Send" />
   <Translate Key="ChatControl_MarkAllMessagesRead" Value="全てのメッセージを既読にする" />
   <Translate Key="ChatControl_MarkAllMessagesRead_Message" Value="全てのメッセージを既読にしますか？" />
   <Translate Key="ChatControl_ImportLockedMessages" Value="ロックされたメッセージのインポート" />

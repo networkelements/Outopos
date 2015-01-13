@@ -371,68 +371,68 @@ namespace Outopos.Properties
         }
 
 
-        public string MainWindow_Languages
+        public string MainWindow_World
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("MainWindow_Languages");
+                    return this.Translate("MainWindow_World");
                 }
             }
         }
 
-        public string MainWindow_Help
+        public string MainWindow_Wiki
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("MainWindow_Help");
+                    return this.Translate("MainWindow_Wiki");
                 }
             }
         }
 
-        public string MainWindow_ManualSite
+        public string MainWindow_Chat
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("MainWindow_ManualSite");
+                    return this.Translate("MainWindow_Chat");
                 }
             }
         }
 
-        public string MainWindow_DeveloperSite
+        public string MainWindow_Mail
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("MainWindow_DeveloperSite");
+                    return this.Translate("MainWindow_Mail");
                 }
             }
         }
 
-        public string MainWindow_CheckUpdate
+        public string MainWindow_Profile
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("MainWindow_CheckUpdate");
+                    return this.Translate("MainWindow_Profile");
                 }
             }
         }
 
-        public string MainWindow_VersionInformation
+        public string MainWindow_Options
         {
             get
             {
                 lock (this.ThisLock)
                 {
-                    return this.Translate("MainWindow_VersionInformation");
+                    return this.Translate("MainWindow_Options");
                 }
             }
         }
@@ -604,6 +604,39 @@ namespace Outopos.Properties
         }
 
 
+        public string ChatControl_NewMessage
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatControl_NewMessage");
+                }
+            }
+        }
+
+        public string ChatControl_ReplyMessage
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatControl_ReplyMessage");
+                }
+            }
+        }
+
+        public string ChatControl_Trust
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("ChatControl_Trust");
+                }
+            }
+        }
+
         public string ChatControl_NewCategory
         {
             get
@@ -699,17 +732,6 @@ namespace Outopos.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("ChatControl_Respons");
-                }
-            }
-        }
-
-        public string ChatControl_Trust
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChatControl_Trust");
                 }
             }
         }
@@ -820,39 +842,6 @@ namespace Outopos.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("ChatControl_FilterSignature");
-                }
-            }
-        }
-
-        public string ChatControl_NewMessageOnly
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChatControl_NewMessageOnly");
-                }
-            }
-        }
-
-        public string ChatControl_Message
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChatControl_Message");
-                }
-            }
-        }
-
-        public string ChatControl_Send
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("ChatControl_Send");
                 }
             }
         }

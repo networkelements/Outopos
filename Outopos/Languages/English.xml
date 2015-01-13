@@ -22,12 +22,12 @@
   <Translate Key="Seed_CreationTime" Value="Creation time" />
   <Translate Key="Seed_Comment" Value="Comment" />
 
-  <Translate Key="MainWindow_Languages" Value="Languages" />
-  <Translate Key="MainWindow_Help" Value="Help" />
-  <Translate Key="MainWindow_ManualSite" Value="Documentation" />
-  <Translate Key="MainWindow_DeveloperSite" Value="Source code" />
-  <Translate Key="MainWindow_CheckUpdate" Value="Check update" />
-  <Translate Key="MainWindow_VersionInformation" Value="Version information" />
+  <Translate Key="MainWindow_World" Value="World" />
+  <Translate Key="MainWindow_Wiki" Value="Wiki" />
+  <Translate Key="MainWindow_Chat" Value="Chat" />
+  <Translate Key="MainWindow_Mail" Value="Mail" />
+  <Translate Key="MainWindow_Profile" Value="Profile" />
+  <Translate Key="MainWindow_Options" Value="Options" />
   <Translate Key="MainWindow_SendingSpeed" Value="Send:" />
   <Translate Key="MainWindow_ReceivingSpeed" Value="Receive:" />
   <Translate Key="MainWindow_DiskSpaceNotFound_Message" Value="Space of disk not found." />
@@ -45,6 +45,9 @@
   <Translate Key="TrustControl_Value" Value="Value" />
   <Translate Key="TrustControl_Copy" Value="Copy" />
 
+  <Translate Key="ChatControl_NewMessage" Value="New message" />
+  <Translate Key="ChatControl_ReplyMessage" Value="Reply message" />
+  <Translate Key="ChatControl_Trust" Value="Trust" />
   <Translate Key="ChatControl_NewCategory" Value="New category" />
   <Translate Key="ChatControl_Edit" Value="Edit" />
   <Translate Key="ChatControl_Delete" Value="Delete" />
@@ -54,7 +57,6 @@
   <Translate Key="ChatControl_Paste" Value="Paste" />
   <Translate Key="ChatControl_ChatList" Value="Chat list" />
   <Translate Key="ChatControl_Respons" Value="Respons" />
-  <Translate Key="ChatControl_Trust" Value="Trust" />
   <Translate Key="ChatControl_Trust_On" Value="Trust On" />
   <Translate Key="ChatControl_Trust_Off" Value="Trust Off" />
   <Translate Key="ChatControl_Lock" Value="Lock" />
@@ -65,9 +67,6 @@
   <Translate Key="ChatControl_Filter" Value="Filter" />
   <Translate Key="ChatControl_FilterWord" Value="Filter word" />
   <Translate Key="ChatControl_FilterSignature" Value="Filter signature" />
-  <Translate Key="ChatControl_NewMessageOnly" Value="Only" />
-  <Translate Key="ChatControl_Message" Value="Message" />
-  <Translate Key="ChatControl_Send" Value="Send" />
   <Translate Key="ChatControl_MarkAllMessagesRead" Value="Mark all messages read" />
   <Translate Key="ChatControl_MarkAllMessagesRead_Message" Value="Do you want to mark all messages read?" />
   <Translate Key="ChatControl_ImportLockedMessages" Value="Import locked messages" />

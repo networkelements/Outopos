@@ -249,10 +249,6 @@ namespace Outopos.Windows
                 _trafficMonitorThread.Name = "MainWindow_TrafficMonitorThread";
                 _trafficMonitorThread.Start();
 
-#if !DEBUG
-                _logRowDefinition.Height = new GridLength(0);
-#endif
-
                 Debug.WriteLineIf(System.Runtime.GCSettings.IsServerGC, "GCSettings.IsServerGC");
 
                 sw.Stop();
@@ -385,11 +381,21 @@ namespace Outopos.Windows
                         {
                             _autoBaseNodeSettingManager.Start();
                         }
+                        else if (_autoBaseNodeSettingManager.State == ManagerState.Start
+                            && !Settings.Instance.Global_AutoBaseNodeSetting_IsEnabled)
+                        {
+                            _autoBaseNodeSettingManager.Stop();
+                        }
 
                         if (_overlayNetworkManager.State == ManagerState.Stop
                             && Settings.Instance.Global_I2p_SamBridge_IsEnabled)
                         {
                             _overlayNetworkManager.Start();
+                        }
+                        else if (_overlayNetworkManager.State == ManagerState.Start
+                            && !Settings.Instance.Global_I2p_SamBridge_IsEnabled)
+                        {
+                            _overlayNetworkManager.Stop();
                         }
 
                         if (_outoposManager.State == ManagerState.Stop)
@@ -653,7 +659,11 @@ namespace Outopos.Windows
                             {
                                 var surroundingNodeCount = (int)_outoposManager.Information["SurroundingNodeCount"];
 
-                                if (surroundingNodeCount <= 3)
+                                if (surroundingNodeCount <= 0)
+                                {
+                                    this.SetConnectionState(ConnectionState.Red);
+                                }
+                                else if (surroundingNodeCount <= 3)
                                 {
                                     this.SetConnectionState(ConnectionState.Yello);
                                 }

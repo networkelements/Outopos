@@ -258,9 +258,9 @@
 
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.RowSpan="3"/>
 
-        <Button x:Name="_newMessageButton" Style="{StaticResource _buttonStyle}" Content="New" Grid.Column="2" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" Width="40" Height="40" Click="_newMessageButton_Click" ToolTip="New"/>
-        <Button x:Name="_replyMessageButton" Style="{StaticResource _buttonStyle}" Content="Reply" Grid.Column="2" HorizontalAlignment="Left" Margin="52,6,0,0" VerticalAlignment="Top" Width="40" Height="40" Click="_replyMessageButton_Click" ToolTip="Reply"/>
-        <ToggleButton x:Name="_trustToggleButton" Style="{StaticResource _toggleButtonStyle}" Content="Trust" Grid.Column="2" HorizontalAlignment="Right" Margin="0,6,6,0" Width="40" Height="40" VerticalAlignment="Top" Click="_trustToggleButton_Click" ToolTip="Trust"/>
+        <Button x:Name="_newMessageButton" Style="{StaticResource _buttonStyle}" Content="New" Grid.Column="2" HorizontalAlignment="Left" Margin="6,6,0,0" VerticalAlignment="Top" Width="40" Height="40" ToolTip="{Binding Path=ChatControl_NewMessage, Source={StaticResource ResourcesInstance}}" Click="_newMessageButton_Click"/>
+        <Button x:Name="_replyMessageButton" Style="{StaticResource _buttonStyle}" Content="Reply" Grid.Column="2" HorizontalAlignment="Left" Margin="52,6,0,0" VerticalAlignment="Top" Width="40" Height="40" ToolTip="{Binding Path=ChatControl_ReplyMessage, Source={StaticResource ResourcesInstance}}" Click="_replyMessageButton_Click"/>
+        <ToggleButton x:Name="_trustToggleButton" Style="{StaticResource _toggleButtonStyle}" Content="Trust" Grid.Column="2" HorizontalAlignment="Right" Margin="0,6,6,0" Width="40" Height="40" VerticalAlignment="Top" ToolTip="{Binding Path=ChatControl_Trust, Source={StaticResource ResourcesInstance}}" Click="_trustToggleButton_Click"/>
         
         <ListBox x:Name="_listBox" 
         	SelectionMode="Extended"

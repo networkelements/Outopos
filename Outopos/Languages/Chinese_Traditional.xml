@@ -22,12 +22,12 @@
   <Translate Key="Seed_CreationTime" Value="建立時間" />
   <Translate Key="Seed_Comment" Value="評論" />
 
-  <Translate Key="MainWindow_Languages" Value="語言" />
-  <Translate Key="MainWindow_Help" Value="說明" />
-  <Translate Key="MainWindow_ManualSite" Value="文件" />
-  <Translate Key="MainWindow_DeveloperSite" Value="原始碼" />
-  <Translate Key="MainWindow_CheckUpdate" Value="檢查更新" />
-  <Translate Key="MainWindow_VersionInformation" Value="版本資訊" />
+  <Translate Key="MainWindow_World" Value="World" />
+  <Translate Key="MainWindow_Wiki" Value="Wiki" />
+  <Translate Key="MainWindow_Chat" Value="Chat" />
+  <Translate Key="MainWindow_Mail" Value="Mail" />
+  <Translate Key="MainWindow_Profile" Value="Profile" />
+  <Translate Key="MainWindow_Options" Value="Options" />
   <Translate Key="MainWindow_SendingSpeed" Value="傳送:" />
   <Translate Key="MainWindow_ReceivingSpeed" Value="接收:" />
   <Translate Key="MainWindow_DiskSpaceNotFound_Message" Value="Space of disk not found." />
@@ -45,6 +45,9 @@
   <Translate Key="TrustControl_Value" Value="Value" />
   <Translate Key="TrustControl_Copy" Value="複製" />
 
+  <Translate Key="ChatControl_NewMessage" Value="New message" />
+  <Translate Key="ChatControl_ReplyMessage" Value="Reply message" />
+  <Translate Key="ChatControl_Trust" Value="信任" />
   <Translate Key="ChatControl_NewCategory" Value="新增分類" />
   <Translate Key="ChatControl_Edit" Value="編輯" />
   <Translate Key="ChatControl_Delete" Value="刪除" />
@@ -54,7 +57,6 @@
   <Translate Key="ChatControl_Paste" Value="貼上" />
   <Translate Key="ChatControl_ChatList" Value="聊天列表" />
   <Translate Key="ChatControl_Respons" Value="回應" />
-  <Translate Key="ChatControl_Trust" Value="信任" />
   <Translate Key="ChatControl_Trust_On" Value="啟用信任" />
   <Translate Key="ChatControl_Trust_Off" Value="關閉信任" />
   <Translate Key="ChatControl_Lock" Value="鎖定" />
@@ -65,9 +67,6 @@
   <Translate Key="ChatControl_Filter" Value="過濾器" />
   <Translate Key="ChatControl_FilterWord" Value="過濾文字" />
   <Translate Key="ChatControl_FilterSignature" Value="過濾簽名" />
-  <Translate Key="ChatControl_NewMessageOnly" Value="僅" />
-  <Translate Key="ChatControl_Message" Value="訊息" />
-  <Translate Key="ChatControl_Send" Value="Send" />
   <Translate Key="ChatControl_MarkAllMessagesRead" Value="所有標記訊息已讀" />
   <Translate Key="ChatControl_MarkAllMessagesRead_Message" Value="你確定要所有標記訊息已讀？" />
   <Translate Key="ChatControl_ImportLockedMessages" Value="匯入已鎖定訊息" />
