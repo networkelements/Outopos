@@ -1016,6 +1016,24 @@ namespace Outopos.Windows
                             }
                         }
                     }
+
+                    // Nodes.txtにあるノード情報を追加する。
+                    if (File.Exists(Path.Combine(App.DirectoryPaths["Settings"], "Nodes.txt")))
+                    {
+                        var list = new List<Node>();
+
+                        using (StreamReader reader = new StreamReader(Path.Combine(App.DirectoryPaths["Settings"], "Nodes.txt"), new UTF8Encoding(false)))
+                        {
+                            string line;
+
+                            while ((line = reader.ReadLine()) != null)
+                            {
+                                list.Add(OutoposConverter.FromNodeString(line));
+                            }
+                        }
+
+                        _outoposManager.SetOtherNodes(list);
+                    }
                 }
                 else
                 {
@@ -1041,24 +1059,6 @@ namespace Outopos.Windows
                 using (StreamWriter writer = new StreamWriter(Path.Combine(App.DirectoryPaths["Configuration"], "Outopos.version"), false, new UTF8Encoding(false)))
                 {
                     writer.WriteLine(App.OutoposVersion.ToString());
-                }
-
-                // Node.txtにあるノード情報を追加する。
-                if (File.Exists(Path.Combine(App.DirectoryPaths["Core"], "Nodes.txt")))
-                {
-                    var list = new List<Node>();
-
-                    using (StreamReader reader = new StreamReader(Path.Combine(App.DirectoryPaths["Core"], "Nodes.txt"), new UTF8Encoding(false)))
-                    {
-                        string line;
-
-                        while ((line = reader.ReadLine()) != null)
-                        {
-                            list.Add(OutoposConverter.FromNodeString(line));
-                        }
-                    }
-
-                    _outoposManager.SetOtherNodes(list);
                 }
 
                 _autoBaseNodeSettingManager = new AutoBaseNodeSettingManager(_outoposManager);
