@@ -415,6 +415,17 @@ namespace Outopos.Properties
             }
         }
 
+        public string MainWindow_Trust
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("MainWindow_Trust");
+                }
+            }
+        }
+
         public string MainWindow_Profile
         {
             get
@@ -1352,6 +1363,95 @@ namespace Outopos.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("ProfileWindow_Cancel");
+                }
+            }
+        }
+
+
+        public string TrustWindow_Title
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("TrustWindow_Title");
+                }
+            }
+        }
+
+        public string TrustWindow_Signature
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("TrustWindow_Signature");
+                }
+            }
+        }
+
+        public string TrustWindow_Delete
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("TrustWindow_Delete");
+                }
+            }
+        }
+
+        public string TrustWindow_Cut
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("TrustWindow_Cut");
+                }
+            }
+        }
+
+        public string TrustWindow_Copy
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("TrustWindow_Copy");
+                }
+            }
+        }
+
+        public string TrustWindow_Paste
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("TrustWindow_Paste");
+                }
+            }
+        }
+
+        public string TrustWindow_Ok
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("TrustWindow_Ok");
+                }
+            }
+        }
+
+        public string TrustWindow_Cancel
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return this.Translate("TrustWindow_Cancel");
                 }
             }
         }

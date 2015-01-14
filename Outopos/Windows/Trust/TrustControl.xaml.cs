@@ -61,7 +61,7 @@ namespace Outopos.Windows
             _wikiListView.Items.Clear();
             _chatListView.Items.Clear();
 
-            foreach (var leaderSignature in Settings.Instance.Global_ProfileItem.TrustSignatures)
+            foreach (var leaderSignature in Settings.Instance.Global_TrustSignatures)
             {
                 var item = this.GetSignatureTreeViewItem(leaderSignature);
                 if (item == null) continue;

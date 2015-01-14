@@ -413,7 +413,25 @@ namespace Outopos.Windows
                 chatMessages.UnionWith(_outoposManager.GetChatMessages(chat, Settings.Instance.Global_Limit));
             }
 
-            var sortedList = chatMessages.ToList();
+            var sortedList =new List<ChatMessage>();
+
+            if (isTrust)
+            {
+                foreach (var chatMessage in chatMessages)
+                {
+                    if (!Trust.ContainSignature(chatMessage.Certificate.ToString())) continue;
+
+                    sortedList.Add(chatMessage);
+                }
+            }
+            else
+            {
+                foreach (var chatMessage in chatMessages)
+                {
+                    sortedList.Add(chatMessage);
+                }
+            }
+
             sortedList.Sort((x, y) => y.CreationTime.CompareTo(x.CreationTime));
 
             return sortedList.Take(1024);

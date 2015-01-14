@@ -26,6 +26,7 @@
   <Translate Key="MainWindow_Wiki" Value="Wiki" />
   <Translate Key="MainWindow_Chat" Value="Chat" />
   <Translate Key="MainWindow_Mail" Value="Mail" />
+  <Translate Key="MainWindow_Trust" Value="Trust" />
   <Translate Key="MainWindow_Profile" Value="Profile" />
   <Translate Key="MainWindow_Options" Value="Options" />
   <Translate Key="MainWindow_SendingSpeed" Value="傳送:" />
@@ -117,6 +118,15 @@
   <Translate Key="ProfileWindow_Paste" Value="Paste" />
   <Translate Key="ProfileWindow_Ok" Value="Ok" />
   <Translate Key="ProfileWindow_Cancel" Value="Cancel" />
+
+  <Translate Key="TrustWindow_Title" Value="Trust options" />
+  <Translate Key="TrustWindow_Signature" Value="Signature" />
+  <Translate Key="TrustWindow_Delete" Value="Delete" />
+  <Translate Key="TrustWindow_Cut" Value="Cut" />
+  <Translate Key="TrustWindow_Copy" Value="Copy" />
+  <Translate Key="TrustWindow_Paste" Value="Paste" />
+  <Translate Key="TrustWindow_Ok" Value="Ok" />
+  <Translate Key="TrustWindow_Cancel" Value="Cancel" />
 
   <Translate Key="OptionsWindow_Title" Value="Options" />
   <Translate Key="OptionsWindow_Core" Value="Core" />

@@ -180,6 +180,18 @@ namespace Outopos.Windows
                     _mailRadioButton.Content = new Image() { Source = bitmap, Height = 32, Width = 32 };
                 }
 
+                // Trust
+                {
+                    var bitmap = new BitmapImage();
+
+                    bitmap.BeginInit();
+                    bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"Tabs\Trust.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
+                    bitmap.EndInit();
+                    if (bitmap.CanFreeze) bitmap.Freeze();
+
+                    _trustButton.Content = new Image() { Source = bitmap, Height = 32, Width = 32 };
+                }
+
                 // Profile
                 {
                     var bitmap = new BitmapImage();
@@ -541,7 +553,7 @@ namespace Outopos.Windows
             var generalProfiles = new List<Profile>();
             var searchSignatures = new SignatureCollection();
 
-            foreach (var leaderSignature in Settings.Instance.Global_ProfileItem.TrustSignatures.ToArray())
+            foreach (var leaderSignature in Settings.Instance.Global_TrustSignatures.ToArray())
             {
                 var tempList = new List<Profile>();
 
@@ -904,6 +916,11 @@ namespace Outopos.Windows
                 {
                     initFlag = true;
 
+                    // デフォルトのTrustSignaturesの設定。
+                    {
+                        Settings.Instance.Global_TrustSignatures.Add("Lyrise@OTAhpWvmegu50LT-p5dZ16og7U6bdpO4z5TInZxGsCs");
+                    }
+
                     // デフォルトのChatタグを設定。
                     {
                         var amoebaTag = OutoposConverter.FromChatString("Chat:AAAAAAAGQW1vZWJhAQAAACCrzcPHuDlkIdAKPyrMvdoRizFo3IOOSlWhQhPTKBIOiWRXEcU");
@@ -1003,7 +1020,6 @@ namespace Outopos.Windows
                         {
                             profileItem.UploadSignature = digitalSignature.ToString();
                             profileItem.Exchange = new Exchange(ExchangeAlgorithm.Rsa2048);
-                            profileItem.TrustSignatures.Add("Lyrise@OTAhpWvmegu50LT-p5dZ16og7U6bdpO4z5TInZxGsCs");
 
                             // Upload
                             {
@@ -1044,14 +1060,11 @@ namespace Outopos.Windows
                         version = new Version(reader.ReadLine());
                     }
 
-                    if (version < new Version(0, 0, 1))
+                    if (version <= new Version(1, 0, 0))
                     {
-                        foreach (var filter in _outoposManager.Filters)
+                        // デフォルトのTrustSignaturesの設定。
                         {
-                            if (filter.ProxyUri == "tcp:127.0.0.1:19050")
-                            {
-                                filter.ProxyUri = "tcp:127.0.0.1:29050";
-                            }
+                            Settings.Instance.Global_TrustSignatures.Add("Lyrise@OTAhpWvmegu50LT-p5dZ16og7U6bdpO4z5TInZxGsCs");
                         }
                     }
                 }
@@ -1604,6 +1617,14 @@ namespace Outopos.Windows
             if (trustControl == null) return;
 
             trustControl.Update();
+        }
+
+        private void _trustButton_Click(object sender, RoutedEventArgs e)
+        {
+            TrustWindow window = new TrustWindow();
+
+            window.Owner = this;
+            window.ShowDialog();
         }
 
         private void _profileButton_Click(object sender, RoutedEventArgs e)

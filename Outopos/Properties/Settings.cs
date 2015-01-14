@@ -23,6 +23,7 @@ namespace Outopos.Properties
         Settings()
             : base(new List<Library.Configuration.ISettingContent>()
             {
+                new Library.Configuration.SettingContent<LockedList<string>>() { Name = "Global_TrustSignatures", Value = new LockedList<string>() },
                 new Library.Configuration.SettingContent<ProfileItem>() { Name = "Global_ProfileItem", Value = null },
                 new Library.Configuration.SettingContent<LockedHashDictionary<string, Profile>>() { Name = "Global_Profiles", Value = new LockedHashDictionary<string, Profile>() },
                 new Library.Configuration.SettingContent<int>() { Name = "Global_Limit", Value = 0 },
@@ -138,6 +139,24 @@ namespace Outopos.Properties
         }
 
         #region Property
+
+        public LockedList<string> Global_TrustSignatures
+        {
+            get
+            {
+                lock (this.ThisLock)
+                {
+                    return (LockedList<string>)this["Global_TrustSignatures"];
+                }
+            }
+            set
+            {
+                lock (this.ThisLock)
+                {
+                    this["Global_TrustSignatures"] = value;
+                }
+            }
+        }
 
         public ProfileItem Global_ProfileItem
         {

@@ -316,7 +316,8 @@
             <RadioButton x:Name="_chatRadioButton" Style="{StaticResource _radioButtonStyle}" Content="Chat" HorizontalAlignment="Left" VerticalAlignment="Top" Height="40" Width="40" Margin="6,98,0,0" ToolTip="{Binding Path=MainWindow_Chat, Source={StaticResource ResourcesInstance}}"/>
             <RadioButton x:Name="_mailRadioButton" Style="{StaticResource _radioButtonStyle}" Content="Mail" HorizontalAlignment="Left" VerticalAlignment="Top" Height="40" Width="40" Margin="6,144,0,0" ToolTip="{Binding Path=MainWindow_Mail, Source={StaticResource ResourcesInstance}}"/>
 
-            <Button x:Name="_profileButton" Style="{StaticResource _buttonStyle}" Content="Profile" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="40" Width="40" Margin="6,0,0,52" ToolTip="{Binding Path=MainWindow_Profile, Source={StaticResource ResourcesInstance}}" Click="_profileButton_Click"/>
+            <Button x:Name="_trustButton" Style="{StaticResource _buttonStyle}" Content="Trust" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="40" Width="40" Margin="6,0,0,52" ToolTip="{Binding Path=MainWindow_Trust, Source={StaticResource ResourcesInstance}}" Click="_trustButton_Click"/>
+            <Button x:Name="_profileButton" Style="{StaticResource _buttonStyle}" Content="Profile" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="40" Width="40" Margin="6,0,0,98" ToolTip="{Binding Path=MainWindow_Profile, Source={StaticResource ResourcesInstance}}" Click="_profileButton_Click"/>
             <Button x:Name="_optionsButton" Style="{StaticResource _buttonStyle}" Content="Options" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="40" Width="40" Margin="6,0,0,6" ToolTip="{Binding Path=MainWindow_Options, Source={StaticResource ResourcesInstance}}" Click="_optionsButton_Click"/>
         </Grid>
 
