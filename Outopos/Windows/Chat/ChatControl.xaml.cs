@@ -413,7 +413,7 @@ namespace Outopos.Windows
                 chatMessages.UnionWith(_outoposManager.GetChatMessages(chat, Settings.Instance.Global_Limit));
             }
 
-            var sortedList =new List<ChatMessage>();
+            var sortedList = new List<ChatMessage>();
 
             if (isTrust)
             {

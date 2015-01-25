@@ -48,7 +48,7 @@ namespace Outopos
 
         App()
         {
-            App.OutoposVersion = new Version(1, 0, 1);
+            App.OutoposVersion = new Version(1, 0, 2);
 
             {
                 var currentProcess = Process.GetCurrentProcess();

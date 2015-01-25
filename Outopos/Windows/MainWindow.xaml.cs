@@ -613,6 +613,8 @@ namespace Outopos.Windows
 
                 foreach (var profile in higherProfiles)
                 {
+                    if (profile.Cost == 0) continue;
+
                     sum += profile.Cost;
                     count++;
                 }
@@ -1130,13 +1132,43 @@ namespace Outopos.Windows
                         {
                             Thread.CurrentThread.IsBackground = true;
 
-                            profileItem.Cost = Miner.Sample(new TimeSpan(0, 3, 0));
+                            try
+                            {
+                                profileItem.Cost = Miner.Sample(new TimeSpan(0, 3, 0));
+
+                                {
+                                    var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == profileItem.UploadSignature);
+
+                                    if (digitalSignature != null)
+                                    {
+                                        _outoposManager.UploadProfile(
+                                            profileItem.Cost,
+                                            profileItem.Exchange.GetExchangePublicKey(),
+                                            profileItem.TrustSignatures,
+                                            profileItem.Wikis,
+                                            profileItem.Chats,
+                                            digitalSignature);
+                                    }
+                                }
+                            }
+                            catch (Exception)
+                            {
+
+                            }
                         });
                     }
                 }
 
                 {
                     this.Refresh_Profiles();
+                }
+
+
+                {
+                    RichTextBoxHelper.WikiClickEvent += this.WikiClickEvent;
+
+                    RichTextBoxHelper.SeedClickEvent += this.SeedClickEvent;
+                    RichTextBoxHelper.LinkClickEvent += this.LinkClickEvent;
                 }
             }
         }
