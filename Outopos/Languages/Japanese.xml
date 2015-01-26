@@ -12,7 +12,7 @@
   <Translate Key="Languages_Ukrainian" Value="ウクライナ語 (Ukrainian)" />
   <Translate Key="Languages_Russian" Value="ロシア語 (Russian)" />
 
-  <Translate Key="Tag_Name" Value="Name" />
+  <Translate Key="Tag_Name" Value="名前" />
   <Translate Key="Tag_Id" Value="ID" />
 
   <Translate Key="Seed_Name" Value="名前" />
@@ -23,7 +23,7 @@
   <Translate Key="Seed_Comment" Value="コメント" />
 
   <Translate Key="MainWindow_World" Value="トラストツリー" />
-  <Translate Key="MainWindow_Wiki" Value="Wiki" />
+  <Translate Key="MainWindow_Wiki" Value="ウィキ" />
   <Translate Key="MainWindow_Chat" Value="チャット" />
   <Translate Key="MainWindow_Mail" Value="メール" />
   <Translate Key="MainWindow_Trust" Value="トラスト" />
@@ -41,7 +41,7 @@
 
   <Translate Key="TrustControl_Trust" Value="トラストリスト" />
   <Translate Key="TrustControl_Chat" Value="チャット" />
-  <Translate Key="TrustControl_Wiki" Value="Wiki" />
+  <Translate Key="TrustControl_Wiki" Value="ウィキ" />
   <Translate Key="TrustControl_Signature" Value="サイン" />
   <Translate Key="TrustControl_Value" Value="値" />
   <Translate Key="TrustControl_Copy" Value="コピー" />
@@ -101,11 +101,11 @@
   <Translate Key="MailControl_Message" Value="新規メール作成" />
 
   <Translate Key="ProfileWindow_Title" Value="プロファイル編集" />
-  <Translate Key="ProfileWindow_YourSignature" Value="編集するあなたのサイン" />
+  <Translate Key="ProfileWindow_YourSignature" Value="あなたのサイン" />
   <Translate Key="ProfileWindow_Trust" Value="トラストリスト" />
   <Translate Key="ProfileWindow_Signature" Value="サイン" />
   <Translate Key="ProfileWindow_Chat" Value="チャット" />
-  <Translate Key="ProfileWindow_Wiki" Value="Wiki" />
+  <Translate Key="ProfileWindow_Wiki" Value="ウィキ" />
   <Translate Key="ProfileWindow_Value" Value="値" />
   <Translate Key="ProfileWindow_Up" Value="↑" />
   <Translate Key="ProfileWindow_Down" Value="↓" />
@@ -159,14 +159,12 @@
   <Translate Key="OptionsWindow_Total" Value="トータル" />
   <Translate Key="OptionsWindow_Reset" Value="リセット" />
   <Translate Key="OptionsWindow_ConnectionCount" Value="接続数上限" />
-  <Translate Key="OptionsWindow_DownloadDirectory" Value="ダウンロード保存先" />
-  <Translate Key="OptionsWindow_DownloadDirectory_Description" Value="Download directory" />
   <Translate Key="OptionsWindow_CacheSize" Value="キャッシュサイズ" />
   <Translate Key="OptionsWindow_Events" Value="その他の設定" />
   <Translate Key="OptionsWindow_Events_Connection" Value="接続" />
   <Translate Key="OptionsWindow_Events_OpenPortAndGetIpAddress" Value="UPnPを使用してポート開放とIPアドレスを設定する。" />
   <Translate Key="OptionsWindow_Events_UseI2p" Value="I2Pを自動設定する。" />
-  <Translate Key="OptionsWindow_Events_UseI2p_SamBridgeUri" Value="I2P SAM application bridge アドレス:" />
+  <Translate Key="OptionsWindow_Events_UseI2p_SamBridgeUri" Value="SAMブリッジのUri:" />
   <Translate Key="OptionsWindow_Tor" Value="Tor" />
   <Translate Key="OptionsWindow_Ipv4" Value="Ipv4" />
   <Translate Key="OptionsWindow_Ipv6" Value="Ipv6" />

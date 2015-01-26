@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Data;
 using System.Xml;
 using Library;
@@ -172,7 +173,7 @@ namespace Outopos.Properties
 
             if (_dic[_currentLanguage].TryGetValue(key, out result))
             {
-                return result;
+                return Regex.Unescape(result);
             }
 
             return null;
@@ -1794,28 +1795,6 @@ namespace Outopos.Properties
                 lock (this.ThisLock)
                 {
                     return this.Translate("OptionsWindow_ConnectionCount");
-                }
-            }
-        }
-
-        public string OptionsWindow_DownloadDirectory
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("OptionsWindow_DownloadDirectory");
-                }
-            }
-        }
-
-        public string OptionsWindow_DownloadDirectory_Description
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return this.Translate("OptionsWindow_DownloadDirectory_Description");
                 }
             }
         }

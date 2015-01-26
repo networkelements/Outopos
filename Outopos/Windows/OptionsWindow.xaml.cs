@@ -160,6 +160,8 @@ namespace Outopos.Windows
             _fontMessageFontFamilyComboBox.SelectedItem = Settings.Instance.Global_Fonts_MessageFontFamily;
 
             _fontMessageFontSizeTextBox.Text = Settings.Instance.Global_Fonts_MessageFontSize.ToString();
+
+            _amoebaPathTextBox.Text = Settings.Instance.Global_Amoeba_Path;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

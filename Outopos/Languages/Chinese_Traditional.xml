@@ -159,8 +159,6 @@
   <Translate Key="OptionsWindow_Total" Value="Total" />
   <Translate Key="OptionsWindow_Reset" Value="Reset" />
   <Translate Key="OptionsWindow_ConnectionCount" Value="Connection count" />
-  <Translate Key="OptionsWindow_DownloadDirectory" Value="Download directory" />
-  <Translate Key="OptionsWindow_DownloadDirectory_Description" Value="Download directory" />
   <Translate Key="OptionsWindow_CacheSize" Value="Cache size" />
   <Translate Key="OptionsWindow_Events" Value="Events" />
   <Translate Key="OptionsWindow_Events_Connection" Value="Connection" />

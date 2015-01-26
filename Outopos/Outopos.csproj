@@ -226,6 +226,8 @@
     <Content Include="Icons\Tabs\Chat.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Icons\Tabs\Connections.png" />
+    <Resource Include="Icons\Tabs\Log.png" />
     <Content Include="Icons\Tabs\Mail.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
