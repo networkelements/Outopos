@@ -15,41 +15,41 @@
   <Translate Key="Tag_Name" Value="Name" />
   <Translate Key="Tag_Id" Value="ID" />
 
-  <Translate Key="Seed_Name" Value="Name" />
+  <Translate Key="Seed_Name" Value="名前" />
   <Translate Key="Seed_Signature" Value="サイン" />
   <Translate Key="Seed_Length" Value="サイズ" />
   <Translate Key="Seed_Keywords" Value="キーワード" />
   <Translate Key="Seed_CreationTime" Value="作成日" />
   <Translate Key="Seed_Comment" Value="コメント" />
 
-  <Translate Key="MainWindow_World" Value="World" />
+  <Translate Key="MainWindow_World" Value="トラストツリー" />
   <Translate Key="MainWindow_Wiki" Value="Wiki" />
-  <Translate Key="MainWindow_Chat" Value="Chat" />
-  <Translate Key="MainWindow_Mail" Value="Mail" />
-  <Translate Key="MainWindow_Trust" Value="Trust" />
-  <Translate Key="MainWindow_Profile" Value="Profile" />
-  <Translate Key="MainWindow_Options" Value="Options" />
+  <Translate Key="MainWindow_Chat" Value="チャット" />
+  <Translate Key="MainWindow_Mail" Value="メール" />
+  <Translate Key="MainWindow_Trust" Value="トラスト" />
+  <Translate Key="MainWindow_Profile" Value="マイプロファイル" />
+  <Translate Key="MainWindow_Options" Value="オプション" />
   <Translate Key="MainWindow_SendingSpeed" Value="送信:" />
   <Translate Key="MainWindow_ReceivingSpeed" Value="受信:" />
-  <Translate Key="MainWindow_DiskSpaceNotFound_Message" Value="Space of disk not found." />
-  <Translate Key="MainWindow_CacheSpaceNotFound_Message" Value="Space of cache not found." />
+  <Translate Key="MainWindow_DiskSpaceNotFound_Message" Value="ディスクの容量が足りません。" />
+  <Translate Key="MainWindow_CacheSpaceNotFound_Message" Value="キャッシュの容量が足りません。" />
   <Translate Key="MainWindow_CheckUpdate_Message" Value="&quot;{0}&quot; へ更新しますか?" />
   <Translate Key="MainWindow_LatestVersion_Message" Value="最新のバージョンです。" />
   <Translate Key="MainWindow_Restart_Message" Value="アップデートが完了しました。再起動してください。" />
-  <Translate Key="MainWindow_Close_Message" Value="終了しますか？" />
+  <Translate Key="MainWindow_Close_Message" Value="終了しますか？※タスクトレイに残っている間は終了処理中です。" />
   <Translate Key="MainWindow_Delete_Message" Value="本当に削除しますか？" />
 
-  <Translate Key="TrustControl_Trust" Value="Trust" />
-  <Translate Key="TrustControl_Chat" Value="Chat" />
+  <Translate Key="TrustControl_Trust" Value="トラストリスト" />
+  <Translate Key="TrustControl_Chat" Value="チャット" />
   <Translate Key="TrustControl_Wiki" Value="Wiki" />
-  <Translate Key="TrustControl_Signature" Value="Signature" />
-  <Translate Key="TrustControl_Value" Value="Value" />
-  <Translate Key="TrustControl_Copy" Value="Copy" />
+  <Translate Key="TrustControl_Signature" Value="サイン" />
+  <Translate Key="TrustControl_Value" Value="値" />
+  <Translate Key="TrustControl_Copy" Value="コピー" />
 
-  <Translate Key="ChatControl_NewMessage" Value="New message" />
-  <Translate Key="ChatControl_ReplyMessage" Value="Reply message" />
+  <Translate Key="ChatControl_NewMessage" Value="新規メッセージを作成" />
+  <Translate Key="ChatControl_ReplyMessage" Value="選択中のメッセージに返信" />
   <Translate Key="ChatControl_Trust" Value="トラスト" />
-  <Translate Key="ChatControl_NewCategory" Value="New category" />
+  <Translate Key="ChatControl_NewCategory" Value="新規項目作成" />
   <Translate Key="ChatControl_Edit" Value="編集" />
   <Translate Key="ChatControl_Delete" Value="削除" />
   <Translate Key="ChatControl_Cut" Value="切り取り" />
@@ -72,136 +72,136 @@
   <Translate Key="ChatControl_MarkAllMessagesRead_Message" Value="全てのメッセージを既読にしますか？" />
   <Translate Key="ChatControl_ImportLockedMessages" Value="ロックされたメッセージのインポート" />
   <Translate Key="ChatControl_ExportLockedMessages" Value="ロックされたメッセージのエクスポート" />
-  <Translate Key="ChatControl_Preview" Value="Preview" />
+  <Translate Key="ChatControl_Preview" Value="プレビュー" />
 
-  <Translate Key="ChatMessageEditWindow_Title" Value="New message" />
-  <Translate Key="ChatMessageEditWindow_Edit" Value="Edit" />
-  <Translate Key="ChatMessageEditWindow_Preview" Value="Preview" />
-  <Translate Key="ChatMessageEditWindow_Comment" Value="Comment" />
-  <Translate Key="ChatMessageEditWindow_Ok" Value="Ok" />
-  <Translate Key="ChatMessageEditWindow_Cancel" Value="Cancel" />
+  <Translate Key="ChatMessageEditWindow_Title" Value="新規メッセージ" />
+  <Translate Key="ChatMessageEditWindow_Edit" Value="編集" />
+  <Translate Key="ChatMessageEditWindow_Preview" Value="プレビュー" />
+  <Translate Key="ChatMessageEditWindow_Comment" Value="コメント" />
+  <Translate Key="ChatMessageEditWindow_Ok" Value="送信" />
+  <Translate Key="ChatMessageEditWindow_Cancel" Value="キャンセル" />
 
-  <Translate Key="ChatListWindow_Title" Value="Chat list" />
-  <Translate Key="ChatListWindow_Name" Value="Name" />
+  <Translate Key="ChatListWindow_Title" Value="チャンネルリスト" />
+  <Translate Key="ChatListWindow_Name" Value="チャンネル名" />
   <Translate Key="ChatListWindow_Id" Value="ID" />
-  <Translate Key="ChatListWindow_Copy" Value="Copy" />
-  <Translate Key="ChatListWindow_CopyInfo" Value="Copy info" />
-  <Translate Key="ChatListWindow_Join" Value="Join" />
-  <Translate Key="ChatListWindow_Close" Value="Close" />
+  <Translate Key="ChatListWindow_Copy" Value="IDコピー" />
+  <Translate Key="ChatListWindow_CopyInfo" Value="(ID+情報)コピー" />
+  <Translate Key="ChatListWindow_Join" Value="追加" />
+  <Translate Key="ChatListWindow_Close" Value="閉じる" />
 
-  <Translate Key="MailControl_NewCategory" Value="New category" />
-  <Translate Key="MailControl_Edit" Value="Edit" />
-  <Translate Key="MailControl_Delete" Value="Delete" />
-  <Translate Key="MailControl_Cut" Value="Cut" />
-  <Translate Key="MailControl_Copy" Value="Copy" />
-  <Translate Key="MailControl_CopyInfo" Value="Copy info" />
-  <Translate Key="MailControl_Paste" Value="Paste" />
-  <Translate Key="MailControl_SignatureList" Value="Signature list" />
-  <Translate Key="MailControl_Respons" Value="Respons" />
-  <Translate Key="MailControl_Message" Value="Message" />
+  <Translate Key="MailControl_NewCategory" Value="新規項目作成" />
+  <Translate Key="MailControl_Edit" Value="編集" />
+  <Translate Key="MailControl_Delete" Value="削除" />
+  <Translate Key="MailControl_Cut" Value="切り取り" />
+  <Translate Key="MailControl_Copy" Value="コピー" />
+  <Translate Key="MailControl_CopyInfo" Value="コピー(詳細)" />
+  <Translate Key="MailControl_Paste" Value="貼り付け" />
+  <Translate Key="MailControl_SignatureList" Value="サインリスト" />
+  <Translate Key="MailControl_Respons" Value="返信" />
+  <Translate Key="MailControl_Message" Value="新規メール作成" />
 
-  <Translate Key="ProfileWindow_Title" Value="Profile options" />
-  <Translate Key="ProfileWindow_YourSignature" Value="Your signature" />
-  <Translate Key="ProfileWindow_Trust" Value="Trust" />
-  <Translate Key="ProfileWindow_Signature" Value="Signature" />
-  <Translate Key="ProfileWindow_Chat" Value="Chat" />
+  <Translate Key="ProfileWindow_Title" Value="プロファイル編集" />
+  <Translate Key="ProfileWindow_YourSignature" Value="編集するサイン" />
+  <Translate Key="ProfileWindow_Trust" Value="トラストリスト" />
+  <Translate Key="ProfileWindow_Signature" Value="サイン" />
+  <Translate Key="ProfileWindow_Chat" Value="チャット" />
   <Translate Key="ProfileWindow_Wiki" Value="Wiki" />
-  <Translate Key="ProfileWindow_Value" Value="Value" />
-  <Translate Key="ProfileWindow_Up" Value="Up" />
-  <Translate Key="ProfileWindow_Down" Value="Down" />
-  <Translate Key="ProfileWindow_Add" Value="Add" />
-  <Translate Key="ProfileWindow_New" Value="New" />
-  <Translate Key="ProfileWindow_Edit" Value="Edit" />
-  <Translate Key="ProfileWindow_Delete" Value="Delete" />
-  <Translate Key="ProfileWindow_Cut" Value="Cut" />
-  <Translate Key="ProfileWindow_Copy" Value="Copy" />
-  <Translate Key="ProfileWindow_Paste" Value="Paste" />
-  <Translate Key="ProfileWindow_Ok" Value="Ok" />
-  <Translate Key="ProfileWindow_Cancel" Value="Cancel" />
+  <Translate Key="ProfileWindow_Value" Value="値" />
+  <Translate Key="ProfileWindow_Up" Value="↑" />
+  <Translate Key="ProfileWindow_Down" Value="↓" />
+  <Translate Key="ProfileWindow_Add" Value="追加" />
+  <Translate Key="ProfileWindow_New" Value="新規" />
+  <Translate Key="ProfileWindow_Edit" Value="編集" />
+  <Translate Key="ProfileWindow_Delete" Value="削除" />
+  <Translate Key="ProfileWindow_Cut" Value="切り取り" />
+  <Translate Key="ProfileWindow_Copy" Value="コピー" />
+  <Translate Key="ProfileWindow_Paste" Value="貼り付け" />
+  <Translate Key="ProfileWindow_Ok" Value="保存" />
+  <Translate Key="ProfileWindow_Cancel" Value="キャンセル" />
 
-  <Translate Key="TrustWindow_Title" Value="Trust options" />
-  <Translate Key="TrustWindow_Signature" Value="Signature" />
-  <Translate Key="TrustWindow_Delete" Value="Delete" />
-  <Translate Key="TrustWindow_Cut" Value="Cut" />
-  <Translate Key="TrustWindow_Copy" Value="Copy" />
-  <Translate Key="TrustWindow_Paste" Value="Paste" />
-  <Translate Key="TrustWindow_Ok" Value="Ok" />
-  <Translate Key="TrustWindow_Cancel" Value="Cancel" />
+  <Translate Key="TrustWindow_Title" Value="トラスト編集" />
+  <Translate Key="TrustWindow_Signature" Value="サイン" />
+  <Translate Key="TrustWindow_Delete" Value="削除" />
+  <Translate Key="TrustWindow_Cut" Value="切り取り" />
+  <Translate Key="TrustWindow_Copy" Value="コピー" />
+  <Translate Key="TrustWindow_Paste" Value="貼り付け" />
+  <Translate Key="TrustWindow_Ok" Value="保存" />
+  <Translate Key="TrustWindow_Cancel" Value="キャンセル" />
 
-  <Translate Key="OptionsWindow_Title" Value="Options" />
-  <Translate Key="OptionsWindow_Core" Value="Core" />
-  <Translate Key="OptionsWindow_BaseNode" Value="Base node" />
-  <Translate Key="OptionsWindow_Node" Value="Node" />
+  <Translate Key="OptionsWindow_Title" Value="オプション" />
+  <Translate Key="OptionsWindow_Core" Value="基本設定" />
+  <Translate Key="OptionsWindow_BaseNode" Value="基礎ノード" />
+  <Translate Key="OptionsWindow_Node" Value="ノード" />
   <Translate Key="OptionsWindow_Uris" Value="Uris" />
   <Translate Key="OptionsWindow_Uri" Value="Uri" />
-  <Translate Key="OptionsWindow_OtherNodes" Value="Other nodes" />
-  <Translate Key="OptionsWindow_Nodes" Value="Nodes" />
-  <Translate Key="OptionsWindow_Client" Value="Client" />
-  <Translate Key="OptionsWindow_Filters" Value="Filters" />
-  <Translate Key="OptionsWindow_ConnectionType" Value="Connection type" />
-  <Translate Key="OptionsWindow_ProxyUri" Value="Proxy uri" />
-  <Translate Key="OptionsWindow_UriCondition" Value="Uri condition" />
-  <Translate Key="OptionsWindow_Option" Value="Option" />
-  <Translate Key="OptionsWindow_Type" Value="Type" />
+  <Translate Key="OptionsWindow_OtherNodes" Value="周辺ノード" />
+  <Translate Key="OptionsWindow_Nodes" Value="ノードリスト" />
+  <Translate Key="OptionsWindow_Client" Value="クライアント設定" />
+  <Translate Key="OptionsWindow_Filters" Value="クライアント設定" />
+  <Translate Key="OptionsWindow_ConnectionType" Value="通信プロトコル" />
+  <Translate Key="OptionsWindow_ProxyUri" Value="接続先" />
+  <Translate Key="OptionsWindow_UriCondition" Value="適用条件" />
+  <Translate Key="OptionsWindow_Option" Value="オプション" />
+  <Translate Key="OptionsWindow_Type" Value="通信プロトコル" />
   <Translate Key="OptionsWindow_Host" Value="Host" />
-  <Translate Key="OptionsWindow_Server" Value="Server" />
-  <Translate Key="OptionsWindow_ListenUris" Value="Listen uris" />
-  <Translate Key="OptionsWindow_Data" Value="Data" />
-  <Translate Key="OptionsWindow_Bandwidth" Value="Bandwidth" />
-  <Translate Key="OptionsWindow_BandwidthLimit" Value="Bandwidth limit (*/s) [0 Byte: unlimited]" />
-  <Translate Key="OptionsWindow_Transfer" Value="Transfer" />
-  <Translate Key="OptionsWindow_TransferLimitType" Value="Limit type" />
-  <Translate Key="OptionsWindow_TransferLimitSpan" Value="Limit span (day)" />
-  <Translate Key="OptionsWindow_TransferLimitSize" Value="Limit size" />
-  <Translate Key="OptionsWindow_TransferInformation" Value="Transfer information" />
-  <Translate Key="OptionsWindow_Downloaded" Value="Downloaded" />
-  <Translate Key="OptionsWindow_Uploaded" Value="Uploaded" />
-  <Translate Key="OptionsWindow_Total" Value="Total" />
-  <Translate Key="OptionsWindow_Reset" Value="Reset" />
-  <Translate Key="OptionsWindow_ConnectionCount" Value="Connection count" />
-  <Translate Key="OptionsWindow_DownloadDirectory" Value="Download directory" />
+  <Translate Key="OptionsWindow_Server" Value="サーバー設定" />
+  <Translate Key="OptionsWindow_ListenUris" Value="サーバー設定" />
+  <Translate Key="OptionsWindow_Data" Value="キャッシュ設定" />
+  <Translate Key="OptionsWindow_Bandwidth" Value="通信帯域幅設定" />
+  <Translate Key="OptionsWindow_BandwidthLimit" Value="帯域幅制限 (*/s) [0 Byte: 無制限]" />
+  <Translate Key="OptionsWindow_Transfer" Value="転送量" />
+  <Translate Key="OptionsWindow_TransferLimitType" Value="制限タイプ" />
+  <Translate Key="OptionsWindow_TransferLimitSpan" Value="期間 (日)" />
+  <Translate Key="OptionsWindow_TransferLimitSize" Value="転送量" />
+  <Translate Key="OptionsWindow_TransferInformation" Value="転送量情報" />
+  <Translate Key="OptionsWindow_Downloaded" Value="ダウンロード" />
+  <Translate Key="OptionsWindow_Uploaded" Value="アップロード" />
+  <Translate Key="OptionsWindow_Total" Value="トータル" />
+  <Translate Key="OptionsWindow_Reset" Value="リセット" />
+  <Translate Key="OptionsWindow_ConnectionCount" Value="接続数上限" />
+  <Translate Key="OptionsWindow_DownloadDirectory" Value="ダウンロード保存先" />
   <Translate Key="OptionsWindow_DownloadDirectory_Description" Value="Download directory" />
-  <Translate Key="OptionsWindow_CacheSize" Value="Cache size" />
-  <Translate Key="OptionsWindow_Events" Value="Events" />
-  <Translate Key="OptionsWindow_Events_Connection" Value="Connection" />
-  <Translate Key="OptionsWindow_Events_OpenPortAndGetIpAddress" Value="Open port and get IP address." />
-  <Translate Key="OptionsWindow_Events_UseI2p" Value="Use I2P." />
-  <Translate Key="OptionsWindow_Events_UseI2p_SamBridgeUri" Value="Sam bridge uri:" />
+  <Translate Key="OptionsWindow_CacheSize" Value="キャッシュサイズ" />
+  <Translate Key="OptionsWindow_Events" Value="その他の設定" />
+  <Translate Key="OptionsWindow_Events_Connection" Value="接続" />
+  <Translate Key="OptionsWindow_Events_OpenPortAndGetIpAddress" Value="UPnPを使用してポート開放とIPアドレスを設定する。" />
+  <Translate Key="OptionsWindow_Events_UseI2p" Value="I2Pを自動設定する。" />
+  <Translate Key="OptionsWindow_Events_UseI2p_SamBridgeUri" Value="I2P SAM application bridge アドレス:" />
   <Translate Key="OptionsWindow_Tor" Value="Tor" />
   <Translate Key="OptionsWindow_Ipv4" Value="Ipv4" />
   <Translate Key="OptionsWindow_Ipv6" Value="Ipv6" />
-  <Translate Key="OptionsWindow_View" Value="View" />
-  <Translate Key="OptionsWindow_Languages" Value="Languages" />
-  <Translate Key="OptionsWindow_UseLanguage" Value="Use language." />
-  <Translate Key="OptionsWindow_Update" Value="Update" />
-  <Translate Key="OptionsWindow_UpdateUrl" Value="Update url" />
-  <Translate Key="OptionsWindow_Signature" Value="Signature" />
-  <Translate Key="OptionsWindow_Signatures" Value="Signatures" />
-  <Translate Key="OptionsWindow_Amoeba" Value="Amoeba" />
-  <Translate Key="OptionsWindow_AmoebaPath" Value="Amoeba path" />
-  <Translate Key="OptionsWindow_Fonts" Value="Fonts" />
-  <Translate Key="OptionsWindow_MessageFontFamily" Value="Message font family" />
-  <Translate Key="OptionsWindow_MessageFontSize" Value="Message font size (pt)" />
-  <Translate Key="OptionsWindow_UpdateOption" Value="Update option" />
-  <Translate Key="OptionsWindow_None" Value="None" />
-  <Translate Key="OptionsWindow_AutoCheck" Value="Auto check" />
-  <Translate Key="OptionsWindow_AutoUpdate" Value="Auto update" />
-  <Translate Key="OptionsWindow_Value" Value="Value" />
-  <Translate Key="OptionsWindow_Import" Value="Import" />
-  <Translate Key="OptionsWindow_Export" Value="Export" />
-  <Translate Key="OptionsWindow_Up" Value="Up" />
-  <Translate Key="OptionsWindow_Down" Value="Down" />
-  <Translate Key="OptionsWindow_Add" Value="Add" />
-  <Translate Key="OptionsWindow_Edit" Value="Edit" />
-  <Translate Key="OptionsWindow_Delete" Value="Delete" />
-  <Translate Key="OptionsWindow_Ok" Value="Ok" />
-  <Translate Key="OptionsWindow_Cancel" Value="Cancel" />
-  <Translate Key="OptionsWindow_Cut" Value="Cut" />
-  <Translate Key="OptionsWindow_Copy" Value="Copy" />
-  <Translate Key="OptionsWindow_Paste" Value="Paste" />
-  <Translate Key="OptionsWindow_CacheResize_Message" Value="Resizing of cache will delete important block. Would that be all right?" />
+  <Translate Key="OptionsWindow_View" Value="表示設定" />
+  <Translate Key="OptionsWindow_Languages" Value="言語(Language)" />
+  <Translate Key="OptionsWindow_UseLanguage" Value="現在日本語が設定されています。" />
+  <Translate Key="OptionsWindow_Update" Value="アップデート" />
+  <Translate Key="OptionsWindow_UpdateUrl" Value="アップデート取得元" />
+  <Translate Key="OptionsWindow_Signature" Value="サイン" />
+  <Translate Key="OptionsWindow_Signatures" Value="サイン" />
+  <Translate Key="OptionsWindow_Amoeba" Value="Amoebaとの連携" />
+  <Translate Key="OptionsWindow_AmoebaPath" Value="Amoebaの場所" />
+  <Translate Key="OptionsWindow_Fonts" Value="フォント" />
+  <Translate Key="OptionsWindow_MessageFontFamily" Value="メッセージのフォント" />
+  <Translate Key="OptionsWindow_MessageFontSize" Value="フォントサイズ(pt)" />
+  <Translate Key="OptionsWindow_UpdateOption" Value="自動アップデートの設定" />
+  <Translate Key="OptionsWindow_None" Value="なし" />
+  <Translate Key="OptionsWindow_AutoCheck" Value="チェックだけする。" />
+  <Translate Key="OptionsWindow_AutoUpdate" Value="アップデートを実行する。" />
+  <Translate Key="OptionsWindow_Value" Value="値" />
+  <Translate Key="OptionsWindow_Import" Value="インポート" />
+  <Translate Key="OptionsWindow_Export" Value="エクスポート" />
+  <Translate Key="OptionsWindow_Up" Value="↑" />
+  <Translate Key="OptionsWindow_Down" Value="↓" />
+  <Translate Key="OptionsWindow_Add" Value="追加" />
+  <Translate Key="OptionsWindow_Edit" Value="編集" />
+  <Translate Key="OptionsWindow_Delete" Value="削除" />
+  <Translate Key="OptionsWindow_Ok" Value="保存" />
+  <Translate Key="OptionsWindow_Cancel" Value="キャンセル" />
+  <Translate Key="OptionsWindow_Cut" Value="切り取り" />
+  <Translate Key="OptionsWindow_Copy" Value="コピー" />
+  <Translate Key="OptionsWindow_Paste" Value="貼り付け" />
+  <Translate Key="OptionsWindow_CacheResize_Message" Value="キャッシュサイズの変更は重要なブロックを削除する可能性があります。それでもよろしいですか？" />
 
-  <Translate Key="ConnectionType_None" Value="None" />
+  <Translate Key="ConnectionType_None" Value="なし" />
   <Translate Key="ConnectionType_Tcp" Value="Tcp" />
   <Translate Key="ConnectionType_Socks4Proxy" Value="Socks4 proxy" />
   <Translate Key="ConnectionType_Socks4aProxy" Value="Socks4a proxy" />
