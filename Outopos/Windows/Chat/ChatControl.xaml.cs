@@ -410,7 +410,7 @@ namespace Outopos.Windows
             }
             else
             {
-                chatMessages.UnionWith(_outoposManager.GetChatMessages(chat, Settings.Instance.Global_Limit));
+                chatMessages.UnionWith(_outoposManager.GetChatMessages(chat, Trust.GetLimit()));
             }
 
             var sortedList = new List<ChatMessage>();

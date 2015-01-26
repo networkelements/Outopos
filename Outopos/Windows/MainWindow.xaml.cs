@@ -619,7 +619,7 @@ namespace Outopos.Windows
                     count++;
                 }
 
-                Settings.Instance.Global_Limit = (sum / count);
+                Trust.SetLimit(sum / count);
             }
 
             _outoposManager.SetSearchSignatures(searchSignatures);

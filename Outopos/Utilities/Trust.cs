@@ -9,6 +9,7 @@ namespace Outopos
     static class Trust
     {
         private static LockedHashSet<string> _trustSignatures = new LockedHashSet<string>();
+        private static int _limit;
 
         public static bool ContainSignature(string signature)
         {
@@ -33,6 +34,16 @@ namespace Outopos
                 _trustSignatures.Clear();
                 _trustSignatures.UnionWith(signatures);
             }
+        }
+
+        public static int GetLimit()
+        {
+            return _limit;
+        }
+
+        public static void SetLimit(int limit)
+        {
+            _limit = limit;
         }
     }
 }

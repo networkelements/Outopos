@@ -26,7 +26,6 @@ namespace Outopos.Properties
                 new Library.Configuration.SettingContent<LockedList<string>>() { Name = "Global_TrustSignatures", Value = new LockedList<string>() },
                 new Library.Configuration.SettingContent<ProfileItem>() { Name = "Global_ProfileItem", Value = null },
                 new Library.Configuration.SettingContent<LockedHashDictionary<string, Profile>>() { Name = "Global_Profiles", Value = new LockedHashDictionary<string, Profile>() },
-                new Library.Configuration.SettingContent<int>() { Name = "Global_Limit", Value = 0 },
                 new Library.Configuration.SettingContent<LockedList<DigitalSignature>>() { Name = "Global_DigitalSignatureCollection", Value = new LockedList<DigitalSignature>() },
                 new Library.Configuration.SettingContent<LockedHashSet<string>>() { Name = "Global_UrlHistorys", Value = new LockedHashSet<string>() },
                 new Library.Configuration.SettingContent<LockedHashSet<Wiki>>() { Name = "Global_WikiHistorys", Value = new LockedHashSet<Wiki>() },
@@ -190,24 +189,6 @@ namespace Outopos.Properties
                 lock (this.ThisLock)
                 {
                     this["Global_Profiles"] = value;
-                }
-            }
-        }
-
-        public int Global_Limit
-        {
-            get
-            {
-                lock (this.ThisLock)
-                {
-                    return (int)this["Global_Limit"];
-                }
-            }
-            set
-            {
-                lock (this.ThisLock)
-                {
-                    this["Global_Limit"] = value;
                 }
             }
         }

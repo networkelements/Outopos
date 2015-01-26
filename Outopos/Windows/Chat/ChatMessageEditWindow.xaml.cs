@@ -123,7 +123,7 @@ namespace Outopos.Windows
         {
             int limit;
 
-            if (!_isTrust) limit = (Settings.Instance.Global_Limit + 1);
+            if (!_isTrust) limit = (Trust.GetLimit() + 1);
             else limit = 0;
 
             _outoposManager.UploadChatMessage(_chat, _commentTextBox.Text, _anchors, limit, new TimeSpan(0, 30, 0), _digitalSignature);
