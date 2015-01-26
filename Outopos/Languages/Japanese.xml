@@ -12,7 +12,7 @@
   <Translate Key="Languages_Ukrainian" Value="ウクライナ語 (Ukrainian)" />
   <Translate Key="Languages_Russian" Value="ロシア語 (Russian)" />
 
-  <Translate Key="Tag_Name" Value="Name" />
+  <Translate Key="Tag_Name" Value="名前" />
   <Translate Key="Tag_Id" Value="ID" />
 
   <Translate Key="Seed_Name" Value="名前" />
