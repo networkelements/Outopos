@@ -101,7 +101,7 @@
   <Translate Key="MailControl_Message" Value="新規メール作成" />
 
   <Translate Key="ProfileWindow_Title" Value="プロファイル編集" />
-  <Translate Key="ProfileWindow_YourSignature" Value="あなたのサイン" />
+  <Translate Key="ProfileWindow_YourSignature" Value="編集するサイン" />
   <Translate Key="ProfileWindow_Trust" Value="トラストリスト" />
   <Translate Key="ProfileWindow_Signature" Value="サイン" />
   <Translate Key="ProfileWindow_Chat" Value="チャット" />
