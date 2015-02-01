@@ -56,7 +56,7 @@
   <Translate Key="ChatControl_Copy" Value="コピー" />
   <Translate Key="ChatControl_CopyInfo" Value="コピー (詳細情報)" />
   <Translate Key="ChatControl_Paste" Value="貼り付け" />
-  <Translate Key="ChatControl_ChatList" Value="チャンネルリスト" />
+  <Translate Key="ChatControl_ChatList" Value="チャットリスト" />
   <Translate Key="ChatControl_Respons" Value="返信" />
   <Translate Key="ChatControl_Trust_On" Value="トラスト有効" />
   <Translate Key="ChatControl_Trust_Off" Value="トラスト無効" />
@@ -81,8 +81,8 @@
   <Translate Key="ChatMessageEditWindow_Ok" Value="送信" />
   <Translate Key="ChatMessageEditWindow_Cancel" Value="キャンセル" />
 
-  <Translate Key="ChatListWindow_Title" Value="チャンネルリスト" />
-  <Translate Key="ChatListWindow_Name" Value="チャンネル名" />
+  <Translate Key="ChatListWindow_Title" Value="チャットリスト" />
+  <Translate Key="ChatListWindow_Name" Value="チャット名" />
   <Translate Key="ChatListWindow_Id" Value="ID" />
   <Translate Key="ChatListWindow_Copy" Value="IDコピー" />
   <Translate Key="ChatListWindow_CopyInfo" Value="(ID+情報)コピー" />
@@ -90,8 +90,8 @@
   <Translate Key="ChatListWindow_Close" Value="閉じる" />
 
   <Translate Key="MailControl_NewCategory" Value="新規項目作成" />
-  <Translate Key="MailControl_Edit" Value="編集" />
-  <Translate Key="MailControl_Delete" Value="削除" />
+  <Translate Key="MailControl_Edit" Value="名前の変更" />
+  <Translate Key="MailControl_Delete" Value="項目を削除" />
   <Translate Key="MailControl_Cut" Value="切り取り" />
   <Translate Key="MailControl_Copy" Value="コピー" />
   <Translate Key="MailControl_CopyInfo" Value="コピー(詳細)" />
