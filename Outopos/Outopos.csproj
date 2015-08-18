@@ -140,6 +140,7 @@
     <Compile Include="Windows\Trust\TrustControl.xaml.cs">
       <DependentUpon>TrustControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\_Controls\ComboBoxEx.cs" />
     <Compile Include="Windows\_Controls\ListBoxEx.cs" />
     <Compile Include="Windows\_Controls\ChatCategorizeTreeViewItem.cs" />
     <Compile Include="Windows\_Controls\ChatTreeViewItem.cs" />

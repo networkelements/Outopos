@@ -1163,7 +1163,6 @@ namespace Outopos.Windows
                     this.Refresh_Profiles();
                 }
 
-
                 {
                     RichTextBoxHelper.WikiClickEvent += this.WikiClickEvent;
 
