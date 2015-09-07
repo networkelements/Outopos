@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Configuration>
+
+  <Translate Key="FontFamily" Value="Gulim" />
+  <Translate Key="FontSize" Value="12" />
+  <Translate Key="DateTime_StringFormat" Value="yyyy/MM/dd HH:mm:ss" />
+
+  <Translate Key="Languages_English" Value="영어" />
+  <Translate Key="Languages_Japanese" Value="일본어" />
+  <Translate Key="Languages_Chinese_Traditional" Value="중국어(번체)" />
+  <Translate Key="Languages_Chinese_Simplified" Value="중국어(간체)" />
+  <Translate Key="Languages_Ukrainian" Value="우크라이나어" />
+  <Translate Key="Languages_Russian" Value="러시아어" />
+
+  <Translate Key="Tag_Name" Value="이름" />
+  <Translate Key="Tag_Id" Value="ID" />
+
+  <Translate Key="Seed_Name" Value="이름" />
+  <Translate Key="Seed_Signature" Value="서명" />
+  <Translate Key="Seed_Length" Value="크기" />
+  <Translate Key="Seed_Keywords" Value="키워드" />
+  <Translate Key="Seed_CreationTime" Value="만든 날짜" />
+  <Translate Key="Seed_Comment" Value="코멘트" />
+
+  <Translate Key="MainWindow_World" Value="World" />
+  <Translate Key="MainWindow_Wiki" Value="위키" />
+  <Translate Key="MainWindow_Chat" Value="채팅" />
+  <Translate Key="MainWindow_Mail" Value="메일" />
+  <Translate Key="MainWindow_Trust" Value="Trust" />
+  <Translate Key="MainWindow_Profile" Value="프로필" />
+  <Translate Key="MainWindow_Options" Value="옵션" />
+  <Translate Key="MainWindow_SendingSpeed" Value="전송:" />
+  <Translate Key="MainWindow_ReceivingSpeed" Value="수신:" />
+  <Translate Key="MainWindow_DiskSpaceNotFound_Message" Value="디스크에 여유공간이 없습니다." />
+  <Translate Key="MainWindow_CacheSpaceNotFound_Message" Value="캐쉬에 여유공간이 없습니다." />
+  <Translate Key="MainWindow_CheckUpdate_Message" Value="&quot;{0}&quot; 업데이트 하시겠습니까?" />
+  <Translate Key="MainWindow_LatestVersion_Message" Value="이것은 최신 버전입니다." />
+  <Translate Key="MainWindow_Restart_Message" Value="업데이트가 완료되었습니다. 다시 시작하십시오." />
+  <Translate Key="MainWindow_Close_Message" Value="종료 하시겠습니까?" />
+  <Translate Key="MainWindow_Delete_Message" Value="정말로 삭제 하시겠습니까?" />
+
+  <Translate Key="TrustControl_Trust" Value="Trust" />
+  <Translate Key="TrustControl_Chat" Value="채팅" />
+  <Translate Key="TrustControl_Wiki" Value="위키" />
+  <Translate Key="TrustControl_Signature" Value="서명" />
+  <Translate Key="TrustControl_Value" Value="값" />
+  <Translate Key="TrustControl_Copy" Value="복사" />
+
+  <Translate Key="ChatControl_NewMessage" Value="새 메세지" />
+  <Translate Key="ChatControl_ReplyMessage" Value="답장 메세지" />
+  <Translate Key="ChatControl_Trust" Value="Trust" />
+  <Translate Key="ChatControl_NewCategory" Value="새 카테고리" />
+  <Translate Key="ChatControl_Edit" Value="편집" />
+  <Translate Key="ChatControl_Delete" Value="삭제" />
+  <Translate Key="ChatControl_Cut" Value="잘라내기" />
+  <Translate Key="ChatControl_Copy" Value="복사" />
+  <Translate Key="ChatControl_CopyInfo" Value="복사(상세 정보)" />
+  <Translate Key="ChatControl_Paste" Value="붙여넣기" />
+  <Translate Key="ChatControl_ChatList" Value="채팅 목록" />
+  <Translate Key="ChatControl_Respons" Value="회신" />
+  <Translate Key="ChatControl_Trust_On" Value="트러스트 유효" />
+  <Translate Key="ChatControl_Trust_Off" Value="트로스트 무효" />
+  <Translate Key="ChatControl_Lock" Value="잠금" />
+  <Translate Key="ChatControl_LockThis" Value="이 메세지 잠금" />
+  <Translate Key="ChatControl_UnlockThis" Value="이 메세지 잠금 해제" />
+  <Translate Key="ChatControl_LockAll" Value="모든 메세지 잠금" />
+  <Translate Key="ChatControl_UnlockAll" Value="모든 메세지 잠금 해제" />
+  <Translate Key="ChatControl_Filter" Value="필터" />
+  <Translate Key="ChatControl_FilterWord" Value="단어 필터" />
+  <Translate Key="ChatControl_FilterSignature" Value="서명 필터" />
+  <Translate Key="ChatControl_MarkAllMessagesRead" Value="모든 메세지를 읽은 상태로 표시" />
+  <Translate Key="ChatControl_MarkAllMessagesRead_Message" Value="모든 메세지를 읽은 상태로 표시하시겠습니까?" />
+  <Translate Key="ChatControl_ImportLockedMessages" Value="잠긴 메세지 가져오기" />
+  <Translate Key="ChatControl_ExportLockedMessages" Value="잠긴 메세지 내보내기" />
+  <Translate Key="ChatControl_Preview" Value="미리보기" />
+
+  <Translate Key="ChatMessageEditWindow_Title" Value="새 메세지" />
+  <Translate Key="ChatMessageEditWindow_Edit" Value="편집" />
+  <Translate Key="ChatMessageEditWindow_Preview" Value="미리보기" />
+  <Translate Key="ChatMessageEditWindow_Comment" Value="코멘트" />
+  <Translate Key="ChatMessageEditWindow_Ok" Value="확인" />
+  <Translate Key="ChatMessageEditWindow_Cancel" Value="취소" />
+
+  <Translate Key="ChatListWindow_Title" Value="채팅 목록" />
+  <Translate Key="ChatListWindow_Name" Value="이름" />
+  <Translate Key="ChatListWindow_Id" Value="ID" />
+  <Translate Key="ChatListWindow_Copy" Value="복사" />
+  <Translate Key="ChatListWindow_CopyInfo" Value="복사(상세 정보)" />
+  <Translate Key="ChatListWindow_Join" Value="조인" />
+  <Translate Key="ChatListWindow_Close" Value="닫기" />
+
+  <Translate Key="MailControl_NewCategory" Value="새 카데고리" />
+  <Translate Key="MailControl_Edit" Value="편집" />
+  <Translate Key="MailControl_Delete" Value="삭제" />
+  <Translate Key="MailControl_Cut" Value="잘라내기" />
+  <Translate Key="MailControl_Copy" Value="복사" />
+  <Translate Key="MailControl_CopyInfo" Value="복사(상세 정보)" />
+  <Translate Key="MailControl_Paste" Value="붙여넣기" />
+  <Translate Key="MailControl_SignatureList" Value="서명 목록" />
+  <Translate Key="MailControl_Respons" Value="피드백" />
+  <Translate Key="MailControl_Message" Value="메세지" />
+
+  <Translate Key="ProfileWindow_Title" Value="프로필 옵션" />
+  <Translate Key="ProfileWindow_YourSignature" Value="본인 서명" />
+  <Translate Key="ProfileWindow_Trust" Value="Trust" />
+  <Translate Key="ProfileWindow_Signature" Value="서명" />
+  <Translate Key="ProfileWindow_Chat" Value="채팅" />
+  <Translate Key="ProfileWindow_Wiki" Value="위키" />
+  <Translate Key="ProfileWindow_Value" Value="값" />
+  <Translate Key="ProfileWindow_Up" Value="위" />
+  <Translate Key="ProfileWindow_Down" Value="아래" />
+  <Translate Key="ProfileWindow_Add" Value="추가" />
+  <Translate Key="ProfileWindow_New" Value="새것" />
+  <Translate Key="ProfileWindow_Edit" Value="편집" />
+  <Translate Key="ProfileWindow_Delete" Value="삭제" />
+  <Translate Key="ProfileWindow_Cut" Value="잘라내기" />
+  <Translate Key="ProfileWindow_Copy" Value="복사" />
+  <Translate Key="ProfileWindow_Paste" Value="붙여넣기" />
+  <Translate Key="ProfileWindow_Ok" Value="확인" />
+  <Translate Key="ProfileWindow_Cancel" Value="취소" />
+
+  <Translate Key="TrustWindow_Title" Value="Trust 옵션" />
+  <Translate Key="TrustWindow_Signature" Value="서명" />
+  <Translate Key="TrustWindow_Delete" Value="삭제" />
+  <Translate Key="TrustWindow_Cut" Value="잘라내기" />
+  <Translate Key="TrustWindow_Copy" Value="복사" />
+  <Translate Key="TrustWindow_Paste" Value="봍여넣기" />
+  <Translate Key="TrustWindow_Ok" Value="확인" />
+  <Translate Key="TrustWindow_Cancel" Value="취소" />
+
+  <Translate Key="OptionsWindow_Title" Value="옵션" />
+  <Translate Key="OptionsWindow_Core" Value="코어" />
+  <Translate Key="OptionsWindow_BaseNode" Value="베이스 노드" />
+  <Translate Key="OptionsWindow_Node" Value="노드" />
+  <Translate Key="OptionsWindow_Uris" Value="Uris" />
+  <Translate Key="OptionsWindow_Uri" Value="Uri" />
+  <Translate Key="OptionsWindow_OtherNodes" Value="다른 노드" />
+  <Translate Key="OptionsWindow_Nodes" Value="노드" />
+  <Translate Key="OptionsWindow_Client" Value="클라이언트" />
+  <Translate Key="OptionsWindow_Filters" Value="필터" />
+  <Translate Key="OptionsWindow_ConnectionType" Value="연결 방식" />
+  <Translate Key="OptionsWindow_ProxyUri" Value="프록시 uri" />
+  <Translate Key="OptionsWindow_UriCondition" Value="Uri 상태" />
+  <Translate Key="OptionsWindow_Option" Value="옵션" />
+  <Translate Key="OptionsWindow_Type" Value="방식" />
+  <Translate Key="OptionsWindow_Host" Value="호스트" />
+  <Translate Key="OptionsWindow_Server" Value="서버" />
+  <Translate Key="OptionsWindow_ListenUris" Value="수신 uris" />
+  <Translate Key="OptionsWindow_Data" Value="수신" />
+  <Translate Key="OptionsWindow_Bandwidth" Value="대역폭" />
+  <Translate Key="OptionsWindow_BandwidthLimit" Value="대역폭 제한 (*/s) [0 Byte: 무제한]" />
+  <Translate Key="OptionsWindow_Transfer" Value="전송" />
+  <Translate Key="OptionsWindow_TransferLimitType" Value="제한 방식" />
+  <Translate Key="OptionsWindow_TransferLimitSpan" Value="제한 기간 (일)" />
+  <Translate Key="OptionsWindow_TransferLimitSize" Value="제한 크기" />
+  <Translate Key="OptionsWindow_TransferInformation" Value="전송 정보" />
+  <Translate Key="OptionsWindow_Downloaded" Value="다운로드 됨" />
+  <Translate Key="OptionsWindow_Uploaded" Value="업로드 됨" />
+  <Translate Key="OptionsWindow_Total" Value="합계" />
+  <Translate Key="OptionsWindow_Reset" Value="리셋" />
+  <Translate Key="OptionsWindow_ConnectionCount" Value="연결 개수" />
+  <Translate Key="OptionsWindow_CacheSize" Value="캐쉬 크기" />
+  <Translate Key="OptionsWindow_Events" Value="이벤트" />
+  <Translate Key="OptionsWindow_Events_Connection" Value="연결" />
+  <Translate Key="OptionsWindow_Events_OpenPortAndGetIpAddress" Value="포트 개방 및 IP 주소 설정" />
+  <Translate Key="OptionsWindow_Events_UseI2p" Value="I2P 사용" />
+  <Translate Key="OptionsWindow_Events_UseI2p_SamBridgeUri" Value="Sam 브릿지 uri:" />
+  <Translate Key="OptionsWindow_Tor" Value="Tor" />
+  <Translate Key="OptionsWindow_Ipv4" Value="Ipv4" />
+  <Translate Key="OptionsWindow_Ipv6" Value="Ipv6" />
+  <Translate Key="OptionsWindow_View" Value="보기" />
+  <Translate Key="OptionsWindow_Languages" Value="언어" />
+  <Translate Key="OptionsWindow_UseLanguage" Value="언어 사용." />
+  <Translate Key="OptionsWindow_Update" Value="업데이트" />
+  <Translate Key="OptionsWindow_UpdateUrl" Value="업데이트 url" />
+  <Translate Key="OptionsWindow_Signature" Value="서명" />
+  <Translate Key="OptionsWindow_Signatures" Value="서명" />
+  <Translate Key="OptionsWindow_Amoeba" Value="아메바" />
+  <Translate Key="OptionsWindow_AmoebaPath" Value="아메바 경로" />
+  <Translate Key="OptionsWindow_Fonts" Value="글꼴" />
+  <Translate Key="OptionsWindow_MessageFontFamily" Value="메세지 폰트 패밀리" />
+  <Translate Key="OptionsWindow_MessageFontSize" Value="메세지 폰트 크기 (pt)" />
+  <Translate Key="OptionsWindow_UpdateOption" Value="업데이트 옵션" />
+  <Translate Key="OptionsWindow_None" Value="없음" />
+  <Translate Key="OptionsWindow_AutoCheck" Value="자동으로 확인" />
+  <Translate Key="OptionsWindow_AutoUpdate" Value="자동으로 업데이트" />
+  <Translate Key="OptionsWindow_Value" Value="값" />
+  <Translate Key="OptionsWindow_Import" Value="가져오기" />
+  <Translate Key="OptionsWindow_Export" Value="내보내기" />
+  <Translate Key="OptionsWindow_Up" Value="위" />
+  <Translate Key="OptionsWindow_Down" Value="아래" />
+  <Translate Key="OptionsWindow_Add" Value="추가" />
+  <Translate Key="OptionsWindow_Edit" Value="편집" />
+  <Translate Key="OptionsWindow_Delete" Value="삭제" />
+  <Translate Key="OptionsWindow_Ok" Value="확인" />
+  <Translate Key="OptionsWindow_Cancel" Value="취소" />
+  <Translate Key="OptionsWindow_Cut" Value="잘라내기" />
+  <Translate Key="OptionsWindow_Copy" Value="복사" />
+  <Translate Key="OptionsWindow_Paste" Value="붙여넣기" />
+  <Translate Key="OptionsWindow_CacheResize_Message" Value="캐쉬 조정시 중요블럭이 삭제 될수있습니다. 그래도 하시겠습니까?" />
+
+  <Translate Key="ConnectionType_None" Value="없음" />
+  <Translate Key="ConnectionType_Tcp" Value="Tcp" />
+  <Translate Key="ConnectionType_Socks4Proxy" Value="Socks4 프록시" />
+  <Translate Key="ConnectionType_Socks4aProxy" Value="Socks4a 프록시" />
+  <Translate Key="ConnectionType_Socks5Proxy" Value="Socks5 프록시" />
+  <Translate Key="ConnectionType_HttpProxy" Value="Http 프록시" />
+
+  <Translate Key="SignatureWindow_Title" Value="서명 설정" />
+  <Translate Key="SignatureWindow_Signature" Value="서명" />
+  <Translate Key="SignatureWindow_Ok" Value="확인" />
+  <Translate Key="SignatureWindow_Cancel" Value="취소" />
+
+  <Translate Key="NameWindow_Title" Value="이름설정" />
+  <Translate Key="NameWindow_Name" Value="이름" />
+  <Translate Key="NameWindow_Ok" Value="확인" />
+  <Translate Key="NameWindow_Cancel" Value="취소" />
+
+</Configuration>

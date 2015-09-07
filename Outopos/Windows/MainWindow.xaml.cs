@@ -1028,6 +1028,7 @@ namespace Outopos.Windows
                                 _outoposManager.UploadProfile(profileItem.Cost,
                                     profileItem.Exchange.GetExchangePublicKey(),
                                     profileItem.TrustSignatures,
+                                    profileItem.DeleteSignatures,
                                     profileItem.Wikis,
                                     profileItem.Chats,
                                     digitalSignature);
