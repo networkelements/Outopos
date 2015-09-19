@@ -25,7 +25,6 @@ namespace Outopos.Windows
     delegate void SeedClickEventHandler(object sender, A.Seed seed);
     delegate void LinkClickEventHandler(object sender, string link);
 
-    delegate ChatMessageWrapper GetAnchorChatMessageWrapperEventHandler(object sender, Anchor anchor);
     delegate double GetMaxHeightEventHandler(object sender);
 
     class RichTextBoxHelper : DependencyObject
@@ -35,7 +34,6 @@ namespace Outopos.Windows
         public static event SeedClickEventHandler SeedClickEvent;
         public static event LinkClickEventHandler LinkClickEvent;
 
-        public static GetAnchorChatMessageWrapperEventHandler GetAnchorChatMessageWrapperEvent;
         public static GetMaxHeightEventHandler GetMaxHeightEvent;
 
         private static Regex _urlRegex = new Regex(@"^(?<start>.*?)(?<url>http(s)?://(\S)+)(?<end>.*?)$", RegexOptions.Compiled | RegexOptions.Singleline);
@@ -90,12 +88,12 @@ namespace Outopos.Windows
             return stringBuilder.ToString().TrimEnd('\r', '\n');
         }
 
-        public static ChatMessageWrapper GetDocumentMessage(DependencyObject obj)
+        public static ChatMessageViewModel GetDocumentMessage(DependencyObject obj)
         {
-            return (ChatMessageWrapper)obj.GetValue(DocumentMessageProperty);
+            return (ChatMessageViewModel)obj.GetValue(DocumentMessageProperty);
         }
 
-        public static void SetDocumentMessage(DependencyObject obj, ChatMessageWrapper value)
+        public static void SetDocumentMessage(DependencyObject obj, ChatMessageViewModel value)
         {
             obj.SetValue(DocumentMessageProperty, value);
         }
@@ -117,9 +115,9 @@ namespace Outopos.Windows
                     {
                         var richTextBox = (RichTextBoxEx)obj;
 
-                        if (e.NewValue is ChatMessageWrapper)
+                        if (e.NewValue is ChatMessageViewModel)
                         {
-                            var chatMessageWrapper = e.NewValue as ChatMessageWrapper;
+                            var chatMessageWrapper = e.NewValue as ChatMessageViewModel;
                             if (chatMessageWrapper == null) return;
 
                             RichTextBoxHelper.SetRichTextBox(richTextBox, chatMessageWrapper.ChatMessage, chatMessageWrapper.IsTrust);
@@ -578,19 +576,6 @@ namespace Outopos.Windows
             get
             {
                 return true;
-            }
-        }
-    }
-
-    class RichTextBoxEx : RichTextBox
-    {
-        private List<RichTextBoxEx> _children = new List<RichTextBoxEx>();
-
-        public List<RichTextBoxEx> Children
-        {
-            get
-            {
-                return _children;
             }
         }
     }

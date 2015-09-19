@@ -9,6 +9,7 @@
   <Translate Key="Languages_Japanese" Value="일본어" />
   <Translate Key="Languages_Chinese_Traditional" Value="중국어(번체)" />
   <Translate Key="Languages_Chinese_Simplified" Value="중국어(간체)" />
+  <Translate Key="Languages_Korean" Value="한국어" />
   <Translate Key="Languages_Ukrainian" Value="우크라이나어" />
   <Translate Key="Languages_Russian" Value="러시아어" />
 

@@ -51,7 +51,7 @@ namespace Outopos.Windows
         private AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
 
         private ChatCategorizeTreeViewItem _treeViewItem;
-        private ObservableCollection<ChatMessageWrapper> _listBoxItemCollection = new ObservableCollection<ChatMessageWrapper>();
+        private ObservableCollection<ChatMessageViewModel> _listBoxItemCollection = new ObservableCollection<ChatMessageViewModel>();
 
         private const HashAlgorithm _hashAlgorithm = HashAlgorithm.Sha256;
 
@@ -160,7 +160,7 @@ namespace Outopos.Windows
             parentTreeViewItem.Update();
         }
 
-        private ChatMessageWrapper GetAnchorChatMessageWrapperEvent(object sender, Anchor anchor)
+        private ChatMessageViewModel GetAnchorChatMessageWrapperEvent(object sender, Anchor anchor)
         {
             var selectTreeViewItem = _treeView.SelectedItem as ChatTreeViewItem;
             if (selectTreeViewItem == null) return null;
@@ -170,7 +170,7 @@ namespace Outopos.Windows
                 var pair = selectTreeViewItem.Value.ChatMessages
                     .First(n => n.Key.VerifyHash(anchor.Hash, anchor.HashAlgorithm));
 
-                return new ChatMessageWrapper(pair.Key, pair.Value, Trust.ContainSignature(pair.Key.Certificate.ToString()));
+                return new ChatMessageViewModel(pair.Key, pair.Value, Trust.ContainSignature(pair.Key.Certificate.ToString()));
             }
             catch (Exception)
             {
@@ -218,12 +218,12 @@ namespace Outopos.Windows
                     {
                         ChatTreeViewItem chatTreeViewItem = (ChatTreeViewItem)tempTreeViewItem;
 
-                        var newList = new HashSet<ChatMessageWrapper>();
+                        var newList = new HashSet<ChatMessageViewModel>();
 
                         lock (chatTreeViewItem.Value.ThisLock)
                         {
                             newList.UnionWith(chatTreeViewItem.Value.ChatMessages
-                                .Select(n => new ChatMessageWrapper(n.Key, n.Value, Trust.ContainSignature(n.Key.Certificate.ToString()))));
+                                .Select(n => new ChatMessageViewModel(n.Key, n.Value, Trust.ContainSignature(n.Key.Certificate.ToString()))));
 
                             foreach (var pair in chatTreeViewItem.Value.ChatMessages.ToArray())
                             {
@@ -231,15 +231,15 @@ namespace Outopos.Windows
                             }
                         }
 
-                        var oldList = new HashSet<ChatMessageWrapper>();
+                        var oldList = new HashSet<ChatMessageViewModel>();
 
                         this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
                         {
                             oldList.UnionWith(_listBoxItemCollection.ToArray());
                         }));
 
-                        var removeList = new List<ChatMessageWrapper>();
-                        var addList = new List<ChatMessageWrapper>();
+                        var removeList = new List<ChatMessageViewModel>();
+                        var addList = new List<ChatMessageViewModel>();
 
                         foreach (var item in oldList)
                         {
@@ -1037,7 +1037,7 @@ namespace Outopos.Windows
             var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == Settings.Instance.Global_ProfileItem.UploadSignature);
             if (digitalSignature == null) return;
 
-            var anchors = _listBox.SelectedItems.OfType<ChatMessageWrapper>().Select(n => new Anchor(n.ChatMessage.CreateHash(_hashAlgorithm), _hashAlgorithm)).ToList();
+            var anchors = _listBox.SelectedItems.OfType<ChatMessageViewModel>().Select(n => new Anchor(n.ChatMessage.CreateHash(_hashAlgorithm), _hashAlgorithm)).ToList();
 
             ChatMessageEditWindow window = new ChatMessageEditWindow(
                 selectTreeViewItem.Value.Tag,
@@ -1106,7 +1106,7 @@ namespace Outopos.Windows
                     var index = _listBox.GetCurrentIndex(e.GetPosition);
                     if (index == -1) return;
 
-                    var listViewItemCollection = CollectionViewSource.GetDefaultView(_listBox.ItemsSource).Cast<ChatMessageWrapper>().ToArray();
+                    var listViewItemCollection = CollectionViewSource.GetDefaultView(_listBox.ItemsSource).Cast<ChatMessageViewModel>().ToArray();
                     var selectItem = listViewItemCollection[index];
 
                     if (_listBox.SelectedItems.Contains(selectItem))
@@ -1123,7 +1123,7 @@ namespace Outopos.Windows
                     var index = _listBox.GetCurrentIndex(e.GetPosition);
                     if (index == -1) return;
 
-                    var listViewItemCollection = CollectionViewSource.GetDefaultView(_listBox.ItemsSource).Cast<ChatMessageWrapper>().ToArray();
+                    var listViewItemCollection = CollectionViewSource.GetDefaultView(_listBox.ItemsSource).Cast<ChatMessageViewModel>().ToArray();
                     var selectItem = listViewItemCollection[index];
 
                     if (_listBox.SelectedItems.Count != 1 || !_listBox.SelectedItems.Contains(selectItem))
@@ -1138,7 +1138,7 @@ namespace Outopos.Windows
                 var index = _listBox.GetCurrentIndex(e.GetPosition);
                 if (index == -1) return;
 
-                var listViewItemCollection = CollectionViewSource.GetDefaultView(_listBox.ItemsSource).Cast<ChatMessageWrapper>().ToArray();
+                var listViewItemCollection = CollectionViewSource.GetDefaultView(_listBox.ItemsSource).Cast<ChatMessageViewModel>().ToArray();
                 var selectItem = listViewItemCollection[index];
 
                 if (!_listBox.SelectedItems.Contains(selectItem))
@@ -1206,7 +1206,7 @@ namespace Outopos.Windows
             var richTextBox = sender as RichTextBoxEx;
             if (richTextBox == null) return;
 
-            var selectItem = _listBox.SelectedItem as ChatMessageWrapper;
+            var selectItem = _listBox.SelectedItem as ChatMessageViewModel;
             if (selectItem == null) return;
 
             var list = new List<MenuItem>();
@@ -1272,7 +1272,7 @@ namespace Outopos.Windows
             var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == Settings.Instance.Global_ProfileItem.UploadSignature);
             if (digitalSignature == null) return;
 
-            var anchors = _listBox.SelectedItems.OfType<ChatMessageWrapper>().Select(n => new Anchor(n.ChatMessage.CreateHash(_hashAlgorithm), _hashAlgorithm)).ToList();
+            var anchors = _listBox.SelectedItems.OfType<ChatMessageViewModel>().Select(n => new Anchor(n.ChatMessage.CreateHash(_hashAlgorithm), _hashAlgorithm)).ToList();
 
             ChatMessageEditWindow window = new ChatMessageEditWindow(
                 selectTreeViewItem.Value.Tag,
@@ -1289,7 +1289,7 @@ namespace Outopos.Windows
 
         private void _richTextBoxTrustMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var item in _listBox.SelectedItems.OfType<ChatMessageWrapper>())
+            foreach (var item in _listBox.SelectedItems.OfType<ChatMessageViewModel>())
             {
                 var signature = item.ChatMessage.Certificate.ToString();
 
@@ -1361,9 +1361,9 @@ namespace Outopos.Windows
         }
     }
 
-    class ChatMessageWrapper : IEquatable<ChatMessageWrapper>
+    class ChatMessageViewModel : IEquatable<ChatMessageViewModel>
     {
-        public ChatMessageWrapper(ChatMessage chatMessage, ChatMessageState state, bool isTrust)
+        public ChatMessageViewModel(ChatMessage chatMessage, ChatMessageState state, bool isTrust)
         {
             this.ChatMessage = chatMessage;
             this.State = state;
@@ -1382,12 +1382,12 @@ namespace Outopos.Windows
 
         public override bool Equals(object obj)
         {
-            if ((object)obj == null || !(obj is ChatMessageWrapper)) return false;
+            if ((object)obj == null || !(obj is ChatMessageViewModel)) return false;
 
-            return this.Equals((ChatMessageWrapper)obj);
+            return this.Equals((ChatMessageViewModel)obj);
         }
 
-        public bool Equals(ChatMessageWrapper other)
+        public bool Equals(ChatMessageViewModel other)
         {
             if ((object)other == null) return false;
             if (object.ReferenceEquals(this, other)) return true;

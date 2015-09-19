@@ -484,7 +484,7 @@ namespace Outopos.Windows
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            var wrapper = values[0] as ChatMessageWrapper;
+            var wrapper = values[0] as ChatMessageViewModel;
             if (wrapper == null) return null;
 
             var isSelect = values[1] as bool?;

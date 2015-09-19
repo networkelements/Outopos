@@ -9,9 +9,9 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Outopos")]
-[assembly: AssemblyCopyright("Copyright © Lyrise 2012-2014")]
+[assembly: AssemblyCopyright("Copyright © Lyrise 2012-2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: ThemeInfo(ResourceDictionaryLocation.None, ResourceDictionaryLocation.SourceAssembly)]
-[assembly: AssemblyVersion("0.0.0.3763")] // LngMpEwx11r+86UBHGKoennezPvieHEv1UrGhHiyfQI=
+[assembly: AssemblyVersion("0.0.0.3764")] // EV9kgqZInNUIfh36jRqPBXorqCCzB2vAWEkW2Ges/6M=
