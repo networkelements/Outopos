@@ -1384,7 +1384,7 @@ namespace Outopos.Windows
 
                                 if (Settings.Instance.Global_Update_Option != UpdateOption.AutoUpdate)
                                 {
-                                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
+                                    this.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
                                     {
                                         if (MessageBox.Show(
                                             this,
@@ -1420,7 +1420,7 @@ namespace Outopos.Windows
                                         File.Move(path, Path.Combine(App.DirectoryPaths["Update"], Path.GetFileName(path)));
                                     }
 
-                                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
+                                    this.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
                                     {
                                         MessageBox.Show(
                                             this,

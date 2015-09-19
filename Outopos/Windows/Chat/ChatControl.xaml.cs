@@ -194,14 +194,14 @@ namespace Outopos.Windows
 
                     TreeViewItem tempTreeViewItem = null;
 
-                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
+                    this.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
                     {
                         tempTreeViewItem = (TreeViewItem)_treeView.SelectedItem;
                     }));
 
                     if (tempTreeViewItem is ChatCategorizeTreeViewItem)
                     {
-                        this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
+                        this.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
                         {
                             if (tempTreeViewItem != _treeView.SelectedItem) return;
                             _refresh = false;
@@ -233,7 +233,7 @@ namespace Outopos.Windows
 
                         var oldList = new HashSet<ChatMessageViewModel>();
 
-                        this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
+                        this.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
                         {
                             oldList.UnionWith(_listBoxItemCollection.ToArray());
                         }));
@@ -251,7 +251,7 @@ namespace Outopos.Windows
                             if (!oldList.Contains(item)) addList.Add(item);
                         }
 
-                        this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
+                        this.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
                         {
                             if (chatTreeViewItem != _treeView.SelectedItem) return;
                             _refresh = false;
@@ -318,7 +318,7 @@ namespace Outopos.Windows
                 {
                     var chatTreeViewItems = new List<ChatTreeViewItem>();
 
-                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
+                    this.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
                     {
                         var categorizeChatTreeViewItems = new List<ChatCategorizeTreeViewItem>();
                         categorizeChatTreeViewItems.Add(_treeViewItem);
@@ -370,14 +370,14 @@ namespace Outopos.Windows
 
                         if (isUpdate)
                         {
-                            this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
+                            this.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
                             {
                                 treeViewItem.Update();
                             }));
                         }
                     }
 
-                    this.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() =>
+                    this.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
                     {
                         if (_cacheUpdate)
                         {
