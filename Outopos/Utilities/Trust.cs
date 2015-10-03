@@ -19,14 +19,6 @@ namespace Outopos
             }
         }
 
-        public static IEnumerable<string> GetSignatures()
-        {
-            lock (_trustSignatures.ThisLock)
-            {
-                return _trustSignatures.ToList();
-            }
-        }
-
         public static void SetSignatures(IEnumerable<string> signatures)
         {
             lock (_trustSignatures.ThisLock)

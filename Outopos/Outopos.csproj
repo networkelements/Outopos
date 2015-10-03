@@ -137,14 +137,13 @@
     <Compile Include="Windows\TrustWindow.xaml.cs">
       <DependentUpon>TrustWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\Trust\TrustControl.xaml.cs">
-      <DependentUpon>TrustControl.xaml</DependentUpon>
+    <Compile Include="Windows\World\WorldControl.xaml.cs">
+      <DependentUpon>WorldControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\_Controls\ComboBoxEx.cs" />
     <Compile Include="Windows\_Controls\ListBoxEx.cs" />
     <Compile Include="Windows\_Controls\ChatCategorizeTreeViewItem.cs" />
     <Compile Include="Windows\_Controls\ChatTreeViewItem.cs" />
-    <Compile Include="Windows\_Controls\RichTextBoxHelper.cs" />
     <Compile Include="Windows\_Items\ChatCategorizeTreeItem.cs" />
     <Compile Include="Windows\_Items\ChatTreeItem.cs" />
     <Compile Include="Windows\_Items\ConnectionState.cs" />
@@ -207,7 +206,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\Trust\TrustControl.xaml">
+    <Page Include="Windows\World\WorldControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

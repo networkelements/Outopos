@@ -47,11 +47,10 @@ namespace Outopos.Windows
 
     enum MainWindowTabType
     {
-        Connection,
-        Chat,
+        World,
         Wiki,
+        Chat,
         Mail,
-        Log,
     }
 
     /// <summary>
@@ -76,7 +75,6 @@ namespace Outopos.Windows
         private volatile bool _closed = false;
 
         private Thread _timerThread;
-        private Thread _watchThread;
         private Thread _statusBarThread;
         private Thread _trafficMonitorThread;
 
@@ -180,18 +178,6 @@ namespace Outopos.Windows
                     _mailRadioButton.Content = new Image() { Source = bitmap, Height = 32, Width = 32 };
                 }
 
-                // Trust
-                {
-                    var bitmap = new BitmapImage();
-
-                    bitmap.BeginInit();
-                    bitmap.StreamSource = new FileStream(Path.Combine(App.DirectoryPaths["Icons"], @"Tabs\Trust.png"), FileMode.Open, FileAccess.Read, FileShare.Read);
-                    bitmap.EndInit();
-                    if (bitmap.CanFreeze) bitmap.Freeze();
-
-                    _trustButton.Content = new Image() { Source = bitmap, Height = 32, Width = 32 };
-                }
-
                 // Profile
                 {
                     var bitmap = new BitmapImage();
@@ -245,11 +231,6 @@ namespace Outopos.Windows
                 _timerThread.Priority = ThreadPriority.Lowest;
                 _timerThread.Name = "MainWindow_TimerThread";
                 _timerThread.Start();
-
-                _watchThread = new Thread(this.WatchThread);
-                _watchThread.Priority = ThreadPriority.Lowest;
-                _watchThread.Name = "MainWindow_WatchThread";
-                _watchThread.Start();
 
                 _statusBarThread = new Thread(this.StatusBarThread);
                 _statusBarThread.Priority = ThreadPriority.Highest;
@@ -522,111 +503,6 @@ namespace Outopos.Windows
             }
         }
 
-        private void WatchThread()
-        {
-            try
-            {
-                Stopwatch stopwatch = new Stopwatch();
-
-                for (; ; )
-                {
-                    Thread.Sleep(1000);
-                    if (_closed) return;
-
-                    if (!stopwatch.IsRunning || stopwatch.Elapsed.TotalSeconds >= 120)
-                    {
-                        stopwatch.Restart();
-
-                        this.Refresh_Profiles();
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Log.Error(e);
-            }
-        }
-
-        private void Refresh_Profiles()
-        {
-            var higherProfiles = new List<Profile>();
-            var generalProfiles = new List<Profile>();
-            var searchSignatures = new SignatureCollection();
-
-            foreach (var leaderSignature in Settings.Instance.Global_TrustSignatures.ToArray())
-            {
-                var tempList = new List<Profile>();
-
-                var checkedSignature = new HashSet<string>();
-
-                {
-                    searchSignatures.Add(leaderSignature);
-
-                    var leaderProfile = _outoposManager.GetProfile(leaderSignature);
-                    if (leaderProfile == null && !Settings.Instance.Global_Profiles.TryGetValue(leaderSignature, out leaderProfile)) continue;
-
-                    tempList.Add(leaderProfile);
-                    checkedSignature.Add(leaderProfile.Certificate.ToString());
-                }
-
-                for (int i = 0; i < tempList.Count; i++)
-                {
-                    foreach (var trustSignature in tempList[i].TrustSignatures)
-                    {
-                        if (checkedSignature.Contains(trustSignature)) continue;
-
-                        searchSignatures.Add(trustSignature);
-
-                        var tempProfile = _outoposManager.GetProfile(trustSignature);
-                        if (tempProfile == null && !Settings.Instance.Global_Profiles.TryGetValue(trustSignature, out tempProfile)) continue;
-
-                        tempList.Add(tempProfile);
-                        checkedSignature.Add(tempProfile.Certificate.ToString());
-
-                        if (tempList.Count > 1024 * 32) goto End;
-                    }
-                }
-
-            End: ;
-
-                higherProfiles.AddRange(tempList.Take(32));
-                generalProfiles.AddRange(tempList);
-            }
-
-            lock (Settings.Instance.ThisLock)
-            {
-                lock (Settings.Instance.Global_Profiles.ThisLock)
-                {
-                    Settings.Instance.Global_Profiles.Clear();
-
-                    foreach (var profile in generalProfiles)
-                    {
-                        Settings.Instance.Global_Profiles.Add(profile.Certificate.ToString(), profile);
-                    }
-                }
-            }
-
-            if (higherProfiles.Count > 0)
-            {
-                int sum = 0;
-                int count = 0;
-
-                foreach (var profile in higherProfiles)
-                {
-                    if (profile.Cost == 0) continue;
-
-                    sum += profile.Cost;
-                    count++;
-                }
-
-                Trust.SetLimit(sum / count);
-            }
-
-            _outoposManager.SetSearchSignatures(searchSignatures);
-
-            Trust.SetSignatures(searchSignatures);
-        }
-
         private void StatusBarThread()
         {
             try
@@ -825,7 +701,15 @@ namespace Outopos.Windows
                         case 2:
                             osName = "Windows 8";
                             break;
+
+                        case 3:
+                            osName = "Windows 8.1";
+                            break;
                     }
+                }
+                else if (osInfo.Version.Major == 10)
+                {
+                    osName = "Windows 10";
                 }
             }
             else if (osInfo.Platform == PlatformID.WinCE)
@@ -1122,119 +1006,7 @@ namespace Outopos.Windows
                         Log.Warning(e2);
                     }
                 }
-
-                // コストを算出する。
-                {
-                    var profileItem = Settings.Instance.Global_ProfileItem;
-
-                    if (profileItem.Cost == 0)
-                    {
-                        ThreadPool.QueueUserWorkItem((object wstate) =>
-                        {
-                            Thread.CurrentThread.IsBackground = true;
-
-                            try
-                            {
-                                profileItem.Cost = Miner.Sample(new TimeSpan(0, 3, 0));
-
-                                {
-                                    var digitalSignature = Settings.Instance.Global_DigitalSignatureCollection.FirstOrDefault(n => n.ToString() == profileItem.UploadSignature);
-
-                                    if (digitalSignature != null)
-                                    {
-                                        _outoposManager.UploadProfile(
-                                            profileItem.Cost,
-                                            profileItem.Exchange.GetExchangePublicKey(),
-                                            profileItem.TrustSignatures,
-                                            profileItem.Wikis,
-                                            profileItem.Chats,
-                                            digitalSignature);
-                                    }
-                                }
-                            }
-                            catch (Exception)
-                            {
-
-                            }
-                        });
-                    }
-                }
-
-                {
-                    this.Refresh_Profiles();
-                }
-
-                {
-                    RichTextBoxHelper.WikiClickEvent += this.WikiClickEvent;
-
-                    RichTextBoxHelper.SeedClickEvent += this.SeedClickEvent;
-                    RichTextBoxHelper.LinkClickEvent += this.LinkClickEvent;
-                }
             }
-        }
-
-        private void WikiClickEvent(object sender, Wiki wiki)
-        {
-
-        }
-
-        private void SeedClickEvent(object sender, A.Seed seed)
-        {
-            if (string.IsNullOrWhiteSpace(Settings.Instance.Global_Amoeba_Path))
-            {
-                foreach (var p in Process.GetProcesses())
-                {
-                    try
-                    {
-                        var path = p.MainModule.FileName;
-
-                        if (Path.GetFileName(path) == "Amoeba.exe")
-                        {
-                            Settings.Instance.Global_Amoeba_Path = path;
-
-                            break;
-                        }
-                    }
-                    catch (Exception)
-                    {
-
-                    }
-                }
-            }
-
-            if (File.Exists(Settings.Instance.Global_Amoeba_Path))
-            {
-                try
-                {
-                    Process process = new Process();
-                    process.StartInfo.FileName = Settings.Instance.Global_Amoeba_Path;
-                    process.StartInfo.Arguments = string.Format("Download {0}", Library.Net.Amoeba.AmoebaConverter.ToSeedString(seed));
-                    process.StartInfo.WorkingDirectory = Path.GetDirectoryName(Settings.Instance.Global_Amoeba_Path);
-                    process.StartInfo.CreateNoWindow = true;
-                    process.StartInfo.UseShellExecute = false;
-                    process.Start();
-                }
-                catch (Exception)
-                {
-                    return;
-                }
-
-                Settings.Instance.Global_SeedHistorys.Add(seed);
-            }
-        }
-
-        private void LinkClickEvent(object sender, string link)
-        {
-            try
-            {
-                Process.Start(link);
-            }
-            catch (Exception)
-            {
-                return;
-            }
-
-            Settings.Instance.Global_UrlHistorys.Add(link);
         }
 
         private WebProxy GetProxy()
@@ -1535,10 +1307,10 @@ namespace Outopos.Windows
                 return this.PointToScreen(new Point(0, 0)).X;
             };
 
-            TrustControl trustControl = new TrustControl(_outoposManager, _bufferManager);
-            trustControl.Height = Double.NaN;
-            trustControl.Width = Double.NaN;
-            _trustContentControl.Content = trustControl;
+            WorldControl worldControl = new WorldControl(_outoposManager, _bufferManager);
+            worldControl.Height = Double.NaN;
+            worldControl.Width = Double.NaN;
+            _worldContentControl.Content = worldControl;
 
             ChatControl chatControl = new ChatControl(_outoposManager, _bufferManager);
             chatControl.Height = Double.NaN;
@@ -1645,18 +1417,10 @@ namespace Outopos.Windows
 
         private void _worldRadioButton_Click(object sender, RoutedEventArgs e)
         {
-            var trustControl = _trustContentControl.Content as TrustControl;
-            if (trustControl == null) return;
+            var worldControl = _worldContentControl.Content as WorldControl;
+            if (worldControl == null) return;
 
-            trustControl.Update();
-        }
-
-        private void _trustButton_Click(object sender, RoutedEventArgs e)
-        {
-            TrustWindow window = new TrustWindow();
-
-            window.Owner = this;
-            window.ShowDialog();
+            worldControl.Update();
         }
 
         private void _profileButton_Click(object sender, RoutedEventArgs e)

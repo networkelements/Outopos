@@ -33,9 +33,9 @@ using System.Windows.Documents;
 namespace Outopos.Windows
 {
     /// <summary>
-    /// Interaction logic for TrustControl.xaml
+    /// Interaction logic for WorldControl.xaml
     /// </summary>
-    partial class TrustControl : UserControl
+    partial class WorldControl : UserControl
     {
         private MainWindow _mainWindow = (MainWindow)Application.Current.MainWindow;
         private OutoposManager _outoposManager;
@@ -43,14 +43,163 @@ namespace Outopos.Windows
 
         private static Random _random = new Random();
 
-        public TrustControl(OutoposManager outoposManager, BufferManager bufferManager)
+        private Thread _watchThread;
+
+        public WorldControl(OutoposManager outoposManager, BufferManager bufferManager)
         {
             _outoposManager = outoposManager;
             _bufferManager = bufferManager;
 
             InitializeComponent();
 
+            _watchThread = new Thread(this.WatchThread);
+            _watchThread.Priority = ThreadPriority.Highest;
+            _watchThread.IsBackground = true;
+            _watchThread.Name = "WorldControl_WatchThread";
+            _watchThread.Start();
+
+            this.Check_Cost();
+
             this.Update();
+        }
+
+        private void WatchThread()
+        {
+            try
+            {
+                Stopwatch stopwatch = new Stopwatch();
+
+                for (; ; )
+                {
+                    Thread.Sleep(1000);
+
+                    if (!stopwatch.IsRunning || stopwatch.Elapsed.TotalSeconds >= 120)
+                    {
+                        stopwatch.Restart();
+
+                        this.Refresh_Profiles();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Error(e);
+            }
+        }
+
+        private void Refresh_Profiles()
+        {
+            var higherProfiles = new HashSet<Profile>();
+            var generalProfiles = new HashSet<Profile>();
+
+            foreach (var leaderSignature in Settings.Instance.Global_TrustSignatures.ToArray())
+            {
+                var targetProfiles = new List<Profile>();
+
+                var targetSignatures = new HashSet<string>();
+                var checkedSignatures = new HashSet<string>();
+
+                targetSignatures.Add(leaderSignature);
+
+                for (int i = 0; i < 32; i++)
+                {
+                    var profiles = this.GetProfiles(targetSignatures).ToList();
+                    if (profiles.Count == 0) break;
+
+                    checkedSignatures.UnionWith(profiles.SelectMany(n => n.DeleteSignatures));
+
+                    targetSignatures.Clear();
+                    targetSignatures.UnionWith(profiles.SelectMany(n => n.TrustSignatures).Where(n => !checkedSignatures.Contains(n)));
+
+                    targetProfiles.AddRange(profiles);
+
+                    if (targetProfiles.Count > 32 * 1024) goto End;
+                }
+
+            End: ;
+
+                higherProfiles.UnionWith(targetProfiles.Take(32));
+                generalProfiles.UnionWith(targetProfiles.Take(32 * 1024));
+            }
+
+            var trustSignatures = new SignatureCollection(generalProfiles.Select(n => n.Certificate.ToString()));
+
+            lock (Settings.Instance.ThisLock)
+            {
+                lock (Settings.Instance.Global_Profiles.ThisLock)
+                {
+                    Settings.Instance.Global_Profiles.Clear();
+
+                    foreach (var profile in generalProfiles)
+                    {
+                        Settings.Instance.Global_Profiles.Add(profile.Certificate.ToString(), profile);
+                    }
+                }
+            }
+
+            try
+            {
+                if (higherProfiles.Count > 0)
+                {
+                    int sum = 0;
+                    int count = 0;
+
+                    foreach (var profile in higherProfiles)
+                    {
+                        if (profile.Cost <= 0) continue;
+
+                        sum += profile.Cost;
+                        count++;
+                    }
+
+                    Trust.SetLimit(sum / count);
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+
+            _outoposManager.SetTrustSignatures(trustSignatures);
+
+            Trust.SetSignatures(trustSignatures);
+        }
+
+        private IEnumerable<Profile> GetProfiles(IEnumerable<string> trustSignatures)
+        {
+            var profiles = new List<Profile>();
+
+            foreach (var trustSignature in trustSignatures)
+            {
+                var profile = _outoposManager.GetProfile(trustSignature);
+                if (profile == null && !Settings.Instance.Global_Profiles.TryGetValue(trustSignature, out profile)) continue;
+
+                profiles.Add(profile);
+            }
+
+            return profiles;
+        }
+
+        private void Check_Cost()
+        {
+            var profileItem = Settings.Instance.Global_ProfileItem;
+
+            if (profileItem.Cost == 0)
+            {
+                ThreadPool.QueueUserWorkItem((object wstate) =>
+                {
+                    Thread.CurrentThread.IsBackground = true;
+
+                    try
+                    {
+                        profileItem.Cost = Miner.Sample(new TimeSpan(0, 3, 0));
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                });
+            }
         }
 
         public void Update()
@@ -72,46 +221,56 @@ namespace Outopos.Windows
 
         private SignatureTreeItem GetSignatureTreeViewItem(string leaderSignature)
         {
+            List<SignatureTreeItem> signatureTreeItems = new List<SignatureTreeItem>();
             List<SignatureTreeItem> workSignatureTreeItems = new List<SignatureTreeItem>();
 
             HashSet<string> checkedSignatures = new HashSet<string>();
+            HashSet<string> workCheckedSignatures = new HashSet<string>();
 
             {
                 Profile leaderProfile;
                 if (!Settings.Instance.Global_Profiles.TryGetValue(leaderSignature, out leaderProfile)) return null;
 
-                workSignatureTreeItems.Add(new SignatureTreeItem(leaderProfile));
+                signatureTreeItems.Add(new SignatureTreeItem(leaderProfile));
                 checkedSignatures.Add(leaderSignature);
             }
 
-            List<SignatureTreeItem> checkedSignatureTreeItems = new List<SignatureTreeItem>();
-
-            for (int i = 0; workSignatureTreeItems.Count != 0 && i < 256; i++)
             {
-                var sortList = workSignatureTreeItems.SelectMany(n => n.Profile.TrustSignatures).ToList();
-                sortList.Sort((x, y) => x.CompareTo(y));
+                int index = 0;
 
-                checkedSignatureTreeItems.AddRange(workSignatureTreeItems);
-                workSignatureTreeItems.Clear();
-
-                foreach (var trustSignature in sortList)
+                for (; ; )
                 {
-                    if (checkedSignatures.Contains(trustSignature)) continue;
+                    for (; index < signatureTreeItems.Count && index < 32 * 1024; index++)
+                    {
+                        var sortedList = signatureTreeItems[index].Profile.TrustSignatures.ToList();
+                        sortedList.Sort();
 
-                    Profile tempProfile;
-                    if (!Settings.Instance.Global_Profiles.TryGetValue(trustSignature, out tempProfile)) continue;
+                        foreach (var trustSignature in sortedList)
+                        {
+                            if (checkedSignatures.Contains(trustSignature)) continue;
 
-                    var tempItem = new SignatureTreeItem(tempProfile);
-                    workSignatureTreeItems.Add(tempItem);
+                            Profile tempProfile;
+                            if (!Settings.Instance.Global_Profiles.TryGetValue(trustSignature, out tempProfile)) continue;
 
-                    var targetItem = checkedSignatureTreeItems.FirstOrDefault(n => n.Profile.TrustSignatures.Contains(trustSignature));
-                    targetItem.Children.Add(tempItem);
+                            var tempItem = new SignatureTreeItem(tempProfile);
+                            signatureTreeItems[index].Children.Add(tempItem);
 
-                    checkedSignatures.Add(trustSignature);
+                            workSignatureTreeItems.Add(tempItem);
+                            workCheckedSignatures.Add(trustSignature);
+                        }
+                    }
+
+                    if (workSignatureTreeItems.Count == 0) break;
+
+                    signatureTreeItems.AddRange(workSignatureTreeItems);
+                    workSignatureTreeItems.Clear();
+
+                    checkedSignatures.UnionWith(workCheckedSignatures);
+                    workCheckedSignatures.Clear();
                 }
             }
 
-            return checkedSignatureTreeItems[0];
+            return signatureTreeItems[0];
         }
 
         #region _treeView

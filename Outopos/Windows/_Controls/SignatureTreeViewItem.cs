@@ -20,7 +20,6 @@ namespace Outopos.Windows
 
         private ObservableCollectionEx<SignatureTreeViewItem> _listViewItemCollection = new ObservableCollectionEx<SignatureTreeViewItem>();
         private TextBlock _header = new TextBlock();
-        private int _hit;
 
         public SignatureTreeViewItem(SignatureTreeItem value)
             : base()
@@ -80,8 +79,6 @@ namespace Outopos.Windows
             {
                 int c = x.Value.Profile.Certificate.ToString().CompareTo(y.Value.Profile.Certificate.ToString());
                 if (c != 0) return c;
-                c = x.Hit.CompareTo(y.Hit);
-                if (c != 0) return c;
 
                 return x.GetHashCode().CompareTo(y.GetHashCode());
             });
@@ -108,20 +105,6 @@ namespace Outopos.Windows
             private set
             {
                 _value = value;
-
-                this.Update();
-            }
-        }
-
-        public int Hit
-        {
-            get
-            {
-                return _hit;
-            }
-            set
-            {
-                _hit = value;
 
                 this.Update();
             }
